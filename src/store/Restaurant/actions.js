@@ -177,6 +177,7 @@ export const branchAddAction = (id, zoneInfo, lat, lng, file, coverFile, current
             open_min: moment(item.startTime, "HH:mm").get('minutes'),
             close_hour: moment(item.endTime, "HH:mm").get('hours'),
             close_minute: moment(item.endTime, "HH:mm").get('minutes'),
+            branch_id: id,
 
         }
     }) : null
@@ -205,6 +206,7 @@ export const branchAddAction = (id, zoneInfo, lat, lng, file, coverFile, current
         working_hours: all_working_hours,
         cuisines: data
     };
+    console.log(formData.toString());
 
     return dispatch => {
         const headers = {
