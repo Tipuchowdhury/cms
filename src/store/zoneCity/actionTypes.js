@@ -1,0 +1,12 @@
+export const ADD_CITY = "ADD_CITY";
+export const ADD_CITY_FRESH = "ADD_CITY_FRESH"
+export const GET_ALL_CITY = "GET_ALL_CITY"
+export const GET_ALL_CITY_FRESH = "GET_ALL_CITY_FRESH"
+export const CITY_NAME_EDIT = "CITY_NAME_EDIT"
+export const CITY_NAME_EDIT_FRESH = "CITY_NAME_EDIT_FRESH"
+export const GET_CITY_NAME_BY_ID = "GET_CITY_NAME_BY_ID"
+export const CITY_DELETE = "CITY_DELETE"
+export const CITY_DELETE_FRESH = "CITY_DELETE_FRESH"
+
+
+
