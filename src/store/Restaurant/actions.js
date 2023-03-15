@@ -182,6 +182,7 @@ export const branchAddAction = (id, zoneInfo, lat, lng, file, coverFile, current
         }
     }) : null
     let formData = {
+        name: zoneInfo.area,
         _id: id,
         email: zoneInfo.email,
         location: {
@@ -206,7 +207,7 @@ export const branchAddAction = (id, zoneInfo, lat, lng, file, coverFile, current
         working_hours: all_working_hours,
         cuisines: data
     };
-    console.log(formData.toString());
+
 
     return dispatch => {
         const headers = {

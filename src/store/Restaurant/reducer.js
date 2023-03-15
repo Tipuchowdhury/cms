@@ -77,8 +77,8 @@ const Restaurant = (state = initialState, action) => {
                 ...state,
                 add_branch_data: action.payload,
                 add_branch_error: null,
-                add_branch_loading: action.status
-
+                add_branch_loading: action.status,
+                get_all_branch_loading: false
             }
             break;
 
