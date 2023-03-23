@@ -1,13 +1,13 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Card, CardBody, Row, Col } from "reactstrap";
+import React from "react"
+import { Link } from "react-router-dom"
+import { Card, CardBody, Row, Col } from "reactstrap"
 
 //Import Images
-import maintenanceImg from "../../assets/images/maintenance.png";
-import logoDark from "../../assets/images/logo-dark.png";
+import maintenanceImg from "../../assets/images/maintenance.png"
+import logoDark from "../../assets/images/logo-dark.png"
 
 const PagesMaintenance = () => {
-  document.title = "Maintenance | Veltrix - React Admin & Dashboard Template";
+  document.title = "Maintenance | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="home-btn d-none d-sm-block">
@@ -45,8 +45,7 @@ const PagesMaintenance = () => {
                         </h6>
                         <p className="text-muted mt-3">
                           There are many variations of passages of Lorem Ipsum
-                          available, but the majority have suffered
-                          alteration.
+                          available, but the majority have suffered alteration.
                         </p>
                       </CardBody>
                     </Card>
@@ -59,9 +58,8 @@ const PagesMaintenance = () => {
                           What is the Downtime?
                         </h6>
                         <p className="text-muted mt-3">
-                          Contrary to popular belief, Lorem Ipsum is not
-                          simply random text. It has roots in a piece of
-                          classNameical.
+                          Contrary to popular belief, Lorem Ipsum is not simply
+                          random text. It has roots in a piece of classNameical.
                         </p>
                       </CardBody>
                     </Card>
@@ -74,8 +72,8 @@ const PagesMaintenance = () => {
                           Do you need Support?
                         </h6>
                         <p className="text-muted mt-3">
-                          If you are going to use a passage of Lorem Ipsum,
-                          you need to be sure there isn't anything embar..{" "}
+                          If you are going to use a passage of Lorem Ipsum, you
+                          need to be sure there isn't anything embar..{" "}
                           <Link
                             to="mailto:no-reply@domain.com"
                             className="text-decoration-underline"
@@ -92,9 +90,8 @@ const PagesMaintenance = () => {
           </Row>
         </div>
       </section>
-
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default PagesMaintenance;
+export default PagesMaintenance

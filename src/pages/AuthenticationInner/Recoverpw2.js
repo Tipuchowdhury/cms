@@ -1,11 +1,12 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Card, Row } from "reactstrap";
-import bg from "../../assets/images/bg.jpg";
-import logoDark from "../../assets/images/logo-dark.png";
+import React from "react"
+import { Link } from "react-router-dom"
+import { Card, Row } from "reactstrap"
+import bg from "../../assets/images/bg.jpg"
+import logoDark from "../../assets/images/logo-dark.png"
 
 const Recoverpw2 = () => {
-  document.title = "Recover Password 2 | Veltrix - React Admin & Dashboard Template";
+  document.title =
+    "Recover Password 2 | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div
@@ -13,7 +14,7 @@ const Recoverpw2 = () => {
         style={{
           backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundImage: `url(${bg})`
+          backgroundImage: `url(${bg})`,
         }}
       ></div>
 
@@ -62,8 +63,7 @@ const Recoverpw2 = () => {
                     <Row className="mt-2 mb-0">
                       <div className="col-12 mt-3">
                         <Link to="/pages-recoverpw-2">
-                          <i className="mdi mdi-lock"></i> Forgot your
-                          password?
+                          <i className="mdi mdi-lock"></i> Forgot your password?
                         </Link>
                       </div>
                     </Row>
@@ -81,8 +81,7 @@ const Recoverpw2 = () => {
                       </Link>{" "}
                     </p>
                     <p>
-                      © {new Date().getFullYear()}{" "}
-                      Veltrix. Crafted with{" "}
+                      © {new Date().getFullYear()} Foodi. Crafted with{" "}
                       <i className="mdi mdi-heart text-danger"></i> by
                       Themesbrand
                     </p>
@@ -94,7 +93,7 @@ const Recoverpw2 = () => {
         </Card>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default Recoverpw2;
+export default Recoverpw2

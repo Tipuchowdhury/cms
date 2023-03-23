@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from "react"
+import { Link } from "react-router-dom"
 import {
   Card,
   CardBody,
@@ -9,13 +9,13 @@ import {
   Input,
   Label,
   Row,
-} from "reactstrap";
+} from "reactstrap"
 
 // import images
-import logo from "../../assets/images/logo-sm.png";
+import logo from "../../assets/images/logo-sm.png"
 
 const Recoverpw = () => {
-  document.title = "Recover Password | Veltrix - React Admin & Dashboard Template";
+  document.title = "Recover Password | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="home-btn d-none d-sm-block">
@@ -74,24 +74,22 @@ const Recoverpw = () => {
               <div className="mt-5 text-center">
                 <p>
                   Remember It ?{" "}
-                  <Link
-                    to="/login"
-                    className="fw-medium text-primary"
-                  >
+                  <Link to="/login" className="fw-medium text-primary">
                     {" "}
                     Sign In here{" "}
                   </Link>{" "}
                 </p>
                 <p className="mb-0">
-                  © {new Date().getFullYear()} Veltrix. Crafted with{" "}
+                  © {new Date().getFullYear()} Foodi. Crafted with{" "}
                   <i className="mdi mdi-heart text-danger"></i> by Themesbrand
                 </p>
               </div>
             </Col>
           </Row>
         </Container>
-      </div> </React.Fragment>
-  );
-};
+      </div>{" "}
+    </React.Fragment>
+  )
+}
 
-export default Recoverpw;
+export default Recoverpw

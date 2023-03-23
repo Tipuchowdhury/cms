@@ -1,71 +1,80 @@
-import PropTypes from "prop-types";
-import React, { useEffect } from "react";
-import { Row, Col, CardBody, Card, Container, Form, FormFeedback, Label, Input, Alert } from "reactstrap";
+import PropTypes from "prop-types"
+import React, { useEffect } from "react"
+import {
+  Row,
+  Col,
+  CardBody,
+  Card,
+  Container,
+  Form,
+  FormFeedback,
+  Label,
+  Input,
+  Alert,
+} from "reactstrap"
 
 // Formik validation
-import * as Yup from "yup";
-import { useFormik } from "formik";
+import * as Yup from "yup"
+import { useFormik } from "formik"
 
 // action
-import { registerUser, apiError, registerUserFailed } from "../../store/actions";
+import { registerUser, apiError, registerUserFailed } from "../../store/actions"
 
 // Redux
-import { connect, useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { connect, useDispatch, useSelector } from "react-redux"
+import { Link, useNavigate } from "react-router-dom"
 
 // import images
-import logoSm from "../../assets/images/logo-sm.png";
+import logoSm from "../../assets/images/logo-sm.png"
 
 const Register = props => {
-  const history = useNavigate();
+  const history = useNavigate()
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const { user } = useSelector(state => ({
     user: state.Account.user,
-  }));
+  }))
 
   useEffect(() => {
     if (user) {
-      setTimeout(() => history("/login"), 3000);
+      setTimeout(() => history("/login"), 3000)
     }
 
     // setTimeout(() => {
     //     dispatch(resetRegisterFlag());
     // }, 3000);
-
-  }, [dispatch, user, history]);
-
+  }, [dispatch, user, history])
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
-      email: '',
-      username: '',
-      password: '',
+      email: "",
+      username: "",
+      password: "",
     },
     validationSchema: Yup.object({
       email: Yup.string().required("Please Enter Your Email"),
       username: Yup.string().required("Please Enter Your User Name"),
       password: Yup.string().required("Please Enter Your Password"),
     }),
-    onSubmit: (values) => {
-      dispatch(registerUser(values));
-    }
-  });
+    onSubmit: values => {
+      dispatch(registerUser(values))
+    },
+  })
 
   // handleValidSubmit
   const handleValidSubmit = (event, values) => {
-    props.registerUser(values);
-  };
+    props.registerUser(values)
+  }
 
   useEffect(() => {
-    props.apiError("");
-  }, []);
+    props.apiError("")
+  }, [])
 
-  document.title = "Register | Veltrix - React Admin & Dashboard Template";
+  document.title = "Register | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="home-btn d-none d-sm-block">
@@ -81,7 +90,9 @@ const Register = props => {
                 <div className="bg-primary">
                   <div className="text-primary text-center p-4">
                     <h5 className="text-white font-size-20">Free Register</h5>
-                    <p className="text-white-50">Get your free Veltrix account now.</p>
+                    <p className="text-white-50">
+                      Get your free Foodi account now.
+                    </p>
                     <Link to="/index" className="logo logo-admin">
                       <img src={logoSm} height="24" alt="logo" />
                     </Link>
@@ -90,19 +101,27 @@ const Register = props => {
                 <CardBody className="p-4">
                   <div className="p-3">
                     {user ? (
-                      <Alert color="success" style={{ marginTop: "13px" }} className="mt-5">
+                      <Alert
+                        color="success"
+                        style={{ marginTop: "13px" }}
+                        className="mt-5"
+                      >
                         Register User Successful
                       </Alert>
                     ) : null}
-                    <Form className="mt-4" onSubmit={(e) => {
-                      e.preventDefault();
-                      validation.handleSubmit();
-                      return false;
-                    }}
-                      action="#">
-
+                    <Form
+                      className="mt-4"
+                      onSubmit={e => {
+                        e.preventDefault()
+                        validation.handleSubmit()
+                        return false
+                      }}
+                      action="#"
+                    >
                       <div className="mb-3">
-                        <Label className="form-label" htmlFor="useremail">Email</Label>
+                        <Label className="form-label" htmlFor="useremail">
+                          Email
+                        </Label>
                         <Input
                           name="email"
                           className="form-control"
@@ -113,16 +132,22 @@ const Register = props => {
                           onBlur={validation.handleBlur}
                           value={validation.values.email || ""}
                           invalid={
-                            validation.touched.email && validation.errors.email ? true : false
+                            validation.touched.email && validation.errors.email
+                              ? true
+                              : false
                           }
                         />
                         {validation.touched.email && validation.errors.email ? (
-                          <FormFeedback type="invalid">{validation.errors.email}</FormFeedback>
+                          <FormFeedback type="invalid">
+                            {validation.errors.email}
+                          </FormFeedback>
                         ) : null}
                       </div>
 
                       <div className="mb-3">
-                        <Label className="form-label" htmlFor="username">Username</Label>
+                        <Label className="form-label" htmlFor="username">
+                          Username
+                        </Label>
                         <Input
                           name="username"
                           className="form-control"
@@ -133,16 +158,24 @@ const Register = props => {
                           onBlur={validation.handleBlur}
                           value={validation.values.username || ""}
                           invalid={
-                            validation.touched.username && validation.errors.username ? true : false
+                            validation.touched.username &&
+                            validation.errors.username
+                              ? true
+                              : false
                           }
                         />
-                        {validation.touched.username && validation.errors.username ? (
-                          <FormFeedback type="invalid">{validation.errors.username}</FormFeedback>
+                        {validation.touched.username &&
+                        validation.errors.username ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.username}
+                          </FormFeedback>
                         ) : null}
                       </div>
 
                       <div className="mb-3">
-                        <Label className="form-label" htmlFor="userpassword">Password</Label>
+                        <Label className="form-label" htmlFor="userpassword">
+                          Password
+                        </Label>
                         <Input
                           name="password"
                           value={validation.values.password || ""}
@@ -153,23 +186,39 @@ const Register = props => {
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           invalid={
-                            validation.touched.password && validation.errors.password ? true : false
+                            validation.touched.password &&
+                            validation.errors.password
+                              ? true
+                              : false
                           }
                         />
-                        {validation.touched.password && validation.errors.password ? (
-                          <FormFeedback type="invalid">{validation.errors.password}</FormFeedback>
+                        {validation.touched.password &&
+                        validation.errors.password ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.password}
+                          </FormFeedback>
                         ) : null}
                       </div>
 
                       <div className="mb-3 row">
                         <div className="col-12 text-end">
-                          <button className="btn btn-primary w-md waves-effect waves-light" type="submit">Register</button>
+                          <button
+                            className="btn btn-primary w-md waves-effect waves-light"
+                            type="submit"
+                          >
+                            Register
+                          </button>
                         </div>
                       </div>
 
                       <div className="mt-2 mb-0 row">
                         <div className="col-12 mt-4">
-                          <p className="mb-0">By registering you agree to the Veltrix <Link to="#" className="text-primary">Terms of Use</Link></p>
+                          <p className="mb-0">
+                            By registering you agree to the Foodi{" "}
+                            <Link to="#" className="text-primary">
+                              Terms of Use
+                            </Link>
+                          </p>
                         </div>
                       </div>
                     </Form>
@@ -185,7 +234,7 @@ const Register = props => {
                   </Link>{" "}
                 </p>
                 <p>
-                  © {new Date().getFullYear()} Veltrix. Crafted with{" "}
+                  © {new Date().getFullYear()} Foodi. Crafted with{" "}
                   <i className="mdi mdi-heart text-danger" /> by Themesbrand
                 </p>
               </div>
@@ -194,23 +243,23 @@ const Register = props => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
 Register.propTypes = {
   registerUser: PropTypes.func,
   registerUserFailed: PropTypes.func,
   registrationError: PropTypes.any,
   user: PropTypes.any,
-};
+}
 
 const mapStatetoProps = state => {
-  const { user, registrationError, loading } = state.Account;
-  return { user, registrationError, loading };
-};
+  const { user, registrationError, loading } = state.Account
+  return { user, registrationError, loading }
+}
 
 export default connect(mapStatetoProps, {
   registerUser,
   apiError,
   registerUserFailed,
-})(Register);
+})(Register)

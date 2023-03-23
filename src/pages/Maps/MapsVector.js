@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 
 import {
   Row,
@@ -8,18 +8,22 @@ import {
   CardTitle,
   CardSubtitle,
   Container,
-} from "reactstrap";
-import Vector from "./Vectormap";
+} from "reactstrap"
+import Vector from "./Vectormap"
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const MapsVector = () => {
-  document.title = "Vector Maps | Veltrix - React Admin & Dashboard Template";
+  document.title = "Vector Maps | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="Maps" breadcrumbItem="Vector Maps" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Maps"
+            breadcrumbItem="Vector Maps"
+          />
 
           <Row>
             <Col lg={6}>
@@ -102,7 +106,7 @@ const MapsVector = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default MapsVector;
+export default MapsVector

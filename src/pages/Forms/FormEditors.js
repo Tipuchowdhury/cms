@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 
 import {
   Form,
@@ -9,22 +9,26 @@ import {
   CardTitle,
   CardSubtitle,
   Container,
-} from "reactstrap";
+} from "reactstrap"
 
 // Form Editor
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { Editor } from "react-draft-wysiwyg"
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const FormEditors = () => {
-  document.title = "Form Editors | Veltrix - React Admin & Dashboard Template";
+  document.title = "Form Editors | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="Forms" breadcrumbItem="Form Editors" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Forms"
+            breadcrumbItem="Form Editors"
+          />
 
           <Row>
             <Col>
@@ -51,7 +55,7 @@ const FormEditors = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default FormEditors;
+export default FormEditors

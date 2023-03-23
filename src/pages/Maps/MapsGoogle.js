@@ -1,26 +1,30 @@
-import PropTypes from 'prop-types';
-import React from "react";
-import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
-import { connect } from "react-redux";
-import LightData from "./LightData";
-import { Row, Col, Card, CardBody, CardTitle, CardSubtitle } from "reactstrap";
+import PropTypes from "prop-types"
+import React from "react"
+import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react"
+import { connect } from "react-redux"
+import LightData from "./LightData"
+import { Row, Col, Card, CardBody, CardTitle, CardSubtitle } from "reactstrap"
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
-const LoadingContainer = () => <div>Loading...</div>;
+const LoadingContainer = () => <div>Loading...</div>
 
 const MapsGoogle = props => {
-  const selectedPlace = {};
+  const selectedPlace = {}
 
   function onMarkerClick() {
-    alert("You clicked in this marker");
+    alert("You clicked in this marker")
   }
-  document.title = "Google Maps | Veltrix - React Admin & Dashboard Template";
+  document.title = "Google Maps | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
-          <Breadcrumbs maintitle="Veltrix" title="Maps" breadcrumbItem="Google Maps" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Maps"
+            breadcrumbItem="Google Maps"
+          />
 
           <Row>
             <Col lg={6}>
@@ -80,7 +84,7 @@ const MapsGoogle = props => {
                     >
                       <Marker
                         onClick={(a, b, c) => {
-                          onMarkerClick(a, b, c);
+                          onMarkerClick(a, b, c)
                         }}
                       />
                       <InfoWindow>
@@ -144,7 +148,7 @@ const MapsGoogle = props => {
                     >
                       <Marker
                         onClick={(a, b, c) => {
-                          onMarkerClick(a, b, c);
+                          onMarkerClick(a, b, c)
                         }}
                       />
                       <InfoWindow>
@@ -161,12 +165,12 @@ const MapsGoogle = props => {
         </div>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
 MapsGoogle.propTypes = {
-  google: PropTypes.object
-};
+  google: PropTypes.object,
+}
 
 export default connect(
   null,
@@ -177,4 +181,4 @@ export default connect(
     LoadingContainer: LoadingContainer,
     v: "3",
   })(MapsGoogle)
-);
+)

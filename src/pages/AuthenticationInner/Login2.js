@@ -1,13 +1,13 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Col, Row, Card } from "reactstrap";
+import React from "react"
+import { Link } from "react-router-dom"
+import { Col, Row, Card } from "reactstrap"
 
 // import images
-import bg from "../../assets/images/bg.jpg";
-import logoDark from "../../assets/images/logo-dark.png";
+import bg from "../../assets/images/bg.jpg"
+import logoDark from "../../assets/images/logo-dark.png"
 
 const Login2 = () => {
-  document.title = "Login2 | Veltrix - React Admin & Dashboard Template";
+  document.title = "Login2 | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="account-pages">
@@ -16,7 +16,7 @@ const Login2 = () => {
           style={{
             background: `url(${bg})`,
             backgroundSize: "cover",
-            backgroundPosition: "center"
+            backgroundPosition: "center",
           }}
         ></div>
 
@@ -36,12 +36,14 @@ const Login2 = () => {
                       Welcome Back !
                     </h4>
                     <p className="text-muted text-center">
-                      Sign in to continue to Veltrix.
+                      Sign in to continue to Foodi.
                     </p>
 
                     <form className="mt-4" action="#">
                       <div className="mb-3">
-                        <label className="form-label" htmlFor="username">Username</label>
+                        <label className="form-label" htmlFor="username">
+                          Username
+                        </label>
                         <input
                           type="text"
                           className="form-control"
@@ -51,7 +53,9 @@ const Login2 = () => {
                       </div>
 
                       <div className="mb-3">
-                        <label className="form-label" htmlFor="userpassword">Password</label>
+                        <label className="form-label" htmlFor="userpassword">
+                          Password
+                        </label>
                         <input
                           type="password"
                           className="form-control"
@@ -109,7 +113,7 @@ const Login2 = () => {
                         </Link>{" "}
                       </p>
                       <p>
-                        © {new Date().getFullYear()} Veltrix. Crafted with{" "}
+                        © {new Date().getFullYear()} Foodi. Crafted with{" "}
                         <i className="mdi mdi-heart text-danger"></i> by
                         Themesbrand
                       </p>
@@ -120,11 +124,9 @@ const Login2 = () => {
             </div>
           </Card>
         </div>
-
-
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default Login2;
+export default Login2

@@ -1,23 +1,27 @@
-import React from "react";
+import React from "react"
 
 // import apexChart
-import LineApexChart from "../AllCharts/apex/chartapex";
-import BarApexChart from "../AllCharts/apex/barchart";
-import AreaChart from "../AllCharts/apex/areachart";
-import DonutChart from "../AllCharts/apex/dountchart";
-import StackedBarChart from "../AllCharts/apex/stackedbarchart";
+import LineApexChart from "../AllCharts/apex/chartapex"
+import BarApexChart from "../AllCharts/apex/barchart"
+import AreaChart from "../AllCharts/apex/areachart"
+import DonutChart from "../AllCharts/apex/dountchart"
+import StackedBarChart from "../AllCharts/apex/stackedbarchart"
 
-import { Row, Col, Card, CardBody, CardTitle } from "reactstrap";
+import { Row, Col, Card, CardBody, CardTitle } from "reactstrap"
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const Apexchart = () => {
-  document.title = "Apex Charts | Veltrix - React Admin & Dashboard Template";
+  document.title = "Apex Charts | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
-          <Breadcrumbs maintitle="Veltrix" title="Charts" breadcrumbItem="Apex Charts" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Charts"
+            breadcrumbItem="Apex Charts"
+          />
 
           <Row>
             <Col lg={6}>
@@ -75,7 +79,7 @@ const Apexchart = () => {
         </div>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default Apexchart;
+export default Apexchart

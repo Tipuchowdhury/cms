@@ -1,17 +1,21 @@
-import React from "react";
-import { Row, Col, Container } from "reactstrap";
-import { Link } from "react-router-dom";
+import React from "react"
+import { Row, Col, Container } from "reactstrap"
+import { Link } from "react-router-dom"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const EmailAlertTemplte = () => {
-  document.title = "Alert Email | Veltrix - React Admin & Dashboard Template";
+  document.title = "Alert Email | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Breadcrumbs maintitle="Veltrix" title="Email Templates" breadcrumbItem="Alert Email" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Email Templates"
+            breadcrumbItem="Alert Email"
+          />
 
           <Row className="email-template">
             <Col md={12}>
@@ -24,7 +28,7 @@ const EmailAlertTemplte = () => {
                   width: "100%",
                   backgroundColor: "transparent",
                   margin: "0",
-                  color: "#000"
+                  color: "#000",
                 }}
                 // bgcolor="#f6f6f6"
               >
@@ -39,8 +43,7 @@ const EmailAlertTemplte = () => {
                   >
                     <td
                       style={{
-                        fontFamily:
-                          "Helvetica Neue,Helvetica,Arial,sans-serif",
+                        fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif",
                         boxSizing: "border-box",
                         fontSize: "14px",
                         verticalAlign: "top",
@@ -52,8 +55,7 @@ const EmailAlertTemplte = () => {
                       className="container"
                       width="600"
                       style={{
-                        fontFamily:
-                          "Helvetica Neue,Helvetica,Arial,sans-serif",
+                        fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif",
                         boxSizing: "border-box",
                         fontSize: "14px",
                         verticalAlign: "top",
@@ -230,10 +232,9 @@ const EmailAlertTemplte = () => {
                                         }}
                                         valign="top"
                                       >
-                                        Add your credit card now to upgrade
-                                        your account to a premium plan to
-                                        ensure you don't miss out on any
-                                        reports.
+                                        Add your credit card now to upgrade your
+                                        account to a premium plan to ensure you
+                                        don't miss out on any reports.
                                       </td>
                                     </tr>
                                     <tr
@@ -308,8 +309,7 @@ const EmailAlertTemplte = () => {
                                         }}
                                         valign="top"
                                       >
-                                        Thanks for choosing <b>Veltrix</b>{" "}
-                                        Admin.
+                                        Thanks for choosing <b>Foodi</b> Admin.
                                       </td>
                                     </tr>
                                     <tr
@@ -334,7 +334,7 @@ const EmailAlertTemplte = () => {
                                         }}
                                         valign="top"
                                       >
-                                        <b>Veltrix</b>
+                                        <b>Foodi</b>
                                         <p>Support Team</p>
                                       </td>
                                     </tr>
@@ -362,7 +362,7 @@ const EmailAlertTemplte = () => {
                                         }}
                                         valign="top"
                                       >
-                                        {new Date().getFullYear()} © Veltrix
+                                        {new Date().getFullYear()} © Foodi
                                       </td>
                                     </tr>
                                   </tbody>
@@ -381,7 +381,7 @@ const EmailAlertTemplte = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default EmailAlertTemplte;
+export default EmailAlertTemplte

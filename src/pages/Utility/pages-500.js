@@ -1,12 +1,12 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Container, Row, Col, Card, CardBody } from "reactstrap";
+import React from "react"
+import { Link } from "react-router-dom"
+import { Container, Row, Col, Card, CardBody } from "reactstrap"
 
 //Import Images
-import errorImg from "../../assets/images/error.png";
+import errorImg from "../../assets/images/error.png"
 
 const Pages500 = () => {
-  document.title = "500 Error Page | Veltrix - React Admin & Dashboard Template";
+  document.title = "500 Error Page | Foodi - React Admin & Dashboard Template"
 
   return (
     <React.Fragment>
@@ -22,13 +22,24 @@ const Pages500 = () => {
                         <div className="ex-page-content">
                           <h1 className="text-dark display-1 mt-4">500</h1>
                           <h4 className="mb-4">Internal Server Error</h4>
-                          <p className="mb-5">It will be as simple as Occidental in fact, it will be Occidental to an English person</p>
-                          <Link className="btn btn-primary mb-5 waves-effect waves-light" to="/"><i className="mdi mdi-home"></i> Back to Dashboard</Link>
+                          <p className="mb-5">
+                            It will be as simple as Occidental in fact, it will
+                            be Occidental to an English person
+                          </p>
+                          <Link
+                            className="btn btn-primary mb-5 waves-effect waves-light"
+                            to="/"
+                          >
+                            <i className="mdi mdi-home"></i> Back to Dashboard
+                          </Link>
                         </div>
-
                       </Col>
                       <Col lg={5} className="mx-auto">
-                        <img src={errorImg} alt="" className="img-fluid mx-auto d-block" />
+                        <img
+                          src={errorImg}
+                          alt=""
+                          className="img-fluid mx-auto d-block"
+                        />
                       </Col>
                     </Row>
                   </CardBody>
@@ -37,11 +48,9 @@ const Pages500 = () => {
             </Row>
           </Container>
         </div>
-
       </div>
+    </React.Fragment>
+  )
+}
 
-    </React.Fragment >
-  );
-};
-
-export default Pages500;
+export default Pages500

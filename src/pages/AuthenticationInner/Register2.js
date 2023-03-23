@@ -1,13 +1,13 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Card, Row } from "reactstrap";
+import React from "react"
+import { Link } from "react-router-dom"
+import { Card, Row } from "reactstrap"
 
 // import images
-import bg from "../../assets/images/bg.jpg";
-import logoDark from "../../assets/images/logo-dark.png";
+import bg from "../../assets/images/bg.jpg"
+import logoDark from "../../assets/images/logo-dark.png"
 
 const Register2 = () => {
-  document.title = "Register 2 | Veltrix - React Admin & Dashboard Template";
+  document.title = "Register 2 | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div
@@ -15,7 +15,7 @@ const Register2 = () => {
         style={{
           backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundImage: `url(${bg})`
+          backgroundImage: `url(${bg})`,
         }}
       ></div>
       <div className="wrapper-page account-page-full">
@@ -34,7 +34,7 @@ const Register2 = () => {
                     Free Register
                   </h4>
                   <p className="text-muted text-center">
-                    Get your free Veltrix account now.
+                    Get your free Foodi account now.
                   </p>
 
                   <form className="mt-4" action="#">
@@ -82,7 +82,7 @@ const Register2 = () => {
                     <Row className="mt-2 mb-0">
                       <div className="col-12 mt-3">
                         <p className="mb-0">
-                          By registering you agree to the Veltrix{" "}
+                          By registering you agree to the Foodi{" "}
                           <Link to="#" className="text-primary">
                             Terms of Use
                           </Link>
@@ -103,7 +103,7 @@ const Register2 = () => {
                       </Link>{" "}
                     </p>
                     <p>
-                      © {new Date().getFullYear()} Veltrix. Crafted with{" "}
+                      © {new Date().getFullYear()} Foodi. Crafted with{" "}
                       <i className="mdi mdi-heart text-danger"></i> by
                       Themesbrand
                     </p>
@@ -115,7 +115,7 @@ const Register2 = () => {
         </Card>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default Register2;
+export default Register2

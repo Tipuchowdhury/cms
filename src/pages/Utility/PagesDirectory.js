@@ -1,29 +1,33 @@
-import React from "react";
-import { Row, Col, Card, CardBody } from "reactstrap";
-import { Link } from "react-router-dom";
+import React from "react"
+import { Row, Col, Card, CardBody } from "reactstrap"
+import { Link } from "react-router-dom"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 // import images
-import user2 from "../../assets/images/users/user-2.jpg";
-import user3 from "../../assets/images/users/user-3.jpg";
-import user4 from "../../assets/images/users/user-4.jpg";
-import user5 from "../../assets/images/users/user-5.jpg";
-import user6 from "../../assets/images/users/user-6.jpg";
-import user7 from "../../assets/images/users/user-7.jpg";
-import user8 from "../../assets/images/users/user-8.jpg";
-import user9 from "../../assets/images/users/user-9.jpg";
-import user10 from "../../assets/images/users/user-10.jpg";
+import user2 from "../../assets/images/users/user-2.jpg"
+import user3 from "../../assets/images/users/user-3.jpg"
+import user4 from "../../assets/images/users/user-4.jpg"
+import user5 from "../../assets/images/users/user-5.jpg"
+import user6 from "../../assets/images/users/user-6.jpg"
+import user7 from "../../assets/images/users/user-7.jpg"
+import user8 from "../../assets/images/users/user-8.jpg"
+import user9 from "../../assets/images/users/user-9.jpg"
+import user10 from "../../assets/images/users/user-10.jpg"
 
 const PagesDirectory = () => {
-  document.title = "Directory | Veltrix - React Admin & Dashboard Template";
+  document.title = "Directory | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
           {/* Render Breadcrumbs */}
-          <Breadcrumbs maintitle="Veltrix" title="Extra Pages" breadcrumbItem="Directory" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Extra Pages"
+            breadcrumbItem="Directory"
+          />
           <Row>
             <Col xl={4} md={6}>
               <Card className="directory-card">
@@ -411,7 +415,7 @@ const PagesDirectory = () => {
         </div>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default PagesDirectory;
+export default PagesDirectory

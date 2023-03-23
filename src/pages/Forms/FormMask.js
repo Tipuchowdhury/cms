@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import {
   Row,
   Col,
@@ -8,16 +8,15 @@ import {
   CardBody,
   CardTitle,
   Container,
-} from "reactstrap";
+} from "reactstrap"
 
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 // Form Mask
-import InputMask from "react-input-mask";
-import MaterialInput from "@material-ui/core/Input";
+import InputMask from "react-input-mask"
+import MaterialInput from "@material-ui/core/Input"
 
 const FormMask = () => {
-
   const ISBN1 = props => (
     <InputMask
       mask="9999-99-99'T'99:99:99"
@@ -29,7 +28,7 @@ const FormMask = () => {
         <MaterialInput {...inputProps} type="tel" disableUnderline />
       )}
     </InputMask>
-  );
+  )
 
   const IPV4 = props => (
     <InputMask
@@ -42,7 +41,7 @@ const FormMask = () => {
         <MaterialInput {...inputProps} type="tel" disableUnderline />
       )}
     </InputMask>
-  );
+  )
 
   const IPV6 = props => (
     <InputMask
@@ -53,7 +52,7 @@ const FormMask = () => {
     >
       {inputProps => <MaterialInput {...inputProps} disableUnderline />}
     </InputMask>
-  );
+  )
 
   const TAX = props => (
     <InputMask
@@ -66,7 +65,7 @@ const FormMask = () => {
         <MaterialInput {...inputProps} type="tel" disableUnderline />
       )}
     </InputMask>
-  );
+  )
 
   const Phone = props => (
     <InputMask
@@ -79,7 +78,7 @@ const FormMask = () => {
         <MaterialInput {...inputProps} type="tel" disableUnderline />
       )}
     </InputMask>
-  );
+  )
 
   const Currency = props => (
     <InputMask
@@ -92,7 +91,7 @@ const FormMask = () => {
         <MaterialInput {...inputProps} prefix="$" type="tel" disableUnderline />
       )}
     </InputMask>
-  );
+  )
 
   const Date1 = props => (
     <InputMask
@@ -105,7 +104,7 @@ const FormMask = () => {
         <MaterialInput {...inputProps} type="tel" disableUnderline />
       )}
     </InputMask>
-  );
+  )
 
   const Date2 = props => (
     <InputMask
@@ -118,26 +117,31 @@ const FormMask = () => {
         <MaterialInput {...inputProps} type="tel" disableUnderline />
       )}
     </InputMask>
-  );
+  )
 
-  document.title = "Form Mask | Veltrix - React Admin & Dashboard Template";
+  document.title = "Form Mask | Foodi - React Admin & Dashboard Template"
 
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="Forms" breadcrumbItem="Form Mask" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Forms"
+            breadcrumbItem="Form Mask"
+          />
 
           <Row>
             <Col lg={12}>
               <Card>
                 <CardBody>
-                  <CardTitle className="mb-4" tag="h4">Example</CardTitle>
+                  <CardTitle className="mb-4" tag="h4">
+                    Example
+                  </CardTitle>
                   <Row>
                     <Col md="6">
                       <div className="p-20">
                         <Form action="#">
-
                           <div className="mb-4">
                             <Label>Date Style 1</Label>
                             <Date1 />
@@ -165,9 +169,7 @@ const FormMask = () => {
                           <div className="mb-0">
                             <Label>Currency</Label>
                             <Currency />
-                            <span className="text-muted">
-                              $ 999,999,999.99
-                            </span>
+                            <span className="text-muted">$ 999,999,999.99</span>
                           </div>
                         </Form>
                       </div>
@@ -179,9 +181,7 @@ const FormMask = () => {
                           <div className="mb-4">
                             <Label>repeat</Label>
                             <TAX />
-                            <span className="text-muted">
-                              e.g. "999999999"
-                            </span>
+                            <span className="text-muted">e.g. "999999999"</span>
                           </div>
                           <div className="mb-4">
                             <Label>Mask</Label>
@@ -193,16 +193,12 @@ const FormMask = () => {
                           <div className="mb-4">
                             <Label>IP address</Label>
                             <IPV4 />
-                            <span className="text-muted">
-                              999.999.999.999
-                            </span>
+                            <span className="text-muted">999.999.999.999</span>
                           </div>
                           <div className="mb-0">
                             <Label>Email address::</Label>
                             <IPV6 />
-                            <span className="text-muted">
-                              _@_._
-                            </span>
+                            <span className="text-muted">_@_._</span>
                           </div>
                         </Form>
                       </div>
@@ -215,7 +211,7 @@ const FormMask = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default FormMask;
+export default FormMask

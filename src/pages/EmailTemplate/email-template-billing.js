@@ -1,16 +1,20 @@
-import React from "react";
-import { Row, Col, Container } from "reactstrap";
+import React from "react"
+import { Row, Col, Container } from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const EmailTemplateBilling = props => {
-  document.title = "Billing Email | Veltrix - React Admin & Dashboard Template";
+  document.title = "Billing Email | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Breadcrumbs maintitle="Veltrix" title="Email Templates" breadcrumbItem="Billing Email" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Email Templates"
+            breadcrumbItem="Billing Email"
+          />
           <Row>
             <Col md="12">
               <table
@@ -22,7 +26,7 @@ const EmailTemplateBilling = props => {
                   width: "100%",
                   backgroundColor: "transparent",
                   margin: "0",
-                  color: "#000"
+                  color: "#000",
                 }}
                 bgcolor="#f6f6f6"
               >
@@ -37,8 +41,7 @@ const EmailTemplateBilling = props => {
                   >
                     <td
                       style={{
-                        fontFamily:
-                          "Helvetica Neue,Helvetica,Arial,sans-serif",
+                        fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif",
                         boxSizing: "border-box",
                         fontSize: "14px",
                         verticalAlign: "top",
@@ -50,8 +53,7 @@ const EmailTemplateBilling = props => {
                       className="container"
                       width="600"
                       style={{
-                        fontFamily:
-                          "Helvetica Neue,Helvetica,Arial,sans-serif",
+                        fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif",
                         boxSizing: "border-box",
                         fontSize: "14px",
                         verticalAlign: "top",
@@ -296,8 +298,7 @@ const EmailTemplateBilling = props => {
                                                       style={{
                                                         fontFamily:
                                                           "Helvetica Neue,Helvetica,Arial,sans-serif",
-                                                        boxSizing:
-                                                          "border-box",
+                                                        boxSizing: "border-box",
                                                         fontSize: "14px",
                                                         margin: "0",
                                                       }}
@@ -309,10 +310,8 @@ const EmailTemplateBilling = props => {
                                                           boxSizing:
                                                             "border-box",
                                                           fontSize: "14px",
-                                                          verticalAlign:
-                                                            "top",
-                                                          borderTopWidth:
-                                                            "1px",
+                                                          verticalAlign: "top",
+                                                          borderTopWidth: "1px",
                                                           borderTopColor:
                                                             "#eee",
                                                           borderTopStyle:
@@ -332,11 +331,9 @@ const EmailTemplateBilling = props => {
                                                           boxSizing:
                                                             "border-box",
                                                           fontSize: "14px",
-                                                          verticalAlign:
-                                                            "top",
+                                                          verticalAlign: "top",
                                                           textAlign: "right",
-                                                          borderTopWidth:
-                                                            "1px",
+                                                          borderTopWidth: "1px",
                                                           borderTopColor:
                                                             "#eee",
                                                           borderTopStyle:
@@ -354,8 +351,7 @@ const EmailTemplateBilling = props => {
                                                       style={{
                                                         fontFamily:
                                                           "Helvetica Neue,Helvetica,Arial,sans-serif",
-                                                        boxSizing:
-                                                          "border-box",
+                                                        boxSizing: "border-box",
                                                         fontSize: "14px",
                                                         margin: "0",
                                                       }}
@@ -367,10 +363,8 @@ const EmailTemplateBilling = props => {
                                                           boxSizing:
                                                             "border-box",
                                                           fontSize: "14px",
-                                                          verticalAlign:
-                                                            "top",
-                                                          borderTopWidth:
-                                                            "1px",
+                                                          verticalAlign: "top",
+                                                          borderTopWidth: "1px",
                                                           borderTopColor:
                                                             "#eee",
                                                           borderTopStyle:
@@ -390,11 +384,9 @@ const EmailTemplateBilling = props => {
                                                           boxSizing:
                                                             "border-box",
                                                           fontSize: "14px",
-                                                          verticalAlign:
-                                                            "top",
+                                                          verticalAlign: "top",
                                                           textAlign: "right",
-                                                          borderTopWidth:
-                                                            "1px",
+                                                          borderTopWidth: "1px",
                                                           borderTopColor:
                                                             "#eee",
                                                           borderTopStyle:
@@ -412,8 +404,7 @@ const EmailTemplateBilling = props => {
                                                       style={{
                                                         fontFamily:
                                                           "Helvetica Neue,Helvetica,Arial,sans-serif",
-                                                        boxSizing:
-                                                          "border-box",
+                                                        boxSizing: "border-box",
                                                         fontSize: "14px",
                                                         margin: "0",
                                                       }}
@@ -425,10 +416,8 @@ const EmailTemplateBilling = props => {
                                                           boxSizing:
                                                             "border-box",
                                                           fontSize: "14px",
-                                                          verticalAlign:
-                                                            "top",
-                                                          borderTopWidth:
-                                                            "1px",
+                                                          verticalAlign: "top",
+                                                          borderTopWidth: "1px",
                                                           borderTopColor:
                                                             "#eee",
                                                           borderTopStyle:
@@ -448,11 +437,9 @@ const EmailTemplateBilling = props => {
                                                           boxSizing:
                                                             "border-box",
                                                           fontSize: "14px",
-                                                          verticalAlign:
-                                                            "top",
+                                                          verticalAlign: "top",
                                                           textAlign: "right",
-                                                          borderTopWidth:
-                                                            "1px",
+                                                          borderTopWidth: "1px",
                                                           borderTopColor:
                                                             "#eee",
                                                           borderTopStyle:
@@ -471,8 +458,7 @@ const EmailTemplateBilling = props => {
                                                       style={{
                                                         fontFamily:
                                                           "Helvetica Neue,Helvetica,Arial,sans-serif",
-                                                        boxSizing:
-                                                          "border-box",
+                                                        boxSizing: "border-box",
                                                         fontSize: "14px",
                                                         margin: "0",
                                                       }}
@@ -486,11 +472,9 @@ const EmailTemplateBilling = props => {
                                                           boxSizing:
                                                             "border-box",
                                                           fontSize: "14px",
-                                                          verticalAlign:
-                                                            "top",
+                                                          verticalAlign: "top",
                                                           textAlign: "right",
-                                                          borderTopWidth:
-                                                            "2px",
+                                                          borderTopWidth: "2px",
                                                           borderTopColor:
                                                             "#333",
                                                           borderTopStyle:
@@ -518,11 +502,9 @@ const EmailTemplateBilling = props => {
                                                           boxSizing:
                                                             "border-box",
                                                           fontSize: "14px",
-                                                          verticalAlign:
-                                                            "top",
+                                                          verticalAlign: "top",
                                                           textAlign: "right",
-                                                          borderTopWidth:
-                                                            "2px",
+                                                          borderTopWidth: "2px",
                                                           borderTopColor:
                                                             "#333",
                                                           borderTopStyle:
@@ -575,8 +557,8 @@ const EmailTemplateBilling = props => {
                                         align="center"
                                         valign="top"
                                       >
-                                        Veltrix Inc. 2896 Howell Rd,
-                                        Russellville, AR, 72823
+                                        Foodi Inc. 2896 Howell Rd, Russellville,
+                                        AR, 72823
                                       </td>
                                     </tr>
 
@@ -603,7 +585,7 @@ const EmailTemplateBilling = props => {
                                         }}
                                         valign="top"
                                       >
-                                        {new Date().getFullYear()} © Veltrix
+                                        {new Date().getFullYear()} © Foodi
                                       </td>
                                     </tr>
                                   </tbody>
@@ -622,7 +604,7 @@ const EmailTemplateBilling = props => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default EmailTemplateBilling;
+export default EmailTemplateBilling

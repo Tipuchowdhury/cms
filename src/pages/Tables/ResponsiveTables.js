@@ -1,18 +1,23 @@
-import React from "react";
+import React from "react"
 
-import { Row, Col, Card, CardBody, CardTitle } from "reactstrap";
-import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
-import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+import { Row, Col, Card, CardBody, CardTitle } from "reactstrap"
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table"
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css"
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const ResponsiveTables = () => {
-  document.title = "Responsive Tables | Veltrix - React Admin & Dashboard Template";
+  document.title =
+    "Responsive Tables | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
-          <Breadcrumbs maintitle="Veltrix" title="Tables" breadcrumbItem="Responsive Table" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Tables"
+            breadcrumbItem="Responsive Table"
+          />
 
           <Row>
             <Col>
@@ -563,7 +568,7 @@ const ResponsiveTables = () => {
         </div>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default ResponsiveTables;
+export default ResponsiveTables

@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 
 import {
   Col,
@@ -12,33 +12,37 @@ import {
   CardFooter,
   CardDeck,
   Container,
-} from "reactstrap";
+} from "reactstrap"
 
 // import images
-import img1 from "../../assets/images/small/img-1.jpg";
-import img2 from "../../assets/images/small/img-2.jpg";
-import img3 from "../../assets/images/small/img-3.jpg";
-import img4 from "../../assets/images/small/img-4.jpg";
-import img5 from "../../assets/images/small/img-5.jpg";
-import img6 from "../../assets/images/small/img-6.jpg";
-import img7 from "../../assets/images/small/img-7.jpg";
-import { Link } from "react-router-dom";
+import img1 from "../../assets/images/small/img-1.jpg"
+import img2 from "../../assets/images/small/img-2.jpg"
+import img3 from "../../assets/images/small/img-3.jpg"
+import img4 from "../../assets/images/small/img-4.jpg"
+import img5 from "../../assets/images/small/img-5.jpg"
+import img6 from "../../assets/images/small/img-6.jpg"
+import img7 from "../../assets/images/small/img-7.jpg"
+import { Link } from "react-router-dom"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const UiCards = () => {
-  document.title = "Cards | Veltrix - React Admin & Dashboard Template";
+  document.title = "Cards | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="UI Elements" breadcrumbItem="Cards" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="UI Elements"
+            breadcrumbItem="Cards"
+          />
 
           <Row>
             <Col md={6} lg={6} xl={3}>
               <Card>
-                <CardImg top className="img-fluid" src={img1} alt="Veltrix" />
+                <CardImg top className="img-fluid" src={img1} alt="Foodi" />
                 <CardBody>
                   <CardTitle className="h4">Card title</CardTitle>
                   <p className="card-text">
@@ -56,7 +60,7 @@ const UiCards = () => {
             </Col>
             <Col md={6} lg={6} xl={3}>
               <Card>
-                <CardImg top className="img-fluid" src={img2} alt="Veltrix" />
+                <CardImg top className="img-fluid" src={img2} alt="Foodi" />
                 <CardBody>
                   <CardTitle className="h4">Card title</CardTitle>
                   <p className="card-text">
@@ -81,7 +85,7 @@ const UiCards = () => {
 
             <Col md={6} lg={6} xl={3}>
               <Card>
-                <CardImg top className="img-fluid" src={img3} alt="Veltrix" />
+                <CardImg top className="img-fluid" src={img3} alt="Foodi" />
                 <CardBody>
                   <p className="card-text">
                     Some quick example text to build on the card title and make
@@ -98,7 +102,7 @@ const UiCards = () => {
                     Support card subtitle
                   </h6>
                 </CardBody>
-                <CardImg className="img-fluid" src={img4} alt="Veltrix" />
+                <CardImg className="img-fluid" src={img4} alt="Foodi" />
                 <CardBody>
                   <p className="card-text">
                     Some quick example text to build on the card title and make
@@ -118,7 +122,9 @@ const UiCards = () => {
           <Row>
             <Col md={6}>
               <Card body>
-                <CardTitle className="h4 mt-0">Special title treatment</CardTitle>
+                <CardTitle className="h4 mt-0">
+                  Special title treatment
+                </CardTitle>
                 <p className="card-text">
                   With supporting text below as a natural lead-in to additional
                   content.
@@ -133,7 +139,9 @@ const UiCards = () => {
             </Col>
             <Col md={6}>
               <Card body>
-                <CardTitle className="h4 mt-0">Special title treatment</CardTitle>
+                <CardTitle className="h4 mt-0">
+                  Special title treatment
+                </CardTitle>
                 <p className="card-text">
                   With supporting text below as a natural lead-in to additional
                   content.
@@ -151,7 +159,9 @@ const UiCards = () => {
           <Row>
             <Col lg={4}>
               <Card body>
-                <CardTitle className="h4 mt-0">Special title treatment</CardTitle>
+                <CardTitle className="h4 mt-0">
+                  Special title treatment
+                </CardTitle>
                 <p className="card-text">
                   With supporting text below as a natural lead-in to additional
                   content.
@@ -167,7 +177,9 @@ const UiCards = () => {
 
             <Col lg={4}>
               <Card body className="text-center">
-                <CardTitle className="h4 mt-0">Special title treatment</CardTitle>
+                <CardTitle className="h4 mt-0">
+                  Special title treatment
+                </CardTitle>
                 <p className="card-text">
                   With supporting text below as a natural lead-in to additional
                   content.
@@ -183,7 +195,9 @@ const UiCards = () => {
 
             <Col lg={4}>
               <Card body className="text-end">
-                <CardTitle className="h4 mt-0">Special title treatment</CardTitle>
+                <CardTitle className="h4 mt-0">
+                  Special title treatment
+                </CardTitle>
                 <p className="card-text">
                   With supporting text below as a natural lead-in to additional
                   content.
@@ -239,9 +253,7 @@ const UiCards = () => {
               <Card>
                 <CardHeader>Featured</CardHeader>
                 <CardBody>
-                  <CardTitle className="h4">
-                    Special title treatment
-                  </CardTitle>
+                  <CardTitle className="h4">Special title treatment</CardTitle>
                   <p className="card-text">
                     With supporting text below as a natural lead-in to
                     additional content.
@@ -261,7 +273,7 @@ const UiCards = () => {
           <Row>
             <Col lg={4}>
               <Card>
-                <CardImg top className="img-fluid" src={img5} alt="Veltrix" />
+                <CardImg top className="img-fluid" src={img5} alt="Foodi" />
                 <CardBody>
                   <CardTitle className="h4">Card title</CardTitle>
                   <p className="card-text">
@@ -293,15 +305,17 @@ const UiCards = () => {
                     </small>
                   </p>
                 </CardBody>
-                <CardImg bottom className="img-fluid" src={img7} alt="Veltrix" />
+                <CardImg bottom className="img-fluid" src={img7} alt="Foodi" />
               </Card>
             </Col>
 
             <Col lg={4}>
               <Card className="text-white">
-                <CardImg className="img-fluid" src={img6} alt="Veltrix" />
+                <CardImg className="img-fluid" src={img6} alt="Foodi" />
                 <CardImgOverlay>
-                  <CardTitle className="text-white mt-0 h4">Card title</CardTitle>
+                  <CardTitle className="text-white mt-0 h4">
+                    Card title
+                  </CardTitle>
                   <p className="card-text">
                     This is a wider card with supporting text below as a natural
                     lead-in to additional content. This content is a little bit
@@ -425,10 +439,13 @@ const UiCards = () => {
               <Card className="text-white bg-dark">
                 <CardBody>
                   <blockquote className="card-blockquote mb-0">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere
-                      erat a ante.</p>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Integer posuere erat a ante.
+                    </p>
                     <footer className="blockquote-footer text-white font-12 m-0">
-                      Someone famous in <cite title="Source Title">Source Title</cite>
+                      Someone famous in{" "}
+                      <cite title="Source Title">Source Title</cite>
                     </footer>
                   </blockquote>
                 </CardBody>
@@ -442,7 +459,7 @@ const UiCards = () => {
               <CardDeck className="card-deck-wrapper">
                 <div className="card-group">
                   <Card className="mb-4">
-                    <CardImg top className="img-fluid" src={img4} alt="Veltrix" />
+                    <CardImg top className="img-fluid" src={img4} alt="Foodi" />
                     <CardBody>
                       <CardTitle className="h4">Card title</CardTitle>
                       <p className="card-text">
@@ -458,7 +475,7 @@ const UiCards = () => {
                     </CardBody>
                   </Card>
                   <Card className="mb-4">
-                    <CardImg top className="img-fluid" src={img5} alt="Veltrix" />
+                    <CardImg top className="img-fluid" src={img5} alt="Foodi" />
                     <CardBody>
                       <CardTitle className="h4">Card title</CardTitle>
                       <p className="card-text">
@@ -473,14 +490,14 @@ const UiCards = () => {
                     </CardBody>
                   </Card>
                   <Card className="mb-4">
-                    <CardImg top className="img-fluid" src={img6} alt="Veltrix" />
+                    <CardImg top className="img-fluid" src={img6} alt="Foodi" />
                     <CardBody>
                       <CardTitle className="h4">Card title</CardTitle>
                       <p className="card-text">
                         This is a wider card with supporting text below as a
-                        natural lead-in to additional content. This card has even
-                        longer content than the first to show that equal height
-                        action.
+                        natural lead-in to additional content. This card has
+                        even longer content than the first to show that equal
+                        height action.
                       </p>
                       <p className="card-text">
                         <small className="text-muted">
@@ -493,12 +510,9 @@ const UiCards = () => {
               </CardDeck>
             </Col>
           </Row>
-
         </Container>
       </div>
-    </React.Fragment >
-  );
-};
+    </React.Fragment>
+  )
+}
 export default UiCards
-
-

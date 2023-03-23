@@ -1,20 +1,24 @@
-import React from "react";
-import { Row, Card, CardBody, Container } from "reactstrap";
-import { Link } from "react-router-dom";
+import React from "react"
+import { Row, Card, CardBody, Container } from "reactstrap"
+import { Link } from "react-router-dom"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
-import logoSm from "../../assets/images/logo-sm.png";
+import logoSm from "../../assets/images/logo-sm.png"
 
 const PagesInvoice = () => {
-  document.title = "Invoice | Veltrix - React Admin & Dashboard Template";
+  document.title = "Invoice | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
           {/* Render Breadcrumbs */}
-          <Breadcrumbs maintitle="Veltrix" title="Extra Pages" breadcrumbItem="Invoice" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Extra Pages"
+            breadcrumbItem="Invoice"
+          />
           <Row>
             <div className="col-12">
               <Card>
@@ -164,7 +168,7 @@ const PagesInvoice = () => {
                               <Link
                                 to="#"
                                 onClick={() => {
-                                  window.print();
+                                  window.print()
                                 }}
                                 className="btn btn-success waves-effect waves-light"
                               >
@@ -189,8 +193,7 @@ const PagesInvoice = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
+  )
+}
 
-};
-
-export default PagesInvoice;
+export default PagesInvoice

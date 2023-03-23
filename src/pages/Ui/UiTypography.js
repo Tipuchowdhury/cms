@@ -1,23 +1,20 @@
-import React from "react";
-import {
-  Card,
-  Row,
-  Col,
-  CardBody,
-  CardTitle,
-  Container,
-} from "reactstrap";
+import React from "react"
+import { Card, Row, Col, CardBody, CardTitle, Container } from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const UiTypography = () => {
-  document.title = "Typography | Veltrix - React Admin & Dashboard Template";
+  document.title = "Typography | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="UI Elements" breadcrumbItem="Typography" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="UI Elements"
+            breadcrumbItem="Typography"
+          />
 
           <Row>
             <Col lg={6}>
@@ -34,11 +31,15 @@ const UiTypography = () => {
 
                   <h1>
                     h1. Bootstrap heading{" "}
-                    <small className="text-muted fw-normal font-size-18">Semibold 2.1875rem (35px)</small>
+                    <small className="text-muted fw-normal font-size-18">
+                      Semibold 2.1875rem (35px)
+                    </small>
                   </h1>
                   <h2>
                     h2. Bootstrap heading{" "}
-                    <small className="text-muted fw-normal font-size-18">Semibold 1.75rem (28px)</small>
+                    <small className="text-muted fw-normal font-size-18">
+                      Semibold 1.75rem (28px)
+                    </small>
                   </h2>
                   <h3>
                     h3. Bootstrap heading{" "}
@@ -48,7 +49,9 @@ const UiTypography = () => {
                   </h3>
                   <h4>
                     h4. Bootstrap heading{" "}
-                    <small className="text-muted fw-normal font-size-18">Semibold 1.3125rem (21px)</small>
+                    <small className="text-muted fw-normal font-size-18">
+                      Semibold 1.3125rem (21px)
+                    </small>
                   </h4>
                   <h5>
                     h5. Bootstrap heading{" "}
@@ -58,7 +61,9 @@ const UiTypography = () => {
                   </h5>
                   <h6 className="mb-0">
                     h6. Bootstrap heading{" "}
-                    <small className="text-muted fw-normal font-size-18">Semibold 0.875rem (14px)</small>
+                    <small className="text-muted fw-normal font-size-18">
+                      Semibold 0.875rem (14px)
+                    </small>
                   </h6>
                 </CardBody>
               </Card>
@@ -109,10 +114,16 @@ const UiTypography = () => {
               <Card>
                 <CardBody>
                   <CardTitle className="h4">Font size</CardTitle>
-                  <p>Quickly change the <code>font-size</code> of text. While our heading classes (e.g.,
-                    <code>.h1</code>–<code>.h6</code>) apply <code>font-size</code>, <code>font-weight</code>, and
-                    <code>line-height</code>, these utilities <em>only</em> apply <code>font-size</code>. Sizing for these
-                    utilities matches HTML’s heading elements, so as the number increases, their size decreases.</p>
+                  <p>
+                    Quickly change the <code>font-size</code> of text. While our
+                    heading classes (e.g.,
+                    <code>.h1</code>–<code>.h6</code>) apply{" "}
+                    <code>font-size</code>, <code>font-weight</code>, and
+                    <code>line-height</code>, these utilities <em>only</em>{" "}
+                    apply <code>font-size</code>. Sizing for these utilities
+                    matches HTML’s heading elements, so as the number increases,
+                    their size decreases.
+                  </p>
                   <p className="fs-1">.fs-1 text</p>
                   <p className="fs-2">.fs-2 text</p>
                   <p className="fs-3">.fs-3 text</p>
@@ -233,7 +244,9 @@ const UiTypography = () => {
             <Col className="col-12">
               <Card>
                 <CardBody>
-                  <CardTitle className="h4">Description list alignment</CardTitle>
+                  <CardTitle className="h4">
+                    Description list alignment
+                  </CardTitle>
                   <p className="card-title-desc">
                     Align terms and descriptions horizontally by using our grid
                     system’s predefined className (or semantic mixins). For
@@ -288,7 +301,7 @@ const UiTypography = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default UiTypography;
+export default UiTypography

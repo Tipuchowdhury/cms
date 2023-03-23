@@ -1,10 +1,10 @@
-import React from "react";
-import { MDBDataTable } from "mdbreact";
-import { Row, Col, Card, CardBody, CardTitle, CardSubtitle } from "reactstrap";
+import React from "react"
+import { MDBDataTable } from "mdbreact"
+import { Row, Col, Card, CardBody, CardTitle, CardSubtitle } from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
-import "./datatables.scss";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
+import "./datatables.scss"
 
 const DatatableTables = () => {
   const data = {
@@ -504,13 +504,17 @@ const DatatableTables = () => {
         salary: "$112",
       },
     ],
-  };
-  document.title = "Data Tables | Veltrix - React Admin & Dashboard Template";
+  }
+  document.title = "Data Tables | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
-          <Breadcrumbs maintitle="Veltrix" title="Tables" breadcrumbItem="Data Tables" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Tables"
+            breadcrumbItem="Data Tables"
+          />
 
           <Row>
             <Col className="col-12">
@@ -550,7 +554,7 @@ const DatatableTables = () => {
         </div>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default DatatableTables;
+export default DatatableTables

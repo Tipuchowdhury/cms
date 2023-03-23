@@ -1,19 +1,19 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Container, Row, Col } from "reactstrap";
+import React from "react"
+import { Link } from "react-router-dom"
+import { Container, Row, Col } from "reactstrap"
 
 //Import Countdown
-import Countdown from "react-countdown";
+import Countdown from "react-countdown"
 
 //Import Images
-import logoDark from "../../assets/images/logo-dark.png";
+import logoDark from "../../assets/images/logo-dark.png"
 import logoLight from "../../assets/images/logo-light.png"
 
 const PagesComingsoon = () => {
   const renderer = ({ days, hours, minutes, seconds, completed }) => {
     if (completed) {
       // Render a completed state
-      return <span>You are good to go!</span>;
+      return <span>You are good to go!</span>
     } else {
       return (
         <>
@@ -30,10 +30,10 @@ const PagesComingsoon = () => {
             {seconds} <span>Seconds</span>
           </div>
         </>
-      );
+      )
     }
-  };
-  document.title = "Coming Soon | Veltrix - React Admin & Dashboard Template";
+  }
+  document.title = "Coming Soon | Foodi - React Admin & Dashboard Template"
 
   return (
     <React.Fragment>
@@ -50,7 +50,7 @@ const PagesComingsoon = () => {
                 <div className="home-wrapper text-center">
                   <img src={logoDark} alt="logo" height="22" />
                   {/* <img src={logoLight} alt="logo" height="22" /> */}
-                  <h3 className="mt-4">Let's get started with Veltrix</h3>
+                  <h3 className="mt-4">Let's get started with Foodi</h3>
                   <p className="mb-5">
                     It will be as simple as Occidental in fact it will be
                     Occidental.
@@ -79,7 +79,7 @@ const PagesComingsoon = () => {
         </div>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default PagesComingsoon;
+export default PagesComingsoon

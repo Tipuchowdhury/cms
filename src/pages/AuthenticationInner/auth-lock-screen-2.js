@@ -1,11 +1,11 @@
 import React from "react"
-import logoDark from "../../assets/images/logo-dark.png";
-import user6 from "../../assets/images/users/user-6.jpg";
-import bg from "../../assets/images/bg.jpg";
+import logoDark from "../../assets/images/logo-dark.png"
+import user6 from "../../assets/images/users/user-6.jpg"
+import bg from "../../assets/images/bg.jpg"
 import { Link } from "react-router-dom"
 
 const LockScreen2 = () => {
-  document.title = "Lock Screen 2 | Veltrix - React Admin & Dashboard Template";
+  document.title = "Lock Screen 2 | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div
@@ -13,7 +13,7 @@ const LockScreen2 = () => {
         style={{
           backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundImage: `url(${bg})`
+          backgroundImage: `url(${bg})`,
         }}
       ></div>
       <div className="wrapper-page account-page-full">
@@ -77,7 +77,7 @@ const LockScreen2 = () => {
                       </Link>{" "}
                     </p>
                     <p>
-                      © {new Date().getFullYear()} Veltrix. Crafted with{" "}
+                      © {new Date().getFullYear()} Foodi. Crafted with{" "}
                       <i className="mdi mdi-heart text-danger"></i> by
                       Themesbrand
                     </p>
@@ -92,4 +92,4 @@ const LockScreen2 = () => {
   )
 }
 
-export default LockScreen2;
+export default LockScreen2

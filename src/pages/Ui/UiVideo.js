@@ -1,22 +1,36 @@
-import React from "react";
-import { Card, CardBody, CardSubtitle, CardTitle, Col, Container, Row } from "reactstrap";
+import React from "react"
+import {
+  Card,
+  CardBody,
+  CardSubtitle,
+  CardTitle,
+  Col,
+  Container,
+  Row,
+} from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const UiVideo = () => {
-  document.title = "Video | Veltrix - React Admin & Dashboard Template";
+  document.title = "Video | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="UI Elements" breadcrumbItem="Video" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="UI Elements"
+            breadcrumbItem="Video"
+          />
 
           <Row>
             <Col lg={6}>
               <Card>
                 <CardBody>
-                  <CardTitle className="h4">Responsive embed video 16:9</CardTitle>
+                  <CardTitle className="h4">
+                    Responsive embed video 16:9
+                  </CardTitle>
                   <CardSubtitle className="mb-3">
                     Aspect ratios can be customized with modifier className.
                   </CardSubtitle>
@@ -35,7 +49,9 @@ const UiVideo = () => {
             <Col lg={6}>
               <Card>
                 <CardBody>
-                  <CardTitle className="h4">Responsive embed video 21:9</CardTitle>
+                  <CardTitle className="h4">
+                    Responsive embed video 21:9
+                  </CardTitle>
                   <CardSubtitle className="mb-3">
                     Aspect ratios can be customized with modifier className.
                   </CardSubtitle>
@@ -56,7 +72,9 @@ const UiVideo = () => {
             <Col lg={6}>
               <Card>
                 <CardBody>
-                  <CardTitle className="h4">Responsive embed video 4:3</CardTitle>
+                  <CardTitle className="h4">
+                    Responsive embed video 4:3
+                  </CardTitle>
                   <CardSubtitle className="mb-3">
                     Aspect ratios can be customized with modifier className.
                   </CardSubtitle>
@@ -75,7 +93,9 @@ const UiVideo = () => {
             <Col lg={6}>
               <Card>
                 <CardBody>
-                  <CardTitle className="h4">Responsive embed video 1:1</CardTitle>
+                  <CardTitle className="h4">
+                    Responsive embed video 1:1
+                  </CardTitle>
                   <CardSubtitle className="mb-3">
                     Aspect ratios can be customized with modifier className.
                   </CardSubtitle>
@@ -94,7 +114,7 @@ const UiVideo = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default UiVideo;
+export default UiVideo

@@ -1,30 +1,38 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react"
+import { Link } from "react-router-dom"
 import {
-  Col, Row, Card, CardBody, Container,
+  Col,
+  Row,
+  Card,
+  CardBody,
+  Container,
   Button,
   ButtonGroup,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
   ButtonDropdown,
-} from "reactstrap";
+} from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const UiButtons = () => {
-  const [radio1, setradio1] = useState(true);
-  const [radio2, setradio2] = useState(false);
-  const [radio3, setradio3] = useState(false);
-  const [drp_link, setdrp_link] = useState(false);
+  const [radio1, setradio1] = useState(true)
+  const [radio2, setradio2] = useState(false)
+  const [radio3, setradio3] = useState(false)
+  const [drp_link, setdrp_link] = useState(false)
 
-  document.title = "Button | Veltrix - React Admin & Dashboard Template";
+  document.title = "Button | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="UI Elements" breadcrumbItem="Buttons" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="UI Elements"
+            breadcrumbItem="Buttons"
+          />
 
           <Row>
             <Col lg={6}>
@@ -97,8 +105,9 @@ const UiButtons = () => {
                   <h4 className="card-title">Outline buttons</h4>
                   <p className="card-title-desc">
                     Replace the default modifier classes with the{" "}
-                    <code className="highlighter-rouge">.btn-outline-* </code> ones to
-                    remove all background images and colors on any button.
+                    <code className="highlighter-rouge">.btn-outline-* </code>{" "}
+                    ones to remove all background images and colors on any
+                    button.
                   </p>
                   <div className="button-items">
                     <Button
@@ -337,15 +346,38 @@ const UiButtons = () => {
                     containing those modified buttons to enable toggling in
                     their respective styles.
                   </p>
-                  <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                    <input type="checkbox" className="btn-check" id="btncheck1" defaultChecked />
-                    <label className="btn btn-secondary" htmlFor="btncheck1">Checked-1</label>
+                  <div
+                    className="btn-group"
+                    role="group"
+                    aria-label="Basic checkbox toggle button group"
+                  >
+                    <input
+                      type="checkbox"
+                      className="btn-check"
+                      id="btncheck1"
+                      defaultChecked
+                    />
+                    <label className="btn btn-secondary" htmlFor="btncheck1">
+                      Checked-1
+                    </label>
 
-                    <input type="checkbox" className="btn-check" id="btncheck2" />
-                    <label className="btn btn-secondary" htmlFor="btncheck2">Checked-2</label>
+                    <input
+                      type="checkbox"
+                      className="btn-check"
+                      id="btncheck2"
+                    />
+                    <label className="btn btn-secondary" htmlFor="btncheck2">
+                      Checked-2
+                    </label>
 
-                    <input type="checkbox" className="btn-check" id="btncheck3" />
-                    <label className="btn btn-secondary" htmlFor="btncheck3">Checked-3</label>
+                    <input
+                      type="checkbox"
+                      className="btn-check"
+                      id="btncheck3"
+                    />
+                    <label className="btn btn-secondary" htmlFor="btncheck3">
+                      Checked-3
+                    </label>
                   </div>
                 </CardBody>
               </Card>
@@ -368,15 +400,40 @@ const UiButtons = () => {
                     containing those modified buttons to enable toggling in
                     their respective styles.
                   </p>
-                  <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                    <input type="checkbox" className="btn-check" id="btncheck4" />
-                    <label className="btn btn-primary active" htmlFor="btncheck4">Active</label>
+                  <div
+                    className="btn-group"
+                    role="group"
+                    aria-label="Basic checkbox toggle button group"
+                  >
+                    <input
+                      type="checkbox"
+                      className="btn-check"
+                      id="btncheck4"
+                    />
+                    <label
+                      className="btn btn-primary active"
+                      htmlFor="btncheck4"
+                    >
+                      Active
+                    </label>
 
-                    <input type="checkbox" className="btn-check" id="btncheck5" />
-                    <label className="btn btn-primary" htmlFor="btncheck5">Radio</label>
+                    <input
+                      type="checkbox"
+                      className="btn-check"
+                      id="btncheck5"
+                    />
+                    <label className="btn btn-primary" htmlFor="btncheck5">
+                      Radio
+                    </label>
 
-                    <input type="checkbox" className="btn-check" id="btncheck6" />
-                    <label className="btn btn-primary" htmlFor="btncheck6">Radio</label>
+                    <input
+                      type="checkbox"
+                      className="btn-check"
+                      id="btncheck6"
+                    />
+                    <label className="btn btn-primary" htmlFor="btncheck6">
+                      Radio
+                    </label>
                   </div>
                 </CardBody>
               </Card>
@@ -538,7 +595,7 @@ const UiButtons = () => {
                     <ButtonDropdown
                       isOpen={drp_link}
                       toggle={() => {
-                        setdrp_link(!drp_link);
+                        setdrp_link(!drp_link)
                       }}
                     >
                       <DropdownToggle caret color="secondary">
@@ -569,11 +626,10 @@ const UiButtons = () => {
               </Card>
             </Col>
           </Row>
-
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default UiButtons;
+export default UiButtons

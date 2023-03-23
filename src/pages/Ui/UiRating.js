@@ -1,21 +1,21 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
-import { Row, Col, Card, CardBody, Container } from "reactstrap";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
+import { Row, Col, Card, CardBody, Container } from "reactstrap"
 
 // Rating Plugin
-import Rating from "react-rating";
-import RatingTooltip from "react-rating-tooltip";
+import Rating from "react-rating"
+import RatingTooltip from "react-rating-tooltip"
 
 const UiRating = () => {
-  const [def, setdef] = useState("");
-  const [customize, setcustomize] = useState("");
-  const starStyle = {};
+  const [def, setdef] = useState("")
+  const [customize, setcustomize] = useState("")
+  const starStyle = {}
 
-  const tooltipContent = ["Rate 1", "Rate 2", "Rate 3", "Rate 4", "Rate 5"];
-  const tooltipContentMore = ["1", "2", "3", "4", "5", "6", "7", "8"];
-  const tooltipContentHalf = ["6", "7", "8", "9", "10"];
+  const tooltipContent = ["Rate 1", "Rate 2", "Rate 3", "Rate 4", "Rate 5"]
+  const tooltipContentMore = ["1", "2", "3", "4", "5", "6", "7", "8"]
+  const tooltipContentHalf = ["6", "7", "8", "9", "10"]
   const tooltipContentMiddle = [
     "2",
     "3",
@@ -28,15 +28,19 @@ const UiRating = () => {
     "10",
     "11",
     "12",
-  ];
-  const tooltipContentStep = ["2", "4", "6", "8", "10"];
+  ]
+  const tooltipContentStep = ["2", "4", "6", "8", "10"]
 
-  document.title = "Rating | Veltrix - React Admin & Dashboard Template";
+  document.title = "Rating | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="UI Elements" breadcrumbItem="Rating" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="UI Elements"
+            breadcrumbItem="Rating"
+          />
 
           <Row>
             <Col className="col-12">
@@ -49,7 +53,7 @@ const UiRating = () => {
                         <RatingTooltip
                           max={5}
                           onChange={rate => {
-                            setdef(rate);
+                            setdef(rate)
                           }}
                           ActiveComponent={
                             <i
@@ -127,7 +131,7 @@ const UiRating = () => {
                         <RatingTooltip
                           max={5}
                           onChange={rate => {
-                            setcustomize(rate);
+                            setcustomize(rate)
                           }}
                           ActiveComponent={
                             <i
@@ -177,7 +181,7 @@ const UiRating = () => {
                         <RatingTooltip
                           max={5}
                           onChange={rate => {
-                            setdef(rate);
+                            setdef(rate)
                           }}
                           tooltipContent={tooltipContent}
                           ActiveComponent={
@@ -204,7 +208,7 @@ const UiRating = () => {
                         <RatingTooltip
                           max={8}
                           onChange={rate => {
-                            setdef(rate);
+                            setdef(rate)
                           }}
                           tooltipContent={tooltipContentMore}
                           ActiveComponent={
@@ -233,7 +237,7 @@ const UiRating = () => {
                         <RatingTooltip
                           max={5}
                           onChange={rate => {
-                            setdef(rate);
+                            setdef(rate)
                           }}
                           tooltipContent={tooltipContentHalf}
                           ActiveComponent={
@@ -262,7 +266,7 @@ const UiRating = () => {
                         <RatingTooltip
                           max={11}
                           onChange={rate => {
-                            setdef(rate);
+                            setdef(rate)
                           }}
                           tooltipContent={tooltipContentMiddle}
                           ActiveComponent={
@@ -291,7 +295,7 @@ const UiRating = () => {
                         <RatingTooltip
                           max={5}
                           onChange={rate => {
-                            setdef(rate);
+                            setdef(rate)
                           }}
                           tooltipContent={tooltipContentStep}
                           ActiveComponent={
@@ -333,7 +337,7 @@ const UiRating = () => {
                         <h5 className="font-16 m-b-15">Fractional rating</h5>
                         <Rating
                           onChange={rate => {
-                            setdef(rate);
+                            setdef(rate)
                           }}
                           ActiveComponent={
                             <i
@@ -357,9 +361,12 @@ const UiRating = () => {
                     <Col xl="3" md="4" sm="6">
                       <div className="p-4 text-center">
                         <h5 className="font-16 m-b-15">Custom CSS icons</h5>
-                        <Rating onChange={rate => {
-                          setdef(rate);
-                        }} fractions={2} />
+                        <Rating
+                          onChange={rate => {
+                            setdef(rate)
+                          }}
+                          fractions={2}
+                        />
                       </div>
                     </Col>
                   </Row>{" "}
@@ -370,6 +377,6 @@ const UiRating = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
-export default UiRating;
+  )
+}
+export default UiRating

@@ -1,17 +1,21 @@
-import React from "react";
+import React from "react"
 
-import { Row, Col, Card, CardBody, Container } from "reactstrap";
+import { Row, Col, Card, CardBody, Container } from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const IconDripicons = () => {
-  document.title = "Dripicons | Veltrix - React Admin & Dashboard Template";
+  document.title = "Dripicons | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Breadcrumbs maintitle="Veltrix" title="Icons" breadcrumbItem="Dripicons" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Icons"
+            breadcrumbItem="Dripicons"
+          />
 
           <Row>
             <Col xs="12">
@@ -85,8 +89,7 @@ const IconDripicons = () => {
                       <i className=" dripicons-article" /> dripicons-article
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-backspace" />{" "}
-                      dripicons-backspace
+                      <i className="dripicons-backspace" /> dripicons-backspace
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-basket" /> dripicons-basket
@@ -118,8 +121,7 @@ const IconDripicons = () => {
                       <i className="dripicons-blog" /> dripicons-blog
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-bluetooth" />{" "}
-                      dripicons-bluetooth
+                      <i className="dripicons-bluetooth" /> dripicons-bluetooth
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-bold" /> dripicons-bold
@@ -128,15 +130,13 @@ const IconDripicons = () => {
                       <i className="dripicons-bookmark" /> dripicons-bookmark
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-bookmarks" />{" "}
-                      dripicons-bookmarks
+                      <i className="dripicons-bookmarks" /> dripicons-bookmarks
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-box" /> dripicons-box
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-briefcase" />{" "}
-                      dripicons-briefcase
+                      <i className="dripicons-briefcase" /> dripicons-briefcase
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-brightness-low" />{" "}
@@ -151,8 +151,7 @@ const IconDripicons = () => {
                       dripicons-brightness-medium
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-broadcast" />{" "}
-                      dripicons-broadcast
+                      <i className="dripicons-broadcast" /> dripicons-broadcast
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-browser" /> dripicons-browser
@@ -168,8 +167,7 @@ const IconDripicons = () => {
                       <i className="dripicons-calendar" /> dripicons-calendar
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-camcorder" />{" "}
-                      dripicons-camcorder
+                      <i className="dripicons-camcorder" /> dripicons-camcorder
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-camera" /> dripicons-camera
@@ -181,12 +179,10 @@ const IconDripicons = () => {
                       <i className="dripicons-cart" /> dripicons-cart
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-checklist" />{" "}
-                      dripicons-checklist
+                      <i className="dripicons-checklist" /> dripicons-checklist
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-checkmark" />{" "}
-                      dripicons-checkmark
+                      <i className="dripicons-checkmark" /> dripicons-checkmark
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-chevron-down" />{" "}
@@ -205,15 +201,13 @@ const IconDripicons = () => {
                       dripicons-chevron-up
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-clipboard" />{" "}
-                      dripicons-clipboard
+                      <i className="dripicons-clipboard" /> dripicons-clipboard
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-clock" /> dripicons-clock
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-clockwise" />{" "}
-                      dripicons-clockwise
+                      <i className="dripicons-clockwise" /> dripicons-clockwise
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-cloud" /> dripicons-cloud
@@ -250,8 +244,7 @@ const IconDripicons = () => {
                       <i className="dripicons-cross" /> dripicons-cross
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-crosshair" />{" "}
-                      dripicons-crosshair
+                      <i className="dripicons-crosshair" /> dripicons-crosshair
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-cutlery" /> dripicons-cutlery
@@ -269,8 +262,7 @@ const IconDripicons = () => {
                       dripicons-device-tablet
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-direction" />{" "}
-                      dripicons-direction
+                      <i className="dripicons-direction" /> dripicons-direction
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-disc" /> dripicons-disc
@@ -307,8 +299,7 @@ const IconDripicons = () => {
                       <i className="dripicons-download" /> dripicons-download
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-duplicate" />{" "}
-                      dripicons-duplicate
+                      <i className="dripicons-duplicate" /> dripicons-duplicate
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-enter" /> dripicons-enter
@@ -360,16 +351,14 @@ const IconDripicons = () => {
                       dripicons-graduation
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-graph-bar" />{" "}
-                      dripicons-graph-bar
+                      <i className="dripicons-graph-bar" /> dripicons-graph-bar
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-graph-line" />{" "}
                       dripicons-graph-line
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-graph-pie" />{" "}
-                      dripicons-graph-pie
+                      <i className="dripicons-graph-pie" /> dripicons-graph-pie
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-headset" /> dripicons-headset
@@ -384,8 +373,7 @@ const IconDripicons = () => {
                       <i className="dripicons-home" /> dripicons-home
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-hourglass" />{" "}
-                      dripicons-hourglass
+                      <i className="dripicons-hourglass" /> dripicons-hourglass
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-inbox" /> dripicons-inbox
@@ -404,8 +392,7 @@ const IconDripicons = () => {
                       <i className="dripicons-lifting" /> dripicons-lifting
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-lightbulb" />{" "}
-                      dripicons-lightbulb
+                      <i className="dripicons-lightbulb" /> dripicons-lightbulb
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-link" /> dripicons-link
@@ -427,8 +414,7 @@ const IconDripicons = () => {
                       <i className="dripicons-lock" /> dripicons-lock
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-lock-open" />{" "}
-                      dripicons-lock-open
+                      <i className="dripicons-lock-open" /> dripicons-lock-open
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-mail" /> dripicons-mail
@@ -497,31 +483,25 @@ const IconDripicons = () => {
                       <i className="dripicons-music" /> dripicons-music
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-network-1" />{" "}
-                      dripicons-network-1
+                      <i className="dripicons-network-1" /> dripicons-network-1
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-network-2" />{" "}
-                      dripicons-network-2
+                      <i className="dripicons-network-2" /> dripicons-network-2
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-network-3" />{" "}
-                      dripicons-network-3
+                      <i className="dripicons-network-3" /> dripicons-network-3
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-network-4" />{" "}
-                      dripicons-network-4
+                      <i className="dripicons-network-4" /> dripicons-network-4
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-network-5" />{" "}
-                      dripicons-network-5
+                      <i className="dripicons-network-5" /> dripicons-network-5
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-pamphlet" /> dripicons-pamphlet
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-paperclip" />{" "}
-                      dripicons-paperclip
+                      <i className="dripicons-paperclip" /> dripicons-paperclip
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-pencil" /> dripicons-pencil
@@ -564,8 +544,7 @@ const IconDripicons = () => {
                       <i className="dripicons-reply" /> dripicons-reply
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-reply-all" />{" "}
-                      dripicons-reply-all
+                      <i className="dripicons-reply-all" /> dripicons-reply-all
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-return" /> dripicons-return
@@ -596,8 +575,7 @@ const IconDripicons = () => {
                       <i className="dripicons-star" /> dripicons-star
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-stopwatch" />{" "}
-                      dripicons-stopwatch
+                      <i className="dripicons-stopwatch" /> dripicons-stopwatch
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-store" /> dripicons-store
@@ -623,8 +601,7 @@ const IconDripicons = () => {
                       dripicons-thumbs-down
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-thumbs-up" />{" "}
-                      dripicons-thumbs-up
+                      <i className="dripicons-thumbs-up" /> dripicons-thumbs-up
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-ticket" /> dripicons-ticket
@@ -662,12 +639,10 @@ const IconDripicons = () => {
                       <i className="dripicons-vibrate" /> dripicons-vibrate
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-view-apps" />{" "}
-                      dripicons-view-apps
+                      <i className="dripicons-view-apps" /> dripicons-view-apps
                     </Col>
                     <Col xl="3" lg="4" sm="6">
-                      <i className="dripicons-view-list" />{" "}
-                      dripicons-view-list
+                      <i className="dripicons-view-list" /> dripicons-view-list
                     </Col>
                     <Col xl="3" lg="4" sm="6">
                       <i className="dripicons-view-list-large" />{" "}
@@ -725,7 +700,7 @@ const IconDripicons = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default IconDripicons;
+export default IconDripicons

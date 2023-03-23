@@ -1,17 +1,18 @@
-import React from "react";
-import CarouselPage from "./CarouselPage";
+import React from "react"
+import CarouselPage from "./CarouselPage"
 
 //Verification code package
-import AuthCode from "react-auth-code-input";
+import AuthCode from "react-auth-code-input"
 
 // import images
-import logodark from "../../assets/images/logo-dark.png";
-import logolight from "../../assets/images/logo-light.png";
-import { Col, Form, FormGroup, Label, Row } from "reactstrap";
-import { Link } from "react-router-dom";
+import logodark from "../../assets/images/logo-dark.png"
+import logolight from "../../assets/images/logo-light.png"
+import { Col, Form, FormGroup, Label, Row } from "reactstrap"
+import { Link } from "react-router-dom"
 
 const TwostepVerification2 = () => {
-  document.title = "Two Step Verification 2 | Veltrix - React Admin & Dashboard Template";
+  document.title =
+    "Two Step Verification 2 | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div>
@@ -78,7 +79,7 @@ const TwostepVerification2 = () => {
                                       marginRight: "15px",
                                       border: "1px solid #ced4da",
                                       textTransform: "uppercase",
-                                      borderRadius: ".4rem"
+                                      borderRadius: ".4rem",
                                     }}
                                   />
                                 </FormGroup>
@@ -100,7 +101,7 @@ const TwostepVerification2 = () => {
 
                     <div className="mt-4 mt-md-5 text-center">
                       <p className="mb-0">
-                        © {new Date().getFullYear()} Veltrix. Crafted with{" "}
+                        © {new Date().getFullYear()} Foodi. Crafted with{" "}
                         <i className="mdi mdi-heart text-danger"></i> by
                         Themesbrand
                       </p>
@@ -113,7 +114,7 @@ const TwostepVerification2 = () => {
         </div>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default TwostepVerification2;
+export default TwostepVerification2

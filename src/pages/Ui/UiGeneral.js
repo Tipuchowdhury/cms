@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 import {
   Button,
   Popover,
@@ -17,29 +17,33 @@ import {
   Pagination,
   PaginationItem,
   PaginationLink,
-} from "reactstrap";
+} from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const UiGeneral = () => {
-  const [popovertop, setpopovertop] = useState(false);
-  const [popoverleft, setpopoverleft] = useState(false);
-  const [popoverright, setpopoverright] = useState(false);
-  const [popoverbottom, setpopoverbottom] = useState(false);
-  const [popoverdismiss, setpopoverdismiss] = useState(false);
+  const [popovertop, setpopovertop] = useState(false)
+  const [popoverleft, setpopoverleft] = useState(false)
+  const [popoverright, setpopoverright] = useState(false)
+  const [popoverbottom, setpopoverbottom] = useState(false)
+  const [popoverdismiss, setpopoverdismiss] = useState(false)
 
-  const [ttop, setttop] = useState(false);
-  const [tbottom, settbottom] = useState(false);
-  const [tleft, settleft] = useState(false);
-  const [tright, settright] = useState(false);
+  const [ttop, setttop] = useState(false)
+  const [tbottom, settbottom] = useState(false)
+  const [tleft, settleft] = useState(false)
+  const [tright, settright] = useState(false)
 
-  document.title = "General | Veltrix - React Admin & Dashboard Template";
+  document.title = "General | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="UI Elements" breadcrumbItem="General" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="UI Elements"
+            breadcrumbItem="General"
+          />
 
           <Row>
             <Col lg={12}>
@@ -56,21 +60,11 @@ const UiGeneral = () => {
                         <Badge color="primary" className="bg-primary">
                           Primary
                         </Badge>{" "}
-                        <Badge className="bg-success">
-                          Success
-                        </Badge>{" "}
-                        <Badge className="bg-info">
-                          Info
-                        </Badge>{" "}
-                        <Badge className="bg-warning">
-                          Warning
-                        </Badge>{" "}
-                        <Badge className="bg-danger">
-                          Danger
-                        </Badge>{" "}
-                        <Badge className="bg-dark">
-                          Dark
-                        </Badge>{" "}
+                        <Badge className="bg-success">Success</Badge>{" "}
+                        <Badge className="bg-info">Info</Badge>{" "}
+                        <Badge className="bg-warning">Warning</Badge>{" "}
+                        <Badge className="bg-danger">Danger</Badge>{" "}
+                        <Badge className="bg-dark">Dark</Badge>{" "}
                       </div>
                     </Col>
                     <Col lg={6}>
@@ -84,30 +78,25 @@ const UiGeneral = () => {
                       </p>
 
                       <div className="d-flex flex-wrap gap-2">
-                        <Badge color="primary" className="rounded-pill bg-primary">
+                        <Badge
+                          color="primary"
+                          className="rounded-pill bg-primary"
+                        >
                           Primary
                         </Badge>{" "}
                         <Badge className="rounded-pill bg-success">
                           Success
                         </Badge>{" "}
-                        <Badge className="rounded-pill bg-info">
-                          Info
-                        </Badge>{" "}
+                        <Badge className="rounded-pill bg-info">Info</Badge>{" "}
                         <Badge className="rounded-pill bg-warning">
                           Warning
                         </Badge>{" "}
-                        <Badge className="rounded-pill bg-danger">
-                          Danger
-                        </Badge>{" "}
-                        <Badge className="rounded-pill bg-dark">
-                          Dark
-                        </Badge>{" "}
+                        <Badge className="rounded-pill bg-danger">Danger</Badge>{" "}
+                        <Badge className="rounded-pill bg-dark">Dark</Badge>{" "}
                       </div>
-
                     </Col>
                   </Row>
                 </CardBody>
-
               </Card>
             </Col>
           </Row>
@@ -126,7 +115,7 @@ const UiGeneral = () => {
                       id="Popovertop"
                       color="secondary"
                       onClick={() => {
-                        setpopovertop(!popovertop);
+                        setpopovertop(!popovertop)
                       }}
                     >
                       Popover on top
@@ -136,7 +125,7 @@ const UiGeneral = () => {
                       isOpen={popovertop}
                       target="Popovertop"
                       toggle={() => {
-                        setpopovertop(!popovertop);
+                        setpopovertop(!popovertop)
                       }}
                     >
                       <PopoverHeader>Popover Title</PopoverHeader>
@@ -149,7 +138,7 @@ const UiGeneral = () => {
                     <Button
                       id="Popoverright"
                       onClick={() => {
-                        setpopoverright(!popoverright);
+                        setpopoverright(!popoverright)
                       }}
                       color="secondary"
                     >
@@ -160,7 +149,7 @@ const UiGeneral = () => {
                       isOpen={popoverright}
                       target="Popoverright"
                       toggle={() => {
-                        setpopoverright(!popoverright);
+                        setpopoverright(!popoverright)
                       }}
                     >
                       <PopoverHeader>Popover Title</PopoverHeader>
@@ -170,11 +159,10 @@ const UiGeneral = () => {
                         vestibulum.
                       </PopoverBody>
                     </Popover>{" "}
-
                     <Button
                       id="Popoverbottom"
                       onClick={() => {
-                        setpopoverbottom(!popoverbottom);
+                        setpopoverbottom(!popoverbottom)
                       }}
                       color="secondary"
                     >
@@ -185,7 +173,7 @@ const UiGeneral = () => {
                       isOpen={popoverbottom}
                       target="Popoverbottom"
                       toggle={() => {
-                        setpopoverbottom(!popoverbottom);
+                        setpopoverbottom(!popoverbottom)
                       }}
                     >
                       <PopoverHeader>Popover Title</PopoverHeader>
@@ -195,11 +183,10 @@ const UiGeneral = () => {
                         vestibulum.
                       </PopoverBody>
                     </Popover>{" "}
-
                     <Button
                       id="Popoverleft"
                       onClick={() => {
-                        setpopoverleft(!popoverleft);
+                        setpopoverleft(!popoverleft)
                       }}
                       color="secondary"
                     >
@@ -210,7 +197,7 @@ const UiGeneral = () => {
                       isOpen={popoverleft}
                       target="Popoverleft"
                       toggle={() => {
-                        setpopoverleft(!popoverleft);
+                        setpopoverleft(!popoverleft)
                       }}
                     >
                       <PopoverHeader>Popover Title</PopoverHeader>
@@ -220,12 +207,11 @@ const UiGeneral = () => {
                         vestibulum.
                       </PopoverBody>
                     </Popover>{" "}
-
                     <Button
                       id="Popoverdismiss"
                       className="btn btn-success"
                       onClick={() => {
-                        setpopoverdismiss(!popoverdismiss);
+                        setpopoverdismiss(!popoverdismiss)
                       }}
                     >
                       Dismissible popover
@@ -259,7 +245,7 @@ const UiGeneral = () => {
                       isOpen={ttop}
                       target="TooltipTop"
                       toggle={() => {
-                        setttop(!ttop);
+                        setttop(!ttop)
                       }}
                     >
                       Hello world!
@@ -269,7 +255,7 @@ const UiGeneral = () => {
                       isOpen={tright}
                       target="TooltipRight"
                       toggle={() => {
-                        settright(!tright);
+                        settright(!tright)
                       }}
                     >
                       Hello world!
@@ -279,7 +265,7 @@ const UiGeneral = () => {
                       isOpen={tbottom}
                       target="TooltipBottom"
                       toggle={() => {
-                        settbottom(!tbottom);
+                        settbottom(!tbottom)
                       }}
                     >
                       Hello world!
@@ -289,12 +275,11 @@ const UiGeneral = () => {
                       isOpen={tleft}
                       target="TooltipLeft"
                       toggle={() => {
-                        settleft(!tleft);
+                        settleft(!tleft)
                       }}
                     >
                       Hello world!
                     </Tooltip>
-
                     <button
                       type="button"
                       className="btn btn-primary"
@@ -384,7 +369,9 @@ const UiGeneral = () => {
                     </Col>
 
                     <Col lg={6}>
-                      <CardTitle className="h4">Disabled and active states</CardTitle>
+                      <CardTitle className="h4">
+                        Disabled and active states
+                      </CardTitle>
                       <p className="card-title-desc">
                         Pagination links are customizable for different
                         circumstances. Use <code>.disabled</code> for links that
@@ -416,9 +403,7 @@ const UiGeneral = () => {
 
                       <Pagination aria-label="Page navigation example">
                         <PaginationItem disabled>
-                          <PaginationLink>
-                            Previous
-                          </PaginationLink>
+                          <PaginationLink>Previous</PaginationLink>
                         </PaginationItem>
                         <PaginationItem>
                           <PaginationLink href="#">1</PaginationLink>
@@ -600,7 +585,7 @@ const UiGeneral = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default UiGeneral;
+export default UiGeneral

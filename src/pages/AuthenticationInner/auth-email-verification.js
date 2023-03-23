@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import { Link } from "react-router-dom"
 import { Card, CardBody, Col, Container, Row } from "reactstrap"
 
@@ -7,7 +7,8 @@ import logodark from "../../assets/images/logo-dark.png"
 import logolight from "../../assets/images/logo-light.png"
 
 const EmailVerification = () => {
-  document.title = "Email Verification | Veltrix - React Admin & Dashboard Template";
+  document.title =
+    "Email Verification | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="account-pages my-5 pt-sm-5">
@@ -54,10 +55,7 @@ const EmailVerification = () => {
                           , Please check it
                         </p>
                         <div className="mt-4">
-                          <a
-                            href="/"
-                            className="btn btn-success w-md"
-                          >
+                          <a href="/" className="btn btn-success w-md">
                             Verify email
                           </a>
                         </div>
@@ -75,7 +73,7 @@ const EmailVerification = () => {
                   </a>{" "}
                 </p>
                 <p>
-                  © {new Date().getFullYear()} Veltrix. Crafted with{" "}
+                  © {new Date().getFullYear()} Foodi. Crafted with{" "}
                   <i className="mdi mdi-heart text-danger"></i> by Themesbrand
                 </p>
               </div>

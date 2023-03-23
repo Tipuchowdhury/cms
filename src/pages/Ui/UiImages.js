@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 
 import {
   Col,
@@ -9,28 +9,32 @@ import {
   CardImg,
   CardText,
   Container,
-} from "reactstrap";
+} from "reactstrap"
 
 // Import Images
-import avatar3 from "../../assets/images/users/avatar-3.jpg";
-import avatar4 from "../../assets/images/users/avatar-4.jpg";
-import user4 from "../../assets/images/users/user-4.jpg";
-import avatar5 from "../../assets/images/users/avatar-5.jpg";
+import avatar3 from "../../assets/images/users/avatar-3.jpg"
+import avatar4 from "../../assets/images/users/avatar-4.jpg"
+import user4 from "../../assets/images/users/user-4.jpg"
+import avatar5 from "../../assets/images/users/avatar-5.jpg"
 
-import img2 from "../../assets/images/small/img-2.jpg";
-import img3 from "../../assets/images/small/img-3.jpg";
-import img4 from "../../assets/images/small/img-4.jpg";
+import img2 from "../../assets/images/small/img-2.jpg"
+import img3 from "../../assets/images/small/img-3.jpg"
+import img4 from "../../assets/images/small/img-4.jpg"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const UiImages = () => {
-  document.title = "Images | Veltrix - React Admin & Dashboard Template";
+  document.title = "Images | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="UI Elements" breadcrumbItem="Images" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="UI Elements"
+            breadcrumbItem="Images"
+          />
 
           <Row>
             <Col lg={6}>
@@ -82,7 +86,6 @@ const UiImages = () => {
                   </Row>
                 </CardBody>
               </Card>
-
             </Col>
 
             <Col lg={6}>
@@ -182,11 +185,10 @@ const UiImages = () => {
               </Card>
             </Col>
           </Row>
-
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default UiImages;
+export default UiImages

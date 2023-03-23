@@ -2,9 +2,8 @@ const projects = [
   {
     id: 0,
     img: "img1",
-    name: "Veltrix Dashboard UI",
-    description:
-      "Separate existence  For  music etc.",
+    name: "Foodi Dashboard UI",
+    description: "Separate existence  For  music etc.",
     status: "Completed",
     color: "primary",
     dueDate: "12 Oct, 2019",
@@ -58,10 +57,10 @@ const projects = [
       ],
     },
     files: [
-      { name: "Veltrix Landing.Zip", size: "3.25 MB", link: "#" },
-      { name: "Veltrix Admin.Zip", size: "3.15 MB", link: "#" },
-      { name: "Veltrix Logo.Zip", size: "2.02 MB", link: "#" },
-      { name: "Veltrix admin.Zip", size: "2.25 MB", link: "#" },
+      { name: "Foodi Landing.Zip", size: "3.25 MB", link: "#" },
+      { name: "Foodi Admin.Zip", size: "3.15 MB", link: "#" },
+      { name: "Foodi Logo.Zip", size: "2.02 MB", link: "#" },
+      { name: "Foodi admin.Zip", size: "2.25 MB", link: "#" },
     ],
     comments: [
       {
@@ -111,10 +110,10 @@ const projects = [
       ],
     },
     files: [
-      { name: "Veltrix Landing.Zip", size: "3.25 MB", link: "#" },
-      { name: "Veltrix Admin.Zip", size: "3.15 MB", link: "#" },
-      { name: "Veltrix Logo.Zip", size: "2.02 MB", link: "#" },
-      { name: "Veltrix admin.Zip", size: "2.25 MB", link: "#" },
+      { name: "Foodi Landing.Zip", size: "3.25 MB", link: "#" },
+      { name: "Foodi Admin.Zip", size: "3.15 MB", link: "#" },
+      { name: "Foodi Logo.Zip", size: "2.02 MB", link: "#" },
+      { name: "Foodi admin.Zip", size: "2.25 MB", link: "#" },
     ],
     comments: [
       {
@@ -161,10 +160,10 @@ const projects = [
       ],
     },
     files: [
-      { name: "Veltrix Landing.Zip", size: "3.25 MB", link: "#" },
-      { name: "Veltrix Admin.Zip", size: "3.15 MB", link: "#" },
-      { name: "Veltrix Logo.Zip", size: "2.02 MB", link: "#" },
-      { name: "Veltrix admin.Zip", size: "2.25 MB", link: "#" },
+      { name: "Foodi Landing.Zip", size: "3.25 MB", link: "#" },
+      { name: "Foodi Admin.Zip", size: "3.15 MB", link: "#" },
+      { name: "Foodi Logo.Zip", size: "2.02 MB", link: "#" },
+      { name: "Foodi admin.Zip", size: "2.25 MB", link: "#" },
     ],
     comments: [
       {
@@ -215,10 +214,10 @@ const projects = [
       ],
     },
     files: [
-      { name: "Veltrix Landing.Zip", size: "3.25 MB", link: "#" },
-      { name: "Veltrix Admin.Zip", size: "3.15 MB", link: "#" },
-      { name: "Veltrix Logo.Zip", size: "2.02 MB", link: "#" },
-      { name: "Veltrix admin.Zip", size: "2.25 MB", link: "#" },
+      { name: "Foodi Landing.Zip", size: "3.25 MB", link: "#" },
+      { name: "Foodi Admin.Zip", size: "3.15 MB", link: "#" },
+      { name: "Foodi Logo.Zip", size: "2.02 MB", link: "#" },
+      { name: "Foodi admin.Zip", size: "2.25 MB", link: "#" },
     ],
     comments: [
       {
@@ -268,10 +267,10 @@ const projects = [
       ],
     },
     files: [
-      { name: "Veltrix Landing.Zip", size: "3.25 MB", link: "#" },
-      { name: "Veltrix Admin.Zip", size: "3.15 MB", link: "#" },
-      { name: "Veltrix Logo.Zip", size: "2.02 MB", link: "#" },
-      { name: "Veltrix admin.Zip", size: "2.25 MB", link: "#" },
+      { name: "Foodi Landing.Zip", size: "3.25 MB", link: "#" },
+      { name: "Foodi Admin.Zip", size: "3.15 MB", link: "#" },
+      { name: "Foodi Logo.Zip", size: "2.02 MB", link: "#" },
+      { name: "Foodi admin.Zip", size: "2.25 MB", link: "#" },
     ],
     comments: [
       {
@@ -300,7 +299,7 @@ const projects = [
   {
     id: 5,
     img: "img5",
-    name: "Veltrix Dashboard UI",
+    name: "Foodi Dashboard UI",
     description: "Separate existence is a myth",
     status: "Completed",
     color: "primary",
@@ -321,10 +320,10 @@ const projects = [
       ],
     },
     files: [
-      { name: "Veltrix Landing.Zip", size: "3.25 MB", link: "#" },
-      { name: "Veltrix Admin.Zip", size: "3.15 MB", link: "#" },
-      { name: "Veltrix Logo.Zip", size: "2.02 MB", link: "#" },
-      { name: "Veltrix admin.Zip", size: "2.25 MB", link: "#" },
+      { name: "Foodi Landing.Zip", size: "3.25 MB", link: "#" },
+      { name: "Foodi Admin.Zip", size: "3.15 MB", link: "#" },
+      { name: "Foodi Logo.Zip", size: "2.02 MB", link: "#" },
+      { name: "Foodi admin.Zip", size: "2.25 MB", link: "#" },
     ],
     comments: [
       {
@@ -371,10 +370,10 @@ const projects = [
       ],
     },
     files: [
-      { name: "Veltrix Landing.Zip", size: "3.25 MB", link: "#" },
-      { name: "Veltrix Admin.Zip", size: "3.15 MB", link: "#" },
-      { name: "Veltrix Logo.Zip", size: "2.02 MB", link: "#" },
-      { name: "Veltrix admin.Zip", size: "2.25 MB", link: "#" },
+      { name: "Foodi Landing.Zip", size: "3.25 MB", link: "#" },
+      { name: "Foodi Admin.Zip", size: "3.15 MB", link: "#" },
+      { name: "Foodi Logo.Zip", size: "2.02 MB", link: "#" },
+      { name: "Foodi admin.Zip", size: "2.25 MB", link: "#" },
     ],
     comments: [
       {
@@ -436,10 +435,10 @@ const projects = [
       ],
     },
     files: [
-      { name: "Veltrix Landing.Zip", size: "3.25 MB", link: "#" },
-      { name: "Veltrix Admin.Zip", size: "3.15 MB", link: "#" },
-      { name: "Veltrix Logo.Zip", size: "2.02 MB", link: "#" },
-      { name: "Veltrix admin.Zip", size: "2.25 MB", link: "#" },
+      { name: "Foodi Landing.Zip", size: "3.25 MB", link: "#" },
+      { name: "Foodi Admin.Zip", size: "3.15 MB", link: "#" },
+      { name: "Foodi Logo.Zip", size: "2.02 MB", link: "#" },
+      { name: "Foodi admin.Zip", size: "2.25 MB", link: "#" },
     ],
     comments: [
       {
@@ -486,10 +485,10 @@ const projects = [
       ],
     },
     files: [
-      { name: "Veltrix Landing.Zip", size: "3.25 MB", link: "#" },
-      { name: "Veltrix Admin.Zip", size: "3.15 MB", link: "#" },
-      { name: "Veltrix Logo.Zip", size: "2.02 MB", link: "#" },
-      { name: "Veltrix admin.Zip", size: "2.25 MB", link: "#" },
+      { name: "Foodi Landing.Zip", size: "3.25 MB", link: "#" },
+      { name: "Foodi Admin.Zip", size: "3.15 MB", link: "#" },
+      { name: "Foodi Logo.Zip", size: "2.02 MB", link: "#" },
+      { name: "Foodi admin.Zip", size: "2.25 MB", link: "#" },
     ],
     comments: [
       {
@@ -515,7 +514,7 @@ const projects = [
       },
     ],
   },
-];
+]
 
 const options = {
   chart: {
@@ -562,13 +561,13 @@ const options = {
     },
   },
   colors: ["#556ee6"],
-};
+}
 
 const series = [
   {
     name: "Overview",
     data: [42, 56, 40, 64, 26, 42, 56, 35, 62],
   },
-];
+]
 
-export { projects, options, series };
+export { projects, options, series }

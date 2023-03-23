@@ -1,14 +1,14 @@
-import React from "react";
-import CarouselPage from "./CarouselPage";
+import React from "react"
+import CarouselPage from "./CarouselPage"
 
 // import images
-import logodark from "../../assets/images/logo-dark.png";
-import logolight from "../../assets/images/logo-light.png";
-import { Col, Container, Row } from "reactstrap";
-import { Link } from "react-router-dom";
+import logodark from "../../assets/images/logo-dark.png"
+import logolight from "../../assets/images/logo-light.png"
+import { Col, Container, Row } from "reactstrap"
+import { Link } from "react-router-dom"
 
 const ConfirmMail2 = () => {
-  document.title = "Confirm Mail 2 | Veltrix - React Admin & Dashboard Template";
+  document.title = "Confirm Mail 2 | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div>
@@ -61,7 +61,7 @@ const ConfirmMail2 = () => {
 
                     <div className="mt-4 mt-md-5 text-center">
                       <p className="mb-0">
-                        © {new Date().getFullYear()} Veltrix. Crafted with{" "}
+                        © {new Date().getFullYear()} Foodi. Crafted with{" "}
                         <i className="mdi mdi-heart text-danger"></i> by
                         Themesbrand
                       </p>
@@ -74,7 +74,7 @@ const ConfirmMail2 = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default ConfirmMail2;
+export default ConfirmMail2

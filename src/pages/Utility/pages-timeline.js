@@ -1,22 +1,26 @@
-import React from "react";
-import { Row, Col, Card, CardBody } from "reactstrap";
-import { Link } from "react-router-dom";
+import React from "react"
+import { Row, Col, Card, CardBody } from "reactstrap"
+import { Link } from "react-router-dom"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 // Import images
-import img1 from "../../assets/images/small/img-1.jpg";
-import img2 from "../../assets/images/small/img-2.jpg";
+import img1 from "../../assets/images/small/img-1.jpg"
+import img2 from "../../assets/images/small/img-2.jpg"
 
 const PagesTimeline = () => {
-  document.title = "Timeline | Veltrix - React Admin & Dashboard Template";
+  document.title = "Timeline | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
           {/* Render Breadcrumbs */}
-          <Breadcrumbs maintitle="Veltrix" title="Extra Pages" breadcrumbItem="Timeline" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Extra Pages"
+            breadcrumbItem="Timeline"
+          />
 
           <Row>
             <Col lg={12}>
@@ -126,11 +130,10 @@ const PagesTimeline = () => {
               </Card>
             </Col>
           </Row>
-
         </div>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default PagesTimeline;
+export default PagesTimeline

@@ -1,16 +1,20 @@
-import React from "react";
-import { Row, Col, Card, CardBody, Container } from "reactstrap";
+import React from "react"
+import { Row, Col, Card, CardBody, Container } from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const IconIon = props => {
-  document.title = "Ion Icons | Veltrix - React Admin & Dashboard Template";
+  document.title = "Ion Icons | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Breadcrumbs maintitle="Veltrix" title="Icons" breadcrumbItem="Ion Icons" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Icons"
+            breadcrumbItem="Ion Icons"
+          />
 
           <Row>
             <Col md={12}>
@@ -2487,7 +2491,7 @@ const IconIon = props => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default IconIon;
+export default IconIon
