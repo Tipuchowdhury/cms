@@ -4,7 +4,9 @@ import {
     RESTAURANT_NAME_UPDATE,
     GET_ALL_CUSINE,
     ADD_BRANCH,
-    GET_ALL_BRANCH
+    GET_ALL_BRANCH,
+    ADD_ZONE,
+    GET_ALL_ZONE
 
 } from "./actionTypes"
 
@@ -30,6 +32,14 @@ const initialState = {
     get_all_branch_data: null,
     get_all_branch_error: null,
     get_all_branch_loading: false,
+
+    add_zone_data: null,
+    add_zone_error: null,
+    add_zone_loading: false,
+
+    get_all_zone_data: null,
+    get_all_zone_error: null,
+    get_all_zone_loading: false,
 }
 
 const Restaurant = (state = initialState, action) => {
@@ -88,6 +98,26 @@ const Restaurant = (state = initialState, action) => {
                 get_all_branch_data: action.payload,
                 get_all_branch_error: null,
                 get_all_branch_loading: action.status
+
+            }
+            break;
+
+        case ADD_ZONE:
+            state = {
+                ...state,
+                add_zone_data: action.payload,
+                add_zone_error: null,
+                add_zone_loading: action.status,
+                get_all_zone_loading: false
+            }
+            break;
+
+        case GET_ALL_ZONE:
+            state = {
+                ...state,
+                get_all_zone_data: action.payload,
+                get_all_zone_error: null,
+                get_all_zone_loading: action.status
 
             }
             break;

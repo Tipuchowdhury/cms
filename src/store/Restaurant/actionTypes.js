@@ -4,6 +4,8 @@ export const RESTAURANT_NAME_UPDATE = "RESTAURANT_NAME_UPDATE";
 export const GET_ALL_CUSINE = "GET_ALL_CUSINE";
 export const ADD_BRANCH = "ADD_BRANCH";
 export const GET_ALL_BRANCH = "GET_ALL_BRANCH";
+export const GET_ALL_ZONE = "GET_ALL_ZONE";
+export const ADD_ZONE = "ADD_ZONE";
 
 
 
