@@ -103,7 +103,7 @@ const Header = props => {
               <i className="mdi mdi-menu"></i>
             </button>
 
-            <div className="d-none d-sm-block">
+            {/* <div className="d-none d-sm-block">
 
               <Dropdown
                 isOpen={singlebtn}
@@ -122,7 +122,7 @@ const Header = props => {
                 </DropdownMenu>
               </Dropdown>
 
-            </div>
+            </div> */}
           </div>
 
           <div className="d-flex">
@@ -137,7 +137,7 @@ const Header = props => {
               </div>
             </form>
 
-            <Dropdown
+            {/* <Dropdown
               className="d-inline-block d-lg-none ms-2"
               onClick={() => {
                 setsearch(!search);
@@ -162,7 +162,7 @@ const Header = props => {
                   </div>
                 </Form>
               </DropdownMenu>
-            </Dropdown>
+            </Dropdown> */}
 
             <LanguageDropdown />
 
