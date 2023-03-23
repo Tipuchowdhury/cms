@@ -119,6 +119,8 @@ import Restaurant from "pages/Restaurant/Restaurant";
 import Branch from "pages/Restaurant/Branch";
 import BranchAdd from "pages/Restaurant/BranchAdd/BranchAdd";
 import EmailForRecoverPassword from "pages/AuthenticationInner/Email-for-recover-password";
+import AddZone from "pages/Zone/AddZone/AddZone";
+import Menu from "pages/Restaurant/Menu/Menu";
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -141,11 +143,13 @@ const userRoutes = [
 
   //Zone & City
   { path: "/zone", component: <Zone /> },
+  { path: "/add-zone", component: <AddZone /> },
   { path: "/city", component: <City /> },
   { path: "/manage-users", component: <ManageUsers /> },
   { path: "/restaurant", component: <Restaurant /> },
   { path: "/manage-branch", component: <Branch /> },
   { path: "/branch-add", component: <BranchAdd /> },
+  { path: "/menu", component: <Menu /> },
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },
   { path: "/chartist-charts", component: <ChartistChart /> },

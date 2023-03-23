@@ -5,12 +5,15 @@ import {
     GET_ALL_CUSINE,
     ADD_BRANCH,
     GET_ALL_BRANCH,
+    ADD_ZONE,
+    GET_ALL_ZONE
 
 } from "./actionTypes"
 import axios from "axios";
 import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 import moment from "moment";
+
 
 // token
 // var authUser = JSON.parse(localStorage.getItem("user"));
@@ -258,6 +261,114 @@ export const getAllBranchAction = () => {
             .catch(error => {
                 dispatch({
                     type: GET_ALL_BRANCH,
+                    status: "Failed",
+                });
+
+            });
+    };
+};
+
+export const zoneAddAction = (id, zoneInfo, path, deliveryCharge, selectedBranch) => {
+    console.log(zoneInfo);
+    console.log(path);
+    console.log(deliveryCharge);
+    console.log(selectedBranch);
+
+    var url = process.env.REACT_APP_LOCALHOST + "/Zone/Post";
+
+    const data = selectedBranch?.length > 0 ? selectedBranch.map(item => {
+        const val = uuidv4();
+        return {
+            _id: val,
+            branch_id: item.value,
+            zone_id: id,
+        }
+    }) : null
+
+    const delivery_charges = deliveryCharge?.length > 0 ? deliveryCharge.map(item => {
+        const val = uuidv4();
+        return {
+            _id: val,
+            distance_start_in_kilometer: Number(item.distanceStart),
+            distance_end_in_kilometer: Number(item.distanceEnd),
+            delivery_charge: Number(item.deliveryCharge),
+            zone_id: id
+
+        }
+    }) : null
+
+
+    const allData = path.map(item => [Number(item.lat), Number(item.lng)]);
+    console.log(allData);
+    let formData = {
+        _id: id,
+        name: zoneInfo.area,
+        radius: Number(zoneInfo.radius),
+        lat_long: {
+            coordinates: [
+
+                allData
+
+            ],
+            "type": "Polygon"
+        },
+        city_id: zoneInfo.city,
+        branches: data,
+        zone_delivery_charges: delivery_charges,
+    };
+
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        };
+
+        axios
+            .post(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: "ADD_ZONE",
+                    payload: response.data,
+                    status: "Success",
+                });
+                toast.success("Zone Addedd Successfully");
+
+            })
+            .catch(error => {
+                dispatch({
+                    type: "ADD_ZONE",
+                    payload: error,
+                    status: "Failed",
+                });
+                toast.error("Zone Add Failed");
+            });
+
+    };
+
+};
+
+export const getAllZoneAction = () => {
+    var url = process.env.REACT_APP_LOCALHOST + "/Zone/Get";
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+
+        };
+        axios
+            .get(url, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: GET_ALL_ZONE,
+                    payload: response.data,
+                    status: "Success",
+                });
+
+            })
+            .catch(error => {
+                dispatch({
+                    type: GET_ALL_ZONE,
                     status: "Failed",
                 });
 

@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { restaurantAddAction, getAllRestaurantAction, restaurantNameUpdateAction } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 
-function Restaurant(props) {
+function Menu(props) {
 
     const [name, setName] = useState("")
     const [modal, setModal] = useState(false);
@@ -80,7 +80,7 @@ function Restaurant(props) {
 
 
 
-    const statusRef = (cell, row) => <Badge color="success" style={{ padding: "12px" }}>Activate</Badge>
+    const statusRef = (cell, row) => <Badge color="success" style={{ padding: "8px" }}>Activate</Badge>
 
 
     const activeData = [
@@ -126,15 +126,15 @@ function Restaurant(props) {
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle="Foodi" title="Restaurant" breadcrumbItem="Manage Restaurant" />
+                    <Breadcrumbs maintitle="Foodi" title="Restaurant" breadcrumbItem="Manage Restaurant Menu" />
                     <Row>
                         <Col className="col-12">
                             <Card style={{ border: "none" }}>
                                 <CardBody >
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Restaurant </CardTitle>
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Menu </CardTitle>
                                         <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle}>
-                                            Add Restaurant
+                                            Add Menu
                                         </Button>
                                     </div>
 
@@ -245,5 +245,5 @@ export default withRouter(
             restaurantAddAction,
             getAllRestaurantAction,
             restaurantNameUpdateAction
-        })(Restaurant)
+        })(Menu)
 );

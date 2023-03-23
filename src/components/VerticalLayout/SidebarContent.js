@@ -160,9 +160,9 @@ const SidebarContent = props => {
                 <span>{props.t("Zone & City")}</span>
               </Link>
               <ul className="sub-menu" aria-expanded="false">
-                {/* <li>
+                <li>
                   <Link to="/zone">{props.t("Zone Area")}</Link>
-                </li> */}
+                </li>
                 <li>
                   <Link to="/city">{props.t("City Area")} </Link>
                 </li>
@@ -200,7 +200,7 @@ const SidebarContent = props => {
                   <Link to="/manage-branch">{props.t("Manage Branch")} </Link>
                 </li>
                 {/* <li>
-                  <Link to="/email-compose">{props.t("Email Compose")} </Link>
+                  <Link to="/menu">{props.t("Manage Restaurant Menu")} </Link>
                 </li> */}
               </ul>
             </li>

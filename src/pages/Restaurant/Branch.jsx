@@ -9,24 +9,30 @@ import { v4 as uuidv4 } from 'uuid';
 import { getAllBranchAction } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 function Branch(props) {
 
+    const navigate = useNavigate();
+    const handleEditBranch = (row) => {
+        console.log(row);
+        navigate("/branch-add", { state: { row } })
+    }
 
     const actionRef = (cell, row) =>
         <div style={{ display: "flex", gap: 10 }}>
             <Button
                 color="primary"
                 className="btn btn-primary waves-effect waves-light"
-                onClick={() => handleEditName(row)}
+                onClick={() => handleEditBranch(row)}
             >
                 Edit
             </Button>{" "}
             <Button
                 color="danger"
                 className="btn btn-danger waves-effect waves-light"
-                onClick={() => handleDeleteModal(row)}
+            //onClick={() => handleDeleteModal(row)}
             >
                 Delete
             </Button>{" "}
@@ -44,12 +50,12 @@ function Branch(props) {
             text: "Branch Name",
             sort: true,
         },
-        {
-            //dataField: "",
-            text: "Restaurant Name",
-            sort: true,
-            //formatter: statusRef
-        },
+        // {
+        //     //dataField: "",
+        //     text: "Restaurant Name",
+        //     sort: true,
+        //     //formatter: statusRef
+        // },
         {
             dataField: "phone_number",
             text: "Phone",

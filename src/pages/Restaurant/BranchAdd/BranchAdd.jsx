@@ -399,30 +399,7 @@ function BranchAdd(props) {
                                     </div>
                                 </Row>
 
-                                {/* <Row className="mb-3">
-                                    <label
-                                        htmlFor="example-text-input"
-                                        className="col-md-2 col-form-label"
-                                    >
-                                        Cuisine
-                                    </label>
-                                    <div className="col-md-10">
-                                        <Input
-                                            id="exampleSelect"
-                                            name="cuisine"
-                                            value={zoneInfo.cuisine}
-                                            required={true}
-                                            // onChange={e => setCusine(e.target.value)}
-                                            onChange={handleInputs}
-                                            type="select"
-                                            isMulti={true}
 
-                                        >
-                                            <option>Choose...</option>
-                                            {cusineData}
-                                        </Input>
-                                    </div>
-                                </Row> */}
                                 <Row className="mb-3">
                                     <label
                                         htmlFor="example-text-input"
