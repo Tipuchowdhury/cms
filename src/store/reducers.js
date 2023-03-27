@@ -11,6 +11,7 @@ import Profile from "./auth/profile/reducer"
 import registerNew from "./register-new/reducer"
 import zoneCity from "./zoneCity/reducer"
 import Restaurant from "./Restaurant/reducer"
+import Category from "./Category/reducer"
 
 //Calendar
 import calendar from "./calendar/reducer"
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
   calendar,
   registerNew,
   zoneCity,
-  Restaurant
+  Restaurant,
+  Category,
 })
 
 export default rootReducer
