@@ -121,6 +121,10 @@ import BranchAdd from "pages/Restaurant/BranchAdd/BranchAdd";
 import EmailForRecoverPassword from "pages/AuthenticationInner/Email-for-recover-password";
 import AddZone from "pages/Zone/AddZone/AddZone";
 import Menu from "pages/Restaurant/Menu/Menu";
+import AddOnsCategory from "pages/Restaurant/AddOnsCategory/AddOnsCategory";
+import CategoryAdd from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryAdd";
+import Slider from "pages/Slider/Slider";
+import SliderAdd from "pages/Slider/addSlider/SliderAdd";
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -145,11 +149,18 @@ const userRoutes = [
   { path: "/zone", component: <Zone /> },
   { path: "/add-zone", component: <AddZone /> },
   { path: "/city", component: <City /> },
+  { path: "/register", component: <Register1 /> },
   { path: "/manage-users", component: <ManageUsers /> },
   { path: "/restaurant", component: <Restaurant /> },
   { path: "/manage-branch", component: <Branch /> },
   { path: "/branch-add", component: <BranchAdd /> },
   { path: "/menu", component: <Menu /> },
+  { path: "/addons-category", component: <AddOnsCategory /> },
+  { path: "/category-addons", component: <CategoryAdd /> },
+
+  //Sliders
+  { path: "/slider", component: <Slider /> },
+  { path: "/add-slider", component: <SliderAdd /> },
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },
   { path: "/chartist-charts", component: <ChartistChart /> },
@@ -229,7 +240,7 @@ const authRoutes = [
   { path: "/login", component: <Login1 /> },
   { path: "/forgot-password-2", component: <ForgetPwd /> },
   //{ path: "/register", component: <Register /> },
-  { path: "/register", component: <Register1 /> },
+  // { path: "/register", component: <Register1 /> },
   { path: "/password-recover-email", component: <EmailForRecoverPassword /> },
 
   { path: "/pages-maintenance", component: <PagesMaintenance /> },

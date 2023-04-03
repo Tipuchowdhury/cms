@@ -6,7 +6,10 @@ import {
     ADD_BRANCH,
     GET_ALL_BRANCH,
     ADD_ZONE,
-    GET_ALL_ZONE
+    GET_ALL_ZONE,
+    EDIT_ZONE,
+    ADD_ZONE_FRESH,
+    EDIT_ZONE_FRESH
 
 } from "./actionTypes"
 import axios from "axios";
@@ -150,16 +153,6 @@ export const getAllCusineAction = () => {
 
 export const branchAddAction = (id, zoneInfo, lat, lng, file, coverFile, currentPath, selectedCuisine, time) => {
     var url = process.env.REACT_APP_LOCALHOST + "/Branch/Post";
-    console.log(id);
-    console.log(zoneInfo);
-    console.log(location);
-    console.log(file);
-    console.log(coverFile);
-    console.log(time);
-    console.log(selectedCuisine);
-
-    //const newLoc = location.replace(/['"]/g,)
-
 
     const data = selectedCuisine?.length > 0 ? selectedCuisine.map(item => {
         const val = uuidv4();
@@ -185,7 +178,7 @@ export const branchAddAction = (id, zoneInfo, lat, lng, file, coverFile, current
         }
     }) : null
     let formData = {
-        name: zoneInfo.area,
+        name: zoneInfo.name,
         _id: id,
         email: zoneInfo.email,
         location: {
@@ -240,6 +233,101 @@ export const branchAddAction = (id, zoneInfo, lat, lng, file, coverFile, current
     };
 
 };
+
+
+export const branchEditAction = (id, zoneInfo, lat, lng, file, coverFile, currentPath, selectedCuisine, time) => {
+    var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put";
+    console.log(id);
+    console.log(zoneInfo);
+    console.log(location);
+    console.log(file);
+    console.log(coverFile);
+    console.log(time);
+    console.log(selectedCuisine);
+
+    //const newLoc = location.replace(/['"]/g,)
+
+
+    const data = selectedCuisine?.length > 0 ? selectedCuisine.map(item => {
+        const val = uuidv4();
+        return {
+            _id: val,
+            cuisine_id: item.value,
+            branch_id: id
+        }
+    }) : null
+
+    console.log(data);
+    const all_working_hours = time?.length > 0 ? time.map(item => {
+        const val = uuidv4();
+        return {
+            _id: val,
+            day: Number(item.day),
+            open_hour: moment(item.startTime, "HH:mm").get('hours'),
+            open_min: moment(item.startTime, "HH:mm").get('minutes'),
+            close_hour: moment(item.endTime, "HH:mm").get('hours'),
+            close_minute: moment(item.endTime, "HH:mm").get('minutes'),
+            branch_id: id,
+
+        }
+    }) : null
+    let formData = {
+        name: zoneInfo.name,
+        _id: id,
+        email: zoneInfo.email,
+        location: {
+            coordinates: [Number(lat), Number(lng)],
+            type: "Point"
+        },
+        address: zoneInfo.address,
+        popularity_sort_value: JSON.parse(zoneInfo.popularity_sort_value),
+        price_range: zoneInfo.price_range,
+        image: "https://unsplash.com/photos/kcA-c3f_3FE",
+        cover_image: "https://unsplash.com/photos/kcA-c3f_3FE",
+        slug: currentPath,
+        zonal_admin: zoneInfo.zonal_admin,
+        is_take_pre_order: JSON.parse(zoneInfo.is_take_pre_order),
+        phone_number: zoneInfo.phone_number,
+        is_veg: JSON.parse(zoneInfo.is_veg),
+        is_popular: JSON.parse(zoneInfo.is_popular),
+        commission: JSON.parse(zoneInfo.commission),
+        min_order_value: 1,
+        delivery_time: JSON.parse(zoneInfo.delivery_time),
+        parent_restaurant_id: zoneInfo.restaurant,
+        working_hours: all_working_hours,
+        cuisines: data
+    };
+
+
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        };
+
+        axios
+            .put(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: "EDIT_BRANCH",
+                    payload: response.data,
+                    status: "Success",
+                });
+                toast.success("Branch Edited Successfully");
+            })
+            .catch(error => {
+                dispatch({
+                    type: "EDIT_BRANCH",
+                    payload: error,
+                    status: "Failed",
+                });
+                toast.error("Branch Edit Failed");
+            });
+
+    };
+
+};
+
 
 export const getAllBranchAction = () => {
     var url = process.env.REACT_APP_LOCALHOST + "/Branch/Get";
@@ -347,6 +435,16 @@ export const zoneAddAction = (id, zoneInfo, path, deliveryCharge, selectedBranch
 
 };
 
+export const zoneAddFresh = () => {
+    return dispatch => {
+        dispatch({
+            type: "ADD_ZONE_FRESH",
+            payload: null,
+            status: false,
+        });
+    };
+};
+
 export const getAllZoneAction = () => {
     var url = process.env.REACT_APP_LOCALHOST + "/Zone/Get";
     return dispatch => {
@@ -373,5 +471,111 @@ export const getAllZoneAction = () => {
                 });
 
             });
+    };
+};
+
+export const zoneEditAction = (id, zoneInfo, path, deliveryCharge, selectedBranch) => {
+    var url = process.env.REACT_APP_LOCALHOST + "/Zone/Put";
+
+    console.log(zoneInfo);
+    console.log(path);
+    console.log(deliveryCharge);
+    console.log(selectedBranch);
+
+    var url = process.env.REACT_APP_LOCALHOST + "/Zone/Put";
+
+    const data = selectedBranch?.length > 0 ? selectedBranch.map(item => {
+        const val = uuidv4();
+        return {
+            _id: val,
+            branch_id: item.value,
+            zone_id: id,
+        }
+    }) : null
+
+    const delivery_charges = deliveryCharge?.length > 0 ? deliveryCharge.map(item => {
+        const val = uuidv4();
+        return {
+            _id: val,
+            distance_start_in_kilometer: Number(item.distanceStart),
+            distance_end_in_kilometer: Number(item.distanceEnd),
+            delivery_charge: Number(item.deliveryCharge),
+            zone_id: id
+
+        }
+    }) : null
+
+
+    const allData = path.map(item => [Number(item.lat), Number(item.lng)]);
+    console.log(allData);
+    let formData = {
+        _id: id,
+        name: zoneInfo.area,
+        radius: Number(zoneInfo.radius),
+        lat_long: {
+            coordinates: [
+
+                allData
+
+            ],
+            "type": "Polygon"
+        },
+        city_id: zoneInfo.city,
+        branches: data,
+        zone_delivery_charges: delivery_charges,
+    };
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+
+        };
+        axios
+            .put(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: EDIT_ZONE,
+                    status: "Success",
+                });
+                toast.success("Updated Successfully");
+            })
+            .catch(error => {
+                dispatch({
+                    type: EDIT_ZONE,
+                    status: "Failed",
+                });
+                toast.error("Something went wrong!!");
+            });
+    };
+};
+
+export const zoneEditFresh = () => {
+    return dispatch => {
+        dispatch({
+            type: "EDIT_ZONE_FRESH",
+            payload: null,
+            status: false,
+        });
+    };
+};
+
+export const addBranchFresh = () => {
+    return dispatch => {
+        dispatch({
+            type: "ADD_BRANCH_FRESH",
+            payload: null,
+            status: false,
+        });
+    };
+};
+
+export const editBranchFresh = () => {
+    return dispatch => {
+        dispatch({
+            type: "EDIT_BRANCH_FRESH",
+            payload: null,
+            status: false,
+        });
     };
 };

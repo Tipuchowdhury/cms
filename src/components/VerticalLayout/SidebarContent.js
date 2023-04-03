@@ -199,10 +199,20 @@ const SidebarContent = props => {
                 <li>
                   <Link to="/manage-branch">{props.t("Manage Branch")} </Link>
                 </li>
-                {/* <li>
+                <li>
                   <Link to="/menu">{props.t("Manage Restaurant Menu")} </Link>
-                </li> */}
+                </li>
+                <li>
+                  <Link to="/addons-category">{props.t("Add-ons Category")} </Link>
+                </li>
               </ul>
+            </li>
+
+            <li>
+              <Link to="/slider" className=" waves-effect">
+                <i className="ti-calendar"></i>
+                <span>{props.t("Slider")}</span>
+              </Link>
             </li>
 
             {/* <li>

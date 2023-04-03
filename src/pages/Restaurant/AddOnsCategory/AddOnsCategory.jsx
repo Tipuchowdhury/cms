@@ -8,8 +8,9 @@ import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import { restaurantAddAction, getAllRestaurantAction, restaurantNameUpdateAction } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
+import { Link } from 'react-router-dom';
 
-function Restaurant(props) {
+function AddOnsCategory(props) {
 
     const [name, setName] = useState("")
     const [modal, setModal] = useState(false);
@@ -80,7 +81,7 @@ function Restaurant(props) {
 
 
 
-    const statusRef = (cell, row) => <Badge color="success" style={{ padding: "12px" }}>Activate</Badge>
+    const statusRef = (cell, row) => <Badge color="success" style={{ padding: "8px" }}>Activate</Badge>
 
 
     const activeData = [
@@ -126,16 +127,19 @@ function Restaurant(props) {
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle="Foodi" title="Restaurant" breadcrumbItem="Manage Restaurant" />
+                    <Breadcrumbs maintitle="Foodi" title="Restaurant" breadcrumbItem="Add-ons Category" />
                     <Row>
                         <Col className="col-12">
                             <Card style={{ border: "none" }}>
                                 <CardBody >
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Restaurant </CardTitle>
-                                        <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle}>
-                                            Add Restaurant
-                                        </Button>
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Add-ons Category </CardTitle>
+                                        <Link to="/category-addons">
+                                            <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}>
+                                                Add
+                                            </Button>
+                                        </Link>
+
                                     </div>
 
                                     {props.get_all_restaurant_data ? props.get_all_restaurant_data.length > 0 ? <DatatableTablesWorking products={props.get_all_restaurant_data}
@@ -171,12 +175,12 @@ function Restaurant(props) {
 
                 {/* ============ edit modal start=============== */}
                 <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-                    <ModalHeader toggle={toggleEditModal}>Edit Restaurant name</ModalHeader>
+                    <ModalHeader toggle={toggleEditModal}>Edit city name</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleEditModalSubmit}>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="username1">Restaurant Name</label>
+                                <label className="form-label" htmlFor="username1">City Name</label>
                                 <input type="text" className="form-control" id="username1" placeholder="Enter city name" required value={restaurantName ? restaurantName : ''} onChange={handleNameChange} />
                             </div>
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
@@ -245,5 +249,5 @@ export default withRouter(
             restaurantAddAction,
             getAllRestaurantAction,
             restaurantNameUpdateAction
-        })(Restaurant)
+        })(AddOnsCategory)
 );

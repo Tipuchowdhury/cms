@@ -4,16 +4,20 @@ import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react";
 import { connect } from "react-redux";
 import withRouter from 'components/Common/withRouter';
 import { useEffect } from 'react';
-import { getAllRestaurantAction, getAllUsersRolesAction, getAllCusineAction, branchAddAction } from 'store/actions';
+import { getAllRestaurantAction, getAllUsersRolesAction, getAllCusineAction, branchAddAction, addBranchFresh, branchEditAction, editBranchFresh } from 'store/actions';
 import Breadcrumbs from 'components/Common/Breadcrumb';
 import { boolean } from 'yup';
 import Select from 'react-select';
 import { v4 as uuidv4 } from 'uuid';
 import moment from "moment";
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const LoadingContainer = () => <div>Loading...</div>;
 
 function BranchAdd(props) {
+    const location = useLocation();
+    const naviagte = useNavigate();
+    console.log(location.state);
     const [modal, setModal] = useState(false);
     const [file, setFile] = useState();
     const [coverFile, setCoverFile] = useState();
@@ -27,15 +31,23 @@ function BranchAdd(props) {
         lat: 23.8103,
         lng: 90.4125,
     });
-
+    const map_value_for_edit = location.state?.location?.coordinates?.map((item) => (
+        item
+    ))
+    console.log(map_value_for_edit);
     const [state2, setState2] = useState({
-        location: undefined,
-        lat: undefined,
-        lng: undefined,
+        location: location.state ? map_value_for_edit : undefined,
+        lat: location.state ? map_value_for_edit[0] : undefined,
+        lng: location.state ? map_value_for_edit[1] : undefined,
     });
     const [selectedGroup, setselectedGroup] = useState(null);
+    const restaurant_time_for_edit = location.state?.working_hours?.map((item) => ({
+
+        day: item.day, startTime: moment({ hour: item.open_hour, minute: item.open_minute }).format('HH:mm'), endTime: moment({ hour: item.close_hour, minute: item.close_minute }).format('HH:mm')
+    }))
+    console.log(restaurant_time_for_edit);
     const timeTemplate = { day: "", startTime: "", endTime: "" }
-    const [time, setTime] = useState([timeTemplate]);
+    const [time, setTime] = useState(location.state ? restaurant_time_for_edit : [timeTemplate]);
 
     function handleAddRowNested() {
         setTime([...time, timeTemplate]);
@@ -62,22 +74,22 @@ function BranchAdd(props) {
         });
     };
     const [zoneInfo, setZoneInfo] = useState({
-        area: undefined,
-        restaurant: undefined,
-        phone_number: "",
-        zonal_admin: "",
-        address: "",
+        name: location.state ? location.state.name : undefined,
+        restaurant: location.state ? location.state.parent_restaurant_id : undefined,
+        phone_number: location.state ? location.state.phone_number : "",
+        zonal_admin: location.state ? location.state.zonal_admin : "",
+        address: location.state ? location.state.address : "",
         cuisine: "",
         location: undefined,
-        price_range: "",
-        popularity_sort_value: "",
-        is_take_pre_order: "",
-        is_veg: "",
-        is_popular: "",
-        commission: undefined,
-        minimum_order_value: undefined,
-        delivery_time: undefined,
-        email: ""
+        price_range: location.state ? location.state.price_range : "",
+        popularity_sort_value: location.state ? location.state.popularity_sort_value : "",
+        is_take_pre_order: location.state ? location.state.is_take_pre_order.toString() : "",
+        is_veg: location.state ? location.state.is_veg.toString() : "",
+        is_popular: location.state ? location.state.is_popular.toString() : "",
+        commission: location.state ? location.state.commission : undefined,
+        minimum_order_value: location.state ? location.state.min_order_value : undefined,
+        delivery_time: location.state ? location.state.delivery_time : undefined,
+        email: location.state ? location.state.email : "",
 
     })
     // get all restaurant
@@ -98,17 +110,16 @@ function BranchAdd(props) {
             </option>
         ));
     }
-    //get all cusine data
-    // let cusineData = undefined;
-    // if (props.get_all_cusine_data?.length > 0) {
-    //     cusineData = props.get_all_cusine_data?.map((item, key) => (
-    //         <option key={item._id} value={item._id}>
-    //             {item.name}
-    //         </option>
-    //     ));
-    // }
 
-    const [selectedCuisine, setSelectedCuisine] = useState(null);
+    //-- cuisine value for edit
+    const common_cuisines = props?.get_all_cusine_data?.filter((elem) => location?.state?.cuisines?.find(({ cuisine_id }) => elem._id === cuisine_id));
+
+    const cuisine_data_edit = common_cuisines ? common_cuisines?.map((item, key) => {
+        return { label: item.name, value: item._id };
+    }) : "";
+    console.log(cuisine_data_edit);
+
+    const [selectedCuisine, setSelectedCuisine] = useState(location.state ? cuisine_data_edit : "");
     const handleSelectCuisine = (e) => {
         console.log(e)
         setSelectedCuisine(e)
@@ -226,9 +237,16 @@ function BranchAdd(props) {
         props.branchAddAction(val, zoneInfo, state2.lat, state2.lng, file, coverFile, currentPath, selectedCuisine, time)
 
     }
-    const handleSort = (e) => {
-        alert("Hello")
+
+    const handleEditBranch = (e) => {
+        e.preventDefault();
+        const currentPath = window.location.pathname;
+        props.branchEditAction(location.state?._id, zoneInfo, state2.lat, state2.lng, file, coverFile, currentPath, selectedCuisine, time)
+
     }
+    // const handleSort = (e) => {
+    //     alert("Hello")
+    // }
     useEffect(() => {
         if (props.get_all_restaurant_loading == false) {
             props.getAllRestaurantAction();
@@ -242,10 +260,20 @@ function BranchAdd(props) {
             props.getAllCusineAction();
         }
 
-    }, [props.get_all_restaurant_loading, props.get_all_user_roles_loading, props.get_all_cusine_loading]);
+        if (props.add_branch_loading === "Success") {
+            naviagte("/manage-branch")
+            props.addBranchFresh();
+        }
+
+        if (props.edit_branch_loading === "Success") {
+            naviagte("/manage-branch")
+            props.editBranchFresh();
+        }
+    }, [props.get_all_restaurant_loading, props.get_all_user_roles_loading, props.get_all_cusine_loading, props.add_branch_loading, props.edit_branch_loading,]);
 
     console.log(props.get_all_restaurant_data);
     console.log(props.get_all_cusine_data);
+    console.log(zoneInfo.is_take_pre_order);
 
     return (
 
@@ -261,7 +289,7 @@ function BranchAdd(props) {
                             <Card style={{ border: "none" }}>
                                 <CardBody>
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Add a New Branch </CardTitle>
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>{location.state ? "Edit Branch" : "Add a New Branch"} </CardTitle>
 
                                     </div>
                                     {/* {props.get_all_restaurant_data ? props.get_all_restaurant_data.length > 0 ? <DatatableTablesWorking products={props.get_all_restaurant_data}
@@ -273,7 +301,7 @@ function BranchAdd(props) {
                     </Row>
                     <Row>
                         <Col className="col-10 mx-auto">
-                            <form className="mt-4" action="#" onSubmit={handleSubmit}>
+                            <form className="mt-4" action="#" onSubmit={location.state ? handleEditBranch : handleSubmit}>
                                 <Row className="mb-3">
                                     <label
                                         htmlFor="example-text-input"
@@ -282,7 +310,7 @@ function BranchAdd(props) {
                                         Branch Name
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="text" className="form-control" id="area" placeholder="Enter area name" name="area" onChange={handleInputs} value={zoneInfo.area ?? ""} />
+                                        <input type="text" className="form-control" id="name" placeholder="Enter branch name" name="name" onChange={handleInputs} value={zoneInfo.name ?? ""} />
                                     </div>
                                 </Row>
 
@@ -331,27 +359,6 @@ function BranchAdd(props) {
                                     </div>
                                 </Row>
 
-                                {/* <Row className="mb-3">
-                                    <label
-                                        htmlFor="example-text-input"
-                                        className="col-md-2 col-form-label"
-                                    >
-                                        Zonal Admin
-                                    </label>
-                                    <div className="col-md-10">
-                                        <Input
-                                            id="exampleSelect"
-                                            name="role"
-                                            value={role}
-                                            required={true}
-                                            onChange={e => setRole(e.target.value)}
-                                            type="select"
-                                        >
-                                            <option>Choose...</option>
-                                            {userData}
-                                        </Input>
-                                    </div>
-                                </Row> */}
                                 <Row className="mb-3">
                                     <label
                                         htmlFor="example-text-input"
@@ -451,7 +458,8 @@ function BranchAdd(props) {
                                                 id="btnradio4"
                                                 autoComplete="off"
                                                 name="price_range" onChange={handleInputs} value="high"
-                                                checked={zoneInfo.price_range == "high"}
+                                                //checked={zoneInfo.price_range == "high"}
+                                                checked={zoneInfo.price_range == "high" ? "high" : ""}
                                             />
                                             <label
                                                 className="btn btn-outline-secondary"
@@ -466,7 +474,8 @@ function BranchAdd(props) {
                                                 name="price_range" onChange={handleInputs} value="medium"
                                                 id="btnradio5"
                                                 autoComplete="off"
-                                                checked={zoneInfo.price_range == "medium"}
+                                                //checked={zoneInfo.price_range == "medium"}
+                                                checked={zoneInfo.price_range == "medium" ? "medium" : ""}
                                             />
                                             <label
                                                 className="btn btn-outline-secondary"
@@ -481,7 +490,8 @@ function BranchAdd(props) {
                                                 name="price_range" onChange={handleInputs} value="low"
                                                 id="btnradio6"
                                                 autoComplete="off"
-                                                checked={zoneInfo.price_range == "low"}
+                                                //checked={zoneInfo.price_range == "low"}
+                                                checked={zoneInfo.price_range == "low" ? "low" : ""}
                                             />
                                             <label
                                                 className="btn btn-outline-secondary"
@@ -508,7 +518,8 @@ function BranchAdd(props) {
                                                 className="btn-check"
                                                 id="popularity_sort_value"
                                                 name="popularity_sort_value" value="1" onChange={handleInputs}
-                                                checked={zoneInfo.popularity_sort_value === "1"}
+                                                //checked={zoneInfo.popularity_sort_value === "1"}
+                                                checked={zoneInfo.popularity_sort_value == "1" ? "1" : ""}
                                             />
                                             <label
                                                 className="btn btn-outline-secondary"
@@ -523,7 +534,8 @@ function BranchAdd(props) {
                                                 name="popularity_sort_value" value="0" onChange={handleInputs}
                                                 id="popularity_sort_value1"
 
-                                                checked={zoneInfo.popularity_sort_value === "0"}
+                                                //checked={zoneInfo.popularity_sort_value === "0"}
+                                                checked={zoneInfo.popularity_sort_value == "0" ? "0" : ""}
                                             />
                                             <label
                                                 className="btn btn-outline-secondary"
@@ -534,27 +546,27 @@ function BranchAdd(props) {
                                         </div>
                                     </div>
                                 </Row>
-
                                 <Row className="mb-3">
                                     <label
                                         htmlFor="example-text-input"
                                         className="col-md-2 col-form-label"
                                     >
                                         Pre Order
+
                                     </label>
                                     <div className="col-md-10">
                                         <div className="btn-group" role="group">
                                             <input
                                                 type="radio"
                                                 className="btn-check"
-                                                id="is_take_pre_order"
-                                                autoComplete="off"
-
-                                                name="is_take_pre_order" onChange={handleInputs} value={true}
+                                                id="popularity_sort"
+                                                name="is_take_pre_order" value="true" onChange={handleInputs}
+                                                //checked={zoneInfo.popularity_sort_value === "1"}
+                                                checked={zoneInfo.is_take_pre_order == "true"}
                                             />
                                             <label
                                                 className="btn btn-outline-secondary"
-                                                htmlFor="is_take_pre_order"
+                                                htmlFor="popularity_sort"
                                             >
                                                 Yes
                                             </label>
@@ -562,13 +574,15 @@ function BranchAdd(props) {
                                             <input
                                                 type="radio"
                                                 className="btn-check"
-                                                name="is_take_pre_order" onChange={handleInputs} value={false}
-                                                id="is_take_pre_order1"
-                                                autoComplete="off"
+                                                name="is_take_pre_order" value="false" onChange={handleInputs}
+                                                id="popularity_value1"
+
+                                                //checked={zoneInfo.popularity_sort_value === "0"}
+                                                checked={zoneInfo.is_take_pre_order == "false"}
                                             />
                                             <label
                                                 className="btn btn-outline-secondary"
-                                                htmlFor="is_take_pre_order1"
+                                                htmlFor="popularity_value1"
                                             >
                                                 No
                                             </label>
@@ -590,8 +604,8 @@ function BranchAdd(props) {
                                                 className="btn-check"
                                                 id="is_veg"
                                                 autoComplete="off"
-                                                defaultChecked
-                                                name="is_veg" onChange={handleInputs} value={true}
+                                                name="is_veg" onChange={handleInputs} value="true"
+                                                checked={zoneInfo.is_veg == "true"}
                                             />
                                             <label
                                                 className="btn btn-outline-secondary"
@@ -603,9 +617,10 @@ function BranchAdd(props) {
                                             <input
                                                 type="radio"
                                                 className="btn-check"
-                                                name="is_veg" onChange={handleInputs} value={false}
+                                                name="is_veg" onChange={handleInputs} value="false"
                                                 id="is_veg1"
                                                 autoComplete="off"
+                                                checked={zoneInfo.is_veg == "false"}
                                             />
                                             <label
                                                 className="btn btn-outline-secondary"
@@ -630,8 +645,8 @@ function BranchAdd(props) {
                                                 className="btn-check"
                                                 id="is_popular"
                                                 autoComplete="off"
-                                                defaultChecked
-                                                name="is_popular" onChange={handleInputs} value={true}
+                                                name="is_popular" onChange={handleInputs} value="true"
+                                                checked={zoneInfo.is_popular == "true"}
                                             />
                                             <label
                                                 className="btn btn-outline-secondary"
@@ -643,9 +658,10 @@ function BranchAdd(props) {
                                             <input
                                                 type="radio"
                                                 className="btn-check"
-                                                name="is_popular" onChange={handleInputs} value={false}
+                                                name="is_popular" onChange={handleInputs} value="false"
                                                 id="is_popular1"
                                                 autoComplete="off"
+                                                checked={zoneInfo.is_popular == "false"}
                                             />
                                             <label
                                                 className="btn btn-outline-secondary"
@@ -664,7 +680,7 @@ function BranchAdd(props) {
                                         Commmission
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="number" className="form-control" id="city" placeholder="Enter commission amount" name="commission" value={zoneInfo.commission} onChange={handleInputs} />
+                                        <input type="number" className="form-control" id="city" placeholder="Enter commission amount" name="commission" value={zoneInfo.commission ?? ""} onChange={handleInputs} />
                                     </div>
                                 </Row>
 
@@ -676,7 +692,7 @@ function BranchAdd(props) {
                                         Minimum Order Value
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="number" className="form-control" id="minimum_order_value" placeholder="Enter minimum order value" name="minimum_order_value" value={zoneInfo.minimum_order_value} onChange={handleInputs} />
+                                        <input type="number" className="form-control" id="minimum_order_value" placeholder="Enter minimum order value" name="minimum_order_value" value={zoneInfo.minimum_order_value ?? ""} onChange={handleInputs} />
                                     </div>
                                 </Row>
                                 <Row className="mb-3">
@@ -687,7 +703,7 @@ function BranchAdd(props) {
                                         Delivery Time
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="number" className="form-control" id="city" placeholder="Enter Delivery Time" name="delivery_time" value={zoneInfo.delivery_time} onChange={handleInputs} />
+                                        <input type="number" className="form-control" id="city" placeholder="Enter Delivery Time" name="delivery_time" value={zoneInfo.delivery_time ?? ""} onChange={handleInputs} />
                                     </div>
                                 </Row>
                                 <Row className="mb-3">
@@ -698,7 +714,7 @@ function BranchAdd(props) {
                                         Location
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="text" className="form-control" id="location" name="location" value={state2.location} />
+                                        <input type="text" className="form-control" id="location" name="location" value={state2.location} readOnly={true} />
                                     </div>
                                 </Row>
 
@@ -797,7 +813,7 @@ function BranchAdd(props) {
 
                                 <div className="mb-3 row">
                                     <div className="col-12 text-end">
-                                        <button className="btn btn-primary w-md waves-effect waves-light" type="submit">Add Branch</button>
+                                        <button className="btn btn-primary w-md waves-effect waves-light" type="submit">{location.state ? "Edit Branch" : "Add Branch"}</button>
                                     </div>
                                 </div>
 
@@ -821,6 +837,8 @@ const mapStateToProps = state => {
 
         get_all_cusine_data,
         get_all_cusine_loading,
+        add_branch_loading,
+        edit_branch_loading,
     } = state.Restaurant;
 
     const {
@@ -837,6 +855,8 @@ const mapStateToProps = state => {
 
         get_all_user_roles_data,
         get_all_user_roles_loading,
+        add_branch_loading,
+        edit_branch_loading
     };
 };
 
@@ -844,7 +864,10 @@ export default withRouter(
     connect(mapStateToProps, {
         getAllRestaurantAction,
         getAllUsersRolesAction,
-        getAllCusineAction, branchAddAction
+        getAllCusineAction, branchAddAction,
+        addBranchFresh,
+        branchEditAction,
+        editBranchFresh
     })(
         GoogleApiWrapper({
             apiKey: "AIzaSyDJkREeL-PpO7Z45k-MsD5sJD_m1mzNGEk",

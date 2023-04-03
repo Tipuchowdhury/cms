@@ -6,7 +6,13 @@ import {
     ADD_BRANCH,
     GET_ALL_BRANCH,
     ADD_ZONE,
-    GET_ALL_ZONE
+    GET_ALL_ZONE,
+    EDIT_ZONE,
+    ADD_ZONE_FRESH,
+    EDIT_ZONE_FRESH,
+    ADD_BRANCH_FRESH,
+    EDIT_BRANCH,
+    EDIT_BRANCH_FRESH
 
 } from "./actionTypes"
 
@@ -40,6 +46,9 @@ const initialState = {
     get_all_zone_data: null,
     get_all_zone_error: null,
     get_all_zone_loading: false,
+
+    edit_zone_loading: false,
+    edit_branch_loading: false
 }
 
 const Restaurant = (state = initialState, action) => {
@@ -119,6 +128,48 @@ const Restaurant = (state = initialState, action) => {
                 get_all_zone_error: null,
                 get_all_zone_loading: action.status
 
+            }
+            break;
+
+        case EDIT_ZONE:
+            state = {
+                ...state,
+                edit_zone_loading: action.status,
+                get_all_zone_loading: false
+            }
+            break;
+
+        case ADD_ZONE_FRESH:
+            state = {
+                ...state,
+                add_zone_loading: action.status,
+            }
+            break;
+
+        case EDIT_ZONE_FRESH:
+            state = {
+                ...state,
+                edit_zone_loading: action.status,
+            }
+            break;
+
+        case ADD_BRANCH_FRESH:
+            state = {
+                ...state,
+                add_branch_loading: action.status,
+            }
+            break;
+        case EDIT_BRANCH:
+            state = {
+                ...state,
+                edit_branch_loading: action.status,
+                get_all_branch_loading: false,
+            }
+            break;
+        case EDIT_BRANCH_FRESH:
+            state = {
+                ...state,
+                edit_branch_loading: action.status,
             }
             break;
 

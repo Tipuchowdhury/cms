@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Badge, Button, Card, CardBody, CardTitle, Col, Container, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import Breadcrumbs from 'components/Common/Breadcrumb';
@@ -12,13 +11,8 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 
-function Branch(props) {
+function Slider(props) {
 
-    const navigate = useNavigate();
-    const handleEditBranch = (row) => {
-        console.log(row);
-        navigate("/branch-add", { state: row })
-    }
 
     const actionRef = (cell, row) =>
         <div style={{ display: "flex", gap: 10 }}>
@@ -78,57 +72,40 @@ function Branch(props) {
     ];
 
 
-    useEffect(() => {
-        if (props.get_all_branch_loading == false) {
-            props.getAllBranchAction();
-        }
-    }, [props.get_all_branch_loading]);
+    // useEffect(() => {
+    //     if (props.get_all_branch_loading == false) {
+    //         props.getAllBranchAction();
+    //     }
+    // }, [props.get_all_branch_loading]);
 
-    console.log(props.get_all_branch_data);
+    // console.log(props.get_all_branch_data);
     return (
         <React.Fragment>
 
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle="Foodi" title="Branch" breadcrumbItem="Manage Branch" />
+                    <Breadcrumbs maintitle="Foodi" title="Slider" breadcrumbItem="Slider Image" />
                     <Row>
                         <Col className="col-12">
                             <Card style={{ border: "none" }}>
                                 <CardBody>
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Branch </CardTitle>
-                                        <Link to="/branch-add">
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Slider Image </CardTitle>
+                                        <Link to="/add-slider">
                                             <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} >
-                                                Add Branch
+                                                Add Slider Image
                                             </Button>
                                         </Link>
                                     </div>
-                                    {props.get_all_branch_data ? props.get_all_branch_data.length > 0 ? <DatatableTablesWorking products={props.get_all_branch_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_branch_data?._id} /> : null : null}
+                                    {/* {props.get_all_branch_data ? props.get_all_branch_data.length > 0 ? <DatatableTablesWorking products={props.get_all_branch_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_branch_data?._id} /> : null : null} */}
 
                                 </CardBody>
                             </Card>
                         </Col>
                     </Row>
                 </Container>
-
-
-                {/* ============ delete modal starts=============== */}
-                {/* <Modal isOpen={modalDel} toggle={toggleDel} centered>
-                    <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
-                        <div className="icon-box">
-                            <i className="fa red-circle fa-trash" style={{ color: "red", fontSize: "40px" }}></i>
-                        </div>
-                        <h2>Are you sure?</h2>
-                    </ModalHeader>
-                    <ModalBody>Do you really want to delete these records? This process cannot be undone.</ModalBody>
-                    <ModalFooter>
-                        <Button color="secondary" onClick={toggleDel}>Cancel</Button>{' '}
-                        <Button color="danger" onClick={handleDelete}>Delete</Button>
-                    </ModalFooter>
-                </Modal> */}
-                {/* ============ delete modal ends=============== */}
             </div>
         </React.Fragment>
     )
@@ -153,5 +130,5 @@ export default withRouter(
     connect(mapStateToProps,
         {
             getAllBranchAction
-        })(Branch)
+        })(Slider)
 );

@@ -6,28 +6,29 @@ import { connect } from "react-redux";
 import withRouter from 'components/Common/withRouter';
 import Select from "react-select";
 import Breadcrumbs from 'components/Common/Breadcrumb';
-import { getAllBranchAction, getAllCityAction, zoneAddAction } from 'store/actions';
+import { getAllBranchAction, getAllCityAction, zoneAddAction, zoneEditAction, zoneAddFresh, zoneEditFresh } from 'store/actions';
 import { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const LoadingContainer = () => <div>Loading...</div>;
 
 function AddZone(props) {
-
     const navigate = useNavigate();
+    const location = useLocation();
     const [defaultProps, setDefaultProps] = useState({
         lat: 23.8103,
         lng: 90.4125,
     });
+    console.log(location.state);
 
-    // maps start from here 
-    // const [path, setPath] = useState([
-    //     { lat: 23.810299999999998, lng: 90.44133911132815 },
-    //     { lat: 23.809985898058592, lng: 90.4334426879883 },
-    //     { lat: 23.8209790138562, lng: 90.41764984130862 }
-    // ]);
-    const [path, setPath] = useState([
+    const edit_map_data = location.state?.lat_long?.coordinates?.[0].map(x => ({
+        lat: x[0],
+        lng: x[1]
+    }))
+    console.log(edit_map_data);
+
+    const [path, setPath] = useState(location.state ? edit_map_data : [
         { lat: 23.810299999999998, lng: 90.44133911132815 },
         { lat: 23.809985898058592, lng: 90.4334426879883 },
         { lat: 23.8209790138562, lng: 90.41764984130862 }
@@ -74,10 +75,14 @@ function AddZone(props) {
 
     console.log("The path state is", path);
 
-    //maps ends here
+    const common_branches = props?.get_all_branch_data?.filter((elem) => location?.state?.branches?.find(({ branch_id }) => elem._id === branch_id));
 
+    const branch_data_edit = common_branches ? common_branches?.map((item, key) => {
+        return { label: item.name, value: item._id };
+    }) : "";
+    console.log(branch_data_edit);
     //select multiple branch
-    const [selectedBranch, setSelectedBranch] = useState(null);
+    const [selectedBranch, setSelectedBranch] = useState(branch_data_edit ? branch_data_edit : "");
     const handleSelectBranch = (e) => {
         console.log(e)
         setSelectedBranch(e)
@@ -108,9 +113,9 @@ function AddZone(props) {
 
 
     const [zoneInfo, setZoneInfo] = useState({
-        area: "",
-        city: "Dhaka",
-        radius: "",
+        area: location.state ? location.state.name : "",
+        city: location.state ? location.state.city_id : "",
+        radius: location.state ? location.state.radius : "",
 
     })
 
@@ -123,11 +128,10 @@ function AddZone(props) {
         setZoneInfo({ ...zoneInfo, [name]: value })
 
     }
+
     const allData = path.map((item) => Number(item.lat) + "," + Number(item.lng));
+
     console.log(allData);
-    const x = allData.map(parseFloat);
-    console.log(x);
-    console.log(path);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -140,9 +144,28 @@ function AddZone(props) {
 
     }
 
+    const handleSubmitForEdit = (e) => {
+        e.preventDefault();
+        console.log("======================I am in the edit form==================");
+        console.log(zoneInfo);
+        console.log(path);
+        console.log(deliveryCharge);
+        console.log(selectedBranch);
+        const uniqueId = uuidv4();
+
+        props.zoneEditAction(location.state._id, zoneInfo, path, deliveryCharge, selectedBranch);
+
+    }
+
+    const edit_zone_delivery_charge = location.state?.zone_delivery_charges?.map((item) => ({
+
+        distanceStart: item.distance_start_in_kilometer, distanceEnd: item.distance_end_in_kilometer, deliveryCharge: item.delivery_charge
+    }))
+
+    console.log(edit_zone_delivery_charge);
     // Delivery charge functionality
     const deliveryChargeTemplate = { distanceStart: "", distanceEnd: "", deliveryCharge: "" }
-    const [deliveryCharge, setDeliveryCHarge] = useState([deliveryChargeTemplate]);
+    const [deliveryCharge, setDeliveryCHarge] = useState(location.state ? edit_zone_delivery_charge : [deliveryChargeTemplate]);
     const handleTimeChange = (e, index) => {
         console.log(index);
         const updatedValue = deliveryCharge.map((row, i) => index === i ? Object.assign(row, { [e.target.name]: e.target.value }) : row);
@@ -163,6 +186,7 @@ function AddZone(props) {
         setDeliveryCHarge([...deliveryCharge, deliveryChargeTemplate]);
     }
     console.log(props.add_zone_loading);
+    console.log(deliveryCharge);
     useEffect(() => {
         if (props.get_all_branch_loading == false) {
             props.getAllBranchAction();
@@ -172,7 +196,17 @@ function AddZone(props) {
             props.getAllCityAction();
         }
 
-    }, [props.get_all_branch_loading, props.get_all_city_loading, props.add_zone_loading]);
+        if (props.add_zone_loading == "Success") {
+            navigate("/zone");
+            props.zoneAddFresh();
+        }
+
+        if (props.edit_zone_loading == "Success") {
+            navigate("/zone");
+            props.zoneEditFresh();
+        }
+
+    }, [props.get_all_branch_loading, props.get_all_city_loading, props.add_zone_loading, props.edit_zone_loading]);
 
     console.log(props.get_all_branch_data);
     console.log(props.get_all_city_data);
@@ -183,14 +217,14 @@ function AddZone(props) {
 
                 <div className="page-content">
                     <Container fluid>
-                        <Breadcrumbs maintitle="Foodi" title="Zone" breadcrumbItem="Add Zone" />
+                        <Breadcrumbs maintitle="Foodi" title="Zone" breadcrumbItem={location.state ? "Edit Zone" : "Add Zone"} />
 
                         <Row>
                             <Col className="col-12">
                                 <Card style={{ border: "none" }}>
                                     <CardBody>
                                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                            <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Add a New Zone </CardTitle>
+                                            <CardTitle className="h4" style={{ color: "#FFFFFF" }}>{location.state ? "Edit Zone" : "Add a New Zone"} </CardTitle>
 
                                         </div>
 
@@ -200,7 +234,7 @@ function AddZone(props) {
                         </Row>
                         <Row>
                             <Col className="col-10 mx-auto">
-                                <form className="mt-4" action="#" onSubmit={handleSubmit}>
+                                <form className="mt-4" action="#" onSubmit={location.state ? handleSubmitForEdit : handleSubmit}>
 
                                     <Row className="mb-3">
                                         <label
@@ -336,17 +370,17 @@ function AddZone(props) {
 
                                                     <div className="mb-3 col-lg-3">
                                                         <label className="form-label" htmlFor="startTime">Distance Start(km)</label>
-                                                        <input type="number" id="startTime" className="form-control" name="distanceStart" placeholder="Distance start" value={row.startTime} onChange={(e) => handleTimeChange(e, idx)} />
+                                                        <input type="number" id="startTime" className="form-control" name="distanceStart" placeholder="Distance start" value={row.distanceStart} onChange={(e) => handleTimeChange(e, idx)} />
                                                     </div>
 
                                                     <div className="mb-3 col-lg-3">
                                                         <label className="form-label" htmlFor="subject">Distance End(km)</label>
-                                                        <input type="number" id="subject" className="form-control" name="distanceEnd" placeholder="Distance end" value={row.endTime} onChange={(e) => handleTimeChange(e, idx)} />
+                                                        <input type="number" id="subject" className="form-control" name="distanceEnd" placeholder="Distance end" value={row.distanceEnd} onChange={(e) => handleTimeChange(e, idx)} />
                                                     </div>
 
                                                     <div className="mb-3 col-lg-3">
                                                         <label className="form-label" htmlFor="startTime">Delivery Charge</label>
-                                                        <input type="number" id="startTime" className="form-control" name="deliveryCharge" placeholder="Delivery charge" value={row.startTime} onChange={(e) => handleTimeChange(e, idx)} />
+                                                        <input type="number" id="startTime" className="form-control" name="deliveryCharge" placeholder="Delivery charge" value={row.deliveryCharge} onChange={(e) => handleTimeChange(e, idx)} />
                                                     </div>
 
                                                     <Col lg={2} className="align-self-center d-grid mt-3">
@@ -369,7 +403,7 @@ function AddZone(props) {
 
                                     <div className="mb-3 row">
                                         <div className="col-12 text-end">
-                                            <button className="btn btn-primary w-md waves-effect waves-light" type="submit">Add Branch</button>
+                                            <button className="btn btn-primary w-md waves-effect waves-light" type="submit">{location.state ? "Edit Zone" : "Add Zone"}</button>
                                         </div>
                                     </div>
 
@@ -393,6 +427,7 @@ const mapStateToProps = state => {
         get_all_branch_loading,
         get_all_branch_data,
         add_zone_loading,
+        edit_zone_loading
 
     } = state.Restaurant;
 
@@ -404,6 +439,7 @@ const mapStateToProps = state => {
     return {
         get_all_branch_loading,
         get_all_branch_data,
+        edit_zone_loading,
 
         get_all_city_data,
         get_all_city_error,
@@ -416,7 +452,10 @@ export default withRouter(
     connect(mapStateToProps, {
         getAllBranchAction,
         getAllCityAction,
-        zoneAddAction
+        zoneAddAction,
+        zoneEditAction,
+        zoneAddFresh,
+        zoneEditFresh
     })(
         GoogleApiWrapper({
             apiKey: "AIzaSyDJkREeL-PpO7Z45k-MsD5sJD_m1mzNGEk",
