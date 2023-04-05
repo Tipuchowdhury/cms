@@ -122,6 +122,9 @@ import EmailForRecoverPassword from "pages/AuthenticationInner/Email-for-recover
 import Category from "pages/Category/Category"
 import AddZone from "pages/Zone/AddZone/AddZone"
 import Menu from "pages/Restaurant/Menu/Menu"
+import Campaign from "pages/Campaign/Campaign"
+import AddCampaign from "pages/Campaign/AddCampaign"
+import EditCampaign from "pages/Campaign/EditCampaign"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -152,6 +155,11 @@ const userRoutes = [
   // Category
   { path: "/category", component: <Category /> },
 
+  // Campaign
+  { path: "/campaign", component: <Campaign /> },
+  { path: "/add-campaign", component: <AddCampaign /> },
+  { path: "/edit-campaign", component: <EditCampaign /> },
+
   { path: "/manage-branch", component: <Branch /> },
   { path: "/branch-add", component: <BranchAdd /> },
   //Charts
@@ -159,6 +167,7 @@ const userRoutes = [
   { path: "/chartist-charts", component: <ChartistChart /> },
   { path: "/chartjs-charts", component: <ChartjsChart /> },
   { path: "/e-charts", component: <EChart /> },
+
   { path: "/sparkline-charts", component: <SparklineChart /> },
 
   // Icons
