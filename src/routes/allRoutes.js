@@ -125,6 +125,10 @@ import Menu from "pages/Restaurant/Menu/Menu"
 import Campaign from "pages/Campaign/Campaign"
 import AddCampaign from "pages/Campaign/AddCampaign"
 import EditCampaign from "pages/Campaign/EditCampaign"
+import AddOnsCategory from "pages/Restaurant/AddOnsCategory/AddOnsCategory"
+import CategoryAdd from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryAdd"
+import Slider from "pages/Slider/Slider"
+import SliderAdd from "pages/Slider/addSlider/SliderAdd"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -149,6 +153,7 @@ const userRoutes = [
   { path: "/zone", component: <Zone /> },
   { path: "/add-zone", component: <AddZone /> },
   { path: "/city", component: <City /> },
+  { path: "/register", component: <Register1 /> },
   { path: "/manage-users", component: <ManageUsers /> },
   { path: "/restaurant", component: <Restaurant /> },
 
@@ -162,6 +167,7 @@ const userRoutes = [
 
   { path: "/manage-branch", component: <Branch /> },
   { path: "/branch-add", component: <BranchAdd /> },
+  { path: "/menu", component: <Menu /> },
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },
   { path: "/chartist-charts", component: <ChartistChart /> },
@@ -242,7 +248,7 @@ const authRoutes = [
   { path: "/login", component: <Login1 /> },
   { path: "/forgot-password-2", component: <ForgetPwd /> },
   //{ path: "/register", component: <Register /> },
-  { path: "/register", component: <Register1 /> },
+  // { path: "/register", component: <Register1 /> },
   { path: "/password-recover-email", component: <EmailForRecoverPassword /> },
 
   { path: "/pages-maintenance", component: <PagesMaintenance /> },

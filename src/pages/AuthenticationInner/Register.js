@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Row, Col, CardBody, Card, Container, Alert, Input } from "reactstrap";
+import { Row, Col, CardBody, Card, Container, Alert, Input, CardTitle } from "reactstrap";
 
 // import images
 import logoSm from "../../assets/images/logo-sm.png";
@@ -14,6 +14,7 @@ import { userRegistrationNew, userRegistrationFresh, getAllUsersRolesAction } fr
 // import "toastr/build/toastr.min.css"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Breadcrumbs from 'components/Common/Breadcrumb';
 import Select from "react-select";
 
 const Register = (props) => {
@@ -111,25 +112,182 @@ const Register = (props) => {
 
   return (
     <React.Fragment>
-      <div className="home-btn d-none d-sm-block">
-        <Link to="/" className="text-dark">
-          <i className="fas fa-home h2"></i>
-        </Link>
+      <div className="page-content">
+        <Container fluid>
+          <Breadcrumbs maintitle="Foodi" title="Users" breadcrumbItem="Add New User" />
+
+          <Row>
+            <Col className="col-12">
+              <Card style={{ border: "none" }}>
+                <CardBody>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
+                    <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Add a New User </CardTitle>
+
+                  </div>
+
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
       </div>
-      <div className="account-pages my-5 pt-sm-5">
+      <Row>
+        <Col className="col-10 mx-auto">
+          <form className="mb-4" onSubmit={handleSubmit}>
+            {passwordStatus ? <Alert color="warning">
+              <strong>Warning!</strong> Password didn't match. Please check.
+            </Alert> : ""}
+
+            <Row className="mb-3">
+              <label
+                htmlFor="example-text-input"
+                className="col-md-2 col-form-label"
+              >
+                First Name
+              </label>
+              <div className="col-md-10">
+                <input type="text" className="form-control" id="first_name" placeholder="Enter username" name="first_name" onChange={handleInputs} />
+              </div>
+            </Row>
+
+            <Row className="mb-3">
+              <label
+                htmlFor="example-text-input"
+                className="col-md-2 col-form-label"
+              >
+                Last Name
+              </label>
+              <div className="col-md-10">
+                <input type="text" className="form-control" id="last_name" placeholder="Enter username" name="last_name" onChange={handleInputs} />
+              </div>
+            </Row>
+
+            <Row className="mb-3">
+              <label
+                htmlFor="example-text-input"
+                className="col-md-2 col-form-label"
+              >
+                Image
+              </label>
+              <div className="col-md-10">
+                <input type="file" className="form-control" id="resume" onChange={handleChange} />
+              </div>
+            </Row>
+
+            <Row className="mb-3">
+              <label
+                htmlFor="example-text-input"
+                className="col-md-2 col-form-label"
+              >
+                Present Address
+              </label>
+              <div className="col-md-10">
+                <input type="text" className="form-control" id="present_address" placeholder="Enter username" name="present_address" onChange={handleInputs} />
+              </div>
+            </Row>
+
+            <Row className="mb-3">
+              <label
+                htmlFor="example-text-input"
+                className="col-md-2 col-form-label"
+              >
+                Permanent Address
+              </label>
+              <div className="col-md-10">
+                <input type="text" className="form-control" id="permanent_address" placeholder="Enter username" name="permanent_address" onChange={handleInputs} />
+              </div>
+            </Row>
+
+            <Row className="mb-3">
+              <label
+                htmlFor="example-text-input"
+                className="col-md-2 col-form-label"
+              >
+                Mobile Number
+              </label>
+              <div className="col-md-10">
+                <input type="number" className="form-control" id="mobileNumber" placeholder="Enter mobile number" name="mobileNumber" onChange={handleInputs} />
+              </div>
+            </Row>
+
+            <Row className="mb-3">
+              <label
+                htmlFor="example-text-input"
+                className="col-md-2 col-form-label"
+              >
+                Email
+              </label>
+              <div className="col-md-10">
+                <input type="email" className="form-control" id="useremail" placeholder="Enter email" name="email" onChange={handleInputs} />
+              </div>
+            </Row>
+
+            <Row className="mb-3">
+              <label
+                htmlFor="example-text-input"
+                className="col-md-2 col-form-label"
+              >
+                Role
+              </label>
+              <div className="col-md-10">
+                <Input
+                  id="exampleSelect"
+                  name="manager"
+                  value={role}
+                  required={true}
+                  onChange={e => setRole(e.target.value)}
+                  type="select"
+                >
+                  <option>Choose...</option>
+                  {userData}
+                </Input>
+              </div>
+            </Row>
+
+            <Row className="mb-3">
+              <label
+                htmlFor="example-text-input"
+                className="col-md-2 col-form-label"
+              >
+                Password
+              </label>
+              <div className="col-md-10">
+                <input type="password" className="form-control" id="userpassword" placeholder="Enter password" name="password" onChange={handleInputs} required />
+              </div>
+            </Row>
+
+            <Row className="mb-3">
+              <label
+                htmlFor="example-text-input"
+                className="col-md-2 col-form-label"
+              >
+                Confirm Password
+              </label>
+              <div className="col-md-10">
+                <input type="password" className="form-control" id="userconfirmpassword" placeholder="Enter password" name="confirmPassword" onChange={handleInputs} required />
+              </div>
+            </Row>
+
+            <div className="mb-3 row">
+              <div className="col-12 text-end">
+                <button className="btn btn-primary w-md waves-effect waves-light" type="submit">Register</button>
+              </div>
+            </div>
+
+            <div className="mt-2 mb-0 row">
+              <div className="col-12 mt-4">
+                <p className="mb-0">By registering you agree to the Foodi <Link to="#" className="text-primary">Terms of Use</Link></p>
+              </div>
+            </div>
+
+          </form>
+        </Col>
+      </Row>
+      {/* <div className="account-pages my-5 pt-sm-5">
         <Container>
           <Row className="justify-content-center">
             <Col md={8} lg={8} xl={7} >
               <Card className="overflow-hidden">
-                <div className="bg-primary">
-                  <div className="text-primary text-center p-4">
-                    <h5 className="text-white font-size-20">Free Register</h5>
-                    <p className="text-white-50">Get your free Foodi account now.</p>
-                    <Link to="/index" className="logo logo-admin">
-                      <img src={logoSm} height="24" alt="logo" />
-                    </Link>
-                  </div>
-                </div>
                 <CardBody className="p-4">
                   <div className="p-3">
                     <form className="mt-4" onSubmit={handleSubmit}>
@@ -230,7 +388,7 @@ const Register = (props) => {
             </Col>
           </Row>
         </Container>
-      </div>
+      </div> */}
     </React.Fragment>
   );
 };

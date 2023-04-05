@@ -20,8 +20,10 @@ import { connect } from "react-redux"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 
 function Zone(props) {
+  const navigate = useNavigate()
   const handleEdit = row => {
     console.log(row)
+    navigate("/add-zone", { state: row })
   }
   const actionRef = (cell, row) => (
     <div style={{ display: "flex", gap: 10 }}>
