@@ -190,7 +190,7 @@ function City(props) {
                     </Row>
                 </Container>
                 <Modal isOpen={modal} toggle={toggle} centered>
-                    <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+                    <ModalHeader toggle={toggle}>Add City</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleSubmit}>
 

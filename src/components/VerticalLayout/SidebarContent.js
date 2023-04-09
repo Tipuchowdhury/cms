@@ -194,6 +194,9 @@ const SidebarContent = props => {
               </Link>
               <ul className="sub-menu" aria-expanded="false">
                 <li>
+                  <Link to="/cuisine">{props.t("Cuisine")} </Link>
+                </li>
+                <li>
                   <Link to="/restaurant">{props.t("Manage Restaurant")}</Link>
                 </li>
                 <li>
@@ -205,6 +208,7 @@ const SidebarContent = props => {
                 <li>
                   <Link to="/addons-category">{props.t("Add-ons Category")} </Link>
                 </li>
+
               </ul>
             </li>
 
