@@ -2,6 +2,7 @@ import {
     ADD_RESTAURANT,
     GET_ALL_RESTAURANT,
     RESTAURANT_NAME_UPDATE,
+    RESTAURANT_STATUS_UPDATE,
     GET_ALL_CUSINE,
     ADD_BRANCH,
     GET_ALL_BRANCH,
@@ -73,6 +74,15 @@ const Restaurant = (state = initialState, action) => {
                 get_all_restaurant_loading: false
             }
             break;
+
+        case RESTAURANT_STATUS_UPDATE:
+            state = {
+                ...state,
+                restaurant_status_update_loading: action.status,
+                get_all_restaurant_loading: false
+            }
+            break;
+
         case GET_ALL_CUSINE:
             state = {
                 ...state,

@@ -2,6 +2,7 @@ import {
     ADD_RESTAURANT,
     GET_ALL_RESTAURANT,
     RESTAURANT_NAME_UPDATE,
+    RESTAURANT_STATUS_UPDATE,
     GET_ALL_CUSINE,
     ADD_BRANCH,
     GET_ALL_BRANCH,
@@ -86,11 +87,12 @@ export const getAllRestaurantAction = () => {
 };
 
 
-export const restaurantNameUpdateAction = (name, id) => {
+export const restaurantNameUpdateAction = (name, id, is_active) => {
     var url = process.env.REACT_APP_LOCALHOST + "/Restaurant/Put";
     const formData = {
         _id: id,
-        name: name
+        name: name,
+        is_active: is_active
     };
     return dispatch => {
         const headers = {
@@ -111,6 +113,39 @@ export const restaurantNameUpdateAction = (name, id) => {
             .catch(error => {
                 dispatch({
                     type: RESTAURANT_NAME_UPDATE,
+                    status: "Failed",
+                });
+                toast.error("Something went wrong!!");
+            });
+    };
+};
+
+export const restaurantStatusUpdateAction = (name, id, is_active) => {
+    var url = process.env.REACT_APP_LOCALHOST + "/Restaurant/Put";
+    const formData = {
+        _id: id,
+        name: name,
+        is_active: !(is_active)
+    };
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+
+        };
+        axios
+            .put(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: RESTAURANT_STATUS_UPDATE,
+                    status: "Success",
+                });
+                toast.success("Status Updated Successfully");
+            })
+            .catch(error => {
+                dispatch({
+                    type: RESTAURANT_STATUS_UPDATE,
                     status: "Failed",
                 });
                 toast.error("Something went wrong!!");
