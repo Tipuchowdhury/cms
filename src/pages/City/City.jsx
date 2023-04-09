@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { addCityAction, addCityFresh, getAllCityAction, getAllCityFresh, cityNameEditAction, cityNameEditFresh, cityDeleteAction, cityDeleteFresh } from 'store/zoneCity/actions';
+import { addCityAction, addCityFresh, getAllCityAction, getAllCityFresh, cityNameEditAction, cityNameEditFresh, cityDeleteAction, cityDeleteFresh, cityStatusEditAction, cityStatusEditFresh } from 'store/zoneCity/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 
 function City(props) {
@@ -17,8 +17,11 @@ function City(props) {
     const [modal, setModal] = useState(false);
     const [cityId, setCityId] = useState();
     const [cityname, setCityName] = useState();
+    const [isActive, setIsActive] = useState();
     const [editModal, setEditModal] = useState(false);
     const [reload, setReload] = useState(false)
+    const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
+    const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
 
     // delete modal
     const [deleteItem, setDeleteItem] = useState()
@@ -45,10 +48,26 @@ function City(props) {
         console.log(row);
         setCityId(row._id);
         setCityName(row.name);
+        setIsActive(row.is_active);
         toggleEditModal();
     }
     const handleCityName = (e) => {
         setCityName(e.target.value);
+    }
+
+    const handleStatusModal = (row) => {
+        setCityId(row._id);
+        setCityName(row.name);
+        setIsActive(row.is_active);
+
+        toggleStatus();
+    }
+
+    const handleStatusUpdate = e => {
+
+        e.preventDefault()
+        props.cityStatusEditAction(cityname, cityId, isActive);
+        // toggleDel();
     }
 
     const handleEditModalSubmit = (e) => {
@@ -56,7 +75,7 @@ function City(props) {
         toggleEditModal();
         console.log(cityname)
         console.log(cityId);
-        props.cityNameEditAction(cityname, cityId)
+        props.cityNameEditAction(cityname, cityId, isActive);
     }
     const handleDeleteModal = (row) => {
         setDeleteItem(row._id);
@@ -84,7 +103,10 @@ function City(props) {
 
     // const statusRef = (cell, row) => <Badge color="secondary" style={{ padding: "12px" }}>Deactivate</Badge>
 
-    const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
+    // const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
+
+    const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
+        className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
 
 
     console.log(props.add_city_loading);
@@ -147,6 +169,19 @@ function City(props) {
 
         }
 
+        if (props.city_status_edit_loading === "Success") {
+            toast.success("City Status Updated");
+            toggleStatus();
+            props.cityStatusEditFresh();
+
+        }
+
+        if (props.city_status_edit_loading === "Failed") {
+            toast.error("Something went wrong");
+            props.cityStatusEditFresh();
+
+        }
+
         if (props.city_delete_loading === "Success") {
             console.log("I am in the delete")
             toast.success("City Deleted");
@@ -155,7 +190,7 @@ function City(props) {
         }
 
 
-    }, [props.add_city_loading, props.city_name_edit_loading, props.city_delete_loading]);
+    }, [props.add_city_loading, props.city_name_edit_loading, props.city_delete_loading, props.city_status_edit_loading]);
 
 
     return (
@@ -256,6 +291,22 @@ function City(props) {
                     </ModalFooter>
                 </Modal>
                 {/* ============ delete modal ends=============== */}
+
+                {/* ============ status update modal starts=============== */}
+                <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
+                    <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
+                        <div className="icon-box">
+                            <i className="fa fa-exclamation-circle" style={{ color: "#DCA218", fontSize: "40px" }}></i>
+                        </div>
+                        Are you sure?
+                    </ModalHeader>
+                    <ModalBody>Do you really want to update status these records? </ModalBody>
+                    <ModalFooter>
+                        <Button color="secondary" onClick={toggleStatus}>Cancel</Button>{' '}
+                        <Button color="primary" onClick={handleStatusUpdate}>Update</Button>
+                    </ModalFooter>
+                </Modal>
+                {/* ============ status update modal ends=============== */}
             </div>
         </React.Fragment>
     )
@@ -275,6 +326,7 @@ const mapStateToProps = state => {
         get_all_city_loading,
 
         city_name_edit_loading,
+        city_status_edit_loading,
         city_delete_loading
     } = state.zoneCity;
 
@@ -288,6 +340,7 @@ const mapStateToProps = state => {
         get_all_city_loading,
 
         city_name_edit_loading,
+        city_status_edit_loading,
         city_delete_loading
     };
 };
@@ -302,6 +355,8 @@ export default withRouter(
             cityNameEditAction,
             cityNameEditFresh,
             cityDeleteAction,
-            cityDeleteFresh
+            cityDeleteFresh,
+            cityStatusEditAction,
+            cityStatusEditFresh
         })(City)
 );

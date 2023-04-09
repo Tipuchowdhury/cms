@@ -5,6 +5,8 @@ import {
   GET_ALL_CATEGORY_FRESH,
   CATEGORY_NAME_EDIT,
   CATEGORY_NAME_EDIT_FRESH,
+  CATEGORY_STATUS_EDIT,
+  CATEGORY_STATUS_EDIT_FRESH,
   GET_CATEGORY_NAME_BY_ID,
   CATEGORY_DELETE,
   CATEGORY_DELETE_FRESH,
@@ -24,6 +26,9 @@ const initialState = {
   //category name edit
   category_name_edit_data: null,
   category_name_edit_loading: false,
+
+  category_status_edit_data: null,
+  category_status_edit_loading: false,
 
   category_delete_loading: false,
 }
@@ -76,6 +81,22 @@ const category = (state = initialState, action) => {
       state = {
         ...state,
         category_name_edit_loading: action.status,
+      }
+      break
+
+    case CATEGORY_STATUS_EDIT:
+      state = {
+        ...state,
+        category_status_edit_data: action.payload,
+        category_status_edit_loading: action.status,
+        get_all_category_loading: false,
+      }
+      break
+
+    case CATEGORY_STATUS_EDIT_FRESH:
+      state = {
+        ...state,
+        category_status_edit_loading: action.status,
       }
       break
 

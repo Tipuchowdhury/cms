@@ -31,8 +31,6 @@ function ManageUsers(props) {
             email: row.email,
             id: row._id,
             is_active: row.is_active,
-
-
         }));
     }
     const [registerInfo, setRegisterInfo] = useState({

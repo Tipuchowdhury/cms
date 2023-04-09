@@ -7,7 +7,9 @@ import {
     CITY_NAME_EDIT_FRESH,
     GET_CITY_NAME_BY_ID,
     CITY_DELETE,
-    CITY_DELETE_FRESH
+    CITY_DELETE_FRESH,
+    CITY_STATUS_EDIT,
+    CITY_STATUS_EDIT_FRESH
 
 } from "./actionTypes"
 
@@ -26,6 +28,9 @@ const initialState = {
     //city name edit
     city_name_edit_data: null,
     city_name_edit_loading: false,
+
+    city_status_edit_data: null,
+    city_status_edit_loading: false,
 
     city_delete_loading: false
 }
@@ -79,6 +84,22 @@ const zoneCity = (state = initialState, action) => {
             state = {
                 ...state,
                 city_name_edit_loading: action.status,
+            }
+            break;
+
+        case CITY_STATUS_EDIT:
+            state = {
+                ...state,
+                city_status_edit_data: action.payload,
+                city_status_edit_loading: action.status,
+                get_all_city_loading: false
+            };
+            break;
+
+        case CITY_STATUS_EDIT_FRESH:
+            state = {
+                ...state,
+                city_status_edit_loading: action.status,
             }
             break;
 

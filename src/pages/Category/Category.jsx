@@ -30,6 +30,8 @@ import {
   categoryNameEditFresh,
   categoryDeleteAction,
   categoryDeleteFresh,
+  categoryStatusEditAction,
+  categoryStatusEditFresh,
 } from "store/Category/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 
@@ -38,14 +40,20 @@ function Category(props) {
   const [modal, setModal] = useState(false)
   const [categoryId, setCategoryId] = useState()
   const [categoryname, setCategoryName] = useState()
+  const [isActive, setIsActive] = useState();
+
   const [editModal, setEditModal] = useState(false)
   const [reload, setReload] = useState(false)
+  const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
+
+  const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
 
   // delete modal
   const [deleteItem, setDeleteItem] = useState()
   const [modalDel, setModalDel] = useState(false)
 
   const toggleDel = () => setModalDel(!modalDel)
+
   const handleDelete = () => {
     toggleDel()
     console.log(deleteItem)
@@ -66,6 +74,7 @@ function Category(props) {
     console.log(row)
     setCategoryId(row._id)
     setCategoryName(row.name)
+    setIsActive(row.is_active);
     toggleEditModal()
   }
   const handleCategoryName = e => {
@@ -77,11 +86,28 @@ function Category(props) {
     toggleEditModal()
     console.log(categoryname)
     console.log(categoryId)
-    props.categoryNameEditAction(categoryname, categoryId)
+    props.categoryNameEditAction(categoryname, categoryId, isActive)
   }
   const handleDeleteModal = row => {
     setDeleteItem(row._id)
     toggleDel()
+  }
+
+  const handleStatusModal = (row) => {
+    setCategoryId(row._id)
+    setCategoryName(row.name)
+    setIsActive(row.is_active);
+
+    toggleStatus();
+  }
+
+  const handleStatusUpdate = e => {
+
+    e.preventDefault()
+    console.log(categoryname)
+    console.log(categoryId)
+    props.categoryStatusEditAction(categoryname, categoryId, isActive)
+    // toggleDel();
   }
   const actionRef = (cell, row) => (
     <div style={{ display: "flex", gap: 10 }}>
@@ -108,7 +134,10 @@ function Category(props) {
   //   </Badge>
   // )
 
-  const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
+  // const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
+
+  const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
+    className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
 
   console.log(props.add_category_loading)
   console.log(props.get_all_category_data)
@@ -163,6 +192,17 @@ function Category(props) {
       props.categoryNameEditFresh()
     }
 
+    if (props.category_status_edit_loading === "Success") {
+      toast.success("Category Status Updated");
+      toggleStatus();
+      props.categoryStatusEditFresh();
+    }
+
+    if (props.category_status_edit_loading === "Failed") {
+      toast.error("Something went wrong");
+      props.categoryStatusEditFresh();
+    }
+
     if (props.category_delete_loading === "Success") {
       console.log("I am in the delete")
       toast.success("Category Deleted")
@@ -172,6 +212,7 @@ function Category(props) {
     props.add_category_loading,
     props.category_name_edit_loading,
     props.category_delete_loading,
+    props.category_status_edit_loading,
   ])
 
   return (
@@ -339,6 +380,22 @@ function Category(props) {
           </ModalFooter>
         </Modal>
         {/* ============ delete modal ends=============== */}
+
+        {/* ============ status update modal starts=============== */}
+        <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
+          <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
+            <div className="icon-box">
+              <i className="fa fa-exclamation-circle" style={{ color: "#DCA218", fontSize: "40px" }}></i>
+            </div>
+            Are you sure?
+          </ModalHeader>
+          <ModalBody>Do you really want to update status these records? </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={toggleStatus}>Cancel</Button>{' '}
+            <Button color="primary" onClick={handleStatusUpdate}>Update</Button>
+          </ModalFooter>
+        </Modal>
+        {/* ============ status update modal ends=============== */}
       </div>
     </React.Fragment>
   )
@@ -355,6 +412,7 @@ const mapStateToProps = state => {
     get_all_category_loading,
 
     category_name_edit_loading,
+    category_status_edit_loading,
     category_delete_loading,
   } = state.Category
 
@@ -368,6 +426,8 @@ const mapStateToProps = state => {
     get_all_category_loading,
 
     category_name_edit_loading,
+
+    category_status_edit_loading,
     category_delete_loading,
   }
 }
@@ -382,5 +442,7 @@ export default withRouter(
     categoryNameEditFresh,
     categoryDeleteAction,
     categoryDeleteFresh,
+    categoryStatusEditAction,
+    categoryStatusEditFresh
   })(Category)
 )

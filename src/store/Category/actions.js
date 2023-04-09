@@ -5,6 +5,8 @@ import {
   GET_ALL_CATEGORY_FRESH,
   CATEGORY_NAME_EDIT,
   CATEGORY_NAME_EDIT_FRESH,
+  CATEGORY_STATUS_EDIT,
+  CATEGORY_STATUS_EDIT_FRESH,
   CATEGORY_DELETE,
   CATEGORY_DELETE_FRESH,
 } from "./actionTypes"
@@ -94,11 +96,12 @@ export const getAllCategoryFresh = () => {
   }
 }
 
-export const categoryNameEditAction = (name, id) => {
+export const categoryNameEditAction = (name, id, is_active) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Category/Put"
   const formData = {
     _id: id,
     category_name: name,
+    is_active: is_active,
   }
   return dispatch => {
     const headers = {
@@ -125,10 +128,54 @@ export const categoryNameEditAction = (name, id) => {
   }
 }
 
+
+
 export const categoryNameEditFresh = () => {
   return dispatch => {
     dispatch({
       type: CATEGORY_NAME_EDIT_FRESH,
+      payload: null,
+      status: false,
+    })
+  }
+}
+
+export const categoryStatusEditAction = (name, id, is_active) => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Category/Put"
+  const formData = {
+    _id: id,
+    category_name: name,
+    is_active: !(is_active),
+  }
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: CATEGORY_STATUS_EDIT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: CATEGORY_STATUS_EDIT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const categoryStatusEditFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: CATEGORY_STATUS_EDIT_FRESH,
       payload: null,
       status: false,
     })
