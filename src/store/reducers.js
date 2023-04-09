@@ -12,6 +12,7 @@ import registerNew from "./register-new/reducer"
 import zoneCity from "./zoneCity/reducer"
 import Restaurant from "./Restaurant/reducer"
 import Category from "./Category/reducer"
+import Campaign from "./Campaign/reducer"
 import SubscriptionTypes from "./SubscriptionTypes/reducer"
 
 //Calendar
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   zoneCity,
   Restaurant,
   Category,
+  Campaign,
   SubscriptionTypes,
 })
 

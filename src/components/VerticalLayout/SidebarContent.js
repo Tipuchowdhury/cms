@@ -209,9 +209,23 @@ const SidebarContent = props => {
                 <li>
                   <Link to="/category">{props.t("Manage Menu Category")} </Link>
                 </li>
+                <li>
+                  <Link to="/menu">{props.t("Manage Restaurant Menu")} </Link>
+                </li>
+                <li>
+                  <Link to="/addons-category">
+                    {props.t("Add-ons Category")}{" "}
+                  </Link>
+                </li>
               </ul>
             </li>
-
+            <li>
+              <Link to="/campaign" className="waves-effect">
+                <i className="ti-announcement"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
+                <span>{props.t("Campaign")}</span>
+              </Link>
+            </li>
             {/* <li>
               <Link to="/calendar" className=" waves-effect">
                 <i className="ti-calendar"></i>

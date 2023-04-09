@@ -123,6 +123,12 @@ import EmailForRecoverPassword from "pages/AuthenticationInner/Email-for-recover
 import Category from "pages/Category/Category"
 import AddZone from "pages/Zone/AddZone/AddZone"
 import Menu from "pages/Restaurant/Menu/Menu"
+import Campaign from "pages/Campaign/Campaign"
+import AddCampaign from "pages/Campaign/AddCampaign"
+import AddOnsCategory from "pages/Restaurant/AddOnsCategory/AddOnsCategory"
+import CategoryAdd from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryAdd"
+import Slider from "pages/Slider/Slider"
+import SliderAdd from "pages/Slider/addSlider/SliderAdd"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -147,6 +153,7 @@ const userRoutes = [
   { path: "/zone", component: <Zone /> },
   { path: "/add-zone", component: <AddZone /> },
   { path: "/city", component: <City /> },
+  { path: "/register", component: <Register1 /> },
   { path: "/manage-users", component: <ManageUsers /> },
   { path: "/subscription-types", component: <SubscriptionTypes /> },
   { path: "/restaurant", component: <Restaurant /> },
@@ -154,13 +161,19 @@ const userRoutes = [
   // Category
   { path: "/category", component: <Category /> },
 
+  // Campaign
+  { path: "/campaign", component: <Campaign /> },
+  { path: "/add-campaign", component: <AddCampaign /> },
+
   { path: "/manage-branch", component: <Branch /> },
   { path: "/branch-add", component: <BranchAdd /> },
+  { path: "/menu", component: <Menu /> },
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },
   { path: "/chartist-charts", component: <ChartistChart /> },
   { path: "/chartjs-charts", component: <ChartjsChart /> },
   { path: "/e-charts", component: <EChart /> },
+
   { path: "/sparkline-charts", component: <SparklineChart /> },
 
   // Icons
@@ -235,7 +248,7 @@ const authRoutes = [
   { path: "/login", component: <Login1 /> },
   { path: "/forgot-password-2", component: <ForgetPwd /> },
   //{ path: "/register", component: <Register /> },
-  { path: "/register", component: <Register1 /> },
+  // { path: "/register", component: <Register1 /> },
   { path: "/password-recover-email", component: <EmailForRecoverPassword /> },
 
   { path: "/pages-maintenance", component: <PagesMaintenance /> },
