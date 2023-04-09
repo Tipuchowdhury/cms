@@ -1,27 +1,31 @@
-import React from "react";
-import { Row, Col, Card, CardBody, Container } from "reactstrap";
+import React from "react"
+import { Row, Col, Card, CardBody, Container } from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 // Charts
-import Gauge from "../AllCharts/echart/gaugechart";
-import Line from "../AllCharts/echart/linechart";
-import LineBar from "../AllCharts/echart/linebarchart";
-import Doughnut from "../AllCharts/echart/doughnutchart";
-import Pie from "../AllCharts/echart/piechart";
-import Scatter from "../AllCharts/echart/scatterchart";
-import Bubble from "../AllCharts/echart/bubblechart";
-import Candlestick from "../AllCharts/echart/candlestickchart";
+import Gauge from "../AllCharts/echart/gaugechart"
+import Line from "../AllCharts/echart/linechart"
+import LineBar from "../AllCharts/echart/linebarchart"
+import Doughnut from "../AllCharts/echart/doughnutchart"
+import Pie from "../AllCharts/echart/piechart"
+import Scatter from "../AllCharts/echart/scatterchart"
+import Bubble from "../AllCharts/echart/bubblechart"
+import Candlestick from "../AllCharts/echart/candlestickchart"
 
 const EChart = () => {
-  document.title = "ECharts | Veltrix - React Admin & Dashboard Template";
+  document.title = "ECharts | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
           {/* Render Breadcrumb */}
-          <Breadcrumbs maintitle="Veltrix" title="Charts" breadcrumbItem="ECharts" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Charts"
+            breadcrumbItem="ECharts"
+          />
           <Row>
             <Col lg="6">
               <Card>
@@ -113,7 +117,7 @@ const EChart = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default EChart;
+export default EChart

@@ -1,24 +1,21 @@
-import React from "react";
+import React from "react"
 
-import {
-  Table,
-  Row,
-  Col,
-  Card,
-  CardBody,
-  CardTitle
-} from "reactstrap";
+import { Table, Row, Col, Card, CardBody, CardTitle } from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const BasicTable = () => {
-  document.title = "Basic Tables | Veltrix - React Admin & Dashboard Template";
+  document.title = "Basic Tables | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
-          <Breadcrumbs maintitle="Veltrix" title="Tables" breadcrumbItem="Basic Tables" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Tables"
+            breadcrumbItem="Basic Tables"
+          />
 
           <Row>
             <Col md={6}>
@@ -576,7 +573,7 @@ const BasicTable = () => {
         </div>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default BasicTable;
+export default BasicTable

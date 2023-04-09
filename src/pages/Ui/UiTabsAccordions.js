@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from "react"
 import {
   Card,
   CardBody,
@@ -13,18 +13,18 @@ import {
   Row,
   TabContent,
   TabPane,
-} from "reactstrap";
+} from "reactstrap"
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
-import classnames from "classnames";
+import classnames from "classnames"
 
 class UiTabsAccordions extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       activeTab: "1",
       activeTab1: "5",
@@ -43,89 +43,89 @@ class UiTabsAccordions extends Component {
       col9: true,
       col10: false,
       col11: false,
-    };
-    this.toggle = this.toggle.bind(this);
-    this.toggle1 = this.toggle1.bind(this);
+    }
+    this.toggle = this.toggle.bind(this)
+    this.toggle1 = this.toggle1.bind(this)
 
-    this.t_col1 = this.t_col1.bind(this);
-    this.t_col2 = this.t_col2.bind(this);
-    this.t_col3 = this.t_col3.bind(this);
-    this.t_col5 = this.t_col5.bind(this);
-    this.t_col6 = this.t_col6.bind(this);
-    this.t_col7 = this.t_col7.bind(this);
-    this.t_col8 = this.t_col8.bind(this);
-    this.t_col9 = this.t_col9.bind(this);
-    this.t_col10 = this.t_col10.bind(this);
-    this.t_col11 = this.t_col11.bind(this);
+    this.t_col1 = this.t_col1.bind(this)
+    this.t_col2 = this.t_col2.bind(this)
+    this.t_col3 = this.t_col3.bind(this)
+    this.t_col5 = this.t_col5.bind(this)
+    this.t_col6 = this.t_col6.bind(this)
+    this.t_col7 = this.t_col7.bind(this)
+    this.t_col8 = this.t_col8.bind(this)
+    this.t_col9 = this.t_col9.bind(this)
+    this.t_col10 = this.t_col10.bind(this)
+    this.t_col11 = this.t_col11.bind(this)
 
-    this.toggle2 = this.toggle2.bind(this);
-    this.toggle3 = this.toggle3.bind(this);
+    this.toggle2 = this.toggle2.bind(this)
+    this.toggle3 = this.toggle3.bind(this)
 
-    this.toggleVertical = this.toggleVertical.bind(this);
-    this.toggleCustom = this.toggleCustom.bind(this);
-    this.toggleJustidyCustom = this.toggleJustidyCustom.bind(this);
+    this.toggleVertical = this.toggleVertical.bind(this)
+    this.toggleCustom = this.toggleCustom.bind(this)
+    this.toggleJustidyCustom = this.toggleJustidyCustom.bind(this)
   }
 
   t_col1() {
-    this.setState({ col1: !this.state.col1 });
-    this.setState({ col2: false });
-    this.setState({ col3: false });
+    this.setState({ col1: !this.state.col1 })
+    this.setState({ col2: false })
+    this.setState({ col3: false })
   }
 
   t_col2() {
-    this.setState({ col2: !this.state.col2 });
-    this.setState({ col1: false });
-    this.setState({ col3: false });
+    this.setState({ col2: !this.state.col2 })
+    this.setState({ col1: false })
+    this.setState({ col3: false })
   }
 
   t_col3() {
-    this.setState({ col3: !this.state.col3 });
-    this.setState({ col1: false });
-    this.setState({ col2: false });
+    this.setState({ col3: !this.state.col3 })
+    this.setState({ col1: false })
+    this.setState({ col2: false })
   }
 
   t_col5() {
-    this.setState({ col5: !this.state.col5 });
+    this.setState({ col5: !this.state.col5 })
   }
 
   t_col6() {
-    this.setState({ col6: !this.state.col6 });
+    this.setState({ col6: !this.state.col6 })
   }
 
   t_col7() {
-    this.setState({ col7: !this.state.col7 });
+    this.setState({ col7: !this.state.col7 })
   }
 
   t_col8() {
     this.setState({
       col6: !this.state.col6,
-      col7: !this.state.col7
-    });
+      col7: !this.state.col7,
+    })
   }
 
   t_col9() {
-    this.setState({ col9: !this.state.col9 });
-    this.setState({ col10: false });
-    this.setState({ col11: false });
+    this.setState({ col9: !this.state.col9 })
+    this.setState({ col10: false })
+    this.setState({ col11: false })
   }
 
   t_col10() {
-    this.setState({ col10: !this.state.col10 });
-    this.setState({ col9: false });
-    this.setState({ col11: false });
+    this.setState({ col10: !this.state.col10 })
+    this.setState({ col9: false })
+    this.setState({ col11: false })
   }
 
   t_col11() {
-    this.setState({ col11: !this.state.col11 });
-    this.setState({ col9: false });
-    this.setState({ col10: false });
+    this.setState({ col11: !this.state.col11 })
+    this.setState({ col9: false })
+    this.setState({ col10: false })
   }
 
   toggle(tab) {
     if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab,
-      });
+      })
     }
   }
 
@@ -133,7 +133,7 @@ class UiTabsAccordions extends Component {
     if (this.state.activeTab1 !== tab) {
       this.setState({
         activeTab1: tab,
-      });
+      })
     }
   }
 
@@ -141,7 +141,7 @@ class UiTabsAccordions extends Component {
     if (this.state.activeTab2 !== tab) {
       this.setState({
         activeTab2: tab,
-      });
+      })
     }
   }
 
@@ -149,7 +149,7 @@ class UiTabsAccordions extends Component {
     if (this.state.activeTab3 !== tab) {
       this.setState({
         activeTab3: tab,
-      });
+      })
     }
   }
 
@@ -157,7 +157,7 @@ class UiTabsAccordions extends Component {
     if (this.state.verticalActiveTab !== tab) {
       this.setState({
         verticalActiveTab: tab,
-      });
+      })
     }
   }
 
@@ -165,7 +165,7 @@ class UiTabsAccordions extends Component {
     if (this.state.customActiveTab !== tab) {
       this.setState({
         customActiveTab: tab,
-      });
+      })
     }
   }
 
@@ -173,13 +173,13 @@ class UiTabsAccordions extends Component {
     if (this.state.activeTabJustify !== tab) {
       this.setState({
         activeTabJustify: tab,
-      });
+      })
     }
   }
 
-
   render() {
-    document.title = "Tab & Accordions | Veltrix - React Admin & Dashboard Template";
+    document.title =
+      "Tab & Accordions | Foodi - React Admin & Dashboard Template"
     return (
       <React.Fragment>
         <div className="page-content">
@@ -210,7 +210,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.activeTab === "1",
                           })}
                           onClick={() => {
-                            this.toggle("1");
+                            this.toggle("1")
                           }}
                         >
                           Home
@@ -223,7 +223,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.activeTab === "2",
                           })}
                           onClick={() => {
-                            this.toggle("2");
+                            this.toggle("2")
                           }}
                         >
                           Profile
@@ -236,7 +236,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.activeTab === "3",
                           })}
                           onClick={() => {
-                            this.toggle("3");
+                            this.toggle("3")
                           }}
                         >
                           Messages
@@ -249,7 +249,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.activeTab === "4",
                           })}
                           onClick={() => {
-                            this.toggle("4");
+                            this.toggle("4")
                           }}
                         >
                           Settings
@@ -257,7 +257,10 @@ class UiTabsAccordions extends Component {
                       </NavItem>
                     </Nav>
 
-                    <TabContent activeTab={this.state.activeTab} className="p-3 text-muted">
+                    <TabContent
+                      activeTab={this.state.activeTab}
+                      className="p-3 text-muted"
+                    >
                       <TabPane tabId="1">
                         <Row>
                           <Col sm="12">
@@ -359,7 +362,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.activeTab1 === "5",
                           })}
                           onClick={() => {
-                            this.toggle1("5");
+                            this.toggle1("5")
                           }}
                         >
                           Home
@@ -372,7 +375,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.activeTab1 === "6",
                           })}
                           onClick={() => {
-                            this.toggle1("6");
+                            this.toggle1("6")
                           }}
                         >
                           Profile
@@ -385,7 +388,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.activeTab1 === "7",
                           })}
                           onClick={() => {
-                            this.toggle1("7");
+                            this.toggle1("7")
                           }}
                         >
                           Messages
@@ -398,7 +401,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.activeTab1 === "8",
                           })}
                           onClick={() => {
-                            this.toggle1("8");
+                            this.toggle1("8")
                           }}
                         >
                           Settings
@@ -406,7 +409,10 @@ class UiTabsAccordions extends Component {
                       </NavItem>
                     </Nav>
 
-                    <TabContent activeTab={this.state.activeTab1} className="p-3 text-muted">
+                    <TabContent
+                      activeTab={this.state.activeTab1}
+                      className="p-3 text-muted"
+                    >
                       <TabPane tabId="5">
                         <Row>
                           <Col sm="12">
@@ -495,9 +501,7 @@ class UiTabsAccordions extends Component {
                 <Card>
                   <CardBody>
                     <CardTitle className="h4">Custom Tabs</CardTitle>
-                    <p className="card-title-desc">
-                      Example of custom tabs
-                    </p>
+                    <p className="card-title-desc">Example of custom tabs</p>
 
                     <Nav tabs className="nav-tabs-custom">
                       <NavItem>
@@ -507,7 +511,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.customActiveTab === "1",
                           })}
                           onClick={() => {
-                            this.toggleCustom("1");
+                            this.toggleCustom("1")
                           }}
                         >
                           <span className="d-none d-sm-block">Home</span>
@@ -520,7 +524,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.customActiveTab === "2",
                           })}
                           onClick={() => {
-                            this.toggleCustom("2");
+                            this.toggleCustom("2")
                           }}
                         >
                           <span className="d-none d-sm-block">Profile</span>
@@ -533,7 +537,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.customActiveTab === "3",
                           })}
                           onClick={() => {
-                            this.toggleCustom("3");
+                            this.toggleCustom("3")
                           }}
                         >
                           <span className="d-none d-sm-block">Messages</span>
@@ -546,7 +550,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.customActiveTab === "4",
                           })}
                           onClick={() => {
-                            this.toggleCustom("4");
+                            this.toggleCustom("4")
                           }}
                         >
                           <span className="d-none d-sm-block">Settings</span>
@@ -554,7 +558,10 @@ class UiTabsAccordions extends Component {
                       </NavItem>
                     </Nav>
 
-                    <TabContent activeTab={this.state.customActiveTab} className="p-3 text-muted">
+                    <TabContent
+                      activeTab={this.state.customActiveTab}
+                      className="p-3 text-muted"
+                    >
                       <TabPane tabId="1">
                         <Row>
                           <Col sm="12">
@@ -639,9 +646,7 @@ class UiTabsAccordions extends Component {
                 <Card>
                   <CardBody>
                     <CardTitle className="h4">Custom Tabs Justified</CardTitle>
-                    <p className="card-title-desc">
-                      Example of custom tabs
-                    </p>
+                    <p className="card-title-desc">Example of custom tabs</p>
 
                     <Nav tabs justified className="nav-tabs-custom">
                       <NavItem>
@@ -651,7 +656,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.activeTabJustify === "1",
                           })}
                           onClick={() => {
-                            this.toggleJustidyCustom("1");
+                            this.toggleJustidyCustom("1")
                           }}
                         >
                           <span className="d-none d-sm-block">Home</span>
@@ -664,7 +669,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.activeTabJustify === "2",
                           })}
                           onClick={() => {
-                            this.toggleJustidyCustom("2");
+                            this.toggleJustidyCustom("2")
                           }}
                         >
                           <span className="d-none d-sm-block">Profile</span>
@@ -677,7 +682,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.activeTabJustify === "3",
                           })}
                           onClick={() => {
-                            this.toggleJustidyCustom("3");
+                            this.toggleJustidyCustom("3")
                           }}
                         >
                           <span className="d-none d-sm-block">Messages</span>
@@ -690,7 +695,7 @@ class UiTabsAccordions extends Component {
                             active: this.state.activeTabJustify === "4",
                           })}
                           onClick={() => {
-                            this.toggleJustidyCustom("4");
+                            this.toggleJustidyCustom("4")
                           }}
                         >
                           <span className="d-none d-sm-block">Settings</span>
@@ -698,7 +703,10 @@ class UiTabsAccordions extends Component {
                       </NavItem>
                     </Nav>
 
-                    <TabContent activeTab={this.state.activeTabJustify} className="p-3 text-muted">
+                    <TabContent
+                      activeTab={this.state.activeTabJustify}
+                      className="p-3 text-muted"
+                    >
                       <TabPane tabId="1">
                         <Row>
                           <Col sm="12">
@@ -833,8 +841,16 @@ class UiTabsAccordions extends Component {
                 <Card>
                   <CardBody>
                     <h4 className="card-title">Multiple targets</h4>
-                    <p>A <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code> can show and hide multiple elements by referencing them with a selector in its <code>href</code> or <code>data-bs-target</code> attribute.
-                      Multiple <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code> can show and hide an element if they each reference it with their <code>href</code> or <code>data-bs-target</code> attribute</p>
+                    <p>
+                      A <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code>{" "}
+                      can show and hide multiple elements by referencing them
+                      with a selector in its <code>href</code> or{" "}
+                      <code>data-bs-target</code> attribute. Multiple{" "}
+                      <code>&lt;button&gt;</code> or <code>&lt;a&gt;</code> can
+                      show and hide an element if they each reference it with
+                      their <code>href</code> or <code>data-bs-target</code>{" "}
+                      attribute
+                    </p>
 
                     <div className="d-flex gap-2 flex-wrap mb-3">
                       <Link
@@ -868,7 +884,10 @@ class UiTabsAccordions extends Component {
                         <Collapse isOpen={this.state.col6}>
                           <Card>
                             <CardBody className="border shadow-none text-muted mb-0">
-                              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                              Anim pariatur cliche reprehenderit, enim eiusmod
+                              high life accusamus terry richardson ad squid.
+                              Nihil anim keffiyeh helvetica, craft beer labore
+                              wes anderson cred nesciunt sapiente ea proident.
                             </CardBody>
                           </Card>
                         </Collapse>
@@ -877,10 +896,10 @@ class UiTabsAccordions extends Component {
                         <Collapse isOpen={this.state.col7}>
                           <Card>
                             <CardBody className="border shadow-none text-muted mb-0">
-                              Anim pariatur cliche reprehenderit, enim eiusmod high
-                              life accusamus terry richardson ad squid. Nihil anim
-                              keffiyeh helvetica, craft beer labore wes anderson
-                              cred nesciunt sapiente ea proident.
+                              Anim pariatur cliche reprehenderit, enim eiusmod
+                              high life accusamus terry richardson ad squid.
+                              Nihil anim keffiyeh helvetica, craft beer labore
+                              wes anderson cred nesciunt sapiente ea proident.
                             </CardBody>
                           </Card>
                         </Collapse>
@@ -896,57 +915,123 @@ class UiTabsAccordions extends Component {
                   <CardBody>
                     <CardTitle className="h4">Accordion example</CardTitle>
                     <p className="card-title-desc">
-                      Click the accordions below to expand/collapse the accordion content.
+                      Click the accordions below to expand/collapse the
+                      accordion content.
                     </p>
 
                     <div className="accordion" id="accordion">
                       <div className="accordion-item">
                         <h2 className="accordion-header" id="headingOne">
-                          <button className={classnames({
-                            collapsed: this.state.col1 === false
-                          }, "accordion-button fw-semibold")} type="button" onClick={this.t_col1} style={{ cursor: "pointer" }}>
+                          <button
+                            className={classnames(
+                              {
+                                collapsed: this.state.col1 === false,
+                              },
+                              "accordion-button fw-semibold"
+                            )}
+                            type="button"
+                            onClick={this.t_col1}
+                            style={{ cursor: "pointer" }}
+                          >
                             Accordion Item #1
                           </button>
                         </h2>
 
-
-                        <Collapse isOpen={this.state.col1} className="accordion-collapse">
+                        <Collapse
+                          isOpen={this.state.col1}
+                          className="accordion-collapse"
+                        >
                           <div className="accordion-body">
                             <div className="text-muted">
-                              <strong className="text-dark">This is the first item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                              <strong className="text-dark">
+                                This is the first item's accordion body.
+                              </strong>{" "}
+                              It is hidden by default, until the collapse plugin
+                              adds the appropriate classes that we use to style
+                              each element. These classes control the overall
+                              appearance, as well as the showing and hiding via
+                              CSS transitions. You can modify any of this with
+                              custom CSS or overriding our default variables.
+                              It's also worth noting that just about any HTML
+                              can go within the <code>.accordion-body</code>,
+                              though the transition does limit overflow.
                             </div>
                           </div>
                         </Collapse>
                       </div>
                       <div className="accordion-item">
                         <h2 className="accordion-header" id="headingTwo">
-                          <button className={classnames({
-                            collapsed: this.state.col2 === false
-                          }, "accordion-button fw-semibold")} type="button" onClick={this.t_col2} style={{ cursor: "pointer" }}>
+                          <button
+                            className={classnames(
+                              {
+                                collapsed: this.state.col2 === false,
+                              },
+                              "accordion-button fw-semibold"
+                            )}
+                            type="button"
+                            onClick={this.t_col2}
+                            style={{ cursor: "pointer" }}
+                          >
                             Accordion Item #2
                           </button>
                         </h2>
 
-                        <Collapse isOpen={this.state.col2} className="accordion-collapse">
+                        <Collapse
+                          isOpen={this.state.col2}
+                          className="accordion-collapse"
+                        >
                           <div className="accordion-body">
                             <div className="text-muted">
-                              <strong className="text-dark">This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                              <strong className="text-dark">
+                                This is the second item's accordion body.
+                              </strong>{" "}
+                              It is hidden by default, until the collapse plugin
+                              adds the appropriate classes that we use to style
+                              each element. These classes control the overall
+                              appearance, as well as the showing and hiding via
+                              CSS transitions. You can modify any of this with
+                              custom CSS or overriding our default variables.
+                              It's also worth noting that just about any HTML
+                              can go within the <code>.accordion-body</code>,
+                              though the transition does limit overflow.
                             </div>
                           </div>
                         </Collapse>
                       </div>
                       <div className="accordion-item">
                         <h2 className="accordion-header" id="headingThree">
-                          <button className={classnames({
-                            collapsed: this.state.col3 === false
-                          }, "accordion-button fw-semibold")} type="button" onClick={this.t_col3} style={{ cursor: "pointer" }}>
+                          <button
+                            className={classnames(
+                              {
+                                collapsed: this.state.col3 === false,
+                              },
+                              "accordion-button fw-semibold"
+                            )}
+                            type="button"
+                            onClick={this.t_col3}
+                            style={{ cursor: "pointer" }}
+                          >
                             Accordion Item #3
                           </button>
                         </h2>
-                        <Collapse isOpen={this.state.col3} className="accordion-collapse">
+                        <Collapse
+                          isOpen={this.state.col3}
+                          className="accordion-collapse"
+                        >
                           <div className="accordion-body">
                             <div className="text-muted">
-                              <strong className="text-dark">This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                              <strong className="text-dark">
+                                This is the third item's accordion body.
+                              </strong>{" "}
+                              It is hidden by default, until the collapse plugin
+                              adds the appropriate classes that we use to style
+                              each element. These classes control the overall
+                              appearance, as well as the showing and hiding via
+                              CSS transitions. You can modify any of this with
+                              custom CSS or overriding our default variables.
+                              It's also worth noting that just about any HTML
+                              can go within the <code>.accordion-body</code>,
+                              though the transition does limit overflow.
                             </div>
                           </div>
                         </Collapse>
@@ -958,48 +1043,131 @@ class UiTabsAccordions extends Component {
               <Col xl={6}>
                 <Card>
                   <CardBody>
-                    <CardTitle className="h4">Accordion example Flush</CardTitle>
-                    <p>Add <code>.accordion-flush</code> to remove the default <code>background-color</code>, some borders, and some rounded corners to render accordions edge-to-edge with their parent container.</p>
+                    <CardTitle className="h4">
+                      Accordion example Flush
+                    </CardTitle>
+                    <p>
+                      Add <code>.accordion-flush</code> to remove the default{" "}
+                      <code>background-color</code>, some borders, and some
+                      rounded corners to render accordions edge-to-edge with
+                      their parent container.
+                    </p>
 
-                    <div className="accordion accordion-flush" id="accordionFlushExample">
+                    <div
+                      className="accordion accordion-flush"
+                      id="accordionFlushExample"
+                    >
                       <div className="accordion-item">
                         <h2 className="accordion-header" id="headingFlushOne">
-                          <button className={classnames({
-                            collapsed: this.state.col9 === false
-                          }, "accordion-button fw-semibold")} type="button" onClick={this.t_col9} style={{ cursor: "pointer" }}>
+                          <button
+                            className={classnames(
+                              {
+                                collapsed: this.state.col9 === false,
+                              },
+                              "accordion-button fw-semibold"
+                            )}
+                            type="button"
+                            onClick={this.t_col9}
+                            style={{ cursor: "pointer" }}
+                          >
                             Accordion Item #1
                           </button>
                         </h2>
 
-
-                        <Collapse isOpen={this.state.col9} className="accordion-collapse">
-                          <div className="accordion-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</div>
-
+                        <Collapse
+                          isOpen={this.state.col9}
+                          className="accordion-collapse"
+                        >
+                          <div className="accordion-body">
+                            Anim pariatur cliche reprehenderit, enim eiusmod
+                            high life accusamus terry richardson ad squid. 3
+                            wolf moon officia aute, non cupidatat skateboard
+                            dolor brunch. Food truck quinoa nesciunt laborum
+                            eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put
+                            a bird on it squid single-origin coffee nulla
+                            assumenda shoreditch et. Nihil anim keffiyeh
+                            helvetica, craft beer labore wes anderson cred
+                            nesciunt sapiente ea proident. Ad vegan excepteur
+                            butcher vice lomo. Leggings occaecat craft beer
+                            farm-to-table, raw denim aesthetic synth nesciunt
+                            you probably haven't heard of them accusamus labore
+                            sustainable VHS.
+                          </div>
                         </Collapse>
                       </div>
                       <div className="accordion-item">
                         <h2 className="accordion-header" id="headingFlushTwo">
-                          <button className={classnames({
-                            collapsed: this.state.col10 === false
-                          }, "accordion-button fw-semibold")} type="button" onClick={this.t_col10} style={{ cursor: "pointer" }}>
+                          <button
+                            className={classnames(
+                              {
+                                collapsed: this.state.col10 === false,
+                              },
+                              "accordion-button fw-semibold"
+                            )}
+                            type="button"
+                            onClick={this.t_col10}
+                            style={{ cursor: "pointer" }}
+                          >
                             Accordion Item #2
                           </button>
                         </h2>
 
-                        <Collapse isOpen={this.state.col10} className="accordion-collapse">
-                          <div className="accordion-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</div>
+                        <Collapse
+                          isOpen={this.state.col10}
+                          className="accordion-collapse"
+                        >
+                          <div className="accordion-body">
+                            Anim pariatur cliche reprehenderit, enim eiusmod
+                            high life accusamus terry richardson ad squid. 3
+                            wolf moon officia aute, non cupidatat skateboard
+                            dolor brunch. Food truck quinoa nesciunt laborum
+                            eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put
+                            a bird on it squid single-origin coffee nulla
+                            assumenda shoreditch et. Nihil anim keffiyeh
+                            helvetica, craft beer labore wes anderson cred
+                            nesciunt sapiente ea proident. Ad vegan excepteur
+                            butcher vice lomo. Leggings occaecat craft beer
+                            farm-to-table, raw denim aesthetic synth nesciunt
+                            you probably haven't heard of them accusamus labore
+                            sustainable VHS.
+                          </div>
                         </Collapse>
                       </div>
                       <div className="accordion-item">
                         <h2 className="accordion-header" id="headingFlushThree">
-                          <button className={classnames({
-                            collapsed: this.state.col11 === false
-                          }, "accordion-button fw-semibold")} type="button" onClick={this.t_col11} style={{ cursor: "pointer" }}>
+                          <button
+                            className={classnames(
+                              {
+                                collapsed: this.state.col11 === false,
+                              },
+                              "accordion-button fw-semibold"
+                            )}
+                            type="button"
+                            onClick={this.t_col11}
+                            style={{ cursor: "pointer" }}
+                          >
                             Accordion Item #3
                           </button>
                         </h2>
-                        <Collapse isOpen={this.state.col11} className="accordion-collapse">
-                          <div className="accordion-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</div>
+                        <Collapse
+                          isOpen={this.state.col11}
+                          className="accordion-collapse"
+                        >
+                          <div className="accordion-body">
+                            Anim pariatur cliche reprehenderit, enim eiusmod
+                            high life accusamus terry richardson ad squid. 3
+                            wolf moon officia aute, non cupidatat skateboard
+                            dolor brunch. Food truck quinoa nesciunt laborum
+                            eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put
+                            a bird on it squid single-origin coffee nulla
+                            assumenda shoreditch et. Nihil anim keffiyeh
+                            helvetica, craft beer labore wes anderson cred
+                            nesciunt sapiente ea proident. Ad vegan excepteur
+                            butcher vice lomo. Leggings occaecat craft beer
+                            farm-to-table, raw denim aesthetic synth nesciunt
+                            you probably haven't heard of them accusamus labore
+                            sustainable VHS.
+                          </div>
                         </Collapse>
                       </div>
                     </div>
@@ -1010,8 +1178,8 @@ class UiTabsAccordions extends Component {
           </Container>
         </div>
       </React.Fragment>
-    );
+    )
   }
 }
 
-export default UiTabsAccordions;
+export default UiTabsAccordions

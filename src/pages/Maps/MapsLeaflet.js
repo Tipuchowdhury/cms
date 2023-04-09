@@ -1,25 +1,29 @@
-import React from "react";
+import React from "react"
 
-import { Container, Row, Col, Card, CardBody } from "reactstrap";
+import { Container, Row, Col, Card, CardBody } from "reactstrap"
 
 //Import maps
-import SimpleMap from "./LeafletMap/SimpleMap";
-import MapWithPopup from "./LeafletMap/MapWithPopup";
-import MapVectorLayers from "./LeafletMap/MapVectorLayers";
-import MapMarkerCustomIcons from "./LeafletMap/MapMarkerCustomIcons";
-import LayerGroup from "./LeafletMap/LayerGroup";
-import MapLayerControl from "./LeafletMap/MapLayerControl";
+import SimpleMap from "./LeafletMap/SimpleMap"
+import MapWithPopup from "./LeafletMap/MapWithPopup"
+import MapVectorLayers from "./LeafletMap/MapVectorLayers"
+import MapMarkerCustomIcons from "./LeafletMap/MapMarkerCustomIcons"
+import LayerGroup from "./LeafletMap/LayerGroup"
+import MapLayerControl from "./LeafletMap/MapLayerControl"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const MapsLeaflet = () => {
-  document.title = "Leaflet Maps | Veltrix - React Admin & Dashboard Template";
+  document.title = "Leaflet Maps | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Breadcrumbs maintitle="Veltrix" title="Maps" breadcrumbItem="Leaflet Maps" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Maps"
+            breadcrumbItem="Leaflet Maps"
+          />
           <Row>
             <Col lg="6">
               <Card>
@@ -98,7 +102,7 @@ const MapsLeaflet = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default MapsLeaflet;
+export default MapsLeaflet

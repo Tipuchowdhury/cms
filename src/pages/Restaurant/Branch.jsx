@@ -40,7 +40,8 @@ function Branch(props) {
 
 
 
-    const statusRef = (cell, row) => <Badge color="success" style={{ padding: "12px" }}>Activate</Badge>
+    // const statusRef = (cell, row) => <Badge color="success" style={{ padding: "12px" }}>Activate</Badge>
+    const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
 
 
     const activeData = [

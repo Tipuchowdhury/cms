@@ -1,9 +1,9 @@
-import React from "react";
+import React from "react"
 
 //Verification code package
-import AuthCode from "react-auth-code-input";
+import AuthCode from "react-auth-code-input"
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 import {
   Card,
   CardBody,
@@ -12,14 +12,15 @@ import {
   Form,
   FormGroup,
   Row,
-} from "reactstrap";
+} from "reactstrap"
 
 // import images
-import logodark from "../../assets/images/logo-dark.png";
-import logolight from "../../assets/images/logo-light.png";
+import logodark from "../../assets/images/logo-dark.png"
+import logolight from "../../assets/images/logo-light.png"
 
 const TwostepVerification = () => {
-  document.title = "Two Step Verification | Veltrix - React Admin & Dashboard Template";
+  document.title =
+    "Two Step Verification | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="account-pages my-5 pt-sm-5">
@@ -118,7 +119,7 @@ const TwostepVerification = () => {
                   </Link>{" "}
                 </p>
                 <p>
-                  © {new Date().getFullYear()} Veltrix. Crafted with{" "}
+                  © {new Date().getFullYear()} Foodi. Crafted with{" "}
                   <i className="mdi mdi-heart text-danger"></i> by Themesbrand
                 </p>
               </div>
@@ -127,6 +128,6 @@ const TwostepVerification = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
-export default TwostepVerification;
+  )
+}
+export default TwostepVerification

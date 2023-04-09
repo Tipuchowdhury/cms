@@ -1,25 +1,25 @@
-import React, { useState } from "react";
-import { Row, Col, Card, CardBody, CardTitle, Container } from "reactstrap";
+import React, { useState } from "react"
+import { Row, Col, Card, CardBody, CardTitle, Container } from "reactstrap"
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
-import Slider from "react-rangeslider";
-import "react-rangeslider/lib/index.css";
+import Slider from "react-rangeslider"
+import "react-rangeslider/lib/index.css"
 
 const UiRangeSlider = () => {
-  const formatkg = value => "$ " + value;
-  const formatdollar = value => value + " kg";
-  const extra_age = value => value + " Age";
+  const formatkg = value => "$ " + value
+  const formatdollar = value => value + " kg"
+  const extra_age = value => value + " Age"
 
-  const [def, setdef] = useState(15);
-  const [min_max, setmin_max] = useState(70);
-  const [step, setstep] = useState(25);
-  const [prefix, setprefix] = useState(50);
-  const [postfix, setpostfix] = useState(85);
-  const [custom_val, setcustom_val] = useState(5);
-  const [float_val, setfloat_val] = useState(55.5);
-  const [extra, setextra] = useState(52);
-  const [hide, sethide] = useState(5);
+  const [def, setdef] = useState(15)
+  const [min_max, setmin_max] = useState(70)
+  const [step, setstep] = useState(25)
+  const [prefix, setprefix] = useState(50)
+  const [postfix, setpostfix] = useState(85)
+  const [custom_val, setcustom_val] = useState(5)
+  const [float_val, setfloat_val] = useState(55.5)
+  const [extra, setextra] = useState(52)
+  const [hide, sethide] = useState(5)
 
   const labels = {
     1: "Jan",
@@ -34,14 +34,18 @@ const UiRangeSlider = () => {
     10: "Oct",
     11: "Nov",
     12: "Dec",
-  };
+  }
 
-  document.title = "Range Slider | Veltrix - React Admin & Dashboard Template";
+  document.title = "Range Slider | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="UI Elements" breadcrumbItem="Range Slider" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="UI Elements"
+            breadcrumbItem="Range Slider"
+          />
 
           <Row>
             <Col className="col-12">
@@ -58,7 +62,7 @@ const UiRangeSlider = () => {
                           value={def}
                           orientation="horizontal"
                           onChange={value => {
-                            setdef(value);
+                            setdef(value)
                           }}
                         />
                       </div>
@@ -75,7 +79,7 @@ const UiRangeSlider = () => {
                           max={90}
                           orientation="horizontal"
                           onChange={value => {
-                            setmin_max(value);
+                            setmin_max(value)
                           }}
                         />
                       </div>
@@ -94,7 +98,7 @@ const UiRangeSlider = () => {
                           format={formatkg}
                           value={prefix}
                           onChange={value => {
-                            setprefix(value);
+                            setprefix(value)
                           }}
                         />
                       </div>
@@ -111,7 +115,7 @@ const UiRangeSlider = () => {
                           format={formatdollar}
                           value={postfix}
                           onChange={value => {
-                            setpostfix(value);
+                            setpostfix(value)
                           }}
                         />
                       </div>
@@ -129,7 +133,7 @@ const UiRangeSlider = () => {
                           step={10}
                           orientation="horizontal"
                           onChange={value => {
-                            setstep(value);
+                            setstep(value)
                           }}
                         />
                       </div>
@@ -147,7 +151,7 @@ const UiRangeSlider = () => {
                           labels={labels}
                           orientation="horizontal"
                           onChange={value => {
-                            setcustom_val(value);
+                            setcustom_val(value)
                           }}
                         />
                       </div>
@@ -166,7 +170,7 @@ const UiRangeSlider = () => {
                           value={hide}
                           reverse={true}
                           onChange={value => {
-                            sethide(value);
+                            sethide(value)
                           }}
                         />
                       </div>
@@ -185,7 +189,7 @@ const UiRangeSlider = () => {
                           format={extra_age}
                           value={extra}
                           onChange={value => {
-                            setextra(value);
+                            setextra(value)
                           }}
                         />
                       </div>
@@ -205,7 +209,7 @@ const UiRangeSlider = () => {
                           step={0.5}
                           orientation="horizontal"
                           onChange={value => {
-                            setfloat_val(value);
+                            setfloat_val(value)
                           }}
                         />
                       </div>
@@ -218,7 +222,7 @@ const UiRangeSlider = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default UiRangeSlider;
+export default UiRangeSlider

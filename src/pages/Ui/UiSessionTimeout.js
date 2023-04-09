@@ -1,71 +1,76 @@
-import React, { Component } from "react";
-import { Card, Row, Col, CardBody, CardTitle, Container } from "reactstrap";
+import React, { Component } from "react"
+import { Card, Row, Col, CardBody, CardTitle, Container } from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 class UiSessionTimeout extends Component {
   constructor(props) {
-    super(props);
-    this.state = { timeralert: null, timerswitch: false, seconds: 0 };
-    this.tick = this.tick.bind(this);
+    super(props)
+    this.state = { timeralert: null, timerswitch: false, seconds: 0 }
+    this.tick = this.tick.bind(this)
   }
   tick() {
     this.interval = setInterval(() => {
-      this.setState(prevState => ({ seconds: prevState.seconds + 1 }));
-    }, 1000);
+      this.setState(prevState => ({ seconds: prevState.seconds + 1 }))
+    }, 1000)
   }
 
   componentDidMount() {
-    this.main_function();
+    this.main_function()
   }
 
   hideAlert() {
-    window.location = "/login";
+    window.location = "/login"
   }
   confirmAlert() {
-    this.setState({ timeralert: null });
+    this.setState({ timeralert: null })
   }
   main_function() {
     setTimeout(
       function () {
         setTimeout(
           function () {
-            this.function1();
+            this.function1()
           }.bind(this),
           6000
-        );
+        )
       }.bind(this),
       6000
-    );
+    )
   }
   function1() {
     if (window.location.pathname === "/ui-session-timeout") {
-      window.location = "/login";
+      window.location = "/login"
     }
   }
   function2() {
-    this.tick();
-    const nextmsg = () => (
-      <></>
-    );
-    this.setState({ timeralert: nextmsg() });
+    this.tick()
+    const nextmsg = () => <></>
+    this.setState({ timeralert: nextmsg() })
   }
   render() {
-    document.title = "Session Timeout | Veltrix - React Admin & Dashboard Template";
+    document.title =
+      "Session Timeout | Foodi - React Admin & Dashboard Template"
     return (
       <React.Fragment>
         <div className="page-content">
           <Container fluid={true}>
             {this.state.timeralert}
 
-            <Breadcrumbs maintitle="Veltrix" title="UI Elements" breadcrumbItem="Session Timeout" />
+            <Breadcrumbs
+              maintitle="Foodi"
+              title="UI Elements"
+              breadcrumbItem="Session Timeout"
+            />
 
             <Row>
               <Col>
                 <Card>
                   <CardBody>
-                    <CardTitle className="h4">Bootstrap-session-timeout</CardTitle>
+                    <CardTitle className="h4">
+                      Bootstrap-session-timeout
+                    </CardTitle>
                     <p className="sub-header">
                       Session timeout and keep-alive control with a nice
                       Bootstrap warning dialog.
@@ -104,8 +109,8 @@ class UiSessionTimeout extends Component {
           </Container>
         </div>
       </React.Fragment>
-    );
+    )
   }
 }
 
-export default UiSessionTimeout;
+export default UiSessionTimeout

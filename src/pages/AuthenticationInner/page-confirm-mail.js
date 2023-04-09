@@ -1,13 +1,13 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Card, CardBody, Col, Container, Row } from "reactstrap";
+import React from "react"
+import { Link } from "react-router-dom"
+import { Card, CardBody, Col, Container, Row } from "reactstrap"
 
 // import images
-import logodark from "../../assets/images/logo-dark.png";
-import logolight from "../../assets/images/logo-light.png";
+import logodark from "../../assets/images/logo-dark.png"
+import logolight from "../../assets/images/logo-light.png"
 
 const ConfirmMail = () => {
-  document.title = "Confirm Mail | Veltrix - React Admin & Dashboard Template";
+  document.title = "Confirm Mail | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="account-pages my-5 pt-sm-5">
@@ -48,8 +48,8 @@ const ConfirmMail = () => {
                         <h4>Success !</h4>
                         <p className="text-muted">
                           At vero eos et accusamus et iusto odio dignissimos
-                          ducimus qui blanditiis praesentium voluptatum
-                          deleniti atque corrupti quos dolores et
+                          ducimus qui blanditiis praesentium voluptatum deleniti
+                          atque corrupti quos dolores et
                         </p>
                         <div className="mt-4">
                           <Link to="/dashboard" className="btn btn-success">
@@ -63,7 +63,7 @@ const ConfirmMail = () => {
               </Card>
               <div className="mt-5 text-center">
                 <p>
-                  © {new Date().getFullYear()} Veltrix. Crafted with{" "}
+                  © {new Date().getFullYear()} Foodi. Crafted with{" "}
                   <i className="mdi mdi-heart text-danger"></i> by Themesbrand
                 </p>
               </div>
@@ -72,7 +72,7 @@ const ConfirmMail = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default ConfirmMail;
+export default ConfirmMail

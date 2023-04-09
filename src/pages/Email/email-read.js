@@ -1,29 +1,33 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Container, Row, Col, Card, CardBody } from "reactstrap";
+import React from "react"
+import { Link } from "react-router-dom"
+import { Container, Row, Col, Card, CardBody } from "reactstrap"
 
 //Import Image
-import avatar2 from "../../assets/images/users/user-2.jpg";
-import img3 from "../../assets/images/small/img-3.jpg";
-import img4 from "../../assets/images/small/img-4.jpg";
+import avatar2 from "../../assets/images/users/user-2.jpg"
+import img3 from "../../assets/images/small/img-3.jpg"
+import img4 from "../../assets/images/small/img-4.jpg"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 //Import Email Sidebar
-import EmailSideBar from "./email-sidebar";
+import EmailSideBar from "./email-sidebar"
 
 //Import Email Topbar
-import EmailToolbar from "./email-toolbar";
+import EmailToolbar from "./email-toolbar"
 
 const EmailRead = () => {
-  document.title = "Read Email | Veltrix - React Admin & Dashboard Template";
+  document.title = "Read Email | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
           {/* Render Breadcrumbs */}
-          <Breadcrumbs maintitle="Veltrix" title="Email" breadcrumbItem="Read Email" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Email"
+            breadcrumbItem="Read Email"
+          />
 
           <Row>
             <Col xs="12">
@@ -118,7 +122,7 @@ const EmailRead = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default EmailRead;
+export default EmailRead

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 import {
   Col,
   Row,
@@ -12,46 +12,50 @@ import {
   ButtonDropdown,
   CardTitle,
   Container,
-} from "reactstrap";
+} from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const UiDropdown = () => {
-  const [singlebtn, setSinglebtn] = useState(false);
-  const [singlebtn1, setSinglebtn1] = useState(false);
-  const [btnprimary1, setBtnprimary1] = useState(false);
-  const [btnsecondary1, setBtnsecondary1] = useState(false);
-  const [btnsuccess1, setBtnsuccess1] = useState(false);
-  const [btnInfo1, setBtnInfo1] = useState(false);
-  const [btnWarning1, setBtnWarning1] = useState(false);
-  const [btnDanger1, setBtnDanger1] = useState(false);
-  const [drp_primary1, setDrp_primary1] = useState(false);
-  const [drp_secondary1, setDrp_secondary1] = useState(false);
-  const [drp_success1, setDrp_success1] = useState(false);
-  const [drp_info1, setDrp_info1] = useState(false);
-  const [drp_warning1, setDrp_warning1] = useState(false);
-  const [drp_danger1, setDrp_danger1] = useState(false);
-  const [drp_secondary, setDrp_secondary] = useState(false);
-  const [drp_secondary_lg, setDrp_secondary_lg] = useState(false);
-  const [drp_secondary_sm, setDrp_secondary_sm] = useState(false);
-  const [drp_secondary_sm1, setDrp_secondary_sm1] = useState(false);
-  const [dropup1, setDropup1] = useState(false);
-  const [drp_up11, setDrp_up11] = useState(false);
-  const [drop_align, setDrop_align] = useState(false);
-  const [info_dropup1, setInfo_dropup1] = useState(false);
-  const [infodrp_up11, setInfodrp_up11] = useState(false);
-  const [info_dropup111, setInfo_dropup111] = useState(false);
-  const [infodrp_up1111, setInfodrp_up1111] = useState(false);
-  const [left_align, setleft_align] = useState(false);
-  const [right_align, setright_align] = useState(false);
+  const [singlebtn, setSinglebtn] = useState(false)
+  const [singlebtn1, setSinglebtn1] = useState(false)
+  const [btnprimary1, setBtnprimary1] = useState(false)
+  const [btnsecondary1, setBtnsecondary1] = useState(false)
+  const [btnsuccess1, setBtnsuccess1] = useState(false)
+  const [btnInfo1, setBtnInfo1] = useState(false)
+  const [btnWarning1, setBtnWarning1] = useState(false)
+  const [btnDanger1, setBtnDanger1] = useState(false)
+  const [drp_primary1, setDrp_primary1] = useState(false)
+  const [drp_secondary1, setDrp_secondary1] = useState(false)
+  const [drp_success1, setDrp_success1] = useState(false)
+  const [drp_info1, setDrp_info1] = useState(false)
+  const [drp_warning1, setDrp_warning1] = useState(false)
+  const [drp_danger1, setDrp_danger1] = useState(false)
+  const [drp_secondary, setDrp_secondary] = useState(false)
+  const [drp_secondary_lg, setDrp_secondary_lg] = useState(false)
+  const [drp_secondary_sm, setDrp_secondary_sm] = useState(false)
+  const [drp_secondary_sm1, setDrp_secondary_sm1] = useState(false)
+  const [dropup1, setDropup1] = useState(false)
+  const [drp_up11, setDrp_up11] = useState(false)
+  const [drop_align, setDrop_align] = useState(false)
+  const [info_dropup1, setInfo_dropup1] = useState(false)
+  const [infodrp_up11, setInfodrp_up11] = useState(false)
+  const [info_dropup111, setInfo_dropup111] = useState(false)
+  const [infodrp_up1111, setInfodrp_up1111] = useState(false)
+  const [left_align, setleft_align] = useState(false)
+  const [right_align, setright_align] = useState(false)
 
-  document.title = "Dropdowns | Veltrix - React Admin & Dashboard Template";
+  document.title = "Dropdowns | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="UI Elements" breadcrumbItem="Dropdowns" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="UI Elements"
+            breadcrumbItem="Dropdowns"
+          />
 
           <Row>
             <Col lg={6}>
@@ -72,8 +76,7 @@ const UiDropdown = () => {
                         toggle={() => setSinglebtn(!singlebtn)}
                       >
                         <DropdownToggle className="btn btn-secondary" caret>
-                          Dropdown button{" "}
-                          <i className="mdi mdi-chevron-down" />
+                          Dropdown button <i className="mdi mdi-chevron-down" />
                         </DropdownToggle>
                         <DropdownMenu>
                           <DropdownItem>Action</DropdownItem>
@@ -118,7 +121,10 @@ const UiDropdown = () => {
                         isOpen={btnprimary1}
                         toggle={() => setBtnprimary1(!btnprimary1)}
                       >
-                        <DropdownToggle tag="button" className="btn btn-primary">
+                        <DropdownToggle
+                          tag="button"
+                          className="btn btn-primary"
+                        >
                           Primary <i className="mdi mdi-chevron-down" />
                         </DropdownToggle>
                         <DropdownMenu>
@@ -135,7 +141,10 @@ const UiDropdown = () => {
                         isOpen={btnsecondary1}
                         toggle={() => setBtnsecondary1(!btnsecondary1)}
                       >
-                        <DropdownToggle tag="button" className="btn btn-secondary">
+                        <DropdownToggle
+                          tag="button"
+                          className="btn btn-secondary"
+                        >
                           Secondary <i className="mdi mdi-chevron-down" />
                         </DropdownToggle>
                         <DropdownMenu>
@@ -152,7 +161,10 @@ const UiDropdown = () => {
                         isOpen={btnsuccess1}
                         toggle={() => setBtnsuccess1(!btnsuccess1)}
                       >
-                        <DropdownToggle tag="button" className="btn btn-success">
+                        <DropdownToggle
+                          tag="button"
+                          className="btn btn-success"
+                        >
                           Success <i className="mdi mdi-chevron-down" />
                         </DropdownToggle>
                         <DropdownMenu>
@@ -186,7 +198,10 @@ const UiDropdown = () => {
                         isOpen={btnWarning1}
                         toggle={() => setBtnWarning1(!btnWarning1)}
                       >
-                        <DropdownToggle tag="button" className="btn btn-warning">
+                        <DropdownToggle
+                          tag="button"
+                          className="btn btn-warning"
+                        >
                           Warning <i className="mdi mdi-chevron-down" />
                         </DropdownToggle>
                         <DropdownMenu>
@@ -239,7 +254,11 @@ const UiDropdown = () => {
                         <Button id="caret" color="primary">
                           Primary
                         </Button>
-                        <DropdownToggle caret color="primary" className="dropdown-toggle-split">
+                        <DropdownToggle
+                          caret
+                          color="primary"
+                          className="dropdown-toggle-split"
+                        >
                           <i className="mdi mdi-chevron-down" />
                         </DropdownToggle>
                         <DropdownMenu>
@@ -260,7 +279,11 @@ const UiDropdown = () => {
                         <Button id="caret" color="secondary">
                           Secondary
                         </Button>
-                        <DropdownToggle caret color="secondary" className="dropdown-toggle-split">
+                        <DropdownToggle
+                          caret
+                          color="secondary"
+                          className="dropdown-toggle-split"
+                        >
                           <i className="mdi mdi-chevron-down" />
                         </DropdownToggle>
                         <DropdownMenu>
@@ -281,7 +304,11 @@ const UiDropdown = () => {
                         <Button id="caret" color="success">
                           Success
                         </Button>
-                        <DropdownToggle caret color="success" className="dropdown-toggle-split">
+                        <DropdownToggle
+                          caret
+                          color="success"
+                          className="dropdown-toggle-split"
+                        >
                           <i className="mdi mdi-chevron-down" />
                         </DropdownToggle>
                         <DropdownMenu>
@@ -302,7 +329,11 @@ const UiDropdown = () => {
                         <Button id="caret" color="info">
                           Info
                         </Button>
-                        <DropdownToggle caret color="info" className="dropdown-toggle-split">
+                        <DropdownToggle
+                          caret
+                          color="info"
+                          className="dropdown-toggle-split"
+                        >
                           <i className="mdi mdi-chevron-down" />
                         </DropdownToggle>
                         <DropdownMenu>
@@ -315,7 +346,6 @@ const UiDropdown = () => {
                       </ButtonDropdown>
                     </div>
 
-
                     <div className="btn-group">
                       <ButtonDropdown
                         isOpen={drp_warning1}
@@ -324,7 +354,11 @@ const UiDropdown = () => {
                         <Button id="caret" color="warning">
                           Warning
                         </Button>
-                        <DropdownToggle caret color="warning" className="dropdown-toggle-split">
+                        <DropdownToggle
+                          caret
+                          color="warning"
+                          className="dropdown-toggle-split"
+                        >
                           <i className="mdi mdi-chevron-down" />
                         </DropdownToggle>
                         <DropdownMenu>
@@ -345,7 +379,11 @@ const UiDropdown = () => {
                         <Button id="caret" color="danger">
                           Danger
                         </Button>
-                        <DropdownToggle caret color="danger" className="dropdown-toggle-split">
+                        <DropdownToggle
+                          caret
+                          color="danger"
+                          className="dropdown-toggle-split"
+                        >
                           <i className="mdi mdi-chevron-down" />
                         </DropdownToggle>
                         <DropdownMenu>
@@ -382,8 +420,7 @@ const UiDropdown = () => {
                           color="secondary"
                           className="btn btn-secondary btn-lg"
                         >
-                          Large button {" "}
-                          <i className="mdi mdi-chevron-down" />
+                          Large button <i className="mdi mdi-chevron-down" />
                         </DropdownToggle>
                         <DropdownMenu>
                           <DropdownItem disabled>Action</DropdownItem>
@@ -393,7 +430,6 @@ const UiDropdown = () => {
                         </DropdownMenu>
                       </ButtonDropdown>
                     </div>{" "}
-
                     <div className="btn-group me-1 mt-2">
                       <ButtonDropdown
                         isOpen={drp_secondary_lg}
@@ -417,7 +453,6 @@ const UiDropdown = () => {
                         </DropdownMenu>
                       </ButtonDropdown>
                     </div>{" "}
-
                     <div className="btn-group me-1 mt-2">
                       <ButtonDropdown
                         isOpen={drp_secondary_sm}
@@ -428,8 +463,7 @@ const UiDropdown = () => {
                           color="secondary"
                           className="btn btn-secondary btn-sm"
                         >
-                          Small button {" "}
-                          <i className="mdi mdi-chevron-down" />
+                          Small button <i className="mdi mdi-chevron-down" />
                         </DropdownToggle>
                         <DropdownMenu>
                           <DropdownItem disabled>Action</DropdownItem>
@@ -439,7 +473,6 @@ const UiDropdown = () => {
                         </DropdownMenu>
                       </ButtonDropdown>
                     </div>{" "}
-
                     <div className="btn-group me-1 mt-2">
                       <ButtonDropdown
                         isOpen={drp_secondary_sm1}
@@ -660,9 +693,13 @@ const UiDropdown = () => {
             <div className="col-lg-12">
               <div className="card">
                 <div className="card-body">
-
                   <h4 className="card-title">Responsive alignment</h4>
-                  <p className="card-title-desc">If you want to use responsive alignment, disable dynamic positioning by adding the <code>data-bs-display="static"</code> attribute and use the responsive variation classes.</p>
+                  <p className="card-title-desc">
+                    If you want to use responsive alignment, disable dynamic
+                    positioning by adding the{" "}
+                    <code>data-bs-display="static"</code> attribute and use the
+                    responsive variation classes.
+                  </p>
 
                   <div className="d-flex gap-2 flex-wrap">
                     <div className="btn-group">
@@ -711,7 +748,6 @@ const UiDropdown = () => {
                       </ButtonDropdown>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -719,7 +755,7 @@ const UiDropdown = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default UiDropdown;
+export default UiDropdown

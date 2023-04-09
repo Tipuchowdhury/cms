@@ -21,26 +21,30 @@ const CarouselPage = () => {
                         clients
                       </h4>
                       <div dir="ltr">
-                        <Carousel showThumbs={false} className="slider_css" dir="rtl">
+                        <Carousel
+                          showThumbs={false}
+                          className="slider_css"
+                          dir="rtl"
+                        >
                           <div>
                             <div className="item">
                               <div className="py-3">
                                 <p className="font-size-16 mb-4">
-                                  " Fantastic theme with a ton of options. If you
-                                  just want the HTML to integrate with your
-                                  project, then this is the package. You can find
-                                  the files in the 'dist' folder...no need to
-                                  install git and all the other stuff the
+                                  " Fantastic theme with a ton of options. If
+                                  you just want the HTML to integrate with your
+                                  project, then this is the package. You can
+                                  find the files in the 'dist' folder...no need
+                                  to install git and all the other stuff the
                                   documentation talks about. "
-                              </p>
+                                </p>
 
                                 <div>
                                   <h4 className="font-size-16 text-primary">
                                     Abs1981
-                                </h4>
+                                  </h4>
                                   <p className="font-size-14 mb-0">
-                                    - Veltrix User
-                                </p>
+                                    - Foodi User
+                                  </p>
                                 </div>
                               </div>
                             </div>
@@ -49,19 +53,19 @@ const CarouselPage = () => {
                             <div className="item">
                               <div className="py-3">
                                 <p className="font-size-16 mb-4">
-                                  "If Every Vendor on Envato are as supportive as
-                                  Themesbrand, Development with be a nice
-                                  experience. You guys are Wonderful. Keep us the
-                                  good work. "
-                              </p>
+                                  "If Every Vendor on Envato are as supportive
+                                  as Themesbrand, Development with be a nice
+                                  experience. You guys are Wonderful. Keep us
+                                  the good work. "
+                                </p>
 
                                 <div>
                                   <h4 className="font-size-16 text-primary">
                                     Abs1981
-                                </h4>
+                                  </h4>
                                   <p className="font-size-14 mb-0">
-                                    - Veltrix User
-                                </p>
+                                    - Foodi User
+                                  </p>
                                 </div>
                               </div>
                             </div>

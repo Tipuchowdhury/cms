@@ -1,25 +1,25 @@
-import React from "react";
+import React from "react"
 
-import { Link } from "react-router-dom";
-import { Container, Row, Col, Button, Input, Label, Card } from "reactstrap";
+import { Link } from "react-router-dom"
+import { Container, Row, Col, Button, Input, Label, Card } from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 //Import Email Sidebar
-import EmailSideBar from "./email-sidebar";
+import EmailSideBar from "./email-sidebar"
 
 //Import Email Topbar
-import EmailToolbar from "./email-toolbar";
+import EmailToolbar from "./email-toolbar"
 
 const EmailInbox = () => {
-  document.title = "Inbox | Veltrix - React Admin & Dashboard Template";
+  document.title = "Inbox | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
           {/* Render Breadcrumbs */}
-          <Breadcrumbs maintitle="Veltrix" title="Email" breadcrumbItem="Inbox" />
+          <Breadcrumbs maintitle="Foodi" title="Email" breadcrumbItem="Inbox" />
 
           <Row>
             <Col xs="12">
@@ -138,9 +138,7 @@ const EmailInbox = () => {
                       </div>
                       <div className="col-mail col-mail-2">
                         <Link to="#" className="subject">
-                          <span className="bg-primary badge me-2">
-                            Social
-                          </span>
+                          <span className="bg-primary badge me-2">Social</span>
                           This Week's Top Stories –{" "}
                           <span className="teaser">
                             Our top pick for you on Medium this week The Man Who
@@ -186,9 +184,7 @@ const EmailInbox = () => {
                       </div>
                       <div className="col-mail col-mail-2">
                         <Link to="#" className="subject">
-                          <span className="bg-success badge me-2">
-                            Family
-                          </span>
+                          <span className="bg-success badge me-2">Family</span>
                           Last pic over my village –{" "}
                           <span className="teaser">
                             Yeah i'd like that! Do you remember the video you
@@ -259,9 +255,7 @@ const EmailInbox = () => {
                       </div>
                       <div className="col-mail col-mail-2">
                         <Link to="#" className="subject">
-                          <span className="bg-danger badge me-2">
-                            Friends
-                          </span>
+                          <span className="bg-danger badge me-2">Friends</span>
                           Weekend on Revibe –{" "}
                           <span className="teaser">
                             Today's Friday and we thought maybe you want some
@@ -307,9 +301,7 @@ const EmailInbox = () => {
                       </div>
                       <div className="col-mail col-mail-2">
                         <Link to="#" className="subject">
-                          <span className="bg-primary badge me-2">
-                            Social
-                          </span>
+                          <span className="bg-primary badge me-2">Social</span>
                           Task assigned: Clone ARP's website –{" "}
                           <span className="teaser">
                             You have been assigned a task by Alex@Work on the
@@ -481,7 +473,7 @@ const EmailInbox = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default EmailInbox;
+export default EmailInbox

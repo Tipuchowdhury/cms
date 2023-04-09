@@ -5,7 +5,7 @@ const tasks = [
     tasks: [
       {
         id: 11,
-        description: "Create a Veltrix Dashboard UI",
+        description: "Create a Foodi Dashboard UI",
         members: [
           {
             username: "",
@@ -40,7 +40,7 @@ const tasks = [
       },
       {
         id: 13,
-        description: "Create a Veltrix Logo",
+        description: "Create a Foodi Logo",
         members: [
           {
             username: "Fransis",

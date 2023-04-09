@@ -1,103 +1,103 @@
-import React from "react";
+import React from "react"
 
 // Profile
-import UserProfile from "../pages/Authentication/user-profile";
+import UserProfile from "../pages/Authentication/user-profile"
 
 // Pages Calendar
-import Calendar from "../pages/Calendar/index";
+import Calendar from "../pages/Calendar/index"
 
 //Email
-import EmailInbox from "../pages/Email/email-inbox";
-import EmailRead from "../pages/Email/email-read";
-import EmailCompose from "../pages/Email/email-compose";
+import EmailInbox from "../pages/Email/email-inbox"
+import EmailRead from "../pages/Email/email-read"
+import EmailCompose from "../pages/Email/email-compose"
 
-import Emailtemplatealert from "../pages/EmailTemplate/email-template-alert";
-import Emailtemplatebasic from "../pages/EmailTemplate/email-template-basic";
-import Emailtemplatebilling from "../pages/EmailTemplate/email-template-billing";
+import Emailtemplatealert from "../pages/EmailTemplate/email-template-alert"
+import Emailtemplatebasic from "../pages/EmailTemplate/email-template-basic"
+import Emailtemplatebilling from "../pages/EmailTemplate/email-template-billing"
 
 // Authentication related pages
-import Login from "../pages/Authentication/Login";
-import Logout from "../pages/Authentication/Logout";
-import Register from "../pages/Authentication/Register";
-import ForgetPwd from "../pages/Authentication/ForgetPassword";
+import Login from "../pages/Authentication/Login"
+import Logout from "../pages/Authentication/Logout"
+import Register from "../pages/Authentication/Register"
+import ForgetPwd from "../pages/Authentication/ForgetPassword"
 
 //  // Inner Authentication
-import Login1 from "../pages/AuthenticationInner/Login";
-import Login2 from "../pages/AuthenticationInner/Login2";
-import Register1 from "../pages/AuthenticationInner/Register";
-import Register2 from "../pages/AuthenticationInner/Register2";
-import Recoverpw from "../pages/AuthenticationInner/Recoverpw";
-import Recoverpw2 from "../pages/AuthenticationInner/Recoverpw2";
-import ForgetPwd1 from "../pages/AuthenticationInner/ForgetPassword";
-import LockScreen from "../pages/AuthenticationInner/auth-lock-screen";
-import LockScreen2 from "../pages/AuthenticationInner/auth-lock-screen-2";
-import ConfirmMail from "../pages/AuthenticationInner/page-confirm-mail";
-import ConfirmMail2 from "../pages/AuthenticationInner/page-confirm-mail-2";
-import EmailVerification from "../pages/AuthenticationInner/auth-email-verification";
-import EmailVerification2 from "../pages/AuthenticationInner/auth-email-verification-2";
-import TwostepVerification from "../pages/AuthenticationInner/auth-two-step-verification";
-import TwostepVerification2 from "../pages/AuthenticationInner/auth-two-step-verification-2";
+import Login1 from "../pages/AuthenticationInner/Login"
+import Login2 from "../pages/AuthenticationInner/Login2"
+import Register1 from "../pages/AuthenticationInner/Register"
+import Register2 from "../pages/AuthenticationInner/Register2"
+import Recoverpw from "../pages/AuthenticationInner/Recoverpw"
+import Recoverpw2 from "../pages/AuthenticationInner/Recoverpw2"
+import ForgetPwd1 from "../pages/AuthenticationInner/ForgetPassword"
+import LockScreen from "../pages/AuthenticationInner/auth-lock-screen"
+import LockScreen2 from "../pages/AuthenticationInner/auth-lock-screen-2"
+import ConfirmMail from "../pages/AuthenticationInner/page-confirm-mail"
+import ConfirmMail2 from "../pages/AuthenticationInner/page-confirm-mail-2"
+import EmailVerification from "../pages/AuthenticationInner/auth-email-verification"
+import EmailVerification2 from "../pages/AuthenticationInner/auth-email-verification-2"
+import TwostepVerification from "../pages/AuthenticationInner/auth-two-step-verification"
+import TwostepVerification2 from "../pages/AuthenticationInner/auth-two-step-verification-2"
 
 // Dashboard
-import Dashboard from "../pages/Dashboard/index";
+import Dashboard from "../pages/Dashboard/index"
 // Charts
-import ChartApex from "../pages/Charts/Apexcharts";
-import ChartistChart from "../pages/Charts/ChartistChart";
-import ChartjsChart from "../pages/Charts/ChartjsChart";
-import EChart from "../pages/Charts/EChart";
-import SparklineChart from "../pages/Charts/SparklineChart";
+import ChartApex from "../pages/Charts/Apexcharts"
+import ChartistChart from "../pages/Charts/ChartistChart"
+import ChartjsChart from "../pages/Charts/ChartjsChart"
+import EChart from "../pages/Charts/EChart"
+import SparklineChart from "../pages/Charts/SparklineChart"
 
 // Maps
-import MapsGoogle from "../pages/Maps/MapsGoogle";
-import MapsVector from "../pages/Maps/MapsVector";
-import MapsLeaflet from "../pages/Maps/MapsLeaflet";
+import MapsGoogle from "../pages/Maps/MapsGoogle"
+import MapsVector from "../pages/Maps/MapsVector"
+import MapsLeaflet from "../pages/Maps/MapsLeaflet"
 
 //Icons
-import IconDripicons from "../pages/Icons/IconDripicons";
-import IconMaterialdesign from "../pages/Icons/IconMaterialdesign";
-import TypiconsIcon from "../pages/Icons/IconTypicons";
-import IconIon from "../pages/Icons/IconIon";
-import ThemifyIcon from "../pages/Icons/IconThemify";
-import IconFontawesome from "../pages/Icons/IconFontawesome";
+import IconDripicons from "../pages/Icons/IconDripicons"
+import IconMaterialdesign from "../pages/Icons/IconMaterialdesign"
+import TypiconsIcon from "../pages/Icons/IconTypicons"
+import IconIon from "../pages/Icons/IconIon"
+import ThemifyIcon from "../pages/Icons/IconThemify"
+import IconFontawesome from "../pages/Icons/IconFontawesome"
 
 //Tables
-import BasicTables from "../pages/Tables/BasicTables";
-import DatatableTables from "../pages/Tables/DatatableTables";
-import ResponsiveTables from "../pages/Tables/ResponsiveTables";
-import EditableTables from "../pages/Tables/EditableTables";
+import BasicTables from "../pages/Tables/BasicTables"
+import DatatableTables from "../pages/Tables/DatatableTables"
+import ResponsiveTables from "../pages/Tables/ResponsiveTables"
+import EditableTables from "../pages/Tables/EditableTables"
 
 // Forms
-import FormElements from "../pages/Forms/FormElements";
-import FormAdvanced from "../pages/Forms/FormAdvanced";
-import FormEditors from "../pages/Forms/FormEditors";
-import FormValidations from "../pages/Forms/FormValidations";
-import FormMask from "../pages/Forms/FormMask";
-import FormRepeater from "../pages/Forms/FormRepeater";
-import FormUpload from "../pages/Forms/FormUpload";
-import FormWizard from "../pages/Forms/FormWizard";
-import FormXeditable from "../pages/Forms/FormXeditable";
+import FormElements from "../pages/Forms/FormElements"
+import FormAdvanced from "../pages/Forms/FormAdvanced"
+import FormEditors from "../pages/Forms/FormEditors"
+import FormValidations from "../pages/Forms/FormValidations"
+import FormMask from "../pages/Forms/FormMask"
+import FormRepeater from "../pages/Forms/FormRepeater"
+import FormUpload from "../pages/Forms/FormUpload"
+import FormWizard from "../pages/Forms/FormWizard"
+import FormXeditable from "../pages/Forms/FormXeditable"
 
 //Ui
-import UiAlert from "../pages/Ui/UiAlert";
-import UiButtons from "../pages/Ui/UiButtons";
-import UiCards from "../pages/Ui/UiCards";
-import UiCarousel from "../pages/Ui/UiCarousel";
-import UiColors from "../pages/Ui/UiColors";
-import UiDropdown from "../pages/Ui/UiDropdown";
-import UiGeneral from "../pages/Ui/UiGeneral";
-import UiGrid from "../pages/Ui/UiGrid";
-import UiImages from "../pages/Ui/UiImages";
-import UiLightbox from "../pages/Ui/UiLightbox";
-import UiModal from "../pages/Ui/UiModal";
-import UiProgressbar from "../pages/Ui/UiProgressbar";
-import UiTabsAccordions from "../pages/Ui/UiTabsAccordions";
-import UiTypography from "../pages/Ui/UiTypography";
-import UiVideo from "../pages/Ui/UiVideo";
-import UiSessionTimeout from "../pages/Ui/UiSessionTimeout";
-import UiRating from "../pages/Ui/UiRating";
-import UiRangeSlider from "../pages/Ui/UiRangeSlider";
-import UiUtilities from "pages/Ui/UiUtilities";
-import UiOffcanvas from "pages/Ui/UiOffcanvas";
+import UiAlert from "../pages/Ui/UiAlert"
+import UiButtons from "../pages/Ui/UiButtons"
+import UiCards from "../pages/Ui/UiCards"
+import UiCarousel from "../pages/Ui/UiCarousel"
+import UiColors from "../pages/Ui/UiColors"
+import UiDropdown from "../pages/Ui/UiDropdown"
+import UiGeneral from "../pages/Ui/UiGeneral"
+import UiGrid from "../pages/Ui/UiGrid"
+import UiImages from "../pages/Ui/UiImages"
+import UiLightbox from "../pages/Ui/UiLightbox"
+import UiModal from "../pages/Ui/UiModal"
+import UiProgressbar from "../pages/Ui/UiProgressbar"
+import UiTabsAccordions from "../pages/Ui/UiTabsAccordions"
+import UiTypography from "../pages/Ui/UiTypography"
+import UiVideo from "../pages/Ui/UiVideo"
+import UiSessionTimeout from "../pages/Ui/UiSessionTimeout"
+import UiRating from "../pages/Ui/UiRating"
+import UiRangeSlider from "../pages/Ui/UiRangeSlider"
+import UiUtilities from "pages/Ui/UiUtilities"
+import UiOffcanvas from "pages/Ui/UiOffcanvas"
 
 //Pages
 import PagesStarter from "../pages/Utility/pages-starter";
@@ -127,6 +127,30 @@ import CategoryAdd from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryAdd
 import Slider from "pages/Slider/Slider";
 import SliderAdd from "pages/Slider/addSlider/SliderAdd";
 import Cuisine from "pages/Restaurant/Cuisine/Cuisine";
+import PagesStarter from "../pages/Utility/pages-starter"
+import PagesMaintenance from "../pages/Utility/pages-maintenance"
+import PagesComingsoon from "../pages/Utility/pages-comingsoon"
+import PagesTimeline from "../pages/Utility/pages-timeline"
+import PagesInvoice from "../pages/Utility/PagesInvoice"
+import PagesFaqs from "../pages/Utility/pages-faqs"
+import PagesPricing from "../pages/Utility/pages-pricing"
+import Pages404 from "../pages/Utility/pages-404"
+import Pages500 from "../pages/Utility/pages-500"
+import PagesGallery from "../pages/Utility/PagesGallery"
+import PagesDirectory from "../pages/Utility/PagesDirectory"
+import PagesProfile from "pages/Utility/pages-profile"
+import City from "pages/City/City"
+import Zone from "pages/Zone/Zone"
+import ManageUsers from "pages/ManageUsers/ManageUsers"
+import SubscriptionTypes from "pages/SubscriptionTypes/SubscriptionTypes"
+import Restaurant from "pages/Restaurant/Restaurant"
+import Branch from "pages/Restaurant/Branch"
+import BranchAdd from "pages/Restaurant/BranchAdd/BranchAdd"
+import EmailForRecoverPassword from "pages/AuthenticationInner/Email-for-recover-password"
+import Category from "pages/Category/Category"
+import AddZone from "pages/Zone/AddZone/AddZone"
+import Campaign from "pages/Campaign/Campaign"
+import AddCampaign from "pages/Campaign/AddCampaign"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -153,7 +177,16 @@ const userRoutes = [
   { path: "/city", component: <City /> },
   { path: "/register", component: <Register1 /> },
   { path: "/manage-users", component: <ManageUsers /> },
+  { path: "/subscription-types", component: <SubscriptionTypes /> },
   { path: "/restaurant", component: <Restaurant /> },
+
+  // Category
+  { path: "/category", component: <Category /> },
+
+  // Campaign
+  { path: "/campaign", component: <Campaign /> },
+  { path: "/add-campaign", component: <AddCampaign /> },
+
   { path: "/manage-branch", component: <Branch /> },
   { path: "/branch-add", component: <BranchAdd /> },
   { path: "/menu", component: <Menu /> },
@@ -170,6 +203,7 @@ const userRoutes = [
   { path: "/chartist-charts", component: <ChartistChart /> },
   { path: "/chartjs-charts", component: <ChartjsChart /> },
   { path: "/e-charts", component: <EChart /> },
+
   { path: "/sparkline-charts", component: <SparklineChart /> },
 
   // Icons
@@ -236,7 +270,7 @@ const userRoutes = [
 
   // this route should be at the end of all other routes
   { path: "/", component: <Dashboard /> },
-];
+]
 
 const authRoutes = [
   { path: "/logout", component: <Logout /> },
@@ -268,7 +302,10 @@ const authRoutes = [
   { path: "/auth-email-verification", component: <EmailVerification /> },
   { path: "/auth-email-verification-2", component: <EmailVerification2 /> },
   { path: "/auth-two-step-verification", component: <TwostepVerification /> },
-  { path: "/auth-two-step-verification-2", component: <TwostepVerification2 /> },
-];
+  {
+    path: "/auth-two-step-verification-2",
+    component: <TwostepVerification2 />,
+  },
+]
 
-export { userRoutes, authRoutes };
+export { userRoutes, authRoutes }

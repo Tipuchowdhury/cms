@@ -1,11 +1,11 @@
-import React from "react";
-import { Row, Col, Card, CardBody, CardTitle } from "reactstrap";
+import React from "react"
+import { Row, Col, Card, CardBody, CardTitle } from "reactstrap"
 // Editable
-import BootstrapTable from "react-bootstrap-table-next";
-import cellEditFactory from "react-bootstrap-table2-editor";
+import BootstrapTable from "react-bootstrap-table-next"
+import cellEditFactory from "react-bootstrap-table2-editor"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const products = [
   { id: 1, age: 25, qty: 1500, cost: 1000 },
@@ -13,7 +13,7 @@ const products = [
   { id: 3, age: 67, qty: 1300, cost: 1300 },
   { id: 4, age: 23, qty: 1100, cost: 6400 },
   { id: 5, age: 78, qty: 1400, cost: 4000 },
-];
+]
 
 const columns = [
   {
@@ -32,15 +32,19 @@ const columns = [
     dataField: "cost",
     text: "Cost(Editable)",
   },
-];
+]
 
 const EditableTables = () => {
-  document.title = "Editable Tables | Veltrix - React Admin & Dashboard Template";
+  document.title = "Editable Tables | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
-          <Breadcrumbs maintitle="Veltrix" title="Tables" breadcrumbItem="Editable Table" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Tables"
+            breadcrumbItem="Editable Table"
+          />
 
           <Row>
             <Col>
@@ -63,7 +67,7 @@ const EditableTables = () => {
         </div>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default EditableTables;
+export default EditableTables

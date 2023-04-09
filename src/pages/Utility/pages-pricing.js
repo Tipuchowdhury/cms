@@ -1,11 +1,11 @@
-import React from "react";
-import { Container, Row } from "reactstrap";
+import React from "react"
+import { Container, Row } from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 //Import Pricing Cards
-import CardPricing from "./card-pricing";
+import CardPricing from "./card-pricing"
 
 const PagesPricing = () => {
   const pricings = [
@@ -69,14 +69,18 @@ const PagesPricing = () => {
         { icon: "mdi mdi-close", title: "Free Setup" },
       ],
     },
-  ];
-  document.title = "Pricing | Veltrix - React Admin & Dashboard Template";
+  ]
+  document.title = "Pricing | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
           {/* Render Breadcrumbs */}
-          <Breadcrumbs maintitle="Veltrix" title="Extra Pages" breadcrumbItem="Pricing" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Extra Pages"
+            breadcrumbItem="Pricing"
+          />
 
           <Row>
             {pricings.map((pricing, key) => (
@@ -86,6 +90,6 @@ const PagesPricing = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
-export default PagesPricing;
+  )
+}
+export default PagesPricing

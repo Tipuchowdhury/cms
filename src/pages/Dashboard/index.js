@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React, { useState } from "react";
+import PropTypes from "prop-types"
+import React, { useState } from "react"
 import {
   Container,
   Row,
@@ -11,45 +11,45 @@ import {
   Dropdown,
   DropdownToggle,
   DropdownItem,
-  DropdownMenu
-} from "reactstrap";
-import { Link } from "react-router-dom";
+  DropdownMenu,
+} from "reactstrap"
+import { Link } from "react-router-dom"
 
 // Custom Scrollbar
-import SimpleBar from "simplebar-react";
+import SimpleBar from "simplebar-react"
 
 // import images
-import servicesIcon1 from "../../assets/images/services-icon/01.png";
-import servicesIcon2 from "../../assets/images/services-icon/02.png";
-import servicesIcon3 from "../../assets/images/services-icon/03.png";
-import servicesIcon4 from "../../assets/images/services-icon/04.png";
-import user2 from "../../assets/images/users/user-2.jpg";
-import user3 from "../../assets/images/users/user-3.jpg";
-import user4 from "../../assets/images/users/user-4.jpg";
-import user5 from "../../assets/images/users/user-5.jpg";
-import user6 from "../../assets/images/users/user-6.jpg";
-import smimg1 from "../../assets/images/small/img-1.jpg";
-import smimg2 from "../../assets/images/small/img-2.jpg";
+import servicesIcon1 from "../../assets/images/services-icon/01.png"
+import servicesIcon2 from "../../assets/images/services-icon/02.png"
+import servicesIcon3 from "../../assets/images/services-icon/03.png"
+import servicesIcon4 from "../../assets/images/services-icon/04.png"
+import user2 from "../../assets/images/users/user-2.jpg"
+import user3 from "../../assets/images/users/user-3.jpg"
+import user4 from "../../assets/images/users/user-4.jpg"
+import user5 from "../../assets/images/users/user-5.jpg"
+import user6 from "../../assets/images/users/user-6.jpg"
+import smimg1 from "../../assets/images/small/img-1.jpg"
+import smimg2 from "../../assets/images/small/img-2.jpg"
 
 // Charts
-import LineAreaChart from "../AllCharts/apex/lineareachart";
-import RadialChart from "../AllCharts/apex/apexdonut";
-import Apexdonut from "../AllCharts/apex/apexdonut1";
-import SparkLine from "../AllCharts/sparkline/sparkline";
-import SparkLine1 from "../AllCharts/sparkline/sparkline1";
-import Salesdonut from "../AllCharts/apex/salesdonut";
+import LineAreaChart from "../AllCharts/apex/lineareachart"
+import RadialChart from "../AllCharts/apex/apexdonut"
+import Apexdonut from "../AllCharts/apex/apexdonut1"
+import SparkLine from "../AllCharts/sparkline/sparkline"
+import SparkLine1 from "../AllCharts/sparkline/sparkline1"
+import Salesdonut from "../AllCharts/apex/salesdonut"
 
-import "chartist/dist/scss/chartist.scss";
+import "chartist/dist/scss/chartist.scss"
 
 //i18n
-import { withTranslation } from "react-i18next";
+import { withTranslation } from "react-i18next"
 
 const Dashboard = props => {
-  const [menu, setMenu] = useState(false);
+  const [menu, setMenu] = useState(false)
   const toggle = () => {
-    setMenu(!menu);
-  };
-  document.title = "Dashboard | Veltrix - React Admin & Dashboard Template";
+    setMenu(!menu)
+  }
+  document.title = "Dashboard | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
@@ -59,26 +59,39 @@ const Dashboard = props => {
               <Col md={8}>
                 <h6 className="page-title">Dashboard</h6>
                 <ol className="breadcrumb m-0">
-                  <li className="breadcrumb-item active">Welcome to Veltrix Dashboard</li>
+                  <li className="breadcrumb-item active">
+                    Welcome to Foodi Dashboard
+                  </li>
                 </ol>
               </Col>
 
-              <Col md="4">
+              {/* <Col md="4">
                 <div className="float-end d-none d-md-block">
                   <Dropdown isOpen={menu} toggle={toggle}>
-                    <DropdownToggle color="primary" className="btn btn-primary dropdown-toggle waves-effect waves-light">
+                    <DropdownToggle
+                      color="primary"
+                      className="btn btn-primary dropdown-toggle waves-effect waves-light"
+                    >
                       <i className="mdi mdi-cog me-2"></i> Settings
                     </DropdownToggle>
                     <DropdownMenu end>
-                      <DropdownItem tag="a" href="#">Action</DropdownItem>
-                      <DropdownItem tag="a" href="#">Another action</DropdownItem>
-                      <DropdownItem tag="a" href="#">Something else here</DropdownItem>
+                      <DropdownItem tag="a" href="#">
+                        Action
+                      </DropdownItem>
+                      <DropdownItem tag="a" href="#">
+                        Another action
+                      </DropdownItem>
+                      <DropdownItem tag="a" href="#">
+                        Something else here
+                      </DropdownItem>
                       <DropdownItem divider />
-                      <DropdownItem tag="a" href="#">Separated link</DropdownItem>
+                      <DropdownItem tag="a" href="#">
+                        Separated link
+                      </DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
                 </div>
-              </Col>
+              </Col> */}
             </Row>
           </div>
           <Row>
@@ -119,7 +132,7 @@ const Dashboard = props => {
                       <img src={servicesIcon2} alt="" />
                     </div>
                     <h5 className="font-size-16 text-uppercase mt-0 text-white-50">
-                      Revenue
+                      Restaurants
                     </h5>
                     <h4 className="fw-medium font-size-24">
                       52,368{" "}
@@ -149,10 +162,10 @@ const Dashboard = props => {
                       <img src={servicesIcon3} alt="" />
                     </div>
                     <h5 className="font-size-16 text-uppercase mt-0 text-white-50">
-                      Average Price
+                      Users
                     </h5>
                     <h4 className="fw-medium font-size-24">
-                      15.8{" "}
+                      35.2K{" "}
                       <i className="mdi mdi-arrow-up text-success ms-2"></i>
                     </h4>
                     <div className="mini-stat-label bg-info">
@@ -179,10 +192,10 @@ const Dashboard = props => {
                       <img src={servicesIcon4} alt="" />
                     </div>
                     <h5 className="font-size-16 text-uppercase mt-0 text-white-50">
-                      Product Sold
+                      Total Order Value
                     </h5>
                     <h4 className="fw-medium font-size-24">
-                      2436{" "}
+                      103K{" "}
                       <i className="mdi mdi-arrow-up text-success ms-2"></i>
                     </h4>
                     <div className="mini-stat-label bg-warning">
@@ -206,7 +219,7 @@ const Dashboard = props => {
             <Col xl={9}>
               <Card>
                 <CardBody>
-                  <h4 className="card-title mb-4">Monthly Earning</h4>
+                  <h4 className="card-title mb-4">Total Order Value</h4>
                   <Row>
                     <Col lg={7}>
                       <div>
@@ -220,8 +233,7 @@ const Dashboard = props => {
                             <p className="text-muted mb-4">This month</p>
                             <h3>$34,252</h3>
                             <p className="text-muted mb-4">
-                              It will be as simple as in fact it will be
-                              occidental.
+                              This is dummy data
                             </p>
                             <RadialChart />
                           </div>
@@ -231,8 +243,7 @@ const Dashboard = props => {
                             <p className="text-muted mb-4">Last month</p>
                             <h3>$36,253</h3>
                             <p className="text-muted mb-4">
-                              It will be as simple as in fact it will be
-                              occidental.
+                              This is dummy data
                             </p>
                             <Apexdonut />
                           </div>
@@ -244,7 +255,7 @@ const Dashboard = props => {
               </Card>
             </Col>
 
-            <Col xl={3}>
+            {/* <Col xl={3}>
               <Card>
                 <CardBody>
                   <div>
@@ -297,10 +308,10 @@ const Dashboard = props => {
                   </div>
                 </CardBody>
               </Card>
-            </Col>
+            </Col> */}
           </Row>
 
-          <Row>
+          {/* <Row>
             <Col xl={3}>
               <Card>
                 <CardBody>
@@ -511,9 +522,7 @@ const Dashboard = props => {
                           <td>15/1/2018</td>
                           <td>$94</td>
                           <td>
-                            <span className="badge bg-success">
-                              Delivered
-                            </span>
+                            <span className="badge bg-success">Delivered</span>
                           </td>
                           <td>
                             <div>
@@ -563,9 +572,7 @@ const Dashboard = props => {
                           <td>17/1/2019</td>
                           <td>$116</td>
                           <td>
-                            <span className="badge bg-success">
-                              Delivered
-                            </span>
+                            <span className="badge bg-success">Delivered</span>
                           </td>
                           <td>
                             <div>
@@ -615,9 +622,7 @@ const Dashboard = props => {
                           <td>19/1/2019</td>
                           <td>$120</td>
                           <td>
-                            <span className="badge bg-success">
-                              Delivered
-                            </span>
+                            <span className="badge bg-success">Delivered</span>
                           </td>
                           <td>
                             <div>
@@ -790,16 +795,15 @@ const Dashboard = props => {
                 </CardBody>
               </Card>
             </Col>
-          </Row>
+          </Row> */}
         </Container>
       </div>
-
     </React.Fragment>
-  );
-};
+  )
+}
 
 Dashboard.propTypes = {
-  t: PropTypes.any
-};
+  t: PropTypes.any,
+}
 
-export default withTranslation()(Dashboard);
+export default withTranslation()(Dashboard)

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 
 import {
   Row,
@@ -11,29 +11,33 @@ import {
   Button,
   CardTitle,
   Container,
-} from "reactstrap";
+} from "reactstrap"
 
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const FormRepeater = () => {
-  const [rows1, setrows1] = useState([]);
-  const [rows2, setrows2] = useState([]);
+  const [rows1, setrows1] = useState([])
+  const [rows2, setrows2] = useState([])
 
   function handleAddRowNested() {
-    const item1 = { name1: "" };
-    setrows1([...rows1, item1]);
+    const item1 = { name1: "" }
+    setrows1([...rows1, item1])
   }
 
   function handleAddRowNested1() {
-    const item2 = { name1: "" };
-    setrows2([...rows2, item2]);
+    const item2 = { name1: "" }
+    setrows2([...rows2, item2])
   }
-  document.title = "Form Repeater | Veltrix - React Admin & Dashboard Template";
+  document.title = "Form Repeater | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="Forms" breadcrumbItem="Form Repeater" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Forms"
+            breadcrumbItem="Form Repeater"
+          />
 
           <Row>
             <Col xs={12}>
@@ -44,37 +48,75 @@ const FormRepeater = () => {
                     <div data-repeater-list="group-a">
                       <div data-repeater-item className="row">
                         <div className="mb-3 col-lg-2">
-                          <label className="form-label" htmlFor="name">Name</label>
-                          <input type="text" id="name" name="untyped-input" className="form-control" placeholder="Enter your name" />
+                          <label className="form-label" htmlFor="name">
+                            Name
+                          </label>
+                          <input
+                            type="text"
+                            id="name"
+                            name="untyped-input"
+                            className="form-control"
+                            placeholder="Enter your name"
+                          />
                         </div>
 
                         <div className="mb-3 col-lg-2">
-                          <label className="form-label" htmlFor="email">Email</label>
-                          <input type="email" id="email" className="form-control" placeholder="Enter your email"/>
+                          <label className="form-label" htmlFor="email">
+                            Email
+                          </label>
+                          <input
+                            type="email"
+                            id="email"
+                            className="form-control"
+                            placeholder="Enter your email"
+                          />
                         </div>
 
                         <div className="mb-3 col-lg-2">
-                          <label className="form-label" htmlFor="subject">Subject</label>
-                          <input type="text" id="subject" className="form-control" placeholder="Enter your subject"/>
+                          <label className="form-label" htmlFor="subject">
+                            Subject
+                          </label>
+                          <input
+                            type="text"
+                            id="subject"
+                            className="form-control"
+                            placeholder="Enter your subject"
+                          />
                         </div>
 
                         <div className="mb-3 col-lg-2">
-                          <label className="form-label" htmlFor="resume">Resume</label>{" "}
-                          <input type="file" className="form-control" id="resume"/>
+                          <label className="form-label" htmlFor="resume">
+                            Resume
+                          </label>{" "}
+                          <input
+                            type="file"
+                            className="form-control"
+                            id="resume"
+                          />
                         </div>
 
                         <div className="mb-3 col-lg-2">
-                          <label className="form-label" htmlFor="message">Message</label>
-                          <textarea id="message" className="form-control" placeholder="Type here..."></textarea>
+                          <label className="form-label" htmlFor="message">
+                            Message
+                          </label>
+                          <textarea
+                            id="message"
+                            className="form-control"
+                            placeholder="Type here..."
+                          ></textarea>
                         </div>
 
                         <Col lg={2} className="align-self-center">
                           <div className="d-grid">
-                            <input data-repeater-delete type="button" className="btn btn-primary" value="Delete" />
+                            <input
+                              data-repeater-delete
+                              type="button"
+                              className="btn btn-primary"
+                              value="Delete"
+                            />
                           </div>
                         </Col>
                       </div>
-
                     </div>
 
                     {rows2.map((item2, idx) => (
@@ -82,41 +124,62 @@ const FormRepeater = () => {
                         <div data-repeater-list="group-a" id={"addr" + idx}>
                           <div data-repeater-item className="row">
                             <div className="mb-3 col-lg-2">
-                              <label className="form-label" htmlFor="name">Name</label>
-                              <input type="text" name="untyped-input" className="form-control" />
+                              <label className="form-label" htmlFor="name">
+                                Name
+                              </label>
+                              <input
+                                type="text"
+                                name="untyped-input"
+                                className="form-control"
+                              />
                             </div>
 
                             <div className="mb-3 col-lg-2">
-                              <label className="form-label" htmlFor="email">Email</label>
+                              <label className="form-label" htmlFor="email">
+                                Email
+                              </label>
                               <input type="email" className="form-control" />
                             </div>
 
                             <div className="mb-3 col-lg-2">
-                              <label className="form-label" htmlFor="subject">Subject</label>
+                              <label className="form-label" htmlFor="subject">
+                                Subject
+                              </label>
                               <input type="text" className="form-control" />
                             </div>
 
                             <div className="mb-3 col-lg-2">
-                              <label className="form-label" htmlFor="resume">Resume</label>
+                              <label className="form-label" htmlFor="resume">
+                                Resume
+                              </label>
                               <input type="file" className="form-control" />
                             </div>
 
                             <div className="mb-3 col-lg-2">
-                              <label className="form-label" htmlFor="message">Message</label>
-                              <textarea id="message" className="form-control"></textarea>
+                              <label className="form-label" htmlFor="message">
+                                Message
+                              </label>
+                              <textarea
+                                id="message"
+                                className="form-control"
+                              ></textarea>
                             </div>
 
                             <Col lg={2} className="align-self-center d-grid">
-                              <input data-repeater-delete type="button" className="btn btn-primary" value="Delete" />
+                              <input
+                                data-repeater-delete
+                                type="button"
+                                className="btn btn-primary"
+                                value="Delete"
+                              />
                             </Col>
                           </div>
-
                         </div>
                       </React.Fragment>
                     ))}
                     <Button
                       onClick={() => {
-                        handleAddRowNested1();
+                        handleAddRowNested1()
                       }}
                       color="success"
                       className="btn btn-success mt-3 mt-lg-0"
@@ -137,7 +200,9 @@ const FormRepeater = () => {
                     <div data-repeater-list="outer-group" className="outer">
                       <div data-repeater-item className="outer">
                         <div className="mb-3">
-                          <Label className="form-label" htmlFor="formname">Name : </Label>
+                          <Label className="form-label" htmlFor="formname">
+                            Name :{" "}
+                          </Label>
                           <Input
                             type="text"
                             id="formname"
@@ -147,7 +212,9 @@ const FormRepeater = () => {
                         </div>
 
                         <div className="mb-3">
-                          <Label className="form-label" htmlFor="formemail">Email :</Label>
+                          <Label className="form-label" htmlFor="formemail">
+                            Email :
+                          </Label>
                           <Input
                             type="email"
                             id="formemail"
@@ -157,7 +224,9 @@ const FormRepeater = () => {
                         </div>
 
                         <div className="inner-repeater mb-4">
-                          <Label className="form-label" htmlFor="formphoneno">Phone no :</Label>
+                          <Label className="form-label" htmlFor="formphoneno">
+                            Phone no :
+                          </Label>
                           <table style={{ width: "100%" }}>
                             <tbody>
                               <tr id="addrMain" key="">
@@ -176,7 +245,7 @@ const FormRepeater = () => {
                                         className="btn-block inner"
                                         style={{ width: "100%" }}
                                         onClick={e => {
-                                          handleRemoveRow(e, idx);
+                                          handleRemoveRow(e, idx)
                                         }}
                                       >
                                         {" "}
@@ -222,7 +291,7 @@ const FormRepeater = () => {
                           </table>
                           <Button
                             onClick={() => {
-                              handleAddRowNested();
+                              handleAddRowNested()
                             }}
                             color="success"
                             className="mt-1"
@@ -232,7 +301,9 @@ const FormRepeater = () => {
                         </div>
 
                         <div className="mb-3">
-                          <Label className="form-label mb-3 d-flex">Gender :</Label>
+                          <Label className="form-label mb-3 d-flex">
+                            Gender :
+                          </Label>
                           <div className="form-check form-check-inline">
                             <Input
                               type="radio"
@@ -241,7 +312,8 @@ const FormRepeater = () => {
                               className="form-check-input"
                             />
                             <Label
-                              className="form-check-label" htmlFor="customRadioInline1"
+                              className="form-check-label"
+                              htmlFor="customRadioInline1"
                             >
                               Male
                             </Label>
@@ -255,7 +327,8 @@ const FormRepeater = () => {
                               className="form-check-input"
                             />
                             <Label
-                              className="form-check-label" htmlFor="customRadioInline2"
+                              className="form-check-label"
+                              htmlFor="customRadioInline2"
                             >
                               Female
                             </Label>
@@ -263,7 +336,9 @@ const FormRepeater = () => {
                         </div>
 
                         <div className="mb-3">
-                          <Label className="form-label" htmlFor="formmessage">Message :</Label>
+                          <Label className="form-label" htmlFor="formmessage">
+                            Message :
+                          </Label>
                           <Input
                             type="textarea"
                             id="formmessage"
@@ -284,7 +359,7 @@ const FormRepeater = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default FormRepeater;
+export default FormRepeater

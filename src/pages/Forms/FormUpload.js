@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 import {
   Row,
   Col,
@@ -7,16 +7,16 @@ import {
   CardBody,
   CardTitle,
   Container,
-} from "reactstrap";
-import Dropzone from "react-dropzone";
+} from "reactstrap"
+import Dropzone from "react-dropzone"
 
 // Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
 const FormUpload = () => {
-  const [selectedFiles, setselectedFiles] = useState([]);
+  const [selectedFiles, setselectedFiles] = useState([])
 
   function handleAcceptedFiles(files) {
     files.map(file =>
@@ -24,29 +24,33 @@ const FormUpload = () => {
         preview: URL.createObjectURL(file),
         formattedSize: formatBytes(file.size),
       })
-    );
-    setselectedFiles(files);
+    )
+    setselectedFiles(files)
   }
 
   /**
    * Formats the size
    */
   function formatBytes(bytes, decimals = 2) {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    if (bytes === 0) return "0 Bytes"
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
 
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
   }
 
-  document.title = "Form File Upload | Veltrix - React Admin & Dashboard Template";
+  document.title = "Form File Upload | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="Forms" breadcrumbItem="Form File Upload" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Forms"
+            breadcrumbItem="Form File Upload"
+          />
 
           <Row>
             <Col className="col-12">
@@ -61,7 +65,7 @@ const FormUpload = () => {
                     <Form>
                       <Dropzone
                         onDrop={acceptedFiles => {
-                          handleAcceptedFiles(acceptedFiles);
+                          handleAcceptedFiles(acceptedFiles)
                         }}
                       >
                         {({ getRootProps, getInputProps }) => (
@@ -79,7 +83,10 @@ const FormUpload = () => {
                           </div>
                         )}
                       </Dropzone>
-                      <div className="dropzone-previews mt-3" id="file-previews">
+                      <div
+                        className="dropzone-previews mt-3"
+                        id="file-previews"
+                      >
                         {selectedFiles.map((f, i) => {
                           return (
                             <Card
@@ -111,7 +118,7 @@ const FormUpload = () => {
                                 </Row>
                               </div>
                             </Card>
-                          );
+                          )
                         })}
                       </div>
                     </Form>
@@ -131,7 +138,7 @@ const FormUpload = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default FormUpload;
+export default FormUpload

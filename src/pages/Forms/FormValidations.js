@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 
 import {
   Row,
@@ -13,85 +13,83 @@ import {
   Input,
   Container,
   Form,
-  FormFeedback
-} from "reactstrap";
+  FormFeedback,
+} from "reactstrap"
 
 // Formik validation
-import * as Yup from "yup";
-import { useFormik } from "formik";
+import * as Yup from "yup"
+import { useFormik } from "formik"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const FormValidations = () => {
-
   function handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
 
-    var fnm = document.getElementById("validationTooltip01").value;
-    var lnm = document.getElementById("validationTooltip02").value;
-    var unm = document.getElementById("validationTooltipUsername").value;
-    var city = document.getElementById("validationTooltip03").value;
-    var stateV = document.getElementById("validationTooltip04").value;
+    var fnm = document.getElementById("validationTooltip01").value
+    var lnm = document.getElementById("validationTooltip02").value
+    var unm = document.getElementById("validationTooltipUsername").value
+    var city = document.getElementById("validationTooltip03").value
+    var stateV = document.getElementById("validationTooltip04").value
 
     if (fnm === "") {
-      setfnm(false);
+      setfnm(false)
     } else {
-      setfnm(true);
+      setfnm(true)
     }
 
     if (lnm === "") {
-      setlnm(false);
+      setlnm(false)
     } else {
-      setlnm(true);
+      setlnm(true)
     }
 
     if (unm === "") {
-      setunm(false);
+      setunm(false)
     } else {
-      setunm(true);
+      setunm(true)
     }
 
     if (city === "") {
-      setcity(false);
+      setcity(false)
     } else {
-      setcity(true);
+      setcity(true)
     }
 
     if (stateV === "") {
-      setstateV(false);
+      setstateV(false)
     } else {
-      setstateV(true);
+      setstateV(true)
     }
 
-    var d1 = document.getElementsByName("validate");
+    var d1 = document.getElementsByName("validate")
 
-    document.getElementById("tooltipForm").classList.add("was-validated");
+    document.getElementById("tooltipForm").classList.add("was-validated")
 
     for (var i = 0; i < d1.length; i++) {
-      d1[i].style.display = "block";
+      d1[i].style.display = "block"
     }
   }
 
   //for change tooltip display propery
   function changeHandeler(event, eleId) {
     if (event.target.value !== "")
-      document.getElementById(eleId).style.display = "none";
-    else document.getElementById(eleId).style.display = "block";
+      document.getElementById(eleId).style.display = "none"
+    else document.getElementById(eleId).style.display = "block"
   }
 
-
-  // Form validation 
+  // Form validation
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
-      firstname: 'Mark',
-      lastname: 'Otto',
-      city: 'City',
-      state: 'State',
-      zip: 'Zip',
+      firstname: "Mark",
+      lastname: "Otto",
+      city: "City",
+      state: "State",
+      zip: "Zip",
     },
     validationSchema: Yup.object({
       firstname: Yup.string().required("Please Enter Your First Name"),
@@ -100,33 +98,29 @@ const FormValidations = () => {
       state: Yup.string().required("Please Enter Your State"),
       zip: Yup.string().required("Please Enter Your Zip"),
     }),
-    onSubmit: (values) => {
-      console.log("values", values);
-    }
-  });
+    onSubmit: values => {
+      console.log("values", values)
+    },
+  })
 
-  // Form validation 
+  // Form validation
   const validationType = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
-      username: '',
-      password: '',
-      password1: '',
-      email: '',
-      digits: '',
-      number: '',
-      alphanumeric: '',
-      textarea: '',
+      username: "",
+      password: "",
+      password1: "",
+      email: "",
+      digits: "",
+      number: "",
+      alphanumeric: "",
+      textarea: "",
     },
     validationSchema: Yup.object().shape({
-      username: Yup.string().required(
-        "This value is required"
-      ),
-      password: Yup.string().required(
-        "This value is required"
-      ),
+      username: Yup.string().required("This value is required"),
+      password: Yup.string().required("This value is required"),
       password1: Yup.string().when("password", {
         is: val => (val && val.length > 0 ? true : false),
         then: Yup.string().oneOf(
@@ -144,40 +138,31 @@ const FormValidations = () => {
           "Enter correct url!"
         )
         .required("Please enter correct Url"),
-      digits: Yup.number().required(
-        "Please Enter Your Digits"
-      ),
-      number: Yup.number().required(
-        "Please Enter Your Number"
-      ),
+      digits: Yup.number().required("Please Enter Your Digits"),
+      number: Yup.number().required("Please Enter Your Number"),
       alphanumeric: Yup.string()
-        .matches(
-          /^[a-z0-9]+$/i,
-          "Enter correct Alphanumeric!"
-        )
+        .matches(/^[a-z0-9]+$/i, "Enter correct Alphanumeric!")
         .required("Please Enter Your Alphanumeric"),
-      textarea: Yup.string().required(
-        "Please Enter Your Textarea"
-      ),
+      textarea: Yup.string().required("Please Enter Your Textarea"),
     }),
-    onSubmit: (values) => {
-      console.log("values", values);
-    }
-  });
-  const regExp = /\b\d{5}\b/;
-  // Form validation 
+    onSubmit: values => {
+      console.log("values", values)
+    },
+  })
+  const regExp = /\b\d{5}\b/
+  // Form validation
   const rangeValidation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
-      min_Length: '',
-      max_Length: '',
-      range_Length: '',
-      min_Value: '',
-      max_Value: '',
-      range_Value: '',
-      regular_Exp: '',
+      min_Length: "",
+      max_Length: "",
+      range_Length: "",
+      min_Value: "",
+      max_Value: "",
+      range_Value: "",
+      regular_Exp: "",
     },
     validationSchema: Yup.object().shape({
       min_Length: Yup.string()
@@ -186,27 +171,32 @@ const FormValidations = () => {
       max_Length: Yup.string()
         .max(6, "Must be exactly 6 digits")
         .required("Max 6 chars"),
-      range_Length: Yup.string().required(
-        "range between 5 to 10"
-      ).min(5, "This value should be between 5 and 10")
+      range_Length: Yup.string()
+        .required("range between 5 to 10")
+        .min(5, "This value should be between 5 and 10")
         .max(10, "This value should be between 5 and 10"),
-      min_Value: Yup.string().required("Min Value 6").test('val', 'This value should be greater than or equal to 6', val => val >= 6),
-      max_Value: Yup.string().required("Max Value 6").matches(/^[0-6]+$/, "This value should be lower than or equal to 6."),
-      range_Value: Yup.string().required(
-        "range between 5 to 10"
-      ).min(5, "This value should be between 5 and 10")
+      min_Value: Yup.string()
+        .required("Min Value 6")
+        .test(
+          "val",
+          "This value should be greater than or equal to 6",
+          val => val >= 6
+        ),
+      max_Value: Yup.string()
+        .required("Max Value 6")
+        .matches(/^[0-6]+$/, "This value should be lower than or equal to 6."),
+      range_Value: Yup.string()
+        .required("range between 5 to 10")
+        .min(5, "This value should be between 5 and 10")
         .max(10, "This value should be between 5 and 10"),
       regular_Exp: Yup.string()
-        .matches(
-          /^[#0-9]+$/,
-          "Only Hex Value"
-        )
+        .matches(/^[#0-9]+$/, "Only Hex Value")
         .required("Only Hex Value"),
     }),
-    onSubmit: (values) => {
-      console.log("values", values);
-    }
-  });
+    onSubmit: values => {
+      console.log("values", values)
+    },
+  })
 
   const [formValidation, setValidation] = useState({
     fnm: null,
@@ -214,61 +204,61 @@ const FormValidations = () => {
     unm: null,
     city: null,
     stateV: null,
-  });
+  })
 
   function handleSubmit(e) {
-    e.preventDefault();
-    const modifiedV = { ...formValidation };
-    var fnm = document.getElementById("validationTooltip01").value;
-    var lnm = document.getElementById("validationTooltip02").value;
-    var unm = document.getElementById("validationTooltipUsername").value;
-    var city = document.getElementById("validationTooltip03").value;
-    var stateV = document.getElementById("validationTooltip04").value;
+    e.preventDefault()
+    const modifiedV = { ...formValidation }
+    var fnm = document.getElementById("validationTooltip01").value
+    var lnm = document.getElementById("validationTooltip02").value
+    var unm = document.getElementById("validationTooltipUsername").value
+    var city = document.getElementById("validationTooltip03").value
+    var stateV = document.getElementById("validationTooltip04").value
 
     if (fnm === "") {
-      modifiedV["fnm"] = false;
+      modifiedV["fnm"] = false
     } else {
-      modifiedV["fnm"] = true;
+      modifiedV["fnm"] = true
     }
 
     if (lnm === "") {
-      modifiedV["lnm"] = false;
+      modifiedV["lnm"] = false
     } else {
-      modifiedV["lnm"] = true;
+      modifiedV["lnm"] = true
     }
 
     if (unm === "") {
-      modifiedV["unm"] = false;
+      modifiedV["unm"] = false
     } else {
-      modifiedV["unm"] = true;
+      modifiedV["unm"] = true
     }
 
     if (city === "") {
-      modifiedV["city"] = false;
+      modifiedV["city"] = false
     } else {
-      modifiedV["city"] = true;
+      modifiedV["city"] = true
     }
 
     if (stateV === "") {
-      modifiedV["stateV"] = false;
+      modifiedV["stateV"] = false
     } else {
-      modifiedV["stateV"] = true;
+      modifiedV["stateV"] = true
     }
-    setValidation(modifiedV);
+    setValidation(modifiedV)
   }
 
   //for change tooltip display propery
   const onChangeValidation = (fieldName, value) => {
-    const modifiedV = { ...validation };
+    const modifiedV = { ...validation }
     if (value !== "") {
-      modifiedV[fieldName] = true;
+      modifiedV[fieldName] = true
     } else {
-      modifiedV[fieldName] = false;
+      modifiedV[fieldName] = false
     }
-    setValidation(modifiedV);
-  };
+    setValidation(modifiedV)
+  }
 
-  document.title = "Form Validation | Veltrix - React Admin & Dashboard Template";
+  document.title = "Form Validation | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
@@ -280,14 +270,16 @@ const FormValidations = () => {
                 <CardBody>
                   <h4 className="card-title">Validation type</h4>
                   <p className="card-title-desc">
-                    Parsley is a javascript form validation library. It helps you provide your users with feedback on their form submission before sending it to your serve
+                    Parsley is a javascript form validation library. It helps
+                    you provide your users with feedback on their form
+                    submission before sending it to your serve
                   </p>
                   <Form
                     className="row g-3 needs-validation"
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      validation.handleSubmit();
-                      return false;
+                    onSubmit={e => {
+                      e.preventDefault()
+                      validation.handleSubmit()
+                      return false
                     }}
                   >
                     <Row>
@@ -305,13 +297,13 @@ const FormValidations = () => {
                             value={validation.values.firstname || ""}
                             invalid={
                               validation.touched.firstname &&
-                                validation.errors.firstname
+                              validation.errors.firstname
                                 ? true
                                 : false
                             }
                           />
                           {validation.touched.firstname &&
-                            validation.errors.firstname ? (
+                          validation.errors.firstname ? (
                             <FormFeedback type="invalid">
                               {validation.errors.firstname}
                             </FormFeedback>
@@ -332,13 +324,13 @@ const FormValidations = () => {
                             value={validation.values.lastname || ""}
                             invalid={
                               validation.touched.lastname &&
-                                validation.errors.lastname
+                              validation.errors.lastname
                                 ? true
                                 : false
                             }
                           />
                           {validation.touched.lastname &&
-                            validation.errors.lastname ? (
+                          validation.errors.lastname ? (
                             <FormFeedback type="invalid">
                               {validation.errors.lastname}
                             </FormFeedback>
@@ -349,7 +341,12 @@ const FormValidations = () => {
                         <FormGroup className="mb-3">
                           <Label htmlFor="validationCustom06">User Name</Label>
                           <div className="input-group has-validation">
-                            <span className="input-group-text" id="inputGroupPrepend">@</span>
+                            <span
+                              className="input-group-text"
+                              id="inputGroupPrepend"
+                            >
+                              @
+                            </span>
                             <Input
                               name="userName"
                               placeholder="Please choose a username"
@@ -361,13 +358,13 @@ const FormValidations = () => {
                               value={validation.values.userName || ""}
                               invalid={
                                 validation.touched.userName &&
-                                  validation.errors.userName
+                                validation.errors.userName
                                   ? true
                                   : false
                               }
                             />
                             {validation.touched.userName &&
-                              validation.errors.userName ? (
+                            validation.errors.userName ? (
                               <FormFeedback type="invalid">
                                 {validation.errors.userName}
                               </FormFeedback>
@@ -415,13 +412,13 @@ const FormValidations = () => {
                             value={validation.values.state || ""}
                             invalid={
                               validation.touched.state &&
-                                validation.errors.state
+                              validation.errors.state
                                 ? true
                                 : false
                             }
                           />
                           {validation.touched.state &&
-                            validation.errors.state ? (
+                          validation.errors.state ? (
                             <FormFeedback type="invalid">
                               {validation.errors.state}
                             </FormFeedback>
@@ -475,7 +472,9 @@ const FormValidations = () => {
                       </Col>
                     </Row>
                     <div className="col-12">
-                      <button className="btn btn-primary" type="submit">Submit form</button>
+                      <button className="btn btn-primary" type="submit">
+                        Submit form
+                      </button>
                     </div>
                   </Form>
                 </CardBody>
@@ -497,7 +496,7 @@ const FormValidations = () => {
                     method="post"
                     id="tooltipForm"
                     onSubmit={e => {
-                      handleSubmit(e);
+                      handleSubmit(e)
                     }}
                   >
                     <Row>
@@ -512,7 +511,7 @@ const FormValidations = () => {
                             id="validationTooltip01"
                             placeholder="First name"
                             onChange={event => {
-                              onChangeValidation("fnm", event.target.value);
+                              onChangeValidation("fnm", event.target.value)
                             }}
                             valid={validation["fnm"] === true}
                             invalid={
@@ -719,11 +718,12 @@ const FormValidations = () => {
                   </CardSubtitle>
 
                   <Form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      validationType.handleSubmit();
-                      return false;
-                    }}>
+                    onSubmit={e => {
+                      e.preventDefault()
+                      validationType.handleSubmit()
+                      return false
+                    }}
+                  >
                     <div className="mb-3">
                       <Label className="form-label">Required</Label>
                       <Input
@@ -734,11 +734,17 @@ const FormValidations = () => {
                         onBlur={validationType.handleBlur}
                         value={validationType.values.username || ""}
                         invalid={
-                          validationType.touched.username && validationType.errors.username ? true : false
+                          validationType.touched.username &&
+                          validationType.errors.username
+                            ? true
+                            : false
                         }
                       />
-                      {validationType.touched.username && validationType.errors.username ? (
-                        <FormFeedback type="invalid">{validationType.errors.username}</FormFeedback>
+                      {validationType.touched.username &&
+                      validationType.errors.username ? (
+                        <FormFeedback type="invalid">
+                          {validationType.errors.username}
+                        </FormFeedback>
                       ) : null}
                     </div>
                     <div className="mb-3">
@@ -751,11 +757,17 @@ const FormValidations = () => {
                         onBlur={validationType.handleBlur}
                         value={validationType.values.password || ""}
                         invalid={
-                          validationType.touched.password && validationType.errors.password ? true : false
+                          validationType.touched.password &&
+                          validationType.errors.password
+                            ? true
+                            : false
                         }
                       />
-                      {validationType.touched.password && validationType.errors.password ? (
-                        <FormFeedback type="invalid">{validationType.errors.password}</FormFeedback>
+                      {validationType.touched.password &&
+                      validationType.errors.password ? (
+                        <FormFeedback type="invalid">
+                          {validationType.errors.password}
+                        </FormFeedback>
                       ) : null}
                     </div>
                     <div className="mb-3">
@@ -767,11 +779,17 @@ const FormValidations = () => {
                         onBlur={validationType.handleBlur}
                         value={validationType.values.password1 || ""}
                         invalid={
-                          validationType.touched.password1 && validationType.errors.password1 ? true : false
+                          validationType.touched.password1 &&
+                          validationType.errors.password1
+                            ? true
+                            : false
                         }
                       />
-                      {validationType.touched.password1 && validationType.errors.password1 ? (
-                        <FormFeedback type="invalid">{validationType.errors.password1}</FormFeedback>
+                      {validationType.touched.password1 &&
+                      validationType.errors.password1 ? (
+                        <FormFeedback type="invalid">
+                          {validationType.errors.password1}
+                        </FormFeedback>
                       ) : null}
                     </div>
                     <div className="mb-3">
@@ -784,11 +802,17 @@ const FormValidations = () => {
                         onBlur={validationType.handleBlur}
                         value={validationType.values.email || ""}
                         invalid={
-                          validationType.touched.email && validationType.errors.email ? true : false
+                          validationType.touched.email &&
+                          validationType.errors.email
+                            ? true
+                            : false
                         }
                       />
-                      {validationType.touched.email && validationType.errors.email ? (
-                        <FormFeedback type="invalid">{validationType.errors.email}</FormFeedback>
+                      {validationType.touched.email &&
+                      validationType.errors.email ? (
+                        <FormFeedback type="invalid">
+                          {validationType.errors.email}
+                        </FormFeedback>
                       ) : null}
                     </div>
                     {/* <div className="mb-3">
@@ -822,11 +846,17 @@ const FormValidations = () => {
                         onBlur={validationType.handleBlur}
                         value={validationType.values.digits || ""}
                         invalid={
-                          validationType.touched.digits && validationType.errors.digits ? true : false
+                          validationType.touched.digits &&
+                          validationType.errors.digits
+                            ? true
+                            : false
                         }
                       />
-                      {validationType.touched.digits && validationType.errors.digits ? (
-                        <FormFeedback type="invalid">{validationType.errors.digits}</FormFeedback>
+                      {validationType.touched.digits &&
+                      validationType.errors.digits ? (
+                        <FormFeedback type="invalid">
+                          {validationType.errors.digits}
+                        </FormFeedback>
                       ) : null}
                     </div>
                     <div className="mb-3">
@@ -839,11 +869,17 @@ const FormValidations = () => {
                         onBlur={validationType.handleBlur}
                         value={validationType.values.number || ""}
                         invalid={
-                          validationType.touched.number && validationType.errors.number ? true : false
+                          validationType.touched.number &&
+                          validationType.errors.number
+                            ? true
+                            : false
                         }
                       />
-                      {validationType.touched.number && validationType.errors.number ? (
-                        <FormFeedback type="invalid">{validationType.errors.number}</FormFeedback>
+                      {validationType.touched.number &&
+                      validationType.errors.number ? (
+                        <FormFeedback type="invalid">
+                          {validationType.errors.number}
+                        </FormFeedback>
                       ) : null}
                     </div>
                     <div className="mb-3">
@@ -856,11 +892,17 @@ const FormValidations = () => {
                         onBlur={validationType.handleBlur}
                         value={validationType.values.alphanumeric || ""}
                         invalid={
-                          validationType.touched.alphanumeric && validationType.errors.alphanumeric ? true : false
+                          validationType.touched.alphanumeric &&
+                          validationType.errors.alphanumeric
+                            ? true
+                            : false
                         }
                       />
-                      {validationType.touched.alphanumeric && validationType.errors.alphanumeric ? (
-                        <FormFeedback type="invalid">{validationType.errors.alphanumeric}</FormFeedback>
+                      {validationType.touched.alphanumeric &&
+                      validationType.errors.alphanumeric ? (
+                        <FormFeedback type="invalid">
+                          {validationType.errors.alphanumeric}
+                        </FormFeedback>
                       ) : null}
                     </div>
                     {/* <div className="mb-3">
@@ -870,7 +912,7 @@ const FormValidations = () => {
                       <Input
                         name="textarea"
                         placeholder="Type here"
-                        className="form-control" 
+                        className="form-control"
                         rows="5"
                         type="text"
                         onChange={validationType.handleChange}
@@ -886,10 +928,10 @@ const FormValidations = () => {
                       </div>
                     </div> */}
                     <div className="d-flex flex-wrap gap-2">
-                      <Button type="submit" color="primary" >
+                      <Button type="submit" color="primary">
                         Submit
                       </Button>{" "}
-                      <Button type="reset" color="secondary" >
+                      <Button type="reset" color="secondary">
                         Cancel
                       </Button>
                     </div>
@@ -909,10 +951,10 @@ const FormValidations = () => {
                   </CardSubtitle>
 
                   <Form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      rangeValidation.handleSubmit();
-                      return false;
+                    onSubmit={e => {
+                      e.preventDefault()
+                      rangeValidation.handleSubmit()
+                      return false
                     }}
                   >
                     <div className="mb-3">
@@ -926,11 +968,17 @@ const FormValidations = () => {
                         onBlur={rangeValidation.handleBlur}
                         value={rangeValidation.values.min_Length || ""}
                         invalid={
-                          rangeValidation.touched.min_Length && rangeValidation.errors.min_Length ? true : false
+                          rangeValidation.touched.min_Length &&
+                          rangeValidation.errors.min_Length
+                            ? true
+                            : false
                         }
                       />
-                      {rangeValidation.touched.min_Length && rangeValidation.errors.min_Length ? (
-                        <FormFeedback type="invalid">{rangeValidation.errors.min_Length}</FormFeedback>
+                      {rangeValidation.touched.min_Length &&
+                      rangeValidation.errors.min_Length ? (
+                        <FormFeedback type="invalid">
+                          {rangeValidation.errors.min_Length}
+                        </FormFeedback>
                       ) : null}
                     </div>
                     <div className="mb-3">
@@ -943,11 +991,17 @@ const FormValidations = () => {
                         onBlur={rangeValidation.handleBlur}
                         value={rangeValidation.values.max_Length || ""}
                         invalid={
-                          rangeValidation.touched.max_Length && rangeValidation.errors.max_Length ? true : false
+                          rangeValidation.touched.max_Length &&
+                          rangeValidation.errors.max_Length
+                            ? true
+                            : false
                         }
                       />
-                      {rangeValidation.touched.max_Length && rangeValidation.errors.max_Length ? (
-                        <FormFeedback type="invalid">{rangeValidation.errors.max_Length}</FormFeedback>
+                      {rangeValidation.touched.max_Length &&
+                      rangeValidation.errors.max_Length ? (
+                        <FormFeedback type="invalid">
+                          {rangeValidation.errors.max_Length}
+                        </FormFeedback>
                       ) : null}
                     </div>
                     <div className="mb-3">
@@ -960,11 +1014,17 @@ const FormValidations = () => {
                         onBlur={rangeValidation.handleBlur}
                         value={rangeValidation.values.range_Length || ""}
                         invalid={
-                          rangeValidation.touched.range_Length && rangeValidation.errors.range_Length ? true : false
+                          rangeValidation.touched.range_Length &&
+                          rangeValidation.errors.range_Length
+                            ? true
+                            : false
                         }
                       />
-                      {rangeValidation.touched.range_Length && rangeValidation.errors.range_Length ? (
-                        <FormFeedback type="invalid">{rangeValidation.errors.range_Length}</FormFeedback>
+                      {rangeValidation.touched.range_Length &&
+                      rangeValidation.errors.range_Length ? (
+                        <FormFeedback type="invalid">
+                          {rangeValidation.errors.range_Length}
+                        </FormFeedback>
                       ) : null}
                     </div>
                     <div className="mb-3">
@@ -978,11 +1038,17 @@ const FormValidations = () => {
                         onBlur={rangeValidation.handleBlur}
                         value={rangeValidation.values.min_Value || ""}
                         invalid={
-                          rangeValidation.touched.min_Value && rangeValidation.errors.min_Value ? true : false
+                          rangeValidation.touched.min_Value &&
+                          rangeValidation.errors.min_Value
+                            ? true
+                            : false
                         }
                       />
-                      {rangeValidation.touched.min_Value && rangeValidation.errors.min_Value ? (
-                        <FormFeedback type="invalid">{rangeValidation.errors.min_Value}</FormFeedback>
+                      {rangeValidation.touched.min_Value &&
+                      rangeValidation.errors.min_Value ? (
+                        <FormFeedback type="invalid">
+                          {rangeValidation.errors.min_Value}
+                        </FormFeedback>
                       ) : null}
                     </div>
 
@@ -997,11 +1063,17 @@ const FormValidations = () => {
                         onBlur={rangeValidation.handleBlur}
                         value={rangeValidation.values.max_Value || ""}
                         invalid={
-                          rangeValidation.touched.max_Value && rangeValidation.errors.max_Value ? true : false
+                          rangeValidation.touched.max_Value &&
+                          rangeValidation.errors.max_Value
+                            ? true
+                            : false
                         }
                       />
-                      {rangeValidation.touched.max_Value && rangeValidation.errors.max_Value ? (
-                        <FormFeedback type="invalid">{rangeValidation.errors.max_Value}</FormFeedback>
+                      {rangeValidation.touched.max_Value &&
+                      rangeValidation.errors.max_Value ? (
+                        <FormFeedback type="invalid">
+                          {rangeValidation.errors.max_Value}
+                        </FormFeedback>
                       ) : null}
                     </div>
                     <div className="mb-3">
@@ -1015,11 +1087,17 @@ const FormValidations = () => {
                         onBlur={rangeValidation.handleBlur}
                         value={rangeValidation.values.range_Value || ""}
                         invalid={
-                          rangeValidation.touched.range_Value && rangeValidation.errors.range_Value ? true : false
+                          rangeValidation.touched.range_Value &&
+                          rangeValidation.errors.range_Value
+                            ? true
+                            : false
                         }
                       />
-                      {rangeValidation.touched.range_Value && rangeValidation.errors.range_Value ? (
-                        <FormFeedback type="invalid">{rangeValidation.errors.range_Value}</FormFeedback>
+                      {rangeValidation.touched.range_Value &&
+                      rangeValidation.errors.range_Value ? (
+                        <FormFeedback type="invalid">
+                          {rangeValidation.errors.range_Value}
+                        </FormFeedback>
                       ) : null}
                     </div>
                     <div className="mb-3">
@@ -1032,18 +1110,24 @@ const FormValidations = () => {
                         onBlur={rangeValidation.handleBlur}
                         value={rangeValidation.values.regular_Exp || ""}
                         invalid={
-                          rangeValidation.touched.regular_Exp && rangeValidation.errors.regular_Exp ? true : false
+                          rangeValidation.touched.regular_Exp &&
+                          rangeValidation.errors.regular_Exp
+                            ? true
+                            : false
                         }
-                      // validate={{
-                      //   required: { value: true },
-                      //   pattern: {
-                      //     value: "^[#0-9]+$",
-                      //     errorMessage: "Only Hex Value",
-                      //   },
-                      // }}
+                        // validate={{
+                        //   required: { value: true },
+                        //   pattern: {
+                        //     value: "^[#0-9]+$",
+                        //     errorMessage: "Only Hex Value",
+                        //   },
+                        // }}
                       />
-                      {rangeValidation.touched.regular_Exp && rangeValidation.errors.regular_Exp ? (
-                        <FormFeedback type="invalid">{rangeValidation.errors.regular_Exp}</FormFeedback>
+                      {rangeValidation.touched.regular_Exp &&
+                      rangeValidation.errors.regular_Exp ? (
+                        <FormFeedback type="invalid">
+                          {rangeValidation.errors.regular_Exp}
+                        </FormFeedback>
                       ) : null}
                     </div>
                     <FormGroup className="mb-0">
@@ -1063,8 +1147,8 @@ const FormValidations = () => {
           </Row>
         </Container>
       </div>
-    </React.Fragment >
-  );
-};
+    </React.Fragment>
+  )
+}
 
-export default FormValidations;
+export default FormValidations

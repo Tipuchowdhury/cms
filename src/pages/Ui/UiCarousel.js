@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import {
   Row,
   Col,
@@ -7,25 +7,29 @@ import {
   CardTitle,
   CardSubtitle,
   Container,
-} from "reactstrap";
+} from "reactstrap"
 
 // Carousel
-import Slide from "./CarouselTypes/slide";
-import Slidewithcontrol from "./CarouselTypes/slidewithcontrol";
-import Slidewithindicator from "./CarouselTypes/slidewithindicator";
-import Slidewithcaption from "./CarouselTypes/slidewithcaption";
-import Slidewithfade from "./CarouselTypes/slidewithfade";
+import Slide from "./CarouselTypes/slide"
+import Slidewithcontrol from "./CarouselTypes/slidewithcontrol"
+import Slidewithindicator from "./CarouselTypes/slidewithindicator"
+import Slidewithcaption from "./CarouselTypes/slidewithcaption"
+import Slidewithfade from "./CarouselTypes/slidewithfade"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const UiCarousel = () => {
-  document.title = "Carousel | Veltrix - React Admin & Dashboard Template";
+  document.title = "Carousel | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="UI Elements" breadcrumbItem="Carousel" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="UI Elements"
+            breadcrumbItem="Carousel"
+          />
 
           <Row>
             <Col lg={6}>
@@ -97,7 +101,7 @@ const UiCarousel = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default UiCarousel;
+export default UiCarousel

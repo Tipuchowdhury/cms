@@ -1,38 +1,35 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 
-import {
-  Card,
-  CardBody,
-  Col,
-  Row,
-  CardTitle,
-  Container
-} from "reactstrap";
+import { Card, CardBody, Col, Row, CardTitle, Container } from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const FormElements = () => {
-  const [customchk, setcustomchk] = useState(true);
-  const [customchkPrimary, setcustomchkPrimary] = useState(true);
-  const [customchkSuccess, setcustomchkSuccess] = useState(true);
-  const [customchkInfo, setcustomchkInfo] = useState(true);
-  const [customchkWarning, setcustomchkWarning] = useState(true);
-  const [customchkDanger, setcustomchkDanger] = useState(true);
-  const [customOutlinePrimary, setcustomOutlinePrimary] = useState(true);
-  const [customOutlineSuccess, setcustomOutlineSuccess] = useState(true);
-  const [customOutlineInfo, setcustomOutlineInfo] = useState(true);
-  const [customOutlineWarning, setcustomOutlineWarning] = useState(true);
-  const [customOutlineDanger, setcustomOutlineDanger] = useState(true);
-  const [toggleSwitch, settoggleSwitch] = useState(true);
-  const [toggleSwitchSize, settoggleSwitchSize] = useState(true);
+  const [customchk, setcustomchk] = useState(true)
+  const [customchkPrimary, setcustomchkPrimary] = useState(true)
+  const [customchkSuccess, setcustomchkSuccess] = useState(true)
+  const [customchkInfo, setcustomchkInfo] = useState(true)
+  const [customchkWarning, setcustomchkWarning] = useState(true)
+  const [customchkDanger, setcustomchkDanger] = useState(true)
+  const [customOutlinePrimary, setcustomOutlinePrimary] = useState(true)
+  const [customOutlineSuccess, setcustomOutlineSuccess] = useState(true)
+  const [customOutlineInfo, setcustomOutlineInfo] = useState(true)
+  const [customOutlineWarning, setcustomOutlineWarning] = useState(true)
+  const [customOutlineDanger, setcustomOutlineDanger] = useState(true)
+  const [toggleSwitch, settoggleSwitch] = useState(true)
+  const [toggleSwitchSize, settoggleSwitchSize] = useState(true)
 
-  document.title = "Form Elements | Veltrix - React Admin & Dashboard Template";
+  document.title = "Form Elements | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="Forms" breadcrumbItem="Form Elements" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Forms"
+            breadcrumbItem="Form Elements"
+          />
 
           <Row>
             <Col>
@@ -281,11 +278,10 @@ const FormElements = () => {
               </Card>
             </Col>
           </Row>
-
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default FormElements;
+export default FormElements

@@ -1,24 +1,38 @@
-import React from "react";
-import { Card, CardBody, CardTitle, Col, Container, Progress, Row } from "reactstrap";
+import React from "react"
+import {
+  Card,
+  CardBody,
+  CardTitle,
+  Col,
+  Container,
+  Progress,
+  Row,
+} from "reactstrap"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const UiProgressbar = () => {
-  document.title = "Progress Bars | Veltrix - React Admin & Dashboard Template";
+  document.title = "Progress Bars | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="UI Elements" breadcrumbItem="Progress Bars" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="UI Elements"
+            breadcrumbItem="Progress Bars"
+          />
 
           <Row>
             <Col lg={6}>
               <Card>
                 <CardBody>
                   <h4 className="card-title">Default Examples</h4>
-                  <p className="card-title-desc">Progress components are built with two
-                    HTML elements, some CSS to set the width, and a few attributes.</p>
+                  <p className="card-title-desc">
+                    Progress components are built with two HTML elements, some
+                    CSS to set the width, and a few attributes.
+                  </p>
 
                   <div className="">
                     <Progress className="mb-4" value={25} />
@@ -100,14 +114,14 @@ const UiProgressbar = () => {
                   <p className="card-title-desc">
                     We only set a{" "}
                     <code className="highlighter-rouge">height</code> value on
-                    the <code className="highlighter-rouge">  .progress-bar</code>
-                    , so if you change that value the outer{" "}
+                    the{" "}
+                    <code className="highlighter-rouge"> .progress-bar</code>,
+                    so if you change that value the outer{" "}
                     <code className="highlighter-rouge">.progress</code> will
                     automatically resize accordingly.
                   </p>
 
                   <div className="">
-
                     <div className="mb-2">
                       <Progress
                         className="progress-sm"
@@ -121,7 +135,7 @@ const UiProgressbar = () => {
                         className="mb-2"
                         value={25}
                         color="primary"
-                        style={{ height: "20px", width: '100%' }}
+                        style={{ height: "20px", width: "100%" }}
                       />
                     </div>
                   </div>
@@ -162,13 +176,33 @@ const UiProgressbar = () => {
                   </p>
 
                   <div className="">
-                    <Progress className="mb-3" striped color="primary" value={10} />
+                    <Progress
+                      className="mb-3"
+                      striped
+                      color="primary"
+                      value={10}
+                    />
 
-                    <Progress className="mb-3" striped color="success" value={25} />
+                    <Progress
+                      className="mb-3"
+                      striped
+                      color="success"
+                      value={25}
+                    />
 
-                    <Progress className="mb-3" striped color="info" value={50} />
+                    <Progress
+                      className="mb-3"
+                      striped
+                      color="info"
+                      value={50}
+                    />
 
-                    <Progress className="mb-3" striped color="warning" value={75} />
+                    <Progress
+                      className="mb-3"
+                      striped
+                      color="warning"
+                      value={75}
+                    />
 
                     <Progress striped color="danger" value={100} />
                   </div>
@@ -179,7 +213,7 @@ const UiProgressbar = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default UiProgressbar;
+export default UiProgressbar

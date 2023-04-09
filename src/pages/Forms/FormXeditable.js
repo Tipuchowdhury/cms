@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import {
   Table,
   Row,
@@ -8,20 +8,24 @@ import {
   CardTitle,
   CardSubtitle,
   Container,
-} from "reactstrap";
+} from "reactstrap"
 
-import Editable from "react-bootstrap-editable";
+import Editable from "react-bootstrap-editable"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const FormXeditable = () => {
-  document.title = "Form Xeditable | Veltrix - React Admin & Dashboard Template";
+  document.title = "Form Xeditable | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="Forms" breadcrumbItem="Form Xeditable" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Forms"
+            breadcrumbItem="Form Xeditable"
+          />
 
           <Row>
             <Col>
@@ -160,7 +164,7 @@ const FormXeditable = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default FormXeditable;
+export default FormXeditable

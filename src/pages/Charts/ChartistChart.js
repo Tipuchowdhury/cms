@@ -1,29 +1,33 @@
-import React from "react";
-import { Row, Col, Card, CardBody, CardTitle, Container } from "reactstrap";
+import React from "react"
+import { Row, Col, Card, CardBody, CardTitle, Container } from "reactstrap"
 
 // import charts
-import BarChart from "../AllCharts/chartist/barchart";
-import Bar from "../AllCharts/chartist/stackedbarchart";
-import DountChart from "../AllCharts/chartist/dountchart";
-import PieChart from "../AllCharts/chartist/piechart";
-import SmilAnimationsChart from "../AllCharts/chartist/smilanimations";
-import LineChart from "../AllCharts/chartist/linechart";
-import ChartBar from "../AllCharts/chartist/chartbar";
-import LineAreaChart from "../AllCharts/chartist/lineareachart";
+import BarChart from "../AllCharts/chartist/barchart"
+import Bar from "../AllCharts/chartist/stackedbarchart"
+import DountChart from "../AllCharts/chartist/dountchart"
+import PieChart from "../AllCharts/chartist/piechart"
+import SmilAnimationsChart from "../AllCharts/chartist/smilanimations"
+import LineChart from "../AllCharts/chartist/linechart"
+import ChartBar from "../AllCharts/chartist/chartbar"
+import LineAreaChart from "../AllCharts/chartist/lineareachart"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
-import "chartist/dist/scss/chartist.scss";
-import "../../assets/scss/chartist.scss";
+import "chartist/dist/scss/chartist.scss"
+import "../../assets/scss/chartist.scss"
 
 const ChartistChart = () => {
-  document.title = "Chartist Charts | Veltrix - React Admin & Dashboard Template";
+  document.title = "Chartist Charts | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid={true}>
-          <Breadcrumbs maintitle="Veltrix" title="Charts" breadcrumbItem="Chartist Charts" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Charts"
+            breadcrumbItem="Chartist Charts"
+          />
           <Row>
             <Col lg={6}>
               <Card>
@@ -245,7 +249,9 @@ const ChartistChart = () => {
             <Col lg={6}>
               <Card>
                 <CardBody>
-                  <CardTitle className="h4 mb-4">Line chart with area</CardTitle>
+                  <CardTitle className="h4 mb-4">
+                    Line chart with area
+                  </CardTitle>
                   <Row className="justify-content-center">
                     <Col sm={4}>
                       <div className="text-center">
@@ -274,7 +280,7 @@ const ChartistChart = () => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default ChartistChart;
+export default ChartistChart

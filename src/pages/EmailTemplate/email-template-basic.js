@@ -1,17 +1,22 @@
-import React from "react";
-import { Row, Col } from "reactstrap";
-import { Link } from "react-router-dom";
+import React from "react"
+import { Row, Col } from "reactstrap"
+import { Link } from "react-router-dom"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 const EmailBasicTemplte = () => {
-  document.title = "Basic Action Email | Veltrix - React Admin & Dashboard Template";
+  document.title =
+    "Basic Action Email | Foodi - React Admin & Dashboard Template"
   return (
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
-          <Breadcrumbs maintitle="Veltrix" title="Email Templates" breadcrumbItem="Basic Email" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Email Templates"
+            breadcrumbItem="Basic Email"
+          />
           <Row className="email-template">
             <Col md="12">
               <table
@@ -23,15 +28,14 @@ const EmailBasicTemplte = () => {
                   margin: "0",
                   width: "100%",
                   backgroundColor: "transparent",
-                  color:"#000"
+                  color: "#000",
                 }}
                 // bgcolor="white"
               >
                 <tbody>
                   <tr
                     style={{
-                      fontFamily:
-                        "'Helvetica Neue',Helvetica,Arial,sans-serif",
+                      fontFamily: "'Helvetica Neue',Helvetica,Arial,sans-serif",
                       boxSizing: "border-box",
                       fontSize: "14px",
                       margin: "0",
@@ -118,8 +122,9 @@ const EmailBasicTemplte = () => {
                                   padding: "30px",
                                   borderRadius: "7px",
                                   backgroundColor: "#fff",
-                                  boxShadow: "0 0.75rem 1.5rem rgba(18,38,63,.03)",
-                                  border: "3px solid #3c4ccf"
+                                  boxShadow:
+                                    "0 0.75rem 1.5rem rgba(18,38,63,.03)",
+                                  border: "3px solid #3c4ccf",
                                 }}
                                 valign="top"
                               >
@@ -198,9 +203,9 @@ const EmailBasicTemplte = () => {
                                         valign="top"
                                       >
                                         We may need to send you critical
-                                        information about our service and it
-                                        is important that we have an accurate
-                                        email address.
+                                        information about our service and it is
+                                        important that we have an accurate email
+                                        address.
                                       </td>
                                     </tr>
 
@@ -280,7 +285,7 @@ const EmailBasicTemplte = () => {
                                         }}
                                         valign="top"
                                       >
-                                        <b>Veltrix</b>
+                                        <b>Foodi</b>
                                         <p>Support Team</p>
                                       </td>
                                     </tr>
@@ -308,7 +313,7 @@ const EmailBasicTemplte = () => {
                                         }}
                                         valign="top"
                                       >
-                                        {new Date().getFullYear()} © Veltrix
+                                        {new Date().getFullYear()} © Foodi
                                       </td>
                                     </tr>
                                   </tbody>
@@ -327,7 +332,7 @@ const EmailBasicTemplte = () => {
         </div>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default EmailBasicTemplte;
+export default EmailBasicTemplte
