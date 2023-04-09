@@ -8,7 +8,9 @@ import {
     GET_ALL_USERS,
     GET_ALL_ROLES,
     USER_UPDATE,
-    USER_UPDATE_FRESH
+    USER_UPDATE_FRESH,
+    USER_STATUS_UPDATE,
+    USER_STATUS_UPDATE_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -32,6 +34,10 @@ const initialState = {
     user_update_data: null,
     user_update_error: null,
     user_update_loading: false,
+
+    user_status_update_data: null,
+    user_status_update_error: null,
+    user_status_update_loading: false,
 
 }
 
@@ -104,6 +110,23 @@ const registerNew = (state = initialState, action) => {
             state = {
                 ...state,
                 user_update_loading: action.status,
+            }
+            break;
+
+        case USER_STATUS_UPDATE:
+            state = {
+                ...state,
+                user_status_update_data: action.payload,
+                user_status_update_error: null,
+                user_status_update_loading: action.status,
+                get_all_user_loading: false
+            };
+            break;
+
+        case USER_STATUS_UPDATE_FRESH:
+            state = {
+                ...state,
+                user_status_update_loading: action.status,
             }
             break;
 
