@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Badge, Button, Card, CardBody, CardTitle, Col, Container, Input, Modal, ModalBody, ModalHeader, Row } from 'reactstrap';
+import { Badge, Button, Card, CardBody, CardTitle, Col, Container, Input, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import Breadcrumbs from 'components/Common/Breadcrumb';
 import { toast } from 'react-toastify';
 import withRouter from 'components/Common/withRouter'; ` `
 import { connect, useSelector } from "react-redux";
-import { getAllAdminUsersAction, getAllUsersRolesAction, userUpdateAction, userUpdateFresh } from 'store/register-new/actions';
+import {
+    getAllAdminUsersAction, getAllUsersRolesAction, userUpdateAction, userUpdateFresh, userStatusUpdateAction, userStatusUpdateFresh
+} from 'store/register-new/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
 
@@ -13,8 +15,10 @@ function ManageUsers(props) {
     const user_update_state = useSelector(state => state.registerNew.user_update_loading);
     console.log(user_update_state);
     const [modal, setModal] = useState(false);
+    const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
 
     const toggle = () => setModal(!modal);
+    const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
     const handleEditUser = (row) => {
         console.log(row);
         toggle()
@@ -25,7 +29,8 @@ function ManageUsers(props) {
             permanent_address: row.permanent_address,
             mobileNumber: row.mobile_number,
             email: row.email,
-            id: row._id
+            id: row._id,
+            is_active: row.is_active,
 
 
         }));
@@ -37,7 +42,8 @@ function ManageUsers(props) {
         permanent_address: "",
         mobileNumber: "",
         email: "",
-        id: null
+        id: null,
+        is_active: true,
     })
 
 
@@ -48,6 +54,11 @@ function ManageUsers(props) {
         setFile(event.target.files[0])
 
     }
+
+    const [statusItem, setStatusItem] = useState({
+        subscriptionTypeId: "",
+        is_active: "",
+    });
 
     const [role, setRole] = useState();
     const [passwordStatus, setPasswordStatus] = useState(false);
@@ -71,6 +82,28 @@ function ManageUsers(props) {
         }
 
 
+    }
+
+    const handleStatusModal = (row) => {
+        setRegisterInfo(prevState => ({
+            first_name: row.first_name,
+            last_name: row.last_name,
+            present_address: row.present_address,
+            permanent_address: row.permanent_address,
+            mobileNumber: row.mobile_number,
+            email: row.email,
+            id: row._id,
+            is_active: row.is_active,
+        }));
+
+        toggleStatus();
+    }
+
+    const handleStatusUpdate = () => {
+
+        // console.log(statusItem);
+        props.userStatusUpdateAction(registerInfo);
+        // toggleDel();
     }
     let userData = undefined;
     if (props.get_all_user_roles_data?.length > 0) {
@@ -101,7 +134,10 @@ function ManageUsers(props) {
 
 
 
-    const statusRef = (cell, row) => <Badge color="success" style={{ padding: "12px" }}>Active</Badge>
+    const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
+
+    // const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
+    //     className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
 
     const activeData = [
         {
@@ -158,7 +194,17 @@ function ManageUsers(props) {
             toast.success("User Updated");
             props.userUpdateFresh();
         }
-    }, [props.get_all_user_loading, props.get_all_user_roles_loading, props.user_update_loading]);
+
+        if (props.user_status_update_loading === "Success") {
+            toast.success("User Status Updated");
+            toggleStatus();
+            props.userStatusUpdateFresh();
+        }
+        if (props.user_status_update_loading === "Failed") {
+            toast.error("Something went wrong");
+            props.userStatusUpdateFresh();
+        }
+    }, [props.get_all_user_loading, props.get_all_user_roles_loading, props.user_update_loading, props.user_status_update_loading]);
 
     return (
         <React.Fragment>
@@ -316,6 +362,22 @@ function ManageUsers(props) {
             </ModalFooter>
         </Modal> */}
                 {/* ============ delete modal ends=============== */}
+
+                {/* ============ status update modal starts=============== */}
+                <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
+                    <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
+                        <div className="icon-box">
+                            <i className="fa fa-exclamation-circle" style={{ color: "#DCA218", fontSize: "40px" }}></i>
+                        </div>
+                        Are you sure?
+                    </ModalHeader>
+                    <ModalBody>Do you really want to update status these records? </ModalBody>
+                    <ModalFooter>
+                        <Button color="secondary" onClick={toggleStatus}>Cancel</Button>{' '}
+                        <Button color="primary" onClick={handleStatusUpdate}>Update</Button>
+                    </ModalFooter>
+                </Modal>
+                {/* ============ status update modal ends=============== */}
             </div>
         </React.Fragment>
     )
@@ -336,6 +398,10 @@ const mapStateToProps = state => {
         user_update_error,
         user_update_loading,
 
+        user_status_update_data,
+        user_status_update_error,
+        user_status_update_loading,
+
     } = state.registerNew;
 
     return {
@@ -349,6 +415,10 @@ const mapStateToProps = state => {
         user_update_error,
         user_update_loading,
 
+        user_status_update_data,
+        user_status_update_error,
+        user_status_update_loading,
+
     };
 };
 
@@ -358,6 +428,8 @@ export default withRouter(
             getAllAdminUsersAction,
             getAllUsersRolesAction,
             userUpdateAction,
-            userUpdateFresh
+            userUpdateFresh,
+            userStatusUpdateAction,
+            userStatusUpdateFresh
         })(ManageUsers)
 );

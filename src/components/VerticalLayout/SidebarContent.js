@@ -180,6 +180,11 @@ const SidebarContent = props => {
                     {props.t("Administrative Manage User")}
                   </Link>
                 </li>
+                <li>
+                  <Link to="/subscription-types">
+                    {props.t("Subscription Types")}
+                  </Link>
+                </li>
                 {/* <li>
                   <Link to="/email-read">{props.t("Email Read")} </Link>
                 </li>

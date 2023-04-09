@@ -15,7 +15,7 @@ import { Link, useNavigate } from "react-router-dom"
 import AddZone from "./AddZone/AddZone"
 import { getAllZoneAction } from "store/actions"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 
@@ -44,11 +44,13 @@ function Zone(props) {
     </div>
   )
 
-  const statusRef = (cell, row) => (
-    <Badge color="success" style={{ padding: "12px" }}>
-      Activate
-    </Badge>
-  )
+  // const statusRef = (cell, row) => (
+  //   <Badge color="success" style={{ padding: "12px" }}>
+  //     Activate
+  //   </Badge>
+  // )
+
+  const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
 
   const activeData = [
     {

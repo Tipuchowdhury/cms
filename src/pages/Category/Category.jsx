@@ -18,7 +18,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { Link, useNavigate } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -102,11 +102,13 @@ function Category(props) {
     </div>
   )
 
-  const statusRef = (cell, row) => (
-    <Badge color="secondary" style={{ padding: "12px" }}>
-      Deactivate
-    </Badge>
-  )
+  // const statusRef = (cell, row) => (
+  //   <Badge color="secondary" style={{ padding: "12px" }}>
+  //     Deactivate
+  //   </Badge>
+  // )
+
+  const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
 
   console.log(props.add_category_loading)
   console.log(props.get_all_category_data)

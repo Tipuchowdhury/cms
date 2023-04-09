@@ -115,6 +115,7 @@ import PagesProfile from "pages/Utility/pages-profile"
 import City from "pages/City/City"
 import Zone from "pages/Zone/Zone"
 import ManageUsers from "pages/ManageUsers/ManageUsers"
+import SubscriptionTypes from "pages/SubscriptionTypes/SubscriptionTypes"
 import Restaurant from "pages/Restaurant/Restaurant"
 import Branch from "pages/Restaurant/Branch"
 import BranchAdd from "pages/Restaurant/BranchAdd/BranchAdd"
@@ -154,6 +155,7 @@ const userRoutes = [
   { path: "/city", component: <City /> },
   { path: "/register", component: <Register1 /> },
   { path: "/manage-users", component: <ManageUsers /> },
+  { path: "/subscription-types", component: <SubscriptionTypes /> },
   { path: "/restaurant", component: <Restaurant /> },
 
   // Category

@@ -8,7 +8,9 @@ import {
     GET_ALL_ROLES,
     GET_ALL_USERS,
     USER_UPDATE,
-    USER_UPDATE_FRESH
+    USER_UPDATE_FRESH,
+    USER_STATUS_UPDATE,
+    USER_STATUS_UPDATE_FRESH,
 
 } from "./actionTypes"
 import axios from "axios";
@@ -237,12 +239,12 @@ export const userUpdateAction = (registerInfo, role) => {
         permanent_address: registerInfo.permanent_address,
         mobile_number: registerInfo.mobileNumber,
         email: registerInfo.email,
-        role_id: role
+        role_id: role,
+        is_active: registerInfo.is_active,
     };
     return dispatch => {
         const headers = {
             "Content-Type": "application/json",
-
             "Access-Control-Allow-Origin": "*",
 
         };
@@ -270,6 +272,56 @@ export const userUpdateFresh = () => {
     return dispatch =>
         dispatch({
             type: USER_UPDATE_FRESH,
+            status: false,
+        });
+};
+
+
+export const userStatusUpdateAction = (registerInfo) => {
+
+    console.log(registerInfo);
+    var url = process.env.REACT_APP_LOCALHOST + "/User/Put";
+    const formData = {
+        _id: registerInfo.id,
+        first_name: registerInfo.first_name,
+        last_name: registerInfo.last_name,
+        present_address: registerInfo.present_address,
+        permanent_address: registerInfo.permanent_address,
+        mobile_number: registerInfo.mobileNumber,
+        email: registerInfo.email,
+        is_active: !(registerInfo.is_active),
+    };
+    // return dispatch => {
+    //     const headers = {
+    //         "Content-Type": "application/json",
+
+    //         "Access-Control-Allow-Origin": "*",
+
+    //     };
+    //     axios
+    //         .put(url, formData, { headers: headers })
+    //         .then(response => {
+    //             dispatch({
+    //                 type: USER_STATUS_UPDATE,
+    //                 payload: response.data,
+    //                 status: "Success",
+    //             });
+    //         })
+    //         .catch(error => {
+    //             dispatch({
+    //                 type: USER_STATUS_UPDATE,
+    //                 payload: error,
+    //                 status: "Failed",
+    //             });
+    //         });
+    // };
+};
+
+export const userStatusUpdateFresh = () => {
+    console.log("===== I am in the fresh ========")
+    return dispatch =>
+        dispatch({
+            type: USER_STATUS_UPDATE_FRESH,
             status: false,
         });
 };
