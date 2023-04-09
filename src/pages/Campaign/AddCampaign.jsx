@@ -17,17 +17,31 @@ import {
   getAllBranchAction,
   addCampaignAction,
   addCampaignFresh,
+  campaignEditAction,
+  campaignEditFresh,
 } from "store/actions"
 import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 function AddCampaign(props) {
   const navigate = useNavigate()
+  const location = useLocation()
+  console.log("lof", location?.state?.restaurants)
 
   //select multiple branch
-  const [selectedBranch, setSelectedBranch] = useState(null)
+  const common_branches = props?.get_all_branch_data?.filter(elem =>
+    location?.state?.restaurants?.find(({ res_id }) => elem._id === res_id)
+  )
 
+  const branch_data_edit = common_branches
+    ? common_branches?.map((item, key) => {
+        return { label: item.name, value: item._id }
+      })
+    : ""
+  const [selectedBranch, setSelectedBranch] = useState(
+    branch_data_edit ? branch_data_edit : ""
+  )
   const handleSelectBranch = e => {
     setSelectedBranch(e)
   }
@@ -41,11 +55,15 @@ function AddCampaign(props) {
   }
 
   const [campaignInfo, setCampaignInfo] = useState({
-    name: "",
-    image: "",
-    description: "",
-    start_date: new Date().toISOString(),
-    end_date: new Date().toISOString(),
+    name: location.state ? location.state.name : "",
+    image: location.state ? location.state.image : "",
+    description: location.state ? location.state.description : "",
+    start_date: location.state
+      ? location.state.start_date
+      : new Date().toISOString(),
+    end_date: location.state
+      ? location.state.end_date
+      : new Date().toISOString(),
   })
   console.log("tt", new Date().toISOString())
   const handleTimeChange = e => {
@@ -74,6 +92,13 @@ function AddCampaign(props) {
     props.addCampaignAction(uniqueId, campaignInfo, selectedBranch)
   }
 
+  const handleSubmitForEdit = e => {
+    e.preventDefault()
+    console.log("======================I am in the edit form==================")
+
+    props.campaignEditAction(location.state._id, campaignInfo, selectedBranch)
+  }
+
   console.log(props.add_campaign_loading)
   useEffect(() => {
     if (props.get_all_branch_loading == false) {
@@ -82,6 +107,12 @@ function AddCampaign(props) {
 
     console.log("add_campaign_loading :", props.add_campaign_loading)
     if (props.add_campaign_loading === "Success") {
+      // redirect
+      props.addCampaignFresh()
+      navigate("/campaign")
+    }
+
+    if (props.campaign_edit_loading === "Success") {
       // redirect
       props.addCampaignFresh()
       navigate("/campaign")
@@ -98,7 +129,7 @@ function AddCampaign(props) {
             <Breadcrumbs
               maintitle="Foodi"
               title="Campaign"
-              breadcrumbItem="Add Campaign"
+              breadcrumbItem={location.state ? "Edit Campaign" : "Add Campaign"}
             />
 
             <Row>
@@ -116,7 +147,9 @@ function AddCampaign(props) {
                       }}
                     >
                       <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
-                        Add a New Campaign{" "}
+                        {location.state
+                          ? "Edit Campaign"
+                          : "Add a New Campaign"}
                       </CardTitle>
                     </div>
                   </CardBody>
@@ -125,7 +158,11 @@ function AddCampaign(props) {
             </Row>
             <Row>
               <Col className="col-10 mx-auto">
-                <form className="mt-4" action="#" onSubmit={handleSubmit}>
+                <form
+                  className="mt-4"
+                  action="#"
+                  onSubmit={location.state ? handleSubmitForEdit : handleSubmit}
+                >
                   <Row className="mb-3">
                     <label
                       htmlFor="example-text-input"
@@ -243,7 +280,7 @@ function AddCampaign(props) {
                         className="btn btn-primary w-md waves-effect waves-light"
                         type="submit"
                       >
-                        Add Campaign
+                        {location.state ? "Edit Campaign" : "Add Campaign"}
                       </button>
                     </div>
                   </div>
@@ -260,11 +297,12 @@ function AddCampaign(props) {
 const mapStateToProps = state => {
   const { get_all_branch_loading, get_all_branch_data } = state.Restaurant
 
-  const { add_campaign_loading } = state.Campaign
+  const { add_campaign_loading, campaign_edit_loading } = state.Campaign
   return {
     get_all_branch_loading,
     get_all_branch_data,
     add_campaign_loading,
+    campaign_edit_loading,
   }
 }
 
@@ -273,5 +311,7 @@ export default withRouter(
     getAllBranchAction,
     addCampaignAction,
     addCampaignFresh,
+    campaignEditAction,
+    campaignEditFresh,
   })(AddCampaign)
 )

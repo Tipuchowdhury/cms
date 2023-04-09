@@ -110,11 +110,23 @@ export const getAllCampaignFresh = () => {
   }
 }
 
-export const campaignNameEditAction = (name, id) => {
+export const campaignEditAction = (id, data, selectedBranch) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Campaign/Put"
+  const selectedBranchData =
+    selectedBranch?.length > 0
+      ? selectedBranch.map(item => {
+          const val = uuidv4()
+          return {
+            _id: val,
+            res_id: item.value,
+            campaign_id: id,
+          }
+        })
+      : null
   const formData = {
     _id: id,
-    name: name,
+    ...data,
+    restaurants: selectedBranchData,
   }
   return dispatch => {
     const headers = {
@@ -126,14 +138,14 @@ export const campaignNameEditAction = (name, id) => {
       .put(url, formData, { headers: headers })
       .then(response => {
         dispatch({
-          type: CAMPAIGN_NAME_EDIT,
+          type: CAMPAIGN_EDIT,
           payload: response.data,
           status: "Success",
         })
       })
       .catch(error => {
         dispatch({
-          type: CAMPAIGN_NAME_EDIT,
+          type: CAMPAIGN_EDIT,
           payload: error,
           status: "Failed",
         })
@@ -141,10 +153,10 @@ export const campaignNameEditAction = (name, id) => {
   }
 }
 
-export const campaignNameEditFresh = () => {
+export const campaignEditFresh = () => {
   return dispatch => {
     dispatch({
-      type: CAMPAIGN_NAME_EDIT_FRESH,
+      type: CAMPAIGN_EDIT_FRESH,
       payload: null,
       status: false,
     })

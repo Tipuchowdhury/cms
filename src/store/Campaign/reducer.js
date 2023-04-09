@@ -3,9 +3,9 @@ import {
   ADD_CAMPAIGN_FRESH,
   GET_ALL_CAMPAIGN,
   GET_ALL_CAMPAIGN_FRESH,
-  CAMPAIGN_NAME_EDIT,
-  CAMPAIGN_NAME_EDIT_FRESH,
-  GET_CAMPAIGN_NAME_BY_ID,
+  CAMPAIGN_EDIT,
+  CAMPAIGN_EDIT_FRESH,
+  GET_CAMPAIGN_BY_ID,
   CAMPAIGN_DELETE,
   CAMPAIGN_DELETE_FRESH,
 } from "./actionTypes"
@@ -21,9 +21,9 @@ const initialState = {
   get_all_campaign_error: null,
   get_all_campaign_loading: false,
 
-  //campaign name edit
-  campaign_name_edit_data: null,
-  campaign_name_edit_loading: false,
+  //campaign edit
+  campaign_edit_data: null,
+  campaign_edit_loading: false,
 
   campaign_delete_loading: false,
 }
@@ -63,19 +63,19 @@ const campaign = (state = initialState, action) => {
       }
       break
 
-    case CAMPAIGN_NAME_EDIT:
+    case CAMPAIGN_EDIT:
       state = {
         ...state,
-        campaign_name_edit_data: action.payload,
-        campaign_name_edit_loading: action.status,
+        campaign_edit_data: action.payload,
+        campaign_edit_loading: action.status,
         get_all_campaign_loading: false,
       }
       break
 
-    case CAMPAIGN_NAME_EDIT_FRESH:
+    case CAMPAIGN_EDIT_FRESH:
       state = {
         ...state,
-        campaign_name_edit_loading: action.status,
+        campaign_edit_loading: action.status,
       }
       break
 

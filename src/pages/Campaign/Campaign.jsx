@@ -26,8 +26,6 @@ import {
   addCampaignFresh,
   getAllCampaignAction,
   getAllCampaignFresh,
-  campaignNameEditAction,
-  campaignNameEditFresh,
   campaignDeleteAction,
   campaignDeleteFresh,
 } from "store/Campaign/actions"
@@ -40,6 +38,7 @@ function Campaign(props) {
   const [campaignname, setCampaignName] = useState()
   const [editModal, setEditModal] = useState(false)
   const [reload, setReload] = useState(false)
+  const navigate = useNavigate()
 
   // delete modal
   const [deleteItem, setDeleteItem] = useState()
@@ -53,7 +52,6 @@ function Campaign(props) {
   }
 
   const toggle = () => setModal(!modal)
-  const toggleEditModal = () => setEditModal(!editModal)
   const handleSubmit = e => {
     e.preventDefault()
     toggle()
@@ -62,22 +60,9 @@ function Campaign(props) {
     console.log(val)
     props.addCampaignAction(name, val)
   }
-  const handleEditCampaignName = row => {
-    console.log(row)
-    setCampaignId(row._id)
-    setCampaignName(row.name)
-    toggleEditModal()
-  }
-  const handleCampaignName = e => {
-    setCampaignName(e.target.value)
-  }
 
-  const handleEditModalSubmit = e => {
-    e.preventDefault()
-    toggleEditModal()
-    console.log(campaignname)
-    console.log(campaignId)
-    props.campaignNameEditAction(campaignname, campaignId)
+  const handleEdit = row => {
+    navigate("/add-campaign", { state: row })
   }
   const handleDeleteModal = row => {
     setDeleteItem(row._id)
@@ -88,7 +73,7 @@ function Campaign(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEditCampaignName(row)}
+        onClick={() => handleEdit(row)}
       >
         Edit
       </Button>{" "}
@@ -103,8 +88,11 @@ function Campaign(props) {
   )
 
   const statusRef = (cell, row) => (
-    <Badge color="secondary" style={{ padding: "12px" }}>
-      Deactivate
+    <Badge
+      color={row.is_active ? "success" : "secondary"}
+      style={{ padding: "12px" }}
+    >
+      {row.is_active ? "Active" : "Deactivate"}
     </Badge>
   )
 
@@ -262,55 +250,6 @@ function Campaign(props) {
           </ModalBody>
         </Modal>
 
-        {/* ============ edit modal start=============== */}
-        <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-          <ModalHeader toggle={toggleEditModal}>Edit campaign name</ModalHeader>
-          <ModalBody>
-            <form className="mt-1" onSubmit={handleEditModalSubmit}>
-              <div className="mb-3">
-                <label className="form-label" htmlFor="username1">
-                  Campaign Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="username1"
-                  placeholder="Enter campaign name"
-                  required
-                  value={campaignname ? campaignname : ""}
-                  onChange={handleCampaignName}
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label" htmlFor="username1">
-                  Image
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="username1"
-                  placeholder="Enter campaign name"
-                  required
-                  value={campaignname ? campaignname : ""}
-                  onChange={handleCampaignName}
-                />
-              </div>
-              <div
-                style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
-              >
-                <Button color="primary" type="submit">
-                  Submit
-                </Button>{" "}
-                <Button color="secondary" onClick={toggleEditModal}>
-                  Cancel
-                </Button>
-              </div>
-            </form>
-          </ModalBody>
-          <ModalFooter></ModalFooter>
-        </Modal>
-        {/* ============ edit modal ends=============== */}
-
         {/* ============ delete modal starts=============== */}
         <Modal isOpen={modalDel} toggle={toggleDel} centered>
           <ModalHeader
@@ -353,8 +292,6 @@ const mapStateToProps = state => {
     get_all_campaign_data,
     get_all_campaign_error,
     get_all_campaign_loading,
-
-    campaign_name_edit_loading,
     campaign_delete_loading,
   } = state.Campaign
 
@@ -367,7 +304,6 @@ const mapStateToProps = state => {
     get_all_campaign_error,
     get_all_campaign_loading,
 
-    campaign_name_edit_loading,
     campaign_delete_loading,
   }
 }
@@ -378,8 +314,6 @@ export default withRouter(
     addCampaignFresh,
     getAllCampaignAction,
     getAllCampaignFresh,
-    campaignNameEditAction,
-    campaignNameEditFresh,
     campaignDeleteAction,
     campaignDeleteFresh,
   })(Campaign)

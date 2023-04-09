@@ -205,7 +205,7 @@ const SidebarContent = props => {
                   <Link to="/category">{props.t("Manage Menu Category")} </Link>
                 </li>
                 <li>
-                  \<Link to="/menu">{props.t("Manage Restaurant Menu")} </Link>
+                  <Link to="/menu">{props.t("Manage Restaurant Menu")} </Link>
                 </li>
                 <li>
                   <Link to="/addons-category">
