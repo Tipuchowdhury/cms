@@ -6,59 +6,21 @@ import { toast } from 'react-toastify';
 import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { restaurantAddAction, getAllRestaurantAction, restaurantNameUpdateAction } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
+import { Link } from 'react-router-dom';
+
+
 
 function Menu(props) {
 
-    const [name, setName] = useState("")
-    const [modal, setModal] = useState(false);
-    const [restaurantId, setId] = useState();
-    const [restaurantName, setRestaurantName] = useState();
-    const [editModal, setEditModal] = useState(false);
-
-    // delete modal
-    const [deleteItem, setDeleteItem] = useState()
     const [modalDel, setModalDel] = useState(false);
 
     const toggleDel = () => setModalDel(!modalDel);
+
     const handleDelete = () => {
         toggleDel();
         console.log(deleteItem)
         props.cityDeleteAction(deleteItem);
-    }
-
-    const toggle = () => setModal(!modal);
-    const toggleEditModal = () => setEditModal(!editModal);
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        toggle();
-        const val = uuidv4();
-        console.log(name)
-        console.log(val);
-        props.restaurantAddAction(name, val);
-        setName("")
-    }
-    const handleEditName = (row) => {
-        console.log(row);
-        setId(row._id);
-        setRestaurantName(row.name);
-        toggleEditModal();
-    }
-    const handleNameChange = (e) => {
-        setRestaurantName(e.target.value);
-    }
-
-    const handleEditModalSubmit = (e) => {
-        e.preventDefault();
-        toggleEditModal();
-        console.log(restaurantName)
-        console.log(restaurantId);
-        props.restaurantNameUpdateAction(restaurantName, restaurantId)
-    }
-    const handleDeleteModal = (row) => {
-        setDeleteItem(row._id);
-        toggleDel();
     }
     const actionRef = (cell, row) =>
         <div style={{ display: "flex", gap: 10 }}>
@@ -133,71 +95,25 @@ function Menu(props) {
                                 <CardBody >
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
                                         <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Menu </CardTitle>
-                                        <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle}>
-                                            Add Menu
-                                        </Button>
+                                        <Link to="/add-menu">
+                                            <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}>
+                                                Add Menu
+                                            </Button>
+                                        </Link>
                                     </div>
 
-                                    {props.get_all_restaurant_data ? props.get_all_restaurant_data.length > 0 ? <DatatableTablesWorking products={props.get_all_restaurant_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_restaurant_data?._id} /> : null : null}
+                                    {/* {props.get_all_restaurant_data ? props.get_all_restaurant_data.length > 0 ? <DatatableTablesWorking products={props.get_all_restaurant_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_restaurant_data?._id} /> : null : null} */}
 
                                 </CardBody>
                             </Card>
                         </Col>
                     </Row>
                 </Container>
-                <Modal isOpen={modal} toggle={toggle} centered>
-                    <ModalHeader toggle={toggle}>Add Restaurant</ModalHeader>
-                    <ModalBody>
-                        <form className="mt-1" onSubmit={handleSubmit}>
 
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="username">Restaurant Name</label>
-                                <input type="text" className="form-control" id="username" placeholder="Enter city name" required value={name} onChange={(e) => setName(e.target.value)} />
-                            </div>
-                            <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
-                                <Button color="secondary" onClick={toggle}>
-                                    Cancel
-                                </Button>{' '}
-                                <Button color="primary" type='submit'>
-                                    Submit
-                                </Button>
-
-                            </div>
-
-                        </form>
-                    </ModalBody>
-                </Modal>
-
-                {/* ============ edit modal start=============== */}
-                <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-                    <ModalHeader toggle={toggleEditModal}>Edit city name</ModalHeader>
-                    <ModalBody>
-                        <form className="mt-1" onSubmit={handleEditModalSubmit}>
-
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="username1">City Name</label>
-                                <input type="text" className="form-control" id="username1" placeholder="Enter city name" required value={restaurantName ? restaurantName : ''} onChange={handleNameChange} />
-                            </div>
-                            <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
-                                <Button color="primary" type="submit">
-                                    Submit
-                                </Button>{' '}
-                                <Button color="secondary" onClick={toggleEditModal}>
-                                    Cancel
-                                </Button>
-                            </div>
-
-                        </form>
-                    </ModalBody>
-                    <ModalFooter>
-
-                    </ModalFooter>
-                </Modal>
-                {/* ============ edit modal ends=============== */}
 
                 {/* ============ delete modal starts=============== */}
-                <Modal isOpen={modalDel} toggle={toggleDel} centered>
+                {/* <Modal isOpen={modalDel} toggle={toggleDel} centered>
                     <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
                         <div className="icon-box">
                             <i className="fa red-circle fa-trash" style={{ color: "red", fontSize: "40px" }}></i>
@@ -209,7 +125,7 @@ function Menu(props) {
                         <Button color="secondary" onClick={toggleDel}>Cancel</Button>{' '}
                         <Button color="danger" onClick={handleDelete}>Delete</Button>
                     </ModalFooter>
-                </Modal>
+                </Modal> */}
                 {/* ============ delete modal ends=============== */}
             </div>
         </React.Fragment>
@@ -221,29 +137,17 @@ const mapStateToProps = state => {
 
     const {
 
-        add_restaurant_data,
-        add_restaurant_error,
-        add_restaurant_loading,
 
-        get_all_restaurant_data,
-        get_all_restaurant_loading,
     } = state.Restaurant;
 
     return {
-        add_restaurant_data,
-        add_restaurant_error,
-        add_restaurant_loading,
 
-        get_all_restaurant_data,
-        get_all_restaurant_loading,
     };
 };
 
 export default withRouter(
     connect(mapStateToProps,
         {
-            restaurantAddAction,
-            getAllRestaurantAction,
-            restaurantNameUpdateAction
+
         })(Menu)
 );

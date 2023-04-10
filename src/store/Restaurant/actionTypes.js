@@ -12,6 +12,10 @@ export const ADD_ZONE_FRESH = "ADD_ZONE_FRESH";
 export const EDIT_ZONE = "EDIT_ZONE";
 export const EDIT_ZONE_FRESH = "EDIT_ZONE_FRESH";
 export const EDIT_BRANCH_FRESH = "EDIT_ZONE_FRESH";
+export const ADD_ONS_CATEGORY = "ADD_ONS_CATEGORY";
+export const ADD_CUISINE = "ADD_CUISINE";
+export const GET_CUISINE = "GET_CUISINE";
+export const EDIT_CUISINE = "EDIT_CUISINE";
 
 
 

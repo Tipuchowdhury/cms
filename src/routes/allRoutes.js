@@ -129,6 +129,8 @@ import AddOnsCategory from "pages/Restaurant/AddOnsCategory/AddOnsCategory"
 import CategoryAdd from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryAdd"
 import Slider from "pages/Slider/Slider"
 import SliderAdd from "pages/Slider/addSlider/SliderAdd"
+import AddMenu from "pages/Restaurant/Menu/AddMenu/AddMenu"
+import Cuisine from "pages/Restaurant/Cuisine/Cuisine"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -168,6 +170,14 @@ const userRoutes = [
   { path: "/manage-branch", component: <Branch /> },
   { path: "/branch-add", component: <BranchAdd /> },
   { path: "/menu", component: <Menu /> },
+  { path: "/add-menu", component: <AddMenu /> },
+  { path: "/addons-category", component: <AddOnsCategory /> },
+  { path: "/category-addons", component: <CategoryAdd /> },
+  { path: "/cuisine", component: <Cuisine /> },
+
+  //Sliders
+  { path: "/slider", component: <Slider /> },
+  { path: "/add-slider", component: <SliderAdd /> },
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },
   { path: "/chartist-charts", component: <ChartistChart /> },

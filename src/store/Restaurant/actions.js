@@ -9,7 +9,11 @@ import {
     GET_ALL_ZONE,
     EDIT_ZONE,
     ADD_ZONE_FRESH,
-    EDIT_ZONE_FRESH
+    EDIT_ZONE_FRESH,
+    ADD_ONS_CATEGORY,
+    ADD_CUISINE,
+    GET_CUISINE,
+    EDIT_CUISINE
 
 } from "./actionTypes"
 import axios from "axios";
@@ -577,5 +581,152 @@ export const editBranchFresh = () => {
             payload: null,
             status: false,
         });
+    };
+};
+
+export const addOnsCategoryAction = (val, category, isChecked) => {
+    var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Post";
+    const val_id = uuidv4();
+    let formData = {
+        _id: val,
+        name: category.name,
+        cat_is_multiple: isChecked,
+        cat_max_choic: parseInt(category.num_of_choice),
+        language_slug: "en",
+        add_on_category_desc: category.add_on_category_desc,
+        variation_id: val_id,
+        //is_active: true
+
+    };
+
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        };
+
+        axios
+            .post(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: "ADD_ONS_CATEGORY",
+                    payload: response.data,
+                    status: "Success",
+                });
+                toast.success("Addon Category Addedd Successfully");
+            })
+            .catch(error => {
+                dispatch({
+                    type: "ADD_ONS_CATEGORY",
+                    error: error,
+                    status: "Failed",
+                });
+                toast.error("Addon Category Add Failed");
+            });
+
+    };
+
+};
+
+export const addCuisineAction = (id, name) => {
+    var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Post";
+
+
+    let formData = {
+        _id: id,
+        name: name,
+        imane: "https://unsplash.com/photos/kcA-c3f_3FE",
+
+    };
+
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        };
+
+        axios
+            .post(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: "ADD_CUISINE",
+                    payload: response.data,
+                    status: "Success",
+                });
+                toast.success("Cuisine Addedd Successfully");
+            })
+            .catch(error => {
+                dispatch({
+                    type: "ADD_CUISINE",
+                    error: error,
+                    status: "Failed",
+                });
+                toast.error("Cuisine Add Failed");
+            });
+
+    };
+
+};
+
+export const getAllCuisneAction = () => {
+    var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Get";
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+
+        };
+        axios
+            .get(url, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: GET_CUISINE,
+                    payload: response.data,
+                    status: "Success",
+                });
+
+            })
+            .catch(error => {
+                dispatch({
+                    type: GET_CUISINE,
+                    status: "Failed",
+                    error: error
+                });
+
+            });
+    };
+};
+
+export const cuisineEditAction = (id, editName) => {
+    var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Put";
+    const formData = {
+        _id: id,
+        name: editName,
+        imane: "https://unsplash.com/photos/kcA-c3f_3FE",
+    };
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+
+        };
+        axios
+            .put(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: EDIT_CUISINE,
+                    status: "Success",
+                });
+                toast.success("Edit Cuisine Successfully");
+            })
+            .catch(error => {
+                dispatch({
+                    type: EDIT_CUISINE,
+                    status: "Failed",
+                });
+                toast.error("Edit Cuisine Fialed !!");
+            });
     };
 };

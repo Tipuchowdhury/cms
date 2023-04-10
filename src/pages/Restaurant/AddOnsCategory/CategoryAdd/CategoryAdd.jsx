@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { restaurantAddAction, getAllRestaurantAction, restaurantNameUpdateAction } from 'store/actions';
+import { addOnsCategoryAction } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 
 function CategoryAdd(props) {
@@ -17,6 +17,7 @@ function CategoryAdd(props) {
 
     })
     const [checked, setChecked] = useState(false);
+    const [isChecked, setIsChecked] = useState(false)
     const addOnsTemplate = { addOnName: "", price: "" }
     const [addOns, setAddOns] = useState([addOnsTemplate]);
     const handleAddOnsCat = (e, index) => {
@@ -45,11 +46,23 @@ function CategoryAdd(props) {
         setCategory({ ...category, [name]: value })
 
     }
+
+    const checkHandler = () => {
+        setIsChecked(!isChecked)
+    }
     const handleChange = () => {
 
         setChecked(!checked);
 
     };
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        console.log(category);
+        console.log(isChecked);
+        const val = uuidv4();
+        props.addOnsCategoryAction(val, category, isChecked)
+    }
     // useEffect(() => {
     //     if (props.get_all_restaurant_loading == false) {
     //         props.getAllRestaurantAction();
@@ -58,6 +71,8 @@ function CategoryAdd(props) {
     // }, [props.get_all_restaurant_loading]);
 
     // console.log(props.get_all_restaurant_data);
+
+    console.log(props.add_ons_category_data);
     return (
         <React.Fragment>
 
@@ -79,7 +94,7 @@ function CategoryAdd(props) {
                     </Row>
                     <Row>
                         <Col className="col-10 mx-auto">
-                            <form className="mt-0" action="#">
+                            <form className="mt-0" onSubmit={handleFormSubmit}>
                                 <Row className="mb-3">
                                     <label
                                         htmlFor="example-text-input"
@@ -114,7 +129,7 @@ function CategoryAdd(props) {
 
                                     <div className="col-md-10">
 
-                                        <input type="checkbox" id="cat_is_multiple" name="cat_is_multiple" onChange={handleInputs} value="true" style={{ margin: "15px 5px 20px 0px" }} />Multiple Selection
+                                        <input type="checkbox" id="cat_is_multiple" name="cat_is_multiple" checked={isChecked} onChange={checkHandler} value="true" style={{ margin: "15px 5px 20px 0px" }} />Multiple Selection
 
                                         {addOns.map((row, idx) => (
                                             <React.Fragment key={idx}>
@@ -149,14 +164,13 @@ function CategoryAdd(props) {
                                             Add
                                         </Button>
 
-                                        {checked ?
+                                        {isChecked ?
                                             <div className="mt-4 col-lg-3">
                                                 <label className="form-label" htmlFor="subject">Maximum required number of choice(s)</label>
-                                                <input type="checkbox" id="subject" className="form-control" placeholder="Enter number" name="num_of_choice" onChange={handleChange} value="true" />
+                                                <input type="number" id="subject" className="form-control" placeholder="Enter number" name="num_of_choice" onChange={handleInputs} />
                                             </div>
+                                            : ""}
 
-                                            : ""
-                                        }
 
                                     </div>
 
@@ -187,29 +201,21 @@ const mapStateToProps = state => {
 
     const {
 
-        add_restaurant_data,
-        add_restaurant_error,
-        add_restaurant_loading,
-
-        get_all_restaurant_data,
-        get_all_restaurant_loading,
+        add_ons_category_data,
+        add_ons_category_error,
+        add_ons_category_loading,
     } = state.Restaurant;
 
     return {
-        add_restaurant_data,
-        add_restaurant_error,
-        add_restaurant_loading,
-
-        get_all_restaurant_data,
-        get_all_restaurant_loading,
+        add_ons_category_data,
+        add_ons_category_error,
+        add_ons_category_loading,
     };
 };
 
 export default withRouter(
     connect(mapStateToProps,
         {
-            restaurantAddAction,
-            getAllRestaurantAction,
-            restaurantNameUpdateAction
+            addOnsCategoryAction
         })(CategoryAdd)
 );
