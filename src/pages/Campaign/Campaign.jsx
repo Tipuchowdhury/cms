@@ -18,7 +18,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { Link, useNavigate } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -81,7 +81,7 @@ function Campaign(props) {
   }
 
   const handleStatusUpdate = () => {
-    console.log(editInfo)
+    // console.log(editInfo)
     props.campaignStatusEditAction({
       ...editInfo,
       is_active: !editInfo.is_active,

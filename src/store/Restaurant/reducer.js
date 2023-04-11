@@ -9,11 +9,15 @@ import {
     ADD_ZONE,
     GET_ALL_ZONE,
     EDIT_ZONE,
+    EDIT_ZONE_STATUS,
     ADD_ZONE_FRESH,
     EDIT_ZONE_FRESH,
+    EDIT_ZONE_STATUS_FRESH,
     ADD_BRANCH_FRESH,
     EDIT_BRANCH,
     EDIT_BRANCH_FRESH,
+    EDIT_BRANCH_STATUS,
+    EDIT_BRANCH_STATUS_FRESH,
     ADD_ONS_CATEGORY,
     ADD_CUISINE,
     GET_CUISINE,
@@ -53,7 +57,9 @@ const initialState = {
     get_all_zone_loading: false,
 
     edit_zone_loading: false,
+    edit_zone_status_loading: false,
     edit_branch_loading: false,
+    edit_branch_status_loading: false,
 
     add_ons_category_data: null,
     add_ons_category_error: null,
@@ -167,6 +173,14 @@ const Restaurant = (state = initialState, action) => {
             }
             break;
 
+        case EDIT_ZONE_STATUS:
+            state = {
+                ...state,
+                edit_zone_status_loading: action.status,
+                get_all_zone_loading: false
+            }
+            break;
+
         case ADD_ZONE_FRESH:
             state = {
                 ...state,
@@ -178,6 +192,13 @@ const Restaurant = (state = initialState, action) => {
             state = {
                 ...state,
                 edit_zone_loading: action.status,
+            }
+            break;
+
+        case EDIT_ZONE_STATUS_FRESH:
+            state = {
+                ...state,
+                edit_zone_status_loading: action.status,
             }
             break;
 
@@ -198,6 +219,20 @@ const Restaurant = (state = initialState, action) => {
             state = {
                 ...state,
                 edit_branch_loading: action.status,
+            }
+            break;
+
+        case EDIT_BRANCH_STATUS:
+            state = {
+                ...state,
+                edit_branch_status_loading: action.status,
+                get_all_branch_loading: false,
+            }
+            break;
+        case EDIT_BRANCH_STATUS_FRESH:
+            state = {
+                ...state,
+                edit_branch_status_loading: action.status,
             }
             break;
 

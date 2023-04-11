@@ -6,10 +6,14 @@ import {
     GET_ALL_CUSINE,
     ADD_BRANCH,
     GET_ALL_BRANCH,
+    EDIT_BRANCH_STATUS,
+    EDIT_BRANCH_STATUS_FRESH,
     ADD_ZONE,
     GET_ALL_ZONE,
     EDIT_ZONE,
     ADD_ZONE_FRESH,
+    EDIT_ZONE_STATUS,
+    EDIT_ZONE_STATUS_FRESH,
     EDIT_ZONE_FRESH,
     ADD_ONS_CATEGORY,
     ADD_CUISINE,
@@ -367,6 +371,40 @@ export const branchEditAction = (id, zoneInfo, lat, lng, file, coverFile, curren
 
 };
 
+export const branchStatusEditAction = data => {
+    var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put";
+
+
+    const formData = data;
+
+
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        };
+
+        axios
+            .put(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: EDIT_BRANCH_STATUS,
+                    payload: response.data,
+                    status: "Success",
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: EDIT_BRANCH_STATUS,
+                    payload: error,
+                    status: "Failed",
+                });
+            });
+
+    };
+
+};
+
 
 export const getAllBranchAction = () => {
     var url = process.env.REACT_APP_LOCALHOST + "/Branch/Get";
@@ -599,6 +637,47 @@ export const zoneEditFresh = () => {
     };
 };
 
+export const zoneStatusEditAction = data => {
+
+    var url = process.env.REACT_APP_LOCALHOST + "/Zone/Put";
+
+    const formData = data;
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+
+        };
+        axios
+            .put(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: EDIT_ZONE_STATUS,
+                    status: "Success",
+                });
+                // toast.success("Updated Successfully");
+            })
+            .catch(error => {
+                dispatch({
+                    type: EDIT_ZONE_STATUS,
+                    status: "Failed",
+                });
+                // toast.error("Something went wrong!!");
+            });
+    };
+};
+
+export const zoneStatusEditActionFresh = () => {
+    return dispatch => {
+        dispatch({
+            type: EDIT_ZONE_STATUS_FRESH,
+            payload: null,
+            status: false,
+        });
+    };
+};
+
 export const addBranchFresh = () => {
     return dispatch => {
         dispatch({
@@ -613,6 +692,16 @@ export const editBranchFresh = () => {
     return dispatch => {
         dispatch({
             type: "EDIT_BRANCH_FRESH",
+            payload: null,
+            status: false,
+        });
+    };
+};
+
+export const editBranchStatusFresh = () => {
+    return dispatch => {
+        dispatch({
+            type: "EDIT_BRANCH_STATUS_FRESH",
             payload: null,
             status: false,
         });

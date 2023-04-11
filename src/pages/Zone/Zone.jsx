@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import {
   Badge,
   Button,
@@ -7,19 +7,39 @@ import {
   CardTitle,
   Col,
   Container,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   Row,
 } from "reactstrap"
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { ToastContainer, toast } from "react-toastify"
 import { Link, useNavigate } from "react-router-dom"
 import AddZone from "./AddZone/AddZone"
-import { getAllZoneAction } from "store/actions"
-import withRouter from "components/Common/withRouter"
-  ; ` `
+import { getAllZoneAction, zoneStatusEditAction, zoneStatusEditActionFresh } from "store/actions"
+import withRouter from "components/Common/withRouter";
 import { connect } from "react-redux"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 
 function Zone(props) {
+
+  const [editInfo, setEditInfo] = useState(false);
+  const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
+  const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
+  const handleStatusModal = row => {
+    setEditInfo(row)
+
+    toggleStatus()
+  }
+
+  const handleStatusUpdate = () => {
+    console.log(editInfo)
+    props.zoneStatusEditAction({
+      ...editInfo,
+      is_active: !editInfo.is_active,
+    })
+  }
   const navigate = useNavigate()
   const handleEdit = row => {
     console.log(row)
@@ -50,7 +70,16 @@ function Zone(props) {
   //   </Badge>
   // )
 
-  const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
+  // const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
+  const statusRef = (cell, row) => (
+    <Button
+      color={row.is_active ? "success" : "secondary"}
+      className="btn waves-effect waves-light"
+      onClick={() => handleStatusModal(row)}
+    >
+      {row.is_active ? "Active" : "Deactivate"}
+    </Button>
+  )
 
   const activeData = [
     {
@@ -82,8 +111,19 @@ function Zone(props) {
     if (props.get_all_zone_loading == false) {
       props.getAllZoneAction()
     }
-  }, [props.get_all_zone_loading])
-  console.log(props.get_all_zone_data)
+
+    if (props.edit_zone_status_loading == "Success") {
+      toast.success("Zone Status Updated Successfully");
+      toggleStatus();
+      props.zoneStatusEditActionFresh();
+    }
+    if (props.edit_zone_status_loading == "Failed") {
+      toast.error("Something went wrong");
+      // toggleStatus();
+      props.zoneStatusEditActionFresh();
+    }
+  }, [props.get_all_zone_loading, props.edit_zone_status_loading])
+  // console.log(props.get_all_zone_data)
   return (
     <React.Fragment>
       <ToastContainer />
@@ -136,6 +176,35 @@ function Zone(props) {
             </Col>
           </Row>
         </Container>
+
+        {/* ============ status update modal starts=============== */}
+        <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
+          <ModalHeader
+            className="text-center"
+            style={{ textAlign: "center", margin: "0 auto" }}
+          >
+            <div className="icon-box">
+              <i
+                className="fa fa-exclamation-circle"
+                style={{ color: "#DCA218", fontSize: "40px" }}
+              ></i>
+            </div>
+            Are you sure?
+          </ModalHeader>
+          <ModalBody>
+            Do you want to {editInfo.is_active ? "deactivate" : "activate"} this
+            record?{" "}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={toggleStatus}>
+              Cancel
+            </Button>{" "}
+            <Button color="primary" onClick={handleStatusUpdate}>
+              Update
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/* ============ status update modal ends=============== */}
       </div>
     </React.Fragment>
   )
@@ -144,17 +213,20 @@ function Zone(props) {
 //export default Zone
 
 const mapStateToProps = state => {
-  const { get_all_zone_data, get_all_zone_error, get_all_zone_loading } =
+  const { get_all_zone_data, get_all_zone_error, get_all_zone_loading, edit_zone_status_loading } =
     state.Restaurant
   return {
     get_all_zone_data,
     get_all_zone_error,
     get_all_zone_loading,
+    edit_zone_status_loading,
   }
 }
 
 export default withRouter(
   connect(mapStateToProps, {
     getAllZoneAction,
+    zoneStatusEditAction,
+    zoneStatusEditActionFresh
   })(Zone)
 )

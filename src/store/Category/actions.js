@@ -16,12 +16,13 @@ import axios from "axios"
 var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
-export const addCategoryAction = (name, id) => {
+export const addCategoryAction = (name, id, image) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Category/Post"
 
   const formData = {
     _id: id,
     category_name: name,
+    image: image,
   }
   return dispatch => {
     console.log("-in the dispatch----")
@@ -96,11 +97,12 @@ export const getAllCategoryFresh = () => {
   }
 }
 
-export const categoryNameEditAction = (name, id, is_active) => {
+export const categoryNameEditAction = (name, id, image, is_active) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Category/Put"
   const formData = {
     _id: id,
     category_name: name,
+    image: image,
     is_active: is_active,
   }
   return dispatch => {
@@ -140,11 +142,12 @@ export const categoryNameEditFresh = () => {
   }
 }
 
-export const categoryStatusEditAction = (name, id, is_active) => {
+export const categoryStatusEditAction = (name, id, image, is_active) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Category/Put"
   const formData = {
     _id: id,
     category_name: name,
+    image: image,
     is_active: !(is_active),
   }
   return dispatch => {

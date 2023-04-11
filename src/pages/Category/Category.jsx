@@ -39,7 +39,8 @@ function Category(props) {
   const [name, setName] = useState("")
   const [modal, setModal] = useState(false)
   const [categoryId, setCategoryId] = useState()
-  const [categoryname, setCategoryName] = useState()
+  const [categoryName, setCategoryName] = useState()
+  const [categoryImage, setCategoryImage] = useState();
   const [isActive, setIsActive] = useState();
 
   const [editModal, setEditModal] = useState(false)
@@ -68,12 +69,13 @@ function Category(props) {
     const val = uuidv4()
     console.log(name)
     console.log(val)
-    props.addCategoryAction(name, val)
+    props.addCategoryAction(categoryName, val, categoryImage)
   }
   const handleEditCategoryName = row => {
     console.log(row)
-    setCategoryId(row._id)
-    setCategoryName(row.name)
+    setCategoryId(row._id);
+    setCategoryName(row.category_name);
+    setCategoryImage(row.image);
     setIsActive(row.is_active);
     toggleEditModal()
   }
@@ -84,9 +86,7 @@ function Category(props) {
   const handleEditModalSubmit = e => {
     e.preventDefault()
     toggleEditModal()
-    console.log(categoryname)
-    console.log(categoryId)
-    props.categoryNameEditAction(categoryname, categoryId, isActive)
+    props.categoryNameEditAction(categoryName, categoryId, categoryImage, isActive)
   }
   const handleDeleteModal = row => {
     setDeleteItem(row._id)
@@ -95,7 +95,8 @@ function Category(props) {
 
   const handleStatusModal = (row) => {
     setCategoryId(row._id)
-    setCategoryName(row.name)
+    setCategoryName(row.category_name);
+    setCategoryImage(row.image);
     setIsActive(row.is_active);
 
     toggleStatus();
@@ -104,9 +105,7 @@ function Category(props) {
   const handleStatusUpdate = e => {
 
     e.preventDefault()
-    console.log(categoryname)
-    console.log(categoryId)
-    props.categoryStatusEditAction(categoryname, categoryId, isActive)
+    props.categoryStatusEditAction(categoryName, categoryId, categoryImage, isActive)
     // toggleDel();
   }
   const actionRef = (cell, row) => (
@@ -178,7 +177,7 @@ function Category(props) {
     }
 
     if (props.add_category_loading === "Success") {
-      toast.success("Category Addedd Successfully")
+      toast.success("Category Added Successfully")
       props.addCategoryFresh()
     }
 
@@ -188,7 +187,7 @@ function Category(props) {
     }
 
     if (props.category_name_edit_loading === "Success") {
-      toast.success("Category Name Updated")
+      toast.success("Category Updated Successfully")
       props.categoryNameEditFresh()
     }
 
@@ -276,17 +275,25 @@ function Category(props) {
           <ModalBody>
             <form className="mt-1" onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className="form-label" htmlFor="username">
+                <label className="form-label" htmlFor="categoryName">
                   Category Name
                 </label>
                 <input
                   type="text"
+                  name="categoryName"
                   className="form-control"
-                  id="username"
+                  id="categoryName"
                   placeholder="Enter category name"
                   required
-                  value={name}
-                  onChange={e => setName(e.target.value)}
+                  value={categoryName}
+                  onChange={e => setCategoryName(e.target.value)}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label" htmlFor="categoryImage">
+                  Category Image
+                </label>
+                <input name="categoryImage" type="file" className="form-control" id="categoryImage" value={categoryImage} onChange={e => setCategoryImage(e.target.value)}
                 />
               </div>
               <div
@@ -309,32 +316,12 @@ function Category(props) {
           <ModalBody>
             <form className="mt-1" onSubmit={handleEditModalSubmit}>
               <div className="mb-3">
-                <label className="form-label" htmlFor="username1">
-                  Category Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="username1"
-                  placeholder="Enter category name"
-                  required
-                  value={categoryname ? categoryname : ""}
-                  onChange={handleCategoryName}
-                />
+                <label className="form-label" htmlFor="categoryName"> Category Name </label>
+                <input name="categoryName" type="text" className="form-control" id="categoryName" placeholder="Enter category name" required value={categoryName ? categoryName : ""} onChange={handleCategoryName} />
               </div>
               <div className="mb-3">
-                <label className="form-label" htmlFor="username1">
-                  Image
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="username1"
-                  placeholder="Enter category name"
-                  required
-                  value={categoryname ? categoryname : ""}
-                  onChange={handleCategoryName}
-                />
+                <label className="form-label" htmlFor="categoryImage"> Image </label>
+                <input name="categoryImage" type="file" className="form-control" id="categoryImage" onChange={e => setCategoryImage(e.target.value)} />
               </div>
               <div
                 style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
