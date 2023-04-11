@@ -8,6 +8,8 @@ import {
   GET_CAMPAIGN_BY_ID,
   CAMPAIGN_DELETE,
   CAMPAIGN_DELETE_FRESH,
+  CAMPAIGN_STATUS_EDIT,
+  CAMPAIGN_STATUS_EDIT_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -24,6 +26,9 @@ const initialState = {
   //campaign edit
   campaign_edit_data: null,
   campaign_edit_loading: false,
+
+  campaign_status_edit_data: null,
+  campaign_status_edit_loading: false,
 
   campaign_delete_loading: false,
 }
@@ -76,6 +81,22 @@ const campaign = (state = initialState, action) => {
       state = {
         ...state,
         campaign_edit_loading: action.status,
+      }
+      break
+
+    case CAMPAIGN_STATUS_EDIT:
+      state = {
+        ...state,
+        campaign_status_edit_data: action.payload,
+        campaign_status_edit_loading: action.status,
+        get_all_campaign_loading: false,
+      }
+      break
+
+    case CAMPAIGN_STATUS_EDIT_FRESH:
+      state = {
+        ...state,
+        campaign_status_edit_loading: action.status,
       }
       break
 

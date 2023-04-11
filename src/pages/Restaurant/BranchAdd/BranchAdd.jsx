@@ -4,7 +4,7 @@ import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react";
 import { connect } from "react-redux";
 import withRouter from 'components/Common/withRouter';
 import { useEffect } from 'react';
-import { getAllRestaurantAction, getAllUsersRolesAction, getAllCusineAction, branchAddAction, addBranchFresh, branchEditAction, editBranchFresh } from 'store/actions';
+import { getAllRestaurantAction, getAllUsersRolesAction, branchAddAction, addBranchFresh, branchEditAction, editBranchFresh, getAllCuisneAction } from 'store/actions';
 import Breadcrumbs from 'components/Common/Breadcrumb';
 import { boolean } from 'yup';
 import Select from 'react-select';
@@ -125,8 +125,8 @@ function BranchAdd(props) {
         setSelectedCuisine(e)
     }
     let cusineData = undefined;
-    if (props.get_all_cusine_data?.length > 0) {
-        cusineData = props.get_all_cusine_data?.map((item, key) => ({
+    if (props.get_all_cuisine_data?.length > 0) {
+        cusineData = props.get_all_cuisine_data?.map((item, key) => ({
             label: item.name, value: item._id,
         }));
 
@@ -247,6 +247,7 @@ function BranchAdd(props) {
     // const handleSort = (e) => {
     //     alert("Hello")
     // }
+    console.log(props.get_all_cusine_data);
     useEffect(() => {
         if (props.get_all_restaurant_loading == false) {
             props.getAllRestaurantAction();
@@ -256,8 +257,9 @@ function BranchAdd(props) {
             props.getAllUsersRolesAction();
         }
 
-        if (props.get_all_cusine_loading === false) {
-            props.getAllCusineAction();
+        if (props.get_all_cuisine_loading === false) {
+            props.getAllCuisneAction();
+
         }
 
         if (props.add_branch_loading === "Success") {
@@ -835,10 +837,11 @@ const mapStateToProps = state => {
         get_all_restaurant_data,
         get_all_restaurant_loading,
 
-        get_all_cusine_data,
-        get_all_cusine_loading,
         add_branch_loading,
         edit_branch_loading,
+
+        get_all_cuisine_data,
+        get_all_cuisine_loading
     } = state.Restaurant;
 
     const {
@@ -850,13 +853,13 @@ const mapStateToProps = state => {
         get_all_restaurant_data,
         get_all_restaurant_loading,
 
-        get_all_cusine_data,
-        get_all_cusine_loading,
-
         get_all_user_roles_data,
         get_all_user_roles_loading,
         add_branch_loading,
-        edit_branch_loading
+        edit_branch_loading,
+
+        get_all_cuisine_data,
+        get_all_cuisine_loading
     };
 };
 
@@ -864,10 +867,11 @@ export default withRouter(
     connect(mapStateToProps, {
         getAllRestaurantAction,
         getAllUsersRolesAction,
-        getAllCusineAction, branchAddAction,
+        branchAddAction,
         addBranchFresh,
         branchEditAction,
-        editBranchFresh
+        editBranchFresh,
+        getAllCuisneAction
     })(
         GoogleApiWrapper({
             apiKey: "AIzaSyDJkREeL-PpO7Z45k-MsD5sJD_m1mzNGEk",
