@@ -13,14 +13,14 @@ import { Link } from 'react-router-dom';
 
 function ManageUsers(props) {
     const user_update_state = useSelector(state => state.registerNew.user_update_loading);
-    console.log(user_update_state);
+    // console.log(user_update_state);
     const [modal, setModal] = useState(false);
     const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
 
     const toggle = () => setModal(!modal);
     const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
     const handleEditUser = (row) => {
-        console.log(row);
+        // console.log(row);
         toggle()
         setRegisterInfo(prevState => ({
             first_name: row.first_name,
@@ -48,21 +48,18 @@ function ManageUsers(props) {
     const [file, setFile] = useState()
 
     function handleChange(event) {
-        console.log(event.target.files[0])
+        // console.log(event.target.files[0])
         setFile(event.target.files[0])
 
     }
 
-    const [statusItem, setStatusItem] = useState({
-        subscriptionTypeId: "",
-        is_active: "",
-    });
+    const [statusItem, setStatusItem] = useState(false);
 
     const [role, setRole] = useState();
     const [passwordStatus, setPasswordStatus] = useState(false);
     let name, value;
     const handleInputs = (e) => {
-        console.log(e);
+        // console.log(e);
         name = e.target.name;
         value = e.target.value;
         setRegisterInfo({ ...registerInfo, [name]: value })
@@ -71,8 +68,8 @@ function ManageUsers(props) {
     const handleSubmit = (e) => {
         e.preventDefault();
         toggle();
-        console.log(registerInfo);
-        console.log(role);
+        // console.log(registerInfo);
+        // console.log(role);
         if (role) {
             props.userUpdateAction(registerInfo, role);
         } else {
@@ -83,16 +80,8 @@ function ManageUsers(props) {
     }
 
     const handleStatusModal = (row) => {
-        setRegisterInfo(prevState => ({
-            first_name: row.first_name,
-            last_name: row.last_name,
-            present_address: row.present_address,
-            permanent_address: row.permanent_address,
-            mobileNumber: row.mobile_number,
-            email: row.email,
-            id: row._id,
-            is_active: row.is_active,
-        }));
+        //  console.log(row);
+        setStatusItem(row);
 
         toggleStatus();
     }
@@ -100,7 +89,12 @@ function ManageUsers(props) {
     const handleStatusUpdate = () => {
 
         // console.log(statusItem);
-        props.userStatusUpdateAction(registerInfo);
+        props.userStatusUpdateAction({
+            ...statusItem,
+            is_active: !statusItem.is_active,
+        })
+
+        // props.userStatusUpdateAction(registerInfo);
         // toggleDel();
     }
     let userData = undefined;
@@ -132,10 +126,10 @@ function ManageUsers(props) {
 
 
 
-    const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
+    // const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
 
-    // const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
-    //     className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
+    const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
+        className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
 
     const activeData = [
         {
@@ -177,8 +171,8 @@ function ManageUsers(props) {
             order: "desc"
         }
     ];
-    console.log(props.get_all_user_data);
-    console.log(props.get_all_user_roles_data,);
+    // console.log(props.get_all_user_data);
+    // console.log(props.get_all_user_roles_data,);
     useEffect(() => {
         if (props.get_all_user_loading === false) {
             props.getAllAdminUsersAction();

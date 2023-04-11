@@ -18,6 +18,8 @@ import {
     EDIT_BRANCH_FRESH,
     EDIT_BRANCH_STATUS,
     EDIT_BRANCH_STATUS_FRESH,
+    EDIT_BRANCH_POPULAR,
+    EDIT_BRANCH_POPULAR_FRESH,
     ADD_ONS_CATEGORY,
     ADD_CUISINE,
     GET_CUISINE,
@@ -60,6 +62,7 @@ const initialState = {
     edit_zone_status_loading: false,
     edit_branch_loading: false,
     edit_branch_status_loading: false,
+    edit_branch_popular_loading: false,
 
     add_ons_category_data: null,
     add_ons_category_error: null,
@@ -235,6 +238,22 @@ const Restaurant = (state = initialState, action) => {
                 edit_branch_status_loading: action.status,
             }
             break;
+
+        case EDIT_BRANCH_POPULAR:
+            state = {
+                ...state,
+                edit_branch_popular_loading: action.status,
+                get_all_branch_loading: false,
+            }
+            break;
+        case EDIT_BRANCH_POPULAR_FRESH:
+            state = {
+                ...state,
+                edit_branch_popular_loading: action.status,
+            }
+            break;
+
+
 
         case ADD_ONS_CATEGORY:
             state = {
