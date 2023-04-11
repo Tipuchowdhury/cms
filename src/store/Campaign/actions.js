@@ -3,10 +3,12 @@ import {
   ADD_CAMPAIGN_FRESH,
   GET_ALL_CAMPAIGN,
   GET_ALL_CAMPAIGN_FRESH,
-  CAMPAIGN_NAME_EDIT,
-  CAMPAIGN_NAME_EDIT_FRESH,
+  CAMPAIGN_EDIT,
+  CAMPAIGN_EDIT_FRESH,
   CAMPAIGN_DELETE,
   CAMPAIGN_DELETE_FRESH,
+  CAMPAIGN_STATUS_EDIT,
+  CAMPAIGN_STATUS_EDIT_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -157,6 +159,44 @@ export const campaignEditFresh = () => {
   return dispatch => {
     dispatch({
       type: CAMPAIGN_EDIT_FRESH,
+      payload: null,
+      status: false,
+    })
+  }
+}
+
+export const campaignStatusEditAction = data => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Campaign/Put"
+  const formData = data
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: CAMPAIGN_STATUS_EDIT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: CAMPAIGN_STATUS_EDIT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const campaignStatusEditFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: CAMPAIGN_STATUS_EDIT_FRESH,
       payload: null,
       status: false,
     })

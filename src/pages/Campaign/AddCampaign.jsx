@@ -114,10 +114,14 @@ function AddCampaign(props) {
 
     if (props.campaign_edit_loading === "Success") {
       // redirect
-      props.addCampaignFresh()
+      props.campaignEditFresh()
       navigate("/campaign")
     }
-  }, [props.get_all_branch_loading, props.add_campaign_loading])
+  }, [
+    props.get_all_branch_loading,
+    props.add_campaign_loading,
+    props.campaign_edit_loading,
+  ])
 
   console.log(props.get_all_branch_data)
 
@@ -179,6 +183,7 @@ function AddCampaign(props) {
                         name="name"
                         onChange={handleInputs}
                         value={campaignInfo.name ?? ""}
+                        required
                       />
                     </div>
                   </Row>
@@ -198,6 +203,7 @@ function AddCampaign(props) {
                         name="description"
                         onChange={handleInputs}
                         value={campaignInfo.description ?? ""}
+                        required
                       ></textarea>
                     </div>
                   </Row>
@@ -214,6 +220,7 @@ function AddCampaign(props) {
                         className="form-control"
                         id="resume"
                         onChange={e => console.log(e)}
+                        required
                       />
                     </div>
                   </Row>
@@ -230,6 +237,7 @@ function AddCampaign(props) {
                         onChange={handleSelectBranch}
                         options={branchDate}
                         isMulti={true}
+                        required
                       />
                     </div>
                   </Row>
@@ -250,6 +258,7 @@ function AddCampaign(props) {
                         placeholder="Start Time"
                         value={campaignInfo.start_date.slice(0, 16)}
                         onChange={e => handleTimeChange(e)}
+                        required
                       />
                     </div>
                   </Row>
@@ -270,6 +279,7 @@ function AddCampaign(props) {
                         placeholder="End Time"
                         value={campaignInfo.end_date.slice(0, 16)}
                         onChange={e => handleTimeChange(e)}
+                        required
                       />
                     </div>
                   </Row>

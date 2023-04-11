@@ -28,6 +28,10 @@ import {
   getAllCampaignFresh,
   campaignDeleteAction,
   campaignDeleteFresh,
+  campaignEditAction,
+  campaignEditFresh,
+  campaignStatusEditAction,
+  campaignStatusEditFresh,
 } from "store/Campaign/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 
@@ -36,13 +40,14 @@ function Campaign(props) {
   const [modal, setModal] = useState(false)
   const [campaignId, setCampaignId] = useState()
   const [campaignname, setCampaignName] = useState()
-  const [editModal, setEditModal] = useState(false)
+  const [editInfo, setEditInfo] = useState(false)
   const [reload, setReload] = useState(false)
   const navigate = useNavigate()
 
   // delete modal
   const [deleteItem, setDeleteItem] = useState()
   const [modalDel, setModalDel] = useState(false)
+  const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
 
   const toggleDel = () => setModalDel(!modalDel)
   const handleDelete = () => {
@@ -50,6 +55,7 @@ function Campaign(props) {
     console.log(deleteItem)
     props.campaignDeleteAction(deleteItem)
   }
+  const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
 
   const toggle = () => setModal(!modal)
   const handleSubmit = e => {
@@ -67,6 +73,19 @@ function Campaign(props) {
   const handleDeleteModal = row => {
     setDeleteItem(row._id)
     toggleDel()
+  }
+  const handleStatusModal = row => {
+    setEditInfo(row)
+
+    toggleStatus()
+  }
+
+  const handleStatusUpdate = () => {
+    console.log(editInfo)
+    props.campaignStatusEditAction({
+      ...editInfo,
+      is_active: !editInfo.is_active,
+    })
   }
   const actionRef = (cell, row) => (
     <div style={{ display: "flex", gap: 10 }}>
@@ -88,12 +107,13 @@ function Campaign(props) {
   )
 
   const statusRef = (cell, row) => (
-    <Badge
+    <Button
       color={row.is_active ? "success" : "secondary"}
-      style={{ padding: "12px" }}
+      className="btn waves-effect waves-light"
+      onClick={() => handleStatusModal(row)}
     >
       {row.is_active ? "Active" : "Deactivate"}
-    </Badge>
+    </Button>
   )
 
   console.log(props.add_campaign_loading)
@@ -135,7 +155,7 @@ function Campaign(props) {
     }
 
     if (props.add_campaign_loading === "Success") {
-      toast.success("Campaign Addedd Successfully")
+      toast.success("Campaign Added Successfully")
       props.addCampaignFresh()
     }
 
@@ -144,9 +164,10 @@ function Campaign(props) {
       props.addCampaignFresh()
     }
 
-    if (props.campaign_name_edit_loading === "Success") {
-      toast.success("Campaign Name Updated")
-      props.campaignNameEditFresh()
+    if (props.campaign_status_edit_loading === "Success") {
+      toast.success("Status Updated")
+      toggleStatus()
+      props.campaignStatusEditFresh()
     }
 
     if (props.campaign_delete_loading === "Success") {
@@ -158,6 +179,7 @@ function Campaign(props) {
     props.add_campaign_loading,
     props.campaign_name_edit_loading,
     props.campaign_delete_loading,
+    props.campaign_status_edit_loading,
   ])
 
   return (
@@ -278,6 +300,35 @@ function Campaign(props) {
           </ModalFooter>
         </Modal>
         {/* ============ delete modal ends=============== */}
+
+        {/* ============ status update modal starts=============== */}
+        <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
+          <ModalHeader
+            className="text-center"
+            style={{ textAlign: "center", margin: "0 auto" }}
+          >
+            <div className="icon-box">
+              <i
+                className="fa fa-exclamation-circle"
+                style={{ color: "#DCA218", fontSize: "40px" }}
+              ></i>
+            </div>
+            Are you sure?
+          </ModalHeader>
+          <ModalBody>
+            Do you want to {editInfo.is_active ? "deactivate" : "activate"} this
+            record?{" "}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={toggleStatus}>
+              Cancel
+            </Button>{" "}
+            <Button color="primary" onClick={handleStatusUpdate}>
+              Update
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/* ============ status update modal ends=============== */}
       </div>
     </React.Fragment>
   )
@@ -293,6 +344,9 @@ const mapStateToProps = state => {
     get_all_campaign_error,
     get_all_campaign_loading,
     campaign_delete_loading,
+    campaign_edit_loading,
+    campaign_status_edit_data,
+    campaign_status_edit_loading,
   } = state.Campaign
 
   return {
@@ -303,8 +357,10 @@ const mapStateToProps = state => {
     get_all_campaign_data,
     get_all_campaign_error,
     get_all_campaign_loading,
-
+    campaign_edit_loading,
     campaign_delete_loading,
+    campaign_status_edit_data,
+    campaign_status_edit_loading,
   }
 }
 
@@ -316,5 +372,8 @@ export default withRouter(
     getAllCampaignFresh,
     campaignDeleteAction,
     campaignDeleteFresh,
+    campaignStatusEditAction,
+    campaignEditFresh,
+    campaignStatusEditFresh,
   })(Campaign)
 )
