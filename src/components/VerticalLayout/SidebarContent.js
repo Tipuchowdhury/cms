@@ -220,7 +220,6 @@ const SidebarContent = props => {
                     {props.t("Add-ons Category")}{" "}
                   </Link>
                 </li>
-
               </ul>
             </li>
             <li>
@@ -229,6 +228,19 @@ const SidebarContent = props => {
                 {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("Campaign")}</span>
               </Link>
+            </li>
+            <li>
+              <Link to="/#" className="waves-effect">
+                <i className="ti-face-smile"></i>
+                <span>{props.t("CRM")}</span>
+              </Link>
+              <ul className="sub-menu" aria-expanded="false">
+                <li>
+                  <Link to="/reward-point-settings">
+                    {props.t("Reward Point Settings")}{" "}
+                  </Link>
+                </li>
+              </ul>
             </li>
             {/* <li>
               <Link to="/calendar" className=" waves-effect">

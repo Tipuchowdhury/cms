@@ -131,6 +131,7 @@ import Slider from "pages/Slider/Slider"
 import SliderAdd from "pages/Slider/addSlider/SliderAdd"
 import AddMenu from "pages/Restaurant/Menu/AddMenu/AddMenu"
 import Cuisine from "pages/Restaurant/Cuisine/Cuisine"
+import RewardPoint from "pages/CRM/RewardPoints/RewardPoint"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -178,6 +179,10 @@ const userRoutes = [
   //Sliders
   { path: "/slider", component: <Slider /> },
   { path: "/add-slider", component: <SliderAdd /> },
+
+  // CRM
+  { path: "/reward-point-settings", component: <RewardPoint /> },
+
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },
   { path: "/chartist-charts", component: <ChartistChart /> },
