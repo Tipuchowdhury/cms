@@ -27,10 +27,10 @@ function AddMenu(props) {
         Variation_group_name: "",
         Variation_grp_desc: "",
         check_add_ons: "",
-        is_popular: "",
-        is_delivery: "",
-        is_pickup: "",
-        is_dine: "",
+        is_popular: "true",
+        is_delivery: "true",
+        is_pickup: "true",
+        is_dine: "true",
         menu_price: "",
         pickup_menu_price: "",
         vat: "",
@@ -212,7 +212,7 @@ function AddMenu(props) {
                                         Menu Name
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="text" className="form-control" id="name" placeholder="Enter menu name" name="name" onChange={handleInputs} value={info.name ?? ""} />
+                                        <input type="text" className="form-control" id="name" placeholder="Enter menu name" name="name" onChange={handleInputs} value={info.name ?? ""} required />
                                     </div>
                                 </Row>
 
@@ -224,7 +224,7 @@ function AddMenu(props) {
                                         Menu Group Name
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="text" className="form-control" id="name" placeholder="Enter menu name" name="menu_grp_name" onChange={handleInputs} value={info.menu_grp_name ?? ""} />
+                                        <input type="text" className="form-control" id="name" placeholder="Enter menu name" name="menu_grp_name" onChange={handleInputs} value={info.menu_grp_name ?? ""} required />
                                     </div>
                                 </Row>
 
@@ -236,7 +236,7 @@ function AddMenu(props) {
                                         Menu Description
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="text" className="form-control" id="name" placeholder="Enter menu name" name="menu_description" onChange={handleInputs} value={info.menu_description ?? ""} />
+                                        <input type="text" className="form-control" id="name" placeholder="Enter menu name" name="menu_description" onChange={handleInputs} value={info.menu_description ?? ""} required />
                                     </div>
                                 </Row>
 
@@ -248,7 +248,7 @@ function AddMenu(props) {
                                         Menu Price
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="text" className="form-control" id="name" placeholder="Enter menu price" name="menu_price" onChange={handleInputs} value={info.menu_price ?? ""} />
+                                        <input type="text" className="form-control" id="name" placeholder="Enter menu price" name="menu_price" onChange={handleInputs} value={info.menu_price ?? ""} required />
                                     </div>
                                 </Row>
 
@@ -260,7 +260,7 @@ function AddMenu(props) {
                                         Pickup Menu Price
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="text" className="form-control" id="name" placeholder="Enter menu price" name="pickup_menu_price" onChange={handleInputs} value={info.pickup_menu_price ?? ""} />
+                                        <input type="text" className="form-control" id="name" placeholder="Enter menu price" name="pickup_menu_price" onChange={handleInputs} value={info.pickup_menu_price ?? ""} required />
                                     </div>
                                 </Row>
 
@@ -272,7 +272,7 @@ function AddMenu(props) {
                                         Variation Group Name
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="text" className="form-control" id="Variation_group_name" placeholder="Enter variation name" name="Variation_group_name" onChange={handleInputs} value={info.Variation_group_name ?? ""} />
+                                        <input type="text" className="form-control" id="Variation_group_name" placeholder="Enter variation name" name="Variation_group_name" onChange={handleInputs} value={info.Variation_group_name ?? ""} required />
                                     </div>
                                 </Row>
 
@@ -284,7 +284,7 @@ function AddMenu(props) {
                                         Variation Description
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="text" className="form-control" id="Variation_grp_desc" placeholder="Enter variation name" name="Variation_grp_desc" onChange={handleInputs} value={info.Variation_grp_desc ?? ""} />
+                                        <input type="text" className="form-control" id="Variation_grp_desc" placeholder="Enter variation name" name="Variation_grp_desc" onChange={handleInputs} value={info.Variation_grp_desc ?? ""} required />
                                     </div>
                                 </Row>
 
@@ -308,7 +308,7 @@ function AddMenu(props) {
                                         Check Add-Ons
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="checkbox" id="cat_is_multiple" name="cat_is_multiple" checked={isChecked} onChange={checkHandler} value="true" style={{ margin: "15px 5px 20px 0px" }} />
+                                        <input type="checkbox" id="cat_is_multiple" name="cat_is_multiple" checked={isChecked} onChange={checkHandler} value="true" style={{ margin: "15px 5px 20px 0px" }} required />
 
                                     </div>
                                 </Row>
@@ -436,6 +436,7 @@ function AddMenu(props) {
                                                 autoComplete="off"
                                                 name="is_popular" onChange={handleInputs} value="true"
                                                 checked={info.is_popular == "true"}
+
                                             />
                                             <label
                                                 className="btn btn-outline-secondary"
@@ -599,6 +600,7 @@ function AddMenu(props) {
                                             //required={true}
                                             onChange={handleInputs}
                                             type="select"
+                                            required
                                         >
                                             <option>Choose...</option>
                                             {branchData}
@@ -621,6 +623,7 @@ function AddMenu(props) {
                                             //required={true}
                                             onChange={handleInputs}
                                             type="select"
+                                            required
                                         >
                                             <option>Choose...</option>
                                             {categoryData}
@@ -636,7 +639,7 @@ function AddMenu(props) {
                                         Vat(%)
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="number" className="form-control" id="vat" placeholder="Enter vat amount" name="vat" onChange={handleInputs} value={info.vat ?? ""} />
+                                        <input type="number" className="form-control" id="vat" placeholder="Enter vat amount" name="vat" onChange={handleInputs} value={info.vat ?? ""} required />
                                     </div>
                                 </Row>
 
@@ -648,7 +651,7 @@ function AddMenu(props) {
                                         SD(%)
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="number" className="form-control" id="sd" placeholder="Enter sd amount" name="sd" onChange={handleInputs} value={info.sd ?? ""} />
+                                        <input type="number" className="form-control" id="sd" placeholder="Enter sd amount" name="sd" onChange={handleInputs} value={info.sd ?? ""} required />
                                     </div>
                                 </Row>
 
