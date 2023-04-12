@@ -208,6 +208,9 @@ const SidebarContent = props => {
                 <li>
                   <Link to="/addons-category">{props.t("Add-ons Category")} </Link>
                 </li>
+                <li>
+                  <Link to="/time-slot">{props.t("Menu Time Slot")} </Link>
+                </li>
 
               </ul>
             </li>

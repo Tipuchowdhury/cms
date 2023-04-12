@@ -127,6 +127,8 @@ import CategoryAdd from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryAdd
 import Slider from "pages/Slider/Slider";
 import SliderAdd from "pages/Slider/addSlider/SliderAdd";
 import Cuisine from "pages/Restaurant/Cuisine/Cuisine";
+import MenuTimeSlot from "pages/Restaurant/MenuItemTimeSlot/MenuTimeSlot";
+import AddTimeSlot from "pages/Restaurant/MenuItemTimeSlot/AddTimeSlot/AddTimeSlot";
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -161,6 +163,8 @@ const userRoutes = [
   { path: "/addons-category", component: <AddOnsCategory /> },
   { path: "/category-addons", component: <CategoryAdd /> },
   { path: "/cuisine", component: <Cuisine /> },
+  { path: "/time-slot", component: <MenuTimeSlot /> },
+  { path: "/add-time-slot", component: <AddTimeSlot /> },
 
   //Sliders
   { path: "/slider", component: <Slider /> },

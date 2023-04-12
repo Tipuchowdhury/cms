@@ -167,7 +167,7 @@ const DatatableTables2 = props => {
     <React.Fragment>
       <PaginationProvider
         pagination={paginationFactory(pageOptions)}
-        keyField="id"
+        keyField={props.key ? key : "1"}
         columns={props.columnData ? props.columnData : columns}
         data={props.products ? props.products : productsdata}
       >
@@ -201,7 +201,7 @@ const DatatableTables2 = props => {
                   <Col xl="12">
                     <div className="table-responsive">
                       <BootstrapTable
-                        keyField={"id"}
+                        keyField={props.key}
                         responsive
                         bordered={false}
                         striped={false}

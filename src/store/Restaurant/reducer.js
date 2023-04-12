@@ -16,7 +16,12 @@ import {
     ADD_ONS_CATEGORY,
     ADD_CUISINE,
     GET_CUISINE,
-    EDIT_CUISINE
+    EDIT_CUISINE,
+    GET_ADD_ONS_CATEGORY,
+    ADD_ONS_CATEGORY_FRESH,
+    ADD_RESTAURANT_MENU,
+    GET_RESTAURANT_MENU,
+    ADD_RESTAURANT_MENU_FRESH
 
 } from "./actionTypes"
 
@@ -30,6 +35,10 @@ const initialState = {
     get_all_restaurant_data: null,
     get_all_restaurant_error: null,
     get_all_restaurant_loading: false,
+
+    get_all_addOns_category_data: null,
+    get_all_addOns_category_error: null,
+    get_all_addOns_category_loading: false,
 
     get_all_cusine_data: null,
     get_all_cusine_error: null,
@@ -67,6 +76,14 @@ const initialState = {
     get_all_cuisine_loading: false,
 
     edit_cuisine_loading: false,
+
+    add_restaurant_menu_data: null,
+    add_restaurant_menu_error: null,
+    add_restaurant_menu_loading: false,
+
+    get_all_menu_data: null,
+    get_all_menu_error: null,
+    get_all_menu_loading: false,
 }
 
 const Restaurant = (state = initialState, action) => {
@@ -197,6 +214,14 @@ const Restaurant = (state = initialState, action) => {
                 add_ons_category_data: action.payload,
                 add_ons_category_error: action.error,
                 add_ons_category_loading: action.status,
+                get_all_addOns_category_loading: false,
+            }
+            break;
+
+        case ADD_ONS_CATEGORY_FRESH:
+            state = {
+                ...state,
+                add_ons_category_loading: action.status,
             }
             break;
 
@@ -225,6 +250,40 @@ const Restaurant = (state = initialState, action) => {
                 ...state,
                 edit_cuisine_loading: action.status,
                 get_all_cuisine_loading: false
+            }
+            break;
+
+        case GET_ADD_ONS_CATEGORY:
+            state = {
+                ...state,
+                get_all_addOns_category_data: action.payload,
+                get_all_addOns_category_error: null,
+                get_all_addOns_category_loading: action.status,
+            }
+            break;
+
+        case ADD_RESTAURANT_MENU:
+            state = {
+                ...state,
+                add_restaurant_menu_data: action.payload,
+                add_restaurant_menu_error: null,
+                add_restaurant_menu_loading: action.status,
+                get_all_menu_loading: false
+            }
+            break;
+        case ADD_RESTAURANT_MENU_FRESH:
+            state = {
+                ...state,
+                add_restaurant_menu_loading: action.status,
+            }
+            break;
+        case GET_RESTAURANT_MENU:
+            state = {
+                ...state,
+                get_all_menu_data: action.payload,
+                get_all_menu_error: action.error,
+                get_all_menu_loading: action.status
+
             }
             break;
 

@@ -13,7 +13,12 @@ import {
     ADD_ONS_CATEGORY,
     ADD_CUISINE,
     GET_CUISINE,
-    EDIT_CUISINE
+    EDIT_CUISINE,
+    GET_ADD_ONS_CATEGORY,
+    ADD_ONS_CATEGORY_FRESH,
+    ADD_RESTAURANT_MENU,
+    GET_RESTAURANT_MENU,
+    ADD_RESTAURANT_MENU_FRESH
 
 } from "./actionTypes"
 import axios from "axios";
@@ -205,7 +210,12 @@ export const branchAddAction = (id, zoneInfo, lat, lng, file, coverFile, current
         delivery_time: JSON.parse(zoneInfo.delivery_time),
         parent_restaurant_id: zoneInfo.restaurant,
         working_hours: all_working_hours,
-        cuisines: data
+        cuisines: data,
+        share_link: zoneInfo.link,
+        pickup_time: JSON.parse(zoneInfo.pickup_time),
+        is_delivery: JSON.parse(zoneInfo.is_delivery),
+        is_pickup: JSON.parse(zoneInfo.is_pickup),
+        is_dine: JSON.parse(zoneInfo.is_dine),
     };
 
 
@@ -584,18 +594,36 @@ export const editBranchFresh = () => {
     };
 };
 
-export const addOnsCategoryAction = (val, category, isChecked) => {
+export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
+    console.log(val, category, isChecked, addOns);
+    console.log(parseInt(category.num_of_choice));
+
     var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Post";
+
+    const data = addOns?.length > 0 ? addOns.map(item => {
+        const val = uuidv4();
+        return {
+            _id: val,
+            add_on_name: item.add_on_name,
+            add_on_price: item.add_on_price,
+            add_on_category_name: category.name,
+            add_on_category_id: val
+
+        }
+    }) : null
     const val_id = uuidv4();
+    console.log(data);
+
     let formData = {
         _id: val,
         name: category.name,
         cat_is_multiple: isChecked,
-        cat_max_choic: parseInt(category.num_of_choice),
+        cat_max_choice: parseInt(category.num_of_choice),
         language_slug: "en",
         add_on_category_desc: category.add_on_category_desc,
         variation_id: val_id,
         //is_active: true
+        preset_add_ons: data
 
     };
 
@@ -730,3 +758,168 @@ export const cuisineEditAction = (id, editName) => {
             });
     };
 };
+
+export const getAllAddOnsCategoryAction = () => {
+    var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Get";
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+
+        };
+        axios
+            .get(url, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: GET_ADD_ONS_CATEGORY,
+                    payload: response.data,
+                    status: "Success",
+                });
+
+            })
+            .catch(error => {
+                dispatch({
+                    type: GET_ADD_ONS_CATEGORY,
+                    status: "Failed",
+                });
+
+            });
+    };
+};
+
+export const addOnCategoryAddFresh = () => {
+    return dispatch => {
+        dispatch({
+            type: "ADD_ONS_CATEGORY_FRESH",
+            payload: null,
+            status: false,
+        });
+    };
+};
+
+export const addRestaurantMenuAction = (val, info, isChecked) => {
+    console.log(val, info, isChecked);
+
+    var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Post";
+
+    // const data = selectedCuisine?.length > 0 ? selectedCuisine.map(item => {
+    //     const val = uuidv4();
+    //     return {
+    //         _id: val,
+    //         cuisine_id: item.value,
+    //         branch_id: id
+    //     }
+    // }) : null
+
+    // console.log(data);
+    // const all_working_hours = time?.length > 0 ? time.map(item => {
+    //     const val = uuidv4();
+    //     return {
+    //         _id: val,
+    //         day: Number(item.day),
+    //         open_hour: moment(item.startTime, "HH:mm").get('hours'),
+    //         open_min: moment(item.startTime, "HH:mm").get('minutes'),
+    //         close_hour: moment(item.endTime, "HH:mm").get('hours'),
+    //         close_minute: moment(item.endTime, "HH:mm").get('minutes'),
+    //         branch_id: id,
+
+    //     }
+    // }) : null
+    let formData = {
+        _id: val,
+        menu_name: info.name,
+        menu_price: Number(info.menu_price),
+        pickup_menu_price: Number(info.pickup_menu_price),
+        menu_group_id: info.restaurant,
+        variation_group_name: info.Variation_group_name,
+        variation_group_desc: info.Variation_grp_desc,
+        check_add_ons: isChecked === true ? 1 : 0,
+        is_popular: JSON.parse(info.is_popular),
+        description: info.menu_description,
+        vat: Number(info.vat),
+        sd: Number(info.sd),
+        restaurant_id: info.restaurant,
+        restaurant_name: "test",
+        category_id: info.category,
+        category_name: info.category,
+        is_delivery: JSON.parse(info.is_delivery),
+        is_pickup: JSON.parse(info.is_pickup),
+        is_dine: JSON.parse(info.is_dine),
+        variations: [],
+        menu_available_times: [],
+        image: "https://unsplash.com/photos/kcA-c3f_3FE",
+        slug: "test",
+        is_active: true
+    };
+
+
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        };
+
+        axios
+            .post(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: "ADD_RESTAURANT_MENU",
+                    payload: response.data,
+                    status: "Success",
+                });
+                toast.success("Menu Addedd Successfully");
+            })
+            .catch(error => {
+                dispatch({
+                    type: "ADD_RESTAURANT_MENU",
+                    payload: error,
+                    status: "Failed",
+                });
+                toast.error("Menu Add Failed");
+            });
+
+    };
+
+};
+
+export const getAllRestaurantMenuItemAction = () => {
+    var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Get";
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+
+        };
+        axios
+            .get(url, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: GET_RESTAURANT_MENU,
+                    payload: response.data,
+                    status: "Success",
+                });
+
+            })
+            .catch(error => {
+                dispatch({
+                    type: GET_RESTAURANT_MENU,
+                    status: "Failed",
+                });
+
+            });
+    };
+};
+
+
+export const addRestaurantMenuAddFresh = () => {
+    return dispatch => {
+        dispatch({
+            type: "ADD_RESTAURANT_MENU_FRESH",
+            payload: null,
+            status: false,
+        });
+    };
+};
+

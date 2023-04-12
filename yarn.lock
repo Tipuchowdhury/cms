@@ -1695,10 +1695,29 @@
   dependencies:
     "@floating-ui/core" "^1.0.4"
 
+"@fortawesome/fontawesome-common-types@6.4.0":
+  "integrity" "sha512-HNii132xfomg5QVZw0HwXXpN22s7VBHQBv9CeOu9tfJnhsWQNd2lmTNi8CSrnw5B+5YOmzu1UoPAyxaXsJ6RgQ=="
+  "resolved" "https://registry.npmjs.org/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-6.4.0.tgz"
+  "version" "6.4.0"
+
 "@fortawesome/fontawesome-free@^5.12.0":
   "integrity" "sha512-eYm8vijH/hpzr/6/1CJ/V/Eb1xQFW2nnUKArb3z+yUWv7HTwj6M7SP957oMjfZjAHU6qpoNc2wQvIxBLWYa/Jg=="
   "resolved" "https://registry.npmjs.org/@fortawesome/fontawesome-free/-/fontawesome-free-5.15.4.tgz"
   "version" "5.15.4"
+
+"@fortawesome/fontawesome-svg-core@~1 || ~6":
+  "integrity" "sha512-Bertv8xOiVELz5raB2FlXDPKt+m94MQ3JgDfsVbrqNpLU9+UE2E18GKjLKw+d3XbeYPqg1pzyQKGsrzbw+pPaw=="
+  "resolved" "https://registry.npmjs.org/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-6.4.0.tgz"
+  "version" "6.4.0"
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "6.4.0"
+
+"@fortawesome/react-fontawesome@^0.2.0":
+  "integrity" "sha512-uHg75Rb/XORTtVt7OS9WoK8uM276Ufi7gCzshVWkUJbHhh3svsUUeqXerrM96Wm7fRiDzfKRwSoahhMIkGAYHw=="
+  "resolved" "https://registry.npmjs.org/@fortawesome/react-fontawesome/-/react-fontawesome-0.2.0.tgz"
+  "version" "0.2.0"
+  dependencies:
+    "prop-types" "^15.8.1"
 
 "@fullcalendar/bootstrap@^5.11.3":
   "integrity" "sha512-qCcNIz4F5YcTfpc1l2kKMtNpC2Lu/Al5/WaCASoLgqx1ukOunGuSh6WmooYrHCg/fwUJR4NOp85Qe4lggyEuSg=="
@@ -10753,7 +10772,7 @@
     "url-search-params-polyfill" "^2.0.0"
     "whatwg-fetch" "2.0.3"
 
-"react@*", "react@^0.14.0 || ^15.0.0", "react@^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18", "react@^0.14.0 || ^15.0.0 || ^16.0.0", "react@^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0", "react@^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0", "react@^0.14.9 || ^15.0.0 || ^16.0.0 || ^17.0.0", "react@^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0 || ^17.0 || ^18.0.0", "react@^15.0.0 || >=16.0.0", "react@^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0", "react@^15.5.0 || ^16.0.0 || ^17.0.0 || ^18.0.0", "react@^15.5.4 || ^16.0.0", "react@^15.5.x || ^16.x || ^17.x || ^18.x", "react@^16.13.1", "react@^16.2.0 || ^17.0.0", "react@^16.3.0", "react@^16.3.0 || ^17.0.0 || ^18.0.0", "react@^16.4.2 || ^17.0.0 || ^18.0.0", "react@^16.7.0 || ^17 || ^18", "react@^16.8 || ^17 || ^18", "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0", "react@^16.8.0 || ^17 || ^18", "react@^16.8.0 || ^17.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.8.3 || ^17.0.0-0", "react@^16.9.0 || ^17 || ^18", "react@^16.9.0 || ^17.0.0 || ^18.0.0", "react@^17.0.0", "react@^18.0.0", "react@^18.2.0", "react@> 15.5.0 < 17", "react@>= 15", "react@>= 16", "react@>= 16.8 || 18.0.0", "react@>= 16.8.0", "react@>= 16.8.x", "react@>=0.13", "react@>=0.14", "react@>=0.14.0", "react@>=0.14.0 || ^15.6.1 || ^16.0.0", "react@>=15.0.0", "react@>=16", "react@>=16, <=18", "react@>=16.0.0", "react@>=16.3.0", "react@>=16.3.3", "react@>=16.6.0", "react@>=16.8", "react@>=16.8.0", "react@~0.14.8 || ^15.0.0 || ^16.0.0", "react@0.13.x || 0.14.x || ^15.0.0-0 || 15.x.x || ^16.0.0-0 || ^16.x.x || ^17.x.x || ^18.x.x", "react@0.14.x || ^15.0.0 || ^16.0.0", "react@0.14.x || ^15.0.0 || ^16.0.0 || ^17.0.0", "react@16.x || 17.x":
+"react@*", "react@^0.14.0 || ^15.0.0", "react@^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18", "react@^0.14.0 || ^15.0.0 || ^16.0.0", "react@^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0", "react@^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0", "react@^0.14.9 || ^15.0.0 || ^16.0.0 || ^17.0.0", "react@^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0 || ^17.0 || ^18.0.0", "react@^15.0.0 || >=16.0.0", "react@^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0", "react@^15.5.0 || ^16.0.0 || ^17.0.0 || ^18.0.0", "react@^15.5.4 || ^16.0.0", "react@^15.5.x || ^16.x || ^17.x || ^18.x", "react@^16.13.1", "react@^16.2.0 || ^17.0.0", "react@^16.3.0", "react@^16.3.0 || ^17.0.0 || ^18.0.0", "react@^16.4.2 || ^17.0.0 || ^18.0.0", "react@^16.7.0 || ^17 || ^18", "react@^16.8 || ^17 || ^18", "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0", "react@^16.8.0 || ^17 || ^18", "react@^16.8.0 || ^17.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.8.3 || ^17.0.0-0", "react@^16.9.0 || ^17 || ^18", "react@^16.9.0 || ^17.0.0 || ^18.0.0", "react@^17.0.0", "react@^18.0.0", "react@^18.2.0", "react@> 15.5.0 < 17", "react@>= 15", "react@>= 16", "react@>= 16.8 || 18.0.0", "react@>= 16.8.0", "react@>= 16.8.x", "react@>=0.13", "react@>=0.14", "react@>=0.14.0", "react@>=0.14.0 || ^15.6.1 || ^16.0.0", "react@>=15.0.0", "react@>=16", "react@>=16, <=18", "react@>=16.0.0", "react@>=16.3", "react@>=16.3.0", "react@>=16.3.3", "react@>=16.6.0", "react@>=16.8", "react@>=16.8.0", "react@~0.14.8 || ^15.0.0 || ^16.0.0", "react@0.13.x || 0.14.x || ^15.0.0-0 || 15.x.x || ^16.0.0-0 || ^16.x.x || ^17.x.x || ^18.x.x", "react@0.14.x || ^15.0.0 || ^16.0.0", "react@0.14.x || ^15.0.0 || ^16.0.0 || ^17.0.0", "react@16.x || 17.x":
   "integrity" "sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ=="
   "resolved" "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   "version" "18.2.0"
