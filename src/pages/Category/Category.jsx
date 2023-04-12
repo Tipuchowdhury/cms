@@ -30,6 +30,8 @@ import {
   categoryNameEditFresh,
   categoryDeleteAction,
   categoryDeleteFresh,
+  categoryStatusEditAction,
+  categoryStatusEditFresh,
 } from "store/Category/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 
@@ -37,15 +39,22 @@ function Category(props) {
   const [name, setName] = useState("")
   const [modal, setModal] = useState(false)
   const [categoryId, setCategoryId] = useState()
-  const [categoryname, setCategoryName] = useState()
+  const [categoryName, setCategoryName] = useState()
+  const [categoryImage, setCategoryImage] = useState();
+  const [isActive, setIsActive] = useState();
+
   const [editModal, setEditModal] = useState(false)
   const [reload, setReload] = useState(false)
+  const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
+
+  const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
 
   // delete modal
   const [deleteItem, setDeleteItem] = useState()
   const [modalDel, setModalDel] = useState(false)
 
   const toggleDel = () => setModalDel(!modalDel)
+
   const handleDelete = () => {
     toggleDel()
     console.log(deleteItem)
@@ -60,12 +69,14 @@ function Category(props) {
     const val = uuidv4()
     console.log(name)
     console.log(val)
-    props.addCategoryAction(name, val)
+    props.addCategoryAction(categoryName, val, categoryImage)
   }
   const handleEditCategoryName = row => {
     console.log(row)
-    setCategoryId(row._id)
-    setCategoryName(row.name)
+    setCategoryId(row._id);
+    setCategoryName(row.category_name);
+    setCategoryImage(row.image);
+    setIsActive(row.is_active);
     toggleEditModal()
   }
   const handleCategoryName = e => {
@@ -75,13 +86,27 @@ function Category(props) {
   const handleEditModalSubmit = e => {
     e.preventDefault()
     toggleEditModal()
-    console.log(categoryname)
-    console.log(categoryId)
-    props.categoryNameEditAction(categoryname, categoryId)
+    props.categoryNameEditAction(categoryName, categoryId, categoryImage, isActive)
   }
   const handleDeleteModal = row => {
     setDeleteItem(row._id)
     toggleDel()
+  }
+
+  const handleStatusModal = (row) => {
+    setCategoryId(row._id)
+    setCategoryName(row.category_name);
+    setCategoryImage(row.image);
+    setIsActive(row.is_active);
+
+    toggleStatus();
+  }
+
+  const handleStatusUpdate = e => {
+
+    e.preventDefault()
+    props.categoryStatusEditAction(categoryName, categoryId, categoryImage, isActive)
+    // toggleDel();
   }
   const actionRef = (cell, row) => (
     <div style={{ display: "flex", gap: 10 }}>
@@ -108,7 +133,10 @@ function Category(props) {
   //   </Badge>
   // )
 
-  const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
+  // const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
+
+  const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
+    className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
 
   console.log(props.add_category_loading)
   console.log(props.get_all_category_data)
@@ -149,7 +177,7 @@ function Category(props) {
     }
 
     if (props.add_category_loading === "Success") {
-      toast.success("Category Addedd Successfully")
+      toast.success("Category Added Successfully")
       props.addCategoryFresh()
     }
 
@@ -159,8 +187,19 @@ function Category(props) {
     }
 
     if (props.category_name_edit_loading === "Success") {
-      toast.success("Category Name Updated")
+      toast.success("Category Updated Successfully")
       props.categoryNameEditFresh()
+    }
+
+    if (props.category_status_edit_loading === "Success") {
+      toast.success("Category Status Updated");
+      toggleStatus();
+      props.categoryStatusEditFresh();
+    }
+
+    if (props.category_status_edit_loading === "Failed") {
+      toast.error("Something went wrong");
+      props.categoryStatusEditFresh();
     }
 
     if (props.category_delete_loading === "Success") {
@@ -172,6 +211,7 @@ function Category(props) {
     props.add_category_loading,
     props.category_name_edit_loading,
     props.category_delete_loading,
+    props.category_status_edit_loading,
   ])
 
   return (
@@ -235,17 +275,25 @@ function Category(props) {
           <ModalBody>
             <form className="mt-1" onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className="form-label" htmlFor="username">
+                <label className="form-label" htmlFor="categoryName">
                   Category Name
                 </label>
                 <input
                   type="text"
+                  name="categoryName"
                   className="form-control"
-                  id="username"
+                  id="categoryName"
                   placeholder="Enter category name"
                   required
-                  value={name}
-                  onChange={e => setName(e.target.value)}
+                  value={categoryName}
+                  onChange={e => setCategoryName(e.target.value)}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label" htmlFor="categoryImage">
+                  Category Image
+                </label>
+                <input name="categoryImage" type="file" className="form-control" id="categoryImage" value={categoryImage} onChange={e => setCategoryImage(e.target.value)}
                 />
               </div>
               <div
@@ -268,32 +316,12 @@ function Category(props) {
           <ModalBody>
             <form className="mt-1" onSubmit={handleEditModalSubmit}>
               <div className="mb-3">
-                <label className="form-label" htmlFor="username1">
-                  Category Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="username1"
-                  placeholder="Enter category name"
-                  required
-                  value={categoryname ? categoryname : ""}
-                  onChange={handleCategoryName}
-                />
+                <label className="form-label" htmlFor="categoryName"> Category Name </label>
+                <input name="categoryName" type="text" className="form-control" id="categoryName" placeholder="Enter category name" required value={categoryName ? categoryName : ""} onChange={handleCategoryName} />
               </div>
               <div className="mb-3">
-                <label className="form-label" htmlFor="username1">
-                  Image
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="username1"
-                  placeholder="Enter category name"
-                  required
-                  value={categoryname ? categoryname : ""}
-                  onChange={handleCategoryName}
-                />
+                <label className="form-label" htmlFor="categoryImage"> Image </label>
+                <input name="categoryImage" type="file" className="form-control" id="categoryImage" onChange={e => setCategoryImage(e.target.value)} />
               </div>
               <div
                 style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
@@ -339,6 +367,22 @@ function Category(props) {
           </ModalFooter>
         </Modal>
         {/* ============ delete modal ends=============== */}
+
+        {/* ============ status update modal starts=============== */}
+        <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
+          <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
+            <div className="icon-box">
+              <i className="fa fa-exclamation-circle" style={{ color: "#DCA218", fontSize: "40px" }}></i>
+            </div>
+            Are you sure?
+          </ModalHeader>
+          <ModalBody>Do you really want to update status these records? </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={toggleStatus}>Cancel</Button>{' '}
+            <Button color="primary" onClick={handleStatusUpdate}>Update</Button>
+          </ModalFooter>
+        </Modal>
+        {/* ============ status update modal ends=============== */}
       </div>
     </React.Fragment>
   )
@@ -355,6 +399,7 @@ const mapStateToProps = state => {
     get_all_category_loading,
 
     category_name_edit_loading,
+    category_status_edit_loading,
     category_delete_loading,
   } = state.Category
 
@@ -368,6 +413,8 @@ const mapStateToProps = state => {
     get_all_category_loading,
 
     category_name_edit_loading,
+
+    category_status_edit_loading,
     category_delete_loading,
   }
 }
@@ -382,5 +429,7 @@ export default withRouter(
     categoryNameEditFresh,
     categoryDeleteAction,
     categoryDeleteFresh,
+    categoryStatusEditAction,
+    categoryStatusEditFresh
   })(Category)
 )

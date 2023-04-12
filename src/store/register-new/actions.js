@@ -227,7 +227,7 @@ export const getAllAdminUsersAction = () => {
 };
 
 export const userUpdateAction = (registerInfo, role) => {
-    console.log(registerInfo, role);
+    // console.log(registerInfo, role);
 
     var url = process.env.REACT_APP_LOCALHOST + "/User/Put";
     const formData = {
@@ -240,8 +240,9 @@ export const userUpdateAction = (registerInfo, role) => {
         mobile_number: registerInfo.mobileNumber,
         email: registerInfo.email,
         role_id: role,
-        is_active: registerInfo.is_active,
+        is_active: !(registerInfo.is_active),
     };
+    console.log(formData);
     return dispatch => {
         const headers = {
             "Content-Type": "application/json",
@@ -277,44 +278,35 @@ export const userUpdateFresh = () => {
 };
 
 
-export const userStatusUpdateAction = (registerInfo) => {
+export const userStatusUpdateAction = registerInfo => {
 
-    console.log(registerInfo);
     var url = process.env.REACT_APP_LOCALHOST + "/User/Put";
-    const formData = {
-        _id: registerInfo.id,
-        first_name: registerInfo.first_name,
-        last_name: registerInfo.last_name,
-        present_address: registerInfo.present_address,
-        permanent_address: registerInfo.permanent_address,
-        mobile_number: registerInfo.mobileNumber,
-        email: registerInfo.email,
-        is_active: !(registerInfo.is_active),
+    const formData = registerInfo;
+    console.log(formData);
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+
+        };
+        axios
+            .put(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: USER_STATUS_UPDATE,
+                    payload: response.data,
+                    status: "Success",
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: USER_STATUS_UPDATE,
+                    payload: error,
+                    status: "Failed",
+                });
+            });
     };
-    // return dispatch => {
-    //     const headers = {
-    //         "Content-Type": "application/json",
-
-    //         "Access-Control-Allow-Origin": "*",
-
-    //     };
-    //     axios
-    //         .put(url, formData, { headers: headers })
-    //         .then(response => {
-    //             dispatch({
-    //                 type: USER_STATUS_UPDATE,
-    //                 payload: response.data,
-    //                 status: "Success",
-    //             });
-    //         })
-    //         .catch(error => {
-    //             dispatch({
-    //                 type: USER_STATUS_UPDATE,
-    //                 payload: error,
-    //                 status: "Failed",
-    //             });
-    //         });
-    // };
 };
 
 export const userStatusUpdateFresh = () => {

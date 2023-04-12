@@ -2,13 +2,20 @@ import {
     ADD_RESTAURANT,
     GET_ALL_RESTAURANT,
     RESTAURANT_NAME_UPDATE,
+    RESTAURANT_STATUS_UPDATE,
     GET_ALL_CUSINE,
     ADD_BRANCH,
     GET_ALL_BRANCH,
+    EDIT_BRANCH_STATUS,
+    EDIT_BRANCH_STATUS_FRESH,
+    EDIT_BRANCH_POPULAR,
+    EDIT_BRANCH_POPULAR_FRESH,
     ADD_ZONE,
     GET_ALL_ZONE,
     EDIT_ZONE,
     ADD_ZONE_FRESH,
+    EDIT_ZONE_STATUS,
+    EDIT_ZONE_STATUS_FRESH,
     EDIT_ZONE_FRESH,
     ADD_ONS_CATEGORY,
     ADD_CUISINE,
@@ -93,11 +100,12 @@ export const getAllRestaurantAction = () => {
 };
 
 
-export const restaurantNameUpdateAction = (name, id) => {
+export const restaurantNameUpdateAction = (name, id, is_active) => {
     var url = process.env.REACT_APP_LOCALHOST + "/Restaurant/Put";
     const formData = {
         _id: id,
-        name: name
+        name: name,
+        is_active: is_active
     };
     return dispatch => {
         const headers = {
@@ -118,6 +126,39 @@ export const restaurantNameUpdateAction = (name, id) => {
             .catch(error => {
                 dispatch({
                     type: RESTAURANT_NAME_UPDATE,
+                    status: "Failed",
+                });
+                toast.error("Something went wrong!!");
+            });
+    };
+};
+
+export const restaurantStatusUpdateAction = (name, id, is_active) => {
+    var url = process.env.REACT_APP_LOCALHOST + "/Restaurant/Put";
+    const formData = {
+        _id: id,
+        name: name,
+        is_active: !(is_active)
+    };
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+
+        };
+        axios
+            .put(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: RESTAURANT_STATUS_UPDATE,
+                    status: "Success",
+                });
+                toast.success("Status Updated Successfully");
+            })
+            .catch(error => {
+                dispatch({
+                    type: RESTAURANT_STATUS_UPDATE,
                     status: "Failed",
                 });
                 toast.error("Something went wrong!!");
@@ -331,6 +372,75 @@ export const branchEditAction = (id, zoneInfo, lat, lng, file, coverFile, curren
     };
 
 };
+
+export const branchStatusEditAction = data => {
+    var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put";
+
+
+    const formData = data;
+
+
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        };
+
+        axios
+            .put(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: EDIT_BRANCH_STATUS,
+                    payload: response.data,
+                    status: "Success",
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: EDIT_BRANCH_STATUS,
+                    payload: error,
+                    status: "Failed",
+                });
+            });
+
+    };
+
+};
+
+export const branchPopularEditAction = data => {
+    var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put";
+
+    const formData = data;
+
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        };
+
+        axios
+            .put(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: EDIT_BRANCH_POPULAR,
+                    payload: response.data,
+                    status: "Success",
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: EDIT_BRANCH_POPULAR,
+                    payload: error,
+                    status: "Failed",
+                });
+            });
+
+    };
+
+};
+
+
+
 
 
 export const getAllBranchAction = () => {
@@ -564,6 +674,47 @@ export const zoneEditFresh = () => {
     };
 };
 
+export const zoneStatusEditAction = data => {
+
+    var url = process.env.REACT_APP_LOCALHOST + "/Zone/Put";
+
+    const formData = data;
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+
+        };
+        axios
+            .put(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: EDIT_ZONE_STATUS,
+                    status: "Success",
+                });
+                // toast.success("Updated Successfully");
+            })
+            .catch(error => {
+                dispatch({
+                    type: EDIT_ZONE_STATUS,
+                    status: "Failed",
+                });
+                // toast.error("Something went wrong!!");
+            });
+    };
+};
+
+export const zoneStatusEditActionFresh = () => {
+    return dispatch => {
+        dispatch({
+            type: EDIT_ZONE_STATUS_FRESH,
+            payload: null,
+            status: false,
+        });
+    };
+};
+
 export const addBranchFresh = () => {
     return dispatch => {
         dispatch({
@@ -583,6 +734,28 @@ export const editBranchFresh = () => {
         });
     };
 };
+
+export const editBranchStatusFresh = () => {
+    return dispatch => {
+        dispatch({
+            type: "EDIT_BRANCH_STATUS_FRESH",
+            payload: null,
+            status: false,
+        });
+    };
+};
+
+export const editBranchPopularFresh = () => {
+    return dispatch => {
+        dispatch({
+            type: EDIT_BRANCH_POPULAR_FRESH,
+            payload: null,
+            status: false,
+        });
+    };
+};
+
+
 
 export const addOnsCategoryAction = (val, category, isChecked) => {
     var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Post";

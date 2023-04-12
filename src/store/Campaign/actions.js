@@ -23,13 +23,13 @@ export const addCampaignAction = (id, data, selectedBranch) => {
   const selectedBranchData =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            res_id: item.value,
-            campaign_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          res_id: item.value,
+          campaign_id: id,
+        }
+      })
       : null
   const formData = {
     _id: id,
@@ -117,13 +117,13 @@ export const campaignEditAction = (id, data, selectedBranch) => {
   const selectedBranchData =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            res_id: item.value,
-            campaign_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          res_id: item.value,
+          campaign_id: id,
+        }
+      })
       : null
   const formData = {
     _id: id,
@@ -166,8 +166,10 @@ export const campaignEditFresh = () => {
 }
 
 export const campaignStatusEditAction = data => {
+
   var url = process.env.REACT_APP_LOCALHOST + "/Campaign/Put"
-  const formData = data
+  const formData = data;
+  console.log(formData);
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",

@@ -5,6 +5,8 @@ import {
   GET_ALL_CATEGORY_FRESH,
   CATEGORY_NAME_EDIT,
   CATEGORY_NAME_EDIT_FRESH,
+  CATEGORY_STATUS_EDIT,
+  CATEGORY_STATUS_EDIT_FRESH,
   CATEGORY_DELETE,
   CATEGORY_DELETE_FRESH,
 } from "./actionTypes"
@@ -14,12 +16,13 @@ import axios from "axios"
 var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
-export const addCategoryAction = (name, id) => {
+export const addCategoryAction = (name, id, image) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Category/Post"
 
   const formData = {
     _id: id,
     category_name: name,
+    image: image,
   }
   return dispatch => {
     console.log("-in the dispatch----")
@@ -94,11 +97,13 @@ export const getAllCategoryFresh = () => {
   }
 }
 
-export const categoryNameEditAction = (name, id) => {
+export const categoryNameEditAction = (name, id, image, is_active) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Category/Put"
   const formData = {
     _id: id,
     category_name: name,
+    image: image,
+    is_active: is_active,
   }
   return dispatch => {
     const headers = {
@@ -125,10 +130,55 @@ export const categoryNameEditAction = (name, id) => {
   }
 }
 
+
+
 export const categoryNameEditFresh = () => {
   return dispatch => {
     dispatch({
       type: CATEGORY_NAME_EDIT_FRESH,
+      payload: null,
+      status: false,
+    })
+  }
+}
+
+export const categoryStatusEditAction = (name, id, image, is_active) => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Category/Put"
+  const formData = {
+    _id: id,
+    category_name: name,
+    image: image,
+    is_active: !(is_active),
+  }
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: CATEGORY_STATUS_EDIT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: CATEGORY_STATUS_EDIT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const categoryStatusEditFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: CATEGORY_STATUS_EDIT_FRESH,
       payload: null,
       status: false,
     })

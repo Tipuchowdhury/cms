@@ -18,7 +18,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { Link, useNavigate } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -52,7 +52,7 @@ function Campaign(props) {
   const toggleDel = () => setModalDel(!modalDel)
   const handleDelete = () => {
     toggleDel()
-    console.log(deleteItem)
+    // console.log(deleteItem)
     props.campaignDeleteAction(deleteItem)
   }
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
@@ -62,8 +62,8 @@ function Campaign(props) {
     e.preventDefault()
     toggle()
     const val = uuidv4()
-    console.log(name)
-    console.log(val)
+    // console.log(name)
+    // console.log(val)
     props.addCampaignAction(name, val)
   }
 
@@ -75,13 +75,14 @@ function Campaign(props) {
     toggleDel()
   }
   const handleStatusModal = row => {
+    // console.log(row);
     setEditInfo(row)
 
     toggleStatus()
   }
 
   const handleStatusUpdate = () => {
-    console.log(editInfo)
+    // console.log(editInfo)
     props.campaignStatusEditAction({
       ...editInfo,
       is_active: !editInfo.is_active,
@@ -116,10 +117,10 @@ function Campaign(props) {
     </Button>
   )
 
-  console.log(props.add_campaign_loading)
-  console.log(props.get_all_campaign_data)
-  console.log(props.campaign_name_edit_loading)
-  console.log(props.get_all_campaign_loading)
+  // console.log(props.add_campaign_loading)
+  // console.log(props.get_all_campaign_data)
+  // console.log(props.campaign_name_edit_loading)
+  // console.log(props.get_all_campaign_loading)
 
   const activeData = [
     {
@@ -148,9 +149,9 @@ function Campaign(props) {
   ]
 
   useEffect(() => {
-    console.log("=======hello", props.campaign_name_edit_loading)
+    // console.log("=======hello", props.campaign_name_edit_loading)
     if (props.get_all_campaign_loading == false) {
-      console.log("I am in get all campaign loading ")
+      //  console.log("I am in get all campaign loading ")
       props.getAllCampaignAction()
     }
 
@@ -171,7 +172,7 @@ function Campaign(props) {
     }
 
     if (props.campaign_delete_loading === "Success") {
-      console.log("I am in the delete")
+      //  console.log("I am in the delete")
       toast.success("Campaign Deleted")
       props.campaignDeleteFresh()
     }

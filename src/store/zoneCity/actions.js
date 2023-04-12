@@ -5,6 +5,8 @@ import {
     GET_ALL_CITY_FRESH,
     CITY_NAME_EDIT,
     CITY_NAME_EDIT_FRESH,
+    CITY_STATUS_EDIT,
+    CITY_STATUS_EDIT_FRESH,
     CITY_DELETE,
     CITY_DELETE_FRESH
 
@@ -101,12 +103,13 @@ export const getAllCityFresh = () => {
     };
 };
 
-export const cityNameEditAction = (name, id) => {
+export const cityNameEditAction = (name, id, is_active) => {
 
     var url = process.env.REACT_APP_LOCALHOST + "/City/Put";
     const formData = {
         _id: id,
-        name: name
+        name: name,
+        is_active: is_active,
     };
     return dispatch => {
         const headers = {
@@ -138,6 +141,50 @@ export const cityNameEditFresh = () => {
     return dispatch => {
         dispatch({
             type: CITY_NAME_EDIT_FRESH,
+            payload: null,
+            status: false,
+        });
+    }
+};
+
+export const cityStatusEditAction = (name, id, is_active) => {
+
+    var url = process.env.REACT_APP_LOCALHOST + "/City/Put";
+    const formData = {
+        _id: id,
+        name: name,
+        is_active: !(is_active),
+    };
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+
+        };
+        axios
+            .put(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: CITY_STATUS_EDIT,
+                    payload: response.data,
+                    status: "Success",
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: CITY_STATUS_EDIT,
+                    payload: error,
+                    status: "Failed",
+                });
+            });
+    };
+};
+
+export const cityStatusEditFresh = () => {
+    return dispatch => {
+        dispatch({
+            type: CITY_STATUS_EDIT_FRESH,
             payload: null,
             status: false,
         });
