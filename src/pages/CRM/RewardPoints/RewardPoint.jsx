@@ -31,10 +31,13 @@ import {
   rewardPointDeleteAction,
   rewardPointDeleteFresh,
 } from "store/CRM/RewardPoints/actions"
+
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
+import { getAllSubscriptionTypeAction } from "store/actions"
+import Select from "react-select"
 
 function RewardPoint(props) {
-  const [name, setName] = useState("")
+  const [value, setValue] = useState("")
   const [modal, setModal] = useState(false)
   const [rewardPointId, setRewardPointId] = useState()
   const [rewardPointname, setRewardPointName] = useState()
@@ -58,9 +61,8 @@ function RewardPoint(props) {
     e.preventDefault()
     toggle()
     const val = uuidv4()
-    console.log(name)
     console.log(val)
-    props.addRewardPointAction(name, val)
+    props.addRewardPointAction(val, value, selectedSubType.value)
   }
   const handleEditRewardPointName = row => {
     console.log(row)
@@ -83,6 +85,33 @@ function RewardPoint(props) {
     setDeleteItem(row._id)
     toggleDel()
   }
+
+  const common_sub_type = props?.get_all_subscription_type_data?.filter(elem =>
+    location?.state?.sub_type?.find(({ branch_id }) => elem._id === branch_id)
+  )
+
+  const sub_type_data_edit = common_sub_type
+    ? common_sub_type?.map((item, key) => {
+        return { label: item.name, value: item._id }
+      })
+    : ""
+  //select multiple branch
+  const [selectedSubType, setSelectedSubType] = useState(
+    sub_type_data_edit ? sub_type_data_edit : ""
+  )
+  const handleSelectSubType = e => {
+    console.log(e)
+    setSelectedSubType(e)
+  }
+
+  let branchDate = undefined
+  if (props.get_all_subscription_type_data?.length > 0) {
+    branchDate = props.get_all_subscription_type_data?.map((item, key) => ({
+      label: item.name,
+      value: item._id,
+    }))
+  }
+
   const actionRef = (cell, row) => (
     <div style={{ display: "flex", gap: 10 }}>
       <Button
@@ -120,8 +149,13 @@ function RewardPoint(props) {
 
   const activeData = [
     {
-      dataField: "name",
-      text: "Name",
+      dataField: "subscription_type.name",
+      text: "Subscription Type",
+      sort: true,
+    },
+    {
+      dataField: "per_point_value",
+      text: "Point Per Taka",
       sort: true,
     },
     {
@@ -151,6 +185,10 @@ function RewardPoint(props) {
       props.getAllRewardPointAction()
     }
 
+    if (props.get_all_subscription_type_loading == false) {
+      props.getAllSubscriptionTypeAction()
+    }
+
     if (props.add_rewardPoint_loading === "Success") {
       toast.success("Reward Point Added Successfully")
       props.addRewardPointFresh()
@@ -175,6 +213,7 @@ function RewardPoint(props) {
     props.add_rewardPoint_loading,
     props.rewardPoint_name_edit_loading,
     props.rewardPoint_delete_loading,
+    props.get_all_subscription_type_loading,
   ])
 
   return (
@@ -184,8 +223,8 @@ function RewardPoint(props) {
           {/* Render Breadcrumbs */}
           <Breadcrumbs
             maintitle="Foodi"
-            title="Zone & RewardPoint"
-            breadcrumbItem="RewardPoint"
+            title="CRM"
+            breadcrumbItem="Reward Point Settings"
           />
           {/* <Row className="d-flex flex-row-reverse" style={{ marginBottom: "20px", alignItems: "end" }}>
                         <Col className="col-12">
@@ -209,13 +248,13 @@ function RewardPoint(props) {
                     }}
                   >
                     <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
-                      RewardPoint{" "}
+                      Reward Point Settings{" "}
                     </CardTitle>
                     <Button
                       style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
                       onClick={toggle}
                     >
-                      Add RewardPoint
+                      Add
                     </Button>
                   </div>
 
@@ -234,21 +273,35 @@ function RewardPoint(props) {
           </Row>
         </Container>
         <Modal isOpen={modal} toggle={toggle} centered>
-          <ModalHeader toggle={toggle}>Add RewardPoint</ModalHeader>
+          <ModalHeader toggle={toggle}>Add Reward Point</ModalHeader>
           <ModalBody>
             <form className="mt-1" onSubmit={handleSubmit}>
+              <Row className="mb-3">
+                <label
+                  htmlFor="example-text-input"
+                  className="col-md-2 col-form-label"
+                >
+                  Subscription Types
+                </label>
+                <Select
+                  value={selectedSubType}
+                  onChange={handleSelectSubType}
+                  options={branchDate}
+                  isMulti={false}
+                />
+              </Row>
               <div className="mb-3">
-                <label className="form-label" htmlFor="username">
-                  RewardPoint Name
+                <label className="col-md-2 col-form-label" htmlFor="username">
+                  Value
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
                   id="username"
-                  placeholder="Enter rewardPoint name"
+                  placeholder="Enter value"
                   required
-                  value={name}
-                  onChange={e => setName(e.target.value)}
+                  value={value}
+                  onChange={e => setValue(e.target.value)}
                 />
               </div>
               <div
@@ -272,18 +325,32 @@ function RewardPoint(props) {
           </ModalHeader>
           <ModalBody>
             <form className="mt-1" onSubmit={handleEditModalSubmit}>
+              <Row className="mb-3">
+                <label
+                  htmlFor="example-text-input"
+                  className="col-md-2 col-form-label"
+                >
+                  Subscription Types
+                </label>
+                <Select
+                  value={selectedSubType}
+                  onChange={handleSelectSubType}
+                  options={branchDate}
+                  isMulti={false}
+                />
+              </Row>
               <div className="mb-3">
-                <label className="form-label" htmlFor="username1">
-                  RewardPoint Name
+                <label className="col-md-2 col-form-label" htmlFor="username">
+                  Value
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
-                  id="username1"
-                  placeholder="Enter rewardPoint name"
+                  id="username"
+                  placeholder="Enter value"
                   required
-                  value={rewardPointname ? rewardPointname : ""}
-                  onChange={handleRewardPointName}
+                  value={value}
+                  onChange={e => setValue(e.target.value)}
                 />
               </div>
               <div
@@ -349,6 +416,9 @@ const mapStateToProps = state => {
     rewardPoint_delete_loading,
   } = state.RewardPoints
 
+  const { get_all_subscription_type_loading, get_all_subscription_type_data } =
+    state.SubscriptionTypes
+
   return {
     add_rewardPoint_data,
     add_rewardPoint_error,
@@ -360,6 +430,8 @@ const mapStateToProps = state => {
 
     rewardPoint_name_edit_loading,
     rewardPoint_delete_loading,
+    get_all_subscription_type_loading,
+    get_all_subscription_type_data,
   }
 }
 
@@ -373,5 +445,6 @@ export default withRouter(
     rewardPointNameEditFresh,
     rewardPointDeleteAction,
     rewardPointDeleteFresh,
+    getAllSubscriptionTypeAction,
   })(RewardPoint)
 )

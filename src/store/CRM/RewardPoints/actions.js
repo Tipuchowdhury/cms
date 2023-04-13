@@ -14,12 +14,15 @@ import axios from "axios"
 var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
-export const addRewardPointAction = (name, id) => {
+export const addRewardPointAction = (id, value, sub_id) => {
+  console.log("id :", id)
   var url = process.env.REACT_APP_LOCALHOST + "/RewardPointSetting/Post"
 
   const formData = {
     _id: id,
-    name: name,
+    subscription_type_id: sub_id,
+    per_point_value: value,
+    is_active: true,
   }
   return dispatch => {
     console.log("-in the dispatch----")
