@@ -400,7 +400,7 @@ export const zoneAddAction = (id, zoneInfo, path, deliveryCharge, selectedBranch
     }) : null
 
 
-    const allData = path.map(item => [Number(item.lat), Number(item.lng)]);
+    const allData = path.map(item => [Number(item.lng), Number(item.lat)]);
     console.log(allData);
     let formData = {
         _id: id,
@@ -848,7 +848,7 @@ export const addRestaurantMenuAction = (val, info, isChecked) => {
         is_dine: JSON.parse(info.is_dine),
         variations: [],
         menu_available_times: [],
-        image: "https://unsplash.com/photos/kcA-c3f_3FE",
+        image: "https://unsplash.com/photos/eYnK2UmLlZ0",
         slug: "test",
         is_active: true
     };

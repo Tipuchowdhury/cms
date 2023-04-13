@@ -4,7 +4,7 @@ import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react";
 import { connect } from "react-redux";
 import withRouter from 'components/Common/withRouter';
 import { useEffect } from 'react';
-import { getAllRestaurantAction, getAllBranchAction, addRestaurantMenuAction, addRestaurantMenuAddFresh } from 'store/actions';
+import { getAllRestaurantAction, getAllBranchAction, addRestaurantMenuAction, addRestaurantMenuAddFresh, getAllAddOnsCategoryAction } from 'store/actions';
 import Breadcrumbs from 'components/Common/Breadcrumb';
 import { boolean } from 'yup';
 import Select from 'react-select';
@@ -17,7 +17,7 @@ const LoadingContainer = () => <div>Loading...</div>;
 
 
 function AddMenu(props) {
-
+    const navigate = useNavigate();
     const [info, setInfo] = useState({
         name: "",
         menu_description: "",
@@ -164,13 +164,16 @@ function AddMenu(props) {
         if (props.get_all_branch_loading == false) {
             props.getAllBranchAction();
         }
+        if (props.get_all_addOns_category_loading == false) {
+            props.getAllAddOnsCategoryAction();
+        }
 
 
         if (props.add_restaurant_menu_loading === "Success") {
-            naviagte("/menu")
+            navigate("/menu")
             props.addRestaurantMenuAddFresh();
         }
-    }, [props.get_all_restaurant_loading]);
+    }, [props.get_all_branch_loading, props.get_all_addOns_category_loading, props.add_restaurant_menu_loading]);
 
     console.log(props.get_all_restaurant_data);
     console.log(props.get_all_branch_data);
@@ -763,7 +766,10 @@ const mapStateToProps = state => {
         get_all_restaurant_loading,
         get_all_branch_loading,
         get_all_branch_data,
-        get_all_addOns_category_data
+        get_all_addOns_category_data,
+        get_all_addOns_category_loading,
+
+        add_restaurant_menu_loading
 
     } = state.Restaurant;
 
@@ -778,7 +784,10 @@ const mapStateToProps = state => {
 
         get_all_branch_loading,
         get_all_branch_data,
-        get_all_addOns_category_data
+        get_all_addOns_category_data,
+        get_all_addOns_category_loading,
+
+        add_restaurant_menu_loading
     };
 };
 
@@ -790,6 +799,7 @@ export default withRouter(
             getAllRestaurantAction,
             getAllBranchAction,
             addRestaurantMenuAction,
-            addRestaurantMenuAddFresh
+            addRestaurantMenuAddFresh,
+            getAllAddOnsCategoryAction
         })(AddMenu)
 );

@@ -129,7 +129,7 @@ function AddZone(props) {
 
     }
 
-    const allData = path.map((item) => Number(item.lat) + "," + Number(item.lng));
+    const allData = path.map((item) => Number(item.lng) + "," + Number(item.lat));
 
     console.log(allData);
 
