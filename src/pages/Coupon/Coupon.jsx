@@ -18,28 +18,28 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { Link, useNavigate } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
-  ; ` `
+;` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
-  addCampaignAction,
-  addCampaignFresh,
-  getAllCampaignAction,
-  getAllCampaignFresh,
-  campaignDeleteAction,
-  campaignDeleteFresh,
-  campaignEditAction,
-  campaignEditFresh,
-  campaignStatusEditAction,
-  campaignStatusEditFresh,
-} from "store/Campaign/actions"
+  addCouponAction,
+  addCouponFresh,
+  getAllCouponAction,
+  getAllCouponFresh,
+  couponDeleteAction,
+  couponDeleteFresh,
+  couponEditAction,
+  couponEditFresh,
+  couponStatusEditAction,
+  couponStatusEditFresh,
+} from "store/Coupon/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 
-function Campaign(props) {
+function Coupon(props) {
   const [name, setName] = useState("")
   const [modal, setModal] = useState(false)
-  const [campaignId, setCampaignId] = useState()
-  const [campaignname, setCampaignName] = useState()
+  const [couponId, setCouponId] = useState()
+  const [couponname, setCouponName] = useState()
   const [editInfo, setEditInfo] = useState(false)
   const [reload, setReload] = useState(false)
   const navigate = useNavigate()
@@ -53,7 +53,7 @@ function Campaign(props) {
   const handleDelete = () => {
     toggleDel()
     // console.log(deleteItem)
-    props.campaignDeleteAction(deleteItem)
+    props.couponDeleteAction(deleteItem)
   }
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
 
@@ -64,11 +64,11 @@ function Campaign(props) {
     const val = uuidv4()
     // console.log(name)
     // console.log(val)
-    props.addCampaignAction(name, val)
+    props.addCouponAction(name, val)
   }
 
   const handleEdit = row => {
-    navigate("/add-campaign", { state: row })
+    navigate("/add-coupon", { state: row })
   }
   const handleDeleteModal = row => {
     setDeleteItem(row._id)
@@ -83,7 +83,7 @@ function Campaign(props) {
 
   const handleStatusUpdate = () => {
     // console.log(editInfo)
-    props.campaignStatusEditAction({
+    props.couponStatusEditAction({
       ...editInfo,
       is_active: !editInfo.is_active,
     })
@@ -117,10 +117,10 @@ function Campaign(props) {
     </Button>
   )
 
-  // console.log(props.add_campaign_loading)
-  // console.log(props.get_all_campaign_data)
-  // console.log(props.campaign_name_edit_loading)
-  // console.log(props.get_all_campaign_loading)
+  // console.log(props.add_coupon_loading)
+  // console.log(props.get_all_coupon_data)
+  // console.log(props.coupon_name_edit_loading)
+  // console.log(props.get_all_coupon_loading)
 
   const activeData = [
     {
@@ -149,38 +149,38 @@ function Campaign(props) {
   ]
 
   useEffect(() => {
-    // console.log("=======hello", props.campaign_name_edit_loading)
-    if (props.get_all_campaign_loading == false) {
-      //  console.log("I am in get all campaign loading ")
-      props.getAllCampaignAction()
+    // console.log("=======hello", props.coupon_name_edit_loading)
+    if (props.get_all_coupon_loading == false) {
+      //  console.log("I am in get all coupon loading ")
+      props.getAllCouponAction()
     }
 
-    if (props.add_campaign_loading === "Success") {
-      toast.success("Campaign Added Successfully")
-      props.addCampaignFresh()
+    if (props.add_coupon_loading === "Success") {
+      toast.success("Coupon Added Successfully")
+      props.addCouponFresh()
     }
 
-    if (props.add_campaign_loading === "Failed") {
+    if (props.add_coupon_loading === "Failed") {
       toast.error("Something went wrong")
-      props.addCampaignFresh()
+      props.addCouponFresh()
     }
 
-    if (props.campaign_status_edit_loading === "Success") {
+    if (props.coupon_status_edit_loading === "Success") {
       toast.success("Status Updated")
       toggleStatus()
-      props.campaignStatusEditFresh()
+      props.couponStatusEditFresh()
     }
 
-    if (props.campaign_delete_loading === "Success") {
+    if (props.coupon_delete_loading === "Success") {
       //  console.log("I am in the delete")
-      toast.success("Campaign Deleted")
-      props.campaignDeleteFresh()
+      toast.success("Coupon Deleted")
+      props.couponDeleteFresh()
     }
   }, [
-    props.add_campaign_loading,
-    props.campaign_name_edit_loading,
-    props.campaign_delete_loading,
-    props.campaign_status_edit_loading,
+    props.add_coupon_loading,
+    props.coupon_name_edit_loading,
+    props.coupon_delete_loading,
+    props.coupon_status_edit_loading,
   ])
 
   return (
@@ -190,13 +190,13 @@ function Campaign(props) {
           {/* Render Breadcrumbs */}
           <Breadcrumbs
             maintitle="Foodi"
-            title="Campaign"
-            breadcrumbItem="Campaign"
+            title="Coupon"
+            breadcrumbItem="Coupon"
           />
           {/* <Row className="d-flex flex-row-reverse" style={{ marginBottom: "20px", alignItems: "end" }}>
                         <Col className="col-12">
                             <Button color="danger" onClick={toggle}>
-                                Add Campaign
+                                Add Coupon
                             </Button>
                         </Col>
                     </Row> */}
@@ -215,21 +215,21 @@ function Campaign(props) {
                     }}
                   >
                     <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
-                      Campaign{" "}
+                      Coupon{" "}
                     </CardTitle>
-                    <Link to="/add-campaign">
+                    <Link to="/add-coupon">
                       <Button
                         style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
                       >
-                        Add Campaign
+                        Add Coupon
                       </Button>
                     </Link>
                   </div>
 
-                  {props.get_all_campaign_data ? (
-                    props.get_all_campaign_data.length > 0 ? (
+                  {props.get_all_coupon_data ? (
+                    props.get_all_coupon_data.length > 0 ? (
                       <DatatableTablesWorking
-                        products={props.get_all_campaign_data}
+                        products={props.get_all_coupon_data}
                         columnData={activeData}
                         defaultSorted={defaultSorted}
                       />
@@ -246,13 +246,13 @@ function Campaign(props) {
             <form className="mt-1" onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className="form-label" htmlFor="username">
-                  Campaign Name
+                  Coupon Name
                 </label>
                 <input
                   type="text"
                   className="form-control"
                   id="username"
-                  placeholder="Enter campaign name"
+                  placeholder="Enter coupon name"
                   required
                   value={name}
                   onChange={e => setName(e.target.value)}
@@ -336,44 +336,44 @@ function Campaign(props) {
 
 const mapStateToProps = state => {
   const {
-    add_campaign_data,
-    add_campaign_error,
-    add_campaign_loading,
+    add_coupon_data,
+    add_coupon_error,
+    add_coupon_loading,
 
-    get_all_campaign_data,
-    get_all_campaign_error,
-    get_all_campaign_loading,
-    campaign_delete_loading,
-    campaign_edit_loading,
-    campaign_status_edit_data,
-    campaign_status_edit_loading,
-  } = state.Campaign
+    get_all_coupon_data,
+    get_all_coupon_error,
+    get_all_coupon_loading,
+    coupon_delete_loading,
+    coupon_edit_loading,
+    coupon_status_edit_data,
+    coupon_status_edit_loading,
+  } = state.Coupon
 
   return {
-    add_campaign_data,
-    add_campaign_error,
-    add_campaign_loading,
+    add_coupon_data,
+    add_coupon_error,
+    add_coupon_loading,
 
-    get_all_campaign_data,
-    get_all_campaign_error,
-    get_all_campaign_loading,
-    campaign_edit_loading,
-    campaign_delete_loading,
-    campaign_status_edit_data,
-    campaign_status_edit_loading,
+    get_all_coupon_data,
+    get_all_coupon_error,
+    get_all_coupon_loading,
+    coupon_edit_loading,
+    coupon_delete_loading,
+    coupon_status_edit_data,
+    coupon_status_edit_loading,
   }
 }
 
 export default withRouter(
   connect(mapStateToProps, {
-    addCampaignAction,
-    addCampaignFresh,
-    getAllCampaignAction,
-    getAllCampaignFresh,
-    campaignDeleteAction,
-    campaignDeleteFresh,
-    campaignStatusEditAction,
-    campaignEditFresh,
-    campaignStatusEditFresh,
-  })(Campaign)
+    addCouponAction,
+    addCouponFresh,
+    getAllCouponAction,
+    getAllCouponFresh,
+    couponDeleteAction,
+    couponDeleteFresh,
+    couponStatusEditAction,
+    couponEditFresh,
+    couponStatusEditFresh,
+  })(Coupon)
 )

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Badge, Button, Card, CardBody, CardTitle, Col, Container, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import Breadcrumbs from 'components/Common/Breadcrumb';
@@ -8,11 +7,10 @@ import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
-import { getAllRestaurantMenuItemAction } from 'store/actions';
 
 
 
-function Menu(props) {
+function MenuTimeSlot(props) {
 
     const [modalDel, setModalDel] = useState(false);
 
@@ -49,21 +47,10 @@ function Menu(props) {
     const activeData = [
 
         {
-            dataField: "menu_name",
-            text: "Title",
+            dataField: "name",
+            text: "Name",
             sort: true,
         },
-        {
-            dataField: "menu_price",
-            text: "Price",
-            sort: true,
-        },
-
-        // {
-        //     dataField: "menu_price",
-        //     text: "Assigned Branch",
-        //     sort: true,
-        // },
         {
             dataField: "",
             text: "Status",
@@ -87,35 +74,35 @@ function Menu(props) {
 
 
     useEffect(() => {
-        if (props.get_all_menu_loading == false) {
-            props.getAllRestaurantMenuItemAction();
+        if (props.get_all_restaurant_loading == false) {
+            props.getAllRestaurantAction();
         }
 
-    }, [props.get_all_menu_loading]);
+    }, [props.get_all_restaurant_loading]);
 
-    console.log(props.get_all_menu_data);
+    console.log(props.get_all_restaurant_data);
     return (
         <React.Fragment>
 
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle="Foodi" title="Restaurant" breadcrumbItem="Manage Restaurant Menu" />
+                    <Breadcrumbs maintitle="Foodi" title="Restaurant" breadcrumbItem="Menu Item TIme Slot" />
                     <Row>
                         <Col className="col-12">
                             <Card style={{ border: "none" }}>
                                 <CardBody >
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Menu </CardTitle>
-                                        <Link to="/add-menu">
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Menu Time Slot</CardTitle>
+                                        <Link to="/add-time-slot">
                                             <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}>
-                                                Add Menu
+                                                Add Time Slot
                                             </Button>
                                         </Link>
                                     </div>
 
-                                    {props.get_all_menu_data ? props.get_all_menu_data.length > 0 ? <DatatableTablesWorking products={props.get_all_menu_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_menu_data?._id} /> : null : null}
+                                    {/* {props.get_all_restaurant_data ? props.get_all_restaurant_data.length > 0 ? <DatatableTablesWorking products={props.get_all_restaurant_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_restaurant_data?._id} /> : null : null} */}
 
                                 </CardBody>
                             </Card>
@@ -148,22 +135,18 @@ function Menu(props) {
 const mapStateToProps = state => {
 
     const {
-        get_all_menu_data,
-        get_all_menu_error,
-        get_all_menu_loading
+
 
     } = state.Restaurant;
 
     return {
-        get_all_menu_data,
-        get_all_menu_error,
-        get_all_menu_loading
+
     };
 };
 
 export default withRouter(
     connect(mapStateToProps,
         {
-            getAllRestaurantMenuItemAction
-        })(Menu)
+
+        })(MenuTimeSlot)
 );
