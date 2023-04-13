@@ -89,8 +89,8 @@ function AddCampaign(props) {
   const handleSubmit = e => {
     e.preventDefault()
     const uniqueId = uuidv4()
-    console.log(campaignInfo);
-    // props.addCampaignAction(uniqueId, campaignInfo, selectedBranch)
+    // console.log(campaignInfo);
+    props.addCampaignAction(uniqueId, campaignInfo, selectedBranch)
   }
 
   const handleSubmitForEdit = e => {
