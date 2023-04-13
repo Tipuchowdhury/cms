@@ -6,12 +6,12 @@ import { toast } from 'react-toastify';
 import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { restaurantAddAction, getAllRestaurantAction, restaurantNameUpdateAction } from 'store/actions';
+import { getAllAddOnsCategoryAction } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function AddOnsCategory(props) {
-
+    const navigate = useNavigate();
     const [name, setName] = useState("")
     const [modal, setModal] = useState(false);
     const [restaurantId, setId] = useState();
@@ -40,12 +40,11 @@ function AddOnsCategory(props) {
         props.restaurantAddAction(name, val);
         setName("")
     }
-    const handleEditName = (row) => {
+    const handleEdit = (row) => {
         console.log(row);
-        setId(row._id);
-        setRestaurantName(row.name);
-        toggleEditModal();
+        navigate("/category-addons", { state: row })
     }
+
     const handleNameChange = (e) => {
         setRestaurantName(e.target.value);
     }
@@ -66,7 +65,7 @@ function AddOnsCategory(props) {
             <Button
                 color="primary"
                 className="btn btn-primary waves-effect waves-light"
-                onClick={() => handleEditName(row)}
+                onClick={() => handleEdit(row)}
             >
                 Edit
             </Button>{" "}
@@ -114,13 +113,13 @@ function AddOnsCategory(props) {
 
 
     useEffect(() => {
-        if (props.get_all_restaurant_loading == false) {
-            props.getAllRestaurantAction();
+        if (props.get_all_addOns_category_loading == false) {
+            props.getAllAddOnsCategoryAction();
         }
 
-    }, [props.get_all_restaurant_loading]);
+    }, [props.get_all_addOns_category_loading]);
 
-    console.log(props.get_all_restaurant_data);
+    console.log(props.get_all_addOns_category_data);
     return (
         <React.Fragment>
 
@@ -142,8 +141,8 @@ function AddOnsCategory(props) {
 
                                     </div>
 
-                                    {props.get_all_restaurant_data ? props.get_all_restaurant_data.length > 0 ? <DatatableTablesWorking products={props.get_all_restaurant_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_restaurant_data?._id} /> : null : null}
+                                    {props.get_all_addOns_category_data ? props.get_all_addOns_category_data.length > 0 ? <DatatableTablesWorking products={props.get_all_addOns_category_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_addOns_category_data?._id} /> : null : null}
 
                                 </CardBody>
                             </Card>
@@ -173,32 +172,7 @@ function AddOnsCategory(props) {
                     </ModalBody>
                 </Modal>
 
-                {/* ============ edit modal start=============== */}
-                <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-                    <ModalHeader toggle={toggleEditModal}>Edit city name</ModalHeader>
-                    <ModalBody>
-                        <form className="mt-1" onSubmit={handleEditModalSubmit}>
 
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="username1">City Name</label>
-                                <input type="text" className="form-control" id="username1" placeholder="Enter city name" required value={restaurantName ? restaurantName : ''} onChange={handleNameChange} />
-                            </div>
-                            <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
-                                <Button color="primary" type="submit">
-                                    Submit
-                                </Button>{' '}
-                                <Button color="secondary" onClick={toggleEditModal}>
-                                    Cancel
-                                </Button>
-                            </div>
-
-                        </form>
-                    </ModalBody>
-                    <ModalFooter>
-
-                    </ModalFooter>
-                </Modal>
-                {/* ============ edit modal ends=============== */}
 
                 {/* ============ delete modal starts=============== */}
                 <Modal isOpen={modalDel} toggle={toggleDel} centered>
@@ -225,29 +199,21 @@ const mapStateToProps = state => {
 
     const {
 
-        add_restaurant_data,
-        add_restaurant_error,
-        add_restaurant_loading,
-
-        get_all_restaurant_data,
-        get_all_restaurant_loading,
+        get_all_addOns_category_data,
+        get_all_addOns_category_error,
+        get_all_addOns_category_loading,
     } = state.Restaurant;
 
     return {
-        add_restaurant_data,
-        add_restaurant_error,
-        add_restaurant_loading,
-
-        get_all_restaurant_data,
-        get_all_restaurant_loading,
+        get_all_addOns_category_data,
+        get_all_addOns_category_error,
+        get_all_addOns_category_loading,
     };
 };
 
 export default withRouter(
     connect(mapStateToProps,
         {
-            restaurantAddAction,
-            getAllRestaurantAction,
-            restaurantNameUpdateAction
+            getAllAddOnsCategoryAction
         })(AddOnsCategory)
 );

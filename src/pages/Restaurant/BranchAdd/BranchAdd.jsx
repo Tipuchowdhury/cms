@@ -86,10 +86,15 @@ function BranchAdd(props) {
         is_take_pre_order: location.state ? location.state.is_take_pre_order.toString() : "",
         is_veg: location.state ? location.state.is_veg.toString() : "",
         is_popular: location.state ? location.state.is_popular.toString() : "",
+        is_delivery: location.state ? location.state.is_delivery.toString() : "",
+        is_pickup: location.state ? location.state.is_pickup.toString() : "",
+        is_dine: location.state ? location.state.is_dine.toString() : "",
         commission: location.state ? location.state.commission : undefined,
         minimum_order_value: location.state ? location.state.min_order_value : undefined,
         delivery_time: location.state ? location.state.delivery_time : undefined,
+        pickup_time: location.state ? location.state.pickup_time : undefined,
         email: location.state ? location.state.email : "",
+        link: location.state ? location.state.share_link : "",
 
     })
     // get all restaurant
@@ -112,7 +117,7 @@ function BranchAdd(props) {
     }
 
     //-- cuisine value for edit
-    const common_cuisines = props?.get_all_cusine_data?.filter((elem) => location?.state?.cuisines?.find(({ cuisine_id }) => elem._id === cuisine_id));
+    const common_cuisines = props?.get_all_cuisine_data?.filter((elem) => location?.state?.cuisines?.find(({ cuisine_id }) => elem._id === cuisine_id));
 
     const cuisine_data_edit = common_cuisines ? common_cuisines?.map((item, key) => {
         return { label: item.name, value: item._id };
@@ -408,6 +413,18 @@ function BranchAdd(props) {
                                     </div>
                                 </Row>
 
+                                <Row className="mb-3">
+                                    <label
+                                        htmlFor="example-text-input"
+                                        className="col-md-2 col-form-label"
+                                    >
+                                        Link
+                                    </label>
+                                    <div className="col-md-10">
+                                        <input type="text" className="form-control" id="city" placeholder="Enter address" name="link" value={zoneInfo.link} onChange={handleInputs} />
+                                    </div>
+                                </Row>
+
 
                                 <Row className="mb-3">
                                     <label
@@ -679,6 +696,129 @@ function BranchAdd(props) {
                                         htmlFor="example-text-input"
                                         className="col-md-2 col-form-label"
                                     >
+                                        Delivery
+                                    </label>
+                                    <div className="col-md-10">
+                                        <div className="btn-group" role="group">
+                                            <input
+                                                type="radio"
+                                                className="btn-check"
+                                                id="is_delivery"
+                                                autoComplete="off"
+                                                name="is_delivery" onChange={handleInputs} value="true"
+                                                checked={zoneInfo.is_delivery == "true"}
+                                            />
+                                            <label
+                                                className="btn btn-outline-secondary"
+                                                htmlFor="is_delivery"
+                                            >
+                                                Yes
+                                            </label>
+
+                                            <input
+                                                type="radio"
+                                                className="btn-check"
+                                                name="is_delivery" onChange={handleInputs} value="false"
+                                                id="is_delivery1"
+                                                autoComplete="off"
+                                                checked={zoneInfo.is_delivery == "false"}
+                                            />
+                                            <label
+                                                className="btn btn-outline-secondary"
+                                                htmlFor="is_delivery1"
+                                            >
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </Row>
+                                <Row className="mb-3">
+                                    <label
+                                        htmlFor="example-text-input"
+                                        className="col-md-2 col-form-label"
+                                    >
+                                        Pickup
+                                    </label>
+                                    <div className="col-md-10">
+                                        <div className="btn-group" role="group">
+                                            <input
+                                                type="radio"
+                                                className="btn-check"
+                                                id="is_pickup"
+                                                autoComplete="off"
+                                                name="is_pickup" onChange={handleInputs} value="true"
+                                                checked={zoneInfo.is_pickup == "true"}
+                                            />
+                                            <label
+                                                className="btn btn-outline-secondary"
+                                                htmlFor="is_pickup"
+                                            >
+                                                Yes
+                                            </label>
+
+                                            <input
+                                                type="radio"
+                                                className="btn-check"
+                                                name="is_pickup" onChange={handleInputs} value="false"
+                                                id="is_pickup1"
+                                                autoComplete="off"
+                                                checked={zoneInfo.is_pickup == "false"}
+                                            />
+                                            <label
+                                                className="btn btn-outline-secondary"
+                                                htmlFor="is_pickup1"
+                                            >
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </Row>
+                                <Row className="mb-3">
+                                    <label
+                                        htmlFor="example-text-input"
+                                        className="col-md-2 col-form-label"
+                                    >
+                                        Dine
+                                    </label>
+                                    <div className="col-md-10">
+                                        <div className="btn-group" role="group">
+                                            <input
+                                                type="radio"
+                                                className="btn-check"
+                                                id="is_dine"
+                                                autoComplete="off"
+                                                name="is_dine" onChange={handleInputs} value="true"
+                                                checked={zoneInfo.is_dine == "true"}
+                                            />
+                                            <label
+                                                className="btn btn-outline-secondary"
+                                                htmlFor="is_dine"
+                                            >
+                                                Yes
+                                            </label>
+
+                                            <input
+                                                type="radio"
+                                                className="btn-check"
+                                                name="is_dine" onChange={handleInputs} value="false"
+                                                id="is_dine1"
+                                                autoComplete="off"
+                                                checked={zoneInfo.is_dine == "false"}
+                                            />
+                                            <label
+                                                className="btn btn-outline-secondary"
+                                                htmlFor="is_dine1"
+                                            >
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </Row>
+                                <Row className="mb-3">
+                                    <label
+                                        htmlFor="example-text-input"
+                                        className="col-md-2 col-form-label"
+                                    >
                                         Commmission
                                     </label>
                                     <div className="col-md-10">
@@ -706,6 +846,18 @@ function BranchAdd(props) {
                                     </label>
                                     <div className="col-md-10">
                                         <input type="number" className="form-control" id="city" placeholder="Enter Delivery Time" name="delivery_time" value={zoneInfo.delivery_time ?? ""} onChange={handleInputs} />
+                                    </div>
+                                </Row>
+
+                                <Row className="mb-3">
+                                    <label
+                                        htmlFor="example-text-input"
+                                        className="col-md-2 col-form-label"
+                                    >
+                                        Pickup Time
+                                    </label>
+                                    <div className="col-md-10">
+                                        <input type="number" className="form-control" id="city" placeholder="Enter Delivery Time" name="pickup_time" value={zoneInfo.pickup_time ?? ""} onChange={handleInputs} />
                                     </div>
                                 </Row>
                                 <Row className="mb-3">

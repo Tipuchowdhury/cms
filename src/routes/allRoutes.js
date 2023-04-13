@@ -134,6 +134,8 @@ import Cuisine from "pages/Restaurant/Cuisine/Cuisine"
 import RewardPoint from "pages/CRM/RewardPoints/RewardPoint"
 import Coupon from "pages/Coupon/Coupon"
 import AddCoupon from "pages/Coupon/AddCoupon"
+import MenuTimeSlot from "pages/Restaurant/MenuItemTimeSlot/MenuTimeSlot"
+import AddTimeSlot from "pages/Restaurant/MenuItemTimeSlot/AddTimeSlot/AddTimeSlot"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -177,6 +179,8 @@ const userRoutes = [
   { path: "/addons-category", component: <AddOnsCategory /> },
   { path: "/category-addons", component: <CategoryAdd /> },
   { path: "/cuisine", component: <Cuisine /> },
+  { path: "/time-slot", component: <MenuTimeSlot /> },
+  { path: "/add-time-slot", component: <AddTimeSlot /> },
 
   //Sliders
   { path: "/slider", component: <Slider /> },

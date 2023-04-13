@@ -220,6 +220,9 @@ const SidebarContent = props => {
                     {props.t("Add-ons Category")}{" "}
                   </Link>
                 </li>
+                <li>
+                  <Link to="/time-slot">{props.t("Menu Time Slot")} </Link>
+                </li>
               </ul>
             </li>
             <li>

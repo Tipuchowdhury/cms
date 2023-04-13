@@ -9,19 +9,13 @@ import { addOnsCategoryAction, addOnCategoryAddFresh } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-function CategoryAdd(props) {
+function AddTimeSlot(props) {
     const location = useLocation();
     const navigate = useNavigate();
     const [category, setCategory] = useState({
         name: location.state ? location.state.name : "",
-        add_on_category_desc: location.state ? location.state.add_on_category_desc : "",
-        num_of_choice: location.state ? location.state.cat_max_choice : "",
-
-
     })
-    const [checked, setChecked] = useState(false);
-    const [isChecked, setIsChecked] = useState(location.state ? location.state.cat_is_multiple : false)
-    const addOnsTemplate = { add_on_name: "", add_on_price: "", categoryName: category?.name }
+    const addOnsTemplate = { start_time: "", end_time: "" }
     const [addOns, setAddOns] = useState(location.state ? location.state.preset_add_ons : [addOnsTemplate]);
     const handleAddOnsCat = (e, index) => {
         console.log(index);
@@ -86,13 +80,13 @@ function CategoryAdd(props) {
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle="Foodi" title="Add-ons Category" breadcrumbItem="Add Add-ons Category" />
+                    <Breadcrumbs maintitle="Foodi" title="Menu Time Slot" breadcrumbItem="Add Menu Time Slot" />
                     <Row>
                         <Col className="col-12">
                             <Card style={{ border: "none" }}>
                                 <CardBody >
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Add-ons Category </CardTitle>
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Add Menu Time Slot </CardTitle>
                                     </div>
 
                                 </CardBody>
@@ -107,36 +101,25 @@ function CategoryAdd(props) {
                                         htmlFor="example-text-input"
                                         className="col-md-2 col-form-label"
                                     >
-                                        Category Name
+                                        Slot Name
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="text" className="form-control" id="name" placeholder="Enter branch name" name="name" onChange={handleInputs} value={category.name ?? ""} />
+                                        <input type="text" className="form-control" id="name" placeholder="Enter slot name" name="name" onChange={handleInputs} value={category.name ?? ""} />
                                     </div>
                                 </Row>
+
+
 
                                 <Row className="mb-3">
                                     <label
                                         htmlFor="example-text-input"
                                         className="col-md-2 col-form-label"
                                     >
-                                        Category Description
-                                    </label>
-                                    <div className="col-md-10">
-                                        <input type="text" className="form-control" id="name" placeholder="Enter category description" name="add_on_category_desc" onChange={handleInputs} value={category.add_on_category_desc ?? ""} />
-                                    </div>
-                                </Row>
-
-                                <Row className="mb-3">
-                                    <label
-                                        htmlFor="example-text-input"
-                                        className="col-md-2 col-form-label"
-                                    >
-                                        Preser Addons
+                                        Menu Availability
                                     </label>
 
                                     <div className="col-md-10">
 
-                                        <input type="checkbox" id="cat_is_multiple" name="cat_is_multiple" checked={isChecked} onChange={checkHandler} value="true" style={{ margin: "15px 5px 20px 0px" }} />Multiple Selection
 
                                         {addOns.map((row, idx) => (
                                             <React.Fragment key={idx}>
@@ -144,19 +127,15 @@ function CategoryAdd(props) {
                                                     <div data-repeater-item className="row">
 
                                                         <div className="mb-3 col-lg-3">
-                                                            <label className="form-label" htmlFor="startTime">Add-ons Name</label>
-                                                            <input type="text" id="startTime" className="form-control" name="add_on_name" placeholder="Add-ons name" value={row.add_on_name} onChange={(e) => handleAddOnsCat(e, idx)} />
+                                                            <label className="form-label" htmlFor="startTime">Start Time</label>
+                                                            <input type="time" id="startTime" className="form-control" name="start_time" placeholder="Add-ons name" value={row.start_time} onChange={(e) => handleAddOnsCat(e, idx)} />
                                                         </div>
 
                                                         <div className="mb-3 col-lg-3">
-                                                            <label className="form-label" htmlFor="subject">Price</label>
-                                                            <input type="number" id="subject" className="form-control" name="add_on_price" placeholder="Price" value={row.add_on_price} onChange={(e) => handleAddOnsCat(e, idx)} />
+                                                            <label className="form-label" htmlFor="subject">End Time</label>
+                                                            <input type="time" id="subject" className="form-control" name="end_time" placeholder="Price" value={row.end_time} onChange={(e) => handleAddOnsCat(e, idx)} />
                                                         </div>
 
-                                                        <div className="mb-3 col-lg-3">
-                                                            <label className="form-label" htmlFor="subject">Category Name</label>
-                                                            <input type="text" className="form-control" id="name" placeholder="Enter branch name" name="categoryName" readOnly value={category.name ?? ""} />
-                                                        </div>
 
                                                         <Col lg={2} className="align-self-center d-grid mt-3">
                                                             <input data-repeater-delete type="button" className="btn btn-primary" value="Delete" onClick={() => (handleRowDelete(idx))} />
@@ -176,12 +155,6 @@ function CategoryAdd(props) {
                                             Add
                                         </Button>
 
-                                        {isChecked ?
-                                            <div className="mt-4 col-lg-3">
-                                                <label className="form-label" htmlFor="subject">Maximum required number of choice(s)</label>
-                                                <input type="number" id="subject" className="form-control" placeholder="Enter number" name="num_of_choice" value={category.num_of_choice} onChange={handleInputs} />
-                                            </div>
-                                            : ""}
 
 
                                     </div>
@@ -232,5 +205,5 @@ export default withRouter(
         {
             addOnsCategoryAction,
             addOnCategoryAddFresh
-        })(CategoryAdd)
+        })(AddTimeSlot)
 );
