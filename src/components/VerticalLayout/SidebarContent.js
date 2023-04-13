@@ -220,9 +220,9 @@ const SidebarContent = props => {
                     {props.t("Add-ons Category")}{" "}
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link to="/time-slot">{props.t("Menu Time Slot")} </Link>
-                </li>
+                </li> */}
               </ul>
             </li>
             <li>
@@ -232,20 +232,18 @@ const SidebarContent = props => {
                 <span>{props.t("Campaign")}</span>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link to="/slider" className="waves-effect">
                 <i className="ti-image"></i>
-                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("Slider")}</span>
               </Link>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <Link to="/coupon" className="waves-effect">
                 <i className="fa fa-tag"></i>
-                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("Coupons")}</span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="ti-face-smile"></i>
