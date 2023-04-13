@@ -31,6 +31,7 @@ export const addCampaignAction = (id, data, selectedBranch) => {
         }
       })
       : null
+  // console.log(selectedBranchData);
   const formData = {
     _id: id,
     ...data,

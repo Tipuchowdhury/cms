@@ -282,6 +282,8 @@ function SubscriptionTypes(props) {
 
     }, [props.add_subscription_type_loading, props.subscription_type_edit_loading,
     props.subscription_type_delete_loading, props.subscription_type_status_edit_loading]);
+
+    // console.log(props.get_all_subscription_type_data);
     return (
         <React.Fragment>
             <div className='page-content'>
@@ -479,7 +481,7 @@ function SubscriptionTypes(props) {
                         <div className="icon-box">
                             <i className="fa red-circle fa-trash" style={{ color: "red", fontSize: "40px" }}></i>
                         </div>
-                        <h2>Are you sure?</h2>
+                        Are you sure?
                     </ModalHeader>
                     <ModalBody>Do you really want to delete these records? This process cannot be undone.</ModalBody>
                     <ModalFooter>

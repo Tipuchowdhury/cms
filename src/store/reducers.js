@@ -14,7 +14,7 @@ import Restaurant from "./Restaurant/reducer"
 import Category from "./Category/reducer"
 import Campaign from "./Campaign/reducer"
 import SubscriptionTypes from "./SubscriptionTypes/reducer"
-
+import Sliders from "./slider/reducer"
 //Calendar
 import calendar from "./calendar/reducer"
 
@@ -32,6 +32,7 @@ const rootReducer = combineReducers({
   Category,
   Campaign,
   SubscriptionTypes,
+  Sliders,
 })
 
 export default rootReducer
