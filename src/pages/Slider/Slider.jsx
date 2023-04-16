@@ -17,6 +17,8 @@ import Select from "react-select";
 
 function Slider(props) {
 
+    document.title = "Slider | Foodi"
+
     const [modal, setModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [modalDel, setModalDel] = useState(false);
