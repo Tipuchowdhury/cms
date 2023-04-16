@@ -240,7 +240,7 @@ export const userUpdateAction = (registerInfo, role) => {
         mobile_number: registerInfo.mobileNumber,
         email: registerInfo.email,
         role_id: role,
-        is_active: !(registerInfo.is_active),
+        is_active: registerInfo.is_active,
     };
     console.log(formData);
     return dispatch => {

@@ -111,12 +111,13 @@ function AddZone(props) {
 
     };
 
+    console.log(location.state);
 
     const [zoneInfo, setZoneInfo] = useState({
         area: location.state ? location.state.name : "",
         city: location.state ? location.state.city_id : "",
         radius: location.state ? location.state.radius : "",
-
+        is_active: location.state ? location.state.is_active : true,
     })
 
 

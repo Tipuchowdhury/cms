@@ -52,6 +52,7 @@ function Slider(props) {
 
     const [deleteItem, setDeleteItem] = useState();
 
+    const [newSelectedRestaurant, setNewSelectedRestaurant] = useState([]);
     const [restaurant, setRestaurant] = useState([]);
 
     // const common_restaurants = props?.get_all_branch_data?.filter((elem) => restaurant?.find(({ res_id }) => elem._id === res_id));
@@ -63,10 +64,15 @@ function Slider(props) {
     //select multiple branch
     // const [selectedRestaurant, setSelectedRestaurant] = useState(restaurant_data_edit ? restaurant_data_edit : "");
 
-    // const [selectedRestaurant, setSelectedRestaurant] = useState([]);
+    const [selectedRestaurant, setSelectedRestaurant] = useState([]);
     const handleSelectRestaurant = (e) => {
         // console.log(e)
         setSelectedRestaurant(e)
+    }
+
+    const handleNewSelectRestaurant = (e) => {
+        // console.log(e)
+        setNewSelectedRestaurant(e)
     }
 
     let allRestaurant = undefined;
@@ -76,13 +82,13 @@ function Slider(props) {
         }));
     }
 
-    const common_restaurants = props?.get_all_branch_data?.filter((elem) => restaurant?.find(({ res_id }) => elem._id === res_id));
+    // const common_restaurants = props?.get_all_branch_data?.filter((elem) => restaurant?.find(({ res_id }) => elem._id === res_id));
 
-    const restaurant_data_edit = common_restaurants ? common_restaurants.map((item, key) => {
-        return { label: item.name, value: item._id };
-    }) : "";
+    // const restaurant_data_edit = common_restaurants ? common_restaurants.map((item, key) => {
+    //     return { label: item.name, value: item._id };
+    // }) : "";
 
-    const [selectedRestaurant, setSelectedRestaurant] = useState(restaurant_data_edit ? restaurant_data_edit : "");
+    //const [selectedRestaurant, setSelectedRestaurant] = useState(restaurant_data_edit ? restaurant_data_edit : "");
 
     // console.log(restaurant_data_edit);
     // console.log(selectedRestaurant);
@@ -103,12 +109,24 @@ function Slider(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        props.addSliderAction(addInfo, selectedRestaurant);
+        props.addSliderAction(addInfo, newSelectedRestaurant);
+    }
+
+
+    const newRest = (nn) => {
+        const common_restaurants = props?.get_all_branch_data?.filter((elem) => nn?.find(({ res_id }) => elem._id === res_id));
+
+        const restaurant_data_edit = common_restaurants ? common_restaurants.map((item, key) => {
+            return { label: item.name, value: item._id };
+        }) : "";
+        //console.log(nn);
+        // console.log(restaurant_data_edit);
+        setSelectedRestaurant(restaurant_data_edit);
     }
 
 
     const handleEditSlider = (row) => {
-        // console.log(row);
+        console.log(row);
 
         setEditInfo(prevState => ({
             _id: row._id,
@@ -123,17 +141,11 @@ function Slider(props) {
         }));
 
         setRestaurant(row.restaurants)
-
-        // console.log(restaurant_data_edit);
-
-
-        // setSelectedRestaurant(restaurant_data_edit);
+        newRest(row.restaurants);
 
         toggleEditModal();
 
     }
-
-
 
     const handleEdit = (e) => {
         e.preventDefault();
@@ -340,8 +352,8 @@ function Slider(props) {
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="restaurants">Restaurants</label>
                                 <Select
-                                    value={selectedRestaurant}
-                                    onChange={handleSelectRestaurant}
+                                    value={newSelectedRestaurant}
+                                    onChange={handleNewSelectRestaurant}
                                     options={allRestaurant}
                                     isMulti={true}
                                 />

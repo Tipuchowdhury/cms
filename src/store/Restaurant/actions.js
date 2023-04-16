@@ -21,6 +21,7 @@ import {
   ADD_CUISINE,
   GET_CUISINE,
   EDIT_CUISINE,
+  EDIT_CUISINE_STATUS,
   GET_ADD_ONS_CATEGORY,
   ADD_ONS_CATEGORY_FRESH,
   ADD_RESTAURANT_MENU,
@@ -202,30 +203,30 @@ export const branchAddAction = (
   const data =
     selectedCuisine?.length > 0
       ? selectedCuisine.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            cuisine_id: item.value,
-            branch_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          cuisine_id: item.value,
+          branch_id: id,
+        }
+      })
       : null
 
   console.log(data)
   const all_working_hours =
     time?.length > 0
       ? time.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            day: Number(item.day),
-            open_hour: moment(item.startTime, "HH:mm").get("hours"),
-            open_min: moment(item.startTime, "HH:mm").get("minutes"),
-            close_hour: moment(item.endTime, "HH:mm").get("hours"),
-            close_minute: moment(item.endTime, "HH:mm").get("minutes"),
-            branch_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          day: Number(item.day),
+          open_hour: moment(item.startTime, "HH:mm").get("hours"),
+          open_min: moment(item.startTime, "HH:mm").get("minutes"),
+          close_hour: moment(item.endTime, "HH:mm").get("hours"),
+          close_minute: moment(item.endTime, "HH:mm").get("minutes"),
+          branch_id: id,
+        }
+      })
       : null
   let formData = {
     name: zoneInfo.name,
@@ -311,30 +312,30 @@ export const branchEditAction = (
   const data =
     selectedCuisine?.length > 0
       ? selectedCuisine.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            cuisine_id: item.value,
-            branch_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          cuisine_id: item.value,
+          branch_id: id,
+        }
+      })
       : null
 
   console.log(data)
   const all_working_hours =
     time?.length > 0
       ? time.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            day: Number(item.day),
-            open_hour: moment(item.startTime, "HH:mm").get("hours"),
-            open_min: moment(item.startTime, "HH:mm").get("minutes"),
-            close_hour: moment(item.endTime, "HH:mm").get("hours"),
-            close_minute: moment(item.endTime, "HH:mm").get("minutes"),
-            branch_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          day: Number(item.day),
+          open_hour: moment(item.startTime, "HH:mm").get("hours"),
+          open_min: moment(item.startTime, "HH:mm").get("minutes"),
+          close_hour: moment(item.endTime, "HH:mm").get("hours"),
+          close_minute: moment(item.endTime, "HH:mm").get("minutes"),
+          branch_id: id,
+        }
+      })
       : null
   let formData = {
     name: zoneInfo.name,
@@ -492,27 +493,27 @@ export const zoneAddAction = (
   const data =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            branch_id: item.value,
-            zone_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          branch_id: item.value,
+          zone_id: id,
+        }
+      })
       : null
 
   const delivery_charges =
     deliveryCharge?.length > 0
       ? deliveryCharge.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            distance_start_in_kilometer: Number(item.distanceStart),
-            distance_end_in_kilometer: Number(item.distanceEnd),
-            delivery_charge: Number(item.deliveryCharge),
-            zone_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          distance_start_in_kilometer: Number(item.distanceStart),
+          distance_end_in_kilometer: Number(item.distanceEnd),
+          delivery_charge: Number(item.deliveryCharge),
+          zone_id: id,
+        }
+      })
       : null
 
   const allData = path.map(item => [Number(item.lng), Number(item.lat)])
@@ -612,27 +613,27 @@ export const zoneEditAction = (
   const data =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            branch_id: item.value,
-            zone_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          branch_id: item.value,
+          zone_id: id,
+        }
+      })
       : null
 
   const delivery_charges =
     deliveryCharge?.length > 0
       ? deliveryCharge.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            distance_start_in_kilometer: Number(item.distanceStart),
-            distance_end_in_kilometer: Number(item.distanceEnd),
-            delivery_charge: Number(item.deliveryCharge),
-            zone_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          distance_start_in_kilometer: Number(item.distanceStart),
+          distance_end_in_kilometer: Number(item.distanceEnd),
+          delivery_charge: Number(item.deliveryCharge),
+          zone_id: id,
+        }
+      })
       : null
 
   const allData = path.map(item => [Number(item.lat), Number(item.lng)])
@@ -641,6 +642,7 @@ export const zoneEditAction = (
     _id: id,
     name: zoneInfo.area,
     radius: Number(zoneInfo.radius),
+    is_active: zoneInfo.is_active,
     lat_long: {
       coordinates: [allData],
       type: "Polygon",
@@ -772,15 +774,15 @@ export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
   const data =
     addOns?.length > 0
       ? addOns.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            add_on_name: item.add_on_name,
-            add_on_price: item.add_on_price,
-            add_on_category_name: category.name,
-            add_on_category_id: val,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          add_on_name: item.add_on_name,
+          add_on_price: item.add_on_price,
+          add_on_category_name: category.name,
+          add_on_category_id: val,
+        }
+      })
       : null
   const val_id = uuidv4()
   console.log(data)
@@ -887,11 +889,12 @@ export const getAllCuisneAction = () => {
   }
 }
 
-export const cuisineEditAction = (id, editName) => {
+export const cuisineEditAction = (id, editName, status) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Put"
   const formData = {
     _id: id,
     name: editName,
+    is_active: status,
     imane: "https://unsplash.com/photos/kcA-c3f_3FE",
   }
   return dispatch => {
@@ -915,6 +918,34 @@ export const cuisineEditAction = (id, editName) => {
           status: "Failed",
         })
         toast.error("Edit Cuisine Fialed !!")
+      })
+  }
+}
+
+export const cuisineStatusEditAction = data => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Put"
+  const formData = data
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: EDIT_CUISINE_STATUS,
+          status: "Success",
+        })
+        toast.success("Cuisine Status Updated Successfully")
+      })
+      .catch(error => {
+        dispatch({
+          type: EDIT_CUISINE_STATUS,
+          status: "Failed",
+        })
+        toast.error("Cuisine Status Updated Failed")
       })
   }
 }
