@@ -20,7 +20,7 @@ function ManageUsers(props) {
     const toggle = () => setModal(!modal);
     const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
     const handleEditUser = (row) => {
-        // console.log(row);
+        console.log(row);
         toggle()
         setRegisterInfo(prevState => ({
             first_name: row.first_name,
@@ -68,7 +68,7 @@ function ManageUsers(props) {
     const handleSubmit = (e) => {
         e.preventDefault();
         toggle();
-        // console.log(registerInfo);
+        console.log(registerInfo);
         // console.log(role);
         if (role) {
             props.userUpdateAction(registerInfo, role);

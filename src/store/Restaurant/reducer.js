@@ -24,6 +24,7 @@ import {
     ADD_CUISINE,
     GET_CUISINE,
     EDIT_CUISINE,
+    EDIT_CUISINE_STATUS,
     GET_ADD_ONS_CATEGORY,
     ADD_ONS_CATEGORY_FRESH,
     ADD_RESTAURANT_MENU,
@@ -86,6 +87,7 @@ const initialState = {
     get_all_cuisine_loading: false,
 
     edit_cuisine_loading: false,
+    edit_status_cuisine_loading: false,
 
     add_restaurant_menu_data: null,
     add_restaurant_menu_error: null,
@@ -316,6 +318,15 @@ const Restaurant = (state = initialState, action) => {
                 get_all_cuisine_loading: false
             }
             break;
+
+        case EDIT_CUISINE_STATUS:
+            state = {
+                ...state,
+                edit_status_cuisine_loading: action.status,
+                get_all_cuisine_loading: false
+            }
+            break;
+
 
         case GET_ADD_ONS_CATEGORY:
             state = {
