@@ -21,7 +21,17 @@ import {
     ADD_ONS_CATEGORY_FRESH,
     ADD_RESTAURANT_MENU,
     GET_RESTAURANT_MENU,
-    ADD_RESTAURANT_MENU_FRESH
+    ADD_RESTAURANT_MENU_FRESH,
+    EDIT_ADD_ONS_CATEGORY,
+    EDIT_ADD_ONS_CATEGORY_FRESH,
+    ADD_MENU_TIME_SLOT,
+    GET_ALL_MENU_TIME_SLOT,
+    ADD_MENU_TIME_SLOT_FRESH,
+    EDIT_MENU_TIME_SLOT,
+    EDIT_MENU_TIME_SLOT_FRESH,
+    GET_CATEGORY_BY_ID,
+    GET_CATEGORY_BY_ID_FRESH
+
 
 } from "./actionTypes"
 
@@ -84,6 +94,22 @@ const initialState = {
     get_all_menu_data: null,
     get_all_menu_error: null,
     get_all_menu_loading: false,
+
+    edit_addOn_category_loading: false,
+
+    add_menu_time_slot_data: null,
+    add_menu_time_slot_error: null,
+    add_menu_time_slot_loading: false,
+
+    get_all_menu_time_slot_data: null,
+    get_all_menu_time_slot_error: null,
+    get_all_menu_time_slot_loading: false,
+
+    edit_menu_time_slot_loading: false,
+
+    get_category_by_id_data: null,
+    get_category_by_id_error: null,
+    get_category_by_id_loading: false,
 }
 
 const Restaurant = (state = initialState, action) => {
@@ -284,6 +310,84 @@ const Restaurant = (state = initialState, action) => {
                 get_all_menu_error: action.error,
                 get_all_menu_loading: action.status
 
+            }
+            break;
+        case EDIT_ADD_ONS_CATEGORY:
+            state = {
+                ...state,
+                edit_addOn_category_loading: action.status,
+                //get_all_branch_loading: false,
+                get_all_addOns_category_loading: false
+            }
+            break;
+
+        case EDIT_ADD_ONS_CATEGORY_FRESH:
+            state = {
+                ...state,
+                edit_addOn_category_loading: action.status,
+
+            }
+            break;
+
+        case ADD_MENU_TIME_SLOT:
+            state = {
+                ...state,
+                add_menu_time_slot_data: action.payload,
+                add_menu_time_slot_error: null,
+                add_menu_time_slot_loading: action.status,
+                get_all_menu_time_slot_loading: false
+
+            }
+
+            break;
+
+        case GET_ALL_MENU_TIME_SLOT:
+            state = {
+                ...state,
+                get_all_menu_time_slot_data: action.payload,
+                get_all_menu_time_slot_error: action.error,
+                get_all_menu_time_slot_loading: action.status
+
+            }
+            break;
+
+        case ADD_MENU_TIME_SLOT_FRESH:
+            state = {
+                ...state,
+                add_menu_time_slot_loading: action.status,
+            }
+            break;
+
+        case EDIT_MENU_TIME_SLOT:
+            state = {
+                ...state,
+                edit_menu_time_slot_loading: action.status,
+                get_all_menu_time_slot_loading: false,
+            }
+            break;
+
+        case EDIT_MENU_TIME_SLOT_FRESH:
+            state = {
+                ...state,
+                edit_menu_time_slot_loading: action.status,
+            }
+            break;
+
+        case GET_CATEGORY_BY_ID:
+            state = {
+                ...state,
+                get_category_by_id_data: action.payload,
+                get_category_by_id_error: action.error,
+                get_category_by_id_loading: action.status
+
+            }
+            break;
+
+        case GET_CATEGORY_BY_ID_FRESH:
+            state = {
+                ...state,
+                get_category_by_id_data: action.payload,
+                get_category_by_id_loading: action.status
             }
             break;
 

@@ -18,7 +18,16 @@ import {
     ADD_ONS_CATEGORY_FRESH,
     ADD_RESTAURANT_MENU,
     GET_RESTAURANT_MENU,
-    ADD_RESTAURANT_MENU_FRESH
+    ADD_RESTAURANT_MENU_FRESH,
+    EDIT_ADD_ONS_CATEGORY,
+    EDIT_ADD_ONS_CATEGORY_FRESH,
+    ADD_MENU_TIME_SLOT,
+    GET_ALL_MENU_TIME_SLOT,
+    ADD_MENU_TIME_SLOT_FRESH,
+    EDIT_MENU_TIME_SLOT,
+    EDIT_MENU_TIME_SLOT_FRESH,
+    GET_CATEGORY_BY_ID,
+    GET_CATEGORY_BY_ID_FRESH
 
 } from "./actionTypes"
 import axios from "axios";
@@ -622,7 +631,7 @@ export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
         language_slug: "en",
         add_on_category_desc: category.add_on_category_desc,
         variation_id: val_id,
-        //is_active: true
+        is_active: true,
         preset_add_ons: data
 
     };
@@ -655,6 +664,70 @@ export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
     };
 
 };
+
+
+export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
+    console.log(val, category, isChecked, addOns);
+    console.log(parseInt(category.num_of_choice));
+
+    var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Put";
+
+    const data = addOns?.length > 0 ? addOns.map(item => {
+        const val = uuidv4();
+        return {
+            _id: val,
+            add_on_name: item.add_on_name,
+            add_on_price: item.add_on_price,
+            add_on_category_name: category.name,
+            add_on_category_id: val
+
+        }
+    }) : null
+    const val_id = uuidv4();
+    console.log(data);
+
+    let formData = {
+        _id: val,
+        name: category.name,
+        cat_is_multiple: isChecked,
+        cat_max_choice: parseInt(category.num_of_choice),
+        language_slug: "en",
+        add_on_category_desc: category.add_on_category_desc,
+        variation_id: val_id,
+        //is_active: true
+        preset_add_ons: data
+
+    };
+
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        };
+
+        axios
+            .put(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: "EDIT_ADD_ONS_CATEGORY",
+                    payload: response.data,
+                    status: "Success",
+                });
+                toast.success("Addon Category Edited Successfully");
+            })
+            .catch(error => {
+                dispatch({
+                    type: "EDIT_ADD_ONS_CATEGORY",
+                    error: error,
+                    status: "Failed",
+                });
+                toast.error("Addon Category Edit Failed");
+            });
+
+    };
+
+};
+
 
 export const addCuisineAction = (id, name) => {
     var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Post";
@@ -923,3 +996,205 @@ export const addRestaurantMenuAddFresh = () => {
     };
 };
 
+export const editAddOnCategoryFresh = () => {
+    return dispatch => {
+        dispatch({
+            type: "EDIT_ADD_ONS_CATEGORY_FRESH",
+            //payload: null,
+            status: false,
+        });
+    };
+};
+
+export const addMenuTimeSlotAction = (val, timeSlot) => {
+    console.log(val, timeSlot);
+    var url = process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/Post";
+
+    let formData = {
+        _id: val,
+        name: timeSlot.name,
+        branch_id: timeSlot.branch,
+        start_time: {
+            hour: moment(timeSlot.start_time, "HH:mm").get('hours'),
+            minute: moment(timeSlot.start_time, "HH:mm").get('minutes'),
+        },
+
+        end_time: {
+            hour: moment(timeSlot.end_time, "HH:mm").get('hours'),
+            minute: moment(timeSlot.end_time, "HH:mm").get('minutes'),
+        },
+
+
+    };
+
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        };
+
+        axios
+            .post(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: "ADD_MENU_TIME_SLOT",
+                    payload: response.data,
+                    status: "Success",
+                });
+                toast.success("Timeslot Addedd Successfully");
+            })
+            .catch(error => {
+                dispatch({
+                    type: "ADD_MENU_TIME_SLOT",
+                    payload: error,
+                    status: "Failed",
+                });
+                toast.error("Timeslot Add Failed");
+            });
+
+    };
+
+};
+
+export const getAllMenuTimeSlot = () => {
+    var url = process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/Get";
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+
+        };
+        axios
+            .get(url, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: GET_ALL_MENU_TIME_SLOT,
+                    payload: response.data,
+                    status: "Success",
+                });
+
+            })
+            .catch(error => {
+                dispatch({
+                    type: GET_ALL_MENU_TIME_SLOT,
+                    status: "Failed",
+                });
+
+            });
+    };
+};
+
+
+export const addMenuTimeSlotFresh = () => {
+    return dispatch => {
+        dispatch({
+            type: "ADD_MENU_TIME_SLOT_FRESH",
+            //payload: null,
+            status: false,
+        });
+    };
+};
+
+
+
+export const editMenuTimeSlotAction = (val, timeSlot) => {
+    console.log(val, timeSlot);
+    var url = process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/Put";
+
+    let formData = {
+        _id: val,
+        name: timeSlot.name,
+        branch_id: timeSlot.branch,
+        start_time: {
+            hour: moment(timeSlot.start_time, "HH:mm").get('hours'),
+            minute: moment(timeSlot.start_time, "HH:mm").get('minutes'),
+        },
+
+        end_time: {
+            hour: moment(timeSlot.end_time, "HH:mm").get('hours'),
+            minute: moment(timeSlot.end_time, "HH:mm").get('minutes'),
+        },
+
+
+    };
+
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        };
+
+        axios
+            .put(url, formData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: "EDIT_MENU_TIME_SLOT",
+                    payload: response.data,
+                    status: "Success",
+                });
+                toast.success("Timeslot Edited Successfully");
+            })
+            .catch(error => {
+                dispatch({
+                    type: "EDIT_MENU_TIME_SLOT",
+                    payload: error,
+                    status: "Failed",
+                });
+                toast.error("Timeslot Edit Failed");
+            });
+
+    };
+
+};
+
+export const editMenuTimeSlotFresh = () => {
+    return dispatch => {
+        dispatch({
+            type: "EDIT_MENU_TIME_SLOT_FRESH",
+            //payload: null,
+            status: false,
+        });
+    };
+};
+
+export const getCategoryByIdAction = (id) => {
+    var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/GetById?id=" + id;
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+
+        };
+        axios
+            .get(url, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: GET_CATEGORY_BY_ID,
+                    payload: response.data,
+                    status: "Success",
+                });
+
+            })
+            .catch(error => {
+                dispatch({
+                    type: GET_CATEGORY_BY_ID,
+                    status: "Failed",
+                });
+
+            });
+    };
+};
+
+
+export const getCategoryByIdFresh = () => {
+    console.log("=======In the fresh ---------");
+    return dispatch => {
+        dispatch({
+            type: "GET_CATEGORY_BY_ID_FRESH",
+            status: false,
+            payload: null,
+        });
+    };
+};
