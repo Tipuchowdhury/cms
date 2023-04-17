@@ -165,6 +165,16 @@ function Campaign(props) {
       props.addCampaignFresh()
     }
 
+    if (props.edit_campaign_loading === "Success") {
+      toast.success("Campaign edited Successfully")
+      props.campaignEditFresh()
+    }
+
+    if (props.edit_campaign_loading === "Failed") {
+      toast.error("Something went wrong")
+      props.campaignEditFresh()
+    }
+
     if (props.campaign_status_edit_loading === "Success") {
       toast.success("Status Updated")
       toggleStatus()
@@ -181,6 +191,7 @@ function Campaign(props) {
     props.campaign_name_edit_loading,
     props.campaign_delete_loading,
     props.campaign_status_edit_loading,
+    props.edit_campaign_loading
   ])
 
   return (
