@@ -23,6 +23,7 @@ import {
 import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
 import { useLocation, useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 function AddCampaign(props) {
   const navigate = useNavigate()
@@ -54,10 +55,13 @@ function AddCampaign(props) {
     }))
   }
 
+  console.log(location.state);
   const [campaignInfo, setCampaignInfo] = useState({
+
     name: location.state ? location.state.name : "",
     image: location.state ? location.state.image : "",
     description: location.state ? location.state.description : "",
+    is_active: location.state ? location.state.is_active : "",
     start_date: location.state
       ? location.state.start_date
       : new Date().toISOString(),
@@ -114,6 +118,7 @@ function AddCampaign(props) {
     }
 
     if (props.campaign_edit_loading === "Success") {
+      toast.success("Campaign edited Successfully")
       // redirect
       props.campaignEditFresh()
       navigate("/campaign")

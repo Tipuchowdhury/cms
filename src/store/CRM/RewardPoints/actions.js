@@ -97,12 +97,15 @@ export const getAllRewardPointFresh = () => {
   }
 }
 
-export const rewardPointNameEditAction = (name, id) => {
+export const rewardPointNameEditAction = (value, id, sub_id, is_active) => {
   var url = process.env.REACT_APP_LOCALHOST + "/RewardPointSetting/Put"
   const formData = {
     _id: id,
-    name: name,
+    per_point_value: value,
+    subscription_type_id: sub_id,
+    is_active: is_active,
   }
+  // console.log(formData);
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
