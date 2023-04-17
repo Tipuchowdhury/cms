@@ -239,6 +239,14 @@ const SidebarContent = props => {
                 <span>{props.t("Slider")}</span>
               </Link>
             </li>
+
+            <li>
+              <Link to="/branch-attribute" className="waves-effect">
+                <i className="ti-list"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
+                <span>{props.t("Branch Attribute")}</span>
+              </Link>
+            </li>
             <li>
               <Link to="/coupon" className="waves-effect">
                 <i className="fa fa-tag"></i>

@@ -18,6 +18,7 @@ import RewardPoints from "./CRM/RewardPoints/reducer"
 import Coupon from "./Coupon/reducer"
 
 import Sliders from "./slider/reducer"
+import BranchAttribute from "./BranchAttribute/reducer"
 //Calendar
 import calendar from "./calendar/reducer"
 
@@ -38,6 +39,7 @@ const rootReducer = combineReducers({
   RewardPoints,
   Coupon,
   Sliders,
+  BranchAttribute
 })
 
 export default rootReducer
