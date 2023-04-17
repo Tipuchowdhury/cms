@@ -4,13 +4,14 @@ import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react";
 import { connect } from "react-redux";
 import withRouter from 'components/Common/withRouter';
 import { useEffect } from 'react';
-import { getAllRestaurantAction, getAllBranchAction, addRestaurantMenuAction, addRestaurantMenuAddFresh, getAllAddOnsCategoryAction } from 'store/actions';
+import { getAllRestaurantAction, getAllBranchAction, addRestaurantMenuAction, addRestaurantMenuAddFresh, getAllAddOnsCategoryAction, getAllMenuTimeSlot, getCategoryByIdAction, getCategoryByIdFresh } from 'store/actions';
 import Breadcrumbs from 'components/Common/Breadcrumb';
 import { boolean } from 'yup';
 import Select from 'react-select';
 import { v4 as uuidv4 } from 'uuid';
 import moment from "moment";
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 const LoadingContainer = () => <div>Loading...</div>;
 
@@ -18,6 +19,7 @@ const LoadingContainer = () => <div>Loading...</div>;
 
 function AddMenu(props) {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [info, setInfo] = useState({
         name: "",
         menu_description: "",
@@ -42,7 +44,37 @@ function AddMenu(props) {
     const [isChecked, setIsChecked] = useState(false);
     const [addVariation, setAddVariation] = useState(false);
     const [modal, setModal] = useState(false);
+    const closeModal = () => {
+        console.log("=== In the close modal ========");
+        setModal(!modal);
+        //props.getCategoryByIdFresh();
+        // dispatch(getCategoryByIdFresh({
+        //     get_category_by_id_data: null,
+        //     get_category_by_id_loading: false
+        // }))
+    }
     const toggle = () => setModal(!modal);
+
+    // ===========================start working from here ====================
+    const [item, setItem] = useState([])
+
+    const handleChangeTime = (e, ClickedItem) => {
+        console.log(e.target.value);
+        console.log(item);
+        // Destructuring
+        const { value, checked } = e.target;
+        console.log(`${value} is ${checked}`);
+
+        // Case 1 : The user checks the box
+        if (checked) {
+            setItem([...item, ClickedItem])
+        } else {
+            setItem(item.filter((e) => e !== ClickedItem))
+        }
+
+    };
+    // ===========================ends here ====================
+    console.log(item);
 
     // get all branch
     console.log(props.get_all_branch_data);
@@ -89,6 +121,7 @@ function AddMenu(props) {
 
     }
     function handleAddRowNested() {
+        console.log("=======I am here ======");
         setAddOns([...addOns, addOnsTemplate]);
     }
     const handleRowDelete = (index) => {
@@ -109,44 +142,76 @@ function AddMenu(props) {
     }
 
     // ** here is all value for "Add Ad-ons Modal"
+    console.log(addOns);
     // *********************** start from here ****************************
+
+
     const [addAddOns, setAddAddOns] = useState({
         category: "",
-        num_of_choice_new: ""
     });
+    const [num_of_choice_new, setNumber] = useState();
     const [isCheckAddOns, setIsCheckAddOns] = useState(false);
+    let addAddOnName, addAddOnValue;
+    const handleInputsAddOns = (e) => {
+        addAddOnName = e.target.name;
+        addAddOnValue = e.target.value;
+        console.log(addAddOnValue);
+        setAddAddOns({ ...addAddOns, [addAddOnName]: addAddOnValue })
+        props.getCategoryByIdAction(addAddOnValue)
 
-
+    }
+    console.log(addAddOns.category);
+    console.log(props.get_category_by_id_data);
+    const [valueByID, setValue] = useState()
     const checkHandlerAddOns = () => {
         setIsCheckAddOns(!isCheckAddOns)
     }
-    const addOnsTemplateNew = { add_on_name: "", add_on_price: "" }
-    const [addOnsNew, setAddOnsNew] = useState([addOnsTemplateNew]);
+    console.log(props?.get_category_by_id_data?.preset_add_ons);
+
+    const [addOnsNew, setAddOnsNew] = useState(props?.get_category_by_id_data?.preset_add_ons);
+    console.log(addOnsNew);
+
     const handleAddOnsCatNew = (e, index) => {
         console.log(index);
-        const updatedValue = addOns.map((row, i) => index === i ? Object.assign(row, { [e.target.name]: e.target.value }) : row);
+        const updatedValue = addOnsNew.map((row, i) => index === i ? Object.assign(row, { [e.target.name]: e.target.value }) : row);
         setAddOnsNew(updatedValue)
 
     }
-    function handleAddRowNested() {
-        setAddOnsNew([...addOns, addOnsTemplateNew]);
-    }
+
     const handleRowDeleteNew = (index) => {
-        const filteredTime = [...addOns];
+        const filteredTime = [...addOnsNew];
         if (filteredTime.length > 1) {
             filteredTime.splice(index, 1);
             setAddOnsNew(filteredTime)
         }
 
     }
-    let addAddOnName, addAddOnValue;
-    const handleInputsAddOns = (e) => {
-        addAddOnName = e.target.name;
-        addAddOnValue = e.target.value;
-        setAddAddOns({ ...info, [addAddOnName]: addAddOnValue })
+
+    /*
+     * 
+     * add-ons under category start 
+     */
+    const addOnsTemplateNew = { add_on_name: "", add_on_price: "" }
+    const [addOnUnderCategory, setAddOnUnderCategory] = useState([]);
+    const [addBtnStatus, setAddBtnStatus] = useState(false);
+    const handleAddOnsUndeCategory = (e, index) => {
+        console.log(index);
+        const updatedValue = addOnUnderCategory.map((row, i) => index === i ? Object.assign(row, { [e.target.name]: e.target.value }) : row);
+        setAddOnUnderCategory(updatedValue)
 
     }
 
+    const handleRowDeleteUnderCategory = (index) => {
+        const filteredTime = [...addOnUnderCategory];
+
+        filteredTime.splice(index, 1);
+        setAddOnUnderCategory(filteredTime)
+
+
+    }
+    function handleAddRowNestedNew() {
+        setAddOnUnderCategory([...addOnUnderCategory, addOnsTemplateNew]);
+    }
     // ************************ ends here ********************************
     const handleAddMenu = (e) => {
         e.preventDefault();
@@ -155,6 +220,13 @@ function AddMenu(props) {
         const val = uuidv4();
         props.addRestaurantMenuAction(val, info, isChecked);
     }
+
+    /*
+    *
+    final template - for add menu addon
+    *
+    */
+    //const finalTemplate = { category_Name: "", category_personal_addOn: [], additionalAddOn: [] }
 
     useEffect(() => {
         // if (props.get_all_restaurant_loading == false) {
@@ -173,10 +245,19 @@ function AddMenu(props) {
             navigate("/menu")
             props.addRestaurantMenuAddFresh();
         }
-    }, [props.get_all_branch_loading, props.get_all_addOns_category_loading, props.add_restaurant_menu_loading]);
+
+        if (props.get_all_menu_time_slot_loading == false) {
+            props.getAllMenuTimeSlot();
+        }
+        if (props?.get_category_by_id_data?.preset_add_ons) {
+            setAddOnsNew(props?.get_category_by_id_data?.preset_add_ons)
+        }
+
+    }, [props.get_all_branch_loading, props.get_all_addOns_category_loading, props.add_restaurant_menu_loading, props.get_all_menu_time_slot_loading, props.get_category_by_id_data]);
 
     console.log(props.get_all_restaurant_data);
     console.log(props.get_all_branch_data);
+    console.log(props.get_all_menu_time_slot_data);
 
 
     return (
@@ -658,6 +739,50 @@ function AddMenu(props) {
                                     </div>
                                 </Row>
 
+                                <Row className="mb-3">
+                                    <label
+                                        htmlFor="example-text-input"
+                                        className="col-md-2 col-form-label"
+                                        style={{ marginTop: "22px" }}
+                                    >
+                                        Menu Availability
+                                    </label>
+                                    <div className="col-md-10">
+                                        {/* <input type="number" className="form-control" id="sd" placeholder="Enter sd amount" name="sd" onChange={handleInputs} value={info.sd ?? ""} required /> */}
+
+                                        {props?.get_all_menu_time_slot_data?.map((item) => (
+                                            <Row className="mb-3">
+                                                {/* <label
+                                                htmlFor="example-text-input"
+                                                className="col-md-2 col-form-label"
+                                            >
+
+                                            </label> */}
+                                                <div className="col-md-10" style={{ display: "flex", justifyContent: "space-between" }}>
+                                                    <div style={{ marginTop: "30px" }}>
+                                                        <input type="checkbox" id="cat_is_multiple" name="cat_is_multiple" style={{ margin: "0px 15px 50px 0px" }}
+                                                            value="true" onChange={(e) => handleChangeTime(e, item)} /><span style={{ fontSize: "16px", fontWeight: "bold" }}>{item?.name}</span>
+                                                    </div>
+
+
+                                                    <div className="mb-3 col-lg-3">
+                                                        <label className="form-label" htmlFor="startTime">Start Time</label>
+                                                        <input type="time" id="startTime" className="form-control" name="start_time" placeholder="Add-ons name" value={moment({ hour: item.start_time?.hour, minute: item?.start_time?.minute }).format('HH:mm')} />
+                                                    </div>
+
+                                                    <div className="mb-3 col-lg-3">
+                                                        <label className="form-label" htmlFor="subject">End Time</label>
+                                                        <input type="time" id="subject" className="form-control" name="end_time" placeholder="Price" value={moment({ hour: item.end_time?.hour, minute: item?.end_time?.minute }).format('HH:mm')} />
+                                                    </div>
+
+                                                </div>
+                                            </Row>
+                                        ))}
+
+                                    </div>
+
+                                </Row>
+
 
 
 
@@ -676,80 +801,106 @@ function AddMenu(props) {
                     </Row>
                 </Container>
             </div>
-            <Modal isOpen={modal} toggle={toggle} centered>
-                <ModalHeader toggle={toggle}>Add Addon</ModalHeader>
+            <Modal isOpen={modal} centered backdrop="static">
+                <ModalHeader toggle={closeModal}>Add Addon</ModalHeader>
                 <ModalBody>
                     <form>
+                        <div>
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="username">Category</label>
+                                <Input
+                                    id="exampleSelect"
+                                    name="category"
+                                    value={addAddOns.category}
+                                    //required={true}
+                                    onChange={handleInputsAddOns}
+                                    type="select"
+                                >
+                                    <option>Choose...</option>
+                                    {categoryData}
+                                </Input>
+                            </div>
 
-                        <div className="mb-3">
-                            <label className="form-label" htmlFor="username">Category</label>
-                            <Input
-                                id="exampleSelect"
-                                name="category"
-                                value={addAddOns.category}
-                                //required={true}
-                                onChange={handleInputsAddOns}
-                                type="select"
-                            >
-                                <option>Choose...</option>
-                                {categoryData}
-                            </Input>
-                        </div>
+                            <div className="col-md-12">
 
-                        <div className="col-md-12">
+                                <input type="checkbox" id="cat_is_multiple" name="cat_is_multiple_add_ons" checked={isCheckAddOns} onChange={checkHandlerAddOns} value="true" style={{ margin: "15px 5px 20px 0px" }} />Multiple Selection
+                                {/* {addOnsNew?.map((row, idx) => ( */}
+                                {addOnsNew?.map((row, idx) => (
+                                    <React.Fragment key={idx}>
+                                        <div data-repeater-list="group-a" id={"addr" + idx}>
+                                            <div data-repeater-item className="row">
 
-                            <input type="checkbox" id="cat_is_multiple" name="cat_is_multiple_add_ons" checked={isCheckAddOns} onChange={checkHandlerAddOns} value="true" style={{ margin: "15px 5px 20px 0px" }} />Multiple Selection
+                                                <div className="mb-3 col-lg-4">
+                                                    <label className="form-label" htmlFor="startTime">Add-ons Name</label>
+                                                    <input type="text" id="startTime" className="form-control" name="add_on_name" placeholder="Add-ons name" value={row.add_on_name} onChange={(e) => handleAddOnsCatNew(e, idx)} />
+                                                </div>
 
-                            {addOnsNew.map((row, idx) => (
-                                <React.Fragment key={idx}>
-                                    <div data-repeater-list="group-a" id={"addr" + idx}>
-                                        <div data-repeater-item className="row">
+                                                <div className="mb-3 col-lg-4">
+                                                    <label className="form-label" htmlFor="subject">Price</label>
+                                                    <input type="number" id="subject" className="form-control" name="add_on_price" placeholder="Price" value={row.add_on_price} onChange={(e) => handleAddOnsCatNew(e, idx)} />
+                                                </div>
 
-                                            <div className="mb-3 col-lg-4">
-                                                <label className="form-label" htmlFor="startTime">Add-ons Name</label>
-                                                <input type="text" id="startTime" className="form-control" name="add_on_name" placeholder="Add-ons name" value={row.add_on_name} onChange={(e) => handleAddOnsCatNew(e, idx)} />
+
+                                                <Col lg={2} className="align-self-center d-grid mt-3">
+                                                    <input data-repeater-delete type="button" className="btn btn-primary" value="Delete" onClick={() => (handleRowDeleteNew(idx))} />
+                                                </Col>
                                             </div>
 
-                                            <div className="mb-3 col-lg-4">
-                                                <label className="form-label" htmlFor="subject">Price</label>
-                                                <input type="number" id="subject" className="form-control" name="add_on_price" placeholder="Price" value={row.add_on_price} onChange={(e) => handleAddOnsCatNew(e, idx)} />
-                                            </div>
-
-
-                                            <Col lg={2} className="align-self-center d-grid mt-3">
-                                                <input data-repeater-delete type="button" className="btn btn-primary" value="Delete" onClick={() => (handleRowDeleteNew(idx))} />
-                                            </Col>
                                         </div>
+                                    </React.Fragment>
+                                ))}
 
+                                {addOnUnderCategory?.map((row, idx) => (
+                                    <React.Fragment key={idx}>
+                                        <div data-repeater-list="group-a" id={"addr" + idx}>
+                                            <div data-repeater-item className="row">
+
+                                                <div className="mb-3 col-lg-4">
+                                                    <label className="form-label" htmlFor="startTime">Add-ons Name</label>
+                                                    <input type="text" id="startTime" className="form-control" name="add_on_name" placeholder="Add-ons name" value={row.add_on_name} onChange={(e) => handleAddOnsUndeCategory(e, idx)} />
+                                                </div>
+
+                                                <div className="mb-3 col-lg-4">
+                                                    <label className="form-label" htmlFor="subject">Price</label>
+                                                    <input type="number" id="subject" className="form-control" name="add_on_price" placeholder="Price" value={row.add_on_price} onChange={(e) => handleAddOnsUndeCategory(e, idx)} />
+                                                </div>
+
+
+                                                <Col lg={2} className="align-self-center d-grid mt-3">
+                                                    <input data-repeater-delete type="button" className="btn btn-primary" value="Delete" onClick={() => (handleRowDeleteUnderCategory(idx))} />
+                                                </Col>
+                                            </div>
+
+                                        </div>
+                                    </React.Fragment>
+                                ))}
+                                <Button
+                                    onClick={() => {
+                                        handleAddRowNestedNew();
+                                    }}
+                                    color="success"
+                                    className="btn btn-success mt-3 mt-lg-0"
+                                >
+                                    Add
+                                </Button>
+
+                                {isCheckAddOns ?
+                                    <div className="mt-4 col-lg-6">
+                                        <label className="form-label" htmlFor="subject">Maximum required number of choice(s)</label>
+                                        <input type="number" id="subject" className="form-control" placeholder="Enter number" name="num_of_choice_new" value={num_of_choice_new} onChange={(e) => setNumber(e.target.value)} />
                                     </div>
-                                </React.Fragment>
-                            ))}
-                            <Button
-                                onClick={() => {
-                                    handleAddRowNested();
-                                }}
-                                color="success"
-                                className="btn btn-success mt-3 mt-lg-0"
-                            >
-                                Add
-                            </Button>
-
-                            {isCheckAddOns ?
-                                <div className="mt-4 col-lg-3">
-                                    <label className="form-label" htmlFor="subject">Maximum required number of choice(s)</label>
-                                    <input type="number" id="subject" className="form-control" placeholder="Enter number" name="num_of_choice_new" value={addAddOns.num_of_choice_new} onChange={handleInputsAddOns} />
-                                </div>
-                                : ""}
+                                    : ""}
 
 
+                            </div>
                         </div>
                     </form>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="primary" onClick={toggle}>
+                    <Button color="primary" >
                         Do Something
                     </Button>{' '}
-                    <Button color="secondary" onClick={toggle}>
+                    <Button color="secondary" onClick={closeModal}>
                         Cancel
                     </Button>
                 </ModalFooter>
@@ -769,7 +920,13 @@ const mapStateToProps = state => {
         get_all_addOns_category_data,
         get_all_addOns_category_loading,
 
-        add_restaurant_menu_loading
+        add_restaurant_menu_loading,
+
+        get_all_menu_time_slot_data,
+        get_all_menu_time_slot_loading,
+
+        get_category_by_id_data,
+        get_category_by_id_loading
 
     } = state.Restaurant;
 
@@ -787,7 +944,13 @@ const mapStateToProps = state => {
         get_all_addOns_category_data,
         get_all_addOns_category_loading,
 
-        add_restaurant_menu_loading
+        add_restaurant_menu_loading,
+
+        get_all_menu_time_slot_data,
+        get_all_menu_time_slot_loading,
+
+        get_category_by_id_data,
+        get_category_by_id_loading
     };
 };
 
@@ -800,6 +963,9 @@ export default withRouter(
             getAllBranchAction,
             addRestaurantMenuAction,
             addRestaurantMenuAddFresh,
-            getAllAddOnsCategoryAction
+            getAllAddOnsCategoryAction,
+            getAllMenuTimeSlot,
+            getCategoryByIdAction,
+            getCategoryByIdFresh
         })(AddMenu)
 );
