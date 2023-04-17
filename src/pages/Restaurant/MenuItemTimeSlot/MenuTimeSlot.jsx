@@ -6,27 +6,32 @@ import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { getAllMenuTimeSlot } from 'store/actions';
 
 
 
 function MenuTimeSlot(props) {
-
+    const navigate = useNavigate();
     const [modalDel, setModalDel] = useState(false);
 
     const toggleDel = () => setModalDel(!modalDel);
 
-    const handleDelete = () => {
-        toggleDel();
-        console.log(deleteItem)
-        props.cityDeleteAction(deleteItem);
+    // const handleDelete = () => {
+    //     toggleDel();
+    //     console.log(deleteItem)
+    //     props.cityDeleteAction(deleteItem);
+    // }
+    const handleEdit = (row) => {
+        console.log(row);
+        navigate("/add-time-slot", { state: row })
     }
     const actionRef = (cell, row) =>
         <div style={{ display: "flex", gap: 10 }}>
             <Button
                 color="primary"
                 className="btn btn-primary waves-effect waves-light"
-                onClick={() => handleEditName(row)}
+                onClick={() => handleEdit(row)}
             >
                 Edit
             </Button>{" "}
@@ -74,13 +79,13 @@ function MenuTimeSlot(props) {
 
 
     useEffect(() => {
-        if (props.get_all_restaurant_loading == false) {
-            props.getAllRestaurantAction();
+        if (props.get_all_menu_time_slot_loading == false) {
+            props.getAllMenuTimeSlot();
         }
 
-    }, [props.get_all_restaurant_loading]);
+    }, [props.get_all_menu_time_slot_loading]);
 
-    console.log(props.get_all_restaurant_data);
+    console.log(props.get_all_menu_time_slot_data);
     return (
         <React.Fragment>
 
@@ -101,8 +106,8 @@ function MenuTimeSlot(props) {
                                         </Link>
                                     </div>
 
-                                    {/* {props.get_all_restaurant_data ? props.get_all_restaurant_data.length > 0 ? <DatatableTablesWorking products={props.get_all_restaurant_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_restaurant_data?._id} /> : null : null} */}
+                                    {props.get_all_menu_time_slot_data ? props.get_all_menu_time_slot_data.length > 0 ? <DatatableTablesWorking products={props.get_all_menu_time_slot_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_menu_time_slot_data?._id} /> : null : null}
 
                                 </CardBody>
                             </Card>
@@ -136,17 +141,21 @@ const mapStateToProps = state => {
 
     const {
 
-
+        get_all_menu_time_slot_data,
+        get_all_menu_time_slot_error,
+        get_all_menu_time_slot_loading,
     } = state.Restaurant;
 
     return {
-
+        get_all_menu_time_slot_data,
+        get_all_menu_time_slot_error,
+        get_all_menu_time_slot_loading,
     };
 };
 
 export default withRouter(
     connect(mapStateToProps,
         {
-
+            getAllMenuTimeSlot
         })(MenuTimeSlot)
 );

@@ -118,13 +118,13 @@ function BranchAdd(props) {
 
     //-- cuisine value for edit
     const common_cuisines = props?.get_all_cuisine_data?.filter((elem) => location?.state?.cuisines?.find(({ cuisine_id }) => elem._id === cuisine_id));
-
+    console.log(common_cuisines);
     const cuisine_data_edit = common_cuisines ? common_cuisines?.map((item, key) => {
         return { label: item.name, value: item._id };
     }) : "";
     console.log(cuisine_data_edit);
 
-    const [selectedCuisine, setSelectedCuisine] = useState(location.state ? cuisine_data_edit : "");
+    const [selectedCuisine, setSelectedCuisine] = useState(cuisine_data_edit ? cuisine_data_edit : "");
     const handleSelectCuisine = (e) => {
         console.log(e)
         setSelectedCuisine(e)
@@ -276,7 +276,7 @@ function BranchAdd(props) {
             naviagte("/manage-branch")
             props.editBranchFresh();
         }
-    }, [props.get_all_restaurant_loading, props.get_all_user_roles_loading, props.get_all_cusine_loading, props.add_branch_loading, props.edit_branch_loading,]);
+    }, [props.get_all_restaurant_loading, props.get_all_user_roles_loading, props.get_all_cusine_loading, props.add_branch_loading, props.edit_branch_loading]);
 
     console.log(props.get_all_restaurant_data);
     console.log(props.get_all_cusine_data);
