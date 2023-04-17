@@ -67,7 +67,8 @@ function RewardPoint(props) {
   const handleEditRewardPointName = row => {
     console.log(row)
     setRewardPointId(row._id)
-    setRewardPointName(row.name)
+    setValue(row.per_point_value)
+    setSelectedSubType(row.subscription_type_id)
     toggleEditModal()
   }
   const handleRewardPointName = e => {
@@ -273,7 +274,7 @@ function RewardPoint(props) {
           </Row>
         </Container>
         <Modal isOpen={modal} toggle={toggle} centered>
-          <ModalHeader toggle={toggle}>Add Reward Point</ModalHeader>
+          <ModalHeader toggle={toggle}>Add Reward Point Settings</ModalHeader>
           <ModalBody>
             <form className="mt-1" onSubmit={handleSubmit}>
               <Row className="mb-3">
@@ -321,7 +322,7 @@ function RewardPoint(props) {
         {/* ============ edit modal start=============== */}
         <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
           <ModalHeader toggle={toggleEditModal}>
-            Edit rewardPoint name
+            Edit Reward Point Settings
           </ModalHeader>
           <ModalBody>
             <form className="mt-1" onSubmit={handleEditModalSubmit}>
