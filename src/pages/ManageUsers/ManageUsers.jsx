@@ -5,7 +5,8 @@ import { toast } from 'react-toastify';
 import withRouter from 'components/Common/withRouter'; ` `
 import { connect, useSelector } from "react-redux";
 import {
-    getAllAdminUsersAction, getAllUsersRolesAction, userUpdateAction, userUpdateFresh, userStatusUpdateAction, userStatusUpdateFresh
+    getAllAdminUsersAction, getAllUsersRolesAction, userUpdateAction, userUpdateFresh, userStatusUpdateAction, userStatusUpdateFresh, userDeleteAction,
+    userDeleteFresh
 } from 'store/register-new/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
@@ -17,7 +18,10 @@ function ManageUsers(props) {
     const [modal, setModal] = useState(false);
     const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
 
+    const [modalDel, setModalDel] = useState(false);
+
     const toggle = () => setModal(!modal);
+    const toggleDel = () => setModalDel(!modalDel);
     const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
     const handleEditUser = (row) => {
         console.log(row);
@@ -43,6 +47,19 @@ function ManageUsers(props) {
         id: null,
         is_active: true,
     })
+
+    const [deleteItem, setDeleteItem] = useState();
+
+    const handleDeleteModal = (row) => {
+        setDeleteItem(row._id);
+        toggleDel();
+    }
+    const handleDelete = () => {
+
+        // console.log(deleteItem)
+        props.userDeleteAction(deleteItem);
+        // toggleDel();
+    }
 
 
     const [file, setFile] = useState()
@@ -196,7 +213,17 @@ function ManageUsers(props) {
             toast.error("Something went wrong");
             props.userStatusUpdateFresh();
         }
-    }, [props.get_all_user_loading, props.get_all_user_roles_loading, props.user_update_loading, props.user_status_update_loading]);
+
+        if (props.user_delete_loading === "Success") {
+            toast.success("User Deleted Successfully");
+            toggleDel();
+            props.userDeleteFresh();
+        }
+        if (props.user_delete_loading === "Failed") {
+            toast.error("Something went wrong");
+            props.userDeleteFresh();
+        }
+    }, [props.get_all_user_loading, props.get_all_user_roles_loading, props.user_update_loading, props.user_status_update_loading, props.user_delete_loading]);
 
     return (
         <React.Fragment>
@@ -340,19 +367,19 @@ function ManageUsers(props) {
                 {/* ============ edit modal ends=============== */}
 
                 {/* ============ delete modal starts=============== */}
-                {/* <Modal isOpen={modalDel} toggle={toggleDel} centered>
-            <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
-                <div className="icon-box">
-                    <i className="fa red-circle fa-trash" style={{ color: "red", fontSize: "40px" }}></i>
-                </div>
-                <h2>Are you sure?</h2>
-            </ModalHeader>
-            <ModalBody>Do you really want to delete these records? This process cannot be undone.</ModalBody>
-            <ModalFooter>
-                <Button color="secondary" onClick={toggleDel}>Cancel</Button>{' '}
-                <Button color="danger" onClick={handleDelete}>Delete</Button>
-            </ModalFooter>
-        </Modal> */}
+                <Modal isOpen={modalDel} toggle={toggleDel} centered>
+                    <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
+                        <div className="icon-box">
+                            <i className="fa red-circle fa-trash" style={{ color: "red", fontSize: "40px" }}></i>
+                        </div>
+                        <h2>Are you sure?</h2>
+                    </ModalHeader>
+                    <ModalBody>Do you really want to delete these records? This process cannot be undone.</ModalBody>
+                    <ModalFooter>
+                        <Button color="secondary" onClick={toggleDel}>Cancel</Button>{' '}
+                        <Button color="danger" onClick={handleDelete}>Delete</Button>
+                    </ModalFooter>
+                </Modal>
                 {/* ============ delete modal ends=============== */}
 
                 {/* ============ status update modal starts=============== */}
@@ -394,6 +421,7 @@ const mapStateToProps = state => {
         user_status_update_error,
         user_status_update_loading,
 
+        user_delete_loading
     } = state.registerNew;
 
     return {
@@ -411,6 +439,8 @@ const mapStateToProps = state => {
         user_status_update_error,
         user_status_update_loading,
 
+        user_delete_loading
+
     };
 };
 
@@ -422,6 +452,8 @@ export default withRouter(
             userUpdateAction,
             userUpdateFresh,
             userStatusUpdateAction,
-            userStatusUpdateFresh
+            userStatusUpdateFresh,
+            userDeleteAction,
+            userDeleteFresh
         })(ManageUsers)
 );

@@ -3,6 +3,8 @@ import {
     GET_ALL_RESTAURANT,
     RESTAURANT_NAME_UPDATE,
     RESTAURANT_STATUS_UPDATE,
+    DELETE_RESTAURANT,
+    DELETE_RESTAURANT_FRESH,
     GET_ALL_CUSINE,
     ADD_BRANCH,
     GET_ALL_BRANCH,
@@ -13,6 +15,8 @@ import {
     ADD_ZONE_FRESH,
     EDIT_ZONE_FRESH,
     EDIT_ZONE_STATUS_FRESH,
+    DELETE_ZONE,
+    DELETE_ZONE_FRESH,
     ADD_BRANCH_FRESH,
     EDIT_BRANCH,
     EDIT_BRANCH_FRESH,
@@ -20,13 +24,19 @@ import {
     EDIT_BRANCH_STATUS_FRESH,
     EDIT_BRANCH_POPULAR,
     EDIT_BRANCH_POPULAR_FRESH,
+    DELETE_BRANCH,
+    DELETE_BRANCH_FRESH,
     ADD_ONS_CATEGORY,
     ADD_CUISINE,
     GET_CUISINE,
     EDIT_CUISINE,
     EDIT_CUISINE_STATUS,
+    DELETE_CUISINE,
+    DELETE_CUISINE_FRESH,
     GET_ADD_ONS_CATEGORY,
     ADD_ONS_CATEGORY_FRESH,
+    DELETE_ADD_ON_CATEGORY,
+    DELETE_ADD_ON_CATEGORY_FRESH,
     ADD_RESTAURANT_MENU,
     GET_RESTAURANT_MENU,
     ADD_RESTAURANT_MENU_FRESH,
@@ -54,6 +64,8 @@ const initialState = {
     get_all_restaurant_error: null,
     get_all_restaurant_loading: false,
 
+    restaurant_delete_loading: false,
+
     get_all_addOns_category_data: null,
     get_all_addOns_category_error: null,
     get_all_addOns_category_loading: false,
@@ -70,6 +82,8 @@ const initialState = {
     get_all_branch_error: null,
     get_all_branch_loading: false,
 
+    branch_delete_loading: false,
+
     add_zone_data: null,
     add_zone_error: null,
     add_zone_loading: false,
@@ -80,6 +94,9 @@ const initialState = {
 
     edit_zone_loading: false,
     edit_zone_status_loading: false,
+
+    zone_delete_loading: false,
+
     edit_branch_loading: false,
     edit_branch_status_loading: false,
     edit_branch_popular_loading: false,
@@ -98,6 +115,8 @@ const initialState = {
 
     edit_cuisine_loading: false,
     edit_status_cuisine_loading: false,
+
+    cuisine_delete_loading: false,
 
     add_restaurant_menu_data: null,
     add_restaurant_menu_error: null,
@@ -163,6 +182,19 @@ const Restaurant = (state = initialState, action) => {
                 get_all_restaurant_loading: false
             }
             break;
+        case DELETE_RESTAURANT:
+            state = {
+                ...state,
+                restaurant_delete_loading: action.status,
+                get_all_restaurant_loading: false
+            }
+            break;
+        case DELETE_RESTAURANT_FRESH:
+            state = {
+                ...state,
+                restaurant_delete_loading: action.status,
+                get_all_restaurant_loading: false
+            }
 
         case GET_ALL_CUSINE:
             state = {
@@ -192,6 +224,20 @@ const Restaurant = (state = initialState, action) => {
 
             }
             break;
+
+        case DELETE_BRANCH:
+            state = {
+                ...state,
+                branch_delete_loading: action.status,
+                get_all_branch_loading: false
+            }
+            break;
+        case DELETE_BRANCH_FRESH:
+            state = {
+                ...state,
+                branch_delete_loading: action.status,
+                get_all_branch_loading: false
+            }
 
         case ADD_ZONE:
             state = {
@@ -249,6 +295,20 @@ const Restaurant = (state = initialState, action) => {
                 edit_zone_status_loading: action.status,
             }
             break;
+
+        case DELETE_ZONE:
+            state = {
+                ...state,
+                zone_delete_loading: action.status,
+                get_all_zone_loading: false
+            }
+            break;
+        case DELETE_ZONE_FRESH:
+            state = {
+                ...state,
+                zone_delete_loading: action.status,
+                get_all_zone_loading: false
+            }
 
         case ADD_BRANCH_FRESH:
             state = {
@@ -353,6 +413,21 @@ const Restaurant = (state = initialState, action) => {
             }
             break;
 
+        case DELETE_CUISINE:
+            state = {
+                ...state,
+                cuisine_delete_loading: action.status,
+                get_all_cuisine_loading: false
+            }
+            break;
+
+        case DELETE_CUISINE_FRESH:
+            state = {
+                ...state,
+                cuisine_delete_loading: action.status,
+                get_all_cuisine_loading: false
+            }
+
 
         case GET_ADD_ONS_CATEGORY:
             state = {
@@ -362,6 +437,22 @@ const Restaurant = (state = initialState, action) => {
                 get_all_addOns_category_loading: action.status,
             }
             break;
+
+        case DELETE_ADD_ON_CATEGORY:
+            state = {
+                ...state,
+                add_on_category_delete_loading: action.status,
+                get_all_addOns_category_loading: false
+            }
+            break;
+
+        case DELETE_ADD_ON_CATEGORY_FRESH:
+            state = {
+                ...state,
+                add_on_category_delete_loading: action.status,
+                get_all_addOns_category_loading: false
+            }
+
 
         case ADD_RESTAURANT_MENU:
             state = {

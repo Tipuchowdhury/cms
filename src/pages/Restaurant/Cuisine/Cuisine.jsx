@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { addCuisineAction, getAllCuisneAction, cuisineEditAction, cuisineStatusEditAction } from 'store/actions';
+import { addCuisineAction, getAllCuisneAction, cuisineEditAction, cuisineStatusEditAction, cuisineDeleteAction, cuisineDeleteFresh } from 'store/actions';
 
 
 function Cuisine(props) {
@@ -26,6 +26,20 @@ function Cuisine(props) {
     const [editInfo, setEditInfo] = useState(false)
     const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
     const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
+
+    const [modalDel, setModalDel] = useState(false);
+    const [deleteItem, setDeleteItem] = useState();
+    const toggleDel = () => setModalDel(!modalDel);
+
+    const handleDeleteModal = (row) => {
+        setDeleteItem(row._id);
+        toggleDel();
+    }
+    const handleDelete = () => {
+
+        props.cuisineDeleteAction(deleteItem);
+    }
+
     const handleStatusModal = row => {
         console.log(row);
         setEditInfo(row)
@@ -63,7 +77,7 @@ function Cuisine(props) {
             <Button
                 color="danger"
                 className="btn btn-danger waves-effect waves-light"
-            //onClick={() => handleDeleteModal(row)}
+                onClick={() => handleDeleteModal(row)}
             >
                 Delete
             </Button>{" "}
@@ -134,7 +148,15 @@ function Cuisine(props) {
             props.getAllCuisneAction();
         }
 
-    }, [props.get_all_cuisine_loading]);
+        if (props.cuisine_delete_loading === "Success") {
+            // console.log("I am in the delete")
+            toast.success("Cuisine Deleted");
+            toggleDel();
+            props.cuisineDeleteFresh();
+
+        }
+
+    }, [props.get_all_cuisine_loading, props.cuisine_delete_loading]);
 
     console.log(props.get_all_cuisine_data);
     console.log(props.get_all_cuisine_loading);
@@ -193,6 +215,22 @@ function Cuisine(props) {
                     </ModalBody>
                 </Modal>
 
+                {/* ============ delete modal starts=============== */}
+                <Modal isOpen={modalDel} toggle={toggleDel} centered>
+                    <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
+                        <div className="icon-box">
+                            <i className="fa red-circle fa-trash" style={{ color: "red", fontSize: "40px" }}></i>
+                        </div>
+                        Are you sure?
+                    </ModalHeader>
+                    <ModalBody>Do you really want to delete these records? This process cannot be undone.</ModalBody>
+                    <ModalFooter>
+                        <Button color="secondary" onClick={toggleDel}>Cancel</Button>{' '}
+                        <Button color="danger" onClick={handleDelete}>Delete</Button>
+                    </ModalFooter>
+                </Modal>
+                {/* ============ delete modal ends=============== */}
+
                 {/* ============ edit modal start=============== */}
                 <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
                     <ModalHeader toggle={toggleEditModal}>Edit city name</ModalHeader>
@@ -247,13 +285,15 @@ const mapStateToProps = state => {
 
         get_all_cuisine_data,
         get_all_cuisine_error,
-        get_all_cuisine_loading
+        get_all_cuisine_loading,
+        cuisine_delete_loading
     } = state.Restaurant;
 
     return {
         get_all_cuisine_data,
         get_all_cuisine_error,
-        get_all_cuisine_loading
+        get_all_cuisine_loading,
+        cuisine_delete_loading
     };
 };
 
@@ -263,6 +303,8 @@ export default withRouter(
             addCuisineAction,
             getAllCuisneAction,
             cuisineEditAction,
-            cuisineStatusEditAction
+            cuisineStatusEditAction,
+            cuisineDeleteAction,
+            cuisineDeleteFresh
         })(Cuisine)
 );

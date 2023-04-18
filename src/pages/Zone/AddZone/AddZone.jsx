@@ -267,7 +267,7 @@ function AddZone(props) {
                                                 onChange={handleInputs}
                                                 type="select"
                                             >
-                                                <option>Choose...</option>
+                                                <option>Choose City</option>
                                                 {cityData}
                                             </Input>
                                         </div>
@@ -281,7 +281,7 @@ function AddZone(props) {
                                             Radius (Km)
                                         </label>
                                         <div className="col-md-10">
-                                            <input type="text" className="form-control" id="radius" placeholder="Enter area name" name="radius" onChange={handleInputs} value={zoneInfo.radius ?? ""} />
+                                            <input type="text" className="form-control" id="radius" placeholder="Enter radius" name="radius" onChange={handleInputs} value={zoneInfo.radius ?? ""} />
                                         </div>
                                     </Row>
 

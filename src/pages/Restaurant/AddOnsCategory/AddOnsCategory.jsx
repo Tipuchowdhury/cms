@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { getAllAddOnsCategoryAction } from 'store/actions';
+import { getAllAddOnsCategoryAction, addOnCategoryDeleteAction, addOnCategoryDeleteFresh } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -24,9 +24,9 @@ function AddOnsCategory(props) {
 
     const toggleDel = () => setModalDel(!modalDel);
     const handleDelete = () => {
-        toggleDel();
+        // toggleDel();
         console.log(deleteItem)
-        props.cityDeleteAction(deleteItem);
+        props.addOnCategoryDeleteAction(deleteItem);
     }
 
     const toggle = () => setModal(!modal);
@@ -117,7 +117,13 @@ function AddOnsCategory(props) {
             props.getAllAddOnsCategoryAction();
         }
 
-    }, [props.get_all_addOns_category_loading]);
+        if (props.add_on_category_delete_loading === "Success") {
+            toast.success("ADD on Category Deleted Successfully");
+            toggleDel();
+            props.addOnCategoryDeleteFresh();
+        }
+
+    }, [props.get_all_addOns_category_loading, props.add_on_category_delete_loading]);
 
     console.log(props.get_all_addOns_category_data);
     return (
@@ -202,18 +208,22 @@ const mapStateToProps = state => {
         get_all_addOns_category_data,
         get_all_addOns_category_error,
         get_all_addOns_category_loading,
+        add_on_category_delete_loading
     } = state.Restaurant;
 
     return {
         get_all_addOns_category_data,
         get_all_addOns_category_error,
         get_all_addOns_category_loading,
+        add_on_category_delete_loading
     };
 };
 
 export default withRouter(
     connect(mapStateToProps,
         {
-            getAllAddOnsCategoryAction
+            getAllAddOnsCategoryAction,
+            addOnCategoryDeleteAction,
+            addOnCategoryDeleteFresh
         })(AddOnsCategory)
 );
