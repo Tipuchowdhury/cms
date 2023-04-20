@@ -37,8 +37,8 @@ function AddCampaign(props) {
 
   const branch_data_edit = common_branches
     ? common_branches?.map((item, key) => {
-      return { label: item.name, value: item._id }
-    })
+        return { label: item.name, value: item._id }
+      })
     : ""
   const [selectedBranch, setSelectedBranch] = useState(
     branch_data_edit ? branch_data_edit : ""
@@ -55,13 +55,12 @@ function AddCampaign(props) {
     }))
   }
 
-  console.log(location.state);
+  console.log(location.state)
   const [campaignInfo, setCampaignInfo] = useState({
-
     name: location.state ? location.state.name : "",
     image: location.state ? location.state.image : "",
     description: location.state ? location.state.description : "",
-    is_active: location.state ? location.state.is_active : "",
+    is_active: location.state ? location.state.is_active : true,
     start_date: location.state
       ? location.state.start_date
       : new Date().toISOString(),
