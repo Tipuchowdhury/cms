@@ -265,6 +265,11 @@ const SidebarContent = props => {
                     {props.t("Reward Point Settings")}{" "}
                   </Link>
                 </li>
+                <li>
+                  <Link to="/voucher_settings">
+                    {props.t("Voucher Settings")}{" "}
+                  </Link>
+                </li>
               </ul>
             </li>
             {/* <li>

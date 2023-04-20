@@ -15,6 +15,7 @@ import Category from "./Category/reducer"
 import Campaign from "./Campaign/reducer"
 import SubscriptionTypes from "./SubscriptionTypes/reducer"
 import RewardPoints from "./CRM/RewardPoints/reducer"
+import VoucherSetting from "./CRM/VoucherSetting/reducer"
 import Coupon from "./Coupon/reducer"
 
 import Sliders from "./slider/reducer"
@@ -37,9 +38,10 @@ const rootReducer = combineReducers({
   Campaign,
   SubscriptionTypes,
   RewardPoints,
+  VoucherSetting,
   Coupon,
   Sliders,
-  BranchAttribute
+  BranchAttribute,
 })
 
 export default rootReducer
