@@ -31,12 +31,16 @@ function BranchAdd(props) {
         lat: 23.8103,
         lng: 90.4125,
     });
+
+
     const map_value_for_edit = location.state?.location?.coordinates?.map((item) => (
         item
     ))
+
+    // const map_value_for_edit = location.state?.location?.coordinates?.map((defaultProps) => Number(defaultProps.lng) + "," + Number(defaultProps.lat));
     console.log(map_value_for_edit);
     const [state2, setState2] = useState({
-        location: location.state ? map_value_for_edit : undefined,
+        location: location.state ? map_value_for_edit : `${defaultProps.lat},${defaultProps.lng}`,
         lat: location.state ? map_value_for_edit[0] : undefined,
         lng: location.state ? map_value_for_edit[1] : undefined,
     });
@@ -82,7 +86,7 @@ function BranchAdd(props) {
         cuisine: "",
         location: undefined,
         price_range: location.state ? location.state.price_range : "",
-        popularity_sort_value: location.state ? location.state.popularity_sort_value : "",
+        popularity_sort_value: location.state ? location.state.popularity_sort_value : 0,
         is_take_pre_order: location.state ? location.state.is_take_pre_order.toString() : "",
         is_veg: location.state ? location.state.is_veg.toString() : "",
         is_popular: location.state ? location.state.is_popular.toString() : "",
@@ -523,7 +527,7 @@ function BranchAdd(props) {
                                 </Row>
 
 
-                                <Row className="mb-3">
+                                {/* <Row className="mb-3">
                                     <label
                                         htmlFor="example-text-input"
                                         className="col-md-2 col-form-label"
@@ -564,7 +568,7 @@ function BranchAdd(props) {
                                             </label>
                                         </div>
                                     </div>
-                                </Row>
+                                </Row> */}
                                 <Row className="mb-3">
                                     <label
                                         htmlFor="example-text-input"
