@@ -8,6 +8,9 @@ import {
   GET_REWARD_POINT_NAME_BY_ID,
   REWARD_POINT_DELETE,
   REWARD_POINT_DELETE_FRESH,
+  EDIT_REWARD_STATUS,
+  EDIT_REWARD_STATUS_FRESH
+
 } from "./actionTypes"
 
 const initialState = {
@@ -24,6 +27,8 @@ const initialState = {
   //rewardPoint name edit
   rewardPoint_name_edit_data: null,
   rewardPoint_name_edit_loading: false,
+
+  edit_reward_status_loading: false,
 
   rewardPoint_delete_loading: false,
 }
@@ -78,6 +83,21 @@ const RewardPoints = (state = initialState, action) => {
         rewardPoint_name_edit_loading: action.status,
       }
       break
+
+    case EDIT_REWARD_STATUS:
+      state = {
+        ...state,
+        edit_reward_status_loading: action.status,
+        get_all_rewardPoint_loading: false,
+      }
+      break;
+    case EDIT_REWARD_STATUS_FRESH:
+      state = {
+        ...state,
+        edit_reward_status_loading: action.status,
+      }
+      break;
+
 
     case REWARD_POINT_DELETE:
       state = {

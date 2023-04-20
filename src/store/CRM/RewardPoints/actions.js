@@ -7,6 +7,8 @@ import {
   REWARD_POINT_NAME_EDIT_FRESH,
   REWARD_POINT_DELETE,
   REWARD_POINT_DELETE_FRESH,
+  EDIT_REWARD_STATUS,
+  EDIT_REWARD_STATUS_FRESH
 } from "./actionTypes"
 import axios from "axios"
 
@@ -135,6 +137,45 @@ export const rewardPointNameEditFresh = () => {
   return dispatch => {
     dispatch({
       type: REWARD_POINT_NAME_EDIT_FRESH,
+      payload: null,
+      status: false,
+    })
+  }
+}
+
+export const rewardStatusEditAction = data => {
+  var url = process.env.REACT_APP_LOCALHOST + "/RewardPointSetting/Put"
+
+  const formData = data
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: EDIT_REWARD_STATUS,
+          status: "Success",
+        })
+        // toast.success("Updated Successfully");
+      })
+      .catch(error => {
+        dispatch({
+          type: EDIT_REWARD_STATUS,
+          status: "Failed",
+        })
+        // toast.error("Something went wrong!!");
+      })
+  }
+}
+
+export const rewardStatusEditActionFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: EDIT_REWARD_STATUS_FRESH,
       payload: null,
       status: false,
     })

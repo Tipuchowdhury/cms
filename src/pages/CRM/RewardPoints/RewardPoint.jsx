@@ -33,7 +33,7 @@ import {
 } from "store/CRM/RewardPoints/actions"
 
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
-import { getAllSubscriptionTypeAction } from "store/actions"
+import { getAllSubscriptionTypeAction, rewardStatusEditAction, rewardStatusEditActionFresh } from "store/actions"
 import Select from "react-select"
 
 function RewardPoint(props) {
@@ -44,6 +44,24 @@ function RewardPoint(props) {
   const [rewardStatus, setRewardStatus] = useState()
   const [editModal, setEditModal] = useState(false)
   const [reload, setReload] = useState(false)
+
+  const [statusItem, setStatusItem] = useState(false);
+  const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
+
+  const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
+
+  const handleStatusModal = (row) => {
+    //  console.log(row);
+    setStatusItem(row);
+    toggleStatus();
+  }
+
+  const handleStatusUpdate = () => {
+    props.rewardStatusEditAction({
+      ...statusItem,
+      is_active: !statusItem.is_active,
+    })
+  }
 
   // delete modal
   const [deleteItem, setDeleteItem] = useState()
@@ -164,14 +182,17 @@ function RewardPoint(props) {
 
   // const statusRef = (cell, row) => <Badge color="secondary" style={{ padding: "12px" }}>Deactivate</Badge>
 
-  const statusRef = (cell, row) => (
-    <Badge
-      color={row.is_active ? "success" : "secondary"}
-      style={{ padding: "12px" }}
-    >
-      {row.is_active ? "Active" : "Deactivate"}
-    </Badge>
-  )
+  // const statusRef = (cell, row) => (
+  //   <Badge
+  //     color={row.is_active ? "success" : "secondary"}
+  //     style={{ padding: "12px" }}
+  //   >
+  //     {row.is_active ? "Active" : "Deactivate"}
+  //   </Badge>
+  // )
+
+  const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
+    className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
 
   console.log(props.add_rewardPoint_loading)
   console.log(props.get_all_rewardPoint_data)
@@ -428,6 +449,22 @@ function RewardPoint(props) {
           </ModalFooter>
         </Modal>
         {/* ============ delete modal ends=============== */}
+
+        {/* ============ status update modal starts=============== */}
+        <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
+          <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
+            <div className="icon-box">
+              <i className="fa fa-exclamation-circle" style={{ color: "#DCA218", fontSize: "40px" }}></i>
+            </div>
+            Are you sure?
+          </ModalHeader>
+          <ModalBody>Do you really want to update status these records? </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={toggleStatus}>Cancel</Button>{' '}
+            <Button color="primary" onClick={handleStatusUpdate}>Update</Button>
+          </ModalFooter>
+        </Modal>
+        {/* ============ status update modal ends=============== */}
       </div>
     </React.Fragment>
   )
@@ -477,5 +514,7 @@ export default withRouter(
     rewardPointDeleteAction,
     rewardPointDeleteFresh,
     getAllSubscriptionTypeAction,
+    rewardStatusEditAction,
+    rewardStatusEditActionFresh
   })(RewardPoint)
 )
