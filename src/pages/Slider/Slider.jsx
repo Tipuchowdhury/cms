@@ -116,7 +116,10 @@ function Slider(props) {
 
 
     const newRest = (nn) => {
+        console.log(nn);
+        console.log(props?.get_all_branch_data);
         const common_restaurants = props?.get_all_branch_data?.filter((elem) => nn?.find(({ res_id }) => elem._id === res_id));
+        console.log(common_restaurants);
 
         const restaurant_data_edit = common_restaurants ? common_restaurants.map((item, key) => {
             return { label: item.name, value: item._id };
@@ -303,11 +306,11 @@ function Slider(props) {
 
         if (props.slider_delete_loading === "Success") {
             // console.log("I am in the delete")
-            toast.success("S:ider Deleted");
+            toast.success("Slider Deleted");
             toggleDel();
             props.promotionDeleteFresh();
-
         }
+
     }, [props.get_all_branch_loading, props.add_slider_loading, props.slider_edit_loading,
     props.slider_delete_loading, props.slider_status_edit_loading]);
 

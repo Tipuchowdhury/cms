@@ -18,7 +18,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { Link, useNavigate } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -41,12 +41,19 @@ function RewardPoint(props) {
   const [modal, setModal] = useState(false)
   const [rewardPointId, setRewardPointId] = useState()
   const [rewardPointname, setRewardPointName] = useState()
+  const [rewardStatus, setRewardStatus] = useState()
   const [editModal, setEditModal] = useState(false)
   const [reload, setReload] = useState(false)
 
   // delete modal
   const [deleteItem, setDeleteItem] = useState()
   const [modalDel, setModalDel] = useState(false)
+
+  const [selectedSubscription, setSelectedSubscription] = useState([]);
+  const handleSelectSubscription = (e) => {
+    // console.log(e)
+    setSelectedSubscription(e)
+  }
 
   const toggleDel = () => setModalDel(!modalDel)
   const handleDelete = () => {
@@ -64,11 +71,34 @@ function RewardPoint(props) {
     console.log(val)
     props.addRewardPointAction(val, value, selectedSubType.value)
   }
+
+  const editSubscriptionType = (subscription_type) => {
+    // console.log(subscription_type);
+    // console.log(props?.get_all_subscription_type_data);
+    const common_subs = props?.get_all_subscription_type_data?.filter((elem) => subscription_type?.find(({ sub_id }) => elem._id === sub_id));
+
+    // console.log(common_subs);
+    const subs_data_edit = common_subs ? common_subs.map((item, key) => {
+      return { label: item.name, value: item._id };
+    }) : "";
+    //console.log(nn);
+    // console.log(subs_data_edit);
+    setSelectedSubscription(subs_data_edit);
+
+  }
+  //  console.log(selectedSubscription);
   const handleEditRewardPointName = row => {
-    console.log(row)
+    // console.log(row)
     setRewardPointId(row._id)
     setValue(row.per_point_value)
-    setSelectedSubType(row.subscription_type_id)
+    setRewardStatus(row.is_active);
+    //setSelectedSubType(row.subscription_type_id)
+    const new_array = [{
+      sub_id: row.subscription_type_id
+    }
+    ];
+    console.log(new_array);
+    editSubscriptionType(new_array)
     toggleEditModal()
   }
   const handleRewardPointName = e => {
@@ -80,7 +110,7 @@ function RewardPoint(props) {
     toggleEditModal()
     console.log(rewardPointname)
     console.log(rewardPointId)
-    props.rewardPointNameEditAction(rewardPointname, rewardPointId)
+    props.rewardPointNameEditAction(value, rewardPointId, selectedSubscription.value, rewardStatus)
   }
   const handleDeleteModal = row => {
     setDeleteItem(row._id)
@@ -93,8 +123,8 @@ function RewardPoint(props) {
 
   const sub_type_data_edit = common_sub_type
     ? common_sub_type?.map((item, key) => {
-        return { label: item.name, value: item._id }
-      })
+      return { label: item.name, value: item._id }
+    })
     : ""
   //select multiple branch
   const [selectedSubType, setSelectedSubType] = useState(
@@ -334,8 +364,8 @@ function RewardPoint(props) {
                   Subscription Types
                 </label>
                 <Select
-                  value={selectedSubType}
-                  onChange={handleSelectSubType}
+                  value={selectedSubscription}
+                  onChange={handleSelectSubscription}
                   options={branchDate}
                   isMulti={false}
                 />

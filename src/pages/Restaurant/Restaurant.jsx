@@ -6,7 +6,9 @@ import { toast } from 'react-toastify';
 import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { restaurantAddAction, getAllRestaurantAction, restaurantNameUpdateAction, restaurantStatusUpdateAction } from 'store/actions';
+import {
+    restaurantAddAction, getAllRestaurantAction, restaurantNameUpdateAction, restaurantStatusUpdateAction, restaurantDeleteAction, restaurantDeleteFresh
+} from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 
 function Restaurant(props) {
@@ -27,9 +29,9 @@ function Restaurant(props) {
     const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
 
     const handleDelete = () => {
-        toggleDel();
+        // toggleDel();
         console.log(deleteItem)
-        props.cityDeleteAction(deleteItem);
+        props.restaurantDeleteAction(deleteItem);
     }
 
     const toggle = () => setModal(!modal);
@@ -141,7 +143,14 @@ function Restaurant(props) {
             props.getAllRestaurantAction();
         }
 
-    }, [props.get_all_restaurant_loading]);
+        if (props.restaurant_delete_loading === "Success") {
+            // console.log("I am in the delete")
+            toast.success("Restaurant Deleted");
+            toggleDel();
+            props.restaurantDeleteFresh();
+        }
+
+    }, [props.get_all_restaurant_loading, props.restaurant_delete_loading]);
 
     console.log(props.get_all_restaurant_data);
     return (
@@ -267,6 +276,8 @@ const mapStateToProps = state => {
 
         get_all_restaurant_data,
         get_all_restaurant_loading,
+
+        restaurant_delete_loading
     } = state.Restaurant;
 
     return {
@@ -276,6 +287,8 @@ const mapStateToProps = state => {
 
         get_all_restaurant_data,
         get_all_restaurant_loading,
+
+        restaurant_delete_loading
     };
 };
 
@@ -285,6 +298,8 @@ export default withRouter(
             restaurantAddAction,
             getAllRestaurantAction,
             restaurantNameUpdateAction,
-            restaurantStatusUpdateAction
+            restaurantStatusUpdateAction,
+            restaurantDeleteAction,
+            restaurantDeleteFresh
         })(Restaurant)
 );

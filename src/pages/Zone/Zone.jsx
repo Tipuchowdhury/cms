@@ -17,20 +17,34 @@ import Breadcrumbs from "components/Common/Breadcrumb"
 import { ToastContainer, toast } from "react-toastify"
 import { Link, useNavigate } from "react-router-dom"
 import AddZone from "./AddZone/AddZone"
-import { getAllZoneAction, zoneStatusEditAction, zoneStatusEditActionFresh } from "store/actions"
+import {
+  getAllZoneAction, zoneStatusEditAction, zoneStatusEditActionFresh, zoneDeleteAction, zoneDeleteFresh
+} from "store/actions"
 import withRouter from "components/Common/withRouter";
 import { connect } from "react-redux"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 
 function Zone(props) {
 
+
+  const [modalDel, setModalDel] = useState(false);
   const [editInfo, setEditInfo] = useState(false);
   const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
+  const [deleteItem, setDeleteItem] = useState();
+
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
+  const toggleDel = () => setModalDel(!modalDel);
+
+
   const handleStatusModal = row => {
     setEditInfo(row)
 
     toggleStatus()
+  }
+
+  const handleDeleteModal = (row) => {
+    setDeleteItem(row._id);
+    toggleDel();
   }
 
   const handleStatusUpdate = () => {
@@ -44,6 +58,13 @@ function Zone(props) {
   const handleEdit = row => {
     console.log(row)
     navigate("/add-zone", { state: row })
+  }
+
+  const handleDelete = () => {
+
+    // console.log(deleteItem)
+    props.zoneDeleteAction(deleteItem);
+    // toggleDel();
   }
   const actionRef = (cell, row) => (
     <div style={{ display: "flex", gap: 10 }}>
@@ -122,7 +143,18 @@ function Zone(props) {
       // toggleStatus();
       props.zoneStatusEditActionFresh();
     }
-  }, [props.get_all_zone_loading, props.edit_zone_status_loading])
+
+    if (props.zone_delete_loading == "Success") {
+      toast.success("Zone Deleted Successfully");
+      toggleDel();
+      props.zoneDeleteFresh();
+    }
+    if (props.zone_delete_loading == "Failed") {
+      toast.error("Something went wrong");
+      // toggleStatus();
+      props.zoneDeleteFresh();
+    }
+  }, [props.get_all_zone_loading, props.edit_zone_status_loading, props.zone_delete_loading])
   // console.log(props.get_all_zone_data)
   return (
     <React.Fragment>
@@ -177,6 +209,23 @@ function Zone(props) {
           </Row>
         </Container>
 
+
+        {/* ============ delete modal starts=============== */}
+        <Modal isOpen={modalDel} toggle={toggleDel} centered>
+          <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
+            <div className="icon-box">
+              <i className="fa red-circle fa-trash" style={{ color: "red", fontSize: "40px" }}></i>
+            </div>
+            Are you sure?
+          </ModalHeader>
+          <ModalBody>Do you really want to delete these records? This process cannot be undone.</ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={toggleDel}>Cancel</Button>{' '}
+            <Button color="danger" onClick={handleDelete}>Delete</Button>
+          </ModalFooter>
+        </Modal>
+        {/* ============ delete modal ends=============== */}
+
         {/* ============ status update modal starts=============== */}
         <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
           <ModalHeader
@@ -213,13 +262,14 @@ function Zone(props) {
 //export default Zone
 
 const mapStateToProps = state => {
-  const { get_all_zone_data, get_all_zone_error, get_all_zone_loading, edit_zone_status_loading } =
+  const { get_all_zone_data, get_all_zone_error, get_all_zone_loading, edit_zone_status_loading, zone_delete_loading } =
     state.Restaurant
   return {
     get_all_zone_data,
     get_all_zone_error,
     get_all_zone_loading,
     edit_zone_status_loading,
+    zone_delete_loading
   }
 }
 
@@ -227,6 +277,8 @@ export default withRouter(
   connect(mapStateToProps, {
     getAllZoneAction,
     zoneStatusEditAction,
-    zoneStatusEditActionFresh
+    zoneStatusEditActionFresh,
+    zoneDeleteAction,
+    zoneDeleteFresh
   })(Zone)
 )
