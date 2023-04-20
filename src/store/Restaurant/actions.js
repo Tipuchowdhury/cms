@@ -39,6 +39,8 @@ import {
   ADD_RESTAURANT_MENU_FRESH,
   EDIT_ADD_ONS_CATEGORY,
   EDIT_ADD_ONS_CATEGORY_FRESH,
+  EDIT_ADD_ON_CATEGORY_STATUS,
+  EDIT_ADD_ON_CATEGORY_STATUS_FRESH,
   ADD_MENU_TIME_SLOT,
   GET_ALL_MENU_TIME_SLOT,
   ADD_MENU_TIME_SLOT_FRESH,
@@ -1020,6 +1022,45 @@ export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
         })
         toast.error("Addon Category Edit Failed")
       })
+  }
+}
+
+export const addOnCategoryStatusEditAction = data => {
+  var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Put"
+
+  const formData = data
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: EDIT_ADD_ON_CATEGORY_STATUS,
+          status: "Success",
+        })
+        // toast.success("Updated Successfully");
+      })
+      .catch(error => {
+        dispatch({
+          type: EDIT_ADD_ON_CATEGORY_STATUS,
+          status: "Failed",
+        })
+        // toast.error("Something went wrong!!");
+      })
+  }
+}
+
+export const addOnCategoryStatusEditActionFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: EDIT_ADD_ON_CATEGORY_STATUS_FRESH,
+      payload: null,
+      status: false,
+    })
   }
 }
 

@@ -42,6 +42,8 @@ import {
     ADD_RESTAURANT_MENU_FRESH,
     EDIT_ADD_ONS_CATEGORY,
     EDIT_ADD_ONS_CATEGORY_FRESH,
+    EDIT_ADD_ON_CATEGORY_STATUS,
+    EDIT_ADD_ON_CATEGORY_STATUS_FRESH,
     ADD_MENU_TIME_SLOT,
     GET_ALL_MENU_TIME_SLOT,
     ADD_MENU_TIME_SLOT_FRESH,
@@ -104,6 +106,8 @@ const initialState = {
     add_ons_category_data: null,
     add_ons_category_error: null,
     add_ons_category_loading: false,
+
+    edit_add_on_category_status_loading: false,
 
     add_cuisine_data: null,
     add_cuisine_error: null,
@@ -452,6 +456,20 @@ const Restaurant = (state = initialState, action) => {
                 add_on_category_delete_loading: action.status,
                 get_all_addOns_category_loading: false
             }
+
+        case EDIT_ADD_ON_CATEGORY_STATUS:
+            state = {
+                ...state,
+                edit_add_on_category_status_loading: action.status,
+                get_all_addOns_category_loading: false,
+            }
+            break;
+        case EDIT_ADD_ON_CATEGORY_STATUS_FRESH:
+            state = {
+                ...state,
+                edit_add_on_category_status_loading: action.status,
+            }
+            break;
 
 
         case ADD_RESTAURANT_MENU:
