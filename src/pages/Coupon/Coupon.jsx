@@ -129,6 +129,16 @@ function Coupon(props) {
       sort: true,
     },
     {
+      dataField: "discount_in_amount",
+      text: "Amount",
+      sort: true,
+    },
+    {
+      dataField: "discount_in_percent",
+      text: "Amount (%)",
+      sort: true,
+    },
+    {
       dataField: "is_active",
       text: "Status",
       sort: true,
