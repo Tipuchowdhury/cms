@@ -217,7 +217,14 @@ export const getAllCouponFresh = () => {
   }
 }
 
-export const couponEditAction = (id, data, selectedBranch) => {
+export const couponEditAction = (id, data, selectedCouponType,
+  selectedBranch,
+  selectedCategory,
+  selectedCuisine,
+  selectedSubType,
+  selectedUser,
+  selectedZone,
+  gradual) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Coupon/Put"
   const selectedBranchData =
     selectedBranch?.length > 0
@@ -225,15 +232,109 @@ export const couponEditAction = (id, data, selectedBranch) => {
         const val = uuidv4()
         return {
           _id: val,
-          res_id: item.value,
+          branch_id: item.value,
           coupon_id: id,
         }
       })
-      : null
+      : []
+
+  selectedCategory =
+    selectedCategory?.length > 0
+      ? selectedCategory.map(item => {
+        const val = uuidv4()
+        return {
+          _id: val,
+          category_id: item.value,
+          coupon_id: id,
+        }
+      })
+      : []
+
+  selectedCuisine =
+    selectedCuisine?.length > 0
+      ? selectedCuisine.map(item => {
+        const val = uuidv4()
+        return {
+          _id: val,
+          cusine_id: item.value,
+          coupon_id: id,
+        }
+      })
+      : []
+
+  selectedCategory =
+    selectedCategory?.length > 0
+      ? selectedCategory.map(item => {
+        const val = uuidv4()
+        return {
+          _id: val,
+          category_id: item.value,
+          coupon_id: id,
+        }
+      })
+      : []
+
+  selectedUser =
+    selectedUser?.length > 0
+      ? selectedUser.map(item => {
+        const val = uuidv4()
+        return {
+          _id: val,
+          customer_id: item.value,
+          coupon_id: id,
+        }
+      })
+      : []
+
+  selectedSubType =
+    selectedSubType?.length > 0
+      ? selectedSubType.map(item => {
+        const val = uuidv4()
+        return {
+          _id: val,
+          subscription_type_id: item.value,
+          coupon_id: id,
+        }
+      })
+      : []
+
+  selectedZone =
+    selectedZone?.length > 0
+      ? selectedZone.map(item => {
+        const val = uuidv4()
+        return {
+          _id: val,
+          zone_id: item.value,
+          coupon_id: id,
+        }
+      })
+      : []
+
+  gradual =
+    gradual?.length > 0
+      ? gradual.map(item => {
+        const val = uuidv4()
+        return {
+          _id: val,
+          sequence: item.sequence,
+          discount_percent: item.discount_percent,
+          coupon_id: id,
+        }
+      })
+      : []
   const formData = {
     _id: id,
     ...data,
-    restaurants: selectedBranchData,
+    coupon_type_name: selectedCouponType.value,
+    branches: selectedBranchData,
+    categories: selectedCategory,
+    cuisines: selectedCuisine,
+    customers: selectedUser,
+    menu_items: [],
+    subscription_types: selectedSubType,
+    zones: selectedZone,
+    gradual_informations: gradual,
+    restaurants: [],
   }
   return dispatch => {
     const headers = {

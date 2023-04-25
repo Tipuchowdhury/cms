@@ -362,7 +362,14 @@ function AddCoupon(props) {
     e.preventDefault()
     console.log("======================I am in the edit form==================")
 
-    props.couponEditAction(location.state._id, couponInfo, selectedBranch)
+    props.couponEditAction(location.state._id, couponInfo, selectedCouponType,
+      selectedBranch,
+      selectedCategory,
+      selectedCuisine,
+      selectedSubType,
+      selectedUser,
+      selectedZone,
+      gradual)
   }
 
   console.log(props.add_coupon_loading)

@@ -168,13 +168,13 @@ function VoucherSetting(props) {
     if (props.voucher_setting_status_edit_loading === "Success") {
       toast.success("Status Updated")
       toggleStatus()
-      props.voucher_settingStatusEditFresh()
+      props.voucherSettingStatusEditFresh()
     }
 
     if (props.voucher_setting_delete_loading === "Success") {
       //  console.log("I am in the delete")
       toast.success("Voucher Setting Deleted")
-      props.voucher_settingDeleteFresh()
+      props.voucherSettingDeleteFresh()
     }
   }, [
     props.add_voucher_setting_loading,
