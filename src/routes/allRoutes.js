@@ -137,6 +137,8 @@ import AddCoupon from "pages/Coupon/AddCoupon"
 import MenuTimeSlot from "pages/Restaurant/MenuItemTimeSlot/MenuTimeSlot"
 import AddTimeSlot from "pages/Restaurant/MenuItemTimeSlot/AddTimeSlot/AddTimeSlot"
 import BranchAttribute from "pages/BranchAttribute/BranchAttribute"
+import VoucherSetting from "pages/CRM/VoucherSetting/VoucherSetting"
+import AddVoucherSetting from "pages/CRM/VoucherSetting/AddVoucherSetting"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -192,6 +194,8 @@ const userRoutes = [
 
   // CRM
   { path: "/reward-point-settings", component: <RewardPoint /> },
+  { path: "/voucher_settings", component: <VoucherSetting /> },
+  { path: "/add-voucher-settings", component: <AddVoucherSetting /> },
 
   // Coupon
   { path: "/coupon", component: <Coupon /> },
