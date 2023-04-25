@@ -18,24 +18,12 @@ import { v4 as uuidv4 } from "uuid"
 var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
-export const addVoucherSettingAction = (id, data, selectedBranch) => {
+export const addVoucherSettingAction = (id, data) => {
   var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Post"
-  const selectedBranchData =
-    selectedBranch?.length > 0
-      ? selectedBranch.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            res_id: item.value,
-            voucher_setting_id: id,
-          }
-        })
-      : null
-  // console.log(selectedBranchData);
+
   const formData = {
     _id: id,
     ...data,
-    restaurants: selectedBranchData,
   }
   return dispatch => {
     console.log("-in the dispatch----")
@@ -113,23 +101,12 @@ export const getAllVoucherSettingFresh = () => {
   }
 }
 
-export const voucherSettingEditAction = (id, data, selectedBranch) => {
+export const voucherSettingEditAction = (id, data) => {
   var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Put"
-  const selectedBranchData =
-    selectedBranch?.length > 0
-      ? selectedBranch.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            res_id: item.value,
-            voucher_setting_id: id,
-          }
-        })
-      : null
+
   const formData = {
     _id: id,
     ...data,
-    restaurants: selectedBranchData,
   }
   return dispatch => {
     const headers = {

@@ -14,7 +14,6 @@ import withRouter from "components/Common/withRouter"
 import Select from "react-select"
 import Breadcrumbs from "components/Common/Breadcrumb"
 import {
-  getAllBranchAction,
   addVoucherSettingAction,
   addVoucherSettingFresh,
   voucherSettingEditAction,
@@ -28,60 +27,21 @@ import { toast } from "react-toastify"
 function AddVoucherSetting(props) {
   const navigate = useNavigate()
   const location = useLocation()
-  console.log("lof", location?.state?.restaurants)
-
-  //select multiple branch
-  const common_branches = props?.get_all_branch_data?.filter(elem =>
-    location?.state?.restaurants?.find(({ res_id }) => elem._id === res_id)
-  )
-
-  const branch_data_edit = common_branches
-    ? common_branches?.map((item, key) => {
-        return { label: item.name, value: item._id }
-      })
-    : ""
-  const [selectedBranch, setSelectedBranch] = useState(
-    branch_data_edit ? branch_data_edit : ""
-  )
-  const handleSelectBranch = e => {
-    setSelectedBranch(e)
-  }
-
-  let branchDate = undefined
-  if (props.get_all_branch_data?.length > 0) {
-    branchDate = props.get_all_branch_data?.map((item, key) => ({
-      label: item.name,
-      value: item._id,
-    }))
-  }
 
   console.log(location.state)
   const [voucherSettingInfo, setVoucherSettingInfo] = useState({
     name: location.state ? location.state.name : "",
     image: location.state ? location.state.image : "",
-    description: location.state ? location.state.description : "",
+    voucher_amount: location.state ? location.state.voucher_amount : 0,
+    voucher_cost_in_point: location.state ? location.state.voucher_cost_in_point : 0,
+    validity_time: location.state ? location.state.validity_time : 0,
+    is_delivery: location.state ? location.state.is_delivery : false,
+    is_pickup: location.state ? location.state.is_pickup : false,
+    is_dine: location.state ? location.state.is_dine : false,
     is_active: location.state ? location.state.is_active : true,
-    start_date: location.state
-      ? location.state.start_date
-      : new Date().toISOString(),
-    end_date: location.state
-      ? location.state.end_date
-      : new Date().toISOString(),
   })
-  console.log("tt", new Date().toISOString())
-  const handleTimeChange = e => {
-    console.log("e :", e.target.value)
-    console.log(new Date(e.target.value).toISOString())
-    name = e.target.name
-    value = e.target.value
-    let new_time_string = `${value}:00Z`
-    setVoucherSettingInfo({
-      ...voucherSettingInfo,
-      [name]: new Date(new_time_string).toISOString(),
-    })
-  }
 
-  let name, value
+  let name, value, checked
   const handleInputs = e => {
     console.log(e)
     name = e.target.name
@@ -89,11 +49,19 @@ function AddVoucherSetting(props) {
     setVoucherSettingInfo({ ...voucherSettingInfo, [name]: value })
   }
 
+  const handleCheckBox = (e) => {
+    // console.log(e);
+    name = e.target.name;
+    checked = e.target.checked;
+    setVoucherSettingInfo({ ...voucherSettingInfo, [name]: checked })
+
+  }
+
   const handleSubmit = e => {
     e.preventDefault()
     const uniqueId = uuidv4()
     // console.log(voucherSettingInfo);
-    props.addVoucherSettingAction(uniqueId, voucherSettingInfo, selectedBranch)
+    props.addVoucherSettingAction(uniqueId, voucherSettingInfo)
   }
 
   const handleSubmitForEdit = e => {
@@ -102,16 +70,13 @@ function AddVoucherSetting(props) {
 
     props.voucherSettingEditAction(
       location.state._id,
-      voucherSettingInfo,
-      selectedBranch
+      voucherSettingInfo
     )
   }
 
   console.log(props.add_voucher_setting_loading)
   useEffect(() => {
-    if (props.get_all_branch_loading == false) {
-      props.getAllBranchAction()
-    }
+
 
     console.log(
       "add_voucher_setting_loading :",
@@ -130,12 +95,10 @@ function AddVoucherSetting(props) {
       navigate("/voucher_settings")
     }
   }, [
-    props.get_all_branch_loading,
     props.add_voucher_setting_loading,
     props.voucher_setting_edit_loading,
   ])
 
-  console.log(props.get_all_branch_data)
 
   return (
     <>
@@ -182,120 +145,72 @@ function AddVoucherSetting(props) {
                   onSubmit={location.state ? handleSubmitForEdit : handleSubmit}
                 >
                   <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Name
+                    <label htmlFor="name" className="col-md-2 col-form-label" > Name
                     </label>
                     <div className="col-md-10">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="name"
-                        placeholder="Enter name"
-                        name="name"
-                        onChange={handleInputs}
-                        value={voucherSettingInfo.name ?? ""}
-                        required
+                      <input type="text" className="form-control" id="name" placeholder="Enter name"
+                        name="name" onChange={handleInputs} value={voucherSettingInfo.name ?? ""} required
                       />
                     </div>
                   </Row>
 
                   <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Description
-                    </label>
+                    <label htmlFor="image" className="col-md-2 col-form-label">Image</label>
                     <div className="col-md-10">
-                      <textarea
-                        className="form-control"
-                        id="description"
-                        placeholder="Enter description"
-                        name="description"
-                        onChange={handleInputs}
-                        value={voucherSettingInfo.description ?? ""}
-                        required
-                      ></textarea>
-                    </div>
-                  </Row>
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Image
-                    </label>
-                    <div className="col-md-10">
-                      <input
-                        type="file"
-                        className="form-control"
-                        id="resume"
-                        onChange={e => console.log(e)}
-                        required
-                      />
-                    </div>
-                  </Row>
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Branches
-                    </label>
-                    <div className="col-md-10">
-                      <Select
-                        value={selectedBranch}
-                        onChange={handleSelectBranch}
-                        options={branchDate}
-                        isMulti={true}
-                        required
-                      />
+                      <input type="file" className="form-control" id="image" onChange={e => console.log(e)} required />
                     </div>
                   </Row>
 
                   <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Start Time
+                    <label htmlFor="voucher_amount" className="col-md-2 col-form-label" > Voucher Amount
                     </label>
                     <div className="col-md-10">
-                      <input
-                        type="datetime-local"
-                        id="start_date"
-                        className="form-control"
-                        name="start_date"
-                        placeholder="Start Time"
-                        value={voucherSettingInfo.start_date.slice(0, 16)}
-                        onChange={e => handleTimeChange(e)}
-                        required
-                      />
+                      <input type="text" className="form-control" id="voucher_amount" placeholder="Enter voucher amount" name="voucher_amount" onChange={handleInputs} value={voucherSettingInfo.voucher_amount ?? ""} required />
                     </div>
                   </Row>
 
                   <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      End Time
+                    <label htmlFor="voucher_cost_in_point" className="col-md-2 col-form-label" > Voucher Cost in Point
                     </label>
                     <div className="col-md-10">
-                      <input
-                        type="datetime-local"
-                        id="end_date"
-                        className="form-control"
-                        name="end_date"
-                        placeholder="End Time"
-                        value={voucherSettingInfo.end_date.slice(0, 16)}
-                        onChange={e => handleTimeChange(e)}
-                        required
-                      />
+                      <input type="text" className="form-control" id="voucher_cost_in_point" placeholder="Enter voucher cost in point" name="voucher_cost_in_point" onChange={handleInputs} value={voucherSettingInfo.voucher_cost_in_point ?? ""} required />
                     </div>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <label htmlFor="validity_time" className="col-md-2 col-form-label" > Validity Time
+                    </label>
+                    <div className="col-md-10">
+                      <input type="number" className="form-control" id="validity_time" placeholder="Enter validity time" name="validity_time" onChange={handleInputs} value={voucherSettingInfo.validity_time ?? ""} required />
+                    </div>
+                  </Row>
+
+                  <Row className="mb-3">
+
+                    <div className="col-sm-4">
+                      <div className="form-check">
+                        <label className="form-check-label" htmlFor="is_delivery">Delivery</label>
+                        <input type="checkbox" className="form-check-input" id="is_delivery" checked={voucherSettingInfo.is_delivery} name="is_delivery" onChange={handleCheckBox} />
+
+                      </div>
+                    </div>
+
+                    <div className="col-sm-4">
+                      <div className="form-check">
+                        <label className="form-check-label" htmlFor="is_pickup">Pickup</label>
+                        <input type="checkbox" className="form-check-input" id="is_pickup" checked={voucherSettingInfo.is_pickup} name="is_pickup" onChange={handleCheckBox} />
+
+                      </div>
+                    </div>
+
+                    <div className="col-sm-4">
+                      <div className="form-check">
+                        <label className="form-check-label" htmlFor="is_dine">Dine</label>
+                        <input type="checkbox" className="form-check-input" id="is_dine" checked={voucherSettingInfo.is_dine} name="is_dine" onChange={handleCheckBox} />
+
+                      </div>
+                    </div>
+
                   </Row>
 
                   <div className="mb-3 row">
@@ -320,14 +235,11 @@ function AddVoucherSetting(props) {
   )
 }
 
-const mapStateToProps = state => {
-  const { get_all_branch_loading, get_all_branch_data } = state.Restaurant
 
+const mapStateToProps = state => {
   const { add_voucher_setting_loading, voucher_setting_edit_loading } =
     state.VoucherSetting
   return {
-    get_all_branch_loading,
-    get_all_branch_data,
     add_voucher_setting_loading,
     voucher_setting_edit_loading,
   }
@@ -335,7 +247,6 @@ const mapStateToProps = state => {
 
 export default withRouter(
   connect(mapStateToProps, {
-    getAllBranchAction,
     addVoucherSettingAction,
     addVoucherSettingFresh,
     voucherSettingEditAction,
