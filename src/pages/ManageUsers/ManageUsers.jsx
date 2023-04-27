@@ -29,6 +29,7 @@ function ManageUsers(props) {
 
 
         }));
+        setRole(row.role_id)
     }
     const [registerInfo, setRegisterInfo] = useState({
         first_name: "",

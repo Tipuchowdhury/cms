@@ -27,7 +27,9 @@ import {
     EDIT_MENU_TIME_SLOT,
     EDIT_MENU_TIME_SLOT_FRESH,
     GET_CATEGORY_BY_ID,
-    GET_CATEGORY_BY_ID_FRESH
+    GET_CATEGORY_BY_ID_FRESH,
+    ADD_BRANCH_FRESH,
+    EDIT_BRANCH_FRESH
 
 } from "./actionTypes"
 import axios from "axios";
@@ -584,6 +586,18 @@ export const zoneEditFresh = () => {
 };
 
 export const addBranchFresh = () => {
+    console.log("I am in add branch fresh===============");
+    return dispatch => {
+        dispatch({
+            type: "ADD_BRANCH_FRESH",
+            payload: null,
+            status: false,
+        });
+    };
+};
+
+export const addBranchFreshNew = () => {
+    console.log("I am in add branch fresh===============");
     return dispatch => {
         dispatch({
             type: "ADD_BRANCH_FRESH",
@@ -594,6 +608,7 @@ export const addBranchFresh = () => {
 };
 
 export const editBranchFresh = () => {
+    console.log("I am in add edit fresh===============");
     return dispatch => {
         dispatch({
             type: "EDIT_BRANCH_FRESH",
@@ -1194,7 +1209,7 @@ export const getCategoryByIdFresh = () => {
         dispatch({
             type: "GET_CATEGORY_BY_ID_FRESH",
             status: false,
-            payload: null,
+            payload: "",
         });
     };
 };
