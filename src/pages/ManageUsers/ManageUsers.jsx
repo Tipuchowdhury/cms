@@ -36,6 +36,7 @@ function ManageUsers(props) {
             id: row._id,
             is_active: row.is_active,
         }));
+        setRole(row.role_id)
     }
     const [registerInfo, setRegisterInfo] = useState({
         first_name: "",

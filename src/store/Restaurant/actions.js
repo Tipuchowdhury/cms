@@ -48,6 +48,8 @@ import {
   EDIT_MENU_TIME_SLOT_FRESH,
   GET_CATEGORY_BY_ID,
   GET_CATEGORY_BY_ID_FRESH,
+  ADD_BRANCH_FRESH,
+  EDIT_BRANCH_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -182,15 +184,15 @@ export const restaurantStatusUpdateAction = (name, id, is_active) => {
   }
 }
 
-export const restaurantDeleteAction = (id) => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Restaurant/Delete";
+export const restaurantDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Restaurant/Delete"
   // console.log(id);
 
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
-    };
+    }
 
     axios
       .delete(url, { params: { id: id } }, { headers: headers })
@@ -199,27 +201,25 @@ export const restaurantDeleteAction = (id) => {
           type: DELETE_RESTAURANT,
           payload: response.data,
           status: "Success",
-        });
+        })
       })
       .catch(error => {
         dispatch({
           type: DELETE_RESTAURANT,
           payload: error,
           status: "Failed",
-        });
-      });
-
-  };
-
-};
+        })
+      })
+  }
+}
 
 export const restaurantDeleteFresh = () => {
   return dispatch =>
     dispatch({
       type: DELETE_RESTAURANT_FRESH,
       status: false,
-    });
-};
+    })
+}
 
 export const getAllCusineAction = () => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Get"
@@ -263,30 +263,30 @@ export const branchAddAction = (
   const data =
     selectedCuisine?.length > 0
       ? selectedCuisine.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          cuisine_id: item.value,
-          branch_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            cuisine_id: item.value,
+            branch_id: id,
+          }
+        })
       : null
 
   console.log(data)
   const all_working_hours =
     time?.length > 0
       ? time.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          day: Number(item.day),
-          open_hour: moment(item.startTime, "HH:mm").get("hours"),
-          open_min: moment(item.startTime, "HH:mm").get("minutes"),
-          close_hour: moment(item.endTime, "HH:mm").get("hours"),
-          close_minute: moment(item.endTime, "HH:mm").get("minutes"),
-          branch_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            day: Number(item.day),
+            open_hour: moment(item.startTime, "HH:mm").get("hours"),
+            open_min: moment(item.startTime, "HH:mm").get("minutes"),
+            close_hour: moment(item.endTime, "HH:mm").get("hours"),
+            close_minute: moment(item.endTime, "HH:mm").get("minutes"),
+            branch_id: id,
+          }
+        })
       : null
   let formData = {
     name: zoneInfo.name,
@@ -372,30 +372,30 @@ export const branchEditAction = (
   const data =
     selectedCuisine?.length > 0
       ? selectedCuisine.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          cuisine_id: item.value,
-          branch_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            cuisine_id: item.value,
+            branch_id: id,
+          }
+        })
       : null
 
   console.log(data)
   const all_working_hours =
     time?.length > 0
       ? time.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          day: Number(item.day),
-          open_hour: moment(item.startTime, "HH:mm").get("hours"),
-          open_min: moment(item.startTime, "HH:mm").get("minutes"),
-          close_hour: moment(item.endTime, "HH:mm").get("hours"),
-          close_minute: moment(item.endTime, "HH:mm").get("minutes"),
-          branch_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            day: Number(item.day),
+            open_hour: moment(item.startTime, "HH:mm").get("hours"),
+            open_min: moment(item.startTime, "HH:mm").get("minutes"),
+            close_hour: moment(item.endTime, "HH:mm").get("hours"),
+            close_minute: moment(item.endTime, "HH:mm").get("minutes"),
+            branch_id: id,
+          }
+        })
       : null
   let formData = {
     name: zoneInfo.name,
@@ -536,15 +536,15 @@ export const getAllBranchAction = () => {
   }
 }
 
-export const branchDeleteAction = (id) => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Branch/Delete";
+export const branchDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Branch/Delete"
   // console.log(id);
 
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
-    };
+    }
 
     axios
       .delete(url, { params: { id: id } }, { headers: headers })
@@ -553,27 +553,25 @@ export const branchDeleteAction = (id) => {
           type: DELETE_BRANCH,
           payload: response.data,
           status: "Success",
-        });
+        })
       })
       .catch(error => {
         dispatch({
           type: DELETE_BRANCH,
           payload: error,
           status: "Failed",
-        });
-      });
-
-  };
-
-};
+        })
+      })
+  }
+}
 
 export const branchDeleteFresh = () => {
   return dispatch =>
     dispatch({
       type: DELETE_BRANCH_FRESH,
       status: false,
-    });
-};
+    })
+}
 
 export const zoneAddAction = (
   id,
@@ -592,27 +590,27 @@ export const zoneAddAction = (
   const data =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          branch_id: item.value,
-          zone_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            branch_id: item.value,
+            zone_id: id,
+          }
+        })
       : null
 
   const delivery_charges =
     deliveryCharge?.length > 0
       ? deliveryCharge.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          distance_start_in_kilometer: Number(item.distanceStart),
-          distance_end_in_kilometer: Number(item.distanceEnd),
-          delivery_charge: Number(item.deliveryCharge),
-          zone_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            distance_start_in_kilometer: Number(item.distanceStart),
+            distance_end_in_kilometer: Number(item.distanceEnd),
+            delivery_charge: Number(item.deliveryCharge),
+            zone_id: id,
+          }
+        })
       : null
 
   const allData = path.map(item => [Number(item.lng), Number(item.lat)])
@@ -712,27 +710,27 @@ export const zoneEditAction = (
   const data =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          branch_id: item.value,
-          zone_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            branch_id: item.value,
+            zone_id: id,
+          }
+        })
       : null
 
   const delivery_charges =
     deliveryCharge?.length > 0
       ? deliveryCharge.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          distance_start_in_kilometer: Number(item.distanceStart),
-          distance_end_in_kilometer: Number(item.distanceEnd),
-          delivery_charge: Number(item.deliveryCharge),
-          zone_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            distance_start_in_kilometer: Number(item.distanceStart),
+            distance_end_in_kilometer: Number(item.distanceEnd),
+            delivery_charge: Number(item.deliveryCharge),
+            zone_id: id,
+          }
+        })
       : null
 
   const allData = path.map(item => [Number(item.lat), Number(item.lng)])
@@ -824,15 +822,15 @@ export const zoneStatusEditActionFresh = () => {
   }
 }
 
-export const zoneDeleteAction = (id) => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Zone/Delete";
+export const zoneDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Zone/Delete"
   // console.log(id);
 
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
-    };
+    }
 
     axios
       .delete(url, { params: { id: id } }, { headers: headers })
@@ -841,27 +839,25 @@ export const zoneDeleteAction = (id) => {
           type: DELETE_ZONE,
           payload: response.data,
           status: "Success",
-        });
+        })
       })
       .catch(error => {
         dispatch({
           type: DELETE_ZONE,
           payload: error,
           status: "Failed",
-        });
-      });
-
-  };
-
-};
+        })
+      })
+  }
+}
 
 export const zoneDeleteFresh = () => {
   return dispatch =>
     dispatch({
       type: DELETE_ZONE_FRESH,
       status: false,
-    });
-};
+    })
+}
 
 export const addBranchFresh = () => {
   return dispatch => {
@@ -903,6 +899,17 @@ export const editBranchPopularFresh = () => {
   }
 }
 
+export const addBranchFreshNew = () => {
+  console.log("I am in add branch fresh===============")
+  return dispatch => {
+    dispatch({
+      type: "ADD_BRANCH_FRESH",
+      payload: null,
+      status: false,
+    })
+  }
+}
+
 export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
   console.log(val, category, isChecked, addOns)
   console.log(parseInt(category.num_of_choice))
@@ -912,15 +919,15 @@ export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
   const data =
     addOns?.length > 0
       ? addOns.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          add_on_name: item.add_on_name,
-          add_on_price: item.add_on_price,
-          add_on_category_name: category.name,
-          add_on_category_id: val,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            add_on_name: item.add_on_name,
+            add_on_price: item.add_on_price,
+            add_on_category_name: category.name,
+            add_on_category_id: val,
+          }
+        })
       : null
   const val_id = uuidv4()
   console.log(data)
@@ -973,15 +980,15 @@ export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
   const data =
     addOns?.length > 0
       ? addOns.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          add_on_name: item.add_on_name,
-          add_on_price: item.add_on_price,
-          add_on_category_name: category.name,
-          add_on_category_id: val,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            add_on_name: item.add_on_name,
+            add_on_price: item.add_on_price,
+            add_on_category_name: category.name,
+            add_on_category_id: val,
+          }
+        })
       : null
   const val_id = uuidv4()
   console.log(data)
@@ -1188,16 +1195,15 @@ export const cuisineStatusEditAction = data => {
   }
 }
 
-
-export const cuisineDeleteAction = (id) => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Delete";
+export const cuisineDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Delete"
   // console.log(id);
 
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
-    };
+    }
 
     axios
       .delete(url, { params: { id: id } }, { headers: headers })
@@ -1206,37 +1212,35 @@ export const cuisineDeleteAction = (id) => {
           type: DELETE_CUISINE,
           payload: response.data,
           status: "Success",
-        });
+        })
       })
       .catch(error => {
         dispatch({
           type: DELETE_CUISINE,
           payload: error,
           status: "Failed",
-        });
-      });
-
-  };
-
-};
+        })
+      })
+  }
+}
 
 export const cuisineDeleteFresh = () => {
   return dispatch =>
     dispatch({
       type: DELETE_CUISINE_FRESH,
       status: false,
-    });
-};
+    })
+}
 
-export const addOnCategoryDeleteAction = (id) => {
-  var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Delete";
+export const addOnCategoryDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Delete"
   // console.log(id);
 
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
-    };
+    }
 
     axios
       .delete(url, { params: { id: id } }, { headers: headers })
@@ -1245,27 +1249,25 @@ export const addOnCategoryDeleteAction = (id) => {
           type: DELETE_ADD_ON_CATEGORY,
           payload: response.data,
           status: "Success",
-        });
+        })
       })
       .catch(error => {
         dispatch({
           type: DELETE_ADD_ON_CATEGORY,
           payload: error,
           status: "Failed",
-        });
-      });
-
-  };
-
-};
+        })
+      })
+  }
+}
 
 export const addOnCategoryDeleteFresh = () => {
   return dispatch =>
     dispatch({
       type: DELETE_ADD_ON_CATEGORY_FRESH,
       status: false,
-    });
-};
+    })
+}
 
 export const getAllAddOnsCategoryAction = () => {
   var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Get"
