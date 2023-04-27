@@ -17,7 +17,7 @@ import Select from "react-select";
 
 function Slider(props) {
 
-    document.title = "Slider | Foodi"
+    document.title = "Promotion | Foodi"
 
     const [modal, setModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
@@ -214,7 +214,7 @@ function Slider(props) {
 
         {
             dataField: "name",
-            text: "Slider Name",
+            text: "Promotion Name",
             sort: true,
         },
         {
@@ -252,7 +252,7 @@ function Slider(props) {
 
 
         if (props.add_slider_loading === "Success") {
-            toast.success("Slider Added Successfully");
+            toast.success("Promotion Added Successfully");
             toggle();
             setAddInfo({
                 ...addInfo,
@@ -278,7 +278,7 @@ function Slider(props) {
         }
 
         if (props.slider_edit_loading === "Success") {
-            toast.success("Slider Updated");
+            toast.success("Promotion Updated");
             toggleEditModal();
             props.promotionUpdateFresh();
         }
@@ -291,7 +291,7 @@ function Slider(props) {
         }
 
         if (props.slider_status_edit_loading === "Success") {
-            toast.success("Slider Status Updated");
+            toast.success("Promotion Status Updated");
             toggleStatus();
             props.promotionStatusUpdateFresh();
 
@@ -306,7 +306,7 @@ function Slider(props) {
 
         if (props.slider_delete_loading === "Success") {
             // console.log("I am in the delete")
-            toast.success("Slider Deleted");
+            toast.success("Promotion Deleted");
             toggleDel();
             props.promotionDeleteFresh();
         }
@@ -322,15 +322,15 @@ function Slider(props) {
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle="Foodi" title="Slider" breadcrumbItem="Slider Image" />
+                    <Breadcrumbs maintitle="Foodi" title="Promotion" breadcrumbItem="Promotion" />
                     <Row>
                         <Col className="col-12">
                             <Card style={{ border: "none" }}>
                                 <CardBody>
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Slider Image </CardTitle>
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Promotion</CardTitle>
                                         <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
-                                            Add Slider Image
+                                            Add Promotion
                                         </Button>
                                     </div>
                                     {props.get_all_slider_data ? props.get_all_slider_data.length > 0 ? <DatatableTablesWorking products={props.get_all_slider_data}
@@ -344,7 +344,7 @@ function Slider(props) {
 
                 {/* ============ create modal start=============== */}
                 <Modal isOpen={modal} toggle={toggle} centered>
-                    <ModalHeader toggle={toggle}>New Slider</ModalHeader>
+                    <ModalHeader toggle={toggle}>New Promotion</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleSubmit}>
 
@@ -399,7 +399,7 @@ function Slider(props) {
 
                 {/* ============ edit modal start=============== */}
                 <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-                    <ModalHeader >Edit Subscription Type</ModalHeader>
+                    <ModalHeader >Edit Promotion</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleEdit} >
 

@@ -73,8 +73,8 @@ function AddCoupon(props) {
 
   const coupon_data_edit = common_coupon_types
     ? common_coupon_types?.map((item, key) => {
-        return { label: item.label, value: item.value }
-      })
+      return { label: item.label, value: item.value }
+    })
     : ""
 
   const [selectedCouponType, setSelectedCouponType] = useState(
@@ -90,8 +90,8 @@ function AddCoupon(props) {
 
   const branch_data_edit = common_branches
     ? common_branches?.map((item, key) => {
-        return { label: item.name, value: item._id }
-      })
+      return { label: item.name, value: item._id }
+    })
     : ""
   const [selectedBranch, setSelectedBranch] = useState(
     branch_data_edit ? branch_data_edit : ""
@@ -117,8 +117,8 @@ function AddCoupon(props) {
 
   const category_data_edit = common_categories
     ? common_categories?.map((item, key) => {
-        return { label: item.category_name, value: item._id }
-      })
+      return { label: item.category_name, value: item._id }
+    })
     : ""
   const [selectedCategory, setSelectedCategory] = useState(
     category_data_edit ? category_data_edit : ""
@@ -142,8 +142,8 @@ function AddCoupon(props) {
 
   const cuisine_data_edit = common_cuisine
     ? common_cuisine?.map((item, key) => {
-        return { label: item.name, value: item._id }
-      })
+      return { label: item.name, value: item._id }
+    })
     : ""
   const [selectedCuisine, setSelectedCuisine] = useState(
     cuisine_data_edit ? cuisine_data_edit : ""
@@ -169,11 +169,11 @@ function AddCoupon(props) {
 
   const user_data_edit = common_user
     ? common_user?.map((item, key) => {
-        return {
-          label: `${item.first_name} ${item.last_name}`,
-          value: item._id,
-        }
-      })
+      return {
+        label: `${item.first_name} ${item.last_name}`,
+        value: item._id,
+      }
+    })
     : ""
   const [selectedUser, setSelectedUser] = useState(
     user_data_edit ? user_data_edit : ""
@@ -197,11 +197,11 @@ function AddCoupon(props) {
 
   const zone_data_edit = common_zone
     ? common_zone?.map((item, key) => {
-        return {
-          label: item.name,
-          value: item._id,
-        }
-      })
+      return {
+        label: item.name,
+        value: item._id,
+      }
+    })
     : ""
   const [selectedZone, setSelectedZone] = useState(
     zone_data_edit ? zone_data_edit : ""
@@ -228,11 +228,11 @@ function AddCoupon(props) {
 
   const subscription_type_data_edit = common_subscription_type
     ? common_subscription_type?.map((item, key) => {
-        return {
-          label: item.name,
-          value: item._id,
-        }
-      })
+      return {
+        label: item.name,
+        value: item._id,
+      }
+    })
     : ""
   const [selectedSubType, setSelectedSubType] = useState(
     subscription_type_data_edit ? subscription_type_data_edit : ""
@@ -362,7 +362,14 @@ function AddCoupon(props) {
     e.preventDefault()
     console.log("======================I am in the edit form==================")
 
-    props.couponEditAction(location.state._id, couponInfo, selectedBranch)
+    props.couponEditAction(location.state._id, couponInfo, selectedCouponType,
+      selectedBranch,
+      selectedCategory,
+      selectedCuisine,
+      selectedSubType,
+      selectedUser,
+      selectedZone,
+      gradual)
   }
 
   console.log(props.add_coupon_loading)
