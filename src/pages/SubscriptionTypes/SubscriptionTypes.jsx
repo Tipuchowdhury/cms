@@ -289,7 +289,7 @@ function SubscriptionTypes(props) {
             <div className='page-content'>
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle='Foodie' title='Users' breadcrumbItem='Subscription-Types' />
+                    <Breadcrumbs maintitle='Foodi' title='Users' breadcrumbItem='Subscription-Types' />
                     <Row>
                         <Col className='col-12'>
                             <Card>
