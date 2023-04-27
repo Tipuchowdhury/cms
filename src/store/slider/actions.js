@@ -150,18 +150,18 @@ export const getAllSliderFresh = () => {
 
 
 export const promotionUpdateAction = (editData, selectedRestaurant) => {
-    // console.log(editData);
+    // console.log(editData, selectedRestaurant);
 
     var url = process.env.REACT_APP_LOCALHOST + "/Promotion/Put";
 
-    // const data = selectedRestaurant?.length > 0 ? selectedRestaurant.map(item => {
-    //     const val = uuidv4();
-    //     return {
-    //         _id: val,
-    //         res_id: item.value,
-    //         promotion_id: slider_id,
-    //     }
-    // }) : null
+    const data = selectedRestaurant?.length > 0 ? selectedRestaurant.map(item => {
+        const val = uuidv4();
+        return {
+            _id: val,
+            res_id: item.value,
+            promotion_id: editData._id,
+        }
+    }) : null
     const formData = {
         _id: editData._id,
         name: editData.name,
@@ -172,7 +172,7 @@ export const promotionUpdateAction = (editData, selectedRestaurant) => {
         is_pickup: editData.is_pickup,
         is_dine: editData.is_dine,
         is_active: editData.is_active,
-        restaurants: []
+        restaurants: data
     };
     return dispatch => {
         const headers = {

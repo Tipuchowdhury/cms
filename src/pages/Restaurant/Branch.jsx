@@ -6,7 +6,9 @@ import { toast } from 'react-toastify';
 import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { getAllBranchAction, branchStatusEditAction, editBranchStatusFresh, branchPopularEditAction, editBranchPopularFresh } from 'store/actions';
+import {
+    getAllBranchAction, branchStatusEditAction, editBranchStatusFresh, branchPopularEditAction, editBranchPopularFresh, branchDeleteAction, branchDeleteFresh
+} from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -21,6 +23,22 @@ function Branch(props) {
     const [isPopular, setIsPopular] = useState(false);;
     const [isPopularModal, setIsPopularModal] = useState(false);
     const togglePopularModal = () => setIsPopularModal(!isPopularModal);
+
+    const [deleteItem, setDeleteItem] = useState()
+    const [modalDel, setModalDel] = useState(false);
+
+    const toggleDel = () => setModalDel(!modalDel);
+
+    const handleDeleteModal = (row) => {
+        setDeleteItem(row._id);
+        toggleDel();
+    }
+
+    const handleDelete = () => {
+        // toggleDel();
+        console.log(deleteItem)
+        props.branchDeleteAction(deleteItem);
+    }
 
     const handleStatusModal = row => {
         setStatusInfo(row)
@@ -63,11 +81,8 @@ function Branch(props) {
             >
                 Edit
             </Button>{" "}
-            <Button
-                color="danger"
-                className="btn btn-danger waves-effect waves-light"
-            //onClick={() => handleDeleteModal(row)}
-            >
+            <Button color="danger" className="btn btn-danger waves-effect waves-light"
+                onClick={() => handleDeleteModal(row)} >
                 Delete
             </Button>{" "}
         </div>
@@ -170,7 +185,13 @@ function Branch(props) {
             toast.error("Something went wrong");
             props.editBranchPopularFresh();
         }
-    }, [props.get_all_branch_loading, props.edit_branch_status_loading, props.edit_branch_popular_loading]);
+
+        if (props.branch_delete_loading === "Success") {
+            toast.success("Branch Deleted Successfully");
+            toggleDel();
+            props.branchDeleteFresh();
+        }
+    }, [props.get_all_branch_loading, props.edit_branch_status_loading, props.edit_branch_popular_loading, props.branch_delete_loading]);
 
     console.log(props.get_all_branch_data);
     return (
@@ -203,7 +224,7 @@ function Branch(props) {
 
 
                 {/* ============ delete modal starts=============== */}
-                {/* <Modal isOpen={modalDel} toggle={toggleDel} centered>
+                <Modal isOpen={modalDel} toggle={toggleDel} centered>
                     <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
                         <div className="icon-box">
                             <i className="fa red-circle fa-trash" style={{ color: "red", fontSize: "40px" }}></i>
@@ -215,7 +236,7 @@ function Branch(props) {
                         <Button color="secondary" onClick={toggleDel}>Cancel</Button>{' '}
                         <Button color="danger" onClick={handleDelete}>Delete</Button>
                     </ModalFooter>
-                </Modal> */}
+                </Modal>
                 {/* ============ delete modal ends=============== */}
 
                 {/* ============ status update modal starts=============== */}
@@ -282,14 +303,16 @@ const mapStateToProps = state => {
         get_all_branch_loading,
         get_all_branch_data,
         edit_branch_status_loading,
-        edit_branch_popular_loading
+        edit_branch_popular_loading,
+        branch_delete_loading
     } = state.Restaurant;
 
     return {
         get_all_branch_loading,
         get_all_branch_data,
         edit_branch_status_loading,
-        edit_branch_popular_loading
+        edit_branch_popular_loading,
+        branch_delete_loading
     };
 };
 
@@ -300,6 +323,8 @@ export default withRouter(
             branchStatusEditAction,
             editBranchStatusFresh,
             branchPopularEditAction,
-            editBranchPopularFresh
+            editBranchPopularFresh,
+            branchDeleteAction,
+            branchDeleteFresh
         })(Branch)
 );

@@ -18,28 +18,28 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { Link, useNavigate } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
-  addCouponAction,
-  addCouponFresh,
-  getAllCouponAction,
-  getAllCouponFresh,
-  couponDeleteAction,
-  couponDeleteFresh,
-  couponEditAction,
-  couponEditFresh,
-  couponStatusEditAction,
-  couponStatusEditFresh,
-} from "store/Coupon/actions"
+  addVoucherSettingAction,
+  addVoucherSettingFresh,
+  getAllVoucherSettingAction,
+  getAllVoucherSettingFresh,
+  voucherSettingDeleteAction,
+  voucherSettingDeleteFresh,
+  voucherSettingEditAction,
+  voucherSettingEditFresh,
+  voucherSettingStatusEditAction,
+  voucherSettingStatusEditFresh,
+} from "store/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 
-function Coupon(props) {
+function VoucherSetting(props) {
   const [name, setName] = useState("")
   const [modal, setModal] = useState(false)
-  const [couponId, setCouponId] = useState()
-  const [couponname, setCouponName] = useState()
+  const [voucherSettingId, setVoucherSettingId] = useState()
+  const [voucherSettingName, setVoucherSettingName] = useState()
   const [editInfo, setEditInfo] = useState(false)
   const [reload, setReload] = useState(false)
   const navigate = useNavigate()
@@ -53,7 +53,7 @@ function Coupon(props) {
   const handleDelete = () => {
     toggleDel()
     // console.log(deleteItem)
-    props.couponDeleteAction(deleteItem)
+    props.voucherSettingDeleteAction(deleteItem)
   }
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
 
@@ -64,11 +64,11 @@ function Coupon(props) {
     const val = uuidv4()
     // console.log(name)
     // console.log(val)
-    props.addCouponAction(name, val)
+    props.addVoucherSettingAction(name, val)
   }
 
   const handleEdit = row => {
-    navigate("/add-coupon", { state: row })
+    navigate("/add-voucher-settings", { state: row })
   }
   const handleDeleteModal = row => {
     setDeleteItem(row._id)
@@ -83,7 +83,7 @@ function Coupon(props) {
 
   const handleStatusUpdate = () => {
     // console.log(editInfo)
-    props.couponStatusEditAction({
+    props.voucherSettingStatusEditAction({
       ...editInfo,
       is_active: !editInfo.is_active,
     })
@@ -117,25 +117,15 @@ function Coupon(props) {
     </Button>
   )
 
-  // console.log(props.add_coupon_loading)
-  // console.log(props.get_all_coupon_data)
-  // console.log(props.coupon_name_edit_loading)
-  // console.log(props.get_all_coupon_loading)
+  // console.log(props.add_voucher_setting_loading)
+  // console.log(props.get_all_voucher_setting_data)
+  // console.log(props.voucher_setting_name_edit_loading)
+  // console.log(props.get_all_voucher_setting_loading)
 
   const activeData = [
     {
       dataField: "name",
       text: "Name",
-      sort: true,
-    },
-    {
-      dataField: "discount_in_amount",
-      text: "Amount",
-      sort: true,
-    },
-    {
-      dataField: "discount_in_percent",
-      text: "Amount (%)",
       sort: true,
     },
     {
@@ -159,38 +149,38 @@ function Coupon(props) {
   ]
 
   useEffect(() => {
-    // console.log("=======hello", props.coupon_name_edit_loading)
-    if (props.get_all_coupon_loading == false) {
-      //  console.log("I am in get all coupon loading ")
-      props.getAllCouponAction()
+    // console.log("=======hello", props.voucher_setting_name_edit_loading)
+    if (props.get_all_voucher_setting_loading == false) {
+      //  console.log("I am in get all voucher_setting loading ")
+      props.getAllVoucherSettingAction()
     }
 
-    if (props.add_coupon_loading === "Success") {
-      toast.success("Coupon Added Successfully")
-      props.addCouponFresh()
+    if (props.add_voucher_setting_loading === "Success") {
+      toast.success("VoucherSetting Added Successfully")
+      props.addVoucherSettingFresh()
     }
 
-    if (props.add_coupon_loading === "Failed") {
+    if (props.add_voucher_setting_loading === "Failed") {
       toast.error("Something went wrong")
-      props.addCouponFresh()
+      props.addVoucherSettingFresh()
     }
 
-    if (props.coupon_status_edit_loading === "Success") {
+    if (props.voucher_setting_status_edit_loading === "Success") {
       toast.success("Status Updated")
       toggleStatus()
-      props.couponStatusEditFresh()
+      props.voucherSettingStatusEditFresh()
     }
 
-    if (props.coupon_delete_loading === "Success") {
+    if (props.voucher_setting_delete_loading === "Success") {
       //  console.log("I am in the delete")
-      toast.success("Coupon Deleted")
-      props.couponDeleteFresh()
+      toast.success("Voucher Setting Deleted")
+      props.voucherSettingDeleteFresh()
     }
   }, [
-    props.add_coupon_loading,
-    props.coupon_name_edit_loading,
-    props.coupon_delete_loading,
-    props.coupon_status_edit_loading,
+    props.add_voucher_setting_loading,
+    props.voucher_setting_name_edit_loading,
+    props.voucher_setting_delete_loading,
+    props.voucher_setting_status_edit_loading,
   ])
 
   return (
@@ -200,13 +190,13 @@ function Coupon(props) {
           {/* Render Breadcrumbs */}
           <Breadcrumbs
             maintitle="Foodi"
-            title="Coupon"
-            breadcrumbItem="Coupon"
+            title="CRM"
+            breadcrumbItem="Voucher Setting"
           />
           {/* <Row className="d-flex flex-row-reverse" style={{ marginBottom: "20px", alignItems: "end" }}>
                         <Col className="col-12">
                             <Button color="danger" onClick={toggle}>
-                                Add Coupon
+                                Add VoucherSetting
                             </Button>
                         </Col>
                     </Row> */}
@@ -225,21 +215,21 @@ function Coupon(props) {
                     }}
                   >
                     <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
-                      Coupon{" "}
+                      Voucher Setting{" "}
                     </CardTitle>
-                    <Link to="/add-coupon">
+                    <Link to="/add-voucher-settings">
                       <Button
                         style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
                       >
-                        Add Coupon
+                        Add Voucher Setting
                       </Button>
                     </Link>
                   </div>
 
-                  {props.get_all_coupon_data ? (
-                    props.get_all_coupon_data.length > 0 ? (
+                  {props.get_all_voucher_setting_data ? (
+                    props.get_all_voucher_setting_data.length > 0 ? (
                       <DatatableTablesWorking
-                        products={props.get_all_coupon_data}
+                        products={props.get_all_voucher_setting_data}
                         columnData={activeData}
                         defaultSorted={defaultSorted}
                       />
@@ -250,37 +240,6 @@ function Coupon(props) {
             </Col>
           </Row>
         </Container>
-        <Modal isOpen={modal} toggle={toggle} centered>
-          <ModalHeader toggle={toggle}>Modal title</ModalHeader>
-          <ModalBody>
-            <form className="mt-1" onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className="form-label" htmlFor="username">
-                  Coupon Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="username"
-                  placeholder="Enter coupon name"
-                  required
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                />
-              </div>
-              <div
-                style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
-              >
-                <Button color="secondary" onClick={toggle}>
-                  Cancel
-                </Button>{" "}
-                <Button color="primary" type="submit">
-                  Submit
-                </Button>
-              </div>
-            </form>
-          </ModalBody>
-        </Modal>
 
         {/* ============ delete modal starts=============== */}
         <Modal isOpen={modalDel} toggle={toggleDel} centered>
@@ -346,44 +305,44 @@ function Coupon(props) {
 
 const mapStateToProps = state => {
   const {
-    add_coupon_data,
-    add_coupon_error,
-    add_coupon_loading,
+    add_voucher_setting_data,
+    add_voucher_setting_error,
+    add_voucher_setting_loading,
 
-    get_all_coupon_data,
-    get_all_coupon_error,
-    get_all_coupon_loading,
-    coupon_delete_loading,
-    coupon_edit_loading,
-    coupon_status_edit_data,
-    coupon_status_edit_loading,
-  } = state.Coupon
+    get_all_voucher_setting_data,
+    get_all_voucher_setting_error,
+    get_all_voucher_setting_loading,
+    voucher_setting_delete_loading,
+    voucher_setting_edit_loading,
+    voucher_setting_status_edit_data,
+    voucher_setting_status_edit_loading,
+  } = state.VoucherSetting
 
   return {
-    add_coupon_data,
-    add_coupon_error,
-    add_coupon_loading,
+    add_voucher_setting_data,
+    add_voucher_setting_error,
+    add_voucher_setting_loading,
 
-    get_all_coupon_data,
-    get_all_coupon_error,
-    get_all_coupon_loading,
-    coupon_edit_loading,
-    coupon_delete_loading,
-    coupon_status_edit_data,
-    coupon_status_edit_loading,
+    get_all_voucher_setting_data,
+    get_all_voucher_setting_error,
+    get_all_voucher_setting_loading,
+    voucher_setting_edit_loading,
+    voucher_setting_delete_loading,
+    voucher_setting_status_edit_data,
+    voucher_setting_status_edit_loading,
   }
 }
 
 export default withRouter(
   connect(mapStateToProps, {
-    addCouponAction,
-    addCouponFresh,
-    getAllCouponAction,
-    getAllCouponFresh,
-    couponDeleteAction,
-    couponDeleteFresh,
-    couponStatusEditAction,
-    couponEditFresh,
-    couponStatusEditFresh,
-  })(Coupon)
+    addVoucherSettingAction,
+    addVoucherSettingFresh,
+    getAllVoucherSettingAction,
+    getAllVoucherSettingFresh,
+    voucherSettingDeleteAction,
+    voucherSettingDeleteFresh,
+    voucherSettingStatusEditAction,
+    voucherSettingEditFresh,
+    voucherSettingStatusEditFresh,
+  })(VoucherSetting)
 )

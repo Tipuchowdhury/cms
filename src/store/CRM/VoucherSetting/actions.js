@@ -1,30 +1,29 @@
 import {
-  ADD_REWARD_POINT,
-  ADD_REWARD_POINT_FRESH,
-  GET_ALL_REWARD_POINT,
-  GET_ALL_REWARD_POINT_FRESH,
-  REWARD_POINT_NAME_EDIT,
-  REWARD_POINT_NAME_EDIT_FRESH,
-  REWARD_POINT_DELETE,
-  REWARD_POINT_DELETE_FRESH,
-  EDIT_REWARD_STATUS,
-  EDIT_REWARD_STATUS_FRESH
+  ADD_VOUCHER_SETTING,
+  ADD_VOUCHER_SETTING_FRESH,
+  GET_ALL_VOUCHER_SETTING,
+  GET_ALL_VOUCHER_SETTING_FRESH,
+  VOUCHER_SETTING_EDIT,
+  VOUCHER_SETTING_EDIT_FRESH,
+  VOUCHER_SETTING_DELETE,
+  VOUCHER_SETTING_DELETE_FRESH,
+  VOUCHER_SETTING_STATUS_EDIT,
+  VOUCHER_SETTING_STATUS_EDIT_FRESH,
 } from "./actionTypes"
 import axios from "axios"
+import { toast } from "react-toastify"
+import { v4 as uuidv4 } from "uuid"
 
 // token
 var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
-export const addRewardPointAction = (id, value, sub_id) => {
-  console.log("id :", id)
-  var url = process.env.REACT_APP_LOCALHOST + "/RewardPointSetting/Post"
+export const addVoucherSettingAction = (id, data) => {
+  var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Post"
 
   const formData = {
     _id: id,
-    subscription_type_id: sub_id,
-    per_point_value: value,
-    is_active: true,
+    ...data,
   }
   return dispatch => {
     console.log("-in the dispatch----")
@@ -37,33 +36,36 @@ export const addRewardPointAction = (id, value, sub_id) => {
     axios
       .post(url, formData, { headers: headers })
       .then(response => {
+        console.log("response :", response)
         dispatch({
-          type: "ADD_REWARD_POINT",
+          type: "ADD_VOUCHER_SETTING",
           payload: response.data,
           status: "Success",
         })
+        toast.success("Voucher Setting Added Successfully")
       })
 
       .catch(error => {
         dispatch({
-          type: "ADD_REWARD_POINT",
+          type: "ADD_VOUCHER_SETTING",
           payload: error,
           status: "Failed",
         })
+        toast.error("Failed to add")
       })
   }
 }
 
-export const addRewardPointFresh = () => {
+export const addVoucherSettingFresh = () => {
   return dispatch =>
     dispatch({
-      type: ADD_REWARD_POINT_FRESH,
+      type: ADD_VOUCHER_SETTING_FRESH,
       status: false,
     })
 }
 
-export const getAllRewardPointAction = () => {
-  var url = process.env.REACT_APP_LOCALHOST + "/RewardPointSetting/Get"
+export const getAllVoucherSettingAction = () => {
+  var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Get"
   const formData = {}
   return dispatch => {
     const headers = {
@@ -75,39 +77,37 @@ export const getAllRewardPointAction = () => {
       .get(url, { headers: headers })
       .then(response => {
         dispatch({
-          type: GET_ALL_REWARD_POINT,
+          type: GET_ALL_VOUCHER_SETTING,
           payload: response.data,
           status: "Success",
         })
       })
       .catch(error => {
         dispatch({
-          type: GET_ALL_REWARD_POINT,
+          type: GET_ALL_VOUCHER_SETTING,
           status: "Failed",
         })
       })
   }
 }
 
-export const getAllRewardPointFresh = () => {
+export const getAllVoucherSettingFresh = () => {
   return dispatch => {
     dispatch({
-      type: "GET_ALL_REWARD_POINT_FRESH",
+      type: "GET_ALL_VOUCHER_SETTING_FRESH",
       payload: null,
       status: "Success",
     })
   }
 }
 
-export const rewardPointNameEditAction = (value, id, sub_id, is_active) => {
-  var url = process.env.REACT_APP_LOCALHOST + "/RewardPointSetting/Put"
+export const voucherSettingEditAction = (id, data) => {
+  var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Put"
+
   const formData = {
     _id: id,
-    per_point_value: value,
-    subscription_type_id: sub_id,
-    is_active: is_active,
+    ...data,
   }
-  // console.log(formData);
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
@@ -118,14 +118,14 @@ export const rewardPointNameEditAction = (value, id, sub_id, is_active) => {
       .put(url, formData, { headers: headers })
       .then(response => {
         dispatch({
-          type: REWARD_POINT_NAME_EDIT,
+          type: VOUCHER_SETTING_EDIT,
           payload: response.data,
           status: "Success",
         })
       })
       .catch(error => {
         dispatch({
-          type: REWARD_POINT_NAME_EDIT,
+          type: VOUCHER_SETTING_EDIT,
           payload: error,
           status: "Failed",
         })
@@ -133,20 +133,20 @@ export const rewardPointNameEditAction = (value, id, sub_id, is_active) => {
   }
 }
 
-export const rewardPointNameEditFresh = () => {
+export const voucherSettingEditFresh = () => {
   return dispatch => {
     dispatch({
-      type: REWARD_POINT_NAME_EDIT_FRESH,
+      type: VOUCHER_SETTING_EDIT_FRESH,
       payload: null,
       status: false,
     })
   }
 }
 
-export const rewardStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/RewardPointSetting/Put"
-
+export const voucherSettingStatusEditAction = data => {
+  var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Put"
   const formData = data
+  console.log(formData)
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
@@ -157,33 +157,33 @@ export const rewardStatusEditAction = data => {
       .put(url, formData, { headers: headers })
       .then(response => {
         dispatch({
-          type: EDIT_REWARD_STATUS,
+          type: VOUCHER_SETTING_STATUS_EDIT,
+          payload: response.data,
           status: "Success",
         })
-        // toast.success("Updated Successfully");
       })
       .catch(error => {
         dispatch({
-          type: EDIT_REWARD_STATUS,
+          type: VOUCHER_SETTING_STATUS_EDIT,
+          payload: error,
           status: "Failed",
         })
-        // toast.error("Something went wrong!!");
       })
   }
 }
 
-export const rewardStatusEditActionFresh = () => {
+export const voucherSettingStatusEditFresh = () => {
   return dispatch => {
     dispatch({
-      type: EDIT_REWARD_STATUS_FRESH,
+      type: VOUCHER_SETTING_STATUS_EDIT_FRESH,
       payload: null,
       status: false,
     })
   }
 }
 
-export const rewardPointDeleteAction = id => {
-  var url = process.env.REACT_APP_LOCALHOST + "/RewardPointSetting/Delete"
+export const voucherSettingDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Delete"
   console.log(id)
 
   return dispatch => {
@@ -196,14 +196,14 @@ export const rewardPointDeleteAction = id => {
       .delete(url, { params: { id: id } }, { headers: headers })
       .then(response => {
         dispatch({
-          type: "REWARD_POINT_DELETE",
+          type: "VOUCHER_SETTING_DELETE",
           payload: response.data,
           status: "Success",
         })
       })
       .catch(error => {
         dispatch({
-          type: "REWARD_POINT_DELETE",
+          type: "VOUCHER_SETTING_DELETE",
           payload: error,
           status: "Failed",
         })
@@ -211,10 +211,10 @@ export const rewardPointDeleteAction = id => {
   }
 }
 
-export const rewardPointDeleteFresh = () => {
+export const voucherSettingDeleteFresh = () => {
   return dispatch =>
     dispatch({
-      type: REWARD_POINT_DELETE_FRESH,
+      type: VOUCHER_SETTING_DELETE_FRESH,
       status: false,
     })
 }

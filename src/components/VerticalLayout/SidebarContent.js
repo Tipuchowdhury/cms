@@ -220,9 +220,9 @@ const SidebarContent = props => {
                     {props.t("Add-ons Category")}{" "}
                   </Link>
                 </li>
-                {/* <li>
+                <li>
                   <Link to="/time-slot">{props.t("Menu Time Slot")} </Link>
-                </li> */}
+                </li>
               </ul>
             </li>
             <li>
@@ -232,18 +232,28 @@ const SidebarContent = props => {
                 <span>{props.t("Campaign")}</span>
               </Link>
             </li>
-            {/* <li>
+            <li>
               <Link to="/slider" className="waves-effect">
                 <i className="ti-image"></i>
-                <span>{props.t("Slider")}</span>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
+                <span>{props.t("Promotion")}</span>
               </Link>
-            </li> */}
-            {/* <li>
+            </li>
+
+            <li>
+              <Link to="/branch-attribute" className="waves-effect">
+                <i className="ti-list"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
+                <span>{props.t("Branch Attribute")}</span>
+              </Link>
+            </li>
+            <li>
               <Link to="/coupon" className="waves-effect">
                 <i className="fa fa-tag"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("Coupons")}</span>
               </Link>
-            </li> */}
+            </li>
             <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="ti-face-smile"></i>
@@ -255,7 +265,20 @@ const SidebarContent = props => {
                     {props.t("Reward Point Settings")}{" "}
                   </Link>
                 </li>
+                <li>
+                  <Link to="/voucher_settings">
+                    {props.t("Voucher Settings")}{" "}
+                  </Link>
+                </li>
               </ul>
+            </li>
+
+            <li>
+              <Link to="/popup-banner" className="waves-effect">
+                <i className="ti-image"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
+                <span>{props.t("PopUp Banner ")}</span>
+              </Link>
             </li>
             {/* <li>
               <Link to="/calendar" className=" waves-effect">

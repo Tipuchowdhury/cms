@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { addOnsCategoryAction, addOnCategoryAddFresh } from 'store/actions';
+import { addOnsCategoryAction, addOnCategoryAddFresh, editAddOnsCategoryAction, editAddOnCategoryFresh } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -66,13 +66,28 @@ function CategoryAdd(props) {
         const val = uuidv4();
         props.addOnsCategoryAction(val, category, isChecked, addOns)
     }
+
+    const handleEdit = (e) => {
+        e.preventDefault();
+        console.log(category);
+        console.log(isChecked);
+        console.log(addOns);
+        props.editAddOnsCategoryAction(location.state?._id, category, isChecked, addOns)
+
+    }
+    //console.log(location.state);
     useEffect(() => {
         if (props.add_ons_category_loading == "Success") {
             navigate("/addons-category")
             props.addOnCategoryAddFresh();
         }
 
-    }, [props.get_all_restaurant_loading, props.add_ons_category_loading]);
+        if (props.edit_addOn_category_loading == "Success") {
+            navigate("/addons-category")
+            props.editAddOnCategoryFresh();
+        }
+
+    }, [props.add_ons_category_loading, props.edit_addOn_category_loading]);
 
     console.log(props.get_all_restaurant_data);
 
@@ -86,13 +101,13 @@ function CategoryAdd(props) {
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle="Foodi" title="Add-ons Category" breadcrumbItem="Add Add-ons Category" />
+                    <Breadcrumbs maintitle="Foodi" title="Add-ons Category" breadcrumbItem={location.state ? "Edit Add-ons Category" : "Add Add-ons Category"} />
                     <Row>
                         <Col className="col-12">
                             <Card style={{ border: "none" }}>
                                 <CardBody >
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Add-ons Category </CardTitle>
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>{location.state ? "Edit Add-ons Category" : "Add-ons Category"} </CardTitle>
                                     </div>
 
                                 </CardBody>
@@ -101,7 +116,7 @@ function CategoryAdd(props) {
                     </Row>
                     <Row>
                         <Col className="col-10 mx-auto">
-                            <form className="mt-0" onSubmit={handleFormSubmit}>
+                            <form className="mt-0" onSubmit={location.state ? handleEdit : handleFormSubmit}>
                                 <Row className="mb-3">
                                     <label
                                         htmlFor="example-text-input"
@@ -217,12 +232,16 @@ const mapStateToProps = state => {
         add_ons_category_error,
         add_ons_category_loading,
 
+        edit_addOn_category_loading
+
     } = state.Restaurant;
 
     return {
         add_ons_category_data,
         add_ons_category_error,
         add_ons_category_loading,
+
+        edit_addOn_category_loading
 
     };
 };
@@ -231,6 +250,8 @@ export default withRouter(
     connect(mapStateToProps,
         {
             addOnsCategoryAction,
-            addOnCategoryAddFresh
+            addOnCategoryAddFresh,
+            editAddOnsCategoryAction,
+            editAddOnCategoryFresh
         })(CategoryAdd)
 );

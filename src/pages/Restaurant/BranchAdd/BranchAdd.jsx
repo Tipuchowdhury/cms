@@ -4,7 +4,7 @@ import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react";
 import { connect } from "react-redux";
 import withRouter from 'components/Common/withRouter';
 import { useEffect } from 'react';
-import { getAllRestaurantAction, getAllUsersRolesAction, branchAddAction, addBranchFresh, branchEditAction, editBranchFresh, getAllCuisneAction } from 'store/actions';
+import { getAllRestaurantAction, getAllUsersRolesAction, branchAddAction, addBranchFresh, branchEditAction, editBranchFresh, getAllCuisneAction, addBranchFreshNew } from 'store/actions';
 import Breadcrumbs from 'components/Common/Breadcrumb';
 import { boolean } from 'yup';
 import Select from 'react-select';
@@ -31,12 +31,16 @@ function BranchAdd(props) {
         lat: 23.8103,
         lng: 90.4125,
     });
+
+
     const map_value_for_edit = location.state?.location?.coordinates?.map((item) => (
         item
     ))
+
+    // const map_value_for_edit = location.state?.location?.coordinates?.map((defaultProps) => Number(defaultProps.lng) + "," + Number(defaultProps.lat));
     console.log(map_value_for_edit);
     const [state2, setState2] = useState({
-        location: location.state ? map_value_for_edit : undefined,
+        location: location.state ? map_value_for_edit : `${defaultProps.lat},${defaultProps.lng}`,
         lat: location.state ? map_value_for_edit[0] : undefined,
         lng: location.state ? map_value_for_edit[1] : undefined,
     });
@@ -82,7 +86,7 @@ function BranchAdd(props) {
         cuisine: "",
         location: undefined,
         price_range: location.state ? location.state.price_range : "",
-        popularity_sort_value: location.state ? location.state.popularity_sort_value : "",
+        popularity_sort_value: location.state ? location.state.popularity_sort_value : 0,
         is_take_pre_order: location.state ? location.state.is_take_pre_order.toString() : "",
         is_veg: location.state ? location.state.is_veg.toString() : "",
         is_popular: location.state ? location.state.is_popular.toString() : "",
@@ -118,13 +122,13 @@ function BranchAdd(props) {
 
     //-- cuisine value for edit
     const common_cuisines = props?.get_all_cuisine_data?.filter((elem) => location?.state?.cuisines?.find(({ cuisine_id }) => elem._id === cuisine_id));
-
+    console.log(common_cuisines);
     const cuisine_data_edit = common_cuisines ? common_cuisines?.map((item, key) => {
         return { label: item.name, value: item._id };
     }) : "";
     console.log(cuisine_data_edit);
 
-    const [selectedCuisine, setSelectedCuisine] = useState(location.state ? cuisine_data_edit : "");
+    const [selectedCuisine, setSelectedCuisine] = useState(cuisine_data_edit ? cuisine_data_edit : "");
     const handleSelectCuisine = (e) => {
         console.log(e)
         setSelectedCuisine(e)
@@ -268,15 +272,16 @@ function BranchAdd(props) {
         }
 
         if (props.add_branch_loading === "Success") {
+            props.addBranchFreshNew();
             naviagte("/manage-branch")
-            props.addBranchFresh();
         }
 
         if (props.edit_branch_loading === "Success") {
-            naviagte("/manage-branch")
+
             props.editBranchFresh();
+            naviagte("/manage-branch")
         }
-    }, [props.get_all_restaurant_loading, props.get_all_user_roles_loading, props.get_all_cusine_loading, props.add_branch_loading, props.edit_branch_loading,]);
+    }, [props.get_all_restaurant_loading, props.get_all_user_roles_loading, props.get_all_cusine_loading, props.add_branch_loading, props.edit_branch_loading]);
 
     console.log(props.get_all_restaurant_data);
     console.log(props.get_all_cusine_data);
@@ -523,7 +528,7 @@ function BranchAdd(props) {
                                 </Row>
 
 
-                                <Row className="mb-3">
+                                {/* <Row className="mb-3">
                                     <label
                                         htmlFor="example-text-input"
                                         className="col-md-2 col-form-label"
@@ -564,7 +569,7 @@ function BranchAdd(props) {
                                             </label>
                                         </div>
                                     </div>
-                                </Row>
+                                </Row> */}
                                 <Row className="mb-3">
                                     <label
                                         htmlFor="example-text-input"
@@ -1023,7 +1028,8 @@ export default withRouter(
         addBranchFresh,
         branchEditAction,
         editBranchFresh,
-        getAllCuisneAction
+        getAllCuisneAction,
+        addBranchFreshNew
     })(
         GoogleApiWrapper({
             apiKey: "AIzaSyDJkREeL-PpO7Z45k-MsD5sJD_m1mzNGEk",

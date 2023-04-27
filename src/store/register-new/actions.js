@@ -11,7 +11,8 @@ import {
     USER_UPDATE_FRESH,
     USER_STATUS_UPDATE,
     USER_STATUS_UPDATE_FRESH,
-
+    USER_DELETE,
+    USER_DELETE_FRESH
 } from "./actionTypes"
 import axios from "axios";
 
@@ -240,7 +241,7 @@ export const userUpdateAction = (registerInfo, role) => {
         mobile_number: registerInfo.mobileNumber,
         email: registerInfo.email,
         role_id: role,
-        is_active: !(registerInfo.is_active),
+        is_active: registerInfo.is_active,
     };
     console.log(formData);
     return dispatch => {
@@ -314,6 +315,45 @@ export const userStatusUpdateFresh = () => {
     return dispatch =>
         dispatch({
             type: USER_STATUS_UPDATE_FRESH,
+            status: false,
+        });
+};
+
+export const userDeleteAction = (id) => {
+    var url = process.env.REACT_APP_LOCALHOST + "/User/Delete";
+    // console.log(id);
+
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        };
+
+        axios
+            .delete(url, { params: { id: id } }, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: USER_DELETE,
+                    payload: response.data,
+                    status: "Success",
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: USER_DELETE,
+                    payload: error,
+                    status: "Failed",
+                });
+            });
+
+    };
+
+};
+
+export const userDeleteFresh = () => {
+    return dispatch =>
+        dispatch({
+            type: USER_DELETE_FRESH,
             status: false,
         });
 };

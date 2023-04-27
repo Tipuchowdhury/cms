@@ -11,6 +11,8 @@ import {
     USER_UPDATE_FRESH,
     USER_STATUS_UPDATE,
     USER_STATUS_UPDATE_FRESH,
+    USER_DELETE,
+    USER_DELETE_FRESH
 } from "./actionTypes"
 
 const initialState = {
@@ -38,6 +40,8 @@ const initialState = {
     user_status_update_data: null,
     user_status_update_error: null,
     user_status_update_loading: false,
+
+    user_delete_loading: false
 
 }
 
@@ -129,6 +133,19 @@ const registerNew = (state = initialState, action) => {
                 user_status_update_loading: action.status,
             }
             break;
+        case USER_DELETE:
+            state = {
+                ...state,
+                user_delete_loading: action.status,
+                get_all_user_loading: false
+            }
+            break;
+        case USER_DELETE_FRESH:
+            state = {
+                ...state,
+                user_delete_loading: action.status,
+                get_all_user_loading: false
+            }
 
     }
     return state

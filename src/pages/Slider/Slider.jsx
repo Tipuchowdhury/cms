@@ -17,6 +17,8 @@ import Select from "react-select";
 
 function Slider(props) {
 
+    document.title = "Promotion | Foodi"
+
     const [modal, setModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [modalDel, setModalDel] = useState(false);
@@ -52,6 +54,7 @@ function Slider(props) {
 
     const [deleteItem, setDeleteItem] = useState();
 
+    const [newSelectedRestaurant, setNewSelectedRestaurant] = useState([]);
     const [restaurant, setRestaurant] = useState([]);
 
     // const common_restaurants = props?.get_all_branch_data?.filter((elem) => restaurant?.find(({ res_id }) => elem._id === res_id));
@@ -63,10 +66,15 @@ function Slider(props) {
     //select multiple branch
     // const [selectedRestaurant, setSelectedRestaurant] = useState(restaurant_data_edit ? restaurant_data_edit : "");
 
-    // const [selectedRestaurant, setSelectedRestaurant] = useState([]);
+    const [selectedRestaurant, setSelectedRestaurant] = useState([]);
     const handleSelectRestaurant = (e) => {
         // console.log(e)
         setSelectedRestaurant(e)
+    }
+
+    const handleNewSelectRestaurant = (e) => {
+        // console.log(e)
+        setNewSelectedRestaurant(e)
     }
 
     let allRestaurant = undefined;
@@ -76,13 +84,13 @@ function Slider(props) {
         }));
     }
 
-    const common_restaurants = props?.get_all_branch_data?.filter((elem) => restaurant?.find(({ res_id }) => elem._id === res_id));
+    // const common_restaurants = props?.get_all_branch_data?.filter((elem) => restaurant?.find(({ res_id }) => elem._id === res_id));
 
-    const restaurant_data_edit = common_restaurants ? common_restaurants.map((item, key) => {
-        return { label: item.name, value: item._id };
-    }) : "";
+    // const restaurant_data_edit = common_restaurants ? common_restaurants.map((item, key) => {
+    //     return { label: item.name, value: item._id };
+    // }) : "";
 
-    const [selectedRestaurant, setSelectedRestaurant] = useState(restaurant_data_edit ? restaurant_data_edit : "");
+    //const [selectedRestaurant, setSelectedRestaurant] = useState(restaurant_data_edit ? restaurant_data_edit : "");
 
     // console.log(restaurant_data_edit);
     // console.log(selectedRestaurant);
@@ -103,12 +111,27 @@ function Slider(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        props.addSliderAction(addInfo, selectedRestaurant);
+        props.addSliderAction(addInfo, newSelectedRestaurant);
+    }
+
+
+    const newRest = (nn) => {
+        console.log(nn);
+        console.log(props?.get_all_branch_data);
+        const common_restaurants = props?.get_all_branch_data?.filter((elem) => nn?.find(({ res_id }) => elem._id === res_id));
+        console.log(common_restaurants);
+
+        const restaurant_data_edit = common_restaurants ? common_restaurants.map((item, key) => {
+            return { label: item.name, value: item._id };
+        }) : "";
+        //console.log(nn);
+        // console.log(restaurant_data_edit);
+        setSelectedRestaurant(restaurant_data_edit);
     }
 
 
     const handleEditSlider = (row) => {
-        // console.log(row);
+        console.log(row);
 
         setEditInfo(prevState => ({
             _id: row._id,
@@ -123,17 +146,11 @@ function Slider(props) {
         }));
 
         setRestaurant(row.restaurants)
-
-        // console.log(restaurant_data_edit);
-
-
-        // setSelectedRestaurant(restaurant_data_edit);
+        newRest(row.restaurants);
 
         toggleEditModal();
 
     }
-
-
 
     const handleEdit = (e) => {
         e.preventDefault();
@@ -197,7 +214,7 @@ function Slider(props) {
 
         {
             dataField: "name",
-            text: "Slider Name",
+            text: "Promotion Name",
             sort: true,
         },
         {
@@ -235,7 +252,7 @@ function Slider(props) {
 
 
         if (props.add_slider_loading === "Success") {
-            toast.success("Slider Added Successfully");
+            toast.success("Promotion Added Successfully");
             toggle();
             setAddInfo({
                 ...addInfo,
@@ -261,7 +278,7 @@ function Slider(props) {
         }
 
         if (props.slider_edit_loading === "Success") {
-            toast.success("Slider Updated");
+            toast.success("Promotion Updated");
             toggleEditModal();
             props.promotionUpdateFresh();
         }
@@ -274,7 +291,7 @@ function Slider(props) {
         }
 
         if (props.slider_status_edit_loading === "Success") {
-            toast.success("Slider Status Updated");
+            toast.success("Promotion Status Updated");
             toggleStatus();
             props.promotionStatusUpdateFresh();
 
@@ -289,11 +306,11 @@ function Slider(props) {
 
         if (props.slider_delete_loading === "Success") {
             // console.log("I am in the delete")
-            toast.success("S:ider Deleted");
+            toast.success("Promotion Deleted");
             toggleDel();
             props.promotionDeleteFresh();
-
         }
+
     }, [props.get_all_branch_loading, props.add_slider_loading, props.slider_edit_loading,
     props.slider_delete_loading, props.slider_status_edit_loading]);
 
@@ -305,15 +322,15 @@ function Slider(props) {
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle="Foodi" title="Slider" breadcrumbItem="Slider Image" />
+                    <Breadcrumbs maintitle="Foodi" title="Promotion" breadcrumbItem="Promotion" />
                     <Row>
                         <Col className="col-12">
                             <Card style={{ border: "none" }}>
                                 <CardBody>
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Slider Image </CardTitle>
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Promotion</CardTitle>
                                         <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
-                                            Add Slider Image
+                                            Add Promotion
                                         </Button>
                                     </div>
                                     {props.get_all_slider_data ? props.get_all_slider_data.length > 0 ? <DatatableTablesWorking products={props.get_all_slider_data}
@@ -327,7 +344,7 @@ function Slider(props) {
 
                 {/* ============ create modal start=============== */}
                 <Modal isOpen={modal} toggle={toggle} centered>
-                    <ModalHeader toggle={toggle}>New Slider</ModalHeader>
+                    <ModalHeader toggle={toggle}>New Promotion</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleSubmit}>
 
@@ -340,8 +357,8 @@ function Slider(props) {
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="restaurants">Restaurants</label>
                                 <Select
-                                    value={selectedRestaurant}
-                                    onChange={handleSelectRestaurant}
+                                    value={newSelectedRestaurant}
+                                    onChange={handleNewSelectRestaurant}
                                     options={allRestaurant}
                                     isMulti={true}
                                 />
@@ -382,7 +399,7 @@ function Slider(props) {
 
                 {/* ============ edit modal start=============== */}
                 <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-                    <ModalHeader >Edit Subscription Type</ModalHeader>
+                    <ModalHeader >Edit Promotion</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleEdit} >
 

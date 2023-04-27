@@ -6,7 +6,9 @@ import { toast } from 'react-toastify';
 import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { getAllAddOnsCategoryAction } from 'store/actions';
+import {
+    getAllAddOnsCategoryAction, addOnCategoryDeleteAction, addOnCategoryDeleteFresh, addOnCategoryStatusEditAction, addOnCategoryStatusEditActionFresh
+} from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -18,15 +20,34 @@ function AddOnsCategory(props) {
     const [restaurantName, setRestaurantName] = useState();
     const [editModal, setEditModal] = useState(false);
 
+    const [statusItem, setStatusItem] = useState(false);
+    const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
+
+    const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
+
+    const handleStatusModal = (row) => {
+        //  console.log(row);
+        setStatusItem(row);
+        toggleStatus();
+    }
+
+    const handleStatusUpdate = () => {
+
+        props.addOnCategoryStatusEditAction({
+            ...statusItem,
+            is_active: !statusItem.is_active,
+        })
+    }
+
     // delete modal
     const [deleteItem, setDeleteItem] = useState()
     const [modalDel, setModalDel] = useState(false);
 
     const toggleDel = () => setModalDel(!modalDel);
     const handleDelete = () => {
-        toggleDel();
+        // toggleDel();
         console.log(deleteItem)
-        props.cityDeleteAction(deleteItem);
+        props.addOnCategoryDeleteAction(deleteItem);
     }
 
     const toggle = () => setModal(!modal);
@@ -80,7 +101,10 @@ function AddOnsCategory(props) {
 
 
 
-    const statusRef = (cell, row) => <Badge color="success" style={{ padding: "8px" }}>Activate</Badge>
+    // const statusRef = (cell, row) => <Badge color="success" style={{ padding: "8px" }}>Activate</Badge>
+
+    const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
+        className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
 
 
     const activeData = [
@@ -117,7 +141,24 @@ function AddOnsCategory(props) {
             props.getAllAddOnsCategoryAction();
         }
 
-    }, [props.get_all_addOns_category_loading]);
+        if (props.add_on_category_delete_loading === "Success") {
+            toast.success("ADD on Category Deleted Successfully");
+            toggleDel();
+            props.addOnCategoryDeleteFresh();
+        }
+        if (props.edit_add_on_category_status_loading === "Success") {
+            toast.success("ADD on Category Status Updated");
+            toggleStatus();
+            props.addOnCategoryStatusEditActionFresh();
+        }
+
+        if (props.edit_add_on_category_status_loading === "Failed") {
+            toast.error("Something went wrong");
+            props.addOnCategoryStatusEditActionFresh();
+        }
+
+
+    }, [props.get_all_addOns_category_loading, props.add_on_category_delete_loading, props.edit_add_on_category_status_loading]);
 
     console.log(props.get_all_addOns_category_data);
     return (
@@ -189,6 +230,22 @@ function AddOnsCategory(props) {
                     </ModalFooter>
                 </Modal>
                 {/* ============ delete modal ends=============== */}
+
+                {/* ============ status update modal starts=============== */}
+                <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
+                    <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
+                        <div className="icon-box">
+                            <i className="fa fa-exclamation-circle" style={{ color: "#DCA218", fontSize: "40px" }}></i>
+                        </div>
+                        Are you sure?
+                    </ModalHeader>
+                    <ModalBody>Do you really want to update status these records? </ModalBody>
+                    <ModalFooter>
+                        <Button color="secondary" onClick={toggleStatus}>Cancel</Button>{' '}
+                        <Button color="primary" onClick={handleStatusUpdate}>Update</Button>
+                    </ModalFooter>
+                </Modal>
+                {/* ============ status update modal ends=============== */}
             </div>
         </React.Fragment>
     )
@@ -202,18 +259,26 @@ const mapStateToProps = state => {
         get_all_addOns_category_data,
         get_all_addOns_category_error,
         get_all_addOns_category_loading,
+        add_on_category_delete_loading,
+        edit_add_on_category_status_loading
     } = state.Restaurant;
 
     return {
         get_all_addOns_category_data,
         get_all_addOns_category_error,
         get_all_addOns_category_loading,
+        add_on_category_delete_loading,
+        edit_add_on_category_status_loading
     };
 };
 
 export default withRouter(
     connect(mapStateToProps,
         {
-            getAllAddOnsCategoryAction
+            getAllAddOnsCategoryAction,
+            addOnCategoryDeleteAction,
+            addOnCategoryDeleteFresh,
+            addOnCategoryStatusEditAction,
+            addOnCategoryStatusEditActionFresh
         })(AddOnsCategory)
 );

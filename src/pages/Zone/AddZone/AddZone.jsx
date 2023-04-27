@@ -23,15 +23,17 @@ function AddZone(props) {
     console.log(location.state);
 
     const edit_map_data = location.state?.lat_long?.coordinates?.[0].map(x => ({
-        lat: x[0],
-        lng: x[1]
+        // lat: x[0],
+        // lng: x[1]
+        lng: x[0],
+        lat: x[1]
     }))
     console.log(edit_map_data);
 
     const [path, setPath] = useState(location.state ? edit_map_data : [
-        { lat: 23.810299999999998, lng: 90.44133911132815 },
-        { lat: 23.809985898058592, lng: 90.4334426879883 },
-        { lat: 23.8209790138562, lng: 90.41764984130862 }
+        { lng: 90.44133911132815, lat: 23.810299999999998, },
+        { lng: 90.4334426879883, lat: 23.809985898058592, },
+        { lng: 90.41764984130862, lat: 23.8209790138562, }
     ]);
 
     const polygonRef = useRef(null);
@@ -111,12 +113,13 @@ function AddZone(props) {
 
     };
 
+    console.log(location.state);
 
     const [zoneInfo, setZoneInfo] = useState({
         area: location.state ? location.state.name : "",
         city: location.state ? location.state.city_id : "",
         radius: location.state ? location.state.radius : "",
-
+        is_active: location.state ? location.state.is_active : true,
     })
 
 
@@ -264,7 +267,7 @@ function AddZone(props) {
                                                 onChange={handleInputs}
                                                 type="select"
                                             >
-                                                <option>Choose...</option>
+                                                <option>Choose City</option>
                                                 {cityData}
                                             </Input>
                                         </div>
@@ -278,7 +281,7 @@ function AddZone(props) {
                                             Radius (Km)
                                         </label>
                                         <div className="col-md-10">
-                                            <input type="text" className="form-control" id="radius" placeholder="Enter area name" name="radius" onChange={handleInputs} value={zoneInfo.radius ?? ""} />
+                                            <input type="text" className="form-control" id="radius" placeholder="Enter radius" name="radius" onChange={handleInputs} value={zoneInfo.radius ?? ""} />
                                         </div>
                                     </Row>
 

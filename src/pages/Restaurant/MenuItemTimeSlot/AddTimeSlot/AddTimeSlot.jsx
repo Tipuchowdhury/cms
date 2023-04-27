@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Badge, Button, Card, CardBody, CardTitle, Col, Container, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
+import { Badge, Button, Card, CardBody, CardTitle, Col, Container, Input, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import Breadcrumbs from 'components/Common/Breadcrumb';
 import { toast } from 'react-toastify';
 import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { addOnsCategoryAction, addOnCategoryAddFresh } from 'store/actions';
+import { getAllBranchAction, addMenuTimeSlotAction, addMenuTimeSlotFresh, editMenuTimeSlotAction, editMenuTimeSlotFresh } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { useLocation, useNavigate } from 'react-router-dom';
+import moment from "moment";
 
 function AddTimeSlot(props) {
     const location = useLocation();
     const navigate = useNavigate();
-    const [category, setCategory] = useState({
+    const [timeSlot, setTimeSlot] = useState({
         name: location.state ? location.state.name : "",
+        branch: location.state ? location.state.branch_id : "",
+        start_time: location.state ? moment({ hour: location?.state?.start_time?.hour, minute: location?.state?.start_time?.minute }).format('HH:mm') : "",
+        end_time: location.state ? moment({ hour: location?.state?.end_time?.hour, minute: location?.state?.end_time?.minute }).format('HH:mm') : "",
     })
     const addOnsTemplate = { start_time: "", end_time: "" }
     const [addOns, setAddOns] = useState(location.state ? location.state.preset_add_ons : [addOnsTemplate]);
@@ -40,39 +44,50 @@ function AddTimeSlot(props) {
         console.log(e);
         name = e.target.name;
         value = e.target.value;
-        setCategory({ ...category, [name]: value })
+        setTimeSlot({ ...timeSlot, [name]: value })
 
     }
-
-    const checkHandler = () => {
-        setIsChecked(!isChecked)
+    // get all branch
+    console.log(props.get_all_branch_data);
+    let branchData = undefined;
+    if (props.get_all_branch_data?.length > 0) {
+        branchData = props.get_all_branch_data?.map((item, key) => (
+            <option key={item._id} value={item._id}>
+                {item.name}
+            </option>
+        ));
     }
-    const handleChange = () => {
-
-        setChecked(!checked);
-
-    };
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        console.log(category);
-        console.log(isChecked);
+        console.log(timeSlot);
         const val = uuidv4();
-        props.addOnsCategoryAction(val, category, isChecked, addOns)
+        props.addMenuTimeSlotAction(val, timeSlot)
+    }
+
+    const handleEdit = (e) => {
+        e.preventDefault();
+        console.log(timeSlot);
+        props.editMenuTimeSlotAction(location?.state?._id, timeSlot)
     }
     useEffect(() => {
-        if (props.add_ons_category_loading == "Success") {
-            navigate("/addons-category")
-            props.addOnCategoryAddFresh();
+        if (props.add_menu_time_slot_loading == "Success") {
+            navigate("/time-slot");
+            props.addMenuTimeSlotFresh();
+        }
+        if (props.get_all_branch_loading == false) {
+            props.getAllBranchAction();
         }
 
-    }, [props.get_all_restaurant_loading, props.add_ons_category_loading]);
+        if (props.edit_menu_time_slot_loading == "Success") {
+            navigate("/time-slot");
+            props.editMenuTimeSlotFresh();
+        }
 
-    console.log(props.get_all_restaurant_data);
 
-    console.log(props.add_ons_category_data);
+    }, [props.add_menu_time_slot_loading, props.get_all_branch_loading, props.edit_menu_time_slot_loading]);
+
     console.log(location.state);
-    console.log(props.add_ons_category_loading);
 
     return (
         <React.Fragment>
@@ -80,13 +95,13 @@ function AddTimeSlot(props) {
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle="Foodi" title="Menu Time Slot" breadcrumbItem="Add Menu Time Slot" />
+                    <Breadcrumbs maintitle="Foodi" title="Menu Time Slot" breadcrumbItem={location.state ? "Edit Menu Time Slot" : "Add Menu Time Slot"} />
                     <Row>
                         <Col className="col-12">
                             <Card style={{ border: "none" }}>
                                 <CardBody >
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Add Menu Time Slot </CardTitle>
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>{location.state ? "Edit Menu Time Slot" : "Add Menu Time Slot"} </CardTitle>
                                     </div>
 
                                 </CardBody>
@@ -95,7 +110,7 @@ function AddTimeSlot(props) {
                     </Row>
                     <Row>
                         <Col className="col-10 mx-auto">
-                            <form className="mt-0" onSubmit={handleFormSubmit}>
+                            <form className="mt-0" onSubmit={location.state ? handleEdit : handleFormSubmit}>
                                 <Row className="mb-3">
                                     <label
                                         htmlFor="example-text-input"
@@ -104,13 +119,34 @@ function AddTimeSlot(props) {
                                         Slot Name
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="text" className="form-control" id="name" placeholder="Enter slot name" name="name" onChange={handleInputs} value={category.name ?? ""} />
+                                        <input type="text" className="form-control" id="name" placeholder="Enter slot name" name="name" onChange={handleInputs} value={timeSlot.name ?? ""} />
                                     </div>
                                 </Row>
 
-
-
                                 <Row className="mb-3">
+                                    <label
+                                        htmlFor="example-text-input"
+                                        className="col-md-2 col-form-label"
+                                    >
+                                        Branch
+                                    </label>
+                                    <div className="col-md-10">
+                                        <Input
+                                            id="exampleSelect"
+                                            name="branch"
+                                            value={timeSlot.branch}
+                                            //required={true}
+                                            onChange={handleInputs}
+                                            type="select"
+                                            required
+                                        >
+                                            <option>Choose...</option>
+                                            {branchData}
+                                        </Input>
+                                    </div>
+                                </Row>
+
+                                {/* <Row className="mb-3">
                                     <label
                                         htmlFor="example-text-input"
                                         className="col-md-2 col-form-label"
@@ -159,7 +195,49 @@ function AddTimeSlot(props) {
 
                                     </div>
 
+                                </Row> */}
+                                <Row className="mb-3">
+                                    <label
+                                        htmlFor="example-text-input"
+                                        className="col-md-2 col-form-label"
+                                    >
+                                        Menu Availability
+                                    </label>
+
+                                    <div className="col-md-10">
+
+
+
+                                        <React.Fragment >
+                                            <div data-repeater-list="group-a" >
+                                                <div data-repeater-item className="row">
+
+                                                    <div className="mb-3 col-lg-3">
+                                                        <label className="form-label" htmlFor="startTime">Start Time</label>
+                                                        <input type="time" id="startTime" className="form-control" name="start_time" placeholder="Add-ons name" value={timeSlot.start_time} onChange={handleInputs} />
+                                                    </div>
+
+                                                    <div className="mb-3 col-lg-3">
+                                                        <label className="form-label" htmlFor="subject">End Time</label>
+                                                        <input type="time" id="subject" className="form-control" name="end_time" placeholder="Price" value={timeSlot.end_time} onChange={handleInputs} />
+                                                    </div>
+
+
+
+                                                </div>
+
+                                            </div>
+                                        </React.Fragment>
+
+
+
+
+
+                                    </div>
+
                                 </Row>
+
+
 
                                 {/* ==================restaurant time================= */}
 
@@ -185,25 +263,37 @@ function AddTimeSlot(props) {
 const mapStateToProps = state => {
 
     const {
+        add_menu_time_slot_data,
+        add_menu_time_slot_loading,
 
-        add_ons_category_data,
-        add_ons_category_error,
-        add_ons_category_loading,
+        get_all_branch_data,
+        get_all_branch_error,
+        get_all_branch_loading,
+
+        edit_menu_time_slot_loading
 
     } = state.Restaurant;
 
     return {
-        add_ons_category_data,
-        add_ons_category_error,
-        add_ons_category_loading,
+        add_menu_time_slot_data,
+        add_menu_time_slot_loading,
 
+        get_all_branch_data,
+        get_all_branch_error,
+        get_all_branch_loading,
+
+        edit_menu_time_slot_loading
     };
 };
 
 export default withRouter(
     connect(mapStateToProps,
         {
-            addOnsCategoryAction,
-            addOnCategoryAddFresh
+            getAllBranchAction,
+            addMenuTimeSlotAction,
+            addMenuTimeSlotFresh,
+            editMenuTimeSlotAction,
+            editMenuTimeSlotFresh
+
         })(AddTimeSlot)
 );
