@@ -23,6 +23,8 @@ import BranchAttribute from "./BranchAttribute/reducer"
 //Calendar
 import calendar from "./calendar/reducer"
 
+import Popup from "./Popup/reducer"
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -42,6 +44,7 @@ const rootReducer = combineReducers({
   Coupon,
   Sliders,
   BranchAttribute,
+  Popup,
 })
 
 export default rootReducer
