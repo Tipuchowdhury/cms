@@ -139,6 +139,7 @@ import AddTimeSlot from "pages/Restaurant/MenuItemTimeSlot/AddTimeSlot/AddTimeSl
 import BranchAttribute from "pages/BranchAttribute/BranchAttribute"
 import VoucherSetting from "pages/CRM/VoucherSetting/VoucherSetting"
 import AddVoucherSetting from "pages/CRM/VoucherSetting/AddVoucherSetting"
+import Popup from "pages/Popup/Popup"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -200,6 +201,9 @@ const userRoutes = [
   // Coupon
   { path: "/coupon", component: <Coupon /> },
   { path: "/add-coupon", component: <AddCoupon /> },
+
+  //Popup
+  { path: "/popup-banner", component: <Popup /> },
 
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },

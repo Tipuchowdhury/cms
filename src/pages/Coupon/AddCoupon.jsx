@@ -77,10 +77,16 @@ function AddCoupon(props) {
     })
     : ""
 
+  console.log(coupon_data_edit);
+
   const [selectedCouponType, setSelectedCouponType] = useState(
-    coupon_data_edit ? coupon_data_edit : ""
+    coupon_data_edit ? coupon_data_edit[0] : ""
   )
+
+  console.log(selectedCouponType?.value);
+
   const handleSelectCouponType = e => {
+    //console.log(e.value);
     setSelectedCouponType(e)
   }
   //select multiple branch
@@ -137,7 +143,7 @@ function AddCoupon(props) {
 
   //select multiple cuisine
   const common_cuisine = props?.get_all_cuisine_data?.filter(elem =>
-    location?.state?.cuisines?.find(({ cuisine_id }) => elem._id === cuisine_id)
+    location?.state?.cuisines?.find(({ cusine_id }) => elem._id === cusine_id)
   )
 
   const cuisine_data_edit = common_cuisine
@@ -145,6 +151,8 @@ function AddCoupon(props) {
       return { label: item.name, value: item._id }
     })
     : ""
+
+
   const [selectedCuisine, setSelectedCuisine] = useState(
     cuisine_data_edit ? cuisine_data_edit : ""
   )
@@ -159,6 +167,8 @@ function AddCoupon(props) {
       value: item._id,
     }))
   }
+
+  console.log("cuisineData", cuisineData)
 
   //select multiple user
   const common_user = props?.get_all_user_data?.filter(elem =>
