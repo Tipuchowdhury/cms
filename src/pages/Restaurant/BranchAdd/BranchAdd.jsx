@@ -4,7 +4,7 @@ import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react";
 import { connect } from "react-redux";
 import withRouter from 'components/Common/withRouter';
 import { useEffect } from 'react';
-import { getAllRestaurantAction, getAllUsersRolesAction, branchAddAction, addBranchFresh, branchEditAction, editBranchFresh, getAllCuisneAction } from 'store/actions';
+import { getAllRestaurantAction, getAllUsersRolesAction, branchAddAction, addBranchFresh, branchEditAction, editBranchFresh, getAllCuisneAction, addBranchFreshNew } from 'store/actions';
 import Breadcrumbs from 'components/Common/Breadcrumb';
 import { boolean } from 'yup';
 import Select from 'react-select';
@@ -272,13 +272,14 @@ function BranchAdd(props) {
         }
 
         if (props.add_branch_loading === "Success") {
+            props.addBranchFreshNew();
             naviagte("/manage-branch")
-            props.addBranchFresh();
         }
 
         if (props.edit_branch_loading === "Success") {
-            naviagte("/manage-branch")
+
             props.editBranchFresh();
+            naviagte("/manage-branch")
         }
     }, [props.get_all_restaurant_loading, props.get_all_user_roles_loading, props.get_all_cusine_loading, props.add_branch_loading, props.edit_branch_loading]);
 
@@ -1027,7 +1028,8 @@ export default withRouter(
         addBranchFresh,
         branchEditAction,
         editBranchFresh,
-        getAllCuisneAction
+        getAllCuisneAction,
+        addBranchFreshNew
     })(
         GoogleApiWrapper({
             apiKey: "AIzaSyDJkREeL-PpO7Z45k-MsD5sJD_m1mzNGEk",

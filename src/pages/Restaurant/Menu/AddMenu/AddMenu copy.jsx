@@ -12,7 +12,6 @@ import { v4 as uuidv4 } from 'uuid';
 import moment from "moment";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
 
 const LoadingContainer = () => <div>Loading...</div>;
 
@@ -153,15 +152,14 @@ function AddMenu(props) {
     const [num_of_choice_new, setNumber] = useState();
     const [isCheckAddOns, setIsCheckAddOns] = useState(false);
     let addAddOnName, addAddOnValue;
-    // const handleInputsAddOns = (e, idx) => {
-    //     console.log(idx);
-    //     addAddOnName = e.target.name;
-    //     addAddOnValue = e.target.value;
-    //     console.log(addAddOnValue);
-    //     setAddAddOns({ ...addAddOns, [addAddOnName]: addAddOnValue })
-    //     props.getCategoryByIdAction(addAddOnValue)
+    const handleInputsAddOns = (e) => {
+        addAddOnName = e.target.name;
+        addAddOnValue = e.target.value;
+        console.log(addAddOnValue);
+        setAddAddOns({ ...addAddOns, [addAddOnName]: addAddOnValue })
+        props.getCategoryByIdAction(addAddOnValue)
 
-    // }
+    }
     console.log(addAddOns.category);
     console.log(props.get_category_by_id_data);
     const [valueByID, setValue] = useState()
@@ -198,7 +196,6 @@ function AddMenu(props) {
     const [addBtnStatus, setAddBtnStatus] = useState(false);
     const handleAddOnsUndeCategory = (e, index) => {
         console.log(index);
-        setAddBtnStatus(true)
         const updatedValue = addOnUnderCategory.map((row, i) => index === i ? Object.assign(row, { [e.target.name]: e.target.value }) : row);
         setAddOnUnderCategory(updatedValue)
 
@@ -215,77 +212,20 @@ function AddMenu(props) {
     function handleAddRowNestedNew() {
         setAddOnUnderCategory([...addOnUnderCategory, addOnsTemplateNew]);
     }
-    console.log(addOnUnderCategory);
 
     /*
    *
    final template - for add menu addon
    *
    */
-    const [apiValue, setApiVal] = useState();
-    //const finalTemplate = { category_Name: "", category_personal_addOn: addOnsNew, additionalAddOn: addOnUnderCategory }
-    const finalTemplate = { category_Name: "", category_personal_addOn: [], additionalAddOn: [] }
+    const finalTemplate = { category_Name: addAddOns, category_personal_addOn: addOnsNew, additionalAddOn: addOnUnderCategory }
     const [addNewCategory, setAddNewCategory] = useState([]);
 
-    const handleInputsAddOns = (e, idx) => {
-        console.log(idx);
-        addAddOnName = e.target.name;
-        addAddOnValue = e.target.value;
-        console.log(addAddOnName);
-        console.log(addAddOnValue);
 
-        // ----test -------
-        //props.getCategoryByIdAction(addAddOnValue);
-        let value = undefined;
-        var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/GetById?id=" + addAddOnValue;
-
-        const headers = {
-            "Content-Type": "application/json",
-
-            "Access-Control-Allow-Origin": "*",
-
-        };
-        axios
-            .get(url, { headers: headers })
-            .then(response => {
-
-                console.log(response.data);
-                console.log(response.data?.preset_add_ons);
-                const updatedValue = addNewCategory.map((row, i) => idx === i ? Object.assign(row, { category_Name: response.data?._id }, { category_personal_addOn: response.data?.preset_add_ons }) : row);
-                setAddNewCategory(updatedValue)
-
-            })
-            .catch(error => {
-                console.log(error);
-
-            });
-
-
-    }
-    console.log(addOnUnderCategory);
     function handleAddCategoryRow() {
         console.log("I am in add category rpw");
-        props.getCategoryByIdFresh();
         setAddNewCategory([...addNewCategory, finalTemplate]);
-
-        // const updatedValue = addNewCategory.map((row, i) => idx === i ? Object.assign(row, { additionalAddOn: addOnUnderCategory }) : row);
-        // setAddNewCategory(updatedValue)
     }
-    // console.log(addOnUnderCategory);
-    const addOnsTemplateNew1 = { add_on_name: "", add_on_price: "" }
-    const [addOnUnderCategory1, setAddOnUnderCategory1] = useState([]);
-    const handleAddOnsUndeCategory1 = (e, index) => {
-        console.log(index);
-        setAddBtnStatus(true)
-        const updatedValue = addNewCategory.map((row, i) => index === i ? Object.assign(row, { additionalAddOn: e.target.value }) : row);
-        setAddNewCategory(updatedValue)
-
-    }
-    function handleAddRowNestedNew1() {
-        setAddOnUnderCategory1([...addOnUnderCategory1, addOnsTemplateNew1]);
-        setAddNewCategory({ ...addNewCategory, additionalAddOn: addOnUnderCategory1 });
-    }
-
     // ************************ ends here ********************************
     const handleAddMenu = (e) => {
         e.preventDefault();
@@ -296,7 +236,6 @@ function AddMenu(props) {
     }
 
     console.log(addNewCategory);
-    console.log(addNewCategory.additionalAddOn);
 
     useEffect(() => {
         // if (props.get_all_restaurant_loading == false) {
@@ -319,16 +258,11 @@ function AddMenu(props) {
         if (props.get_all_menu_time_slot_loading == false) {
             props.getAllMenuTimeSlot();
         }
-        // if (props.get_category_by_id_loading == "Success") {
-        //     props.getCategoryByIdFresh();
-        // }
-
         if (props?.get_category_by_id_data?.preset_add_ons) {
             setAddOnsNew(props?.get_category_by_id_data?.preset_add_ons)
         }
 
-
-    }, [props.get_all_branch_loading, props.get_all_addOns_category_loading, props.add_restaurant_menu_loading, props.get_all_menu_time_slot_loading, props.get_category_by_id_data, props.get_category_by_id_loading]);
+    }, [props.get_all_branch_loading, props.get_all_addOns_category_loading, props.add_restaurant_menu_loading, props.get_all_menu_time_slot_loading, props.get_category_by_id_data]);
 
     console.log(props.get_all_restaurant_data);
     console.log(props.get_all_branch_data);
@@ -881,99 +815,96 @@ function AddMenu(props) {
                 <ModalBody>
                     <form>
                         {addNewCategory.map((item, idx) => (
-                            console.log(idx),
-                            <React.Fragment key={idx}>
-                                <div>
-                                    <div className="mb-3">
-                                        <label className="form-label" htmlFor="username">Category</label>
-                                        <Input
-                                            id="exampleSelect"
-                                            name="category_Name"
-                                            value={item.category_Name}
-                                            required={true}
-                                            onChange={(e) => handleInputsAddOns(e, idx)}
-                                            type="select"
-                                        >
-                                            <option>Choose...</option>
-                                            {categoryData}
-                                        </Input>
-                                    </div>
+                            <div>
+                                <div className="mb-3">
+                                    <label className="form-label" htmlFor="username">Category</label>
+                                    <Input
+                                        id="exampleSelect"
+                                        name="category"
+                                        value={addAddOns.category}
+                                        //required={true}
+                                        onChange={handleInputsAddOns}
+                                        type="select"
+                                    >
+                                        <option>Choose...</option>
+                                        {categoryData}
+                                    </Input>
+                                </div>
 
-                                    <div className="col-md-12">
+                                <div className="col-md-12">
 
-                                        <input type="checkbox" id="cat_is_multiple" name="cat_is_multiple_add_ons" checked={isCheckAddOns} onChange={checkHandlerAddOns} value="true" style={{ margin: "15px 5px 20px 0px" }} />Multiple Selection
-                                        {/* {addOnsNew?.map((row, idx) => ( */}
-                                        {item?.category_personal_addOn?.map((row, idx) => (
-                                            <React.Fragment key={idx}>
-                                                <div data-repeater-list="group-a" id={"addr" + idx}>
-                                                    <div data-repeater-item className="row">
+                                    <input type="checkbox" id="cat_is_multiple" name="cat_is_multiple_add_ons" checked={isCheckAddOns} onChange={checkHandlerAddOns} value="true" style={{ margin: "15px 5px 20px 0px" }} />Multiple Selection
+                                    {/* {addOnsNew?.map((row, idx) => ( */}
+                                    {addOnsNew?.map((row, idx) => (
+                                        <React.Fragment key={idx}>
+                                            <div data-repeater-list="group-a" id={"addr" + idx}>
+                                                <div data-repeater-item className="row">
 
-                                                        <div className="mb-3 col-lg-4">
-                                                            <label className="form-label" htmlFor="startTime">Add-ons Name</label>
-                                                            <input type="text" id="startTime" className="form-control" name="add_on_name" placeholder="Add-ons name" value={row.add_on_name} onChange={(e) => handleAddOnsCatNew(e, idx)} />
-                                                        </div>
-
-                                                        <div className="mb-3 col-lg-4">
-                                                            <label className="form-label" htmlFor="subject">Price</label>
-                                                            <input type="number" id="subject" className="form-control" name="add_on_price" placeholder="Price" value={row.add_on_price} onChange={(e) => handleAddOnsCatNew(e, idx)} />
-                                                        </div>
-
-
-                                                        <Col lg={2} className="align-self-center d-grid mt-3">
-                                                            <input data-repeater-delete type="button" className="btn btn-primary" value="Delete" onClick={() => (handleRowDeleteNew(idx))} />
-                                                        </Col>
+                                                    <div className="mb-3 col-lg-4">
+                                                        <label className="form-label" htmlFor="startTime">Add-ons Name</label>
+                                                        <input type="text" id="startTime" className="form-control" name="add_on_name" placeholder="Add-ons name" value={row.add_on_name} onChange={(e) => handleAddOnsCatNew(e, idx)} />
                                                     </div>
 
-                                                </div>
-                                            </React.Fragment>
-                                        ))}
-
-                                        {addOnUnderCategory?.map((row, idx) => (
-                                            <React.Fragment key={idx}>
-                                                <div data-repeater-list="group-a" id={"addr" + idx}>
-                                                    <div data-repeater-item className="row">
-
-                                                        <div className="mb-3 col-lg-4">
-                                                            <label className="form-label" htmlFor="startTime">Add-ons Name</label>
-                                                            <input type="text" id="startTime" className="form-control" name="add_on_name" placeholder="Add-ons name" value={row.add_on_name} onChange={(e) => handleAddOnsUndeCategory(e, idx)} />
-                                                        </div>
-
-                                                        <div className="mb-3 col-lg-4">
-                                                            <label className="form-label" htmlFor="subject">Price</label>
-                                                            <input type="number" id="subject" className="form-control" name="add_on_price" placeholder="Price" value={row.add_on_price} onChange={(e) => handleAddOnsUndeCategory(e, idx)} />
-                                                        </div>
-
-
-                                                        <Col lg={2} className="align-self-center d-grid mt-3">
-                                                            <input data-repeater-delete type="button" className="btn btn-primary" value="Delete" onClick={() => (handleRowDeleteUnderCategory(idx))} />
-                                                        </Col>
+                                                    <div className="mb-3 col-lg-4">
+                                                        <label className="form-label" htmlFor="subject">Price</label>
+                                                        <input type="number" id="subject" className="form-control" name="add_on_price" placeholder="Price" value={row.add_on_price} onChange={(e) => handleAddOnsCatNew(e, idx)} />
                                                     </div>
 
-                                                </div>
-                                            </React.Fragment>
-                                        ))}
-                                        <Button
-                                            onClick={() => {
-                                                handleAddRowNestedNew();
-                                            }}
-                                            color="success"
-                                            className="btn btn-success mt-3 mt-lg-0"
-                                        >
-                                            Add
-                                        </Button>
 
-                                        {isCheckAddOns ?
-                                            <div className="mt-4 col-lg-6">
-                                                <label className="form-label" htmlFor="subject">Maximum required number of choice(s)</label>
-                                                <input type="number" id="subject" className="form-control" placeholder="Enter number" name="num_of_choice_new" value={num_of_choice_new} onChange={(e) => setNumber(e.target.value)} />
+                                                    <Col lg={2} className="align-self-center d-grid mt-3">
+                                                        <input data-repeater-delete type="button" className="btn btn-primary" value="Delete" onClick={() => (handleRowDeleteNew(idx))} />
+                                                    </Col>
+                                                </div>
+
                                             </div>
-                                            : ""}
+                                        </React.Fragment>
+                                    ))}
+
+                                    {addOnUnderCategory?.map((row, idx) => (
+                                        <React.Fragment key={idx}>
+                                            <div data-repeater-list="group-a" id={"addr" + idx}>
+                                                <div data-repeater-item className="row">
+
+                                                    <div className="mb-3 col-lg-4">
+                                                        <label className="form-label" htmlFor="startTime">Add-ons Name</label>
+                                                        <input type="text" id="startTime" className="form-control" name="add_on_name" placeholder="Add-ons name" value={row.add_on_name} onChange={(e) => handleAddOnsUndeCategory(e, idx)} />
+                                                    </div>
+
+                                                    <div className="mb-3 col-lg-4">
+                                                        <label className="form-label" htmlFor="subject">Price</label>
+                                                        <input type="number" id="subject" className="form-control" name="add_on_price" placeholder="Price" value={row.add_on_price} onChange={(e) => handleAddOnsUndeCategory(e, idx)} />
+                                                    </div>
 
 
-                                    </div>
+                                                    <Col lg={2} className="align-self-center d-grid mt-3">
+                                                        <input data-repeater-delete type="button" className="btn btn-primary" value="Delete" onClick={() => (handleRowDeleteUnderCategory(idx))} />
+                                                    </Col>
+                                                </div>
+
+                                            </div>
+                                        </React.Fragment>
+                                    ))}
+                                    <Button
+                                        onClick={() => {
+                                            handleAddRowNestedNew();
+                                        }}
+                                        color="success"
+                                        className="btn btn-success mt-3 mt-lg-0"
+                                    >
+                                        Add
+                                    </Button>
+
+                                    {isCheckAddOns ?
+                                        <div className="mt-4 col-lg-6">
+                                            <label className="form-label" htmlFor="subject">Maximum required number of choice(s)</label>
+                                            <input type="number" id="subject" className="form-control" placeholder="Enter number" name="num_of_choice_new" value={num_of_choice_new} onChange={(e) => setNumber(e.target.value)} />
+                                        </div>
+                                        : ""}
+
 
                                 </div>
-                            </React.Fragment>
+
+                            </div>
                         ))}
 
 
