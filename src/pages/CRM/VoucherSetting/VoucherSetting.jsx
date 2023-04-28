@@ -36,6 +36,9 @@ import {
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 
 function VoucherSetting(props) {
+
+  document.title = "Voucher Setting | Foodi"
+
   const [name, setName] = useState("")
   const [modal, setModal] = useState(false)
   const [voucherSettingId, setVoucherSettingId] = useState()

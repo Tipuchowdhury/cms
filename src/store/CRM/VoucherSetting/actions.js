@@ -18,15 +18,25 @@ import { v4 as uuidv4 } from "uuid"
 var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
-export const addVoucherSettingAction = (id, data) => {
+export const addVoucherSettingAction = (id, data, selectedBranch) => {
   var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Post"
+
+  const restaurants = selectedBranch?.length > 0 ? selectedBranch.map(item => {
+    const val = uuidv4()
+    return {
+      _id: val,
+      res_id: item.value,
+      voucher_setting_id: id,
+    }
+  }) : null
 
   const formData = {
     _id: id,
     ...data,
+    restaurants: restaurants,
   }
   return dispatch => {
-    console.log("-in the dispatch----")
+    // console.log("-in the dispatch----")
 
     const headers = {
       "Content-Type": "application/json",
@@ -36,7 +46,7 @@ export const addVoucherSettingAction = (id, data) => {
     axios
       .post(url, formData, { headers: headers })
       .then(response => {
-        console.log("response :", response)
+        // console.log("response :", response)
         dispatch({
           type: "ADD_VOUCHER_SETTING",
           payload: response.data,
@@ -101,12 +111,22 @@ export const getAllVoucherSettingFresh = () => {
   }
 }
 
-export const voucherSettingEditAction = (id, data) => {
+export const voucherSettingEditAction = (id, data, selectedBranch) => {
   var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Put"
+
+  const restaurants = selectedBranch?.length > 0 ? selectedBranch.map(item => {
+    const val = uuidv4()
+    return {
+      _id: val,
+      res_id: item.value,
+      voucher_setting_id: id,
+    }
+  }) : null
 
   const formData = {
     _id: id,
     ...data,
+    restaurants: restaurants,
   }
   return dispatch => {
     const headers = {
@@ -146,7 +166,7 @@ export const voucherSettingEditFresh = () => {
 export const voucherSettingStatusEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Put"
   const formData = data
-  console.log(formData)
+  // console.log(formData)
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
@@ -184,7 +204,7 @@ export const voucherSettingStatusEditFresh = () => {
 
 export const voucherSettingDeleteAction = id => {
   var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Delete"
-  console.log(id)
+  // console.log(id)
 
   return dispatch => {
     const headers = {
