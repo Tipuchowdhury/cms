@@ -124,10 +124,10 @@ function Popup(props) {
     const handleStatusUpdate = () => {
 
         // console.log(editInfo);
-        // props.promotionStatusUpdateAction({
-        //     ...editInfo,
-        //     is_active: !editInfo.is_active,
-        // })
+        props.popUpStatusUpdateAction({
+            ...editInfo,
+            is_active: !editInfo.is_active,
+        })
 
     }
 
@@ -232,19 +232,19 @@ function Popup(props) {
 
         }
 
-        // if (props.slider_status_edit_loading === "Success") {
-        //     toast.success("Promotion Status Updated");
-        //     toggleStatus();
-        //     props.promotionStatusUpdateFresh();
+        if (props.popup_status_edit_loading === "Success") {
+            toast.success("PopUp Banner Status Updated");
+            toggleStatus();
+            props.popUpStatusUpdateFresh();
 
-        // }
+        }
 
-        // if (props.slider_status_edit_loading === "Failed") {
-        //     toast.error("Something went wrong");
-        //     // toggleEditModal();
-        //     props.promotionStatusUpdateFresh();
+        if (props.popup_status_edit_loading === "Failed") {
+            toast.error("Something went wrong");
+            // toggleEditModal();
+            props.popUpStatusUpdateFresh();
 
-        // }
+        }
 
         if (props.popup_delete_loading === "Success") {
             // console.log("I am in the delete")
@@ -393,7 +393,7 @@ function Popup(props) {
 
 
                 {/* ============ status update modal starts=============== */}
-                {/* <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
+                <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
                     <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
                         <div className="icon-box">
                             <i className="fa fa-exclamation-circle" style={{ color: "#DCA218", fontSize: "40px" }}></i>
@@ -405,7 +405,7 @@ function Popup(props) {
                         <Button color="secondary" onClick={toggleStatus}>Cancel</Button>{' '}
                         <Button color="primary" onClick={handleStatusUpdate}>Update</Button>
                     </ModalFooter>
-                </Modal> */}
+                </Modal>
                 {/* ============ status update modal ends=============== */}
             </div>
         </React.Fragment>
