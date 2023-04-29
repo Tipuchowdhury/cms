@@ -25,6 +25,8 @@ import calendar from "./calendar/reducer"
 
 import Popup from "./Popup/reducer"
 
+// Notification
+import Notification from "./Notification/reducer"
 import Customer from "./Customer/reducer"
 import Review from "./Review/reducer"
 
@@ -48,6 +50,7 @@ const rootReducer = combineReducers({
   Sliders,
   BranchAttribute,
   Popup,
+  Notification,
   Customer,
   Review,
 })
