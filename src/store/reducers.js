@@ -25,6 +25,9 @@ import calendar from "./calendar/reducer"
 
 import Popup from "./Popup/reducer"
 
+// Notification
+import Notification from "./Notification/reducer"
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -45,6 +48,7 @@ const rootReducer = combineReducers({
   Sliders,
   BranchAttribute,
   Popup,
+  Notification,
 })
 
 export default rootReducer

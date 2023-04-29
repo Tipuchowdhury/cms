@@ -140,6 +140,8 @@ import BranchAttribute from "pages/BranchAttribute/BranchAttribute"
 import VoucherSetting from "pages/CRM/VoucherSetting/VoucherSetting"
 import AddVoucherSetting from "pages/CRM/VoucherSetting/AddVoucherSetting"
 import Popup from "pages/Popup/Popup"
+import Notification from "pages/Notification/Notification"
+import AddNotification from "pages/Notification/AddNotification"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -204,6 +206,10 @@ const userRoutes = [
 
   //Popup
   { path: "/popup-banner", component: <Popup /> },
+
+  // Notification
+  { path: "/notification", component: <Notification /> },
+  { path: "/add-notification", component: <AddNotification /> },
 
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },
