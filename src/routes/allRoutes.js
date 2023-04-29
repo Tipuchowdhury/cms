@@ -140,6 +140,8 @@ import BranchAttribute from "pages/BranchAttribute/BranchAttribute"
 import VoucherSetting from "pages/CRM/VoucherSetting/VoucherSetting"
 import AddVoucherSetting from "pages/CRM/VoucherSetting/AddVoucherSetting"
 import Popup from "pages/Popup/Popup"
+import Review from "pages/Review/Review"
+import Customer from "pages/Customer/Customer"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -166,6 +168,7 @@ const userRoutes = [
   { path: "/city", component: <City /> },
   { path: "/register", component: <Register1 /> },
   { path: "/manage-users", component: <ManageUsers /> },
+  { path: "/customers", component: <Customer /> },
   { path: "/subscription-types", component: <SubscriptionTypes /> },
   { path: "/restaurant", component: <Restaurant /> },
 
@@ -204,6 +207,9 @@ const userRoutes = [
 
   //Popup
   { path: "/popup-banner", component: <Popup /> },
+
+  //Review
+  { path: "/review", component: <Review /> },
 
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },

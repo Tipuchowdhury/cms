@@ -25,6 +25,8 @@ import calendar from "./calendar/reducer"
 
 import Popup from "./Popup/reducer"
 
+import Customer from "./Customer/reducer"
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -45,6 +47,7 @@ const rootReducer = combineReducers({
   Sliders,
   BranchAttribute,
   Popup,
+  Customer,
 })
 
 export default rootReducer

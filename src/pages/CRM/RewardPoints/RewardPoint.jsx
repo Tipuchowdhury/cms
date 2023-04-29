@@ -86,25 +86,19 @@ function RewardPoint(props) {
     e.preventDefault()
     toggle()
     const val = uuidv4()
-    console.log(val)
     props.addRewardPointAction(val, value, selectedSubType.value)
   }
 
   const editSubscriptionType = (subscription_type) => {
-    // console.log(subscription_type);
-    // console.log(props?.get_all_subscription_type_data);
     const common_subs = props?.get_all_subscription_type_data?.filter((elem) => subscription_type?.find(({ sub_id }) => elem._id === sub_id));
 
-    // console.log(common_subs);
     const subs_data_edit = common_subs ? common_subs.map((item, key) => {
       return { label: item.name, value: item._id };
     }) : "";
-    //console.log(nn);
-    // console.log(subs_data_edit);
     setSelectedSubscription(subs_data_edit);
 
   }
-  //  console.log(selectedSubscription);
+
   const handleEditRewardPointName = row => {
     // console.log(row)
     setRewardPointId(row._id)
@@ -115,7 +109,6 @@ function RewardPoint(props) {
       sub_id: row.subscription_type_id
     }
     ];
-    console.log(new_array);
     editSubscriptionType(new_array)
     toggleEditModal()
   }
@@ -126,8 +119,6 @@ function RewardPoint(props) {
   const handleEditModalSubmit = e => {
     e.preventDefault()
     toggleEditModal()
-    console.log(rewardPointname)
-    console.log(rewardPointId)
     props.rewardPointNameEditAction(value, rewardPointId, selectedSubscription.value, rewardStatus)
   }
   const handleDeleteModal = row => {
@@ -149,7 +140,6 @@ function RewardPoint(props) {
     sub_type_data_edit ? sub_type_data_edit : ""
   )
   const handleSelectSubType = e => {
-    console.log(e)
     setSelectedSubType(e)
   }
 

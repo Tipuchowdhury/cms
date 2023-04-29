@@ -181,6 +181,11 @@ const SidebarContent = props => {
                   </Link>
                 </li>
                 <li>
+                  <Link to="/customers">
+                    {props.t("Customers")}
+                  </Link>
+                </li>
+                <li>
                   <Link to="/subscription-types">
                     {props.t("Subscription Types")}
                   </Link>
@@ -234,7 +239,7 @@ const SidebarContent = props => {
             </li>
             <li>
               <Link to="/slider" className="waves-effect">
-                <i className="ti-image"></i>
+                <i className="ti-export"></i>
                 {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("Promotion")}</span>
               </Link>
@@ -278,6 +283,14 @@ const SidebarContent = props => {
                 <i className="ti-image"></i>
                 {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("PopUp Banner ")}</span>
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/review" className="waves-effect">
+                <i className="ti-star"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
+                <span>{props.t("Review & Ratings")}</span>
               </Link>
             </li>
             {/* <li>
