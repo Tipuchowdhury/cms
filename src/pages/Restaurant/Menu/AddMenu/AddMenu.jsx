@@ -113,7 +113,7 @@ function AddMenu(props) {
     }
 
     //for variation start
-    const addOnsTemplate = { addOnName: "", price: "", group: info.Variation_group_name, desc: info.Variation_grp_desc }
+    const addOnsTemplate = { addOnName: "", price: "", group: info.Variation_group_name, desc: info.Variation_grp_desc, additionalVariation: [] }
     const [addOns, setAddOns] = useState([addOnsTemplate]);
     const handleAddOnsCat = (e, index) => {
         console.log(index);
@@ -170,14 +170,13 @@ function AddMenu(props) {
     }
     console.log(props?.get_category_by_id_data?.preset_add_ons);
 
-    const [addOnsNew, setAddOnsNew] = useState(props?.get_category_by_id_data?.preset_add_ons);
+    const [addOnsNew, setAddOnsNew] = useState([props?.get_category_by_id_data?.preset_add_ons]);
     console.log(addOnsNew);
 
     const handleAddOnsCatNew = (e, index) => {
         console.log(index);
         const updatedValue = addOnsNew.map((row, i) => index === i ? Object.assign(row, { [e.target.name]: e.target.value }) : row);
         setAddOnsNew(updatedValue)
-
     }
 
     const handleRowDeleteNew = (index) => {
@@ -188,12 +187,17 @@ function AddMenu(props) {
         }
 
     }
-
+    const [id, setID] = useState();
+    const handleID = (idx) => {
+        //alert(idx)
+        setID(idx);
+    }
+    console.log(id);
     /*
      * 
      * add-ons under category start 
      */
-    const addOnsTemplateNew = { add_on_name: "", add_on_price: "" }
+    const addOnsTemplateNew_test = { add_on_name: "", add_on_price: "" }
     const [addOnUnderCategory, setAddOnUnderCategory] = useState([]);
     const [addBtnStatus, setAddBtnStatus] = useState(false);
     const handleAddOnsUndeCategory = (e, index) => {
@@ -209,10 +213,9 @@ function AddMenu(props) {
 
         filteredTime.splice(index, 1);
         setAddOnUnderCategory(filteredTime)
-
-
     }
-    function handleAddRowNestedNew() {
+    function handleAddRowNestedNew(category_Name) {
+        const addOnsTemplateNew = { category_Name: category_Name, add_on_name: "", add_on_price: "" }
         setAddOnUnderCategory([...addOnUnderCategory, addOnsTemplateNew]);
     }
     console.log(addOnUnderCategory);
@@ -265,7 +268,7 @@ function AddMenu(props) {
     console.log(addOnUnderCategory);
     function handleAddCategoryRow() {
         console.log("I am in add category rpw");
-        props.getCategoryByIdFresh();
+        //props.getCategoryByIdFresh();
         setAddNewCategory([...addNewCategory, finalTemplate]);
 
         // const updatedValue = addNewCategory.map((row, i) => idx === i ? Object.assign(row, { additionalAddOn: addOnUnderCategory }) : row);
@@ -282,8 +285,10 @@ function AddMenu(props) {
 
     }
     function handleAddRowNestedNew1() {
-        setAddOnUnderCategory1([...addOnUnderCategory1, addOnsTemplateNew1]);
-        setAddNewCategory({ ...addNewCategory, additionalAddOn: addOnUnderCategory1 });
+        //setAddOnUnderCategory1([...addOnUnderCategory1, addOnsTemplateNew1]);
+        //setAddNewCategory({ ...addNewCategory, additionalAddOn: addOnsTemplateNew1 });
+        const updatedValue = addNewCategory.map((row, i) => index === i ? Object.assign(row, { additionalAddOn: addOnsTemplateNew1 }) : row);
+        setAddNewCategory(updatedValue)
     }
 
     // ************************ ends here ********************************
@@ -297,6 +302,27 @@ function AddMenu(props) {
 
     console.log(addNewCategory);
     console.log(addNewCategory.additionalAddOn);
+    let newAddOnsArray = [];
+    const handleAddOnsForm = (e, idx) => {
+        e.preventDefault();
+        console.log(id);
+        console.log(idx);
+        //===== test ======== 
+        const updatedValue = addOns.map((row, i) => idx === i ? Object.assign(row, { additionalVariation: [{ categoryAddOns: addNewCategory }, { underCategoryAddOns: addOnUnderCategory }] }) : row);
+        setAddOns(updatedValue);
+
+        setAddNewCategory([finalTemplate]);
+        setAddOnUnderCategory([addOnsTemplateNew_test]);
+        closeModal();
+        // setAddNewCategory("");
+        // setAddOnUnderCategory("");
+        //===== test end======== 
+        // addOns.splice(id, 0, { additionalVariation: [addNewCategory, addOnUnderCategory] })
+        // console.log("I am hererere");
+        console.log(addNewCategory, addOnUnderCategory);
+        console.log(addOns);
+    }
+    console.log(addOns);
 
     useEffect(() => {
         // if (props.get_all_restaurant_loading == false) {
@@ -471,7 +497,7 @@ function AddMenu(props) {
 
                                     </div>
                                 </Row>
-                                {isChecked ?
+                                {/* {isChecked ?
 
                                     <Row className="mb-3">
                                         <label
@@ -486,9 +512,9 @@ function AddMenu(props) {
                                     </Row>
 
 
-                                    : ""}
+                                    : ""} */}
 
-                                {addVariation ? <>
+                                {isChecked ? <>
                                     {addOns.map((row, idx) => (
                                         <Row className="mb-3">
                                             <label
@@ -536,7 +562,7 @@ function AddMenu(props) {
 
 
 
-                                                                <input data-repeater-delete type="button" className="btn btn-primary" value="Add Ad ons" style={{ marginTop: "30px", cursor: "pointer" }} onClick={toggle} />
+                                                                <input data-repeater-delete type="button" className="btn btn-primary" value="Add Ad ons" style={{ marginTop: "30px", cursor: "pointer" }} onClick={() => { { toggle(), handleID(idx) } }} />
 
 
                                                             </div>
@@ -879,9 +905,10 @@ function AddMenu(props) {
             <Modal isOpen={modal} centered backdrop="static">
                 <ModalHeader toggle={closeModal}>Add Addon</ModalHeader>
                 <ModalBody>
-                    <form>
-                        {addNewCategory.map((item, idx) => (
-                            console.log(idx),
+                    <form >
+                        {addNewCategory.map((itemCat, idx) => (
+                            // id === idx ?
+
                             <React.Fragment key={idx}>
                                 <div>
                                     <div className="mb-3">
@@ -889,7 +916,7 @@ function AddMenu(props) {
                                         <Input
                                             id="exampleSelect"
                                             name="category_Name"
-                                            value={item.category_Name}
+                                            value={itemCat.category_Name}
                                             required={true}
                                             onChange={(e) => handleInputsAddOns(e, idx)}
                                             type="select"
@@ -903,7 +930,7 @@ function AddMenu(props) {
 
                                         <input type="checkbox" id="cat_is_multiple" name="cat_is_multiple_add_ons" checked={isCheckAddOns} onChange={checkHandlerAddOns} value="true" style={{ margin: "15px 5px 20px 0px" }} />Multiple Selection
                                         {/* {addOnsNew?.map((row, idx) => ( */}
-                                        {item?.category_personal_addOn?.map((row, idx) => (
+                                        {itemCat?.category_personal_addOn?.map((row, idx) => (
                                             <React.Fragment key={idx}>
                                                 <div data-repeater-list="group-a" id={"addr" + idx}>
                                                     <div data-repeater-item className="row">
@@ -928,33 +955,39 @@ function AddMenu(props) {
                                             </React.Fragment>
                                         ))}
 
-                                        {addOnUnderCategory?.map((row, idx) => (
-                                            <React.Fragment key={idx}>
-                                                <div data-repeater-list="group-a" id={"addr" + idx}>
-                                                    <div data-repeater-item className="row">
+                                        {addOnUnderCategory.map((row, idx) => (
 
-                                                        <div className="mb-3 col-lg-4">
-                                                            <label className="form-label" htmlFor="startTime">Add-ons Name</label>
-                                                            <input type="text" id="startTime" className="form-control" name="add_on_name" placeholder="Add-ons name" value={row.add_on_name} onChange={(e) => handleAddOnsUndeCategory(e, idx)} />
+                                            row.category_Name == itemCat.category_Name ?
+                                                <React.Fragment key={idx}>
+                                                    <div data-repeater-list="group-a" id={"addr" + idx}>
+                                                        <div data-repeater-item className="row">
+
+                                                            <div className="mb-3 col-lg-4">
+                                                                <label className="form-label" htmlFor="startTime">Add-ons Name</label>
+                                                                <input type="text" id="startTime" className="form-control" name="add_on_name" placeholder="Add-ons name" value={row.add_on_name} onChange={(e) => handleAddOnsUndeCategory(e, idx)} />
+                                                            </div>
+
+                                                            <div className="mb-3 col-lg-4">
+                                                                <label className="form-label" htmlFor="subject">Price</label>
+                                                                <input type="number" id="subject" className="form-control" name="add_on_price" placeholder="Price" value={row.add_on_price} onChange={(e) => handleAddOnsUndeCategory(e, idx)} />
+                                                            </div>
+
+
+                                                            <Col lg={2} className="align-self-center d-grid mt-3">
+                                                                <input data-repeater-delete type="button" className="btn btn-primary" value="Delete" onClick={() => (handleRowDeleteUnderCategory(idx))} />
+                                                            </Col>
                                                         </div>
 
-                                                        <div className="mb-3 col-lg-4">
-                                                            <label className="form-label" htmlFor="subject">Price</label>
-                                                            <input type="number" id="subject" className="form-control" name="add_on_price" placeholder="Price" value={row.add_on_price} onChange={(e) => handleAddOnsUndeCategory(e, idx)} />
-                                                        </div>
-
-
-                                                        <Col lg={2} className="align-self-center d-grid mt-3">
-                                                            <input data-repeater-delete type="button" className="btn btn-primary" value="Delete" onClick={() => (handleRowDeleteUnderCategory(idx))} />
-                                                        </Col>
                                                     </div>
+                                                </React.Fragment>
+                                                :
+                                                null
 
-                                                </div>
-                                            </React.Fragment>
+
                                         ))}
                                         <Button
                                             onClick={() => {
-                                                handleAddRowNestedNew();
+                                                handleAddRowNestedNew(itemCat.category_Name);
                                             }}
                                             color="success"
                                             className="btn btn-success mt-3 mt-lg-0"
@@ -974,6 +1007,7 @@ function AddMenu(props) {
 
                                 </div>
                             </React.Fragment>
+                            // : ""
                         ))}
 
 
@@ -987,17 +1021,26 @@ function AddMenu(props) {
                         >
                             Add category
                         </Button>
+                        <div style={{ display: "flex", justifyContent: "flex-end", gap: 5, marginTop: "20px" }}>
+                            <Button color="primary" onClick={(e) => handleAddOnsForm(e, id)}>
+                                Save
+                            </Button>{' '}
+                            <Button color="secondary" onClick={closeModal}>
+                                Cancel
+                            </Button>
+                        </div>
+
 
                     </form>
                 </ModalBody>
-                <ModalFooter>
-                    <Button color="primary" >
+                {/* <ModalFooter>
+                    <Button color="primary" type='submit'>
                         Do Something
                     </Button>{' '}
                     <Button color="secondary" onClick={closeModal}>
                         Cancel
                     </Button>
-                </ModalFooter>
+                </ModalFooter> */}
             </Modal>
         </React.Fragment>
     );
