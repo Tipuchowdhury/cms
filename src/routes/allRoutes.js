@@ -142,6 +142,8 @@ import AddVoucherSetting from "pages/CRM/VoucherSetting/AddVoucherSetting"
 import Popup from "pages/Popup/Popup"
 import Notification from "pages/Notification/Notification"
 import AddNotification from "pages/Notification/AddNotification"
+import Review from "pages/Review/Review"
+import Customer from "pages/Customer/Customer"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -168,6 +170,7 @@ const userRoutes = [
   { path: "/city", component: <City /> },
   { path: "/register", component: <Register1 /> },
   { path: "/manage-users", component: <ManageUsers /> },
+  { path: "/customers", component: <Customer /> },
   { path: "/subscription-types", component: <SubscriptionTypes /> },
   { path: "/restaurant", component: <Restaurant /> },
 
@@ -210,6 +213,8 @@ const userRoutes = [
   // Notification
   { path: "/notification", component: <Notification /> },
   { path: "/add-notification", component: <AddNotification /> },
+  //Review
+  { path: "/review", component: <Review /> },
 
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },

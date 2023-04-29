@@ -6,7 +6,7 @@ import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import {
-    addPopUpAction, addPopUpFresh, getAllPopUpAction, getAllPopUpFresh, popUpUpdateAction, popUpUpdateFresh, popUpStatusUpdateAction, popUpStatusUpdateFresh, popUpDeleteAction, popUpDeleteFresh
+    getAllSubscriptionTypeAction, addCustomerAction, addCustomerFresh, getAllCustomerAction, getAllCustomerFresh, customerEditAction, customerEditFresh, customerStatusEditAction, customerStatusEditActionFresh, customerDeleteAction, customerDeleteFresh
 } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
@@ -14,9 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import Select from "react-select";
 
 
-function Popup(props) {
+function Customer(props) {
 
-    document.title = "PopUp Banner | Foodi"
+    document.title = "Customer | Foodi"
 
     const [modal, setModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
@@ -29,23 +29,91 @@ function Popup(props) {
     const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
 
     const [addInfo, setAddInfo] = useState({
-        title: "",
-        description: "",
-        cancellable: true,
+        first_name: "",
+        last_name: "",
+        email: "",
+        mobile: "",
         image: "",
         is_active: true,
     });
+
+    const [selectedSubscription, setSelectedSubscription] = useState([]);
+    const handleSelectSubscription = (e) => {
+
+        var new_data = [e];
+        //console.log(new_data)
+        setSelectedSubscription(new_data)
+    }
+
 
     const [editInfo, setEditInfo] = useState({
         _id: "",
-        title: "",
-        description: "",
-        cancellable: true,
+        first_name: "",
+        last_name: "",
+        email: "",
+        mobile: "",
         image: "",
         is_active: true,
     });
 
+    const handleEdit = (row) => {
+
+        setEditInfo(prevState => ({
+            _id: row._id,
+            first_name: row.first_name,
+            last_name: row.last_name,
+            email: row.email,
+            mobile: row.mobile,
+            image: row.image,
+            is_active: row.is_active,
+        }));
+
+        const new_array = [{
+            sub_id: row.subscription_type_id
+        }
+        ];
+        editSubscriptionType(new_array)
+
+        toggleEditModal();
+    }
+
+    const editSubscriptionType = (subscription_type) => {
+        const common_subs = props?.get_all_subscription_type_data?.filter((elem) => subscription_type?.find(({ sub_id }) => elem._id === sub_id));
+
+        const subs_data_edit = common_subs ? common_subs.map((item, key) => {
+            return { label: item.name, value: item._id };
+        }) : "";
+        setSelectedSubscription(subs_data_edit);
+    }
+
+    // console.log(selectedSubscription);
+
     const [deleteItem, setDeleteItem] = useState();
+
+    const common_sub_type = props?.get_all_subscription_type_data?.filter(elem =>
+        location?.state?.sub_type?.find(({ branch_id }) => elem._id === branch_id)
+    )
+
+    const sub_type_data_edit = common_sub_type
+        ? common_sub_type?.map((item, key) => {
+            return { label: item.name, value: item._id }
+        })
+        : ""
+    //select multiple branch
+    const [selectedSubType, setSelectedSubType] = useState(
+        sub_type_data_edit ? sub_type_data_edit : ""
+    )
+    const handleSelectSubType = e => {
+        setSelectedSubType(e)
+    }
+
+    let branchDate = undefined
+    if (props.get_all_subscription_type_data?.length > 0) {
+        branchDate = props.get_all_subscription_type_data?.map((item, key) => ({
+            label: item.name,
+            value: item._id,
+        }))
+    }
 
 
     let name, value, checked;
@@ -63,7 +131,6 @@ function Popup(props) {
         });
     }
 
-
     const handleAddCheckBox = (e) => {
         // console.log(e);
         name = e.target.name;
@@ -72,7 +139,8 @@ function Popup(props) {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        props.addPopUpAction(addInfo);
+        const id = uuidv4()
+        props.addCustomerAction(id, addInfo, selectedSubType.value);
     }
 
     const handleEditInputs = (e) => {
@@ -96,24 +164,10 @@ function Popup(props) {
         setEditInfo({ ...editInfo, [name]: checked });
     }
 
-
-    const handleEditSlider = (row) => {
-
-        setEditInfo(prevState => ({
-            _id: row._id,
-            title: row.title,
-            description: row.description,
-            cancellable: row.cancellable,
-            image: row.image,
-            is_active: row.is_active,
-        }));
-
-        toggleEditModal();
-    }
-
-    const handleEdit = (e) => {
+    const handleEditSubmit = (e) => {
         e.preventDefault();
-        props.popUpUpdateAction(editInfo);
+        // console.log(selectedSubscription);
+        props.customerEditAction(editInfo, selectedSubscription[0].value);
     }
 
     const handleStatusModal = (row) => {
@@ -124,7 +178,7 @@ function Popup(props) {
     const handleStatusUpdate = () => {
 
         // console.log(editInfo);
-        props.popUpStatusUpdateAction({
+        props.customerStatusEditAction({
             ...editInfo,
             is_active: !editInfo.is_active,
         })
@@ -137,13 +191,13 @@ function Popup(props) {
     }
     const handleDelete = () => {
 
-        props.popUpDeleteAction(deleteItem);
+        props.customerDeleteAction(deleteItem);
     }
 
 
     const actionRef = (cell, row) =>
         <div style={{ display: "flex", gap: 10 }}>
-            <Button color="primary" className="btn btn-primary waves-effect waves-light" onClick={() => handleEditSlider(row)}
+            <Button color="primary" className="btn btn-primary waves-effect waves-light" onClick={() => handleEdit(row)}
             >
                 Edit
             </Button>{" "}
@@ -163,8 +217,23 @@ function Popup(props) {
     const activeData = [
 
         {
-            dataField: "title",
-            text: "Title",
+            dataField: "first_name",
+            text: "First Name",
+            sort: true,
+        },
+        {
+            dataField: "last_name",
+            text: "Last Name",
+            sort: true,
+        },
+        {
+            dataField: "email",
+            text: "Email",
+            sort: true,
+        },
+        {
+            dataField: "mobile",
+            text: "Mobile",
             sort: true,
         },
         {
@@ -184,7 +253,7 @@ function Popup(props) {
     ];
     const defaultSorted = [
         {
-            dataField: "title",
+            dataField: "first_name",
             order: "desc"
         }
     ];
@@ -192,69 +261,74 @@ function Popup(props) {
 
     useEffect(() => {
 
-
-        if (props.get_all_popup_loading == false) {
-            props.getAllPopUpAction();
+        if (props.get_all_subscription_type_loading == false) {
+            props.getAllSubscriptionTypeAction()
         }
 
+        if (props.get_all_customer_loading == false) {
+            props.getAllCustomerAction();
+        }
 
-        if (props.add_popup_loading === "Success") {
-            toast.success("PopUp Banner Added Successfully");
+        if (props.add_customer_loading === "Success") {
+            toast.success("Customer Added Successfully");
             toggle();
             setAddInfo({
                 ...addInfo,
-                title: "",
-                description: "",
-                cancellable: true,
+                first_name: "",
+                last_name: "",
+                email: "",
+                mobile: "",
                 image: "",
+                subscription_type_id: "",
                 is_active: true,
             });
-            props.addPopUpFresh();
+
+            setSelectedSubType([]);
+            props.addCustomerFresh();
         }
 
 
-        if (props.add_popup_loading === "Failed") {
+        if (props.add_customer_loading === "Failed") {
             toast.error("Something went wrong");
-            props.addPopUpFresh();
+            props.addCustomerFresh();
 
         }
 
-        if (props.popup_edit_loading === "Success") {
-            toast.success("PopUp Banner Updated");
+        if (props.customer_edit_loading === "Success") {
+            toast.success("Customer Updated");
             toggleEditModal();
-            props.popUpUpdateFresh();
+            props.customerEditFresh();
         }
 
-        if (props.popup_edit_loading === "Failed") {
+        if (props.customer_edit_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
-            props.popUpUpdateFresh();
-
+            props.customerEditFresh();
         }
 
-        if (props.popup_status_edit_loading === "Success") {
-            toast.success("PopUp Banner Status Updated");
+        if (props.edit_cutomer_status_loading === "Success") {
+            toast.success("Customer Status Updated");
             toggleStatus();
-            props.popUpStatusUpdateFresh();
+            props.customerStatusEditActionFresh();
 
         }
 
-        if (props.popup_status_edit_loading === "Failed") {
+        if (props.edit_cutomer_status_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
-            props.popUpStatusUpdateFresh();
+            props.customerStatusEditActionFresh();
 
         }
 
-        if (props.popup_delete_loading === "Success") {
+        if (props.customer_delete_loading === "Success") {
             // console.log("I am in the delete")
-            toast.success("PopUp Banner Deleted");
+            toast.success("Customer Deleted");
             toggleDel();
-            props.popUpDeleteFresh();
+            props.customerDeleteFresh();
         }
 
-    }, [props.add_popup_loading, props.popup_edit_loading,
-    props.popup_delete_loading, props.popup_status_edit_loading]);
+    }, [props.get_all_subscription_type_loading, props.add_customer_loading, props.customer_edit_loading,
+    props.customer_delete_loading, props.edit_cutomer_status_loading]);
 
 
     return (
@@ -263,20 +337,20 @@ function Popup(props) {
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle="Foodi" title="PopUp Banner" breadcrumbItem="PopUp Banner" />
+                    <Breadcrumbs maintitle="Foodi" title="Users" breadcrumbItem="Customers" />
                     <Row>
                         <Col className="col-12">
                             <Card style={{ border: "none" }}>
                                 <CardBody>
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>PopUp Banner</CardTitle>
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Customers</CardTitle>
                                         <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
-                                            Add PopUp Banner
+                                            Add Customer
                                         </Button>
                                     </div>
 
-                                    {props.get_all_popup_data ? props.get_all_popup_data.length > 0 ? <DatatableTablesWorking products={props.get_all_popup_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_popup_data?._id} /> : null : null}
+                                    {props.get_all_customer_data ? props.get_all_customer_data.length > 0 ? <DatatableTablesWorking products={props.get_all_customer_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_customer_data?._id} /> : null : null}
 
                                 </CardBody>
                             </Card>
@@ -291,14 +365,23 @@ function Popup(props) {
                         <form className="mt-1" onSubmit={handleSubmit}>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="title">Title</label>
-                                <input type="text" className="form-control" id="title" placeholder="Enter title" required name="title" value={addInfo.title} onChange={handleAddInputs} />
+                                <label className="form-label" htmlFor="first_name">First Name</label>
+                                <input type="text" className="form-control" id="first_name" placeholder="Enter First Name" required name="first_name" value={addInfo.first_name} onChange={handleAddInputs} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="description">Description</label>
-                                <textarea className="form-control" id="description"
-                                    placeholder="Enter description" name="description" onChange={handleAddInputs} value={addInfo.description} required></textarea>
+                                <label className="form-label" htmlFor="last_name">Last Name</label>
+                                <input type="text" className="form-control" id="last_name" placeholder="Enter last name" required name="last_name" value={addInfo.last_name} onChange={handleAddInputs} />
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="email">Email</label>
+                                <input type="text" className="form-control" id="email" placeholder="Enter email" required name="email" value={addInfo.email} onChange={handleAddInputs} />
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="mobile">Mobile</label>
+                                <input type="text" className="form-control" id="mobile" placeholder="Enter mobile" required name="mobile" value={addInfo.mobile} onChange={handleAddInputs} />
                             </div>
 
                             <div className="mb-3">
@@ -307,12 +390,15 @@ function Popup(props) {
                             </div>
 
                             <div className="mb-3">
-                                <div className="form-check">
-                                    <label className="form-label" htmlFor="cancellable">Cancellable </label>
-                                    <input type="checkbox" className="form-check-input" id="cancellable" checked={addInfo.cancellable} name="cancellable" onChange={handleAddCheckBox} />
-
-                                </div>
+                                <label className="form-label" htmlFor="subscription_type_id">Subscription Types</label>
+                                <Select
+                                    value={selectedSubType}
+                                    onChange={handleSelectSubType}
+                                    options={branchDate}
+                                    isMulti={false}
+                                />
                             </div>
+
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
                                 <Button color="secondary" onClick={toggle}>
@@ -333,17 +419,26 @@ function Popup(props) {
                 <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
                     <ModalHeader >Edit PopUp Banner</ModalHeader>
                     <ModalBody>
-                        <form className="mt-1" onSubmit={handleEdit} >
+                        <form className="mt-1" onSubmit={handleEditSubmit} >
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="title">Title</label>
-                                <input type="text" className="form-control" id="title" placeholder="Enter title" required name="title" value={editInfo.title} onChange={handleEditInputs} />
+                                <label className="form-label" htmlFor="first_name">First Name</label>
+                                <input type="text" className="form-control" id="first_name" placeholder="Enter First Name" required name="first_name" value={editInfo.first_name} onChange={handleEditInputs} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="description">Description</label>
-                                <textarea className="form-control" id="description"
-                                    placeholder="Enter description" name="description" onChange={handleEditInputs} value={editInfo.description} required></textarea>
+                                <label className="form-label" htmlFor="last_name">Last Name</label>
+                                <input type="text" className="form-control" id="last_name" placeholder="Enter last name" required name="last_name" value={editInfo.last_name} onChange={handleEditInputs} />
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="email">Email</label>
+                                <input type="text" className="form-control" id="email" placeholder="Enter email" required name="email" value={editInfo.email} onChange={handleEditInputs} />
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="mobile">Mobile</label>
+                                <input type="text" className="form-control" id="mobile" placeholder="Enter mobile" required name="mobile" value={editInfo.mobile} onChange={handleEditInputs} />
                             </div>
 
                             <div className="mb-3">
@@ -352,12 +447,17 @@ function Popup(props) {
                             </div>
 
                             <div className="mb-3">
-                                <div className="form-check">
-                                    <label className="form-label" htmlFor="cancellable">Cancellable</label>
-                                    <input type="checkbox" className="form-check-input" id="cancellable" checked={editInfo.cancellable} name="cancellable" onChange={handleEditCheckBox} />
+                                <label className="form-label" htmlFor="subscription_type_id">Subscription Types</label>
 
-                                </div>
+                                <Select
+                                    value={selectedSubscription}
+                                    onChange={handleSelectSubscription}
+                                    options={branchDate}
+                                    isMulti={false}
+                                />
                             </div>
+
+
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
                                 <Button color="primary" type="submit">
@@ -415,57 +515,62 @@ function Popup(props) {
 
 const mapStateToProps = state => {
 
+    const { get_all_subscription_type_loading, get_all_subscription_type_data } =
+        state.SubscriptionTypes
 
     const {
-        add_popup_data,
-        add_popup_error,
-        add_popup_loading,
+        add_customer_data,
+        add_customer_error,
+        add_customer_loading,
 
-        get_all_popup_data,
-        get_all_popup_error,
-        get_all_popup_loading,
+        get_all_customer_data,
+        get_all_customer_error,
+        get_all_customer_loading,
 
-        popup_edit_data,
-        popup_edit_loading,
+        customer_edit_data,
+        customer_edit_loading,
 
-        popup_status_edit_data,
-        popup_status_edit_loading,
+        edit_cutomer_status_loading,
 
-        popup_delete_loading
+        customer_delete_loading
 
-    } = state.Popup;
+    } = state.Customer;
 
     return {
-        add_popup_data,
-        add_popup_error,
-        add_popup_loading,
 
-        get_all_popup_data,
-        get_all_popup_error,
-        get_all_popup_loading,
+        get_all_subscription_type_loading,
+        get_all_subscription_type_data,
 
-        popup_edit_data,
-        popup_edit_loading,
+        add_customer_data,
+        add_customer_error,
+        add_customer_loading,
 
-        popup_status_edit_data,
-        popup_status_edit_loading,
+        get_all_customer_data,
+        get_all_customer_error,
+        get_all_customer_loading,
 
-        popup_delete_loading
+        customer_edit_data,
+        customer_edit_loading,
+
+        edit_cutomer_status_loading,
+
+        customer_delete_loading
     };
 };
 
 export default withRouter(
     connect(mapStateToProps,
         {
-            addPopUpAction,
-            addPopUpFresh,
-            getAllPopUpAction,
-            getAllPopUpFresh,
-            popUpUpdateAction,
-            popUpUpdateFresh,
-            popUpStatusUpdateAction,
-            popUpStatusUpdateFresh,
-            popUpDeleteAction,
-            popUpDeleteFresh,
-        })(Popup)
+            getAllSubscriptionTypeAction,
+            addCustomerAction,
+            addCustomerFresh,
+            getAllCustomerAction,
+            getAllCustomerFresh,
+            customerEditAction,
+            customerEditFresh,
+            customerStatusEditAction,
+            customerStatusEditActionFresh,
+            customerDeleteAction,
+            customerDeleteFresh,
+        })(Customer)
 );

@@ -27,6 +27,7 @@ import Popup from "./Popup/reducer"
 
 // Notification
 import Notification from "./Notification/reducer"
+import Customer from "./Customer/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -49,6 +50,7 @@ const rootReducer = combineReducers({
   BranchAttribute,
   Popup,
   Notification,
+  Customer,
 })
 
 export default rootReducer

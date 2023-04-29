@@ -1,42 +1,30 @@
 import {
-  ADD_VOUCHER_SETTING,
-  ADD_VOUCHER_SETTING_FRESH,
-  GET_ALL_VOUCHER_SETTING,
-  GET_ALL_VOUCHER_SETTING_FRESH,
-  VOUCHER_SETTING_EDIT,
-  VOUCHER_SETTING_EDIT_FRESH,
-  VOUCHER_SETTING_DELETE,
-  VOUCHER_SETTING_DELETE_FRESH,
-  VOUCHER_SETTING_STATUS_EDIT,
-  VOUCHER_SETTING_STATUS_EDIT_FRESH,
+  ADD_CUSTOMER,
+  ADD_CUSTOMER_FRESH,
+  GET_ALL_CUSTOMER,
+  GET_ALL_CUSTOMER_FRESH,
+  CUSTOMER_NAME_EDIT,
+  CUSTOMER_NAME_EDIT_FRESH,
+  CUSTOMER_DELETE,
+  CUSTOMER_DELETE_FRESH,
+  EDIT_CUSTOMER_STATUS,
+  EDIT_CUSTOMER_STATUS_FRESH
 } from "./actionTypes"
 import axios from "axios"
-import { toast } from "react-toastify"
-import { v4 as uuidv4 } from "uuid"
 
 // token
 var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
-export const addVoucherSettingAction = (id, data, selectedBranch) => {
-  var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Post"
-
-  const restaurants = selectedBranch?.length > 0 ? selectedBranch.map(item => {
-    const val = uuidv4()
-    return {
-      _id: val,
-      res_id: item.value,
-      voucher_setting_id: id,
-    }
-  }) : null
+export const addCustomerAction = (id, data, sub_id) => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Customer/Post"
 
   const formData = {
     _id: id,
     ...data,
-    restaurants: restaurants,
+    subscription_type_id: sub_id,
   }
   return dispatch => {
-    // console.log("-in the dispatch----")
 
     const headers = {
       "Content-Type": "application/json",
@@ -46,36 +34,33 @@ export const addVoucherSettingAction = (id, data, selectedBranch) => {
     axios
       .post(url, formData, { headers: headers })
       .then(response => {
-        // console.log("response :", response)
         dispatch({
-          type: "ADD_VOUCHER_SETTING",
+          type: ADD_CUSTOMER,
           payload: response.data,
           status: "Success",
         })
-        toast.success("Voucher Setting Added Successfully")
       })
 
       .catch(error => {
         dispatch({
-          type: "ADD_VOUCHER_SETTING",
+          type: ADD_CUSTOMER,
           payload: error,
           status: "Failed",
         })
-        toast.error("Failed to add")
       })
   }
 }
 
-export const addVoucherSettingFresh = () => {
+export const addCustomerFresh = () => {
   return dispatch =>
     dispatch({
-      type: ADD_VOUCHER_SETTING_FRESH,
+      type: ADD_CUSTOMER_FRESH,
       status: false,
     })
 }
 
-export const getAllVoucherSettingAction = () => {
-  var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Get"
+export const getAllCustomerAction = () => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Customer/Get"
   const formData = {}
   return dispatch => {
     const headers = {
@@ -87,47 +72,37 @@ export const getAllVoucherSettingAction = () => {
       .get(url, { headers: headers })
       .then(response => {
         dispatch({
-          type: GET_ALL_VOUCHER_SETTING,
+          type: GET_ALL_CUSTOMER,
           payload: response.data,
           status: "Success",
         })
       })
       .catch(error => {
         dispatch({
-          type: GET_ALL_VOUCHER_SETTING,
+          type: GET_ALL_CUSTOMER,
           status: "Failed",
         })
       })
   }
 }
 
-export const getAllVoucherSettingFresh = () => {
+export const getAllCustomerFresh = () => {
   return dispatch => {
     dispatch({
-      type: "GET_ALL_VOUCHER_SETTING_FRESH",
+      type: GET_ALL_CUSTOMER_FRESH,
       payload: null,
       status: "Success",
     })
   }
 }
 
-export const voucherSettingEditAction = (id, data, selectedBranch) => {
-  var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Put"
-
-  const restaurants = selectedBranch?.length > 0 ? selectedBranch.map(item => {
-    const val = uuidv4()
-    return {
-      _id: val,
-      res_id: item.value,
-      voucher_setting_id: id,
-    }
-  }) : null
-
+export const customerEditAction = (data, sub_id) => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Customer/Put"
   const formData = {
-    _id: id,
     ...data,
-    restaurants: restaurants,
+    subscription_type_id: sub_id
   }
+  // console.log(formData);
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
@@ -138,14 +113,14 @@ export const voucherSettingEditAction = (id, data, selectedBranch) => {
       .put(url, formData, { headers: headers })
       .then(response => {
         dispatch({
-          type: VOUCHER_SETTING_EDIT,
+          type: CUSTOMER_NAME_EDIT,
           payload: response.data,
           status: "Success",
         })
       })
       .catch(error => {
         dispatch({
-          type: VOUCHER_SETTING_EDIT,
+          type: CUSTOMER_NAME_EDIT,
           payload: error,
           status: "Failed",
         })
@@ -153,20 +128,20 @@ export const voucherSettingEditAction = (id, data, selectedBranch) => {
   }
 }
 
-export const voucherSettingEditFresh = () => {
+export const customerEditFresh = () => {
   return dispatch => {
     dispatch({
-      type: VOUCHER_SETTING_EDIT_FRESH,
+      type: CUSTOMER_NAME_EDIT_FRESH,
       payload: null,
       status: false,
     })
   }
 }
 
-export const voucherSettingStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Put"
+export const customerStatusEditAction = data => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Customer/Put"
+
   const formData = data
-  // console.log(formData)
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
@@ -177,34 +152,33 @@ export const voucherSettingStatusEditAction = data => {
       .put(url, formData, { headers: headers })
       .then(response => {
         dispatch({
-          type: VOUCHER_SETTING_STATUS_EDIT,
-          payload: response.data,
+          type: EDIT_CUSTOMER_STATUS,
           status: "Success",
         })
+        // toast.success("Updated Successfully");
       })
       .catch(error => {
         dispatch({
-          type: VOUCHER_SETTING_STATUS_EDIT,
-          payload: error,
+          type: EDIT_CUSTOMER_STATUS,
           status: "Failed",
         })
+        // toast.error("Something went wrong!!");
       })
   }
 }
 
-export const voucherSettingStatusEditFresh = () => {
+export const customerStatusEditActionFresh = () => {
   return dispatch => {
     dispatch({
-      type: VOUCHER_SETTING_STATUS_EDIT_FRESH,
+      type: EDIT_CUSTOMER_STATUS_FRESH,
       payload: null,
       status: false,
     })
   }
 }
 
-export const voucherSettingDeleteAction = id => {
-  var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Delete"
-  // console.log(id)
+export const customerDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Customer/Delete"
 
   return dispatch => {
     const headers = {
@@ -216,14 +190,14 @@ export const voucherSettingDeleteAction = id => {
       .delete(url, { params: { id: id } }, { headers: headers })
       .then(response => {
         dispatch({
-          type: "VOUCHER_SETTING_DELETE",
+          type: CUSTOMER_DELETE,
           payload: response.data,
           status: "Success",
         })
       })
       .catch(error => {
         dispatch({
-          type: "VOUCHER_SETTING_DELETE",
+          type: CUSTOMER_DELETE,
           payload: error,
           status: "Failed",
         })
@@ -231,10 +205,10 @@ export const voucherSettingDeleteAction = id => {
   }
 }
 
-export const voucherSettingDeleteFresh = () => {
+export const customerDeleteFresh = () => {
   return dispatch =>
     dispatch({
-      type: VOUCHER_SETTING_DELETE_FRESH,
+      type: CUSTOMER_DELETE_FRESH,
       status: false,
     })
 }
