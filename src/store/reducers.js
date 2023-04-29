@@ -26,6 +26,7 @@ import calendar from "./calendar/reducer"
 import Popup from "./Popup/reducer"
 
 import Customer from "./Customer/reducer"
+import Review from "./Review/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -48,6 +49,7 @@ const rootReducer = combineReducers({
   BranchAttribute,
   Popup,
   Customer,
+  Review,
 })
 
 export default rootReducer
