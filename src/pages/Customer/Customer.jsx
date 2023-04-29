@@ -84,12 +84,9 @@ function Customer(props) {
             return { label: item.name, value: item._id };
         }) : "";
         setSelectedSubscription(subs_data_edit);
-
     }
 
     // console.log(selectedSubscription);
-
-
 
     const [deleteItem, setDeleteItem] = useState();
 
@@ -133,7 +130,6 @@ function Customer(props) {
             image: e.target.value,
         });
     }
-
 
     const handleAddCheckBox = (e) => {
         // console.log(e);

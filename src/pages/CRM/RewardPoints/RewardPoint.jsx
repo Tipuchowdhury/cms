@@ -69,8 +69,9 @@ function RewardPoint(props) {
 
   const [selectedSubscription, setSelectedSubscription] = useState([]);
   const handleSelectSubscription = (e) => {
-    // console.log(e)
-    setSelectedSubscription(e)
+    var new_data = [e];
+    //console.log(new_data)
+    setSelectedSubscription(new_data)
   }
 
   const toggleDel = () => setModalDel(!modalDel)
@@ -119,7 +120,7 @@ function RewardPoint(props) {
   const handleEditModalSubmit = e => {
     e.preventDefault()
     toggleEditModal()
-    props.rewardPointNameEditAction(value, rewardPointId, selectedSubscription.value, rewardStatus)
+    props.rewardPointNameEditAction(value, rewardPointId, selectedSubscription[0].value, rewardStatus)
   }
   const handleDeleteModal = row => {
     setDeleteItem(row._id)
