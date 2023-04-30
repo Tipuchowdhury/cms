@@ -124,8 +124,8 @@ function Notification(props) {
 
   const activeData = [
     {
-      dataField: "name",
-      text: "Name",
+      dataField: "title",
+      text: "Title",
       sort: true,
     },
     {

@@ -11,6 +11,7 @@ import {
   NOTIFICATION_STATUS_EDIT_FRESH,
 } from "./actionTypes"
 import axios from "axios"
+import { convertToFormData } from "helpers/functions"
 import { toast } from "react-toastify"
 import { v4 as uuidv4 } from "uuid"
 
@@ -32,16 +33,18 @@ export const addNotificationAction = (id, data, selectedUser) => {
         })
       : null
   // console.log(selectedUserData);
-  const formData = {
+  const dataObject = {
     _id: id,
     ...data,
     customers: selectedUserData,
   }
+  const formData = convertToFormData(dataObject)
+
   return dispatch => {
     console.log("-in the dispatch----")
 
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -126,11 +129,12 @@ export const notificationEditAction = (id, data, selectedUser) => {
           }
         })
       : null
-  const formData = {
+  const dataObject = {
     _id: id,
     ...data,
     customers: selectedUserData,
   }
+  const formData = convertToFormData(dataObject)
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
