@@ -14,7 +14,7 @@ import withRouter from "components/Common/withRouter"
 import Select from "react-select"
 import Breadcrumbs from "components/Common/Breadcrumb"
 import {
-  getAllAdminUsersAction,
+  getAllCustomerAction,
   addNotificationAction,
   addNotificationFresh,
   notificationEditAction,
@@ -31,7 +31,7 @@ function AddNotification(props) {
   console.log("lof", location?.state?.restaurants)
 
   //select multiple user
-  const common_users = props?.get_all_user_data?.filter(elem =>
+  const common_users = props?.get_all_customer_data?.filter(elem =>
     location?.state?.restaurants?.find(({ res_id }) => elem._id === res_id)
   )
 
@@ -52,12 +52,16 @@ function AddNotification(props) {
 
   // TODO: Get Customers
   let userData = undefined
-  if (props.get_all_user_data?.length > 0) {
-    userData = props.get_all_user_data?.map((item, key) => ({
+  if (props.get_all_customer_data?.length > 0) {
+    userData = props.get_all_customer_data?.map((item, key) => ({
       label: `${item.first_name} ${item.last_name}`,
       value: item._id,
     }))
   }
+
+  const [images, setImages] = useState({
+    image: location.state ? location.state.image : "",
+  })
 
   console.log(location.state)
   const [notificationInfo, setNotificationInfo] = useState({
@@ -67,17 +71,6 @@ function AddNotification(props) {
     is_active: location.state ? location.state.is_active : true,
   })
   console.log("tt", new Date().toISOString())
-  const handleTimeChange = e => {
-    console.log("e :", e.target.value)
-    console.log(new Date(e.target.value).toISOString())
-    name = e.target.name
-    value = e.target.value
-    let new_time_string = `${value}:00Z`
-    setNotificationInfo({
-      ...notificationInfo,
-      [name]: new Date(new_time_string).toISOString(),
-    })
-  }
 
   let name, value
   const handleInputs = e => {
@@ -85,6 +78,19 @@ function AddNotification(props) {
     name = e.target.name
     value = e.target.value
     setNotificationInfo({ ...notificationInfo, [name]: value })
+  }
+
+  const handleFiles = e => {
+    name = e.target.name
+    value = e.target.files[0]
+    setNotificationInfo({ ...notificationInfo, [name]: value })
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      setImages({ ...images, [name]: reader.result })
+    }
+
+    reader.readAsDataURL(value)
   }
 
   const handleSubmit = e => {
@@ -107,8 +113,8 @@ function AddNotification(props) {
 
   console.log(props.add_notification_loading)
   useEffect(() => {
-    if (props.get_all_user_loading == false) {
-      props.getAllAdminUsersAction()
+    if (props.get_all_customer_loading == false) {
+      props.getAllCustomerAction()
     }
 
     console.log("add_notification_loading :", props.add_notification_loading)
@@ -125,12 +131,12 @@ function AddNotification(props) {
       navigate("/notification")
     }
   }, [
-    props.get_all_user_loading,
+    props.get_all_customer_loading,
     props.add_notification_loading,
     props.notification_edit_loading,
   ])
 
-  console.log(props.get_all_user_data)
+  console.log(props.get_all_customer_data)
 
   return (
     <>
@@ -228,11 +234,25 @@ function AddNotification(props) {
                         type="file"
                         className="form-control"
                         id="resume"
-                        onChange={e => console.log(e)}
-                        required
+                        name="image"
+                        onChange={handleFiles}
                       />
                     </div>
                   </Row>
+                  {images?.image && (
+                    <Row className="mb-3">
+                      <label className="col-md-2">
+                        <span></span>
+                      </label>
+                      <div className="col-md-10">
+                        <img
+                          src={images.image}
+                          alt="preview"
+                          style={{ width: "50%" }}
+                        />
+                      </div>
+                    </Row>
+                  )}
                   <Row className="mb-3">
                     <label
                       htmlFor="example-text-input"
@@ -274,14 +294,17 @@ function AddNotification(props) {
 }
 
 const mapStateToProps = state => {
-  const { get_all_user_data, get_all_user_error, get_all_user_loading } =
-    state.registerNew
+  const {
+    get_all_customer_data,
+    get_all_customer_error,
+    get_all_customer_loading,
+  } = state.Customer
 
   const { add_notification_loading, notification_edit_loading } =
     state.Notification
   return {
-    get_all_user_loading,
-    get_all_user_data,
+    get_all_customer_loading,
+    get_all_customer_data,
     add_notification_loading,
     notification_edit_loading,
   }
@@ -289,7 +312,7 @@ const mapStateToProps = state => {
 
 export default withRouter(
   connect(mapStateToProps, {
-    getAllAdminUsersAction,
+    getAllCustomerAction,
     addNotificationAction,
     addNotificationFresh,
     notificationEditAction,
