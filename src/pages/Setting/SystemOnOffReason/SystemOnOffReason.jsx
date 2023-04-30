@@ -6,7 +6,7 @@ import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import {
-    addReviewAction, addReviewFresh, getAllReviewAction, getAllReviewFresh, reviewUpdateAction, reviewUpdateFresh, reviewStatusUpdateAction, reviewStatusUpdateFresh, reviewDeleteAction, reviewDeleteFresh
+    addReasonAction, addReasonFresh, getAllReasonAction, getAllReasonFresh, reasonUpdateAction, reasonUpdateFresh, reasonStatusUpdateAction, reasonStatusUpdateFresh, reasonDeleteAction, reasonDeleteFresh
 } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
@@ -14,9 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import Select from "react-select";
 
 
-function Review(props) {
+function SystemOnOffReason(props) {
 
-    document.title = "Review & Ratings | Foodi"
+    document.title = "System On Off Reason | Foodi"
 
     const [modal, setModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
@@ -28,18 +28,18 @@ function Review(props) {
     const toggleDel = () => setModalDel(!modalDel);
     const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
 
-    // const [addInfo, setAddInfo] = useState({
-    //     title: "",
-    //     description: "",
-    //     cancellable: true,
-    //     image: "",
-    //     is_active: true,
-    // });
+    const [addInfo, setAddInfo] = useState({
+        name: "",
+        description: "",
+        image: "",
+        is_active: true,
+    });
 
     const [editInfo, setEditInfo] = useState({
         _id: "",
-        rating: 0,
-        review: "",
+        name: "",
+        description: "",
+        image: "",
         is_active: true,
     });
 
@@ -47,32 +47,30 @@ function Review(props) {
 
 
     let name, value, checked;
-    // const handleAddInputs = (e) => {
-    //     // console.log(e);
-    //     name = e.target.name;
-    //     value = e.target.value;
-    //     setAddInfo({ ...addInfo, [name]: value });
-    // }
+    const handleAddInputs = (e) => {
+        // console.log(e);
+        name = e.target.name;
+        value = e.target.value;
+        setAddInfo({ ...addInfo, [name]: value });
+    }
 
-    // const handleAddFile = (e) => {
-    //     setAddInfo({
-    //         ...addInfo,
-    //         image: e.target.value,
-    //     });
-    // }
+    const handleAddFile = (e) => {
+        setAddInfo({
+            ...addInfo,
+            image: e.target.value,
+        });
+    }
 
-
-    // const handleAddCheckBox = (e) => {
-    //     // console.log(e);
-    //     name = e.target.name;
-    //     checked = e.target.checked;
-    //     setAddInfo({ ...addInfo, [name]: checked });
-    // }
-
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     props.addReviewAction(addInfo);
-    // }
+    const handleAddCheckBox = (e) => {
+        // console.log(e);
+        name = e.target.name;
+        checked = e.target.checked;
+        setAddInfo({ ...addInfo, [name]: checked });
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        props.addReasonAction(addInfo);
+    }
 
     const handleEditInputs = (e) => {
         // console.log(e);
@@ -100,21 +98,17 @@ function Review(props) {
 
         setEditInfo(prevState => ({
             _id: row._id,
-            rating: row.rating,
-            review: row.review,
-            rest_id: row.rest_id,
-            order_id: row.order_id,
-            user_id: row.user_id,
-            name: row.user_name,
+            name: row.name,
+            description: row.description,
+            image: row.image,
             is_active: row.is_active,
         }));
-
         toggleEditModal();
     }
 
     const handleEdit = (e) => {
         e.preventDefault();
-        props.reviewUpdateAction(editInfo);
+        props.reasonUpdateAction(editInfo);
     }
 
     const handleStatusModal = (row) => {
@@ -125,7 +119,7 @@ function Review(props) {
     const handleStatusUpdate = () => {
 
         // console.log(editInfo);
-        props.reviewStatusUpdateAction({
+        props.reasonStatusUpdateAction({
             ...editInfo,
             is_active: !editInfo.is_active,
         })
@@ -138,7 +132,7 @@ function Review(props) {
     }
     const handleDelete = () => {
 
-        props.reviewDeleteAction(deleteItem);
+        props.reasonDeleteAction(deleteItem);
     }
 
 
@@ -164,23 +158,8 @@ function Review(props) {
     const activeData = [
 
         {
-            dataField: "rest_name",
-            text: "Restaurant",
-            sort: true,
-        },
-        {
-            dataField: "order_id",
-            text: "Order ID",
-            sort: true,
-        },
-        {
-            dataField: "user_name",
-            text: "User Name",
-            sort: true,
-        },
-        {
-            dataField: "rating",
-            text: "Ratings",
+            dataField: "name",
+            text: "Name",
             sort: true,
         },
         {
@@ -209,68 +188,66 @@ function Review(props) {
     useEffect(() => {
 
 
-        if (props.get_all_review_loading == false) {
-            props.getAllReviewAction();
+        if (props.get_all_reason_loading == false) {
+            props.getAllReasonAction();
         }
 
-
-        if (props.add_review_loading === "Success") {
-            toast.success("Review Added Successfully");
+        if (props.add_reason_loading === "Success") {
+            toast.success("Reason Added Successfully");
             toggle();
             setAddInfo({
                 ...addInfo,
-                title: "",
+                name: "",
                 description: "",
-                cancellable: true,
                 image: "",
                 is_active: true,
             });
-            props.addReviewFresh();
+            props.addReasonFresh();
         }
 
 
-        if (props.add_review_loading === "Failed") {
+        if (props.add_reason_loading === "Failed") {
             toast.error("Something went wrong");
-            props.addReviewFresh();
+            props.addReasonFresh();
 
         }
 
-        if (props.review_edit_loading === "Success") {
-            toast.success("Review Updated");
+        if (props.reason_edit_loading === "Success") {
+            toast.success("Reason Updated");
             toggleEditModal();
-            props.reviewUpdateFresh();
+            props.reasonUpdateFresh();
         }
 
-        if (props.review_edit_loading === "Failed") {
+        if (props.reason_edit_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
-            props.reviewUpdateFresh();
+            props.reasonUpdateFresh();
 
         }
 
-        if (props.review_status_edit_loading === "Success") {
-            toast.success("Review Status Updated");
+        if (props.reason_status_edit_loading === "Success") {
+            toast.success("Reason Status Updated");
             toggleStatus();
-            props.reviewStatusUpdateFresh();
+            props.reasonStatusUpdateFresh();
 
         }
 
-        if (props.review_status_edit_loading === "Failed") {
+        if (props.reason_status_edit_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
-            props.reviewStatusUpdateFresh();
+            props.reasonStatusUpdateFresh();
 
         }
 
-        if (props.review_delete_loading === "Success") {
+        if (props.reason_delete_loading === "Success") {
             // console.log("I am in the delete")
-            toast.success("Review Banner Deleted");
+            toast.success("Reason Deleted");
             toggleDel();
-            props.reviewDeleteFresh();
+            props.reasonDeleteFresh();
         }
 
-    }, [props.add_review_loading, props.review_edit_loading,
-    props.review_delete_loading, props.review_status_edit_loading]);
+    }, [props.add_reason_loading, props.reason_edit_loading,
+    props.reason_delete_loading, props.reason_status_edit_loading]);
 
 
     return (
@@ -279,20 +256,20 @@ function Review(props) {
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle="Foodi" title="Review" breadcrumbItem="Review & Ratings" />
+                    <Breadcrumbs maintitle="Foodi" title="Settings" breadcrumbItem="System On Off Reason" />
                     <Row>
                         <Col className="col-12">
                             <Card style={{ border: "none" }}>
                                 <CardBody>
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Review & Ratings</CardTitle>
-                                        {/* <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
-                                            Add Review & Ratings
-                                        </Button> */}
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>System On Off Reason</CardTitle>
+                                        <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
+                                            Add Reason
+                                        </Button>
                                     </div>
 
-                                    {props.get_all_review_data ? props.get_all_review_data.length > 0 ? <DatatableTablesWorking products={props.get_all_review_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_review_data?._id} /> : null : null}
+                                    {props.get_all_reason_data ? props.get_all_reason_data.length > 0 ? <DatatableTablesWorking products={props.get_all_reason_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_reason_data?._id} /> : null : null}
 
                                 </CardBody>
                             </Card>
@@ -301,14 +278,14 @@ function Review(props) {
                 </Container>
 
                 {/* ============ create modal start=============== */}
-                {/* <Modal isOpen={modal} toggle={toggle} centered>
-                    <ModalHeader toggle={toggle}>New Review Banner</ModalHeader>
+                <Modal isOpen={modal} toggle={toggle} centered>
+                    <ModalHeader toggle={toggle}>New Reason</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleSubmit}>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="title">Title</label>
-                                <input type="text" className="form-control" id="title" placeholder="Enter title" required name="title" value={addInfo.title} onChange={handleAddInputs} />
+                                <label className="form-label" htmlFor="title">Name</label>
+                                <input type="text" className="form-control" id="name" placeholder="Enter name" required name="name" value={addInfo.name} onChange={handleAddInputs} />
                             </div>
 
                             <div className="mb-3">
@@ -320,14 +297,6 @@ function Review(props) {
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="image">Image</label>
                                 <input type="file" className="form-control" id="image" required name="image" onChange={handleAddFile} />
-                            </div>
-
-                            <div className="mb-3">
-                                <div className="form-check">
-                                    <label className="form-label" htmlFor="cancellable">Cancellable </label>
-                                    <input type="checkbox" className="form-check-input" id="cancellable" checked={addInfo.cancellable} name="cancellable" onChange={handleAddCheckBox} />
-
-                                </div>
                             </div>
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
@@ -342,26 +311,30 @@ function Review(props) {
 
                         </form>
                     </ModalBody>
-                </Modal> */}
+                </Modal>
                 {/* ============ create modal end=============== */}
 
                 {/* ============ edit modal start=============== */}
                 <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-                    <ModalHeader >Edit Review Banner</ModalHeader>
+                    <ModalHeader >Edit Reason</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleEdit} >
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="rating">Title</label>
-                                <input type="text" className="form-control" id="rating" placeholder="Enter rating" required name="rating" value={editInfo.rating} onChange={handleEditInputs} />
+                                <label className="form-label" htmlFor="name">Name</label>
+                                <input type="text" className="form-control" id="name" placeholder="Enter name" required name="name" value={editInfo.name} onChange={handleEditInputs} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="review">Review</label>
-                                <textarea className="form-control" id="review"
-                                    placeholder="Enter review" name="review" onChange={handleEditInputs} value={editInfo.review} required></textarea>
+                                <label className="form-label" htmlFor="description">Description</label>
+                                <textarea className="form-control" id="description"
+                                    placeholder="Enter description" name="description" onChange={handleEditInputs} value={editInfo.description} required></textarea>
                             </div>
 
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="image">Image</label>
+                                <input type="file" className="form-control" id="image" required name="image" onChange={handleEditFile} />
+                            </div>
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
                                 <Button color="primary" type="submit">
@@ -421,55 +394,55 @@ const mapStateToProps = state => {
 
 
     const {
-        add_review_data,
-        add_review_error,
-        add_review_loading,
+        add_reason_data,
+        add_reason_error,
+        add_reason_loading,
 
-        get_all_review_data,
-        get_all_review_error,
-        get_all_review_loading,
+        get_all_reason_data,
+        get_all_reason_error,
+        get_all_reason_loading,
 
-        review_edit_data,
-        review_edit_loading,
+        reason_edit_data,
+        reason_edit_loading,
 
-        review_status_edit_data,
-        review_status_edit_loading,
+        reason_status_edit_data,
+        reason_status_edit_loading,
 
-        review_delete_loading
+        reason_delete_loading
 
-    } = state.Review;
+    } = state.Reason;
 
     return {
-        add_review_data,
-        add_review_error,
-        add_review_loading,
+        add_reason_data,
+        add_reason_error,
+        add_reason_loading,
 
-        get_all_review_data,
-        get_all_review_error,
-        get_all_review_loading,
+        get_all_reason_data,
+        get_all_reason_error,
+        get_all_reason_loading,
 
-        review_edit_data,
-        review_edit_loading,
+        reason_edit_data,
+        reason_edit_loading,
 
-        review_status_edit_data,
-        review_status_edit_loading,
+        reason_status_edit_data,
+        reason_status_edit_loading,
 
-        review_delete_loading
+        reason_delete_loading
     };
 };
 
 export default withRouter(
     connect(mapStateToProps,
         {
-            addReviewAction,
-            addReviewFresh,
-            getAllReviewAction,
-            getAllReviewFresh,
-            reviewUpdateAction,
-            reviewUpdateFresh,
-            reviewStatusUpdateAction,
-            reviewStatusUpdateFresh,
-            reviewDeleteAction,
-            reviewDeleteFresh,
-        })(Review)
+            addReasonAction,
+            addReasonFresh,
+            getAllReasonAction,
+            getAllReasonFresh,
+            reasonUpdateAction,
+            reasonUpdateFresh,
+            reasonStatusUpdateAction,
+            reasonStatusUpdateFresh,
+            reasonDeleteAction,
+            reasonDeleteFresh,
+        })(SystemOnOffReason)
 );

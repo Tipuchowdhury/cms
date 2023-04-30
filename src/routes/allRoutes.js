@@ -144,6 +144,7 @@ import Notification from "pages/Notification/Notification"
 import AddNotification from "pages/Notification/AddNotification"
 import Review from "pages/Review/Review"
 import Customer from "pages/Customer/Customer"
+import SystemOnOffReason from "pages/Setting/SystemOnOffReason/SystemOnOffReason"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -210,11 +211,16 @@ const userRoutes = [
   //Popup
   { path: "/popup-banner", component: <Popup /> },
 
+  //Review
+  { path: "/review", component: <Review /> },
+
+  // Settings
+  { path: "/reason", component: <SystemOnOffReason /> },
+
   // Notification
   { path: "/notification", component: <Notification /> },
   { path: "/add-notification", component: <AddNotification /> },
-  //Review
-  { path: "/review", component: <Review /> },
+
 
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },
