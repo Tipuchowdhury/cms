@@ -29,6 +29,7 @@ import Popup from "./Popup/reducer"
 import Notification from "./Notification/reducer"
 import Customer from "./Customer/reducer"
 import Review from "./Review/reducer"
+import Reason from "./Setting/SystemOnOffReason/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -53,6 +54,7 @@ const rootReducer = combineReducers({
   Notification,
   Customer,
   Review,
+  Reason,
 })
 
 export default rootReducer
