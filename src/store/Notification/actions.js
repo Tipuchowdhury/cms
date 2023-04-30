@@ -24,14 +24,15 @@ export const addNotificationAction = (id, data, selectedUser) => {
   const selectedUserData =
     selectedUser?.length > 0
       ? selectedUser.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            customer_id: item.value,
-            notification_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          customer_id: item.value,
+          notification_id: id,
+        }
+      })
       : null
+
   // console.log(selectedUserData);
   const dataObject = {
     _id: id,
@@ -121,13 +122,13 @@ export const notificationEditAction = (id, data, selectedUser) => {
   const selectedUserData =
     selectedUser?.length > 0
       ? selectedUser.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            customer_id: item.value,
-            notification_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          customer_id: item.value,
+          notification_id: id,
+        }
+      })
       : null
   const dataObject = {
     _id: id,
@@ -137,7 +138,7 @@ export const notificationEditAction = (id, data, selectedUser) => {
   const formData = convertToFormData(dataObject)
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
 
       "Access-Control-Allow-Origin": "*",
     }

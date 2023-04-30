@@ -30,6 +30,7 @@ import Notification from "./Notification/reducer"
 import Customer from "./Customer/reducer"
 import Review from "./Review/reducer"
 import Reason from "./Setting/SystemOnOffReason/reducer"
+import OperationTimeSlot from "./Setting/PlatformOperationTimeSlot/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -55,6 +56,7 @@ const rootReducer = combineReducers({
   Customer,
   Review,
   Reason,
+  OperationTimeSlot,
 })
 
 export default rootReducer
