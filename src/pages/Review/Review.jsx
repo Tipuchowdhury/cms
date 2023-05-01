@@ -6,7 +6,7 @@ import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import {
-    addPopUpAction, addPopUpFresh, getAllPopUpAction, getAllPopUpFresh, popUpUpdateAction, popUpUpdateFresh, popUpStatusUpdateAction, popUpStatusUpdateFresh, popUpDeleteAction, popUpDeleteFresh
+    addReviewAction, addReviewFresh, getAllReviewAction, getAllReviewFresh, reviewUpdateAction, reviewUpdateFresh, reviewStatusUpdateAction, reviewStatusUpdateFresh, reviewDeleteAction, reviewDeleteFresh
 } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
@@ -14,9 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import Select from "react-select";
 
 
-function Popup(props) {
+function Review(props) {
 
-    document.title = "PopUp Banner | Foodi"
+    document.title = "Review & Ratings | Foodi"
 
     const [modal, setModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
@@ -28,20 +28,18 @@ function Popup(props) {
     const toggleDel = () => setModalDel(!modalDel);
     const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
 
-    const [addInfo, setAddInfo] = useState({
-        title: "",
-        description: "",
-        cancellable: true,
-        image: "",
-        is_active: true,
-    });
+    // const [addInfo, setAddInfo] = useState({
+    //     title: "",
+    //     description: "",
+    //     cancellable: true,
+    //     image: "",
+    //     is_active: true,
+    // });
 
     const [editInfo, setEditInfo] = useState({
         _id: "",
-        title: "",
-        description: "",
-        cancellable: true,
-        image: "",
+        rating: 0,
+        review: "",
         is_active: true,
     });
 
@@ -49,31 +47,32 @@ function Popup(props) {
 
 
     let name, value, checked;
-    const handleAddInputs = (e) => {
-        // console.log(e);
-        name = e.target.name;
-        value = e.target.value;
-        setAddInfo({ ...addInfo, [name]: value });
-    }
+    // const handleAddInputs = (e) => {
+    //     // console.log(e);
+    //     name = e.target.name;
+    //     value = e.target.value;
+    //     setAddInfo({ ...addInfo, [name]: value });
+    // }
 
-    const handleAddFile = (e) => {
-        setAddInfo({
-            ...addInfo,
-            image: e.target.value,
-        });
-    }
+    // const handleAddFile = (e) => {
+    //     setAddInfo({
+    //         ...addInfo,
+    //         image: e.target.value,
+    //     });
+    // }
 
 
-    const handleAddCheckBox = (e) => {
-        // console.log(e);
-        name = e.target.name;
-        checked = e.target.checked;
-        setAddInfo({ ...addInfo, [name]: checked });
-    }
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        props.addPopUpAction(addInfo);
-    }
+    // const handleAddCheckBox = (e) => {
+    //     // console.log(e);
+    //     name = e.target.name;
+    //     checked = e.target.checked;
+    //     setAddInfo({ ...addInfo, [name]: checked });
+    // }
+
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     props.addReviewAction(addInfo);
+    // }
 
     const handleEditInputs = (e) => {
         // console.log(e);
@@ -101,10 +100,12 @@ function Popup(props) {
 
         setEditInfo(prevState => ({
             _id: row._id,
-            title: row.title,
-            description: row.description,
-            cancellable: row.cancellable,
-            image: row.image,
+            rating: row.rating,
+            review: row.review,
+            rest_id: row.rest_id,
+            order_id: row.order_id,
+            user_id: row.user_id,
+            name: row.user_name,
             is_active: row.is_active,
         }));
 
@@ -113,7 +114,7 @@ function Popup(props) {
 
     const handleEdit = (e) => {
         e.preventDefault();
-        props.popUpUpdateAction(editInfo);
+        props.reviewUpdateAction(editInfo);
     }
 
     const handleStatusModal = (row) => {
@@ -124,7 +125,7 @@ function Popup(props) {
     const handleStatusUpdate = () => {
 
         // console.log(editInfo);
-        props.popUpStatusUpdateAction({
+        props.reviewStatusUpdateAction({
             ...editInfo,
             is_active: !editInfo.is_active,
         })
@@ -137,7 +138,7 @@ function Popup(props) {
     }
     const handleDelete = () => {
 
-        props.popUpDeleteAction(deleteItem);
+        props.reviewDeleteAction(deleteItem);
     }
 
 
@@ -163,8 +164,23 @@ function Popup(props) {
     const activeData = [
 
         {
-            dataField: "title",
-            text: "Title",
+            dataField: "rest_name",
+            text: "Restaurant",
+            sort: true,
+        },
+        {
+            dataField: "order_id",
+            text: "Order ID",
+            sort: true,
+        },
+        {
+            dataField: "user_name",
+            text: "User Name",
+            sort: true,
+        },
+        {
+            dataField: "rating",
+            text: "Ratings",
             sort: true,
         },
         {
@@ -193,13 +209,13 @@ function Popup(props) {
     useEffect(() => {
 
 
-        if (props.get_all_popup_loading == false) {
-            props.getAllPopUpAction();
+        if (props.get_all_review_loading == false) {
+            props.getAllReviewAction();
         }
 
 
-        if (props.add_popup_loading === "Success") {
-            toast.success("PopUp Banner Added Successfully");
+        if (props.add_review_loading === "Success") {
+            toast.success("Review Added Successfully");
             toggle();
             setAddInfo({
                 ...addInfo,
@@ -209,52 +225,52 @@ function Popup(props) {
                 image: "",
                 is_active: true,
             });
-            props.addPopUpFresh();
+            props.addReviewFresh();
         }
 
 
-        if (props.add_popup_loading === "Failed") {
+        if (props.add_review_loading === "Failed") {
             toast.error("Something went wrong");
-            props.addPopUpFresh();
+            props.addReviewFresh();
 
         }
 
-        if (props.popup_edit_loading === "Success") {
-            toast.success("PopUp Banner Updated");
+        if (props.review_edit_loading === "Success") {
+            toast.success("Review Updated");
             toggleEditModal();
-            props.popUpUpdateFresh();
+            props.reviewUpdateFresh();
         }
 
-        if (props.popup_edit_loading === "Failed") {
+        if (props.review_edit_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
-            props.popUpUpdateFresh();
+            props.reviewUpdateFresh();
 
         }
 
-        if (props.popup_status_edit_loading === "Success") {
-            toast.success("PopUp Banner Status Updated");
+        if (props.review_status_edit_loading === "Success") {
+            toast.success("Review Status Updated");
             toggleStatus();
-            props.popUpStatusUpdateFresh();
+            props.reviewStatusUpdateFresh();
 
         }
 
-        if (props.popup_status_edit_loading === "Failed") {
+        if (props.review_status_edit_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
-            props.popUpStatusUpdateFresh();
+            props.reviewStatusUpdateFresh();
 
         }
 
-        if (props.popup_delete_loading === "Success") {
+        if (props.review_delete_loading === "Success") {
             // console.log("I am in the delete")
-            toast.success("PopUp Banner Deleted");
+            toast.success("Review Banner Deleted");
             toggleDel();
-            props.popUpDeleteFresh();
+            props.reviewDeleteFresh();
         }
 
-    }, [props.add_popup_loading, props.popup_edit_loading,
-    props.popup_delete_loading, props.popup_status_edit_loading]);
+    }, [props.add_review_loading, props.review_edit_loading,
+    props.review_delete_loading, props.review_status_edit_loading]);
 
 
     return (
@@ -263,20 +279,20 @@ function Popup(props) {
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle="Foodi" title="PopUp Banner" breadcrumbItem="PopUp Banner" />
+                    <Breadcrumbs maintitle="Foodi" title="Review" breadcrumbItem="Review & Ratings" />
                     <Row>
                         <Col className="col-12">
                             <Card style={{ border: "none" }}>
                                 <CardBody>
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>PopUp Banner</CardTitle>
-                                        <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
-                                            Add PopUp Banner
-                                        </Button>
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Review & Ratings</CardTitle>
+                                        {/* <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
+                                            Add Review & Ratings
+                                        </Button> */}
                                     </div>
 
-                                    {props.get_all_popup_data ? props.get_all_popup_data.length > 0 ? <DatatableTablesWorking products={props.get_all_popup_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_popup_data?._id} /> : null : null}
+                                    {props.get_all_review_data ? props.get_all_review_data.length > 0 ? <DatatableTablesWorking products={props.get_all_review_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_review_data?._id} /> : null : null}
 
                                 </CardBody>
                             </Card>
@@ -285,8 +301,8 @@ function Popup(props) {
                 </Container>
 
                 {/* ============ create modal start=============== */}
-                <Modal isOpen={modal} toggle={toggle} centered>
-                    <ModalHeader toggle={toggle}>New PopUp Banner</ModalHeader>
+                {/* <Modal isOpen={modal} toggle={toggle} centered>
+                    <ModalHeader toggle={toggle}>New Review Banner</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleSubmit}>
 
@@ -326,38 +342,26 @@ function Popup(props) {
 
                         </form>
                     </ModalBody>
-                </Modal>
+                </Modal> */}
                 {/* ============ create modal end=============== */}
 
                 {/* ============ edit modal start=============== */}
                 <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-                    <ModalHeader >Edit PopUp Banner</ModalHeader>
+                    <ModalHeader >Edit Review Banner</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleEdit} >
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="title">Title</label>
-                                <input type="text" className="form-control" id="title" placeholder="Enter title" required name="title" value={editInfo.title} onChange={handleEditInputs} />
+                                <label className="form-label" htmlFor="rating">Title</label>
+                                <input type="text" className="form-control" id="rating" placeholder="Enter rating" required name="rating" value={editInfo.rating} onChange={handleEditInputs} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="description">Description</label>
-                                <textarea className="form-control" id="description"
-                                    placeholder="Enter description" name="description" onChange={handleEditInputs} value={editInfo.description} required></textarea>
+                                <label className="form-label" htmlFor="review">Review</label>
+                                <textarea className="form-control" id="review"
+                                    placeholder="Enter review" name="review" onChange={handleEditInputs} value={editInfo.review} required></textarea>
                             </div>
 
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="image">Image</label>
-                                <input type="file" className="form-control" id="image" required name="image" onChange={handleEditFile} />
-                            </div>
-
-                            <div className="mb-3">
-                                <div className="form-check">
-                                    <label className="form-label" htmlFor="cancellable">Cancellable</label>
-                                    <input type="checkbox" className="form-check-input" id="cancellable" checked={editInfo.cancellable} name="cancellable" onChange={handleEditCheckBox} />
-
-                                </div>
-                            </div>
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
                                 <Button color="primary" type="submit">
@@ -417,55 +421,55 @@ const mapStateToProps = state => {
 
 
     const {
-        add_popup_data,
-        add_popup_error,
-        add_popup_loading,
+        add_review_data,
+        add_review_error,
+        add_review_loading,
 
-        get_all_popup_data,
-        get_all_popup_error,
-        get_all_popup_loading,
+        get_all_review_data,
+        get_all_review_error,
+        get_all_review_loading,
 
-        popup_edit_data,
-        popup_edit_loading,
+        review_edit_data,
+        review_edit_loading,
 
-        popup_status_edit_data,
-        popup_status_edit_loading,
+        review_status_edit_data,
+        review_status_edit_loading,
 
-        popup_delete_loading
+        review_delete_loading
 
-    } = state.Popup;
+    } = state.Review;
 
     return {
-        add_popup_data,
-        add_popup_error,
-        add_popup_loading,
+        add_review_data,
+        add_review_error,
+        add_review_loading,
 
-        get_all_popup_data,
-        get_all_popup_error,
-        get_all_popup_loading,
+        get_all_review_data,
+        get_all_review_error,
+        get_all_review_loading,
 
-        popup_edit_data,
-        popup_edit_loading,
+        review_edit_data,
+        review_edit_loading,
 
-        popup_status_edit_data,
-        popup_status_edit_loading,
+        review_status_edit_data,
+        review_status_edit_loading,
 
-        popup_delete_loading
+        review_delete_loading
     };
 };
 
 export default withRouter(
     connect(mapStateToProps,
         {
-            addPopUpAction,
-            addPopUpFresh,
-            getAllPopUpAction,
-            getAllPopUpFresh,
-            popUpUpdateAction,
-            popUpUpdateFresh,
-            popUpStatusUpdateAction,
-            popUpStatusUpdateFresh,
-            popUpDeleteAction,
-            popUpDeleteFresh,
-        })(Popup)
+            addReviewAction,
+            addReviewFresh,
+            getAllReviewAction,
+            getAllReviewFresh,
+            reviewUpdateAction,
+            reviewUpdateFresh,
+            reviewStatusUpdateAction,
+            reviewStatusUpdateFresh,
+            reviewDeleteAction,
+            reviewDeleteFresh,
+        })(Review)
 );

@@ -18,31 +18,28 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { Link, useNavigate } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
-  ; ` `
+;` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
-  addVoucherSettingAction,
-  addVoucherSettingFresh,
-  getAllVoucherSettingAction,
-  getAllVoucherSettingFresh,
-  voucherSettingDeleteAction,
-  voucherSettingDeleteFresh,
-  voucherSettingEditAction,
-  voucherSettingEditFresh,
-  voucherSettingStatusEditAction,
-  voucherSettingStatusEditFresh,
-} from "store/actions"
+  addNotificationAction,
+  addNotificationFresh,
+  getAllNotificationAction,
+  getAllNotificationFresh,
+  notificationDeleteAction,
+  notificationDeleteFresh,
+  notificationEditAction,
+  notificationEditFresh,
+  notificationStatusEditAction,
+  notificationStatusEditFresh,
+} from "store/Notification/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 
-function VoucherSetting(props) {
-
-  document.title = "Voucher Setting | Foodi"
-
+function Notification(props) {
   const [name, setName] = useState("")
   const [modal, setModal] = useState(false)
-  const [voucherSettingId, setVoucherSettingId] = useState()
-  const [voucherSettingName, setVoucherSettingName] = useState()
+  const [notificationId, setNotificationId] = useState()
+  const [notificationname, setNotificationName] = useState()
   const [editInfo, setEditInfo] = useState(false)
   const [reload, setReload] = useState(false)
   const navigate = useNavigate()
@@ -56,7 +53,7 @@ function VoucherSetting(props) {
   const handleDelete = () => {
     toggleDel()
     // console.log(deleteItem)
-    props.voucherSettingDeleteAction(deleteItem)
+    props.notificationDeleteAction(deleteItem)
   }
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
 
@@ -67,11 +64,11 @@ function VoucherSetting(props) {
     const val = uuidv4()
     // console.log(name)
     // console.log(val)
-    props.addVoucherSettingAction(name, val)
+    props.addNotificationAction(name, val)
   }
 
   const handleEdit = row => {
-    navigate("/add-voucher-settings", { state: row })
+    navigate("/add-notification", { state: row })
   }
   const handleDeleteModal = row => {
     setDeleteItem(row._id)
@@ -86,7 +83,7 @@ function VoucherSetting(props) {
 
   const handleStatusUpdate = () => {
     // console.log(editInfo)
-    props.voucherSettingStatusEditAction({
+    props.notificationStatusEditAction({
       ...editInfo,
       is_active: !editInfo.is_active,
     })
@@ -120,15 +117,15 @@ function VoucherSetting(props) {
     </Button>
   )
 
-  // console.log(props.add_voucher_setting_loading)
-  // console.log(props.get_all_voucher_setting_data)
-  // console.log(props.voucher_setting_name_edit_loading)
-  // console.log(props.get_all_voucher_setting_loading)
+  // console.log(props.add_notification_loading)
+  // console.log(props.get_all_notification_data)
+  // console.log(props.notification_name_edit_loading)
+  // console.log(props.get_all_notification_loading)
 
   const activeData = [
     {
-      dataField: "name",
-      text: "Name",
+      dataField: "title",
+      text: "Title",
       sort: true,
     },
     {
@@ -152,38 +149,38 @@ function VoucherSetting(props) {
   ]
 
   useEffect(() => {
-    // console.log("=======hello", props.voucher_setting_name_edit_loading)
-    if (props.get_all_voucher_setting_loading == false) {
-      //  console.log("I am in get all voucher_setting loading ")
-      props.getAllVoucherSettingAction()
+    // console.log("=======hello", props.notification_name_edit_loading)
+    if (props.get_all_notification_loading == false) {
+      //  console.log("I am in get all notification loading ")
+      props.getAllNotificationAction()
     }
 
-    if (props.add_voucher_setting_loading === "Success") {
-      toast.success("VoucherSetting Added Successfully")
-      props.addVoucherSettingFresh()
+    if (props.add_notification_loading === "Success") {
+      toast.success("Notification Added Successfully")
+      props.addNotificationFresh()
     }
 
-    if (props.add_voucher_setting_loading === "Failed") {
+    if (props.add_notification_loading === "Failed") {
       toast.error("Something went wrong")
-      props.addVoucherSettingFresh()
+      props.addNotificationFresh()
     }
 
-    if (props.voucher_setting_status_edit_loading === "Success") {
+    if (props.notification_status_edit_loading === "Success") {
       toast.success("Status Updated")
       toggleStatus()
-      props.voucherSettingStatusEditFresh()
+      props.notificationStatusEditFresh()
     }
 
-    if (props.voucher_setting_delete_loading === "Success") {
+    if (props.notification_delete_loading === "Success") {
       //  console.log("I am in the delete")
-      toast.success("Voucher Setting Deleted")
-      props.voucherSettingDeleteFresh()
+      toast.success("Notification Deleted")
+      props.notificationDeleteFresh()
     }
   }, [
-    props.add_voucher_setting_loading,
-    props.voucher_setting_name_edit_loading,
-    props.voucher_setting_delete_loading,
-    props.voucher_setting_status_edit_loading,
+    props.add_notification_loading,
+    props.notification_name_edit_loading,
+    props.notification_delete_loading,
+    props.notification_status_edit_loading,
   ])
 
   return (
@@ -193,13 +190,13 @@ function VoucherSetting(props) {
           {/* Render Breadcrumbs */}
           <Breadcrumbs
             maintitle="Foodi"
-            title="CRM"
-            breadcrumbItem="Voucher Setting"
+            title="Notification"
+            breadcrumbItem="Notification"
           />
           {/* <Row className="d-flex flex-row-reverse" style={{ marginBottom: "20px", alignItems: "end" }}>
                         <Col className="col-12">
                             <Button color="danger" onClick={toggle}>
-                                Add VoucherSetting
+                                Add Notification
                             </Button>
                         </Col>
                     </Row> */}
@@ -218,21 +215,21 @@ function VoucherSetting(props) {
                     }}
                   >
                     <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
-                      Voucher Setting{" "}
+                      Notification{" "}
                     </CardTitle>
-                    <Link to="/add-voucher-settings">
+                    <Link to="/add-notification">
                       <Button
                         style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
                       >
-                        Add Voucher Setting
+                        Add Notification
                       </Button>
                     </Link>
                   </div>
 
-                  {props.get_all_voucher_setting_data ? (
-                    props.get_all_voucher_setting_data.length > 0 ? (
+                  {props.get_all_notification_data ? (
+                    props.get_all_notification_data.length > 0 ? (
                       <DatatableTablesWorking
-                        products={props.get_all_voucher_setting_data}
+                        products={props.get_all_notification_data}
                         columnData={activeData}
                         defaultSorted={defaultSorted}
                       />
@@ -243,6 +240,37 @@ function VoucherSetting(props) {
             </Col>
           </Row>
         </Container>
+        <Modal isOpen={modal} toggle={toggle} centered>
+          <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+          <ModalBody>
+            <form className="mt-1" onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label className="form-label" htmlFor="username">
+                  Notification Name
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="username"
+                  placeholder="Enter notification name"
+                  required
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                />
+              </div>
+              <div
+                style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
+              >
+                <Button color="secondary" onClick={toggle}>
+                  Cancel
+                </Button>{" "}
+                <Button color="primary" type="submit">
+                  Submit
+                </Button>
+              </div>
+            </form>
+          </ModalBody>
+        </Modal>
 
         {/* ============ delete modal starts=============== */}
         <Modal isOpen={modalDel} toggle={toggleDel} centered>
@@ -308,44 +336,44 @@ function VoucherSetting(props) {
 
 const mapStateToProps = state => {
   const {
-    add_voucher_setting_data,
-    add_voucher_setting_error,
-    add_voucher_setting_loading,
+    add_notification_data,
+    add_notification_error,
+    add_notification_loading,
 
-    get_all_voucher_setting_data,
-    get_all_voucher_setting_error,
-    get_all_voucher_setting_loading,
-    voucher_setting_delete_loading,
-    voucher_setting_edit_loading,
-    voucher_setting_status_edit_data,
-    voucher_setting_status_edit_loading,
-  } = state.VoucherSetting
+    get_all_notification_data,
+    get_all_notification_error,
+    get_all_notification_loading,
+    notification_delete_loading,
+    notification_edit_loading,
+    notification_status_edit_data,
+    notification_status_edit_loading,
+  } = state.Notification
 
   return {
-    add_voucher_setting_data,
-    add_voucher_setting_error,
-    add_voucher_setting_loading,
+    add_notification_data,
+    add_notification_error,
+    add_notification_loading,
 
-    get_all_voucher_setting_data,
-    get_all_voucher_setting_error,
-    get_all_voucher_setting_loading,
-    voucher_setting_edit_loading,
-    voucher_setting_delete_loading,
-    voucher_setting_status_edit_data,
-    voucher_setting_status_edit_loading,
+    get_all_notification_data,
+    get_all_notification_error,
+    get_all_notification_loading,
+    notification_edit_loading,
+    notification_delete_loading,
+    notification_status_edit_data,
+    notification_status_edit_loading,
   }
 }
 
 export default withRouter(
   connect(mapStateToProps, {
-    addVoucherSettingAction,
-    addVoucherSettingFresh,
-    getAllVoucherSettingAction,
-    getAllVoucherSettingFresh,
-    voucherSettingDeleteAction,
-    voucherSettingDeleteFresh,
-    voucherSettingStatusEditAction,
-    voucherSettingEditFresh,
-    voucherSettingStatusEditFresh,
-  })(VoucherSetting)
+    addNotificationAction,
+    addNotificationFresh,
+    getAllNotificationAction,
+    getAllNotificationFresh,
+    notificationDeleteAction,
+    notificationDeleteFresh,
+    notificationStatusEditAction,
+    notificationEditFresh,
+    notificationStatusEditFresh,
+  })(Notification)
 )

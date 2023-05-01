@@ -25,6 +25,12 @@ import calendar from "./calendar/reducer"
 
 import Popup from "./Popup/reducer"
 
+// Notification
+import Notification from "./Notification/reducer"
+import Customer from "./Customer/reducer"
+import Review from "./Review/reducer"
+import Reason from "./Setting/SystemOnOffReason/reducer"
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -45,6 +51,10 @@ const rootReducer = combineReducers({
   Sliders,
   BranchAttribute,
   Popup,
+  Notification,
+  Customer,
+  Review,
+  Reason,
 })
 
 export default rootReducer

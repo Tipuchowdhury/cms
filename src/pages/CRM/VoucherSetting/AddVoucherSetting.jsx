@@ -14,6 +14,7 @@ import withRouter from "components/Common/withRouter"
 import Select from "react-select"
 import Breadcrumbs from "components/Common/Breadcrumb"
 import {
+  getAllBranchAction,
   addVoucherSettingAction,
   addVoucherSettingFresh,
   voucherSettingEditAction,
@@ -28,25 +29,56 @@ function AddVoucherSetting(props) {
   const navigate = useNavigate()
   const location = useLocation()
 
-  console.log(location.state)
+  document.title = location.state ? 'Edit Voucher Setting | Foodi' : 'Add Voucher Setting | Foodi'
+
+  // console.log(location.state)
   const [voucherSettingInfo, setVoucherSettingInfo] = useState({
     name: location.state ? location.state.name : "",
     image: location.state ? location.state.image : "",
     voucher_amount: location.state ? location.state.voucher_amount : 0,
     voucher_cost_in_point: location.state ? location.state.voucher_cost_in_point : 0,
     validity_time: location.state ? location.state.validity_time : 0,
+    notes: location.state ? location.state.notes : "",
+    description: location.state ? location.state.description : "",
     is_delivery: location.state ? location.state.is_delivery : false,
     is_pickup: location.state ? location.state.is_pickup : false,
     is_dine: location.state ? location.state.is_dine : false,
     is_active: location.state ? location.state.is_active : true,
   })
 
+  const common_branches = props?.get_all_branch_data?.filter((elem) => location?.state?.restaurants?.find(({ res_id }) => elem._id === res_id));
+
+  const branch_data_edit = common_branches ? common_branches?.map((item, key) => {
+    return { label: item.name, value: item._id };
+  }) : "";
+  // console.log(branch_data_edit);
+  //select multiple branch
+  const [selectedBranch, setSelectedBranch] = useState(branch_data_edit ? branch_data_edit : "");
+  const handleSelectBranch = (e) => {
+    // console.log(e)
+    setSelectedBranch(e)
+  }
+
+  let branchDate = undefined;
+  if (props.get_all_branch_data?.length > 0) {
+    branchDate = props.get_all_branch_data?.map((item, key) => ({
+      label: item.name, value: item._id,
+    }));
+
+  }
+
   let name, value, checked
   const handleInputs = e => {
-    console.log(e)
     name = e.target.name
     value = e.target.value
     setVoucherSettingInfo({ ...voucherSettingInfo, [name]: value })
+  }
+
+  const handleFile = (e) => {
+    setVoucherSettingInfo({
+      ...voucherSettingInfo,
+      image: e.target.value,
+    });
   }
 
   const handleCheckBox = (e) => {
@@ -61,27 +93,26 @@ function AddVoucherSetting(props) {
     e.preventDefault()
     const uniqueId = uuidv4()
     // console.log(voucherSettingInfo);
-    props.addVoucherSettingAction(uniqueId, voucherSettingInfo)
+    props.addVoucherSettingAction(uniqueId, voucherSettingInfo, selectedBranch)
   }
 
   const handleSubmitForEdit = e => {
     e.preventDefault()
-    console.log("======================I am in the edit form==================")
 
     props.voucherSettingEditAction(
       location.state._id,
-      voucherSettingInfo
+      voucherSettingInfo,
+      selectedBranch
     )
   }
 
-  console.log(props.add_voucher_setting_loading)
   useEffect(() => {
 
 
-    console.log(
-      "add_voucher_setting_loading :",
-      props.add_voucher_setting_loading
-    )
+    if (props.get_all_branch_loading == false) {
+      props.getAllBranchAction();
+    }
+
     if (props.add_voucher_setting_loading === "Success") {
       // redirect
       props.addVoucherSettingFresh()
@@ -95,6 +126,7 @@ function AddVoucherSetting(props) {
       navigate("/voucher_settings")
     }
   }, [
+    props.get_all_branch_loading,
     props.add_voucher_setting_loading,
     props.voucher_setting_edit_loading,
   ])
@@ -157,7 +189,15 @@ function AddVoucherSetting(props) {
                   <Row className="mb-3">
                     <label htmlFor="image" className="col-md-2 col-form-label">Image</label>
                     <div className="col-md-10">
-                      <input type="file" className="form-control" id="image" onChange={e => console.log(e)} required />
+                      <input type="file" className="form-control" name="image" id="image" onChange={handleFile} required />
+                    </div>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <label htmlFor="example-text-input" className="col-md-2 col-form-label" > Branches </label>
+                    <div className="col-md-10">
+                      <Select value={selectedBranch} onChange={handleSelectBranch} options={branchDate} isMulti={true} />
+
                     </div>
                   </Row>
 
@@ -186,6 +226,26 @@ function AddVoucherSetting(props) {
                   </Row>
 
                   <Row className="mb-3">
+                    <label htmlFor="notes" className="col-md-2 col-form-label" > Notes
+                    </label>
+                    <div className="col-md-10">
+                      <input type="text" className="form-control" id="notes" placeholder="Enter notes"
+                        name="notes" onChange={handleInputs} value={voucherSettingInfo.notes ?? ""} required
+                      />
+                    </div>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <label htmlFor="description" className="col-md-2 col-form-label" > Description
+                    </label>
+                    <div className="col-md-10">
+                      <textarea className="form-control" id="description"
+                        placeholder="Enter description" name="description" onChange={handleInputs} value={voucherSettingInfo.description ?? ""} required></textarea>
+
+                    </div>
+                  </Row>
+
+                  <Row className="mb-3">
 
                     <div className="col-sm-4">
                       <div className="form-check">
@@ -199,7 +259,6 @@ function AddVoucherSetting(props) {
                       <div className="form-check">
                         <label className="form-check-label" htmlFor="is_pickup">Pickup</label>
                         <input type="checkbox" className="form-check-input" id="is_pickup" checked={voucherSettingInfo.is_pickup} name="is_pickup" onChange={handleCheckBox} />
-
                       </div>
                     </div>
 
@@ -237,9 +296,17 @@ function AddVoucherSetting(props) {
 
 
 const mapStateToProps = state => {
+  const {
+
+    get_all_branch_loading,
+    get_all_branch_data,
+
+  } = state.Restaurant;
   const { add_voucher_setting_loading, voucher_setting_edit_loading } =
     state.VoucherSetting
   return {
+    get_all_branch_loading,
+    get_all_branch_data,
     add_voucher_setting_loading,
     voucher_setting_edit_loading,
   }
@@ -247,6 +314,7 @@ const mapStateToProps = state => {
 
 export default withRouter(
   connect(mapStateToProps, {
+    getAllBranchAction,
     addVoucherSettingAction,
     addVoucherSettingFresh,
     voucherSettingEditAction,

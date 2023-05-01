@@ -140,6 +140,11 @@ import BranchAttribute from "pages/BranchAttribute/BranchAttribute"
 import VoucherSetting from "pages/CRM/VoucherSetting/VoucherSetting"
 import AddVoucherSetting from "pages/CRM/VoucherSetting/AddVoucherSetting"
 import Popup from "pages/Popup/Popup"
+import Notification from "pages/Notification/Notification"
+import AddNotification from "pages/Notification/AddNotification"
+import Review from "pages/Review/Review"
+import Customer from "pages/Customer/Customer"
+import SystemOnOffReason from "pages/Setting/SystemOnOffReason/SystemOnOffReason"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -166,6 +171,7 @@ const userRoutes = [
   { path: "/city", component: <City /> },
   { path: "/register", component: <Register1 /> },
   { path: "/manage-users", component: <ManageUsers /> },
+  { path: "/customers", component: <Customer /> },
   { path: "/subscription-types", component: <SubscriptionTypes /> },
   { path: "/restaurant", component: <Restaurant /> },
 
@@ -204,6 +210,17 @@ const userRoutes = [
 
   //Popup
   { path: "/popup-banner", component: <Popup /> },
+
+  //Review
+  { path: "/review", component: <Review /> },
+
+  // Settings
+  { path: "/reason", component: <SystemOnOffReason /> },
+
+  // Notification
+  { path: "/notification", component: <Notification /> },
+  { path: "/add-notification", component: <AddNotification /> },
+
 
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },

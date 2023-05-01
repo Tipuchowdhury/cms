@@ -181,6 +181,11 @@ const SidebarContent = props => {
                   </Link>
                 </li>
                 <li>
+                  <Link to="/customers">
+                    {props.t("Customers")}
+                  </Link>
+                </li>
+                <li>
                   <Link to="/subscription-types">
                     {props.t("Subscription Types")}
                   </Link>
@@ -234,7 +239,7 @@ const SidebarContent = props => {
             </li>
             <li>
               <Link to="/slider" className="waves-effect">
-                <i className="ti-image"></i>
+                <i className="ti-export"></i>
                 {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("Promotion")}</span>
               </Link>
@@ -274,11 +279,39 @@ const SidebarContent = props => {
             </li>
 
             <li>
+              <Link to="/notification" className="waves-effect">
+                <i className="ti-bell"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
+                <span>{props.t("Notification")}</span>
+              </Link>
+            </li>
+
+            <li>
               <Link to="/popup-banner" className="waves-effect">
                 <i className="ti-image"></i>
                 {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("PopUp Banner ")}</span>
               </Link>
+            </li>
+
+            <li>
+              <Link to="/review" className="waves-effect">
+                <i className="ti-star"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
+                <span>{props.t("Review & Ratings")}</span>
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/#" className="has-arrow waves-effect">
+                <i className="ti-settings"></i>
+                <span>{props.t("Settings")}</span>
+              </Link>
+              <ul className="sub-menu" aria-expanded="false">
+                <li>
+                  <Link to="/reason">{props.t("System On Off Reason")} </Link>
+                </li>
+              </ul>
             </li>
             {/* <li>
               <Link to="/calendar" className=" waves-effect">

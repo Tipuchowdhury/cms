@@ -6,8 +6,7 @@ import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import {
-    addSliderAction, getAllBranchAction, addSliderFresh, getAllSliderAction, getAllSliderFresh, promotionUpdateAction, promotionUpdateFresh, promotionStatusUpdateAction, promotionStatusUpdateFresh, promotionDeleteAction,
-    promotionDeleteFresh
+    addReasonAction, addReasonFresh, getAllReasonAction, getAllReasonFresh, reasonUpdateAction, reasonUpdateFresh, reasonStatusUpdateAction, reasonStatusUpdateFresh, reasonDeleteAction, reasonDeleteFresh
 } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
@@ -15,9 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import Select from "react-select";
 
 
-function Slider(props) {
+function SystemOnOffReason(props) {
 
-    document.title = "Promotion | Foodi"
+    document.title = "System On Off Reason | Foodi"
 
     const [modal, setModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
@@ -31,122 +30,100 @@ function Slider(props) {
 
     const [addInfo, setAddInfo] = useState({
         name: "",
-        start_date: "2023-04-12T09:11:58.616Z",
-        end_date: "2023-04-12T09:11:58.616Z",
-        type: "string",
-        is_deliver: true,
-        is_pickup: true,
-        is_dine: true,
+        description: "",
+        image: "",
         is_active: true,
     });
 
     const [editInfo, setEditInfo] = useState({
         _id: "",
         name: "",
-        start_date: "2023-04-12T09:11:58.616Z",
-        end_date: "2023-04-12T09:11:58.616Z",
-        type: "string",
-        is_deliver: true,
-        is_pickup: true,
-        is_dine: true,
+        description: "",
+        image: "",
         is_active: true,
     });
 
     const [deleteItem, setDeleteItem] = useState();
 
-    const [newSelectedRestaurant, setNewSelectedRestaurant] = useState([]);
-    const [restaurant, setRestaurant] = useState([]);
-
-
-    const [selectedRestaurant, setSelectedRestaurant] = useState([]);
-    const handleSelectRestaurant = (e) => {
-        // console.log(e)
-        setSelectedRestaurant(e)
-    }
-
-    const handleNewSelectRestaurant = (e) => {
-        // console.log(e)
-        setNewSelectedRestaurant(e)
-    }
-
-    let allRestaurant = undefined;
-    if (props.get_all_branch_data?.length > 0) {
-        allRestaurant = props.get_all_branch_data?.map((item, key) => ({
-            label: item.name, value: item._id,
-        }));
-    }
 
     let name, value, checked;
-    const handleInputs = (e) => {
+    const handleAddInputs = (e) => {
         // console.log(e);
         name = e.target.name;
         value = e.target.value;
         setAddInfo({ ...addInfo, [name]: value });
+    }
+
+    const handleAddFile = (e) => {
+        setAddInfo({
+            ...addInfo,
+            image: e.target.value,
+        });
+    }
+
+    const handleAddCheckBox = (e) => {
+        // console.log(e);
+        name = e.target.name;
+        checked = e.target.checked;
+        setAddInfo({ ...addInfo, [name]: checked });
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        props.addReasonAction(addInfo);
+    }
+
+    const handleEditInputs = (e) => {
+        // console.log(e);
+        name = e.target.name;
+        value = e.target.value;
         setEditInfo({ ...editInfo, [name]: value });
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        props.addSliderAction(addInfo, newSelectedRestaurant);
+    const handleEditFile = (e) => {
+        setEditInfo({
+            ...editInfo,
+            image: e.target.value,
+        });
     }
 
-
-    const newRest = (nn) => {
-        console.log(nn);
-        console.log(props?.get_all_branch_data);
-        const common_restaurants = props?.get_all_branch_data?.filter((elem) => nn?.find(({ res_id }) => elem._id === res_id));
-        console.log(common_restaurants);
-
-        const restaurant_data_edit = common_restaurants ? common_restaurants.map((item, key) => {
-            return { label: item.name, value: item._id };
-        }) : "";
-        setSelectedRestaurant(restaurant_data_edit);
+    const handleEditCheckBox = (e) => {
+        // console.log(e);
+        name = e.target.name;
+        checked = e.target.checked;
+        setEditInfo({ ...editInfo, [name]: checked });
     }
 
 
     const handleEditSlider = (row) => {
-        console.log(row);
 
         setEditInfo(prevState => ({
             _id: row._id,
             name: row.name,
-            start_date: row.start_date,
-            end_date: row.end_date,
-            type: row.type,
-            is_deliver: row.is_deliver,
-            is_pickup: row.is_pickup,
-            is_dine: row.is_dine,
+            description: row.description,
+            image: row.image,
             is_active: row.is_active,
         }));
-
-        setRestaurant(row.restaurants)
-        newRest(row.restaurants);
-
         toggleEditModal();
-
     }
 
     const handleEdit = (e) => {
         e.preventDefault();
-        props.promotionUpdateAction(editInfo, selectedRestaurant);
-
+        props.reasonUpdateAction(editInfo);
     }
 
     const handleStatusModal = (row) => {
         setEditInfo(row);
-
         toggleStatus();
     }
 
     const handleStatusUpdate = () => {
 
         // console.log(editInfo);
-        props.promotionStatusUpdateAction({
+        props.reasonStatusUpdateAction({
             ...editInfo,
             is_active: !editInfo.is_active,
         })
-        // props.promotionStatusUpdateAction(editInfo);
-        // toggleDel();
+
     }
 
     const handleDeleteModal = (row) => {
@@ -155,9 +132,7 @@ function Slider(props) {
     }
     const handleDelete = () => {
 
-        // console.log(deleteItem)
-        props.promotionDeleteAction(deleteItem);
-        // toggleDel();
+        props.reasonDeleteAction(deleteItem);
     }
 
 
@@ -179,14 +154,12 @@ function Slider(props) {
     const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
         className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
 
-    // console.log(props.get_all_slider_data);
-
 
     const activeData = [
 
         {
             dataField: "name",
-            text: "Promotion Name",
+            text: "Name",
             sort: true,
         },
         {
@@ -206,87 +179,76 @@ function Slider(props) {
     ];
     const defaultSorted = [
         {
-            dataField: "name",
+            dataField: "title",
             order: "desc"
         }
     ];
 
 
     useEffect(() => {
-        if (props.get_all_branch_loading == false) {
-            props.getAllBranchAction();
+
+
+        if (props.get_all_reason_loading == false) {
+            props.getAllReasonAction();
         }
 
-        if (props.get_all_slider_loading == false) {
-            // console.log("I am in get all slider loading ")
-            props.getAllSliderAction();
-        }
-
-
-        if (props.add_slider_loading === "Success") {
-            toast.success("Promotion Added Successfully");
+        if (props.add_reason_loading === "Success") {
+            toast.success("Reason Added Successfully");
             toggle();
             setAddInfo({
                 ...addInfo,
                 name: "",
-                start_date: "2023-04-12T09:11:58.616Z",
-                end_date: "2023-04-12T09:11:58.616Z",
-                type: "string",
-                is_deliver: true,
-                is_pickup: true,
-                is_dine: true,
+                description: "",
+                image: "",
                 is_active: true,
             });
-            setSelectedRestaurant(false);
-            props.addSliderFresh();
+            props.addReasonFresh();
         }
 
 
-        if (props.add_slider_loading === "Failed") {
-            //console.log(props.add_slider_data);
+        if (props.add_reason_loading === "Failed") {
             toast.error("Something went wrong");
-            props.addSliderFresh();
+            props.addReasonFresh();
 
         }
 
-        if (props.slider_edit_loading === "Success") {
-            toast.success("Promotion Updated");
+        if (props.reason_edit_loading === "Success") {
+            toast.success("Reason Updated");
             toggleEditModal();
-            props.promotionUpdateFresh();
+            props.reasonUpdateFresh();
         }
 
-        if (props.slider_edit_loading === "Failed") {
+        if (props.reason_edit_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
-            props.promotionUpdateFresh();
+            props.reasonUpdateFresh();
 
         }
 
-        if (props.slider_status_edit_loading === "Success") {
-            toast.success("Promotion Status Updated");
+        if (props.reason_status_edit_loading === "Success") {
+            toast.success("Reason Status Updated");
             toggleStatus();
-            props.promotionStatusUpdateFresh();
+            props.reasonStatusUpdateFresh();
 
         }
 
-        if (props.slider_status_edit_loading === "Failed") {
+        if (props.reason_status_edit_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
-            props.promotionStatusUpdateFresh();
+            props.reasonStatusUpdateFresh();
 
         }
 
-        if (props.slider_delete_loading === "Success") {
+        if (props.reason_delete_loading === "Success") {
             // console.log("I am in the delete")
-            toast.success("Promotion Deleted");
+            toast.success("Reason Deleted");
             toggleDel();
-            props.promotionDeleteFresh();
+            props.reasonDeleteFresh();
         }
 
-    }, [props.get_all_branch_loading, props.add_slider_loading, props.slider_edit_loading,
-    props.slider_delete_loading, props.slider_status_edit_loading]);
+    }, [props.add_reason_loading, props.reason_edit_loading,
+    props.reason_delete_loading, props.reason_status_edit_loading]);
 
-    // console.log(props.get_all_slider_data);
 
     return (
         <React.Fragment>
@@ -294,19 +256,20 @@ function Slider(props) {
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle="Foodi" title="Promotion" breadcrumbItem="Promotion" />
+                    <Breadcrumbs maintitle="Foodi" title="Settings" breadcrumbItem="System On Off Reason" />
                     <Row>
                         <Col className="col-12">
                             <Card style={{ border: "none" }}>
                                 <CardBody>
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Promotion</CardTitle>
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>System On Off Reason</CardTitle>
                                         <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
-                                            Add Promotion
+                                            Add Reason
                                         </Button>
                                     </div>
-                                    {props.get_all_slider_data ? props.get_all_slider_data.length > 0 ? <DatatableTablesWorking products={props.get_all_slider_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_slider_data?._id} /> : null : null}
+
+                                    {props.get_all_reason_data ? props.get_all_reason_data.length > 0 ? <DatatableTablesWorking products={props.get_all_reason_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_reason_data?._id} /> : null : null}
 
                                 </CardBody>
                             </Card>
@@ -316,43 +279,25 @@ function Slider(props) {
 
                 {/* ============ create modal start=============== */}
                 <Modal isOpen={modal} toggle={toggle} centered>
-                    <ModalHeader toggle={toggle}>New Promotion</ModalHeader>
+                    <ModalHeader toggle={toggle}>New Reason</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleSubmit}>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="name">Name</label>
-                                <input type="text" className="form-control" id="name" placeholder="Enter name" required name="name" value={addInfo.name} onChange={handleInputs} />
+                                <label className="form-label" htmlFor="title">Name</label>
+                                <input type="text" className="form-control" id="name" placeholder="Enter name" required name="name" value={addInfo.name} onChange={handleAddInputs} />
                             </div>
-
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="restaurants">Restaurants</label>
-                                <Select
-                                    value={newSelectedRestaurant}
-                                    onChange={handleNewSelectRestaurant}
-                                    options={allRestaurant}
-                                    isMulti={true}
-                                />
+                                <label className="form-label" htmlFor="description">Description</label>
+                                <textarea className="form-control" id="description"
+                                    placeholder="Enter description" name="description" onChange={handleAddInputs} value={addInfo.description} required></textarea>
                             </div>
-                            {/* <Row className="mb-3">
-                                <label
-                                    htmlFor="example-text-input"
-                                    className="col-md-2 col-form-label"
-                                >
-                                    Branches
-                                </label>
-                                <div className="col-md-10">
-                                    <Select
-                                        value={selectedBranch}
-                                        onChange={handleSelectBranch}
-                                        options={allRestaurant}
-                                        isMulti={true}
-                                    />
 
-                                </div>
-                            </Row> */}
-
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="image">Image</label>
+                                <input type="file" className="form-control" id="image" required name="image" onChange={handleAddFile} />
+                            </div>
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
                                 <Button color="secondary" onClick={toggle}>
@@ -371,23 +316,24 @@ function Slider(props) {
 
                 {/* ============ edit modal start=============== */}
                 <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-                    <ModalHeader >Edit Promotion</ModalHeader>
+                    <ModalHeader >Edit Reason</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleEdit} >
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="name"> Name</label>
-                                <input type="text" className="form-control" id="name" placeholder="Enter name" required name="name" onChange={handleInputs} value={editInfo.name} />
+                                <label className="form-label" htmlFor="name">Name</label>
+                                <input type="text" className="form-control" id="name" placeholder="Enter name" required name="name" value={editInfo.name} onChange={handleEditInputs} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="restaurants">Restaurants</label>
-                                <Select
-                                    value={selectedRestaurant}
-                                    onChange={handleSelectRestaurant}
-                                    options={allRestaurant}
-                                    isMulti={true}
-                                />
+                                <label className="form-label" htmlFor="description">Description</label>
+                                <textarea className="form-control" id="description"
+                                    placeholder="Enter description" name="description" onChange={handleEditInputs} value={editInfo.description} required></textarea>
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="image">Image</label>
+                                <input type="file" className="form-control" id="image" required name="image" onChange={handleEditFile} />
                             </div>
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
@@ -446,67 +392,57 @@ function Slider(props) {
 
 const mapStateToProps = state => {
 
-    const {
-
-        get_all_branch_loading,
-        get_all_branch_data,
-
-    } = state.Restaurant;
 
     const {
+        add_reason_data,
+        add_reason_error,
+        add_reason_loading,
 
-        add_slider_data,
-        add_slider_error,
-        add_slider_loading,
+        get_all_reason_data,
+        get_all_reason_error,
+        get_all_reason_loading,
 
-        get_all_slider_data,
-        get_all_slider_error,
-        get_all_slider_loading,
+        reason_edit_data,
+        reason_edit_loading,
 
-        slider_edit_data,
-        slider_edit_loading,
+        reason_status_edit_data,
+        reason_status_edit_loading,
 
-        slider_status_edit_data,
-        slider_status_edit_loading,
+        reason_delete_loading
 
-        slider_delete_loading
-    } = state.Sliders;
+    } = state.Reason;
 
     return {
-        get_all_branch_loading,
-        get_all_branch_data,
+        add_reason_data,
+        add_reason_error,
+        add_reason_loading,
 
-        add_slider_data,
-        add_slider_error,
-        add_slider_loading,
+        get_all_reason_data,
+        get_all_reason_error,
+        get_all_reason_loading,
 
-        get_all_slider_data,
-        get_all_slider_error,
-        get_all_slider_loading,
+        reason_edit_data,
+        reason_edit_loading,
 
-        slider_edit_data,
-        slider_edit_loading,
+        reason_status_edit_data,
+        reason_status_edit_loading,
 
-        slider_status_edit_data,
-        slider_status_edit_loading,
-
-        slider_delete_loading
+        reason_delete_loading
     };
 };
 
 export default withRouter(
     connect(mapStateToProps,
         {
-            getAllBranchAction,
-            addSliderAction,
-            addSliderFresh,
-            getAllSliderAction,
-            getAllSliderFresh,
-            promotionUpdateAction,
-            promotionUpdateFresh,
-            promotionStatusUpdateAction,
-            promotionStatusUpdateFresh,
-            promotionDeleteAction,
-            promotionDeleteFresh
-        })(Slider)
+            addReasonAction,
+            addReasonFresh,
+            getAllReasonAction,
+            getAllReasonFresh,
+            reasonUpdateAction,
+            reasonUpdateFresh,
+            reasonStatusUpdateAction,
+            reasonStatusUpdateFresh,
+            reasonDeleteAction,
+            reasonDeleteFresh,
+        })(SystemOnOffReason)
 );
