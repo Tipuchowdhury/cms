@@ -146,13 +146,10 @@ function SystemOnOffReason(props) {
     }
 
     const handleStatusUpdate = () => {
-
-        // console.log(editInfo);
         props.reasonStatusUpdateAction({
             ...editInfo,
             is_active: !editInfo.is_active,
         })
-
     }
 
     const handleDeleteModal = (row) => {
@@ -231,6 +228,7 @@ function SystemOnOffReason(props) {
                 image: "",
                 is_active: true,
             });
+            setAddImages("");
             props.addReasonFresh();
         }
 
