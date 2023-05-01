@@ -28,6 +28,13 @@ function Customer(props) {
     const toggleDel = () => setModalDel(!modalDel);
     const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
 
+    const [addImages, setAddImages] = useState({
+        image: "",
+    })
+    const [editImages, setEditImages] = useState({
+        image: "",
+    })
+
     const [addInfo, setAddInfo] = useState({
         first_name: "",
         last_name: "",
@@ -36,6 +43,7 @@ function Customer(props) {
         image: "",
         is_active: true,
     });
+
 
     const [selectedSubscription, setSelectedSubscription] = useState([]);
     const handleSelectSubscription = (e) => {
@@ -67,6 +75,7 @@ function Customer(props) {
             image: row.image,
             is_active: row.is_active,
         }));
+        setEditImages({ ...editImages, image: row.image })
 
         const new_array = [{
             sub_id: row.subscription_type_id
@@ -125,10 +134,20 @@ function Customer(props) {
     }
 
     const handleAddFile = (e) => {
-        setAddInfo({
-            ...addInfo,
-            image: e.target.value,
-        });
+        // setAddInfo({
+        //     ...addInfo,
+        //     image: e.target.value,
+        // });
+        name = e.target.name
+        value = e.target.files[0]
+        setAddInfo({ ...addInfo, [name]: value })
+        const reader = new FileReader()
+
+        reader.onload = () => {
+            setAddImages({ ...addImages, [name]: reader.result })
+        }
+
+        reader.readAsDataURL(value)
     }
 
     const handleAddCheckBox = (e) => {
@@ -151,10 +170,21 @@ function Customer(props) {
     }
 
     const handleEditFile = (e) => {
-        setEditInfo({
-            ...editInfo,
-            image: e.target.value,
-        });
+        // setEditInfo({
+        //     ...editInfo,
+        //     image: e.target.value,
+        // });
+
+        name = e.target.name
+        value = e.target.files[0]
+        setEditInfo({ ...editInfo, [name]: value })
+        const reader2 = new FileReader()
+
+        reader2.onload = () => {
+            setEditImages({ ...editImages, [name]: reader2.result })
+        }
+
+        reader2.readAsDataURL(value)
     }
 
     const handleEditCheckBox = (e) => {
@@ -283,6 +313,7 @@ function Customer(props) {
                 is_active: true,
             });
 
+            setAddImages("");
             setSelectedSubType([]);
             props.addCustomerFresh();
         }
@@ -389,6 +420,21 @@ function Customer(props) {
                                 <input type="file" className="form-control" id="image" required name="image" onChange={handleAddFile} />
                             </div>
 
+                            {addImages?.image && (
+                                <Row className="mb-3">
+                                    <label className="col-md-2">
+                                        <span></span>
+                                    </label>
+                                    <div className="col-md-10">
+                                        <img
+                                            src={addImages.image}
+                                            alt="preview"
+                                            style={{ width: "50%" }}
+                                        />
+                                    </div>
+                                </Row>
+                            )}
+
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="subscription_type_id">Subscription Types</label>
                                 <Select
@@ -445,6 +491,21 @@ function Customer(props) {
                                 <label className="form-label" htmlFor="image">Image</label>
                                 <input type="file" className="form-control" id="image" required name="image" onChange={handleEditFile} />
                             </div>
+
+                            {editImages?.image && (
+                                <Row className="mb-3">
+                                    <label className="col-md-2">
+                                        <span></span>
+                                    </label>
+                                    <div className="col-md-10">
+                                        <img
+                                            src={editImages.image}
+                                            alt="preview"
+                                            style={{ width: "50%" }}
+                                        />
+                                    </div>
+                                </Row>
+                            )}
 
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="subscription_type_id">Subscription Types</label>

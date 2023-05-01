@@ -19,6 +19,7 @@ import { v4 as uuidv4 } from "uuid"
 var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
+
 export const addNotificationAction = (id, data, selectedUser) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Notification/Post"
   const selectedUserData =

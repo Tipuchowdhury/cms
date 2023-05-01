@@ -11,6 +11,7 @@ import {
   COUPON_STATUS_EDIT_FRESH,
 } from "./actionTypes"
 import axios from "axios"
+import { convertToFormData } from "helpers/functions"
 import { toast } from "react-toastify"
 import { v4 as uuidv4 } from "uuid"
 
@@ -127,7 +128,22 @@ export const addCouponAction = (
         }
       })
       : []
-  const formData = {
+  // const formData = {
+  //   _id: id,
+  //   ...data,
+  //   coupon_type_name: selectedCouponType.value,
+  //   branches: selectedBranchData,
+  //   categories: selectedCategory,
+  //   cuisines: selectedCuisine,
+  //   customers: selectedUser,
+  //   menu_items: [],
+  //   subscription_types: selectedSubType,
+  //   zones: selectedZone,
+  //   gradual_informations: gradual,
+  //   restaurants: [],
+  // }
+
+  const dataObject = {
     _id: id,
     ...data,
     coupon_type_name: selectedCouponType.value,
@@ -141,11 +157,13 @@ export const addCouponAction = (
     gradual_informations: gradual,
     restaurants: [],
   }
+  const formData = convertToFormData(dataObject)
   return dispatch => {
     console.log("-in the dispatch----")
 
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
+      // "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -322,7 +340,22 @@ export const couponEditAction = (id, data, selectedCouponType,
         }
       })
       : []
-  const formData = {
+  // const formData = {
+  //   _id: id,
+  //   ...data,
+  //   coupon_type_name: selectedCouponType.value,
+  //   branches: selectedBranchData,
+  //   categories: selectedCategory,
+  //   cuisines: selectedCuisine,
+  //   customers: selectedUser,
+  //   menu_items: [],
+  //   subscription_types: selectedSubType,
+  //   zones: selectedZone,
+  //   gradual_informations: gradual,
+  //   restaurants: [],
+  // }
+
+  const dataObject = {
     _id: id,
     ...data,
     coupon_type_name: selectedCouponType.value,
@@ -336,10 +369,11 @@ export const couponEditAction = (id, data, selectedCouponType,
     gradual_informations: gradual,
     restaurants: [],
   }
+  const formData = convertToFormData(dataObject)
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
-
+      // "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
     axios
@@ -373,11 +407,12 @@ export const couponEditFresh = () => {
 
 export const couponStatusEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/Coupon/Put"
-  const formData = data
-  console.log(formData)
+  const dataObject = data;
+  const formData = convertToFormData(dataObject)
+  // console.log(formData)
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
 
       "Access-Control-Allow-Origin": "*",
     }

@@ -25,10 +25,11 @@ import { v4 as uuidv4 } from "uuid"
 import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 
+
 function AddNotification(props) {
   const navigate = useNavigate()
   const location = useLocation()
-  console.log("lof", location?.state?.restaurants)
+  // console.log("lof", location?.state?.restaurants)
 
   //select multiple user
   const common_users = props?.get_all_customer_data?.filter(elem =>
@@ -37,11 +38,11 @@ function AddNotification(props) {
 
   const user_data_edit = common_users
     ? common_users?.map((item, key) => {
-        return {
-          label: `${item.first_name} ${item.last_name}`,
-          value: item._id,
-        }
-      })
+      return {
+        label: `${item.first_name} ${item.last_name}`,
+        value: item._id,
+      }
+    })
     : ""
   const [selectedUser, setSelectedUser] = useState(
     user_data_edit ? user_data_edit : ""
@@ -49,6 +50,7 @@ function AddNotification(props) {
   const handleSelectUser = e => {
     setSelectedUser(e)
   }
+
 
   // TODO: Get Customers
   let userData = undefined
@@ -63,7 +65,7 @@ function AddNotification(props) {
     image: location.state ? location.state.image : "",
   })
 
-  console.log(location.state)
+  // console.log(location.state)
   const [notificationInfo, setNotificationInfo] = useState({
     title: location.state ? location.state.title : "",
     image: location.state ? location.state.image : "",
@@ -224,7 +226,7 @@ function AddNotification(props) {
                   </Row>
                   <Row className="mb-3">
                     <label
-                      htmlFor="example-text-input"
+                      htmlFor="image"
                       className="col-md-2 col-form-label"
                     >
                       Image
@@ -233,7 +235,7 @@ function AddNotification(props) {
                       <input
                         type="file"
                         className="form-control"
-                        id="resume"
+                        id="image"
                         name="image"
                         onChange={handleFiles}
                       />

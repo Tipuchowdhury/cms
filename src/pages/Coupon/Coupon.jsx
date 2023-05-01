@@ -18,7 +18,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { Link, useNavigate } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -43,6 +43,7 @@ function Coupon(props) {
   const [editInfo, setEditInfo] = useState(false)
   const [reload, setReload] = useState(false)
   const navigate = useNavigate()
+
 
   // delete modal
   const [deleteItem, setDeleteItem] = useState()

@@ -31,6 +31,9 @@ function AddVoucherSetting(props) {
 
   document.title = location.state ? 'Edit Voucher Setting | Foodi' : 'Add Voucher Setting | Foodi'
 
+  const [images, setImages] = useState({
+    image: location.state ? location.state.image : "",
+  })
   // console.log(location.state)
   const [voucherSettingInfo, setVoucherSettingInfo] = useState({
     name: location.state ? location.state.name : "",
@@ -45,6 +48,7 @@ function AddVoucherSetting(props) {
     is_dine: location.state ? location.state.is_dine : false,
     is_active: location.state ? location.state.is_active : true,
   })
+
 
   const common_branches = props?.get_all_branch_data?.filter((elem) => location?.state?.restaurants?.find(({ res_id }) => elem._id === res_id));
 
@@ -74,11 +78,17 @@ function AddVoucherSetting(props) {
     setVoucherSettingInfo({ ...voucherSettingInfo, [name]: value })
   }
 
-  const handleFile = (e) => {
-    setVoucherSettingInfo({
-      ...voucherSettingInfo,
-      image: e.target.value,
-    });
+  const handleFiles = e => {
+    name = e.target.name
+    value = e.target.files[0]
+    setVoucherSettingInfo({ ...voucherSettingInfo, [name]: value })
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      setImages({ ...images, [name]: reader.result })
+    }
+
+    reader.readAsDataURL(value)
   }
 
   const handleCheckBox = (e) => {
@@ -189,9 +199,30 @@ function AddVoucherSetting(props) {
                   <Row className="mb-3">
                     <label htmlFor="image" className="col-md-2 col-form-label">Image</label>
                     <div className="col-md-10">
-                      <input type="file" className="form-control" name="image" id="image" onChange={handleFile} required />
+                      <input
+                        type="file"
+                        className="form-control"
+                        id="image"
+                        name="image"
+                        onChange={handleFiles}
+                      />
                     </div>
                   </Row>
+
+                  {images?.image && (
+                    <Row className="mb-3">
+                      <label className="col-md-2">
+                        <span></span>
+                      </label>
+                      <div className="col-md-10">
+                        <img
+                          src={images.image}
+                          alt="preview"
+                          style={{ width: "50%" }}
+                        />
+                      </div>
+                    </Row>
+                  )}
 
                   <Row className="mb-3">
                     <label htmlFor="example-text-input" className="col-md-2 col-form-label" > Branches </label>

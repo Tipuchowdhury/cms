@@ -41,6 +41,7 @@ function SystemOnOffReason(props) {
         is_active: true,
     });
 
+
     const [editInfo, setEditInfo] = useState({
         _id: "",
         name: "",
@@ -77,6 +78,7 @@ function SystemOnOffReason(props) {
 
         reader.readAsDataURL(value)
     }
+
 
     const handleAddCheckBox = (e) => {
         // console.log(e);
@@ -120,6 +122,7 @@ function SystemOnOffReason(props) {
         checked = e.target.checked;
         setEditInfo({ ...editInfo, [name]: checked });
     }
+
 
     const handleEditSlider = (row) => {
 
