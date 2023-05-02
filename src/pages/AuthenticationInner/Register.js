@@ -31,12 +31,24 @@ const Register = (props) => {
     password: "",
     confirmPassword: ""
   })
+
   const [file, setFile] = useState()
+  const [addImages, setAddImages] = useState({
+    image: "",
+  })
 
   function handleChange(event) {
-    console.log(event.target.files[0])
-    console.log("nooooooooooooooo")
-    setFile(event.target.files[0])
+    let name = event.target.name
+    let value = event.target.files[0]
+    setFile(value)
+
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      setAddImages({ ...addImages, [name]: reader.result })
+    }
+
+    reader.readAsDataURL(value)
 
   }
 
@@ -163,16 +175,28 @@ const Register = (props) => {
             </Row>
 
             <Row className="mb-3">
-              <label
-                htmlFor="example-text-input"
-                className="col-md-2 col-form-label"
-              >
+              <label htmlFor="image" className="col-md-2 col-form-label" >
                 Image
               </label>
               <div className="col-md-10">
-                <input type="file" className="form-control" id="resume" onChange={handleChange} />
+                <input type="file" className="form-control" id="image" name="image" onChange={handleChange} />
               </div>
             </Row>
+
+            {addImages?.image && (
+              <Row className="mb-3">
+                <label className="col-md-2">
+                  <span></span>
+                </label>
+                <div className="col-md-10">
+                  <img
+                    src={addImages.image}
+                    alt="preview"
+                    style={{ width: "50%" }}
+                  />
+                </div>
+              </Row>
+            )}
 
             <Row className="mb-3">
               <label
