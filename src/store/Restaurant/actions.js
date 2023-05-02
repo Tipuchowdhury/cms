@@ -1075,14 +1075,16 @@ export const addOnCategoryStatusEditActionFresh = () => {
   }
 }
 
-export const addCuisineAction = (id, name, file) => {
+export const addCuisineAction = (id, name, file, color) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Post"
   console.log(file);
 
   let dataObject = {
     _id: id,
     name: name,
-    image: file
+    image: file,
+    "color.fg": color.fg,
+    "color.bg": color.bg,
   }
 
   const formData = convertToFormData(dataObject)
@@ -1141,7 +1143,7 @@ export const getAllCuisneAction = () => {
   }
 }
 
-export const cuisineEditAction = (id, editName, status, file) => {
+export const cuisineEditAction = (id, editName, status, file, color) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Put"
   // const formData = {
   //   _id: id,
@@ -1150,12 +1152,17 @@ export const cuisineEditAction = (id, editName, status, file) => {
   //   imane: "https://unsplash.com/photos/kcA-c3f_3FE",
   // }
 
+
   let dataObject = {
     _id: id,
     name: editName,
     is_active: status,
     image: file,
+    "color.fg": color.fg,
+    "color.bg": color.bg,
   };
+
+  console.log(dataObject)
 
   const formData = convertToFormData(dataObject)
   // console.log(formData);
@@ -1188,7 +1195,12 @@ export const cuisineStatusEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Put"
   // console.log(data);
   let dataObject = {
-    ...data
+    _id: data._id,
+    name: data.name,
+    is_active: data.is_active,
+    image: data.image,
+    "color.fg": data.color.fg,
+    "color.bg": data.color.bg,
   };
   // console.log(dataObject);
   const formData = convertToFormData(dataObject)

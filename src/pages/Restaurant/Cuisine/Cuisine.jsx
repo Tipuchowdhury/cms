@@ -20,6 +20,10 @@ function Cuisine(props) {
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
     const [editModal, setEditModal] = useState(false);
+    const [color, setColor] = useState({
+        fg: "",
+        bg: ""
+    });
     // const toggleEditModal = () => {
     //     setAddImages({ ...addImages, image: "" });
     //     setEditModal(!editModal);
@@ -76,6 +80,7 @@ function Cuisine(props) {
         setEditName(row.name);
         setStatus(row.is_active);
         setEditImages({ ...editImages, image: row.image });
+        setColor({ ...color, fg: row.color.fg, bg: row.color.bg });
         toggleEditModal();
     }
     // console.log(addImages);
@@ -165,12 +170,26 @@ function Cuisine(props) {
         reader.readAsDataURL(value)
     }
 
+    const handleAddColors = (e) => {
+        let name = e.target.name;
+        let value = e.target.value;
+        setColor({ ...color, [name]: value })
+
+    }
+
+    const handleEditColors = (e) => {
+        let name = e.target.name;
+        let value = e.target.value;
+        setColor({ ...color, [name]: value })
+
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         //console.log(name);
-        //console.log(file);
+        console.log(color);
         const id = uuidv4();
-        props.addCuisineAction(id, name, file);
+        props.addCuisineAction(id, name, file, color);
         toggle();
         setName("");
     }
@@ -178,7 +197,7 @@ function Cuisine(props) {
     const handleEditModal = (e) => {
         e.preventDefault(e);
         // console.log(editName);
-        props.cuisineEditAction(id, editName, status, file);
+        props.cuisineEditAction(id, editName, status, file, color);
         toggleEditModal();
         setEditName("")
     }
@@ -234,6 +253,14 @@ function Cuisine(props) {
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="username">Cuisine Name</label>
                                 <input type="text" className="form-control" id="username" placeholder="Enter city name" required value={name} onChange={(e) => setName(e.target.value)} />
+                            </div>
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="fg">Color FG</label>
+                                <input type="color" className="form-control" value={color.fg} name="fg" id="fg" onChange={handleAddColors} />
+                            </div>
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="bg">Color BG</label>
+                                <input type="color" className="form-control" value={color.bg} name="bg" id="bg" onChange={handleAddColors} />
                             </div>
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="image">Image</label>
@@ -293,6 +320,15 @@ function Cuisine(props) {
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="cuisine_name">Cuisine Name</label>
                                 <input type="text" className="form-control" id="cuisine_name" placeholder="Enter cuisine name" required value={editName} onChange={(e) => setEditName(e.target.value)} />
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="fg">Color FG</label>
+                                <input type="color" className="form-control" value={color.fg} name="fg" id="fg" onChange={handleEditColors} />
+                            </div>
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="bg">Color BG</label>
+                                <input type="color" className="form-control" value={color.bg} name="bg" id="bg" onChange={handleEditColors} />
                             </div>
 
                             <div className="mb-3">
