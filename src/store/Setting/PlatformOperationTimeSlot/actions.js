@@ -1,39 +1,33 @@
-import { ADD_SLIDER, ADD_SLIDER_FRESH, GET_ALL_SLIDER, GET_ALL_SLIDER_FRESH, SLIDER_EDIT, SLIDER_EDIT_FRESH, SLIDER_DELETE, SLIDER_DELETE_FRESH, SLIDER_STATUS_EDIT, SLIDER_STATUS_EDIT_FRESH } from "./actionTypes";
+import { ADD_OPERATION_TIME_SLOT, ADD_OPERATION_TIME_SLOT_FRESH, GET_ALL_OPERATION_TIME_SLOT, GET_ALL_OPERATION_TIME_SLOT_FRESH, OPERATION_TIME_SLOT_EDIT, OPERATION_TIME_SLOT_EDIT_FRESH, OPERATION_TIME_SLOT_DELETE, OPERATION_TIME_SLOT_DELETE_FRESH, OPERATION_TIME_SLOT_STATUS_EDIT, OPERATION_TIME_SLOT_STATUS_EDIT_FRESH } from "./actionTypes";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { convertToFormData } from "helpers/functions"
+import moment from "moment"
 
 // token
 var token = JSON.parse(localStorage.getItem("jwt"));
 
+export const addOperationTimeSlotAction = (addData) => {
 
-export const addSliderAction = (addData, selectedRestaurant) => {
-    var url = process.env.REACT_APP_LOCALHOST + "/Promotion/Post";
-    const slider_id = uuidv4();
-    //console.log(addData, restaurant);
+    var url = process.env.REACT_APP_LOCALHOST + "/PlatfromOperationTimeSlot/Post";
+    const time_slot_id = uuidv4();
 
-    const data = selectedRestaurant?.length > 0 ? selectedRestaurant.map(item => {
-        const val = uuidv4();
-        return {
-            _id: val,
-            res_id: item.value,
-            promotion_id: slider_id,
-        }
-    }) : null
-
-
+    // /console.log(addData);
 
     let formData = {
-        _id: slider_id,
-        name: addData.name,
-        start_date: addData.start_date,
-        end_date: addData.end_date,
-        type: addData.type,
-        is_delivery: addData.is_delivery,
-        is_pickup: addData.is_pickup,
-        is_dine: addData.is_dine,
+        _id: time_slot_id,
+        day: addData.day,
+        open_hour: moment(addData.start_time, "HH:mm").get("hours"),
+        open_minute: moment(addData.start_time, "HH:mm").get("minutes"),
+        close_hour: moment(addData.end_time, "HH:mm").get("hours"),
+        close_minute: moment(addData.end_time, "HH:mm").get("minutes"),
         is_active: addData.is_active,
-        restaurants: data
+
     };
+
+    // console.log(dataObject);
+
+    // const formData = convertToFormData(dataObject)
 
     // console.log(formData);
 
@@ -49,7 +43,7 @@ export const addSliderAction = (addData, selectedRestaurant) => {
             .post(url, formData, { headers: headers })
             .then(response => {
                 dispatch({
-                    type: ADD_SLIDER,
+                    type: ADD_OPERATION_TIME_SLOT,
                     payload: response.data,
                     status: "Success",
                 });
@@ -57,27 +51,25 @@ export const addSliderAction = (addData, selectedRestaurant) => {
 
             .catch(error => {
                 dispatch({
-                    type: ADD_SLIDER,
+                    type: ADD_OPERATION_TIME_SLOT,
                     payload: error,
                     status: "Failed",
                 });
             });
-
     };
-
 };
 
-export const addSliderFresh = () => {
+export const addOperationTimeSlotFresh = () => {
     return dispatch =>
         dispatch({
-            type: ADD_SLIDER_FRESH,
+            type: ADD_OPERATION_TIME_SLOT_FRESH,
             status: false,
         });
 };
 
-export const getAllSliderAction = () => {
+export const getAllOperationTimeSlotAction = () => {
     // console.log("hi");
-    var url = process.env.REACT_APP_LOCALHOST + "/Promotion/Get";
+    var url = process.env.REACT_APP_LOCALHOST + "/PlatfromOperationTimeSlot/Get";
     const formData = {};
     return dispatch => {
         const headers = {
@@ -89,57 +81,47 @@ export const getAllSliderAction = () => {
             .get(url, { headers: headers })
             .then(response => {
                 dispatch({
-                    type: GET_ALL_SLIDER,
+                    type: GET_ALL_OPERATION_TIME_SLOT,
                     payload: response.data,
                     status: "Success",
                 });
             })
             .catch(error => {
                 dispatch({
-                    type: GET_ALL_SLIDER,
+                    type: GET_ALL_OPERATION_TIME_SLOT,
                     status: "Failed",
                 });
             });
     };
 };
 
-
-export const getAllSliderFresh = () => {
+export const getAllOperationTimeSlotFresh = () => {
     return dispatch => {
         dispatch({
-            type: GET_ALL_SLIDER_FRESH,
+            type: GET_ALL_OPERATION_TIME_SLOT_FRESH,
             payload: null,
             status: "Success",
         });
     };
 };
 
+export const operationTimeSlotUpdateAction = (editData) => {
+    //console.log(editData);
 
-export const promotionUpdateAction = (editData, selectedRestaurant) => {
-    // console.log(editData, selectedRestaurant);
+    var url = process.env.REACT_APP_LOCALHOST + "/PlatfromOperationTimeSlot/Put";
 
-    var url = process.env.REACT_APP_LOCALHOST + "/Promotion/Put";
-
-    const data = selectedRestaurant?.length > 0 ? selectedRestaurant.map(item => {
-        const val = uuidv4();
-        return {
-            _id: val,
-            res_id: item.value,
-            promotion_id: editData._id,
-        }
-    }) : null
-    const formData = {
+    let formData = {
         _id: editData._id,
-        name: editData.name,
-        start_date: editData.start_date,
-        end_date: editData.end_date,
-        type: editData.type,
-        is_delivery: editData.is_delivery,
-        is_pickup: editData.is_pickup,
-        is_dine: editData.is_dine,
+        day: editData.day,
+        open_hour: moment(editData.start_time, "HH:mm").get("hours"),
+        open_minute: moment(editData.start_time, "HH:mm").get("minutes"),
+        close_hour: moment(editData.end_time, "HH:mm").get("hours"),
+        close_minute: moment(editData.end_time, "HH:mm").get("minutes"),
         is_active: editData.is_active,
-        restaurants: data
+
     };
+
+    // const formData = convertToFormData(dataObject)
     return dispatch => {
         const headers = {
             "Content-Type": "application/json",
@@ -151,14 +133,14 @@ export const promotionUpdateAction = (editData, selectedRestaurant) => {
             .put(url, formData, { headers: headers })
             .then(response => {
                 dispatch({
-                    type: SLIDER_EDIT,
+                    type: OPERATION_TIME_SLOT_EDIT,
                     payload: response.data,
                     status: "Success",
                 });
             })
             .catch(error => {
                 dispatch({
-                    type: SLIDER_EDIT,
+                    type: OPERATION_TIME_SLOT_EDIT,
                     payload: error,
                     status: "Failed",
                 });
@@ -166,21 +148,22 @@ export const promotionUpdateAction = (editData, selectedRestaurant) => {
     };
 };
 
-export const promotionUpdateFresh = () => {
+export const operationTimeSlotUpdateFresh = () => {
     // console.log("===== I am in the fresh ========")
     return dispatch =>
         dispatch({
-            type: SLIDER_EDIT_FRESH,
+            type: OPERATION_TIME_SLOT_EDIT_FRESH,
             status: false,
         });
 };
 
-export const promotionStatusUpdateAction = (editData) => {
+export const operationTimeSlotStatusUpdateAction = (editData) => {
 
 
-    var url = process.env.REACT_APP_LOCALHOST + "/Promotion/Put";
-    const formData = editData;
+    var url = process.env.REACT_APP_LOCALHOST + "/PlatfromOperationTimeSlot/Put";
+    const dataObject = editData;
 
+    const formData = convertToFormData(dataObject)
     return dispatch => {
         const headers = {
             "Content-Type": "application/json",
@@ -190,14 +173,14 @@ export const promotionStatusUpdateAction = (editData) => {
             .put(url, formData, { headers: headers })
             .then(response => {
                 dispatch({
-                    type: SLIDER_STATUS_EDIT,
+                    type: OPERATION_TIME_SLOT_STATUS_EDIT,
                     payload: response.data,
                     status: "Success",
                 });
             })
             .catch(error => {
                 dispatch({
-                    type: SLIDER_STATUS_EDIT,
+                    type: OPERATION_TIME_SLOT_STATUS_EDIT,
                     payload: error,
                     status: "Failed",
                 });
@@ -205,19 +188,18 @@ export const promotionStatusUpdateAction = (editData) => {
     };
 };
 
-export const promotionStatusUpdateFresh = () => {
+export const operationTimeSlotStatusUpdateFresh = () => {
     // console.log("===== I am in the fresh ========")
     return dispatch =>
         dispatch({
-            type: SLIDER_STATUS_EDIT_FRESH,
+            type: OPERATION_TIME_SLOT_STATUS_EDIT_FRESH,
             status: false,
         });
 };
 
 
-
-export const promotionDeleteAction = (id) => {
-    var url = process.env.REACT_APP_LOCALHOST + "/Promotion/Delete";
+export const operationTimeSlotDeleteAction = (id) => {
+    var url = process.env.REACT_APP_LOCALHOST + "/PlatfromOperationTimeSlot/Delete";
     // console.log(id);
 
     return dispatch => {
@@ -230,14 +212,14 @@ export const promotionDeleteAction = (id) => {
             .delete(url, { params: { id: id } }, { headers: headers })
             .then(response => {
                 dispatch({
-                    type: SLIDER_DELETE,
+                    type: OPERATION_TIME_SLOT_DELETE,
                     payload: response.data,
                     status: "Success",
                 });
             })
             .catch(error => {
                 dispatch({
-                    type: SLIDER_DELETE,
+                    type: OPERATION_TIME_SLOT_DELETE,
                     payload: error,
                     status: "Failed",
                 });
@@ -247,10 +229,10 @@ export const promotionDeleteAction = (id) => {
 
 };
 
-export const promotionDeleteFresh = () => {
+export const operationTimeSlotDeleteFresh = () => {
     return dispatch =>
         dispatch({
-            type: SLIDER_DELETE_FRESH,
+            type: OPERATION_TIME_SLOT_DELETE_FRESH,
             status: false,
         });
 };

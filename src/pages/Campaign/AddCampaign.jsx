@@ -28,7 +28,7 @@ import { toast } from "react-toastify"
 function AddCampaign(props) {
   const navigate = useNavigate()
   const location = useLocation()
-  console.log("lof", location?.state?.restaurants)
+  // console.log("lof", location?.state?.restaurants)
 
   //select multiple branch
   const common_branches = props?.get_all_branch_data?.filter(elem =>
@@ -37,8 +37,8 @@ function AddCampaign(props) {
 
   const branch_data_edit = common_branches
     ? common_branches?.map((item, key) => {
-        return { label: item.name, value: item._id }
-      })
+      return { label: item.name, value: item._id }
+    })
     : ""
   const [selectedBranch, setSelectedBranch] = useState(
     branch_data_edit ? branch_data_edit : ""
@@ -55,7 +55,12 @@ function AddCampaign(props) {
     }))
   }
 
-  console.log(location.state)
+  const [images, setImages] = useState({
+    image: location.state ? location.state.image : "",
+  })
+
+
+  // console.log(location.state)
   const [campaignInfo, setCampaignInfo] = useState({
     name: location.state ? location.state.name : "",
     image: location.state ? location.state.image : "",
@@ -68,7 +73,7 @@ function AddCampaign(props) {
       ? location.state.end_date
       : new Date().toISOString(),
   })
-  console.log("tt", new Date().toISOString())
+  // console.log("tt", new Date().toISOString())
   const handleTimeChange = e => {
     console.log("e :", e.target.value)
     console.log(new Date(e.target.value).toISOString())
@@ -87,6 +92,19 @@ function AddCampaign(props) {
     name = e.target.name
     value = e.target.value
     setCampaignInfo({ ...campaignInfo, [name]: value })
+  }
+
+  const handleFiles = e => {
+    name = e.target.name
+    value = e.target.files[0]
+    setCampaignInfo({ ...campaignInfo, [name]: value })
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      setImages({ ...images, [name]: reader.result })
+    }
+
+    reader.readAsDataURL(value)
   }
 
   const handleSubmit = e => {
@@ -220,15 +238,29 @@ function AddCampaign(props) {
                       Image
                     </label>
                     <div className="col-md-10">
-                      <input
-                        type="file"
+                      <input type="file"
                         className="form-control"
-                        id="resume"
-                        onChange={e => console.log(e)}
+                        name="image" id="image"
+                        onChange={handleFiles}
                         required
                       />
                     </div>
                   </Row>
+
+                  {images?.image && (
+                    <Row className="mb-3">
+                      <label className="col-md-2">
+                        <span></span>
+                      </label>
+                      <div className="col-md-10">
+                        <img
+                          src={images.image}
+                          alt="preview"
+                          style={{ width: "50%" }}
+                        />
+                      </div>
+                    </Row>
+                  )}
                   <Row className="mb-3">
                     <label
                       htmlFor="example-text-input"

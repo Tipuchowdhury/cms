@@ -311,6 +311,9 @@ const SidebarContent = props => {
                 <li>
                   <Link to="/reason">{props.t("System On Off Reason")} </Link>
                 </li>
+                <li>
+                  <Link to="/operation-time-slot">{props.t("System Operation Time Slot")} </Link>
+                </li>
               </ul>
             </li>
             {/* <li>

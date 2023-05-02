@@ -145,6 +145,7 @@ import AddNotification from "pages/Notification/AddNotification"
 import Review from "pages/Review/Review"
 import Customer from "pages/Customer/Customer"
 import SystemOnOffReason from "pages/Setting/SystemOnOffReason/SystemOnOffReason"
+import PlatfromOperationTimeSlot from "pages/Setting/PlatfromOperationTimeSlot/PlatfromOperationTimeSlot"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -216,6 +217,8 @@ const userRoutes = [
 
   // Settings
   { path: "/reason", component: <SystemOnOffReason /> },
+  { path: "/operation-time-slot", component: <PlatfromOperationTimeSlot /> },
+
 
   // Notification
   { path: "/notification", component: <Notification /> },

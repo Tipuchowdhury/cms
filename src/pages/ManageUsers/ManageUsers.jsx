@@ -33,10 +33,12 @@ function ManageUsers(props) {
             permanent_address: row.permanent_address,
             mobileNumber: row.mobile_number,
             email: row.email,
+            image: row.image,
             id: row._id,
             is_active: row.is_active,
         }));
         setRole(row.role_id)
+        setAddImages({ ...addImages, image: row.image })
     }
     const [registerInfo, setRegisterInfo] = useState({
         first_name: "",
@@ -44,6 +46,7 @@ function ManageUsers(props) {
         present_address: "",
         permanent_address: "",
         mobileNumber: "",
+        image: "",
         email: "",
         id: null,
         is_active: true,
@@ -64,10 +67,22 @@ function ManageUsers(props) {
 
 
     const [file, setFile] = useState()
+    const [addImages, setAddImages] = useState({
+        image: "",
+    })
 
     function handleChange(event) {
-        // console.log(event.target.files[0])
-        setFile(event.target.files[0])
+        let name = event.target.name
+        let value = event.target.files[0]
+        setFile(value)
+
+        const reader = new FileReader()
+
+        reader.onload = () => {
+            setAddImages({ ...addImages, [name]: reader.result })
+        }
+
+        reader.readAsDataURL(value)
 
     }
 
@@ -89,7 +104,7 @@ function ManageUsers(props) {
         console.log(registerInfo);
         // console.log(role);
         if (role) {
-            props.userUpdateAction(registerInfo, role);
+            props.userUpdateAction(registerInfo, file, role);
         } else {
             toast.warning("Please select role");
         }
@@ -296,9 +311,23 @@ function ManageUsers(props) {
                                     <input type="text" className="form-control" id="last_name" placeholder="Enter username" name="last_name" onChange={handleInputs} value={registerInfo.last_name} />
                                 </div>
                                 <div className="mb-3">
-                                    <label className="form-label" htmlFor="resume" >Image</label>{" "}
-                                    <input type="file" className="form-control" id="resume" onChange={handleChange} />
+                                    <label className="form-label" htmlFor="image" >Image</label>{" "}
+                                    <input type="file" className="form-control" id="image" name="image" onChange={handleChange} />
                                 </div>
+                                {addImages?.image && (
+                                    <Row className="mb-3">
+                                        <label className="col-md-2">
+                                            <span></span>
+                                        </label>
+                                        <div className="col-md-10">
+                                            <img
+                                                src={addImages.image}
+                                                alt="preview"
+                                                style={{ width: "50%" }}
+                                            />
+                                        </div>
+                                    </Row>
+                                )}
                                 <div className="mb-3">
                                     <label className="form-label" htmlFor="present_address">Present Address</label>
                                     <input type="text" className="form-control" id="present_address" placeholder="Enter username" name="present_address" onChange={handleInputs} value={registerInfo.present_address} />

@@ -1,6 +1,7 @@
 import { ADD_REASON, ADD_REASON_FRESH, GET_ALL_REASON, GET_ALL_REASON_FRESH, REASON_EDIT, REASON_EDIT_FRESH, REASON_DELETE, REASON_DELETE_FRESH, REASON_STATUS_EDIT, REASON_STATUS_EDIT_FRESH } from "./actionTypes";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { convertToFormData } from "helpers/functions"
 
 // token
 var token = JSON.parse(localStorage.getItem("jwt"));
@@ -12,10 +13,12 @@ export const addReasonAction = (addData) => {
 
     // console.log(addData);
 
-    let formData = {
+    let dataObject = {
         _id: reason_id,
         ...addData,
     };
+
+    const formData = convertToFormData(dataObject)
 
     // console.log(formData);
 
@@ -23,7 +26,7 @@ export const addReasonAction = (addData) => {
         // console.log("-in the dispatch----")
 
         const headers = {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             "Access-Control-Allow-Origin": "*",
         };
 
@@ -93,15 +96,18 @@ export const getAllReasonFresh = () => {
     };
 };
 
+
 export const reasonUpdateAction = (editData) => {
     //console.log(editData);
 
     var url = process.env.REACT_APP_LOCALHOST + "/SystemOnOffReson/Put";
 
-    const formData = editData;
+    const dataObject = editData;
+
+    const formData = convertToFormData(dataObject)
     return dispatch => {
         const headers = {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
 
             "Access-Control-Allow-Origin": "*",
 
@@ -138,11 +144,12 @@ export const reasonStatusUpdateAction = (editData) => {
 
 
     var url = process.env.REACT_APP_LOCALHOST + "/SystemOnOffReson/Put";
-    const formData = editData;
+    const dataObject = editData;
 
+    const formData = convertToFormData(dataObject)
     return dispatch => {
         const headers = {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             "Access-Control-Allow-Origin": "*",
         };
         axios

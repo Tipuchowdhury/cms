@@ -20,8 +20,25 @@ function Cuisine(props) {
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
     const [editModal, setEditModal] = useState(false);
-    const toggleEditModal = () => setEditModal(!editModal);
+    const [color, setColor] = useState({
+        fg: "#ffffff",
+        bg: "#ffffff"
+    });
+    // const toggleEditModal = () => {
+    //     setAddImages({ ...addImages, image: "" });
+    //     setEditModal(!editModal);
+    // }
     const [file, setFile] = useState();
+    const [addImages, setAddImages] = useState({
+        image: "",
+    })
+    const [editImages, setEditImages] = useState({
+        image: "",
+    })
+
+    const toggleEditModal = () => {
+        setEditModal(!editModal);
+    }
 
     const [editInfo, setEditInfo] = useState(false)
     const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
@@ -41,7 +58,7 @@ function Cuisine(props) {
     }
 
     const handleStatusModal = row => {
-        console.log(row);
+        // console.log(row);
         setEditInfo(row)
 
         toggleStatus()
@@ -62,9 +79,11 @@ function Cuisine(props) {
         setId(row._id);
         setEditName(row.name);
         setStatus(row.is_active);
+        setEditImages({ ...editImages, image: row.image });
+        setColor({ ...color, fg: row.color.fg, bg: row.color.bg });
         toggleEditModal();
     }
-    console.log(editName);
+    // console.log(addImages);
     const actionRef = (cell, row) =>
         <div style={{ display: "flex", gap: 10 }}>
             <Button
@@ -120,26 +139,65 @@ function Cuisine(props) {
         }
     ];
 
-    const handleChange = (event) => {
-        console.log(event.target.files[0])
-        setFile(event.target.files[0])
+
+
+    const handleEditFile = (event) => {
+
+        let name = event.target.name
+        let value = event.target.files[0]
+        setFile(value)
+
+        const reader2 = new FileReader()
+
+        reader2.onload = () => {
+            setEditImages({ ...editImages, [name]: reader2.result })
+        }
+
+        reader2.readAsDataURL(value)
+    }
+    const handleAddFile = (event) => {
+
+        let name = event.target.name
+        let value = event.target.files[0]
+        setFile(value)
+
+        const reader = new FileReader()
+
+        reader.onload = () => {
+            setAddImages({ ...addImages, [name]: reader.result })
+        }
+
+        reader.readAsDataURL(value)
+    }
+
+    const handleAddColors = (e) => {
+        let name = e.target.name;
+        let value = e.target.value;
+        setColor({ ...color, [name]: value })
+
+    }
+
+    const handleEditColors = (e) => {
+        let name = e.target.name;
+        let value = e.target.value;
+        setColor({ ...color, [name]: value })
 
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(name);
-        console.log(file);
+        //console.log(name);
+        console.log(color);
         const id = uuidv4();
-        props.addCuisineAction(id, name);
+        props.addCuisineAction(id, name, file, color);
         toggle();
         setName("");
     }
 
     const handleEditModal = (e) => {
         e.preventDefault(e);
-        console.log(editName);
-        props.cuisineEditAction(id, editName, status);
+        // console.log(editName);
+        props.cuisineEditAction(id, editName, status, file, color);
         toggleEditModal();
         setEditName("")
     }
@@ -196,10 +254,35 @@ function Cuisine(props) {
                                 <label className="form-label" htmlFor="username">Cuisine Name</label>
                                 <input type="text" className="form-control" id="username" placeholder="Enter city name" required value={name} onChange={(e) => setName(e.target.value)} />
                             </div>
+                            <Row>
+                                <div className="col-sm-6 mb-3">
+                                    <label className="form-label" htmlFor="fg">Color FG</label>
+                                    <input type="color" style={{ width: 100, height: 50 }} className="form-control" value={color.fg} name="fg" id="fg" onChange={handleAddColors} />
+                                </div>
+                                <div className="col-sm-6 mb-3">
+                                    <label className="form-label" htmlFor="bg">Color BG</label>
+                                    <input type="color" style={{ width: 100, height: 50 }} className="form-control" value={color.bg} name="bg" id="bg" onChange={handleAddColors} />
+                                </div>
+                            </Row>
+
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="username">Image</label>
-                                <input type="file" className="form-control" id="resume" onChange={handleChange} />
+                                <label className="form-label" htmlFor="image">Image</label>
+                                <input type="file" className="form-control" name="image" id="image" onChange={handleAddFile} />
                             </div>
+                            {addImages?.image && (
+                                <Row className="mb-3">
+                                    <label className="col-md-2">
+                                        <span></span>
+                                    </label>
+                                    <div className="col-md-10">
+                                        <img
+                                            src={addImages.image}
+                                            alt="preview"
+                                            style={{ width: "50%" }}
+                                        />
+                                    </div>
+                                </Row>
+                            )}
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
                                 <Button color="secondary" onClick={toggle}>
@@ -241,6 +324,37 @@ function Cuisine(props) {
                                 <label className="form-label" htmlFor="cuisine_name">Cuisine Name</label>
                                 <input type="text" className="form-control" id="cuisine_name" placeholder="Enter cuisine name" required value={editName} onChange={(e) => setEditName(e.target.value)} />
                             </div>
+                            <Row>
+                                <div className="mb-3">
+                                    <label className="form-label" htmlFor="fg">Color FG</label>
+                                    <input type="color" style={{ width: 100, height: 50 }} className="form-control" value={color.fg} name="fg" id="fg" onChange={handleEditColors} />
+                                </div>
+                                <div className="mb-3">
+                                    <label className="form-label" htmlFor="bg">Color BG</label>
+                                    <input type="color" style={{ width: 100, height: 50 }} className="form-control" value={color.bg} name="bg" id="bg" onChange={handleEditColors} />
+                                </div>
+                            </Row>
+
+
+
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="image">Image</label>
+                                <input type="file" className="form-control" name="image" id="image" onChange={handleEditFile} />
+                            </div>
+                            {editImages?.image && (
+                                <Row className="mb-3">
+                                    <label className="col-md-2">
+                                        <span></span>
+                                    </label>
+                                    <div className="col-md-10">
+                                        <img
+                                            src={editImages.image}
+                                            alt="preview"
+                                            style={{ width: "50%" }}
+                                        />
+                                    </div>
+                                </Row>
+                            )}
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
                                 <Button color="primary" type="submit">
                                     Submit

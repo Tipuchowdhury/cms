@@ -24,9 +24,9 @@ function BranchAdd(props) {
     const [popularVal, setPopularVal] = useState();
     const [preOrder, setPreOrder] = useState();
     const [priceRange, setPriceRange] = useState();
-    console.log(popularVal)
-    console.log(preOrder)
-    console.log(priceRange)
+    // console.log(popularVal)
+    // console.log(preOrder)
+    // console.log(priceRange)
     const [defaultProps, setDefaultProps] = useState({
         lat: 23.8103,
         lng: 90.4125,
@@ -77,6 +77,14 @@ function BranchAdd(props) {
             lng: (e.latLng.lng())
         });
     };
+
+    const [images, setImages] = useState({
+        image: location.state ? location.state.image : "",
+    })
+    const [coverImages, setCoverImages] = useState({
+        cover_image: location.state ? location.state.cover_image : "",
+    })
+
     const [zoneInfo, setZoneInfo] = useState({
         name: location.state ? location.state.name : undefined,
         restaurant: location.state ? location.state.parent_restaurant_id : undefined,
@@ -101,6 +109,8 @@ function BranchAdd(props) {
         link: location.state ? location.state.share_link : "",
 
     })
+
+
     // get all restaurant
     let restaurantData = undefined;
     if (props.get_all_restaurant_data?.length > 0) {
@@ -143,23 +153,44 @@ function BranchAdd(props) {
     function handleSelectGroup(selectedGroup) {
         setselectedGroup(selectedGroup);
     }
-    function handleChange(event) {
-        console.log(event.target.files[0])
-        console.log("nooooooooooooooo")
-        setFile(event.target.files[0])
 
-    }
-    function handleChangeCover(event) {
-        console.log(event.target.files[0])
-        console.log("nooooooooooooooo")
-        setCoverFile(event.target.files[0])
-
-    }
     let name, value;
     const handleInputs = (e) => {
         name = e.target.name;
         value = e.target.value;
         setZoneInfo({ ...zoneInfo, [name]: value })
+
+    }
+    function handleChangeImage(event) {
+
+        name = event.target.name
+        value = event.target.files[0]
+        setFile(value)
+
+        const reader = new FileReader()
+
+        reader.onload = () => {
+            setImages({ ...coverImages, [name]: reader.result })
+        }
+
+        reader.readAsDataURL(value)
+
+    }
+
+
+    function handleChangeCover(event) {
+
+        name = event.target.name
+        value = event.target.files[0]
+        setCoverFile(value)
+
+        const reader2 = new FileReader()
+
+        reader2.onload = () => {
+            setCoverImages({ ...coverImages, [name]: reader2.result })
+        }
+
+        reader2.readAsDataURL(value)
 
     }
     const [timeCheckerState, setChecker] = useState()
@@ -283,9 +314,7 @@ function BranchAdd(props) {
         }
     }, [props.get_all_restaurant_loading, props.get_all_user_roles_loading, props.get_all_cusine_loading, props.add_branch_loading, props.edit_branch_loading]);
 
-    console.log(props.get_all_restaurant_data);
-    console.log(props.get_all_cusine_data);
-    console.log(zoneInfo.is_take_pre_order);
+
 
     return (
 
@@ -395,28 +424,57 @@ function BranchAdd(props) {
 
                                 <Row className="mb-3">
                                     <label
-                                        htmlFor="example-text-input"
+                                        htmlFor="image"
                                         className="col-md-2 col-form-label"
                                     >
                                         Image
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="file" className="form-control" id="resume" onChange={handleChange} />
+                                        <input type="file" name="image" className="form-control" id="image" onChange={handleChangeImage} />
+
                                     </div>
                                 </Row>
+
+                                {images?.image && (
+                                    <Row className="mb-3">
+                                        <label className="col-md-2">
+                                            <span></span>
+                                        </label>
+                                        <div className="col-md-10">
+                                            <img
+                                                src={images.image}
+                                                alt="preview"
+                                                style={{ width: "50%" }}
+                                            />
+                                        </div>
+                                    </Row>
+                                )}
+
 
 
                                 <Row className="mb-3">
-                                    <label
-                                        htmlFor="example-text-input"
-                                        className="col-md-2 col-form-label"
-                                    >
+                                    <label htmlFor="cover_image" className="col-md-2 col-form-label">
                                         Cover Image
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="file" className="form-control" id="resume" onChange={handleChangeCover} />
+                                        <input type="file" className="form-control" name="cover_image" id="cover_image" onChange={handleChangeCover} />
                                     </div>
                                 </Row>
+
+                                {coverImages?.cover_image && (
+                                    <Row className="mb-3">
+                                        <label className="col-md-2">
+                                            <span></span>
+                                        </label>
+                                        <div className="col-md-10">
+                                            <img
+                                                src={coverImages.cover_image}
+                                                alt="preview"
+                                                style={{ width: "50%" }}
+                                            />
+                                        </div>
+                                    </Row>
+                                )}
 
                                 <Row className="mb-3">
                                     <label
@@ -930,13 +988,13 @@ function BranchAdd(props) {
                                                     >
                                                         <option>Choose...</option>
 
-                                                        <option value="1">Saturday</option>
-                                                        <option value="2">Sunday</option>
-                                                        <option value="3">Monday</option>
-                                                        <option value="4">Tuesday</option>
-                                                        <option value="5">Wednesday</option>
-                                                        <option value="6">Thursday</option>
-                                                        <option value="7">Friday</option>
+                                                        <option value="6">Saturday</option>
+                                                        <option value="7">Sunday</option>
+                                                        <option value="1">Monday</option>
+                                                        <option value="2">Tuesday</option>
+                                                        <option value="3">Wednesday</option>
+                                                        <option value="4">Thursday</option>
+                                                        <option value="5">Friday</option>
                                                     </Input>
                                                 </div>
 

@@ -55,6 +55,7 @@ import axios from "axios"
 import { toast } from "react-toastify"
 import { v4 as uuidv4 } from "uuid"
 import moment from "moment"
+import { convertToFormData } from "helpers/functions"
 
 // token
 // var authUser = JSON.parse(localStorage.getItem("user"));
@@ -288,7 +289,8 @@ export const branchAddAction = (
         }
       })
       : null
-  let formData = {
+
+  const dataObject = {
     name: zoneInfo.name,
     _id: id,
     email: zoneInfo.email,
@@ -299,8 +301,8 @@ export const branchAddAction = (
     address: zoneInfo.address,
     popularity_sort_value: JSON.parse(zoneInfo.popularity_sort_value),
     price_range: zoneInfo.price_range,
-    image: "https://unsplash.com/photos/kcA-c3f_3FE",
-    cover_image: "https://unsplash.com/photos/kcA-c3f_3FE",
+    image: file,
+    cover_image: coverFile,
     slug: currentPath,
     zonal_admin: zoneInfo.zonal_admin,
     is_take_pre_order: JSON.parse(zoneInfo.is_take_pre_order),
@@ -318,11 +320,12 @@ export const branchAddAction = (
     is_delivery: JSON.parse(zoneInfo.is_delivery),
     is_pickup: JSON.parse(zoneInfo.is_pickup),
     is_dine: JSON.parse(zoneInfo.is_dine),
-  }
+  };
+  const formData = convertToFormData(dataObject)
 
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -397,7 +400,7 @@ export const branchEditAction = (
         }
       })
       : null
-  let formData = {
+  const dataObject = {
     name: zoneInfo.name,
     _id: id,
     email: zoneInfo.email,
@@ -408,8 +411,8 @@ export const branchEditAction = (
     address: zoneInfo.address,
     popularity_sort_value: JSON.parse(zoneInfo.popularity_sort_value),
     price_range: zoneInfo.price_range,
-    image: "https://unsplash.com/photos/kcA-c3f_3FE",
-    cover_image: "https://unsplash.com/photos/kcA-c3f_3FE",
+    image: file,
+    cover_image: coverFile,
     slug: currentPath,
     zonal_admin: zoneInfo.zonal_admin,
     is_take_pre_order: JSON.parse(zoneInfo.is_take_pre_order),
@@ -423,10 +426,11 @@ export const branchEditAction = (
     working_hours: all_working_hours,
     cuisines: data,
   }
-
+  const formData = convertToFormData(dataObject)
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
+      // "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -454,11 +458,12 @@ export const branchEditAction = (
 export const branchStatusEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put"
 
-  const formData = data
+  const dataObject = data;
+  const formData = convertToFormData(dataObject);
 
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -484,11 +489,13 @@ export const branchStatusEditAction = data => {
 export const branchPopularEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put"
 
-  const formData = data
+  const dataObject = data
+  // console.log(dataObject);
+  const formData = convertToFormData(dataObject)
 
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -1068,18 +1075,23 @@ export const addOnCategoryStatusEditActionFresh = () => {
   }
 }
 
-export const addCuisineAction = (id, name) => {
+export const addCuisineAction = (id, name, file, color) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Post"
+  console.log(file);
 
-  let formData = {
+  let dataObject = {
     _id: id,
     name: name,
-    imane: "https://unsplash.com/photos/kcA-c3f_3FE",
+    image: file,
+    "color.fg": color.fg,
+    "color.bg": color.bg,
   }
+
+  const formData = convertToFormData(dataObject)
 
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -1131,18 +1143,33 @@ export const getAllCuisneAction = () => {
   }
 }
 
-export const cuisineEditAction = (id, editName, status) => {
+export const cuisineEditAction = (id, editName, status, file, color) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Put"
-  const formData = {
+  // const formData = {
+  //   _id: id,
+  //   name: editName,
+  //   is_active: status,
+  //   imane: "https://unsplash.com/photos/kcA-c3f_3FE",
+  // }
+
+
+  let dataObject = {
     _id: id,
     name: editName,
     is_active: status,
-    imane: "https://unsplash.com/photos/kcA-c3f_3FE",
-  }
+    image: file,
+    "color.fg": color.fg,
+    "color.bg": color.bg,
+  };
+
+  console.log(dataObject)
+
+  const formData = convertToFormData(dataObject)
+  // console.log(formData);
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
-
+      // "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
     axios
@@ -1166,11 +1193,22 @@ export const cuisineEditAction = (id, editName, status) => {
 
 export const cuisineStatusEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Put"
-  const formData = data
+  // console.log(data);
+  let dataObject = {
+    _id: data._id,
+    name: data.name,
+    is_active: data.is_active,
+    image: data.image,
+    "color.fg": data.color.fg,
+    "color.bg": data.color.bg,
+  };
+  // console.log(dataObject);
+  const formData = convertToFormData(dataObject)
+  //console.log(formData);
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
-
+      // "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
     axios

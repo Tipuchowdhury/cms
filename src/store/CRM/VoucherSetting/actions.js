@@ -11,6 +11,7 @@ import {
   VOUCHER_SETTING_STATUS_EDIT_FRESH,
 } from "./actionTypes"
 import axios from "axios"
+import { convertToFormData } from "helpers/functions"
 import { toast } from "react-toastify"
 import { v4 as uuidv4 } from "uuid"
 
@@ -30,16 +31,19 @@ export const addVoucherSettingAction = (id, data, selectedBranch) => {
     }
   }) : null
 
-  const formData = {
+
+  const dataObject = {
     _id: id,
     ...data,
     restaurants: restaurants,
   }
+  // console.log(formData)
+  const formData = convertToFormData(dataObject)
   return dispatch => {
     // console.log("-in the dispatch----")
 
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -123,14 +127,18 @@ export const voucherSettingEditAction = (id, data, selectedBranch) => {
     }
   }) : null
 
-  const formData = {
+
+  const dataObject = {
     _id: id,
     ...data,
     restaurants: restaurants,
   }
+  // console.log(formData)
+  const formData = convertToFormData(dataObject)
+
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
 
       "Access-Control-Allow-Origin": "*",
     }
@@ -165,11 +173,12 @@ export const voucherSettingEditFresh = () => {
 
 export const voucherSettingStatusEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Put"
-  const formData = data
+  const dataObject = data
   // console.log(formData)
+  const formData = convertToFormData(dataObject)
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
 
       "Access-Control-Allow-Origin": "*",
     }
