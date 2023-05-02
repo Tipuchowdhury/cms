@@ -207,7 +207,7 @@ const DatatableTables2 = props => {
                         striped={false}
                         defaultSorted={defaultSorted}
                         // selectRow={selectRow}
-                        classes={"table align-middle table-nowrap"}
+                        classes={"table align-middle"}
                         headerWrapperClasses={"thead-light"}
                         {...toolkitProps.baseProps}
                         {...paginationTableProps}

@@ -20,41 +20,7 @@ export const addSliderAction = (addData, selectedRestaurant) => {
         }
     }) : null
 
-    // const selectedBranchData =
-    //     selectedRestaurant?.length > 0
-    //         ? selectedRestaurant.map(item => {
-    //             const val = uuidv4()
-    //             return {
-    //                 _id: val,
-    //                 res_id: item.value,
-    //                 promotion_id: slider_id,
-    //             }
-    //         })
-    //         : null
 
-    // const selectedBranchData = [
-    //     {
-    //         _id: slider_id,
-    //         res_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    //         promotion_id: slider_id
-    //     }
-    // ];
-
-    // console.log(data);
-
-
-    // let formData = {
-    //     _id: slider_id,
-    //     name: addData.name,
-    //     start_date: "2023-04-12T10:16:44.008Z",
-    //     end_date: "2023-04-12T10:16:44.008Z",
-    //     type: "string",
-    //     is_delivery: true,
-    //     is_pickup: true,
-    //     is_dine: true,
-    //     is_active: true,
-    //     restaurants: data
-    // };
 
     let formData = {
         _id: slider_id,

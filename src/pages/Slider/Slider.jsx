@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Badge, Button, Card, CardBody, CardTitle, Col, Container, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
+import { Badge, Button, Card, CardBody, CardTitle, Col, Container, Input, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import Breadcrumbs from 'components/Common/Breadcrumb';
 import { toast } from 'react-toastify';
 import withRouter from 'components/Common/withRouter'; ` `
@@ -31,9 +31,9 @@ function Slider(props) {
 
     const [addInfo, setAddInfo] = useState({
         name: "",
-        start_date: "2023-04-12T09:11:58.616Z",
-        end_date: "2023-04-12T09:11:58.616Z",
-        type: "string",
+        start_date: new Date().toISOString(),
+        end_date: new Date().toISOString(),
+        type: "",
         is_deliver: true,
         is_pickup: true,
         is_dine: true,
@@ -43,9 +43,9 @@ function Slider(props) {
     const [editInfo, setEditInfo] = useState({
         _id: "",
         name: "",
-        start_date: "2023-04-12T09:11:58.616Z",
-        end_date: "2023-04-12T09:11:58.616Z",
-        type: "string",
+        start_date: new Date().toISOString(),
+        end_date: new Date().toISOString(),
+        type: "",
         is_deliver: true,
         is_pickup: true,
         is_dine: true,
@@ -82,7 +82,33 @@ function Slider(props) {
         name = e.target.name;
         value = e.target.value;
         setAddInfo({ ...addInfo, [name]: value });
+    }
+
+    const handleEditInputs = (e) => {
+        // console.log(e);
+        name = e.target.name;
+        value = e.target.value;
         setEditInfo({ ...editInfo, [name]: value });
+    }
+
+    const handleAddTimeChange = e => {
+        name = e.target.name
+        value = e.target.value
+        let new_time_string = `${value}:00Z`
+        setAddInfo({
+            ...addInfo,
+            [name]: new Date(new_time_string).toISOString(),
+        })
+    }
+
+    const handleEditTimeChange = e => {
+        name = e.target.name
+        value = e.target.value
+        let new_time_string = `${value}:00Z`
+        setEditInfo({
+            ...editInfo,
+            [name]: new Date(new_time_string).toISOString(),
+        })
     }
 
     const handleSubmit = (e) => {
@@ -229,9 +255,9 @@ function Slider(props) {
             setAddInfo({
                 ...addInfo,
                 name: "",
-                start_date: "2023-04-12T09:11:58.616Z",
-                end_date: "2023-04-12T09:11:58.616Z",
-                type: "string",
+                start_date: "",
+                end_date: "",
+                type: "",
                 is_deliver: true,
                 is_pickup: true,
                 is_dine: true,
@@ -325,6 +351,16 @@ function Slider(props) {
                                 <input type="text" className="form-control" id="name" placeholder="Enter name" required name="name" value={addInfo.name} onChange={handleInputs} />
                             </div>
 
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="type">Type</label>
+                                <Input id="type" name="type" className="form-control" placeholder="select type" value={addInfo.type} onChange={handleInputs} type="select" >
+                                    <option>Choose...</option>
+                                    <option value="slider">Slider</option>
+                                    <option value="banner">Banner</option>
+
+                                </Input>
+                            </div>
+
 
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="restaurants">Restaurants</label>
@@ -334,6 +370,20 @@ function Slider(props) {
                                     options={allRestaurant}
                                     isMulti={true}
                                 />
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="start_date" className="col-md-2 col-form-label"> Start Time </label>
+                                <input type="datetime-local" id="start_date" className="form-control"
+                                    name="start_date" placeholder="Start Time"
+                                    value={addInfo.start_date.slice(0, 16)} onChange={e => handleAddTimeChange(e)} required />
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="end_date" className="col-md-2 col-form-label"> Start Time </label>
+                                <input type="datetime-local" id="end_date" className="form-control"
+                                    name="end_date" placeholder="Start Time"
+                                    value={addInfo.end_date.slice(0, 16)} onChange={e => handleAddTimeChange(e)} required />
                             </div>
                             {/* <Row className="mb-3">
                                 <label
@@ -377,7 +427,17 @@ function Slider(props) {
 
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="name"> Name</label>
-                                <input type="text" className="form-control" id="name" placeholder="Enter name" required name="name" onChange={handleInputs} value={editInfo.name} />
+                                <input type="text" className="form-control" id="name" placeholder="Enter name" required name="name" onChange={handleEditInputs} value={editInfo.name} />
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label" htmlFor="type">Type</label>
+                                <Input id="type" name="type" className="form-control" placeholder="select type" value={editInfo.type} onChange={handleEditInputs} type="select" >
+                                    <option>Choose...</option>
+                                    <option value="slider">Slider</option>
+                                    <option value="banner">Banner</option>
+
+                                </Input>
                             </div>
 
                             <div className="mb-3">
@@ -388,6 +448,20 @@ function Slider(props) {
                                     options={allRestaurant}
                                     isMulti={true}
                                 />
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="start_date" className="col-md-2 col-form-label"> Start Time </label>
+                                <input type="datetime-local" id="start_date" className="form-control"
+                                    name="start_date" placeholder="Start Time"
+                                    value={editInfo.start_date.slice(0, 16)} onChange={e => handleEditTimeChange(e)} required />
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="end_date" className="col-md-2 col-form-label"> Start Time </label>
+                                <input type="datetime-local" id="end_date" className="form-control"
+                                    name="end_date" placeholder="Start Time"
+                                    value={editInfo.end_date.slice(0, 16)} onChange={e => handleEditTimeChange(e)} required />
                             </div>
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
