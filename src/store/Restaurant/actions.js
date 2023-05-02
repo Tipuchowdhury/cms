@@ -55,6 +55,7 @@ import axios from "axios"
 import { toast } from "react-toastify"
 import { v4 as uuidv4 } from "uuid"
 import moment from "moment"
+import { convertToFormData } from "helpers/functions"
 
 // token
 // var authUser = JSON.parse(localStorage.getItem("user"));
@@ -1068,18 +1069,21 @@ export const addOnCategoryStatusEditActionFresh = () => {
   }
 }
 
-export const addCuisineAction = (id, name) => {
+export const addCuisineAction = (id, name, file) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Post"
+  console.log(file);
 
-  let formData = {
+  let dataObject = {
     _id: id,
     name: name,
-    imane: "https://unsplash.com/photos/kcA-c3f_3FE",
+    image: file
   }
+
+  const formData = convertToFormData(dataObject)
 
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -1131,18 +1135,28 @@ export const getAllCuisneAction = () => {
   }
 }
 
-export const cuisineEditAction = (id, editName, status) => {
+export const cuisineEditAction = (id, editName, status, file) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Put"
-  const formData = {
+  // const formData = {
+  //   _id: id,
+  //   name: editName,
+  //   is_active: status,
+  //   imane: "https://unsplash.com/photos/kcA-c3f_3FE",
+  // }
+
+  let dataObject = {
     _id: id,
     name: editName,
     is_active: status,
-    imane: "https://unsplash.com/photos/kcA-c3f_3FE",
-  }
+    image: file,
+  };
+
+  const formData = convertToFormData(dataObject)
+  // console.log(formData);
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
-
+      // "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
     axios
@@ -1166,11 +1180,17 @@ export const cuisineEditAction = (id, editName, status) => {
 
 export const cuisineStatusEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Put"
-  const formData = data
+  // console.log(data);
+  let dataObject = {
+    ...data
+  };
+  // console.log(dataObject);
+  const formData = convertToFormData(dataObject)
+  //console.log(formData);
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
-
+      // "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
     axios

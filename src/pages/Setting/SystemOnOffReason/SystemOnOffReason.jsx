@@ -22,6 +22,12 @@ function SystemOnOffReason(props) {
     const [editModal, setEditModal] = useState(false);
     const [modalDel, setModalDel] = useState(false);
     const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
+    const [addImages, setAddImages] = useState({
+        image: "",
+    })
+    const [editImages, setEditImages] = useState({
+        image: "",
+    })
 
     const toggle = () => setModal(!modal);
     const toggleEditModal = () => setEditModal(!editModal);
@@ -34,6 +40,7 @@ function SystemOnOffReason(props) {
         image: "",
         is_active: true,
     });
+
 
     const [editInfo, setEditInfo] = useState({
         _id: "",
@@ -55,11 +62,23 @@ function SystemOnOffReason(props) {
     }
 
     const handleAddFile = (e) => {
-        setAddInfo({
-            ...addInfo,
-            image: e.target.value,
-        });
+        // setAddInfo({
+        //     ...addInfo,
+        //     image: e.target.value,
+        // });
+
+        name = e.target.name
+        value = e.target.files[0]
+        setAddInfo({ ...addInfo, [name]: value })
+        const reader = new FileReader()
+
+        reader.onload = () => {
+            setAddImages({ ...addImages, [name]: reader.result })
+        }
+
+        reader.readAsDataURL(value)
     }
+
 
     const handleAddCheckBox = (e) => {
         // console.log(e);
@@ -80,10 +99,21 @@ function SystemOnOffReason(props) {
     }
 
     const handleEditFile = (e) => {
-        setEditInfo({
-            ...editInfo,
-            image: e.target.value,
-        });
+        // setEditInfo({
+        //     ...editInfo,
+        //     image: e.target.value,
+        // });
+
+        name = e.target.name
+        value = e.target.files[0]
+        setEditInfo({ ...editInfo, [name]: value })
+        const reader2 = new FileReader()
+
+        reader2.onload = () => {
+            setEditImages({ ...editImages, [name]: reader2.result })
+        }
+
+        reader2.readAsDataURL(value)
     }
 
     const handleEditCheckBox = (e) => {
@@ -103,6 +133,8 @@ function SystemOnOffReason(props) {
             image: row.image,
             is_active: row.is_active,
         }));
+
+        setEditImages({ ...editImages, image: row.image })
         toggleEditModal();
     }
 
@@ -117,13 +149,10 @@ function SystemOnOffReason(props) {
     }
 
     const handleStatusUpdate = () => {
-
-        // console.log(editInfo);
         props.reasonStatusUpdateAction({
             ...editInfo,
             is_active: !editInfo.is_active,
         })
-
     }
 
     const handleDeleteModal = (row) => {
@@ -202,6 +231,7 @@ function SystemOnOffReason(props) {
                 image: "",
                 is_active: true,
             });
+            setAddImages("");
             props.addReasonFresh();
         }
 
@@ -297,7 +327,23 @@ function SystemOnOffReason(props) {
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="image">Image</label>
                                 <input type="file" className="form-control" id="image" required name="image" onChange={handleAddFile} />
+
                             </div>
+
+                            {addImages?.image && (
+                                <Row className="mb-3">
+                                    <label className="col-md-2">
+                                        <span></span>
+                                    </label>
+                                    <div className="col-md-10">
+                                        <img
+                                            src={addImages.image}
+                                            alt="preview"
+                                            style={{ width: "50%" }}
+                                        />
+                                    </div>
+                                </Row>
+                            )}
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
                                 <Button color="secondary" onClick={toggle}>
@@ -335,6 +381,20 @@ function SystemOnOffReason(props) {
                                 <label className="form-label" htmlFor="image">Image</label>
                                 <input type="file" className="form-control" id="image" required name="image" onChange={handleEditFile} />
                             </div>
+                            {editImages?.image && (
+                                <Row className="mb-3">
+                                    <label className="col-md-2">
+                                        <span></span>
+                                    </label>
+                                    <div className="col-md-10">
+                                        <img
+                                            src={editImages.image}
+                                            alt="preview"
+                                            style={{ width: "50%" }}
+                                        />
+                                    </div>
+                                </Row>
+                            )}
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
                                 <Button color="primary" type="submit">

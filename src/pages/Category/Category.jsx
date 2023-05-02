@@ -42,10 +42,17 @@ function Category(props) {
   const [categoryName, setCategoryName] = useState()
   const [categoryImage, setCategoryImage] = useState();
   const [isActive, setIsActive] = useState();
+  const [addImages, setAddImages] = useState({
+    image: "",
+  })
+  const [editImages, setEditImages] = useState({
+    image: "",
+  })
 
   const [editModal, setEditModal] = useState(false)
   const [reload, setReload] = useState(false)
   const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
+
 
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
 
@@ -75,12 +82,42 @@ function Category(props) {
     console.log(row)
     setCategoryId(row._id);
     setCategoryName(row.category_name);
-    setCategoryImage(row.image);
+    setEditImages({ ...editImages, image: row.image });
     setIsActive(row.is_active);
     toggleEditModal()
   }
   const handleCategoryName = e => {
     setCategoryName(e.target.value)
+  }
+
+  const handleAddFile = (event) => {
+
+    let name = event.target.name
+    let value = event.target.files[0]
+    setCategoryImage(value)
+
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      setAddImages({ ...addImages, [name]: reader.result })
+    }
+
+    reader.readAsDataURL(value)
+  }
+
+  const handleEditFile = (event) => {
+
+    let name = event.target.name
+    let value = event.target.files[0]
+    setCategoryImage(value)
+
+    const reader2 = new FileReader()
+
+    reader2.onload = () => {
+      setEditImages({ ...editImages, [name]: reader2.result })
+    }
+
+    reader2.readAsDataURL(value)
   }
 
   const handleEditModalSubmit = e => {
@@ -290,12 +327,26 @@ function Category(props) {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label" htmlFor="categoryImage">
+                <label className="form-label" htmlFor="image">
                   Category Image
                 </label>
-                <input name="categoryImage" type="file" className="form-control" id="categoryImage" value={categoryImage} onChange={e => setCategoryImage(e.target.value)}
-                />
+                <input type="file" className="form-control" name="image" id="image" onChange={handleAddFile} />
               </div>
+
+              {addImages?.image && (
+                <Row className="mb-3">
+                  <label className="col-md-2">
+                    <span></span>
+                  </label>
+                  <div className="col-md-10">
+                    <img
+                      src={addImages.image}
+                      alt="preview"
+                      style={{ width: "50%" }}
+                    />
+                  </div>
+                </Row>
+              )}
               <div
                 style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
               >
@@ -320,9 +371,23 @@ function Category(props) {
                 <input name="categoryName" type="text" className="form-control" id="categoryName" placeholder="Enter category name" required value={categoryName ? categoryName : ""} onChange={handleCategoryName} />
               </div>
               <div className="mb-3">
-                <label className="form-label" htmlFor="categoryImage"> Image </label>
-                <input name="categoryImage" type="file" className="form-control" id="categoryImage" onChange={e => setCategoryImage(e.target.value)} />
+                <label className="form-label" htmlFor="image"> Image </label>
+                <input type="file" className="form-control" name="image" id="image" onChange={handleEditFile} />
               </div>
+              {editImages?.image && (
+                <Row className="mb-3">
+                  <label className="col-md-2">
+                    <span></span>
+                  </label>
+                  <div className="col-md-10">
+                    <img
+                      src={editImages.image}
+                      alt="preview"
+                      style={{ width: "50%" }}
+                    />
+                  </div>
+                </Row>
+              )}
               <div
                 style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
               >

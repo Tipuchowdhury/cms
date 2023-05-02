@@ -1,3 +1,4 @@
+
 import {
     REGISTER_USER,
     REGISTER_USER_FRESH,
@@ -15,6 +16,7 @@ import {
     USER_DELETE_FRESH
 } from "./actionTypes"
 import axios from "axios";
+import { convertToFormData } from "helpers/functions";
 
 // token
 // var authUser = JSON.parse(localStorage.getItem("user"));
@@ -22,11 +24,11 @@ import axios from "axios";
 
 export const userRegistrationNew = (user, file, role) => {
     var url = process.env.REACT_APP_LOCALHOST + "/Authentication/register";
-    console.log(user)
-    console.log(role)
-    console.log(file)
-    console.log(url);
-    let formData = new FormData();
+    // console.log(user)
+    // console.log(role)
+    // console.log(file)
+    // console.log(url);
+    // let formData = new FormData();
     // let formData = {
     //     first_name: user.first_name,
     //     last_name: user.last_name,
@@ -39,21 +41,46 @@ export const userRegistrationNew = (user, file, role) => {
     //     confirm_password: user.confirmPassword
 
     // };
-    formData.append("first_name", user.first_name);
-    formData.append("last_name", user.last_name);
-    formData.append("present_address", user.present_address);
-    formData.append("permanent_address", user.permanent_address);
-    formData.append("mobile_number", user.mobileNumber);
-    formData.append("email", user.email);
-    formData.append("role_id", role);
-    formData.append("password", user.password);
-    formData.append("confirm_password", user.confirmPassword);
-    formData.append("image", "https://unsplash.com/photos/OHjxA8bfrwg");
+
+    const dataObject = {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        present_address: user.present_address,
+        permanent_address: user.permanent_address,
+        mobile_number: user.mobileNumber,
+        email: user.email,
+        role_id: role,
+        password: user.password,
+        confirm_password: user.confirmPassword,
+        image: file
+    }
+    const formData = convertToFormData(dataObject)
+    // formData.append("first_name", user.first_name);
+    // formData.append("last_name", user.last_name);
+    // formData.append("present_address", user.present_address);
+    // formData.append("permanent_address", user.permanent_address);
+    // formData.append("mobile_number", user.mobileNumber);
+    // formData.append("email", user.email);
+    // formData.append("role_id", role);
+    // formData.append("password", user.password);
+    // formData.append("confirm_password", user.confirmPassword);
+    // formData.append("image", file);
+
+    //console.log(formData)
+
+    // const dataObject = {
+    //     _id: id,
+    //     ...data,
+    //     customers: selectedUserData,
+    // }
+    // const formData = convertToFormData(dataObject)
+
     return dispatch => {
         const headers = {
-            "Content-Type": "application/json",
+            // "Content-Type": "application/json",
             // 'content-type': 'application/x-www-form-urlencoded'
 
+            "Content-Type": "multipart/form-data",
             "Access-Control-Allow-Origin": "*",
         };
 
@@ -227,15 +254,15 @@ export const getAllAdminUsersAction = () => {
     };
 };
 
-export const userUpdateAction = (registerInfo, role) => {
+export const userUpdateAction = (registerInfo, file, role) => {
     // console.log(registerInfo, role);
 
     var url = process.env.REACT_APP_LOCALHOST + "/User/Put";
-    const formData = {
+    const dataObject = {
         _id: registerInfo.id,
         first_name: registerInfo.first_name,
         last_name: registerInfo.last_name,
-        image: "https://unsplash.com/photos/OHjxA8bfrwg",
+        image: file,
         present_address: registerInfo.present_address,
         permanent_address: registerInfo.permanent_address,
         mobile_number: registerInfo.mobileNumber,
@@ -243,10 +270,13 @@ export const userUpdateAction = (registerInfo, role) => {
         role_id: role,
         is_active: registerInfo.is_active,
     };
-    console.log(formData);
+
+    const formData = convertToFormData(dataObject)
+    // console.log(formData);
     return dispatch => {
         const headers = {
-            "Content-Type": "application/json",
+            // "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             "Access-Control-Allow-Origin": "*",
 
         };
@@ -282,11 +312,11 @@ export const userUpdateFresh = () => {
 export const userStatusUpdateAction = registerInfo => {
 
     var url = process.env.REACT_APP_LOCALHOST + "/User/Put";
-    const formData = registerInfo;
-    console.log(formData);
+    const dataObject = registerInfo;
+    const formData = convertToFormData(dataObject)
     return dispatch => {
         const headers = {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
 
             "Access-Control-Allow-Origin": "*",
 

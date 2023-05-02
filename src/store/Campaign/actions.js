@@ -13,10 +13,12 @@ import {
 import axios from "axios"
 import { toast } from "react-toastify"
 import { v4 as uuidv4 } from "uuid"
+import { convertToFormData } from "helpers/functions"
 
 // token
 var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
+
 
 export const addCampaignAction = (id, data, selectedBranch) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Campaign/Post"
@@ -32,16 +34,25 @@ export const addCampaignAction = (id, data, selectedBranch) => {
       })
       : null
   // console.log(selectedBranchData);
-  const formData = {
+  // const formData = {
+  //   _id: id,
+  //   ...data,
+  //   restaurants: selectedBranchData,
+  // }
+
+  const dataObject = {
     _id: id,
     ...data,
     restaurants: selectedBranchData,
   }
+  //  console.log(dataObject)
+  const formData = convertToFormData(dataObject)
   return dispatch => {
     console.log("-in the dispatch----")
 
     const headers = {
-      "Content-Type": "application/json",
+      // "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -126,15 +137,18 @@ export const campaignEditAction = (id, data, selectedBranch) => {
         }
       })
       : null
-  const formData = {
+
+  const dataObject = {
     _id: id,
     ...data,
     restaurants: selectedBranchData,
   }
+  //  console.log(dataObject)
+  const formData = convertToFormData(dataObject)
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
-
+      // "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
     axios
@@ -169,12 +183,14 @@ export const campaignEditFresh = () => {
 export const campaignStatusEditAction = data => {
 
   var url = process.env.REACT_APP_LOCALHOST + "/Campaign/Put"
-  const formData = data;
-  console.log(formData);
+  let dataObject = { ...data };
+
+  const formData = convertToFormData(dataObject);
+  // console.log(formData);
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
-
+      // "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
     axios

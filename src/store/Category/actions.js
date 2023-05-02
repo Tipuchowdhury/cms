@@ -1,3 +1,4 @@
+import { convertToFormData } from "helpers/functions"
 import {
   ADD_CATEGORY,
   ADD_CATEGORY_FRESH,
@@ -19,16 +20,21 @@ var token = JSON.parse(localStorage.getItem("jwt"))
 export const addCategoryAction = (name, id, image) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Category/Post"
 
-  const formData = {
+  const dataObject = {
     _id: id,
     category_name: name,
     image: image,
   }
+
+  const formData = convertToFormData(dataObject)
+
+  //console.log(formData);
   return dispatch => {
     console.log("-in the dispatch----")
 
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
+      // "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -99,15 +105,20 @@ export const getAllCategoryFresh = () => {
 
 export const categoryNameEditAction = (name, id, image, is_active) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Category/Put"
-  const formData = {
+
+  const dataObject = {
     _id: id,
     category_name: name,
     image: image,
     is_active: is_active,
   }
+
+  const formData = convertToFormData(dataObject)
+
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
+      // "Content-Type": "application/json",
 
       "Access-Control-Allow-Origin": "*",
     }
@@ -144,16 +155,18 @@ export const categoryNameEditFresh = () => {
 
 export const categoryStatusEditAction = (name, id, image, is_active) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Category/Put"
-  const formData = {
+  const dataObject = {
     _id: id,
     category_name: name,
     image: image,
     is_active: !(is_active),
   }
+
+  const formData = convertToFormData(dataObject)
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
-
+      // "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
     axios

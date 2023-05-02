@@ -1,5 +1,6 @@
 import { ADD_POPUP, ADD_POPUP_FRESH, GET_ALL_POPUP, GET_ALL_POPUP_FRESH, POPUP_EDIT, POPUP_EDIT_FRESH, POPUP_DELETE, POPUP_DELETE_FRESH, POPUP_STATUS_EDIT, POPUP_STATUS_EDIT_FRESH } from "./actionTypes";
 import axios from "axios";
+import { convertToFormData } from "helpers/functions";
 import { v4 as uuidv4 } from "uuid";
 
 // token
@@ -10,18 +11,23 @@ export const addPopUpAction = (addData) => {
     const popup_id = uuidv4();
 
 
-    let formData = {
+    // let formData = {
+    //     _id: popup_id,
+    //     ...addData,
+    // };
+
+    let dataObject = {
         _id: popup_id,
         ...addData,
     };
 
-    // console.log(formData);
+    const formData = convertToFormData(dataObject)
 
     return dispatch => {
         // console.log("-in the dispatch----")
 
         const headers = {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             "Access-Control-Allow-Origin": "*",
         };
 
@@ -96,11 +102,15 @@ export const popUpUpdateAction = (editData) => {
 
     var url = process.env.REACT_APP_LOCALHOST + "/PopUpBanner/Put";
 
-    const formData = editData;
+    // const formData = editData;
+
+    const dataObject = editData;
+
+    const formData = convertToFormData(dataObject)
     return dispatch => {
         const headers = {
-            "Content-Type": "application/json",
-
+            // "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             "Access-Control-Allow-Origin": "*",
 
         };
@@ -136,11 +146,14 @@ export const popUpStatusUpdateAction = (editData) => {
 
 
     var url = process.env.REACT_APP_LOCALHOST + "/PopUpBanner/Put";
-    const formData = editData;
+    const dataObject = editData;
+
+    const formData = convertToFormData(dataObject)
 
     return dispatch => {
         const headers = {
-            "Content-Type": "application/json",
+            // "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             "Access-Control-Allow-Origin": "*",
         };
         axios

@@ -259,6 +259,10 @@ function AddCoupon(props) {
     }))
   }
 
+  const [images, setImages] = useState({
+    image: location.state ? location.state.image : "",
+  })
+
   const [couponInfo, setCouponInfo] = useState({
     name: location.state ? location.state.name : "",
     image: location.state ? location.state.image : "",
@@ -310,6 +314,19 @@ function AddCoupon(props) {
       ...couponInfo,
       [name]: new Date(new_time_string).toISOString(),
     })
+  }
+
+  const handleFiles = e => {
+    name = e.target.name
+    value = e.target.files[0]
+    setCouponInfo({ ...couponInfo, [name]: value })
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      setImages({ ...images, [name]: reader.result })
+    }
+
+    reader.readAsDataURL(value)
   }
 
   const gradual_for_edit = location.state?.gradual_informations?.map(item => ({
@@ -535,7 +552,7 @@ function AddCoupon(props) {
                   </Row>
                   <Row className="mb-3">
                     <label
-                      htmlFor="example-text-input"
+                      htmlFor="image"
                       className="col-md-2 col-form-label"
                     >
                       Image
@@ -544,12 +561,26 @@ function AddCoupon(props) {
                       <input
                         type="file"
                         className="form-control"
-                        id="resume"
-                        onChange={e => console.log(e)}
-                        required
+                        id="image"
+                        name="image"
+                        onChange={handleFiles}
                       />
                     </div>
                   </Row>
+                  {images?.image && (
+                    <Row className="mb-3">
+                      <label className="col-md-2">
+                        <span></span>
+                      </label>
+                      <div className="col-md-10">
+                        <img
+                          src={images.image}
+                          alt="preview"
+                          style={{ width: "50%" }}
+                        />
+                      </div>
+                    </Row>
+                  )}
 
                   {selectedCouponType?.value == "branch_wise" ? (
                     <Row className="mb-3">
