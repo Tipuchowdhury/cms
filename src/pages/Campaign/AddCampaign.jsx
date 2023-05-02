@@ -59,6 +59,7 @@ function AddCampaign(props) {
     image: location.state ? location.state.image : "",
   })
 
+
   // console.log(location.state)
   const [campaignInfo, setCampaignInfo] = useState({
     name: location.state ? location.state.name : "",

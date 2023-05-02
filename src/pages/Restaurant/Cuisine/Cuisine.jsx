@@ -21,8 +21,8 @@ function Cuisine(props) {
     const toggle = () => setModal(!modal);
     const [editModal, setEditModal] = useState(false);
     const [color, setColor] = useState({
-        fg: "",
-        bg: ""
+        fg: "#ffffff",
+        bg: "#ffffff"
     });
     // const toggleEditModal = () => {
     //     setAddImages({ ...addImages, image: "" });
@@ -254,14 +254,17 @@ function Cuisine(props) {
                                 <label className="form-label" htmlFor="username">Cuisine Name</label>
                                 <input type="text" className="form-control" id="username" placeholder="Enter city name" required value={name} onChange={(e) => setName(e.target.value)} />
                             </div>
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="fg">Color FG</label>
-                                <input type="color" className="form-control" value={color.fg} name="fg" id="fg" onChange={handleAddColors} />
-                            </div>
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="bg">Color BG</label>
-                                <input type="color" className="form-control" value={color.bg} name="bg" id="bg" onChange={handleAddColors} />
-                            </div>
+                            <Row>
+                                <div className="col-sm-6 mb-3">
+                                    <label className="form-label" htmlFor="fg">Color FG</label>
+                                    <input type="color" style={{ width: 100, height: 50 }} className="form-control" value={color.fg} name="fg" id="fg" onChange={handleAddColors} />
+                                </div>
+                                <div className="col-sm-6 mb-3">
+                                    <label className="form-label" htmlFor="bg">Color BG</label>
+                                    <input type="color" style={{ width: 100, height: 50 }} className="form-control" value={color.bg} name="bg" id="bg" onChange={handleAddColors} />
+                                </div>
+                            </Row>
+
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="image">Image</label>
                                 <input type="file" className="form-control" name="image" id="image" onChange={handleAddFile} />
@@ -321,15 +324,18 @@ function Cuisine(props) {
                                 <label className="form-label" htmlFor="cuisine_name">Cuisine Name</label>
                                 <input type="text" className="form-control" id="cuisine_name" placeholder="Enter cuisine name" required value={editName} onChange={(e) => setEditName(e.target.value)} />
                             </div>
+                            <Row>
+                                <div className="mb-3">
+                                    <label className="form-label" htmlFor="fg">Color FG</label>
+                                    <input type="color" style={{ width: 100, height: 50 }} className="form-control" value={color.fg} name="fg" id="fg" onChange={handleEditColors} />
+                                </div>
+                                <div className="mb-3">
+                                    <label className="form-label" htmlFor="bg">Color BG</label>
+                                    <input type="color" style={{ width: 100, height: 50 }} className="form-control" value={color.bg} name="bg" id="bg" onChange={handleEditColors} />
+                                </div>
+                            </Row>
 
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="fg">Color FG</label>
-                                <input type="color" className="form-control" value={color.fg} name="fg" id="fg" onChange={handleEditColors} />
-                            </div>
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="bg">Color BG</label>
-                                <input type="color" className="form-control" value={color.bg} name="bg" id="bg" onChange={handleEditColors} />
-                            </div>
+
 
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="image">Image</label>
