@@ -95,6 +95,7 @@ function AddNotification(props) {
     reader.readAsDataURL(value)
   }
 
+
   const handleSubmit = e => {
     e.preventDefault()
     const uniqueId = uuidv4()
