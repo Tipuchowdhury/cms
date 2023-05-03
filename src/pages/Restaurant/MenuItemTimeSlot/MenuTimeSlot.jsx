@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link, useNavigate } from 'react-router-dom';
-import { getAllMenuTimeSlot } from 'store/actions';
+import { getAllMenuTimeSlot, menuTimeSlotDeleteAction, menuTimeSlotDeleteFresh } from 'store/actions';
 
 
 
@@ -15,15 +15,23 @@ function MenuTimeSlot(props) {
     const navigate = useNavigate();
     const [modalDel, setModalDel] = useState(false);
 
+    const [deleteItem, setDeleteItem] = useState();
+
     const toggleDel = () => setModalDel(!modalDel);
 
-    // const handleDelete = () => {
-    //     toggleDel();
-    //     console.log(deleteItem)
-    //     props.cityDeleteAction(deleteItem);
-    // }
+    const handleDeleteModal = (row) => {
+        setDeleteItem(row._id);
+        toggleDel();
+    }
+
+    const handleDelete = () => {
+        props.menuTimeSlotDeleteAction(deleteItem);
+    }
+
+
+
     const handleEdit = (row) => {
-        console.log(row);
+        // console.log(row);
         navigate("/add-time-slot", { state: row })
     }
     const actionRef = (cell, row) =>
@@ -82,10 +90,17 @@ function MenuTimeSlot(props) {
         if (props.get_all_menu_time_slot_loading == false) {
             props.getAllMenuTimeSlot();
         }
+        if (props.menu_time_slot_delete_loading === "Success") {
+            // console.log("I am in the delete")
+            toast.success("Menu Time Slot Deleted");
+            toggleDel();
+            props.menuTimeSlotDeleteFresh();
+
+        }
 
     }, [props.get_all_menu_time_slot_loading]);
 
-    console.log(props.get_all_menu_time_slot_data);
+    // console.log(props.get_all_menu_time_slot_data);
     return (
         <React.Fragment>
 
@@ -117,7 +132,7 @@ function MenuTimeSlot(props) {
 
 
                 {/* ============ delete modal starts=============== */}
-                {/* <Modal isOpen={modalDel} toggle={toggleDel} centered>
+                <Modal isOpen={modalDel} toggle={toggleDel} centered>
                     <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
                         <div className="icon-box">
                             <i className="fa red-circle fa-trash" style={{ color: "red", fontSize: "40px" }}></i>
@@ -129,7 +144,7 @@ function MenuTimeSlot(props) {
                         <Button color="secondary" onClick={toggleDel}>Cancel</Button>{' '}
                         <Button color="danger" onClick={handleDelete}>Delete</Button>
                     </ModalFooter>
-                </Modal> */}
+                </Modal>
                 {/* ============ delete modal ends=============== */}
             </div>
         </React.Fragment>
@@ -144,18 +159,22 @@ const mapStateToProps = state => {
         get_all_menu_time_slot_data,
         get_all_menu_time_slot_error,
         get_all_menu_time_slot_loading,
+        menu_time_slot_delete_loading,
     } = state.Restaurant;
 
     return {
         get_all_menu_time_slot_data,
         get_all_menu_time_slot_error,
         get_all_menu_time_slot_loading,
+        menu_time_slot_delete_loading,
     };
 };
 
 export default withRouter(
     connect(mapStateToProps,
         {
-            getAllMenuTimeSlot
+            getAllMenuTimeSlot,
+            menuTimeSlotDeleteAction,
+            menuTimeSlotDeleteFresh,
         })(MenuTimeSlot)
 );

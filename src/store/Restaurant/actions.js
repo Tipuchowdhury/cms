@@ -46,6 +46,8 @@ import {
   ADD_MENU_TIME_SLOT_FRESH,
   EDIT_MENU_TIME_SLOT,
   EDIT_MENU_TIME_SLOT_FRESH,
+  DELETE_MENU_TIME_SLOT,
+  DELETE_MENU_TIME_SLOT_FRESH,
   GET_CATEGORY_BY_ID,
   GET_CATEGORY_BY_ID_FRESH,
   ADD_BRANCH_FRESH,
@@ -1551,7 +1553,7 @@ export const addMenuTimeSlotFresh = () => {
 }
 
 export const editMenuTimeSlotAction = (val, timeSlot) => {
-  console.log(val, timeSlot)
+  // console.log(val, timeSlot)
   var url = process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/Put"
 
   let formData = {
@@ -1568,6 +1570,8 @@ export const editMenuTimeSlotAction = (val, timeSlot) => {
       minute: moment(timeSlot.end_time, "HH:mm").get("minutes"),
     },
   }
+
+  // console.log(formData)
 
   return dispatch => {
     const headers = {
@@ -1604,6 +1608,43 @@ export const editMenuTimeSlotFresh = () => {
       status: false,
     })
   }
+}
+
+export const menuTimeSlotDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/Delete"
+  // console.log(id);
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+
+    axios
+      .delete(url, { params: { id: id } }, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: DELETE_MENU_TIME_SLOT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: DELETE_MENU_TIME_SLOT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const menuTimeSlotDeleteFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: DELETE_MENU_TIME_SLOT_FRESH,
+      status: false,
+    })
 }
 
 export const getCategoryByIdAction = id => {

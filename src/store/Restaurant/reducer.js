@@ -50,7 +50,9 @@ import {
     EDIT_MENU_TIME_SLOT,
     EDIT_MENU_TIME_SLOT_FRESH,
     GET_CATEGORY_BY_ID,
-    GET_CATEGORY_BY_ID_FRESH
+    GET_CATEGORY_BY_ID_FRESH,
+    DELETE_MENU_TIME_SLOT,
+    DELETE_MENU_TIME_SLOT_FRESH
 
 
 } from "./actionTypes"
@@ -141,6 +143,8 @@ const initialState = {
     get_all_menu_time_slot_loading: false,
 
     edit_menu_time_slot_loading: false,
+
+    menu_time_slot_delete_loading: false,
 
     get_category_by_id_data: null,
     get_category_by_id_error: null,
@@ -432,6 +436,7 @@ const Restaurant = (state = initialState, action) => {
                 get_all_cuisine_loading: false
             }
 
+            break;
 
         case GET_ADD_ONS_CATEGORY:
             state = {
@@ -555,6 +560,23 @@ const Restaurant = (state = initialState, action) => {
                 ...state,
                 edit_menu_time_slot_loading: action.status,
             }
+            break;
+
+        case DELETE_MENU_TIME_SLOT:
+            state = {
+                ...state,
+                menu_time_slot_delete_loading: action.status,
+                get_all_menu_time_slot_loading: false
+            }
+            break;
+
+        case DELETE_MENU_TIME_SLOT_FRESH:
+            state = {
+                ...state,
+                menu_time_slot_delete_loading: action.status,
+                get_all_menu_time_slot_loading: false
+            }
+
             break;
 
         case GET_CATEGORY_BY_ID:

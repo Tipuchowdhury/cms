@@ -48,7 +48,7 @@ function AddTimeSlot(props) {
 
     }
     // get all branch
-    console.log(props.get_all_branch_data);
+    // console.log(props.get_all_branch_data);
     let branchData = undefined;
     if (props.get_all_branch_data?.length > 0) {
         branchData = props.get_all_branch_data?.map((item, key) => (
