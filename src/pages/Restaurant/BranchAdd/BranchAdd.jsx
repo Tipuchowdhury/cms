@@ -41,8 +41,8 @@ function BranchAdd(props) {
     console.log(map_value_for_edit);
     const [state2, setState2] = useState({
         location: location.state ? map_value_for_edit : `${defaultProps.lat},${defaultProps.lng}`,
-        lat: location.state ? map_value_for_edit[0] : undefined,
-        lng: location.state ? map_value_for_edit[1] : undefined,
+        lat: location.state ? map_value_for_edit[0] : 23.8103,
+        lng: location.state ? map_value_for_edit[1] : 90.4125,
     });
     const [selectedGroup, setselectedGroup] = useState(null);
     const restaurant_time_for_edit = location.state?.working_hours?.map((item) => ({

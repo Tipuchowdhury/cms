@@ -136,13 +136,19 @@ function PlatfromOperationTimeSlot(props) {
     const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
         className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
 
+    // const day = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
+    //     className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
+
+    const weekday = ['0', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Satuday', 'Sunday'];
+    const mainday = (cell, row) => <>{weekday[row.day]}</>
 
     const activeData = [
 
         {
-            dataField: "name",
-            text: "Name",
+            dataField: "day",
+            text: "Day",
             sort: true,
+            formatter: mainday
         },
         {
             dataField: "",
@@ -161,7 +167,7 @@ function PlatfromOperationTimeSlot(props) {
     ];
     const defaultSorted = [
         {
-            dataField: "title",
+            dataField: "day",
             order: "desc"
         }
     ];
@@ -170,11 +176,11 @@ function PlatfromOperationTimeSlot(props) {
     useEffect(() => {
 
 
-        if (props.get_all_operation_time_slotloading == false) {
+        if (props.get_all_operation_time_slot_loading == false) {
             props.getAllOperationTimeSlotAction();
         }
 
-        if (props.add_operation_time_slotloading === "Success") {
+        if (props.add_operation_time_slot_loading === "Success") {
             toast.success("Operation Time Slot Added Successfully");
             toggle();
             setAddInfo({
@@ -188,48 +194,48 @@ function PlatfromOperationTimeSlot(props) {
         }
 
 
-        if (props.add_operation_time_slotloading === "Failed") {
+        if (props.add_operation_time_slot_loading === "Failed") {
             toast.error("Something went wrong");
             props.addOperationTimeSlotFresh();
 
         }
 
-        if (props.operation_time_slotedit_loading === "Success") {
+        if (props.operation_time_slot_edit_loading === "Success") {
             toast.success("Operation Time Slot Updated");
             toggleEditModal();
             props.operationTimeSlotUpdateFresh();
         }
 
-        if (props.operation_time_slotedit_loading === "Failed") {
+        if (props.operation_time_slot_edit_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
             props.operationTimeSlotUpdateFresh();
 
         }
 
-        if (props.operation_time_slotstatus_edit_loading === "Success") {
+        if (props.operation_time_slot_status_edit_loading === "Success") {
             toast.success("Operation Time Slot Status Updated");
             toggleStatus();
             props.operationTimeSlotStatusUpdateFresh();
 
         }
 
-        if (props.operation_time_slotstatus_edit_loading === "Failed") {
+        if (props.operation_time_slot_status_edit_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
             props.operationTimeSlotStatusUpdateFresh();
 
         }
 
-        if (props.operation_time_slotdelete_loading === "Success") {
+        if (props.operation_time_slot_delete_loading === "Success") {
             // console.log("I am in the delete")
             toast.success("Operation Time Slot Deleted");
             toggleDel();
             props.operationTimeSlotDeleteFresh();
         }
 
-    }, [props.add_operation_time_slotloading, props.operation_time_slotedit_loading,
-    props.operation_time_slotdelete_loading, props.operation_time_slotstatus_edit_loading]);
+    }, [props.add_operation_time_slot_loading, props.operation_time_slot_edit_loading,
+    props.operation_time_slot_delete_loading, props.operation_time_slot_status_edit_loading]);
 
 
     return (
@@ -250,8 +256,8 @@ function PlatfromOperationTimeSlot(props) {
                                         </Button>
                                     </div>
 
-                                    {props.get_all_operation_time_slotdata ? props.get_all_operation_time_slotdata.length > 0 ? <DatatableTablesWorking products={props.get_all_operation_time_slotdata}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_operation_time_slotdata?._id} /> : null : null}
+                                    {props.get_all_operation_time_slot_data ? props.get_all_operation_time_slot_data.length > 0 ? <DatatableTablesWorking products={props.get_all_operation_time_slot_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_operation_time_slot_data?._id} /> : null : null}
 
                                 </CardBody>
                             </Card>
@@ -388,40 +394,40 @@ const mapStateToProps = state => {
 
 
     const {
-        add_operation_time_slotdata,
-        add_operation_time_sloterror,
-        add_operation_time_slotloading,
+        add_operation_time_slot_data,
+        add_operation_time_slot_error,
+        add_operation_time_slot_loading,
 
-        get_all_operation_time_slotdata,
-        get_all_operation_time_sloterror,
-        get_all_operation_time_slotloading,
+        get_all_operation_time_slot_data,
+        get_all_operation_time_slot_error,
+        get_all_operation_time_slot_loading,
 
-        operation_time_slotedit_data,
-        operation_time_slotedit_loading,
+        operation_time_slot_edit_data,
+        operation_time_slot_edit_loading,
 
-        operation_time_slotstatus_edit_data,
-        operation_time_slotstatus_edit_loading,
+        operation_time_slot_status_edit_data,
+        operation_time_slot_status_edit_loading,
 
-        operation_time_slotdelete_loading
+        operation_time_slot_delete_loading
 
     } = state.OperationTimeSlot;
 
     return {
-        add_operation_time_slotdata,
-        add_operation_time_sloterror,
-        add_operation_time_slotloading,
+        add_operation_time_slot_data,
+        add_operation_time_slot_error,
+        add_operation_time_slot_loading,
 
-        get_all_operation_time_slotdata,
-        get_all_operation_time_sloterror,
-        get_all_operation_time_slotloading,
+        get_all_operation_time_slot_data,
+        get_all_operation_time_slot_error,
+        get_all_operation_time_slot_loading,
 
-        operation_time_slotedit_data,
-        operation_time_slotedit_loading,
+        operation_time_slot_edit_data,
+        operation_time_slot_edit_loading,
 
-        operation_time_slotstatus_edit_data,
-        operation_time_slotstatus_edit_loading,
+        operation_time_slot_status_edit_data,
+        operation_time_slot_status_edit_loading,
 
-        operation_time_slotdelete_loading
+        operation_time_slot_delete_loading
     };
 };
 
