@@ -186,6 +186,11 @@ const SidebarContent = props => {
                   </Link>
                 </li>
                 <li>
+                  <Link to="/vehicle-types">
+                    {props.t("Vehicle Types")}
+                  </Link>
+                </li>
+                <li>
                   <Link to="/subscription-types">
                     {props.t("Subscription Types")}
                   </Link>
@@ -210,6 +215,9 @@ const SidebarContent = props => {
                 </li>
                 <li>
                   <Link to="/restaurant">{props.t("Manage Restaurant")}</Link>
+                </li>
+                <li>
+                  <Link to="/branch-attribute">{props.t("Branch Attribute")}</Link>
                 </li>
                 <li>
                   <Link to="/manage-branch">{props.t("Manage Branch")} </Link>
@@ -245,13 +253,12 @@ const SidebarContent = props => {
               </Link>
             </li>
 
-            <li>
+            {/* <li>
               <Link to="/branch-attribute" className="waves-effect">
                 <i className="ti-list"></i>
-                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("Branch Attribute")}</span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link to="/coupon" className="waves-effect">
                 <i className="fa fa-tag"></i>

@@ -31,6 +31,7 @@ import Customer from "./Customer/reducer"
 import Review from "./Review/reducer"
 import Reason from "./Setting/SystemOnOffReason/reducer"
 import OperationTimeSlot from "./Setting/PlatformOperationTimeSlot/reducer"
+import VehicleType from "./Rider/VehicleType/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -57,6 +58,7 @@ const rootReducer = combineReducers({
   Review,
   Reason,
   OperationTimeSlot,
+  VehicleType,
 })
 
 export default rootReducer

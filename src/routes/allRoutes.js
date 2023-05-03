@@ -146,6 +146,7 @@ import Review from "pages/Review/Review"
 import Customer from "pages/Customer/Customer"
 import SystemOnOffReason from "pages/Setting/SystemOnOffReason/SystemOnOffReason"
 import PlatfromOperationTimeSlot from "pages/Setting/PlatfromOperationTimeSlot/PlatfromOperationTimeSlot"
+import VehicleTypes from "pages/Rider/VehicleTypes/VehicleTypes"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -173,6 +174,7 @@ const userRoutes = [
   { path: "/register", component: <Register1 /> },
   { path: "/manage-users", component: <ManageUsers /> },
   { path: "/customers", component: <Customer /> },
+  { path: "/vehicle-types", component: <VehicleTypes /> },
   { path: "/subscription-types", component: <SubscriptionTypes /> },
   { path: "/restaurant", component: <Restaurant /> },
 
