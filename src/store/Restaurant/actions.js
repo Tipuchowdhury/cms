@@ -296,10 +296,10 @@ export const branchAddAction = (
     name: zoneInfo.name,
     _id: id,
     email: zoneInfo.email,
-    location: {
-      coordinates: [Number(lat), Number(lng)],
-      type: "Point",
-    },
+    // location: {
+    //   coordinates: [Number(lat), Number(lng)],
+    //   type: "Point",
+    // },
     address: zoneInfo.address,
     popularity_sort_value: JSON.parse(zoneInfo.popularity_sort_value),
     price_range: zoneInfo.price_range,
@@ -322,8 +322,15 @@ export const branchAddAction = (
     is_delivery: JSON.parse(zoneInfo.is_delivery),
     is_pickup: JSON.parse(zoneInfo.is_pickup),
     is_dine: JSON.parse(zoneInfo.is_dine),
+    delivery_charge: 100,
   };
+
+  console.log(dataObject)
   const formData = convertToFormData(dataObject)
+
+  formData.append("location[coordinates][0]", Number(lng));
+  formData.append("location[coordinates][1]", Number(lat));
+  formData.append("location[type]", "Point");
 
   return dispatch => {
     const headers = {
@@ -334,11 +341,11 @@ export const branchAddAction = (
     axios
       .post(url, formData, { headers: headers })
       .then(response => {
-        dispatch({
-          type: "ADD_BRANCH",
-          payload: response.data,
-          status: "Success",
-        })
+        // dispatch({
+        //   type: "ADD_BRANCH",
+        //   payload: response.data,
+        //   status: "Success",
+        // })
         toast.success("Branch Addedd Successfully")
       })
       .catch(error => {

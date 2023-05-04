@@ -191,6 +191,11 @@ const SidebarContent = props => {
                   </Link>
                 </li>
                 <li>
+                  <Link to="/riders">
+                    {props.t("Riders")}
+                  </Link>
+                </li>
+                <li>
                   <Link to="/subscription-types">
                     {props.t("Subscription Types")}
                   </Link>

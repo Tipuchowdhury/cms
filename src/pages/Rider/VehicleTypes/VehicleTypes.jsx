@@ -222,6 +222,11 @@ function VehicleTypes(props) {
 
     useEffect(() => {
 
+        if (props.get_all_vehicle_type_loading == false) {
+            // console.log("I am in get all slider loading ")
+            props.getAllVehicleTypeAction();
+        }
+
 
         if (props.add_vehicle_type_loading === "Success") {
             toast.success("Vehicle Type Added Successfully");
