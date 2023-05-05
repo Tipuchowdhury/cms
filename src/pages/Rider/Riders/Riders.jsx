@@ -318,8 +318,11 @@ const mapStateToProps = state => {
         get_all_rider_data,
         get_all_rider_error,
         get_all_rider_loading,
+
         rider_edit_loading,
+
         rider_delete_loading,
+
         rider_status_edit_data,
         rider_status_edit_loading,
     }

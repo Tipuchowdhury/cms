@@ -61,7 +61,7 @@ function AddRider(props) {
         house_nameplate: location.state ? location.state.house_nameplate : "",
     })
 
-    // console.log(location.state)
+
     const [RiderInfo, setRiderInfo] = useState({
         first_name: location.state ? location.state.first_name : "",
         last_name: location.state ? location.state.last_name : "",
@@ -116,7 +116,7 @@ function AddRider(props) {
     //select multiple zone
     const [selectedZone, setSelectedZone] = useState(zone_data_edit ? zone_data_edit : "");
     const handleSelectZone = (e) => {
-        // console.log(e)
+
         setSelectedZone(e)
     }
 
@@ -128,7 +128,6 @@ function AddRider(props) {
 
     }
 
-    console.log(zoneData);
 
     let name, value, checked
     const handleInputs = e => {
@@ -257,7 +256,7 @@ function AddRider(props) {
 
 
     const handleCheckBox = (e) => {
-        // console.log(e);
+
         name = e.target.name;
         checked = e.target.checked;
         setRiderInfo({ ...RiderInfo, [name]: checked })
@@ -267,7 +266,7 @@ function AddRider(props) {
     const handleSubmit = e => {
         e.preventDefault()
         const uniqueId = uuidv4()
-        // console.log(RiderInfo);
+
         props.addRiderAction(uniqueId, RiderInfo, selectedZone)
     }
 
@@ -280,11 +279,8 @@ function AddRider(props) {
             selectedZone
         )
     }
-    //console.log(props.get_all_city_data);
 
     useEffect(() => {
-
-
 
         if (props.get_all_city_loading == false) {
 

@@ -17,16 +17,18 @@ import { v4 as uuidv4 } from "uuid"
 
 // token
 var token = JSON.parse(localStorage.getItem("jwt"))
-//console.log(token.jwt);
 
-export const addRiderAction = (id, data, selectedBranch) => {
+
+export const addRiderAction = (id, data, selectedZone) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Rider/Post"
 
-  const restaurants = selectedBranch?.length > 0 ? selectedBranch.map(item => {
+  // console.log(selectedZone);
+
+  const zone = selectedZone?.length > 0 ? selectedZone.map(item => {
     const val = uuidv4()
     return {
       _id: val,
-      res_id: item.value,
+      zone_id: item.value,
       rider_id: id,
     }
   }) : null
@@ -35,9 +37,9 @@ export const addRiderAction = (id, data, selectedBranch) => {
   const dataObject = {
     _id: id,
     ...data,
-    restaurants: restaurants,
+    zone: zone,
   }
-  // console.log(formData)
+  //console.log(dataObject)
   const formData = convertToFormData(dataObject)
   return dispatch => {
     // console.log("-in the dispatch----")
@@ -52,7 +54,7 @@ export const addRiderAction = (id, data, selectedBranch) => {
       .then(response => {
         // console.log("response :", response)
         dispatch({
-          type: "ADD_RIDER",
+          type: ADD_RIDER,
           payload: response.data,
           status: "Success",
         })
@@ -61,7 +63,7 @@ export const addRiderAction = (id, data, selectedBranch) => {
 
       .catch(error => {
         dispatch({
-          type: "ADD_RIDER",
+          type: ADD_RIDER,
           payload: error,
           status: "Failed",
         })
@@ -115,14 +117,14 @@ export const getAllRiderFresh = () => {
   }
 }
 
-export const riderEditAction = (id, data, selectedBranch) => {
+export const riderEditAction = (id, data, selectedZone) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Rider/Put"
 
-  const restaurants = selectedBranch?.length > 0 ? selectedBranch.map(item => {
+  const zone = selectedZone?.length > 0 ? selectedZone.map(item => {
     const val = uuidv4()
     return {
       _id: val,
-      res_id: item.value,
+      zone_id: item.value,
       rider_id: id,
     }
   }) : null
@@ -131,7 +133,7 @@ export const riderEditAction = (id, data, selectedBranch) => {
   const dataObject = {
     _id: id,
     ...data,
-    restaurants: restaurants,
+    zone: zone,
   }
   // console.log(formData)
   const formData = convertToFormData(dataObject)
