@@ -341,11 +341,11 @@ export const branchAddAction = (
     axios
       .post(url, formData, { headers: headers })
       .then(response => {
-        // dispatch({
-        //   type: "ADD_BRANCH",
-        //   payload: response.data,
-        //   status: "Success",
-        // })
+        dispatch({
+          type: "ADD_BRANCH",
+          payload: response.data,
+          status: "Success",
+        })
         toast.success("Branch Addedd Successfully")
       })
       .catch(error => {
