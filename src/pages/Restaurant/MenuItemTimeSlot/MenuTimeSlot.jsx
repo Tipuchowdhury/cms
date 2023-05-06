@@ -7,22 +7,38 @@ import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link, useNavigate } from 'react-router-dom';
-import { getAllMenuTimeSlot, menuTimeSlotDeleteAction, menuTimeSlotDeleteFresh } from 'store/actions';
-
-
+import { getAllMenuTimeSlot, menuTimeSlotDeleteAction, menuTimeSlotDeleteFresh, editMenuTimeSlotStatusAction, editMenuTimeSlotStatusFresh } from 'store/actions';
 
 function MenuTimeSlot(props) {
     const navigate = useNavigate();
+
+    const [editInfo, setEditInfo] = useState({});
+    const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
     const [modalDel, setModalDel] = useState(false);
 
     const [deleteItem, setDeleteItem] = useState();
 
     const toggleDel = () => setModalDel(!modalDel);
+    const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
+
+
+    const handleStatusModal = (row) => {
+        setEditInfo(row);
+        toggleStatus();
+    }
+
+    const handleStatusUpdate = () => {
+        props.editMenuTimeSlotStatusAction({
+            ...editInfo,
+            is_active: !editInfo.is_active,
+        })
+    }
 
     const handleDeleteModal = (row) => {
         setDeleteItem(row._id);
         toggleDel();
     }
+
 
     const handleDelete = () => {
         props.menuTimeSlotDeleteAction(deleteItem);
@@ -54,7 +70,8 @@ function MenuTimeSlot(props) {
 
 
 
-    const statusRef = (cell, row) => <Badge color="success" style={{ padding: "8px" }}>Activate</Badge>
+    const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
+        className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
 
 
     const activeData = [
@@ -98,7 +115,21 @@ function MenuTimeSlot(props) {
 
         }
 
-    }, [props.get_all_menu_time_slot_loading]);
+        if (props.edit_menu_time_slot_status_loading === "Success") {
+            toast.success("Time Slot Status Updated");
+            toggleStatus();
+            props.editMenuTimeSlotStatusFresh();
+
+        }
+
+        if (props.edit_menu_time_slot_status_loading === "Failed") {
+            toast.error("Something went wrong");
+            // toggleEditModal();
+            props.editMenuTimeSlotStatusFresh();
+
+        }
+
+    }, [props.get_all_menu_time_slot_loading, props.edit_menu_time_slot_status_loading]);
 
     // console.log(props.get_all_menu_time_slot_data);
     return (
@@ -146,6 +177,22 @@ function MenuTimeSlot(props) {
                     </ModalFooter>
                 </Modal>
                 {/* ============ delete modal ends=============== */}
+
+                {/* ============ status update modal starts=============== */}
+                <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
+                    <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
+                        <div className="icon-box">
+                            <i className="fa fa-exclamation-circle" style={{ color: "#DCA218", fontSize: "40px" }}></i>
+                        </div>
+                        Are you sure?
+                    </ModalHeader>
+                    <ModalBody>Do you really want to update status these records? </ModalBody>
+                    <ModalFooter>
+                        <Button color="secondary" onClick={toggleStatus}>Cancel</Button>{' '}
+                        <Button color="primary" onClick={handleStatusUpdate}>Update</Button>
+                    </ModalFooter>
+                </Modal>
+                {/* ============ status update modal ends=============== */}
             </div>
         </React.Fragment>
     )
@@ -160,6 +207,7 @@ const mapStateToProps = state => {
         get_all_menu_time_slot_error,
         get_all_menu_time_slot_loading,
         menu_time_slot_delete_loading,
+        edit_menu_time_slot_status_loading,
     } = state.Restaurant;
 
     return {
@@ -167,6 +215,7 @@ const mapStateToProps = state => {
         get_all_menu_time_slot_error,
         get_all_menu_time_slot_loading,
         menu_time_slot_delete_loading,
+        edit_menu_time_slot_status_loading,
     };
 };
 
@@ -176,5 +225,7 @@ export default withRouter(
             getAllMenuTimeSlot,
             menuTimeSlotDeleteAction,
             menuTimeSlotDeleteFresh,
+            editMenuTimeSlotStatusAction,
+            editMenuTimeSlotStatusFresh,
         })(MenuTimeSlot)
 );

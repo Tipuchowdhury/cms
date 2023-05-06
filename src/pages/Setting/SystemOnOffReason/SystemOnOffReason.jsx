@@ -62,10 +62,6 @@ function SystemOnOffReason(props) {
     }
 
     const handleAddFile = (e) => {
-        // setAddInfo({
-        //     ...addInfo,
-        //     image: e.target.value,
-        // });
 
         name = e.target.name
         value = e.target.files[0]
@@ -99,10 +95,6 @@ function SystemOnOffReason(props) {
     }
 
     const handleEditFile = (e) => {
-        // setEditInfo({
-        //     ...editInfo,
-        //     image: e.target.value,
-        // });
 
         name = e.target.name
         value = e.target.files[0]
@@ -379,7 +371,7 @@ function SystemOnOffReason(props) {
 
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="image">Image</label>
-                                <input type="file" className="form-control" id="image" required name="image" onChange={handleEditFile} />
+                                <input type="file" className="form-control" id="image" name="image" onChange={handleEditFile} />
                             </div>
                             {editImages?.image && (
                                 <Row className="mb-3">

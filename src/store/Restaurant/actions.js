@@ -46,6 +46,8 @@ import {
   ADD_MENU_TIME_SLOT_FRESH,
   EDIT_MENU_TIME_SLOT,
   EDIT_MENU_TIME_SLOT_FRESH,
+  EDIT_MENU_TIME_SLOT_STATUS,
+  EDIT_MENU_TIME_SLOT_STATUS_FRESH,
   DELETE_MENU_TIME_SLOT,
   DELETE_MENU_TIME_SLOT_FRESH,
   GET_CATEGORY_BY_ID,
@@ -341,11 +343,11 @@ export const branchAddAction = (
     axios
       .post(url, formData, { headers: headers })
       .then(response => {
-        dispatch({
-          type: "ADD_BRANCH",
-          payload: response.data,
-          status: "Success",
-        })
+        // dispatch({
+        //   type: "ADD_BRANCH",
+        //   payload: response.data,
+        //   status: "Success",
+        // })
         toast.success("Branch Addedd Successfully")
       })
       .catch(error => {
@@ -1611,6 +1613,51 @@ export const editMenuTimeSlotFresh = () => {
   return dispatch => {
     dispatch({
       type: "EDIT_MENU_TIME_SLOT_FRESH",
+      //payload: null,
+      status: false,
+    })
+  }
+}
+
+export const editMenuTimeSlotStatusAction = (timeSlot) => {
+  // console.log(val, timeSlot)
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/Put"
+
+  let formData = timeSlot
+
+  // console.log(formData)
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: EDIT_MENU_TIME_SLOT_STATUS,
+          payload: response.data,
+          status: "Success",
+        })
+        // toast.success("Timeslot Edited Successfully")
+      })
+      .catch(error => {
+        dispatch({
+          type: "EDIT_MENU_TIME_SLOT",
+          payload: error,
+          status: "Failed",
+        })
+        // toast.error("Timeslot Edit Failed")
+      })
+  }
+}
+
+export const editMenuTimeSlotStatusFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: EDIT_MENU_TIME_SLOT_STATUS_FRESH,
       //payload: null,
       status: false,
     })

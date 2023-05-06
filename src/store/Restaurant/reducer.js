@@ -49,6 +49,8 @@ import {
     ADD_MENU_TIME_SLOT_FRESH,
     EDIT_MENU_TIME_SLOT,
     EDIT_MENU_TIME_SLOT_FRESH,
+    EDIT_MENU_TIME_SLOT_STATUS,
+    EDIT_MENU_TIME_SLOT_STATUS_FRESH,
     GET_CATEGORY_BY_ID,
     GET_CATEGORY_BY_ID_FRESH,
     DELETE_MENU_TIME_SLOT,
@@ -143,6 +145,8 @@ const initialState = {
     get_all_menu_time_slot_loading: false,
 
     edit_menu_time_slot_loading: false,
+
+    edit_menu_time_slot_status_loading: false,
 
     menu_time_slot_delete_loading: false,
 
@@ -559,6 +563,21 @@ const Restaurant = (state = initialState, action) => {
             state = {
                 ...state,
                 edit_menu_time_slot_loading: action.status,
+            }
+            break;
+
+        case EDIT_MENU_TIME_SLOT_STATUS:
+            state = {
+                ...state,
+                edit_menu_time_slot_status_loading: action.status,
+                get_all_menu_time_slot_loading: false,
+            }
+            break;
+
+        case EDIT_MENU_TIME_SLOT_STATUS_FRESH:
+            state = {
+                ...state,
+                edit_menu_time_slot_status_loading: action.status,
             }
             break;
 

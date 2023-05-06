@@ -55,6 +55,8 @@ function Branch(props) {
     const handleStatusUpdate = () => {
         props.branchStatusEditAction({
             ...statusInfo,
+            image: null,
+            cover_image: null,
             is_active: !statusInfo.is_active,
         })
     }
@@ -62,6 +64,8 @@ function Branch(props) {
     const handlePopularUpdate = () => {
         props.branchPopularEditAction({
             ...isPopular,
+            image: null,
+            cover_image: null,
             is_popular: !isPopular.is_popular,
         })
     }
