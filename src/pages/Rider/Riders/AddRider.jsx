@@ -79,7 +79,7 @@ function AddRider(props) {
 
         vehicle_type_id: location.state ? location.state.vehicle_type_id : "",
         city_id: location.state ? location.state.city_id : "",
-        zone: location.state ? location.state.zone : "",
+        // zone: location.state ? location.state.zone : "",
 
 
 

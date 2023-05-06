@@ -37,7 +37,7 @@ export const addRiderAction = (id, data, selectedZone) => {
   const dataObject = {
     _id: id,
     ...data,
-    zone: zone,
+    zones: zone,
   }
   //console.log(dataObject)
   const formData = convertToFormData(dataObject)
@@ -133,7 +133,7 @@ export const riderEditAction = (id, data, selectedZone) => {
   const dataObject = {
     _id: id,
     ...data,
-    zone: zone,
+    zones: zone,
   }
   // console.log(formData)
   const formData = convertToFormData(dataObject)
