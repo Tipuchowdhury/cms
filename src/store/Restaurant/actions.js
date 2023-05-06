@@ -415,10 +415,10 @@ export const branchEditAction = (
     name: zoneInfo.name,
     _id: id,
     email: zoneInfo.email,
-    location: {
-      coordinates: [Number(lat), Number(lng)],
-      type: "Point",
-    },
+    // location: {
+    //   coordinates: [Number(lat), Number(lng)],
+    //   type: "Point",
+    // },
     address: zoneInfo.address,
     popularity_sort_value: JSON.parse(zoneInfo.popularity_sort_value),
     price_range: zoneInfo.price_range,
@@ -436,8 +436,15 @@ export const branchEditAction = (
     parent_restaurant_id: zoneInfo.restaurant,
     working_hours: all_working_hours,
     cuisines: data,
+    delivery_charge: 100
   }
+
   const formData = convertToFormData(dataObject)
+
+
+  formData.append("location[coordinates][0]", Number(lng));
+  formData.append("location[coordinates][1]", Number(lat));
+  formData.append("location[type]", "Point");
   return dispatch => {
     const headers = {
       "Content-Type": "multipart/form-data",
