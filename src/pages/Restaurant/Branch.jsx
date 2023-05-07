@@ -193,7 +193,7 @@ function Branch(props) {
         }
     }, [props.get_all_branch_loading, props.edit_branch_status_loading, props.edit_branch_popular_loading, props.branch_delete_loading]);
 
-    console.log(props.get_all_branch_data);
+    // console.log(props.get_all_branch_data);
     return (
         <React.Fragment>
 

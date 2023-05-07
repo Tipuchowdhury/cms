@@ -7,23 +7,47 @@ import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link, useNavigate } from 'react-router-dom';
-import { getAllMenuTimeSlot } from 'store/actions';
-
-
+import { getAllMenuTimeSlot, menuTimeSlotDeleteAction, menuTimeSlotDeleteFresh, editMenuTimeSlotStatusAction, editMenuTimeSlotStatusFresh } from 'store/actions';
 
 function MenuTimeSlot(props) {
     const navigate = useNavigate();
+
+    const [editInfo, setEditInfo] = useState({});
+    const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
     const [modalDel, setModalDel] = useState(false);
 
-    const toggleDel = () => setModalDel(!modalDel);
+    const [deleteItem, setDeleteItem] = useState();
 
-    // const handleDelete = () => {
-    //     toggleDel();
-    //     console.log(deleteItem)
-    //     props.cityDeleteAction(deleteItem);
-    // }
+    const toggleDel = () => setModalDel(!modalDel);
+    const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
+
+
+    const handleStatusModal = (row) => {
+        setEditInfo(row);
+        toggleStatus();
+    }
+
+    const handleStatusUpdate = () => {
+        props.editMenuTimeSlotStatusAction({
+            ...editInfo,
+            is_active: !editInfo.is_active,
+        })
+    }
+
+    const handleDeleteModal = (row) => {
+        setDeleteItem(row._id);
+        toggleDel();
+    }
+
+
+    const handleDelete = () => {
+        props.menuTimeSlotDeleteAction(deleteItem);
+    }
+
+
+
     const handleEdit = (row) => {
-        console.log(row);
+        // console.log(row);
         navigate("/add-time-slot", { state: row })
     }
     const actionRef = (cell, row) =>
@@ -46,7 +70,8 @@ function MenuTimeSlot(props) {
 
 
 
-    const statusRef = (cell, row) => <Badge color="success" style={{ padding: "8px" }}>Activate</Badge>
+    const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
+        className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
 
 
     const activeData = [
@@ -82,10 +107,31 @@ function MenuTimeSlot(props) {
         if (props.get_all_menu_time_slot_loading == false) {
             props.getAllMenuTimeSlot();
         }
+        if (props.menu_time_slot_delete_loading === "Success") {
+            // console.log("I am in the delete")
+            toast.success("Menu Time Slot Deleted");
+            toggleDel();
+            props.menuTimeSlotDeleteFresh();
 
-    }, [props.get_all_menu_time_slot_loading]);
+        }
 
-    console.log(props.get_all_menu_time_slot_data);
+        if (props.edit_menu_time_slot_status_loading === "Success") {
+            toast.success("Time Slot Status Updated");
+            toggleStatus();
+            props.editMenuTimeSlotStatusFresh();
+
+        }
+
+        if (props.edit_menu_time_slot_status_loading === "Failed") {
+            toast.error("Something went wrong");
+            // toggleEditModal();
+            props.editMenuTimeSlotStatusFresh();
+
+        }
+
+    }, [props.get_all_menu_time_slot_loading, props.edit_menu_time_slot_status_loading]);
+
+    // console.log(props.get_all_menu_time_slot_data);
     return (
         <React.Fragment>
 
@@ -117,7 +163,7 @@ function MenuTimeSlot(props) {
 
 
                 {/* ============ delete modal starts=============== */}
-                {/* <Modal isOpen={modalDel} toggle={toggleDel} centered>
+                <Modal isOpen={modalDel} toggle={toggleDel} centered>
                     <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
                         <div className="icon-box">
                             <i className="fa red-circle fa-trash" style={{ color: "red", fontSize: "40px" }}></i>
@@ -129,8 +175,24 @@ function MenuTimeSlot(props) {
                         <Button color="secondary" onClick={toggleDel}>Cancel</Button>{' '}
                         <Button color="danger" onClick={handleDelete}>Delete</Button>
                     </ModalFooter>
-                </Modal> */}
+                </Modal>
                 {/* ============ delete modal ends=============== */}
+
+                {/* ============ status update modal starts=============== */}
+                <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
+                    <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
+                        <div className="icon-box">
+                            <i className="fa fa-exclamation-circle" style={{ color: "#DCA218", fontSize: "40px" }}></i>
+                        </div>
+                        Are you sure?
+                    </ModalHeader>
+                    <ModalBody>Do you really want to update status these records? </ModalBody>
+                    <ModalFooter>
+                        <Button color="secondary" onClick={toggleStatus}>Cancel</Button>{' '}
+                        <Button color="primary" onClick={handleStatusUpdate}>Update</Button>
+                    </ModalFooter>
+                </Modal>
+                {/* ============ status update modal ends=============== */}
             </div>
         </React.Fragment>
     )
@@ -144,18 +206,26 @@ const mapStateToProps = state => {
         get_all_menu_time_slot_data,
         get_all_menu_time_slot_error,
         get_all_menu_time_slot_loading,
+        menu_time_slot_delete_loading,
+        edit_menu_time_slot_status_loading,
     } = state.Restaurant;
 
     return {
         get_all_menu_time_slot_data,
         get_all_menu_time_slot_error,
         get_all_menu_time_slot_loading,
+        menu_time_slot_delete_loading,
+        edit_menu_time_slot_status_loading,
     };
 };
 
 export default withRouter(
     connect(mapStateToProps,
         {
-            getAllMenuTimeSlot
+            getAllMenuTimeSlot,
+            menuTimeSlotDeleteAction,
+            menuTimeSlotDeleteFresh,
+            editMenuTimeSlotStatusAction,
+            editMenuTimeSlotStatusFresh,
         })(MenuTimeSlot)
 );

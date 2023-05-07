@@ -8,6 +8,8 @@ import {
   GET_ALL_CUSINE,
   ADD_BRANCH,
   GET_ALL_BRANCH,
+  EDIT_BRANCH,
+  EDIT_BRANCH_FRESH,
   EDIT_BRANCH_STATUS,
   EDIT_BRANCH_STATUS_FRESH,
   EDIT_BRANCH_POPULAR,
@@ -46,10 +48,13 @@ import {
   ADD_MENU_TIME_SLOT_FRESH,
   EDIT_MENU_TIME_SLOT,
   EDIT_MENU_TIME_SLOT_FRESH,
+  EDIT_MENU_TIME_SLOT_STATUS,
+  EDIT_MENU_TIME_SLOT_STATUS_FRESH,
+  DELETE_MENU_TIME_SLOT,
+  DELETE_MENU_TIME_SLOT_FRESH,
   GET_CATEGORY_BY_ID,
   GET_CATEGORY_BY_ID_FRESH,
   ADD_BRANCH_FRESH,
-  EDIT_BRANCH_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -273,7 +278,7 @@ export const branchAddAction = (
         })
       : null
 
-  console.log(data)
+  // console.log(data)
   const all_working_hours =
     time?.length > 0
       ? time.map(item => {
@@ -294,10 +299,10 @@ export const branchAddAction = (
     name: zoneInfo.name,
     _id: id,
     email: zoneInfo.email,
-    location: {
-      coordinates: [Number(lat), Number(lng)],
-      type: "Point",
-    },
+    // location: {
+    //   coordinates: [Number(lat), Number(lng)],
+    //   type: "Point",
+    // },
     address: zoneInfo.address,
     popularity_sort_value: JSON.parse(zoneInfo.popularity_sort_value),
     price_range: zoneInfo.price_range,
@@ -320,8 +325,15 @@ export const branchAddAction = (
     is_delivery: JSON.parse(zoneInfo.is_delivery),
     is_pickup: JSON.parse(zoneInfo.is_pickup),
     is_dine: JSON.parse(zoneInfo.is_dine),
+    delivery_charge: 100,
   }
+
+  console.log(dataObject)
   const formData = convertToFormData(dataObject)
+
+  formData.append("location.coordinates[0]", Number(lng))
+  formData.append("location.coordinates[1]", Number(lat))
+  formData.append("location[type]", "Point")
 
   return dispatch => {
     const headers = {
@@ -333,19 +345,19 @@ export const branchAddAction = (
       .post(url, formData, { headers: headers })
       .then(response => {
         dispatch({
-          type: "ADD_BRANCH",
+          type: ADD_BRANCH,
           payload: response.data,
           status: "Success",
         })
-        toast.success("Branch Addedd Successfully")
+        // toast.success("Branch Addedd Successfully")
       })
       .catch(error => {
         dispatch({
-          type: "ADD_BRANCH",
+          type: ADD_BRANCH,
           payload: error,
           status: "Failed",
         })
-        toast.error("Branch Add Failed")
+        // toast.error("Branch Add Failed")
       })
   }
 }
@@ -362,13 +374,13 @@ export const branchEditAction = (
   time
 ) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put"
-  console.log(id)
-  console.log(zoneInfo)
-  console.log(location)
-  console.log(file)
-  console.log(coverFile)
-  console.log(time)
-  console.log(selectedCuisine)
+  // console.log(id)
+  // console.log(zoneInfo)
+  // console.log(location)
+  // console.log(file)
+  // console.log(coverFile)
+  // console.log(time)
+  // console.log(selectedCuisine)
 
   //const newLoc = location.replace(/['"]/g,)
 
@@ -384,7 +396,7 @@ export const branchEditAction = (
         })
       : null
 
-  console.log(data)
+  // console.log(data)
   const all_working_hours =
     time?.length > 0
       ? time.map(item => {
@@ -404,10 +416,10 @@ export const branchEditAction = (
     name: zoneInfo.name,
     _id: id,
     email: zoneInfo.email,
-    location: {
-      coordinates: [Number(lat), Number(lng)],
-      type: "Point",
-    },
+    // location: {
+    //   coordinates: [Number(lng), Number(lat)],
+    //   type: "Point",
+    // },
     address: zoneInfo.address,
     popularity_sort_value: JSON.parse(zoneInfo.popularity_sort_value),
     price_range: zoneInfo.price_range,
@@ -425,8 +437,14 @@ export const branchEditAction = (
     parent_restaurant_id: zoneInfo.restaurant,
     working_hours: all_working_hours,
     cuisines: data,
+    delivery_charge: 100,
   }
+
   const formData = convertToFormData(dataObject)
+
+  formData.append("location[coordinates][0]", Number(lng))
+  formData.append("location[coordinates][1]", Number(lat))
+  formData.append("location[type]", "Point")
   return dispatch => {
     const headers = {
       "Content-Type": "multipart/form-data",
@@ -438,19 +456,19 @@ export const branchEditAction = (
       .put(url, formData, { headers: headers })
       .then(response => {
         dispatch({
-          type: "EDIT_BRANCH",
+          type: EDIT_BRANCH,
           payload: response.data,
           status: "Success",
         })
-        toast.success("Branch Edited Successfully")
+        // toast.success("Branch Edited Successfully")
       })
       .catch(error => {
         dispatch({
-          type: "EDIT_BRANCH",
+          type: EDIT_BRANCH,
           payload: error,
           status: "Failed",
         })
-        toast.error("Branch Edit Failed")
+        // toast.error("Branch Edit Failed")
       })
   }
 }
@@ -458,8 +476,43 @@ export const branchEditAction = (
 export const branchStatusEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put"
 
-  const dataObject = data
+  // const dataObject = data
+  // console.log(data);
+  // console.log(data.location.coordinates);
+  const dataObject = {
+    name: data.name,
+    _id: data._id,
+    email: data.email,
+    // location: {
+    //   coordinates: [Number(lng), Number(lat)],
+    //   type: "Point",
+    // },
+    address: data.address,
+    popularity_sort_value: JSON.parse(data.popularity_sort_value),
+    price_range: data.price_range,
+    image: data.image,
+    cover_image: data.cover_image,
+    slug: data.slug,
+    zonal_admin: data.zonal_admin,
+    is_take_pre_order: JSON.parse(data.is_take_pre_order),
+    phone_number: data.phone_number,
+    is_veg: JSON.parse(data.is_veg),
+    is_popular: JSON.parse(data.is_popular),
+    commission: JSON.parse(data.commission),
+    min_order_value: 1,
+    delivery_time: JSON.parse(data.delivery_time),
+    parent_restaurant_id: data.parent_restaurant_id,
+    working_hours: data.working_hours,
+    cuisines: data.cuisines,
+    delivery_charge: data.delivery_charge,
+    is_active: data.is_active,
+  }
+
   const formData = convertToFormData(dataObject)
+
+  formData.append("location[coordinates][0]", data.location.coordinates[0])
+  formData.append("location[coordinates][1]", data.location.coordinates[1])
+  formData.append("location[type]", data.location.type)
 
   return dispatch => {
     const headers = {
@@ -489,9 +542,41 @@ export const branchStatusEditAction = data => {
 export const branchPopularEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put"
 
-  const dataObject = data
-  // console.log(dataObject);
+  // const dataObject = data
+  const dataObject = {
+    name: data.name,
+    _id: data._id,
+    email: data.email,
+    // location: {
+    //   coordinates: [Number(lng), Number(lat)],
+    //   type: "Point",
+    // },
+    address: data.address,
+    popularity_sort_value: JSON.parse(data.popularity_sort_value),
+    price_range: data.price_range,
+    image: data.image,
+    cover_image: data.cover_image,
+    slug: data.slug,
+    zonal_admin: data.zonal_admin,
+    is_take_pre_order: JSON.parse(data.is_take_pre_order),
+    phone_number: data.phone_number,
+    is_veg: JSON.parse(data.is_veg),
+    is_popular: JSON.parse(data.is_popular),
+    commission: JSON.parse(data.commission),
+    min_order_value: 1,
+    delivery_time: JSON.parse(data.delivery_time),
+    parent_restaurant_id: data.parent_restaurant_id,
+    working_hours: data.working_hours,
+    cuisines: data.cuisines,
+    delivery_charge: data.delivery_charge,
+    is_active: data.is_active,
+  }
+
   const formData = convertToFormData(dataObject)
+
+  formData.append("location[coordinates][0]", data.location.coordinates[0])
+  formData.append("location[coordinates][1]", data.location.coordinates[1])
+  formData.append("location[type]", data.location.type)
 
   return dispatch => {
     const headers = {
@@ -874,7 +959,7 @@ export const addBranchFresh = () => {
 export const editBranchFresh = () => {
   return dispatch => {
     dispatch({
-      type: "EDIT_BRANCH_FRESH",
+      type: EDIT_BRANCH_FRESH,
       payload: null,
       status: false,
     })
@@ -901,22 +986,23 @@ export const editBranchPopularFresh = () => {
   }
 }
 
-export const addBranchFreshNew = () => {
-  console.log("I am in add branch fresh===============")
-  return dispatch => {
-    dispatch({
-      type: "ADD_BRANCH_FRESH",
-      payload: null,
-      status: false,
-    })
-  }
-}
+// export const addBranchFreshNew = () => {
+//   console.log("I am in add branch fresh===============")
+//   return dispatch => {
+//     dispatch({
+//       type: "ADD_BRANCH_FRESH",
+//       payload: null,
+//       status: false,
+//     })
+//   }
+// }
 
 export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
-  console.log(val, category, isChecked, addOns)
-  console.log(parseInt(category.num_of_choice))
+  // console.log(addOns)
+  // console.log(parseInt(category.num_of_choice))
 
   var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Post"
+  // console.log(addOns?.length)
 
   const data =
     addOns?.length > 0
@@ -932,7 +1018,7 @@ export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
         })
       : null
   const val_id = uuidv4()
-  console.log(data)
+  // console.log(data)
 
   let formData = {
     _id: val,
@@ -974,8 +1060,8 @@ export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
 }
 
 export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
-  console.log(val, category, isChecked, addOns)
-  console.log(parseInt(category.num_of_choice))
+  // console.log(val, category, isChecked, addOns)
+  // console.log(parseInt(category.num_of_choice))
 
   var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Put"
 
@@ -993,7 +1079,7 @@ export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
         })
       : null
   const val_id = uuidv4()
-  console.log(data)
+  // console.log(data)
 
   let formData = {
     _id: val,
@@ -1567,7 +1653,7 @@ export const addMenuTimeSlotFresh = () => {
 }
 
 export const editMenuTimeSlotAction = (val, timeSlot) => {
-  console.log(val, timeSlot)
+  // console.log(val, timeSlot)
   var url = process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/Put"
 
   let formData = {
@@ -1584,6 +1670,8 @@ export const editMenuTimeSlotAction = (val, timeSlot) => {
       minute: moment(timeSlot.end_time, "HH:mm").get("minutes"),
     },
   }
+
+  // console.log(formData)
 
   return dispatch => {
     const headers = {
@@ -1620,6 +1708,88 @@ export const editMenuTimeSlotFresh = () => {
       status: false,
     })
   }
+}
+
+export const editMenuTimeSlotStatusAction = timeSlot => {
+  // console.log(val, timeSlot)
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/Put"
+
+  let formData = timeSlot
+
+  // console.log(formData)
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: EDIT_MENU_TIME_SLOT_STATUS,
+          payload: response.data,
+          status: "Success",
+        })
+        // toast.success("Timeslot Edited Successfully")
+      })
+      .catch(error => {
+        dispatch({
+          type: "EDIT_MENU_TIME_SLOT",
+          payload: error,
+          status: "Failed",
+        })
+        // toast.error("Timeslot Edit Failed")
+      })
+  }
+}
+
+export const editMenuTimeSlotStatusFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: EDIT_MENU_TIME_SLOT_STATUS_FRESH,
+      //payload: null,
+      status: false,
+    })
+  }
+}
+
+export const menuTimeSlotDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/Delete"
+  // console.log(id);
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+
+    axios
+      .delete(url, { params: { id: id } }, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: DELETE_MENU_TIME_SLOT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: DELETE_MENU_TIME_SLOT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const menuTimeSlotDeleteFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: DELETE_MENU_TIME_SLOT_FRESH,
+      status: false,
+    })
 }
 
 export const getCategoryByIdAction = id => {

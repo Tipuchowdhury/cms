@@ -6,7 +6,7 @@ import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import {
-    addReasonAction, addReasonFresh, getAllReasonAction, getAllReasonFresh, reasonUpdateAction, reasonUpdateFresh, reasonStatusUpdateAction, reasonStatusUpdateFresh, reasonDeleteAction, reasonDeleteFresh
+    addVehicleTypeAction, addVehicleTypeFresh, getAllVehicleTypeAction, getAllVehicleTypeFresh, vehicleTypeEditAction, vehicleTypeEditFresh, vehicleTypeStatusEditAction, vehicleTypeStatusEditActionFresh, vehicleTypeDeleteAction, vehicleTypeDeleteFresh
 } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
@@ -14,14 +14,20 @@ import { useNavigate } from 'react-router-dom';
 import Select from "react-select";
 
 
-function SystemOnOffReason(props) {
+function VehicleTypes(props) {
 
-    document.title = "System On Off Reason | Foodi"
+    document.title = "Vehicle Types | Foodi"
 
     const [modal, setModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [modalDel, setModalDel] = useState(false);
     const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
+
+    const toggle = () => setModal(!modal);
+    const toggleEditModal = () => setEditModal(!editModal);
+    const toggleDel = () => setModalDel(!modalDel);
+    const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
+
     const [addImages, setAddImages] = useState({
         image: "",
     })
@@ -29,26 +35,37 @@ function SystemOnOffReason(props) {
         image: "",
     })
 
-    const toggle = () => setModal(!modal);
-    const toggleEditModal = () => setEditModal(!editModal);
-    const toggleDel = () => setModalDel(!modalDel);
-    const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
-
     const [addInfo, setAddInfo] = useState({
-        name: "",
-        description: "",
-        image: "",
+        type: "",
+        commission: "",
+        maximum_no_of_received_order_at_a_time: "",
         is_active: true,
     });
 
 
     const [editInfo, setEditInfo] = useState({
         _id: "",
-        name: "",
-        description: "",
-        image: "",
+        type: "",
+        commission: "",
+        maximum_no_of_received_order_at_a_time: "",
         is_active: true,
     });
+
+    const handleEdit = (row) => {
+
+        setEditInfo(prevState => ({
+            _id: row._id,
+            type: row.type,
+            commission: row.commission,
+            maximum_no_of_received_order_at_a_time: row.maximum_no_of_received_order_at_a_time,
+            is_active: row.is_active,
+        }));
+        setEditImages({ ...editImages, image: row.image })
+
+        toggleEditModal();
+    }
+
+
 
     const [deleteItem, setDeleteItem] = useState();
 
@@ -62,7 +79,10 @@ function SystemOnOffReason(props) {
     }
 
     const handleAddFile = (e) => {
-
+        // setAddInfo({
+        //     ...addInfo,
+        //     image: e.target.value,
+        // });
         name = e.target.name
         value = e.target.files[0]
         setAddInfo({ ...addInfo, [name]: value })
@@ -75,7 +95,6 @@ function SystemOnOffReason(props) {
         reader.readAsDataURL(value)
     }
 
-
     const handleAddCheckBox = (e) => {
         // console.log(e);
         name = e.target.name;
@@ -84,8 +103,10 @@ function SystemOnOffReason(props) {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        props.addReasonAction(addInfo);
+        const id = uuidv4()
+        props.addVehicleTypeAction(id, addInfo);
     }
+
 
     const handleEditInputs = (e) => {
         // console.log(e);
@@ -95,6 +116,10 @@ function SystemOnOffReason(props) {
     }
 
     const handleEditFile = (e) => {
+        // setEditInfo({
+        //     ...editInfo,
+        //     image: e.target.value,
+        // });
 
         name = e.target.name
         value = e.target.files[0]
@@ -115,24 +140,9 @@ function SystemOnOffReason(props) {
         setEditInfo({ ...editInfo, [name]: checked });
     }
 
-
-    const handleEditSlider = (row) => {
-
-        setEditInfo(prevState => ({
-            _id: row._id,
-            name: row.name,
-            description: row.description,
-            image: row.image,
-            is_active: row.is_active,
-        }));
-
-        setEditImages({ ...editImages, image: row.image })
-        toggleEditModal();
-    }
-
-    const handleEdit = (e) => {
+    const handleEditSubmit = (e) => {
         e.preventDefault();
-        props.reasonUpdateAction(editInfo);
+        props.vehicleTypeEditAction(editInfo);
     }
 
     const handleStatusModal = (row) => {
@@ -141,10 +151,13 @@ function SystemOnOffReason(props) {
     }
 
     const handleStatusUpdate = () => {
-        props.reasonStatusUpdateAction({
+
+        // console.log(editInfo);
+        props.vehicleTypeStatusEditAction({
             ...editInfo,
             is_active: !editInfo.is_active,
         })
+
     }
 
     const handleDeleteModal = (row) => {
@@ -153,13 +166,13 @@ function SystemOnOffReason(props) {
     }
     const handleDelete = () => {
 
-        props.reasonDeleteAction(deleteItem);
+        props.vehicleTypeDeleteAction(deleteItem);
     }
 
 
     const actionRef = (cell, row) =>
         <div style={{ display: "flex", gap: 10 }}>
-            <Button color="primary" className="btn btn-primary waves-effect waves-light" onClick={() => handleEditSlider(row)}
+            <Button color="primary" className="btn btn-primary waves-effect waves-light" onClick={() => handleEdit(row)}
             >
                 Edit
             </Button>{" "}
@@ -179,10 +192,11 @@ function SystemOnOffReason(props) {
     const activeData = [
 
         {
-            dataField: "name",
-            text: "Name",
+            dataField: "type",
+            text: "Vehicle Type",
             sort: true,
         },
+
         {
             dataField: "",
             text: "Status",
@@ -200,7 +214,7 @@ function SystemOnOffReason(props) {
     ];
     const defaultSorted = [
         {
-            dataField: "title",
+            dataField: "type",
             order: "desc"
         }
     ];
@@ -208,68 +222,69 @@ function SystemOnOffReason(props) {
 
     useEffect(() => {
 
-
-        if (props.get_all_reason_loading == false) {
-            props.getAllReasonAction();
+        if (props.get_all_vehicle_type_loading == false) {
+            // console.log("I am in get all slider loading ")
+            props.getAllVehicleTypeAction();
         }
 
-        if (props.add_reason_loading === "Success") {
-            toast.success("Reason Added Successfully");
+
+        if (props.add_vehicle_type_loading === "Success") {
+            toast.success("Vehicle Type Added Successfully");
             toggle();
             setAddInfo({
                 ...addInfo,
-                name: "",
-                description: "",
-                image: "",
+                type: "",
+                commission: "",
+                maximum_no_of_received_order_at_a_time: "",
                 is_active: true,
             });
+
             setAddImages("");
-            props.addReasonFresh();
+            props.addVehicleTypeFresh();
         }
 
 
-        if (props.add_reason_loading === "Failed") {
+        if (props.add_vehicle_type_loading === "Failed") {
             toast.error("Something went wrong");
-            props.addReasonFresh();
+            props.addVehicleTypeFresh();
 
         }
 
-        if (props.reason_edit_loading === "Success") {
-            toast.success("Reason Updated");
+        if (props.vehicle_type_edit_loading === "Success") {
+            toast.success("Vehicle Type Updated");
             toggleEditModal();
-            props.reasonUpdateFresh();
+            props.vehicleTypeEditFresh();
         }
 
-        if (props.reason_edit_loading === "Failed") {
+        if (props.vehicle_type_edit_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
-            props.reasonUpdateFresh();
-
+            props.vehicleTypeEditFresh();
         }
 
-        if (props.reason_status_edit_loading === "Success") {
-            toast.success("Reason Status Updated");
+        if (props.edit_vehicle_type_status_loading === "Success") {
+            toast.success("Vehicle Type Status Updated");
             toggleStatus();
-            props.reasonStatusUpdateFresh();
+            props.vehicleTypeStatusEditActionFresh();
 
         }
 
-        if (props.reason_status_edit_loading === "Failed") {
+        if (props.edit_vehicle_type_status_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
-            props.reasonStatusUpdateFresh();
+            props.vehicleTypeStatusEditActionFresh();
 
         }
 
-        if (props.reason_delete_loading === "Success") {
+        if (props.vehicle_type_delete_loading === "Success") {
             // console.log("I am in the delete")
-            toast.success("Reason Deleted");
+            toast.success("Vehicle Type Deleted");
             toggleDel();
-            props.reasonDeleteFresh();
+            props.vehicleTypeDeleteFresh();
         }
 
-    }, [props.add_reason_loading, props.reason_edit_loading,
-    props.reason_delete_loading, props.reason_status_edit_loading]);
+    }, [props.add_vehicle_type_loading, props.vehicle_type_edit_loading,
+    props.vehicle_type_delete_loading, props.edit_vehicle_type_status_loading]);
 
 
     return (
@@ -278,20 +293,20 @@ function SystemOnOffReason(props) {
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle="Foodi" title="Settings" breadcrumbItem="System On Off Reason" />
+                    <Breadcrumbs maintitle="Foodi" title="Users" breadcrumbItem="Vehicle Types" />
                     <Row>
                         <Col className="col-12">
                             <Card style={{ border: "none" }}>
                                 <CardBody>
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>System On Off Reason</CardTitle>
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Vehicle Types</CardTitle>
                                         <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
-                                            Add Reason
+                                            Add Vehicle Type
                                         </Button>
                                     </div>
 
-                                    {props.get_all_reason_data ? props.get_all_reason_data.length > 0 ? <DatatableTablesWorking products={props.get_all_reason_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_reason_data?._id} /> : null : null}
+                                    {props.get_all_vehicle_type_data ? props.get_all_vehicle_type_data.length > 0 ? <DatatableTablesWorking products={props.get_all_vehicle_type_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_vehicle_type_data?._id} /> : null : null}
 
                                 </CardBody>
                             </Card>
@@ -301,41 +316,26 @@ function SystemOnOffReason(props) {
 
                 {/* ============ create modal start=============== */}
                 <Modal isOpen={modal} toggle={toggle} centered>
-                    <ModalHeader toggle={toggle}>New Reason</ModalHeader>
+                    <ModalHeader toggle={toggle}>New PopUp Banner</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleSubmit}>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="title">Name</label>
-                                <input type="text" className="form-control" id="name" placeholder="Enter name" required name="name" value={addInfo.name} onChange={handleAddInputs} />
+                                <label className="form-label" htmlFor="type">Vehicle Type</label>
+                                <input type="text" className="form-control" id="type" placeholder="Enter vehicle type" required name="type" value={addInfo.type} onChange={handleAddInputs} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="description">Description</label>
-                                <textarea className="form-control" id="description"
-                                    placeholder="Enter description" name="description" onChange={handleAddInputs} value={addInfo.description} required></textarea>
+                                <label className="form-label" htmlFor="commission">Commission</label>
+                                <input type="text" className="form-control" id="commission" placeholder="Enter Commission" required name="commission" value={addInfo.commission} onChange={handleAddInputs} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="image">Image</label>
-                                <input type="file" className="form-control" id="image" required name="image" onChange={handleAddFile} />
-
+                                <label className="form-label" htmlFor="maximum_no_of_received_order_at_a_time">Minium no of received order at a time</label>
+                                <input type="text" className="form-control" id="maximum_no_of_received_order_at_a_time" placeholder="Enter minium no of received order at a time" required name="maximum_no_of_received_order_at_a_time" value={addInfo.maximum_no_of_received_order_at_a_time} onChange={handleAddInputs} />
                             </div>
 
-                            {addImages?.image && (
-                                <Row className="mb-3">
-                                    <label className="col-md-2">
-                                        <span></span>
-                                    </label>
-                                    <div className="col-md-10">
-                                        <img
-                                            src={addImages.image}
-                                            alt="preview"
-                                            style={{ width: "50%" }}
-                                        />
-                                    </div>
-                                </Row>
-                            )}
+
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
                                 <Button color="secondary" onClick={toggle}>
@@ -354,39 +354,24 @@ function SystemOnOffReason(props) {
 
                 {/* ============ edit modal start=============== */}
                 <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-                    <ModalHeader >Edit Reason</ModalHeader>
+                    <ModalHeader >Edit PopUp Banner</ModalHeader>
                     <ModalBody>
-                        <form className="mt-1" onSubmit={handleEdit} >
+                        <form className="mt-1" onSubmit={handleEditSubmit} >
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="name">Name</label>
-                                <input type="text" className="form-control" id="name" placeholder="Enter name" required name="name" value={editInfo.name} onChange={handleEditInputs} />
+                                <label className="form-label" htmlFor="type">Vehicle Type</label>
+                                <input type="text" className="form-control" id="type" placeholder="Enter vehicle type" required name="type" value={editInfo.type} onChange={handleEditInputs} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="description">Description</label>
-                                <textarea className="form-control" id="description"
-                                    placeholder="Enter description" name="description" onChange={handleEditInputs} value={editInfo.description} required></textarea>
+                                <label className="form-label" htmlFor="commission">Commission</label>
+                                <input type="text" className="form-control" id="commission" placeholder="Enter Commission" required name="commission" value={editInfo.commission} onChange={handleEditInputs} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="image">Image</label>
-                                <input type="file" className="form-control" id="image" name="image" onChange={handleEditFile} />
+                                <label className="form-label" htmlFor="maximum_no_of_received_order_at_a_time">Minium no of received order at a time</label>
+                                <input type="text" className="form-control" id="maximum_no_of_received_order_at_a_time" placeholder="Enter minium no of received order at a time" required name="maximum_no_of_received_order_at_a_time" value={editInfo.maximum_no_of_received_order_at_a_time} onChange={handleEditInputs} />
                             </div>
-                            {editImages?.image && (
-                                <Row className="mb-3">
-                                    <label className="col-md-2">
-                                        <span></span>
-                                    </label>
-                                    <div className="col-md-10">
-                                        <img
-                                            src={editImages.image}
-                                            alt="preview"
-                                            style={{ width: "50%" }}
-                                        />
-                                    </div>
-                                </Row>
-                            )}
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
                                 <Button color="primary" type="submit">
@@ -446,55 +431,54 @@ const mapStateToProps = state => {
 
 
     const {
-        add_reason_data,
-        add_reason_error,
-        add_reason_loading,
+        add_vehicle_type_data,
+        add_vehicle_type_error,
+        add_vehicle_type_loading,
 
-        get_all_reason_data,
-        get_all_reason_error,
-        get_all_reason_loading,
+        get_all_vehicle_type_data,
+        get_all_vehicle_type_error,
+        get_all_vehicle_type_loading,
 
-        reason_edit_data,
-        reason_edit_loading,
+        vehicle_type_edit_data,
+        vehicle_type_edit_loading,
 
-        reason_status_edit_data,
-        reason_status_edit_loading,
+        edit_vehicle_type_status_loading,
 
-        reason_delete_loading
+        vehicle_type_delete_loading
 
-    } = state.Reason;
+    } = state.VehicleType;
 
     return {
-        add_reason_data,
-        add_reason_error,
-        add_reason_loading,
 
-        get_all_reason_data,
-        get_all_reason_error,
-        get_all_reason_loading,
+        add_vehicle_type_data,
+        add_vehicle_type_error,
+        add_vehicle_type_loading,
 
-        reason_edit_data,
-        reason_edit_loading,
+        get_all_vehicle_type_data,
+        get_all_vehicle_type_error,
+        get_all_vehicle_type_loading,
 
-        reason_status_edit_data,
-        reason_status_edit_loading,
+        vehicle_type_edit_data,
+        vehicle_type_edit_loading,
 
-        reason_delete_loading
+        edit_vehicle_type_status_loading,
+
+        vehicle_type_delete_loading
     };
 };
 
 export default withRouter(
     connect(mapStateToProps,
         {
-            addReasonAction,
-            addReasonFresh,
-            getAllReasonAction,
-            getAllReasonFresh,
-            reasonUpdateAction,
-            reasonUpdateFresh,
-            reasonStatusUpdateAction,
-            reasonStatusUpdateFresh,
-            reasonDeleteAction,
-            reasonDeleteFresh,
-        })(SystemOnOffReason)
+            addVehicleTypeAction,
+            addVehicleTypeFresh,
+            getAllVehicleTypeAction,
+            getAllVehicleTypeFresh,
+            vehicleTypeEditAction,
+            vehicleTypeEditFresh,
+            vehicleTypeStatusEditAction,
+            vehicleTypeStatusEditActionFresh,
+            vehicleTypeDeleteAction,
+            vehicleTypeDeleteFresh,
+        })(VehicleTypes)
 );
