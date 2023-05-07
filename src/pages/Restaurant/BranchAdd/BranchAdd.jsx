@@ -4,29 +4,28 @@ import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react";
 import { connect } from "react-redux";
 import withRouter from 'components/Common/withRouter';
 import { useEffect } from 'react';
-import { getAllRestaurantAction, getAllUsersRolesAction, branchAddAction, addBranchFresh, branchEditAction, editBranchFresh, getAllCuisneAction, addBranchFreshNew } from 'store/actions';
+import { getAllRestaurantAction, getAllAdminUsersAction, branchAddAction, addBranchFresh, branchEditAction, editBranchFresh, getAllCuisneAction } from 'store/actions';
 import Breadcrumbs from 'components/Common/Breadcrumb';
 import { boolean } from 'yup';
 import Select from 'react-select';
 import { v4 as uuidv4 } from 'uuid';
 import moment from "moment";
 import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const LoadingContainer = () => <div>Loading...</div>;
 
 function BranchAdd(props) {
     const location = useLocation();
     const naviagte = useNavigate();
-    console.log(location.state);
+
     const [modal, setModal] = useState(false);
     const [file, setFile] = useState();
     const [coverFile, setCoverFile] = useState();
     const [popularVal, setPopularVal] = useState();
     const [preOrder, setPreOrder] = useState();
     const [priceRange, setPriceRange] = useState();
-    // console.log(popularVal)
-    // console.log(preOrder)
-    // console.log(priceRange)
+
     const [defaultProps, setDefaultProps] = useState({
         lat: 23.8103,
         lng: 90.4125,
@@ -38,7 +37,7 @@ function BranchAdd(props) {
     ))
 
     // const map_value_for_edit = location.state?.location?.coordinates?.map((defaultProps) => Number(defaultProps.lng) + "," + Number(defaultProps.lat));
-    console.log(map_value_for_edit);
+
     const [state2, setState2] = useState({
         location: location.state ? map_value_for_edit : `${defaultProps.lat},${defaultProps.lng}`,
         lat: location.state ? map_value_for_edit[0] : 23.8103,
@@ -49,26 +48,25 @@ function BranchAdd(props) {
 
         day: item.day, startTime: moment({ hour: item.open_hour, minute: item.open_minute }).format('HH:mm'), endTime: moment({ hour: item.close_hour, minute: item.close_minute }).format('HH:mm')
     }))
-    console.log(restaurant_time_for_edit);
+
     const timeTemplate = { day: "", startTime: "", endTime: "" }
     const [time, setTime] = useState(location.state ? restaurant_time_for_edit : [timeTemplate]);
 
     function handleAddRowNested() {
         setTime([...time, timeTemplate]);
     }
-    console.log(time);
+
     const toggle = () => setModal(!modal);
     const onMarkerClick = e => {
-        console.log(e.google.maps.LatLng());
+
     };
 
     const onMapClickHandler = e => {
-        console.log(e);
+
     };
 
     const moveMarker = (props, marker, e) => {
-        console.log(e.latLng.lat())
-        console.log(e.latLng.lng())
+
         setDefaultProps({ lat: e.latLng.lat(), lng: e.latLng.lng() });
         setState2({
             ...state2,
@@ -122,25 +120,25 @@ function BranchAdd(props) {
     }
     // get all users
     let userData = undefined;
-    if (props.get_all_user_roles_data?.length > 0) {
-        userData = props.get_all_user_roles_data?.map((item, key) => (
+    if (props.get_all_user_data?.length > 0) {
+        userData = props.get_all_user_data?.map((item, key) => (
             <option key={item._id} value={item._id}>
-                {item.name}
+                {item.first_name} {item.last_name}
             </option>
         ));
     }
 
     //-- cuisine value for edit
     const common_cuisines = props?.get_all_cuisine_data?.filter((elem) => location?.state?.cuisines?.find(({ cuisine_id }) => elem._id === cuisine_id));
-    console.log(common_cuisines);
+
     const cuisine_data_edit = common_cuisines ? common_cuisines?.map((item, key) => {
         return { label: item.name, value: item._id };
     }) : "";
-    console.log(cuisine_data_edit);
+
 
     const [selectedCuisine, setSelectedCuisine] = useState(cuisine_data_edit ? cuisine_data_edit : "");
     const handleSelectCuisine = (e) => {
-        console.log(e)
+
         setSelectedCuisine(e)
     }
     let cusineData = undefined;
@@ -195,50 +193,13 @@ function BranchAdd(props) {
     }
     const [timeCheckerState, setChecker] = useState()
     const handleTimeChange = (e, index) => {
-        console.log(index);
+
         const updatedValue = time.map((row, i) => index === i ? Object.assign(row, { [e.target.name]: e.target.value }) : row);
         setTime(updatedValue)
 
     }
 
-    // const handleTimeChange = (e, index) => {
-    //     console.log(index);
-    //     if (time.length > 1) {
-    //         console.log("===========yo==============");
-    //         const updatedValue = time.map((row, i) => index === i ? Object.assign(row, { [e.target.name]: e.target.value }) : row);
-    //         //setTime(updatedValue)
-    //         isTimeInRange(updatedValue);
-    //     } else {
-    //         const updatedValue = time.map((row, i) => index === i ? Object.assign(row, { [e.target.name]: e.target.value }) : row);
-    //         setTime(updatedValue)
 
-    //     }
-
-
-    //}
-    // function isTimeInRange(time) {
-    //     for (var i = 0; i < time.length; i++) {
-    //         var range = time[i];
-    //         console.log(range)
-    //         console.log(time)
-    //         if (range.day == time[i].day) {
-    //             console.log("=========yes===========");
-    //             if ((time.startTime > range.startTime && time.startTime < range.endTime)
-    //                 || (range.startTime > range.endTime && (time.startTime > range.startTime || time.startTime < range.endTime))) {
-    //                 //return true
-    //                 setChecker(true)
-    //             } else {
-    //                 setTime(time)
-    //                 setChecker(false)
-    //             }
-    //         } else {
-    //             console.log("=========No===========");
-    //             setTime(time)
-    //             setChecker(false)
-    //         }
-
-    //     }
-    // }
 
     //==============
     function isTimeInRange(newTime) {
@@ -246,11 +207,11 @@ function BranchAdd(props) {
             var range = time[i]
             if ((newTime.startTime > range.startTime && newTime.startTime < range.endTime)
                 || (range.startTime > range.endTime && (newTime.startTime > range.startTime || newTime.startTime < range.endTime))) {
-                console.log("=======inside true============");
+
                 setTime(time)
                 setChecker(true)
             } else {
-                console.log("=======inside false============");
+
                 setTime(time)
                 setChecker(false)
             }
@@ -260,8 +221,7 @@ function BranchAdd(props) {
         //     || (item.startTime > item.endTime && (newTime.startTime > item.startTime || newTime.startTime < item.endTime))) ? setTime(time) && setChecker(true) : setTime(time) && setChecker(false))
 
     }
-    console.log(timeCheckerState);
-    console.log(time);
+
     const handleRowDelete = (index) => {
         const filteredTime = [...time];
         if (filteredTime.length > 1) {
@@ -284,35 +244,50 @@ function BranchAdd(props) {
         props.branchEditAction(location.state?._id, zoneInfo, state2.lat, state2.lng, file, coverFile, currentPath, selectedCuisine, time)
 
     }
-    // const handleSort = (e) => {
-    //     alert("Hello")
-    // }
-    console.log(props.get_all_cusine_data);
+
     useEffect(() => {
         if (props.get_all_restaurant_loading == false) {
             props.getAllRestaurantAction();
         }
 
-        if (props.get_all_user_roles_loading === false) {
-            props.getAllUsersRolesAction();
+        if (props.get_all_user_loading === false) {
+            props.getAllAdminUsersAction();
         }
 
         if (props.get_all_cuisine_loading === false) {
             props.getAllCuisneAction();
-
         }
 
         if (props.add_branch_loading === "Success") {
-            props.addBranchFreshNew();
+            toast.success("Branch added Successfully")
+            props.addBranchFresh();
             naviagte("/manage-branch")
+        }
+
+        if (props.add_branch_loading === "Failed") {
+            toast.error("Branch Add Failed")
+            props.addBranchFresh();
+            // naviagte("/manage-branch")
         }
 
         if (props.edit_branch_loading === "Success") {
-
+            toast.success("Branch edited Successfully")
             props.editBranchFresh();
             naviagte("/manage-branch")
         }
-    }, [props.get_all_restaurant_loading, props.get_all_user_roles_loading, props.get_all_cusine_loading, props.add_branch_loading, props.edit_branch_loading]);
+
+        if (props.edit_branch_loading === "Failed") {
+            toast.error("Branch edited Failed")
+            props.editBranchFresh();
+            // naviagte("/manage-branch")
+        }
+        // if (props.voucher_setting_edit_loading === "Success") {
+        //     toast.success("Voucher Setting edited Successfully")
+        //     // redirect
+        //     props.voucherSettingEditFresh()
+        //     navigate("/voucher_settings")
+        // }
+    }, [props.get_all_restaurant_loading, props.get_all_user_loading, props.get_all_cusine_loading, props.add_branch_loading, props.edit_branch_loading]);
 
 
 
@@ -1060,16 +1035,16 @@ const mapStateToProps = state => {
     } = state.Restaurant;
 
     const {
-        get_all_user_roles_data,
-        get_all_user_roles_loading,
+        get_all_user_data,
+        get_all_user_loading,
 
     } = state.registerNew;
     return {
         get_all_restaurant_data,
         get_all_restaurant_loading,
 
-        get_all_user_roles_data,
-        get_all_user_roles_loading,
+        get_all_user_data,
+        get_all_user_loading,
         add_branch_loading,
         edit_branch_loading,
 
@@ -1081,13 +1056,12 @@ const mapStateToProps = state => {
 export default withRouter(
     connect(mapStateToProps, {
         getAllRestaurantAction,
-        getAllUsersRolesAction,
+        getAllAdminUsersAction,
         branchAddAction,
         addBranchFresh,
         branchEditAction,
         editBranchFresh,
-        getAllCuisneAction,
-        addBranchFreshNew
+        getAllCuisneAction
     })(
         GoogleApiWrapper({
             apiKey: "AIzaSyDJkREeL-PpO7Z45k-MsD5sJD_m1mzNGEk",
