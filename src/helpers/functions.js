@@ -9,37 +9,37 @@
 // }
 
 function convertToFormData(dataObject, parentKey = "") {
-  console.log("dataObject :", dataObject)
   const formData = new FormData()
 
-  for (const key in dataObject) {
-    const fullKey = parentKey ? `${parentKey}[${key}]` : key
-    if (dataObject[key] instanceof File) {
-      formData.append(fullKey, dataObject[key])
-      continue
-    }
-    if (
-      typeof dataObject[key] === "object" &&
-      !Array.isArray(dataObject[key])
-    ) {
-      const childFormData = convertToFormData(dataObject[key], fullKey)
+  function appendFormData(value, key) {
+    if (value instanceof File) {
+      formData.append(key, value)
+    } else if (typeof value === "object" && !Array.isArray(value)) {
+      const childFormData = convertToFormData(value, key)
       for (const childKey of childFormData.keys()) {
         formData.append(childKey, childFormData.get(childKey))
       }
-    } else if (Array.isArray(dataObject[key])) {
-      dataObject[key].forEach((item, index) => {
-        const arrayItemKey = `${fullKey}[${index}]`
-        const childFormData = convertToFormData(item, arrayItemKey)
-        for (const childKey of childFormData.keys()) {
-          formData.append(childKey, childFormData.get(childKey))
-        }
+    } else if (Array.isArray(value)) {
+      value.forEach((item, index) => {
+        const arrayItemKey = `${key}[${index}]`
+        appendFormData(item, arrayItemKey)
       })
     } else {
-      formData.append(fullKey, dataObject[key])
+      formData.append(key, value)
     }
   }
 
-  console.log("formData :", formData)
+  if (Array.isArray(dataObject)) {
+    dataObject.forEach((item, index) => {
+      const arrayItemKey = `${parentKey}[${index}]`
+      appendFormData(item, arrayItemKey)
+    })
+  } else {
+    for (const key in dataObject) {
+      const fullKey = parentKey ? `${parentKey}[${key}]` : key
+      appendFormData(dataObject[key], fullKey)
+    }
+  }
 
   return formData
 }
