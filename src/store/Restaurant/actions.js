@@ -1358,8 +1358,10 @@ export const addRestaurantMenuAction = (
               return {
                 ...addon_cats,
                 add_ons: addon_cats.add_ons.map(add_ons => {
+                  const _addon_id = uuidv4()
                   return {
                     ...add_ons,
+                    _id: _addon_id,
                     variation_and_add_on_category_id: _id,
                   }
                 }),
