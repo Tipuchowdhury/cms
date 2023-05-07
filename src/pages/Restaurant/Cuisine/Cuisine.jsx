@@ -339,8 +339,6 @@ function Cuisine(props) {
                                 </div>
                             </Row>
 
-
-
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="image">Image</label>
                                 <input type="file" className="form-control" name="image" id="image" onChange={handleEditFile} />

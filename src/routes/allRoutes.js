@@ -146,6 +146,7 @@ import Review from "pages/Review/Review"
 import Customer from "pages/Customer/Customer"
 import SystemOnOffReason from "pages/Setting/SystemOnOffReason/SystemOnOffReason"
 import PlatfromOperationTimeSlot from "pages/Setting/PlatfromOperationTimeSlot/PlatfromOperationTimeSlot"
+import SystemOption from "pages/Setting/SystemOption/SystemOption"
 import VehicleTypes from "pages/Rider/VehicleTypes/VehicleTypes"
 import Riders from "pages/Rider/Riders/Riders"
 import AddRider from "pages/Rider/Riders/AddRider"
@@ -236,6 +237,8 @@ const userRoutes = [
   // Settings
   { path: "/reason", component: <SystemOnOffReason /> },
   { path: "/operation-time-slot", component: <PlatfromOperationTimeSlot /> },
+  { path: "/system-option", component: <SystemOption /> },
+
 
 
   // Notification

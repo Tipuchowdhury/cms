@@ -326,6 +326,9 @@ const SidebarContent = props => {
                 <li>
                   <Link to="/operation-time-slot">{props.t("System Operation Time Slot")} </Link>
                 </li>
+                <li>
+                  <Link to="/system-option">{props.t("System Option")} </Link>
+                </li>
               </ul>
             </li>
             {/* <li>
