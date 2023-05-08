@@ -24,6 +24,11 @@ function Cuisine(props) {
         fg: "#ffffff",
         bg: "#ffffff"
     });
+
+    const [editColor, setEditColor] = useState({
+        fg: "#ffffff",
+        bg: "#ffffff"
+    });
     // const toggleEditModal = () => {
     //     setAddImages({ ...addImages, image: "" });
     //     setEditModal(!editModal);
@@ -80,7 +85,7 @@ function Cuisine(props) {
         setEditName(row.name);
         setStatus(row.is_active);
         setEditImages({ ...editImages, image: row.image });
-        setColor({ ...color, fg: row.color.fg, bg: row.color.bg });
+        setEditColor({ ...editColor, fg: row.color.fg, bg: row.color.bg });
         toggleEditModal();
     }
     // console.log(addImages);
@@ -174,13 +179,12 @@ function Cuisine(props) {
         let name = e.target.name;
         let value = e.target.value;
         setColor({ ...color, [name]: value })
-
     }
 
     const handleEditColors = (e) => {
         let name = e.target.name;
         let value = e.target.value;
-        setColor({ ...color, [name]: value })
+        setEditColor({ ...editColor, [name]: value })
 
     }
 
@@ -197,7 +201,7 @@ function Cuisine(props) {
     const handleEditModal = (e) => {
         e.preventDefault(e);
         // console.log(editName);
-        props.cuisineEditAction(id, editName, status, file, color);
+        props.cuisineEditAction(id, editName, status, file, editColor);
         toggleEditModal();
         setEditName("")
     }
@@ -256,11 +260,11 @@ function Cuisine(props) {
                             </div>
                             <Row>
                                 <div className="col-sm-6 mb-3">
-                                    <label className="form-label" htmlFor="fg">Color FG</label>
+                                    <label className="form-label" htmlFor="fg">Color Foreground</label>
                                     <input type="color" style={{ width: 100, height: 50 }} className="form-control" value={color.fg} name="fg" id="fg" onChange={handleAddColors} />
                                 </div>
                                 <div className="col-sm-6 mb-3">
-                                    <label className="form-label" htmlFor="bg">Color BG</label>
+                                    <label className="form-label" htmlFor="bg">Color Background</label>
                                     <input type="color" style={{ width: 100, height: 50 }} className="form-control" value={color.bg} name="bg" id="bg" onChange={handleAddColors} />
                                 </div>
                             </Row>
@@ -325,17 +329,15 @@ function Cuisine(props) {
                                 <input type="text" className="form-control" id="cuisine_name" placeholder="Enter cuisine name" required value={editName} onChange={(e) => setEditName(e.target.value)} />
                             </div>
                             <Row>
-                                <div className="mb-3">
-                                    <label className="form-label" htmlFor="fg">Color FG</label>
-                                    <input type="color" style={{ width: 100, height: 50 }} className="form-control" value={color.fg} name="fg" id="fg" onChange={handleEditColors} />
+                                <div className="col-sm-6 mb-3">
+                                    <label className="form-label" htmlFor="fg">Color Foreground</label>
+                                    <input type="color" style={{ width: 100, height: 50 }} className="form-control" value={editColor.fg} name="fg" id="fg" onChange={handleEditColors} />
                                 </div>
-                                <div className="mb-3">
-                                    <label className="form-label" htmlFor="bg">Color BG</label>
-                                    <input type="color" style={{ width: 100, height: 50 }} className="form-control" value={color.bg} name="bg" id="bg" onChange={handleEditColors} />
+                                <div className="col-sm-6 mb-3">
+                                    <label className="form-label" htmlFor="bg">Color Background</label>
+                                    <input type="color" style={{ width: 100, height: 50 }} className="form-control" value={editColor.bg} name="bg" id="bg" onChange={handleEditColors} />
                                 </div>
                             </Row>
-
-
 
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="image">Image</label>

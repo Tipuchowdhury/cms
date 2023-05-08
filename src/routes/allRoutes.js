@@ -146,17 +146,21 @@ import Review from "pages/Review/Review"
 import Customer from "pages/Customer/Customer"
 import SystemOnOffReason from "pages/Setting/SystemOnOffReason/SystemOnOffReason"
 import PlatfromOperationTimeSlot from "pages/Setting/PlatfromOperationTimeSlot/PlatfromOperationTimeSlot"
+import SystemOption from "pages/Setting/SystemOption/SystemOption"
+import VehicleTypes from "pages/Rider/VehicleTypes/VehicleTypes"
+import Riders from "pages/Rider/Riders/Riders"
+import AddRider from "pages/Rider/Riders/AddRider"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
 
-  // //calendar
+  // calendar
   { path: "/calendar", component: <Calendar /> },
 
-  // //profile
+  // profile
   { path: "/profile", component: <UserProfile /> },
 
-  //Email
+  // Email
   { path: "/email-inbox", component: <EmailInbox /> },
   { path: "/email-read", component: <EmailRead /> },
   { path: "/email-compose", component: <EmailCompose /> },
@@ -166,39 +170,54 @@ const userRoutes = [
   { path: "/email-template-basic", component: <Emailtemplatebasic /> },
   { path: "/email-template-billing", component: <Emailtemplatebilling /> },
 
-  //Zone & City
+  // Zone & City
   { path: "/zone", component: <Zone /> },
   { path: "/add-zone", component: <AddZone /> },
   { path: "/city", component: <City /> },
+
+  // Users 
   { path: "/register", component: <Register1 /> },
   { path: "/manage-users", component: <ManageUsers /> },
+
   { path: "/customers", component: <Customer /> },
+
+  { path: "/vehicle-types", component: <VehicleTypes /> },
+
+  { path: "/riders", component: <Riders /> },
+  { path: "/add-rider", component: <AddRider /> },
+
   { path: "/subscription-types", component: <SubscriptionTypes /> },
+
+
+  // Restaurant
+  { path: "/cuisine", component: <Cuisine /> },
+
   { path: "/restaurant", component: <Restaurant /> },
 
-  // Category
-  { path: "/category", component: <Category /> },
-
-  // Campaign
-  { path: "/campaign", component: <Campaign /> },
-  { path: "/add-campaign", component: <AddCampaign /> },
+  { path: "/branch-attribute", component: <BranchAttribute /> },
 
   { path: "/manage-branch", component: <Branch /> },
   { path: "/branch-add", component: <BranchAdd /> },
+
+  { path: "/category", component: <Category /> },
+
+  { path: "/campaign", component: <Campaign /> },
+  { path: "/add-campaign", component: <AddCampaign /> },
+
   { path: "/menu", component: <Menu /> },
   { path: "/add-menu", component: <AddMenu /> },
+
   { path: "/addons-category", component: <AddOnsCategory /> },
   { path: "/category-addons", component: <CategoryAdd /> },
-  { path: "/cuisine", component: <Cuisine /> },
+
   { path: "/time-slot", component: <MenuTimeSlot /> },
   { path: "/add-time-slot", component: <AddTimeSlot /> },
 
-  //Sliders
+
+  // Sliders or Promotions
   { path: "/slider", component: <Slider /> },
   { path: "/add-slider", component: <SliderAdd /> },
 
-  //Branch Attribute
-  { path: "/branch-attribute", component: <BranchAttribute /> },
 
   // CRM
   { path: "/reward-point-settings", component: <RewardPoint /> },
@@ -209,15 +228,17 @@ const userRoutes = [
   { path: "/coupon", component: <Coupon /> },
   { path: "/add-coupon", component: <AddCoupon /> },
 
-  //Popup
+  // Popup
   { path: "/popup-banner", component: <Popup /> },
 
-  //Review
+  // Review
   { path: "/review", component: <Review /> },
 
   // Settings
   { path: "/reason", component: <SystemOnOffReason /> },
   { path: "/operation-time-slot", component: <PlatfromOperationTimeSlot /> },
+  { path: "/system-option", component: <SystemOption /> },
+
 
 
   // Notification

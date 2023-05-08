@@ -8,6 +8,8 @@ import {
   GET_ALL_CUSINE,
   ADD_BRANCH,
   GET_ALL_BRANCH,
+  EDIT_BRANCH,
+  EDIT_BRANCH_FRESH,
   EDIT_BRANCH_STATUS,
   EDIT_BRANCH_STATUS_FRESH,
   EDIT_BRANCH_POPULAR,
@@ -46,10 +48,13 @@ import {
   ADD_MENU_TIME_SLOT_FRESH,
   EDIT_MENU_TIME_SLOT,
   EDIT_MENU_TIME_SLOT_FRESH,
+  EDIT_MENU_TIME_SLOT_STATUS,
+  EDIT_MENU_TIME_SLOT_STATUS_FRESH,
+  DELETE_MENU_TIME_SLOT,
+  DELETE_MENU_TIME_SLOT_FRESH,
   GET_CATEGORY_BY_ID,
   GET_CATEGORY_BY_ID_FRESH,
   ADD_BRANCH_FRESH,
-  EDIT_BRANCH_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -264,40 +269,40 @@ export const branchAddAction = (
   const data =
     selectedCuisine?.length > 0
       ? selectedCuisine.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          cuisine_id: item.value,
-          branch_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            cuisine_id: item.value,
+            branch_id: id,
+          }
+        })
       : null
 
-  console.log(data)
+  // console.log(data)
   const all_working_hours =
     time?.length > 0
       ? time.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          day: Number(item.day),
-          open_hour: moment(item.startTime, "HH:mm").get("hours"),
-          open_min: moment(item.startTime, "HH:mm").get("minutes"),
-          close_hour: moment(item.endTime, "HH:mm").get("hours"),
-          close_minute: moment(item.endTime, "HH:mm").get("minutes"),
-          branch_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            day: Number(item.day),
+            open_hour: moment(item.startTime, "HH:mm").get("hours"),
+            open_min: moment(item.startTime, "HH:mm").get("minutes"),
+            close_hour: moment(item.endTime, "HH:mm").get("hours"),
+            close_minute: moment(item.endTime, "HH:mm").get("minutes"),
+            branch_id: id,
+          }
+        })
       : null
 
   const dataObject = {
     name: zoneInfo.name,
     _id: id,
     email: zoneInfo.email,
-    location: {
-      coordinates: [Number(lat), Number(lng)],
-      type: "Point",
-    },
+    // location: {
+    //   coordinates: [Number(lat), Number(lng)],
+    //   type: "Point",
+    // },
     address: zoneInfo.address,
     popularity_sort_value: JSON.parse(zoneInfo.popularity_sort_value),
     price_range: zoneInfo.price_range,
@@ -320,8 +325,15 @@ export const branchAddAction = (
     is_delivery: JSON.parse(zoneInfo.is_delivery),
     is_pickup: JSON.parse(zoneInfo.is_pickup),
     is_dine: JSON.parse(zoneInfo.is_dine),
-  };
+    delivery_charge: 100,
+  }
+
+  console.log(dataObject)
   const formData = convertToFormData(dataObject)
+
+  formData.append("location.coordinates[0]", Number(lng))
+  formData.append("location.coordinates[1]", Number(lat))
+  formData.append("location[type]", "Point")
 
   return dispatch => {
     const headers = {
@@ -333,19 +345,19 @@ export const branchAddAction = (
       .post(url, formData, { headers: headers })
       .then(response => {
         dispatch({
-          type: "ADD_BRANCH",
+          type: ADD_BRANCH,
           payload: response.data,
           status: "Success",
         })
-        toast.success("Branch Addedd Successfully")
+        // toast.success("Branch Addedd Successfully")
       })
       .catch(error => {
         dispatch({
-          type: "ADD_BRANCH",
+          type: ADD_BRANCH,
           payload: error,
           status: "Failed",
         })
-        toast.error("Branch Add Failed")
+        // toast.error("Branch Add Failed")
       })
   }
 }
@@ -362,52 +374,52 @@ export const branchEditAction = (
   time
 ) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put"
-  console.log(id)
-  console.log(zoneInfo)
-  console.log(location)
-  console.log(file)
-  console.log(coverFile)
-  console.log(time)
-  console.log(selectedCuisine)
+  // console.log(id)
+  // console.log(zoneInfo)
+  // console.log(location)
+  // console.log(file)
+  // console.log(coverFile)
+  // console.log(time)
+  // console.log(selectedCuisine)
 
   //const newLoc = location.replace(/['"]/g,)
 
   const data =
     selectedCuisine?.length > 0
       ? selectedCuisine.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          cuisine_id: item.value,
-          branch_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            cuisine_id: item.value,
+            branch_id: id,
+          }
+        })
       : null
 
-  console.log(data)
+  // console.log(data)
   const all_working_hours =
     time?.length > 0
       ? time.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          day: Number(item.day),
-          open_hour: moment(item.startTime, "HH:mm").get("hours"),
-          open_min: moment(item.startTime, "HH:mm").get("minutes"),
-          close_hour: moment(item.endTime, "HH:mm").get("hours"),
-          close_minute: moment(item.endTime, "HH:mm").get("minutes"),
-          branch_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            day: Number(item.day),
+            open_hour: moment(item.startTime, "HH:mm").get("hours"),
+            open_min: moment(item.startTime, "HH:mm").get("minutes"),
+            close_hour: moment(item.endTime, "HH:mm").get("hours"),
+            close_minute: moment(item.endTime, "HH:mm").get("minutes"),
+            branch_id: id,
+          }
+        })
       : null
   const dataObject = {
     name: zoneInfo.name,
     _id: id,
     email: zoneInfo.email,
-    location: {
-      coordinates: [Number(lat), Number(lng)],
-      type: "Point",
-    },
+    // location: {
+    //   coordinates: [Number(lng), Number(lat)],
+    //   type: "Point",
+    // },
     address: zoneInfo.address,
     popularity_sort_value: JSON.parse(zoneInfo.popularity_sort_value),
     price_range: zoneInfo.price_range,
@@ -425,8 +437,14 @@ export const branchEditAction = (
     parent_restaurant_id: zoneInfo.restaurant,
     working_hours: all_working_hours,
     cuisines: data,
+    delivery_charge: 100,
   }
+
   const formData = convertToFormData(dataObject)
+
+  formData.append("location[coordinates][0]", Number(lng))
+  formData.append("location[coordinates][1]", Number(lat))
+  formData.append("location[type]", "Point")
   return dispatch => {
     const headers = {
       "Content-Type": "multipart/form-data",
@@ -438,19 +456,19 @@ export const branchEditAction = (
       .put(url, formData, { headers: headers })
       .then(response => {
         dispatch({
-          type: "EDIT_BRANCH",
+          type: EDIT_BRANCH,
           payload: response.data,
           status: "Success",
         })
-        toast.success("Branch Edited Successfully")
+        // toast.success("Branch Edited Successfully")
       })
       .catch(error => {
         dispatch({
-          type: "EDIT_BRANCH",
+          type: EDIT_BRANCH,
           payload: error,
           status: "Failed",
         })
-        toast.error("Branch Edit Failed")
+        // toast.error("Branch Edit Failed")
       })
   }
 }
@@ -458,8 +476,43 @@ export const branchEditAction = (
 export const branchStatusEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put"
 
-  const dataObject = data;
-  const formData = convertToFormData(dataObject);
+  // const dataObject = data
+  // console.log(data);
+  // console.log(data.location.coordinates);
+  const dataObject = {
+    name: data.name,
+    _id: data._id,
+    email: data.email,
+    // location: {
+    //   coordinates: [Number(lng), Number(lat)],
+    //   type: "Point",
+    // },
+    address: data.address,
+    popularity_sort_value: JSON.parse(data.popularity_sort_value),
+    price_range: data.price_range,
+    image: data.image,
+    cover_image: data.cover_image,
+    slug: data.slug,
+    zonal_admin: data.zonal_admin,
+    is_take_pre_order: JSON.parse(data.is_take_pre_order),
+    phone_number: data.phone_number,
+    is_veg: JSON.parse(data.is_veg),
+    is_popular: JSON.parse(data.is_popular),
+    commission: JSON.parse(data.commission),
+    min_order_value: 1,
+    delivery_time: JSON.parse(data.delivery_time),
+    parent_restaurant_id: data.parent_restaurant_id,
+    working_hours: data.working_hours,
+    cuisines: data.cuisines,
+    delivery_charge: data.delivery_charge,
+    is_active: data.is_active,
+  }
+
+  const formData = convertToFormData(dataObject)
+
+  formData.append("location[coordinates][0]", data.location.coordinates[0])
+  formData.append("location[coordinates][1]", data.location.coordinates[1])
+  formData.append("location[type]", data.location.type)
 
   return dispatch => {
     const headers = {
@@ -489,9 +542,41 @@ export const branchStatusEditAction = data => {
 export const branchPopularEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put"
 
-  const dataObject = data
-  // console.log(dataObject);
+  // const dataObject = data
+  const dataObject = {
+    name: data.name,
+    _id: data._id,
+    email: data.email,
+    // location: {
+    //   coordinates: [Number(lng), Number(lat)],
+    //   type: "Point",
+    // },
+    address: data.address,
+    popularity_sort_value: JSON.parse(data.popularity_sort_value),
+    price_range: data.price_range,
+    image: data.image,
+    cover_image: data.cover_image,
+    slug: data.slug,
+    zonal_admin: data.zonal_admin,
+    is_take_pre_order: JSON.parse(data.is_take_pre_order),
+    phone_number: data.phone_number,
+    is_veg: JSON.parse(data.is_veg),
+    is_popular: JSON.parse(data.is_popular),
+    commission: JSON.parse(data.commission),
+    min_order_value: 1,
+    delivery_time: JSON.parse(data.delivery_time),
+    parent_restaurant_id: data.parent_restaurant_id,
+    working_hours: data.working_hours,
+    cuisines: data.cuisines,
+    delivery_charge: data.delivery_charge,
+    is_active: data.is_active,
+  }
+
   const formData = convertToFormData(dataObject)
+
+  formData.append("location[coordinates][0]", data.location.coordinates[0])
+  formData.append("location[coordinates][1]", data.location.coordinates[1])
+  formData.append("location[type]", data.location.type)
 
   return dispatch => {
     const headers = {
@@ -587,34 +672,32 @@ export const zoneAddAction = (
   deliveryCharge,
   selectedBranch
 ) => {
-
-
   var url = process.env.REACT_APP_LOCALHOST + "/Zone/Post"
 
   const data =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          branch_id: item.value,
-          zone_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            branch_id: item.value,
+            zone_id: id,
+          }
+        })
       : null
 
   const delivery_charges =
     deliveryCharge?.length > 0
       ? deliveryCharge.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          distance_start_in_kilometer: Number(item.distanceStart),
-          distance_end_in_kilometer: Number(item.distanceEnd),
-          delivery_charge: Number(item.deliveryCharge),
-          zone_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            distance_start_in_kilometer: Number(item.distanceStart),
+            distance_end_in_kilometer: Number(item.distanceEnd),
+            delivery_charge: Number(item.deliveryCharge),
+            zone_id: id,
+          }
+        })
       : null
 
   const allData = path.map(item => [Number(item.lng), Number(item.lat)])
@@ -714,27 +797,27 @@ export const zoneEditAction = (
   const data =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          branch_id: item.value,
-          zone_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            branch_id: item.value,
+            zone_id: id,
+          }
+        })
       : null
 
   const delivery_charges =
     deliveryCharge?.length > 0
       ? deliveryCharge.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          distance_start_in_kilometer: Number(item.distanceStart),
-          distance_end_in_kilometer: Number(item.distanceEnd),
-          delivery_charge: Number(item.deliveryCharge),
-          zone_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            distance_start_in_kilometer: Number(item.distanceStart),
+            distance_end_in_kilometer: Number(item.distanceEnd),
+            delivery_charge: Number(item.deliveryCharge),
+            zone_id: id,
+          }
+        })
       : null
 
   const allData = path.map(item => [Number(item.lat), Number(item.lng)])
@@ -876,7 +959,7 @@ export const addBranchFresh = () => {
 export const editBranchFresh = () => {
   return dispatch => {
     dispatch({
-      type: "EDIT_BRANCH_FRESH",
+      type: EDIT_BRANCH_FRESH,
       payload: null,
       status: false,
     })
@@ -903,38 +986,39 @@ export const editBranchPopularFresh = () => {
   }
 }
 
-export const addBranchFreshNew = () => {
-  console.log("I am in add branch fresh===============")
-  return dispatch => {
-    dispatch({
-      type: "ADD_BRANCH_FRESH",
-      payload: null,
-      status: false,
-    })
-  }
-}
+// export const addBranchFreshNew = () => {
+//   console.log("I am in add branch fresh===============")
+//   return dispatch => {
+//     dispatch({
+//       type: "ADD_BRANCH_FRESH",
+//       payload: null,
+//       status: false,
+//     })
+//   }
+// }
 
 export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
-  console.log(val, category, isChecked, addOns)
-  console.log(parseInt(category.num_of_choice))
+  // console.log(addOns)
+  // console.log(parseInt(category.num_of_choice))
 
   var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Post"
+  // console.log(addOns?.length)
 
   const data =
     addOns?.length > 0
       ? addOns.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          add_on_name: item.add_on_name,
-          add_on_price: item.add_on_price,
-          add_on_category_name: category.name,
-          add_on_category_id: val,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            add_on_name: item.add_on_name,
+            add_on_price: item.add_on_price,
+            add_on_category_name: category.name,
+            add_on_category_id: val,
+          }
+        })
       : null
   const val_id = uuidv4()
-  console.log(data)
+  // console.log(data)
 
   let formData = {
     _id: val,
@@ -976,26 +1060,26 @@ export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
 }
 
 export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
-  console.log(val, category, isChecked, addOns)
-  console.log(parseInt(category.num_of_choice))
+  // console.log(val, category, isChecked, addOns)
+  // console.log(parseInt(category.num_of_choice))
 
   var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Put"
 
   const data =
     addOns?.length > 0
       ? addOns.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          add_on_name: item.add_on_name,
-          add_on_price: item.add_on_price,
-          add_on_category_name: category.name,
-          add_on_category_id: val,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            add_on_name: item.add_on_name,
+            add_on_price: item.add_on_price,
+            add_on_category_name: category.name,
+            add_on_category_id: val,
+          }
+        })
       : null
   const val_id = uuidv4()
-  console.log(data)
+  // console.log(data)
 
   let formData = {
     _id: val,
@@ -1077,7 +1161,7 @@ export const addOnCategoryStatusEditActionFresh = () => {
 
 export const addCuisineAction = (id, name, file, color) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Post"
-  console.log(file);
+  console.log(file)
 
   let dataObject = {
     _id: id,
@@ -1152,7 +1236,6 @@ export const cuisineEditAction = (id, editName, status, file, color) => {
   //   imane: "https://unsplash.com/photos/kcA-c3f_3FE",
   // }
 
-
   let dataObject = {
     _id: id,
     name: editName,
@@ -1160,7 +1243,7 @@ export const cuisineEditAction = (id, editName, status, file, color) => {
     image: file,
     "color.fg": color.fg,
     "color.bg": color.bg,
-  };
+  }
 
   console.log(dataObject)
 
@@ -1201,7 +1284,7 @@ export const cuisineStatusEditAction = data => {
     image: data.image,
     "color.fg": data.color.fg,
     "color.bg": data.color.bg,
-  };
+  }
   // console.log(dataObject);
   const formData = convertToFormData(dataObject)
   //console.log(formData);
@@ -1340,35 +1423,55 @@ export const addOnCategoryAddFresh = () => {
   }
 }
 
-export const addRestaurantMenuAction = (val, info, isChecked) => {
+export const addRestaurantMenuAction = (
+  val,
+  info,
+  isChecked,
+  variations,
+  menuTiming
+) => {
   console.log(val, info, isChecked)
 
   var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Post"
 
-  // const data = selectedCuisine?.length > 0 ? selectedCuisine.map(item => {
-  //     const val = uuidv4();
-  //     return {
-  //         _id: val,
-  //         cuisine_id: item.value,
-  //         branch_id: id
-  //     }
-  // }) : null
+  const variationData =
+    isChecked && variations?.length > 0
+      ? variations.map(item => {
+          const _id = uuidv4()
+          return {
+            ...item,
+            add_on_categories: item.add_on_categories.map(addon_cats => {
+              return {
+                ...addon_cats,
+                add_ons: addon_cats.add_ons.map(add_ons => {
+                  const _addon_id = uuidv4()
+                  return {
+                    ...add_ons,
+                    _id: _addon_id,
+                    variation_and_add_on_category_id: _id,
+                  }
+                }),
+              }
+            }),
+            _id: _id,
+            menu_id: val,
+          }
+        })
+      : []
 
-  // console.log(data);
-  // const all_working_hours = time?.length > 0 ? time.map(item => {
-  //     const val = uuidv4();
-  //     return {
-  //         _id: val,
-  //         day: Number(item.day),
-  //         open_hour: moment(item.startTime, "HH:mm").get('hours'),
-  //         open_min: moment(item.startTime, "HH:mm").get('minutes'),
-  //         close_hour: moment(item.endTime, "HH:mm").get('hours'),
-  //         close_minute: moment(item.endTime, "HH:mm").get('minutes'),
-  //         branch_id: id,
+  const menuTimingData =
+    menuTiming.length > 0
+      ? menuTiming.map(item => {
+          const _id = uuidv4()
+          return {
+            _id: _id,
+            menu_item_time_slot_id: item._id,
+            menu_id: val,
+          }
+        })
+      : []
 
-  //     }
-  // }) : null
-  let formData = {
+  let dataObject = {
     _id: val,
     menu_name: info.name,
     menu_price: Number(info.menu_price),
@@ -1382,22 +1485,21 @@ export const addRestaurantMenuAction = (val, info, isChecked) => {
     vat: Number(info.vat),
     sd: Number(info.sd),
     restaurant_id: info.restaurant,
-    restaurant_name: "test",
     category_id: info.category,
-    category_name: info.category,
     is_delivery: JSON.parse(info.is_delivery),
     is_pickup: JSON.parse(info.is_pickup),
     is_dine: JSON.parse(info.is_dine),
-    variations: [],
-    menu_available_times: [],
-    image: "https://unsplash.com/photos/eYnK2UmLlZ0",
+    variations: variationData,
+    menu_available_times: menuTimingData,
+    image: info.image,
     slug: "test",
     is_active: true,
   }
+  const formData = convertToFormData(dataObject)
 
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -1551,7 +1653,7 @@ export const addMenuTimeSlotFresh = () => {
 }
 
 export const editMenuTimeSlotAction = (val, timeSlot) => {
-  console.log(val, timeSlot)
+  // console.log(val, timeSlot)
   var url = process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/Put"
 
   let formData = {
@@ -1568,6 +1670,8 @@ export const editMenuTimeSlotAction = (val, timeSlot) => {
       minute: moment(timeSlot.end_time, "HH:mm").get("minutes"),
     },
   }
+
+  // console.log(formData)
 
   return dispatch => {
     const headers = {
@@ -1604,6 +1708,88 @@ export const editMenuTimeSlotFresh = () => {
       status: false,
     })
   }
+}
+
+export const editMenuTimeSlotStatusAction = timeSlot => {
+  // console.log(val, timeSlot)
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/Put"
+
+  let formData = timeSlot
+
+  // console.log(formData)
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: EDIT_MENU_TIME_SLOT_STATUS,
+          payload: response.data,
+          status: "Success",
+        })
+        // toast.success("Timeslot Edited Successfully")
+      })
+      .catch(error => {
+        dispatch({
+          type: "EDIT_MENU_TIME_SLOT",
+          payload: error,
+          status: "Failed",
+        })
+        // toast.error("Timeslot Edit Failed")
+      })
+  }
+}
+
+export const editMenuTimeSlotStatusFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: EDIT_MENU_TIME_SLOT_STATUS_FRESH,
+      //payload: null,
+      status: false,
+    })
+  }
+}
+
+export const menuTimeSlotDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/Delete"
+  // console.log(id);
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+
+    axios
+      .delete(url, { params: { id: id } }, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: DELETE_MENU_TIME_SLOT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: DELETE_MENU_TIME_SLOT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const menuTimeSlotDeleteFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: DELETE_MENU_TIME_SLOT_FRESH,
+      status: false,
+    })
 }
 
 export const getCategoryByIdAction = id => {

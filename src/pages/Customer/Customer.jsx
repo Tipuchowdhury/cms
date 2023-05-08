@@ -341,14 +341,12 @@ function Customer(props) {
             toast.success("Customer Status Updated");
             toggleStatus();
             props.customerStatusEditActionFresh();
-
         }
 
         if (props.edit_cutomer_status_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
             props.customerStatusEditActionFresh();
-
         }
 
         if (props.customer_delete_loading === "Success") {

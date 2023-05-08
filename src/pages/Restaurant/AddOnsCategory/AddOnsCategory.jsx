@@ -160,7 +160,7 @@ function AddOnsCategory(props) {
 
     }, [props.get_all_addOns_category_loading, props.add_on_category_delete_loading, props.edit_add_on_category_status_loading]);
 
-    console.log(props.get_all_addOns_category_data);
+    // console.log(props.get_all_addOns_category_data);
     return (
         <React.Fragment>
 

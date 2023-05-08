@@ -34,9 +34,9 @@ function Slider(props) {
         start_date: new Date().toISOString(),
         end_date: new Date().toISOString(),
         type: "",
-        is_deliver: true,
-        is_pickup: true,
-        is_dine: true,
+        is_delivery: false,
+        is_pickup: false,
+        is_dine: false,
         is_active: true,
     });
 
@@ -46,9 +46,9 @@ function Slider(props) {
         start_date: new Date().toISOString(),
         end_date: new Date().toISOString(),
         type: "",
-        is_deliver: true,
-        is_pickup: true,
-        is_dine: true,
+        is_delivery: false,
+        is_pickup: false,
+        is_dine: false,
         is_active: true,
     });
 
@@ -84,11 +84,12 @@ function Slider(props) {
         setAddInfo({ ...addInfo, [name]: value });
     }
 
-    const handleEditInputs = (e) => {
+    const handleAddCheckBox = (e) => {
         // console.log(e);
         name = e.target.name;
-        value = e.target.value;
-        setEditInfo({ ...editInfo, [name]: value });
+        checked = e.target.checked;
+        setAddInfo({ ...addInfo, [name]: checked })
+
     }
 
     const handleAddTimeChange = e => {
@@ -99,6 +100,20 @@ function Slider(props) {
             ...addInfo,
             [name]: new Date(new_time_string).toISOString(),
         })
+    }
+
+    const handleEditInputs = (e) => {
+        // console.log(e);
+        name = e.target.name;
+        value = e.target.value;
+        setEditInfo({ ...editInfo, [name]: value });
+    }
+
+    const handleEditCheckBox = (e) => {
+        // console.log(e);
+        name = e.target.name;
+        checked = e.target.checked;
+        setEditInfo({ ...editInfo, [name]: checked })
     }
 
     const handleEditTimeChange = e => {
@@ -139,7 +154,7 @@ function Slider(props) {
             start_date: row.start_date,
             end_date: row.end_date,
             type: row.type,
-            is_deliver: row.is_deliver,
+            is_delivery: row.is_delivery,
             is_pickup: row.is_pickup,
             is_dine: row.is_dine,
             is_active: row.is_active,
@@ -171,8 +186,6 @@ function Slider(props) {
             ...editInfo,
             is_active: !editInfo.is_active,
         })
-        // props.promotionStatusUpdateAction(editInfo);
-        // toggleDel();
     }
 
     const handleDeleteModal = (row) => {
@@ -255,12 +268,12 @@ function Slider(props) {
             setAddInfo({
                 ...addInfo,
                 name: "",
-                start_date: "",
-                end_date: "",
+                tart_date: new Date().toISOString(),
+                end_date: new Date().toISOString(),
                 type: "",
-                is_deliver: true,
-                is_pickup: true,
-                is_dine: true,
+                is_delivery: false,
+                is_pickup: false,
+                is_dine: false,
                 is_active: true,
             });
             setSelectedRestaurant(false);
@@ -385,23 +398,33 @@ function Slider(props) {
                                     name="end_date" placeholder="Start Time"
                                     value={addInfo.end_date.slice(0, 16)} onChange={e => handleAddTimeChange(e)} required />
                             </div>
-                            {/* <Row className="mb-3">
-                                <label
-                                    htmlFor="example-text-input"
-                                    className="col-md-2 col-form-label"
-                                >
-                                    Branches
-                                </label>
-                                <div className="col-md-10">
-                                    <Select
-                                        value={selectedBranch}
-                                        onChange={handleSelectBranch}
-                                        options={allRestaurant}
-                                        isMulti={true}
-                                    />
 
+                            <Row className="mb-3">
+
+                                <div className="col-sm-4">
+                                    <div className="form-check">
+                                        <label className="form-check-label" htmlFor="is_delivery">Delivery</label>
+                                        <input type="checkbox" className="form-check-input" id="is_delivery" checked={addInfo.is_delivery} name="is_delivery" onChange={handleAddCheckBox} />
+
+                                    </div>
                                 </div>
-                            </Row> */}
+
+                                <div className="col-sm-4">
+                                    <div className="form-check">
+                                        <label className="form-check-label" htmlFor="is_pickup">Pickup</label>
+                                        <input type="checkbox" className="form-check-input" id="is_pickup" checked={addInfo.is_pickup} name="is_pickup" onChange={handleAddCheckBox} />
+                                    </div>
+                                </div>
+
+                                <div className="col-sm-4">
+                                    <div className="form-check">
+                                        <label className="form-check-label" htmlFor="is_dine">Dine</label>
+                                        <input type="checkbox" className="form-check-input" id="is_dine" checked={addInfo.is_dine} name="is_dine" onChange={handleAddCheckBox} />
+
+                                    </div>
+                                </div>
+
+                            </Row>
 
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
@@ -463,6 +486,33 @@ function Slider(props) {
                                     name="end_date" placeholder="Start Time"
                                     value={editInfo.end_date.slice(0, 16)} onChange={e => handleEditTimeChange(e)} required />
                             </div>
+
+                            <Row className="mb-3">
+
+                                <div className="col-sm-4">
+                                    <div className="form-check">
+                                        <label className="form-check-label" htmlFor="is_delivery">Delivery</label>
+                                        <input type="checkbox" className="form-check-input" id="is_delivery" checked={editInfo.is_delivery} name="is_delivery" onChange={handleEditCheckBox} />
+
+                                    </div>
+                                </div>
+
+                                <div className="col-sm-4">
+                                    <div className="form-check">
+                                        <label className="form-check-label" htmlFor="is_pickup">Pickup</label>
+                                        <input type="checkbox" className="form-check-input" id="is_pickup" checked={editInfo.is_pickup} name="is_pickup" onChange={handleEditCheckBox} />
+                                    </div>
+                                </div>
+
+                                <div className="col-sm-4">
+                                    <div className="form-check">
+                                        <label className="form-check-label" htmlFor="is_dine">Dine</label>
+                                        <input type="checkbox" className="form-check-input" id="is_dine" checked={editInfo.is_dine} name="is_dine" onChange={handleEditCheckBox} />
+
+                                    </div>
+                                </div>
+
+                            </Row>
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
                                 <Button color="primary" type="submit">

@@ -22,10 +22,11 @@ import {
   getAllSubscriptionTypeAction,
   getAllCategoryAction,
   getAllCuisneAction,
-  getAllAdminUsersAction, //TODO: change it to normal customer
+  // getAllAdminUsersAction, //TODO: change it to normal customer
   getAllRestaurantAction,
   // TODO: Get Menu Action
   getAllZoneAction,
+  getAllCustomerAction,
 } from "store/actions"
 import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
@@ -34,7 +35,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 function AddCoupon(props) {
   const navigate = useNavigate()
   const location = useLocation()
-  console.log("lof", location?.state?.restaurants)
+  // console.log("lof", location?.state?.restaurants)
 
   const [couponTypes, setCouponTypes] = useState([
     {
@@ -77,13 +78,13 @@ function AddCoupon(props) {
     })
     : ""
 
-  console.log(coupon_data_edit);
+  console.log(coupon_data_edit)
 
   const [selectedCouponType, setSelectedCouponType] = useState(
     coupon_data_edit ? coupon_data_edit[0] : ""
   )
 
-  console.log(selectedCouponType?.value);
+  console.log(selectedCouponType?.value)
 
   const handleSelectCouponType = e => {
     //console.log(e.value);
@@ -152,7 +153,6 @@ function AddCoupon(props) {
     })
     : ""
 
-
   const [selectedCuisine, setSelectedCuisine] = useState(
     cuisine_data_edit ? cuisine_data_edit : ""
   )
@@ -171,7 +171,7 @@ function AddCoupon(props) {
   console.log("cuisineData", cuisineData)
 
   //select multiple user
-  const common_user = props?.get_all_user_data?.filter(elem =>
+  const common_user = props?.get_all_customer_data?.filter(elem =>
     location?.state?.customers?.find(
       ({ customer_id }) => elem._id === customer_id
     )
@@ -193,8 +193,8 @@ function AddCoupon(props) {
   }
 
   let userData = undefined
-  if (props.get_all_user_data?.length > 0) {
-    userData = props.get_all_user_data?.map((item, key) => ({
+  if (props.get_all_customer_data?.length > 0) {
+    userData = props.get_all_customer_data?.map((item, key) => ({
       label: `${item.first_name} ${item.last_name}`,
       value: item._id,
     }))
@@ -389,14 +389,18 @@ function AddCoupon(props) {
     e.preventDefault()
     console.log("======================I am in the edit form==================")
 
-    props.couponEditAction(location.state._id, couponInfo, selectedCouponType,
+    props.couponEditAction(
+      location.state._id,
+      couponInfo,
+      selectedCouponType,
       selectedBranch,
       selectedCategory,
       selectedCuisine,
       selectedSubType,
       selectedUser,
       selectedZone,
-      gradual)
+      gradual
+    )
   }
 
   console.log(props.add_coupon_loading)
@@ -419,8 +423,8 @@ function AddCoupon(props) {
     if (props.get_all_category_loading == false) {
       props.getAllCategoryAction()
     }
-    if (props.get_all_user_loading == false) {
-      props.getAllAdminUsersAction()
+    if (props.get_all_customer_loading == false) {
+      props.getAllCustomerAction()
     }
     if (props.get_all_subscription_type_loading == false) {
       props.getAllSubscriptionTypeAction()
@@ -445,7 +449,7 @@ function AddCoupon(props) {
     props.get_all_cuisine_loading,
     props.get_all_zone_loading,
     props.get_all_category_loading,
-    props.get_all_user_loading,
+    props.get_all_customer_loading,
     props.get_all_subscription_type_loading,
     props.get_all_category_loading,
   ])
@@ -551,10 +555,7 @@ function AddCoupon(props) {
                     </div>
                   </Row>
                   <Row className="mb-3">
-                    <label
-                      htmlFor="image"
-                      className="col-md-2 col-form-label"
-                    >
+                    <label htmlFor="image" className="col-md-2 col-form-label">
                       Image
                     </label>
                     <div className="col-md-10">
@@ -1182,8 +1183,11 @@ const mapStateToProps = state => {
     get_all_category_loading,
   } = state.Category
 
-  const { get_all_user_data, get_all_user_error, get_all_user_loading } =
-    state.registerNew
+  const {
+    get_all_customer_data,
+    get_all_customer_error,
+    get_all_customer_loading,
+  } = state.Customer
 
   const {
     get_all_subscription_type_data,
@@ -1206,9 +1210,9 @@ const mapStateToProps = state => {
     get_all_category_data,
     get_all_category_error,
     get_all_category_loading,
-    get_all_user_data,
-    get_all_user_error,
-    get_all_user_loading,
+    get_all_customer_data,
+    get_all_customer_error,
+    get_all_customer_loading,
     get_all_subscription_type_data,
     get_all_subscription_type_error,
     get_all_subscription_type_loading,
@@ -1225,7 +1229,7 @@ export default withRouter(
     getAllSubscriptionTypeAction,
     getAllCategoryAction,
     getAllCuisneAction,
-    getAllAdminUsersAction,
+    getAllCustomerAction,
     getAllRestaurantAction,
     getAllZoneAction,
   })(AddCoupon)

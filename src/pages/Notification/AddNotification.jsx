@@ -25,7 +25,6 @@ import { v4 as uuidv4 } from "uuid"
 import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 
-
 function AddNotification(props) {
   const navigate = useNavigate()
   const location = useLocation()
@@ -33,16 +32,18 @@ function AddNotification(props) {
 
   //select multiple user
   const common_users = props?.get_all_customer_data?.filter(elem =>
-    location?.state?.restaurants?.find(({ res_id }) => elem._id === res_id)
+    location?.state?.customers?.find(
+      ({ customer_id }) => elem._id === customer_id
+    )
   )
 
   const user_data_edit = common_users
     ? common_users?.map((item, key) => {
-      return {
-        label: `${item.first_name} ${item.last_name}`,
-        value: item._id,
-      }
-    })
+        return {
+          label: `${item.first_name} ${item.last_name}`,
+          value: item._id,
+        }
+      })
     : ""
   const [selectedUser, setSelectedUser] = useState(
     user_data_edit ? user_data_edit : ""
@@ -50,7 +51,6 @@ function AddNotification(props) {
   const handleSelectUser = e => {
     setSelectedUser(e)
   }
-
 
   // TODO: Get Customers
   let userData = undefined
@@ -94,7 +94,6 @@ function AddNotification(props) {
 
     reader.readAsDataURL(value)
   }
-
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -226,10 +225,7 @@ function AddNotification(props) {
                     </div>
                   </Row>
                   <Row className="mb-3">
-                    <label
-                      htmlFor="image"
-                      className="col-md-2 col-form-label"
-                    >
+                    <label htmlFor="image" className="col-md-2 col-form-label">
                       Image
                     </label>
                     <div className="col-md-10">

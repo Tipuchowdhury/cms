@@ -41,14 +41,14 @@ function AddTimeSlot(props) {
 
     let name, value;
     const handleInputs = (e) => {
-        console.log(e);
+        // console.log(e);
         name = e.target.name;
         value = e.target.value;
         setTimeSlot({ ...timeSlot, [name]: value })
 
     }
     // get all branch
-    console.log(props.get_all_branch_data);
+    // console.log(props.get_all_branch_data);
     let branchData = undefined;
     if (props.get_all_branch_data?.length > 0) {
         branchData = props.get_all_branch_data?.map((item, key) => (
@@ -60,15 +60,24 @@ function AddTimeSlot(props) {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        console.log(timeSlot);
+        // console.log(timeSlot);
         const val = uuidv4();
-        props.addMenuTimeSlotAction(val, timeSlot)
+
+        if (timeSlot.end_time <= timeSlot.start_time) {
+            toast.error("Start time can not be greater than or equal end time");
+        } else {
+            props.addMenuTimeSlotAction(val, timeSlot)
+        }
     }
 
     const handleEdit = (e) => {
         e.preventDefault();
         console.log(timeSlot);
-        props.editMenuTimeSlotAction(location?.state?._id, timeSlot)
+        if (timeSlot.end_time <= timeSlot.start_time) {
+            toast.error("Start time can not be greater than or equal end time");
+        } else {
+            props.editMenuTimeSlotAction(location?.state?._id, timeSlot)
+        }
     }
     useEffect(() => {
         if (props.add_menu_time_slot_loading == "Success") {
@@ -87,7 +96,7 @@ function AddTimeSlot(props) {
 
     }, [props.add_menu_time_slot_loading, props.get_all_branch_loading, props.edit_menu_time_slot_loading]);
 
-    console.log(location.state);
+    // console.log(location.state);
 
     return (
         <React.Fragment>
