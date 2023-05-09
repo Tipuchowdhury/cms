@@ -1,0 +1,11 @@
+export const ADD_ROLE = "ADD_ROLE";
+export const ADD_ROLE_FRESH = "ADD_ROLE_FRESH"
+export const GET_ALL_ROLE = "GET_ALL_ROLE";
+export const GET_ALL_ROLE_FRESH = "GET_ALL_ROLE_FRESH"
+export const ROLE_EDIT = "ROLE_EDIT"
+export const ROLE_STATUS_EDIT = "ROLE_STATUS_EDIT"
+export const ROLE_STATUS_EDIT_FRESH = "ROLE_STATUS_EDIT_FRESH"
+export const ROLE_EDIT_FRESH = "ROLE_EDIT_FRESH"
+export const GET_ROLE_BY_ID = "GET_ROLE_BY_ID"
+export const ROLE_DELETE = "ROLE_DELETE"
+export const ROLE_DELETE_FRESH = "ROLE_DELETE_FRESH"

@@ -149,6 +149,8 @@ import SystemOption from "pages/Setting/SystemOption/SystemOption"
 import VehicleTypes from "pages/Rider/VehicleTypes/VehicleTypes"
 import Riders from "pages/Rider/Riders/Riders"
 import AddRider from "pages/Rider/Riders/AddRider"
+import Permissions from "pages/roles_and_permissions/Permissions/Permissions"
+import Roles from "pages/roles_and_permissions/Roles/Roles"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -234,6 +236,11 @@ const userRoutes = [
   { path: "/reason", component: <SystemOnOffReason /> },
   { path: "/operation-time-slot", component: <PlatfromOperationTimeSlot /> },
   { path: "/system-option", component: <SystemOption /> },
+
+  // Roles & Permissions
+  { path: "/permissions", component: <Permissions /> },
+  { path: "/roles", component: <Roles /> },
+
 
   // Notification
   { path: "/notification", component: <Notification /> },
