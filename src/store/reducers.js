@@ -35,6 +35,7 @@ import SystemOption from "./Setting/SystemOption/reducer"
 import VehicleType from "./Rider/VehicleType/reducer"
 import Rider from "./Rider/Rider/reducer"
 import Permissions from "./Roles_and_Permissions/Permissions/reducer"
+import Roles from "./Roles_and_Permissions/Roles/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -65,6 +66,7 @@ const rootReducer = combineReducers({
   VehicleType,
   Rider,
   Permissions,
+  Roles,
 })
 
 export default rootReducer

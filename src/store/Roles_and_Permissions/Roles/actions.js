@@ -1,4 +1,4 @@
-import { ADD_PERMISSION, ADD_PERMISSION_FRESH, GET_ALL_PERMISSION, GET_ALL_PERMISSION_FRESH, PERMISSION_EDIT, PERMISSION_EDIT_FRESH, PERMISSION_DELETE, PERMISSION_DELETE_FRESH, PERMISSION_STATUS_EDIT, PERMISSION_STATUS_EDIT_FRESH } from "./actionTypes";
+import { ADD_ROLE, ADD_ROLE_FRESH, GET_ALL_ROLE, GET_ALL_ROLE_FRESH, ROLE_EDIT, ROLE_EDIT_FRESH, ROLE_DELETE, ROLE_DELETE_FRESH, ROLE_STATUS_EDIT, ROLE_STATUS_EDIT_FRESH } from "./actionTypes";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
@@ -6,15 +6,29 @@ import { v4 as uuidv4 } from "uuid";
 var token = JSON.parse(localStorage.getItem("jwt"));
 
 
-export const addPermissionAction = (addData) => {
-    var url = process.env.REACT_APP_LOCALHOST + "/Permission/Post";
+export const addRoleAction = (addData, permissions) => {
+    var url = process.env.REACT_APP_LOCALHOST + "/Role/Post";
 
-    const val = uuidv4();
+    const role_id = uuidv4();
+
+    const set_permissions = permissions?.length > 0 ? permissions.map(item => {
+        const new_val = uuidv4();
+        return {
+            _id: new_val,
+            permission_id: item.value,
+            role_id: role_id,
+        }
+    }) : null
+
     const formData = {
-        _id: val,
-        ...addData
+        _id: role_id,
+        ...addData,
+        permissions: set_permissions
     };
-    // console.log(formData);
+
+    //console.log(formData);
+
+    console.log(formData);
     return dispatch => {
         // console.log("-in the dispatch----")
 
@@ -27,7 +41,7 @@ export const addPermissionAction = (addData) => {
             .post(url, formData, { headers: headers })
             .then(response => {
                 dispatch({
-                    type: ADD_PERMISSION,
+                    type: ADD_ROLE,
                     payload: response.data,
                     status: "Success",
                 });
@@ -35,7 +49,7 @@ export const addPermissionAction = (addData) => {
 
             .catch(error => {
                 dispatch({
-                    type: ADD_PERMISSION,
+                    type: ADD_ROLE,
                     payload: error,
                     status: "Failed",
                 });
@@ -45,16 +59,16 @@ export const addPermissionAction = (addData) => {
 
 };
 
-export const addPermissionFresh = () => {
+export const addRoleFresh = () => {
     return dispatch =>
         dispatch({
-            type: ADD_PERMISSION_FRESH,
+            type: ADD_ROLE_FRESH,
             status: false,
         });
 };
 
-export const getAllPermissionAction = () => {
-    var url = process.env.REACT_APP_LOCALHOST + "/Permission/Get";
+export const getAllRoleAction = () => {
+    var url = process.env.REACT_APP_LOCALHOST + "/Role/Get";
     const formData = {};
     return dispatch => {
         const headers = {
@@ -66,14 +80,14 @@ export const getAllPermissionAction = () => {
             .get(url, { headers: headers })
             .then(response => {
                 dispatch({
-                    type: GET_ALL_PERMISSION,
+                    type: GET_ALL_ROLE,
                     payload: response.data,
                     status: "Success",
                 });
             })
             .catch(error => {
                 dispatch({
-                    type: GET_ALL_PERMISSION,
+                    type: GET_ALL_ROLE,
                     status: "Failed",
                 });
             });
@@ -81,10 +95,10 @@ export const getAllPermissionAction = () => {
 };
 
 
-export const getAllPermissionFresh = () => {
+export const getAllRoleFresh = () => {
     return dispatch => {
         dispatch({
-            type: GET_ALL_PERMISSION_FRESH,
+            type: GET_ALL_ROLE_FRESH,
             payload: null,
             status: "Success",
         });
@@ -92,11 +106,29 @@ export const getAllPermissionFresh = () => {
 };
 
 
-export const permissionUpdateAction = (editData) => {
+export const roleUpdateAction = (editData, permissions) => {
     // console.log(editData);
 
-    var url = process.env.REACT_APP_LOCALHOST + "/Permission/Put";
-    const formData = editData;
+    var url = process.env.REACT_APP_LOCALHOST + "/Role/Put";
+
+    const set_permissions = permissions?.length > 0 ? permissions.map(item => {
+        const val = uuidv4();
+        return {
+            _id: val,
+            permission_id: item.value,
+            role_id: editData._id,
+        }
+    }) : null
+
+    const role_id = uuidv4();
+
+
+    const formData = {
+        ...editData,
+        permissions: set_permissions
+    };
+
+    // console.log(formData)
     return dispatch => {
         const headers = {
             "Content-Type": "application/json",
@@ -108,14 +140,14 @@ export const permissionUpdateAction = (editData) => {
             .put(url, formData, { headers: headers })
             .then(response => {
                 dispatch({
-                    type: PERMISSION_EDIT,
+                    type: ROLE_EDIT,
                     payload: response.data,
                     status: "Success",
                 });
             })
             .catch(error => {
                 dispatch({
-                    type: PERMISSION_EDIT,
+                    type: ROLE_EDIT,
                     payload: error,
                     status: "Failed",
                 });
@@ -123,19 +155,19 @@ export const permissionUpdateAction = (editData) => {
     };
 };
 
-export const permissionUpdateFresh = () => {
+export const roleUpdateFresh = () => {
     // console.log("===== I am in the fresh ========")
     return dispatch =>
         dispatch({
-            type: PERMISSION_EDIT_FRESH,
+            type: ROLE_EDIT_FRESH,
             status: false,
         });
 };
 
-export const permissionStatusUpdateAction = (editData) => {
+export const roleStatusUpdateAction = (editData) => {
 
 
-    var url = process.env.REACT_APP_LOCALHOST + "/Permission/Put";
+    var url = process.env.REACT_APP_LOCALHOST + "/Role/Put";
     const formData = editData;
 
     return dispatch => {
@@ -147,14 +179,14 @@ export const permissionStatusUpdateAction = (editData) => {
             .put(url, formData, { headers: headers })
             .then(response => {
                 dispatch({
-                    type: PERMISSION_STATUS_EDIT,
+                    type: ROLE_STATUS_EDIT,
                     payload: response.data,
                     status: "Success",
                 });
             })
             .catch(error => {
                 dispatch({
-                    type: PERMISSION_STATUS_EDIT,
+                    type: ROLE_STATUS_EDIT,
                     payload: error,
                     status: "Failed",
                 });
@@ -162,19 +194,19 @@ export const permissionStatusUpdateAction = (editData) => {
     };
 };
 
-export const permissionStatusUpdateFresh = () => {
+export const roleStatusUpdateFresh = () => {
     // console.log("===== I am in the fresh ========")
     return dispatch =>
         dispatch({
-            type: PERMISSION_STATUS_EDIT_FRESH,
+            type: ROLE_STATUS_EDIT_FRESH,
             status: false,
         });
 };
 
 
 
-export const permissionDeleteAction = (id) => {
-    var url = process.env.REACT_APP_LOCALHOST + "/Permission/Delete";
+export const roleDeleteAction = (id) => {
+    var url = process.env.REACT_APP_LOCALHOST + "/Role/Delete";
     // console.log(id);
 
     return dispatch => {
@@ -187,14 +219,14 @@ export const permissionDeleteAction = (id) => {
             .delete(url, { params: { id: id } }, { headers: headers })
             .then(response => {
                 dispatch({
-                    type: PERMISSION_DELETE,
+                    type: ROLE_DELETE,
                     payload: response.data,
                     status: "Success",
                 });
             })
             .catch(error => {
                 dispatch({
-                    type: PERMISSION_DELETE,
+                    type: ROLE_DELETE,
                     payload: error,
                     status: "Failed",
                 });
@@ -204,10 +236,10 @@ export const permissionDeleteAction = (id) => {
 
 };
 
-export const permissionDeleteFresh = () => {
+export const roleDeleteFresh = () => {
     return dispatch =>
         dispatch({
-            type: PERMISSION_DELETE_FRESH,
+            type: ROLE_DELETE_FRESH,
             status: false,
         });
 };

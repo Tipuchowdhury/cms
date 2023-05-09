@@ -275,7 +275,7 @@ function Permissions(props) {
             <div className='page-content'>
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle='Foodi' title='Roles & Permissions' breadcrumbItem='Permission' />
+                    <Breadcrumbs maintitle='Foodi' title='Roles & Permissions' breadcrumbItem='Permissions' />
                     <Row>
                         <Col className='col-12'>
                             <Card>

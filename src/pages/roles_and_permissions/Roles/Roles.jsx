@@ -7,15 +7,16 @@ import { Link } from 'react-router-dom';
 import { Badge, Button, Card, CardBody, CardTitle, Col, Container, FormGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import { v4 as uuidv4 } from 'uuid';
 import {
-    addSubscriptionTypeAction, addSubscriptionTypeFresh, getAllSubscriptionTypeAction,
-    getAllSubscriptionTypeFresh, subscriptionTypeUpdateAction, subscriptionTypeUpdateFresh, subscriptionTypeDeleteAction, subscriptionTypeDeleteFresh, subscriptionTypeStatusUpdateAction, subscriptionTypeStatusUpdateFresh
-} from 'store/SubscriptionTypes/actions';
+    addRoleAction, addRoleFresh, getAllRoleAction,
+    getAllRoleFresh, roleUpdateAction, roleUpdateFresh, roleDeleteAction, roleDeleteFresh, roleStatusUpdateAction, roleStatusUpdateFresh, getAllPermissionAction
+} from "store/actions"
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { toast } from 'react-toastify';
+import Select from "react-select";
 
 function Roles(props) {
 
-    document.title = "Subscription Types | Foodi"
+    document.title = "Roles | Foodi"
 
     const [modal, setModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
@@ -30,90 +31,113 @@ function Roles(props) {
 
 
     const [addInfo, setAddInfo] = useState({
-        subscriptionTypeId: "",
-        subscriptionTypeName: "",
-        freeDeliveryAmountLimit: 0,
-        freeDeliveryOrderLimit: 0,
-        pickupDiscountAmountLimit: 0,
-        pickupDiscountOrderLimit: 0,
-        deliveryFree: false,
-        unlimitedFreeDelivery: false,
-        pickupDiscount: false,
-        unlimitedPickupDiscount: false
+        name: "",
+        is_active: true
     });
 
 
     const [editInfo, setEditInfo] = useState({
-        subscriptionTypeId: "",
-        subscriptionTypeName: "",
-        freeDeliveryAmountLimit: 0,
-        freeDeliveryOrderLimit: 0,
-        pickupDiscountAmountLimit: 0,
-        pickupDiscountOrderLimit: 0,
-        deliveryFree: false,
-        unlimitedFreeDelivery: false,
-        pickupDiscount: false,
-        unlimitedPickupDiscount: false,
-        isActive: true,
+        _id: "",
+        name: "",
+        is_active: true
     });
 
     const [deleteItem, setDeleteItem] = useState();
 
-    const [statusItem, setStatusItem] = useState({
-        subscriptionTypeId: "",
-        is_active: "",
-    });
+    const [newSelectedPermission, setNewSelectedPermission] = useState([]);
+    const [selectedPermission, setSelectedPermission] = useState([]);
+
+    // const [statusItem, setStatusItem] = useState({
+    //     roleId: "",
+    //     is_active: "",
+    // });
+
+    let allPermission = undefined;
+    if (props.get_all_permission_data?.length > 0) {
+        allPermission = props.get_all_permission_data?.map((item, key) => ({
+            label: item.module_name, value: item._id,
+        }));
+    }
+
 
     let name, value, checked;
-    const handleInputs = (e) => {
+    const handleAddInputs = (e) => {
         // console.log(e);
         name = e.target.name;
         value = e.target.value;
         setAddInfo({ ...addInfo, [name]: value });
+
+    }
+    const handleEditInputs = (e) => {
+        // console.log(e);
+        name = e.target.name;
+        value = e.target.value;
         setEditInfo({ ...editInfo, [name]: value });
 
     }
 
-    const handleCheckBox = (e) => {
+    const handleAddCheckBox = (e) => {
         // console.log(e);
         name = e.target.name;
         checked = e.target.checked;
         setAddInfo({ ...addInfo, [name]: checked });
-        setEditInfo({ ...editInfo, [name]: checked });
+    }
 
+    const handleEditCheckBox = (e) => {
+        // console.log(e);
+        name = e.target.name;
+        checked = e.target.checked;
+        setEditInfo({ ...editInfo, [name]: checked });
+    }
+
+    const handleSelectPermission = (e) => {
+        // console.log(e)
+        setSelectedPermission(e)
+    }
+
+    const handleNewSelectPermission = (e) => {
+        // console.log(e)
+        setNewSelectedPermission(e)
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const val = uuidv4();
 
-        props.addSubscriptionTypeAction(addInfo);
+        props.addRoleAction(addInfo, newSelectedPermission);
     }
 
-    const handleEditSubscriptionType = (row) => {
+    const handleEditRole = (row) => {
         // console.log(row);
 
         setEditInfo(prevState => ({
-            subscriptionTypeId: row._id,
-            subscriptionTypeName: row.name,
-            freeDeliveryAmountLimit: row.free_delivary_amount_limit,
-            freeDeliveryOrderLimit: row.free_delivary_order_limit,
-            pickupDiscountAmountLimit: row.pick_up_discount_amount_limit,
-            pickupDiscountOrderLimit: row.pick_up_discount_order_limit,
-            deliveryFree: row.is_delivary_free,
-            unlimitedFreeDelivery: row.is_unlimited_free_delivary,
-            pickupDiscount: row.is_has_pick_up_discount,
-            unlimitedPickupDiscount: row.is_unlimited_pick_up_discount,
-            isActive: row.is_active
+            _id: row._id,
+            name: row.name,
+            is_active: row.is_active,
         }));
+        newPerm(row.permissions);
 
         toggleEditModal();
 
     }
 
+    const newPerm = (nn) => {
+        // console.log(nn);
+        // console.log(props?.get_all_branch_data);
+        const common_permissions = props?.get_all_permission_data?.filter((elem) => nn?.find(({ permission_id }) => elem._id === permission_id));
+        //console.log(common_restaurants);
+
+        const permission_data_edit = common_permissions ? common_permissions.map((item, key) => {
+            return { label: item.module_name, value: item._id };
+        }) : "";
+
+    }
+
+
+
     const handleEdit = (e) => {
         e.preventDefault();
-        props.subscriptionTypeUpdateAction(editInfo);
+        props.roleUpdateAction(editInfo, selectedPermission);
 
         //toggleEditModal();
 
@@ -126,24 +150,12 @@ function Roles(props) {
     const handleDelete = () => {
 
         // console.log(deleteItem)
-        props.subscriptionTypeDeleteAction(deleteItem);
+        props.roleDeleteAction(deleteItem);
         // toggleDel();
     }
 
     const handleStatusModal = (row) => {
-        setEditInfo(prevState => ({
-            subscriptionTypeId: row._id,
-            subscriptionTypeName: row.name,
-            freeDeliveryAmountLimit: row.free_delivary_amount_limit,
-            freeDeliveryOrderLimit: row.free_delivary_order_limit,
-            pickupDiscountAmountLimit: row.pick_up_discount_amount_limit,
-            pickupDiscountOrderLimit: row.pick_up_discount_order_limit,
-            deliveryFree: row.is_delivary_free,
-            unlimitedFreeDelivery: row.is_unlimited_free_delivary,
-            pickupDiscount: row.is_has_pick_up_discount,
-            unlimitedPickupDiscount: row.is_unlimited_pick_up_discount,
-            isActive: row.is_active
-        }));
+        setEditInfo(row);
 
         toggleStatus();
     }
@@ -151,7 +163,10 @@ function Roles(props) {
     const handleStatusUpdate = () => {
 
         // console.log(statusItem);
-        props.subscriptionTypeStatusUpdateAction(editInfo);
+        props.roleStatusUpdateAction({
+            ...editInfo,
+            is_active: !editInfo.is_active,
+        });
         // toggleDel();
     }
 
@@ -161,7 +176,7 @@ function Roles(props) {
             <Button
                 color="primary"
                 className="btn btn-primary waves-effect waves-light"
-                onClick={() => handleEditSubscriptionType(row)}
+                onClick={() => handleEditRole(row)}
             >
                 Edit
             </Button>{" "}
@@ -185,7 +200,7 @@ function Roles(props) {
 
         {
             dataField: "name",
-            text: "Name",
+            text: "Roles",
             sort: true,
         },
         {
@@ -210,98 +225,93 @@ function Roles(props) {
     ];
 
     useEffect(() => {
-        if (props.get_all_subscription_type_loading == false) {
-            //console.log("I am in get all subscription type loading ")
-            props.getAllSubscriptionTypeAction();
+        if (props.get_all_permission_loading == false) {
+            props.getAllPermissionAction();
+        }
+        if (props.get_all_role_loading == false) {
+            //console.log("I am in get all permis type loading ")
+            props.getAllRoleAction();
         }
 
 
-        if (props.add_subscription_type_loading === "Success") {
-            toast.success("Subscription Type Added Successfully");
+        if (props.add_role_loading === "Success") {
+            toast.success("Role Added Successfully");
             toggle();
             setAddInfo({
                 ...addInfo,
-                subscriptionTypeId: "",
-                subscriptionTypeName: "",
-                freeDeliveryAmountLimit: 0,
-                freeDeliveryOrderLimit: 0,
-                pickupDiscountAmountLimit: 0,
-                pickupDiscountOrderLimit: 0,
-                deliveryFree: false,
-                unlimitedFreeDelivery: false,
-                pickupDiscount: false,
-                unlimitedPickupDiscount: false
+                name: "",
+                is_active: true
             });
-            props.addSubscriptionTypeFresh();
+            props.addRoleFresh();
         }
 
 
-        if (props.add_subscription_type_loading === "Failed") {
-            //console.log(props.add_subscription_type_data);
+        if (props.add_role_loading === "Failed") {
+            //console.log(props.add_role_data);
             toast.error("Something went wrong");
-            props.addSubscriptionTypeFresh();
+            props.addRoleFresh();
 
         }
 
-        if (props.subscription_type_edit_loading === "Success") {
-            toast.success("Subscription Type Updated");
+        if (props.role_edit_loading === "Success") {
+            toast.success("Role Updated");
             toggleEditModal();
-            props.subscriptionTypeUpdateFresh();
+            props.roleUpdateFresh();
 
         }
 
-        if (props.subscription_type_edit_loading === "Failed") {
+        if (props.role_edit_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
-            props.subscriptionTypeUpdateFresh();
+            props.roleUpdateFresh();
 
         }
 
-        if (props.subscription_type_status_edit_loading === "Success") {
-            toast.success("Subscription Type Status Updated");
+        if (props.role_status_edit_loading === "Success") {
+            toast.success("Role Status Updated");
             toggleStatus();
-            props.subscriptionTypeStatusUpdateFresh();
+            props.roleStatusUpdateFresh();
 
         }
 
-        if (props.subscription_type_status_edit_loading === "Failed") {
+        if (props.role_status_edit_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
-            props.subscriptionTypeStatusUpdateFresh();
+            props.roleStatusUpdateFresh();
 
         }
 
-        if (props.subscription_type_delete_loading === "Success") {
+        if (props.role_delete_loading === "Success") {
             // console.log("I am in the delete")
-            toast.success("Subscription Type Deleted");
+            toast.success("Role Deleted");
             toggleDel();
-            props.subscriptionTypeDeleteFresh();
+            props.roleDeleteFresh();
 
         }
 
 
-    }, [props.add_subscription_type_loading, props.subscription_type_edit_loading,
-    props.subscription_type_delete_loading, props.subscription_type_status_edit_loading]);
+    }, [props.get_all_permission_loading, props.add_role_loading, props.role_edit_loading,
+    props.role_delete_loading, props.role_status_edit_loading]);
 
-    // console.log(props.get_all_subscription_type_data);
+    // console.log(props.get_all_role_data);
     return (
         <React.Fragment>
             <div className='page-content'>
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs maintitle='Foodi' title='Users' breadcrumbItem='Subscription-Types' />
+                    <Breadcrumbs maintitle='Foodi' title='Roles & Permissions' breadcrumbItem='Roles' />
                     <Row>
                         <Col className='col-12'>
                             <Card>
                                 <CardBody>
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Subscription Types </CardTitle>
+                                        <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Roles </CardTitle>
                                         <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
-                                            Add Subscription Type
+                                            Add Role
                                         </Button>
                                     </div>
 
-                                    {props.get_all_subscription_type_data ? props.get_all_subscription_type_data.length > 0 ? <DatatableTablesWorking products={props.get_all_subscription_type_data}
+                                    {props.get_all_role_data ? props.get_all_role_data.length > 0 ? <DatatableTablesWorking products={props.get_all_role_data}
                                         columnData={activeData} defaultSorted={defaultSorted} /> : null : null}
 
                                 </CardBody>
@@ -314,67 +324,24 @@ function Roles(props) {
 
 
                 <Modal isOpen={modal} toggle={toggle} centered>
-                    <ModalHeader toggle={toggle}>New Subscription Type</ModalHeader>
+                    <ModalHeader toggle={toggle}>New Role</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleSubmit}>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="subscriptionTypeName">Subscription Type Name</label>
-                                <input type="text" className="form-control" id="subscriptionTypeName" placeholder="Enter subscription type name" required name="subscriptionTypeName" value={addInfo.subscriptionTypeName} onChange={handleInputs} />
+                                <label className="form-label" htmlFor="name">Role Name</label>
+                                <input type="text" className="form-control" id="name" placeholder="Enter role name" required name="name" onChange={handleAddInputs} value={addInfo.name} />
                             </div>
+
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="freeDeliveryAmountLimit">Free Delivery Amount Limit</label>
-                                <input type="number" className="form-control" id="freeDeliveryAmountLimit" placeholder="Enter free delivery amount limit" required name="freeDeliveryAmountLimit" value={addInfo.freeDeliveryAmountLimit} onChange={handleInputs} />
-                            </div>
-
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="freeDeliveryOrderLimit">Free Delivery Order Limit</label>
-                                <input type="text" className="form-control" id="freeDeliveryOrderLimit" placeholder="Enter Free Delivery Order Limit" required value={addInfo.freeDeliveryOrderLimit} name="freeDeliveryOrderLimit" onChange={handleInputs} />
-                            </div>
-
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="pickupDiscountAmountLimit">Pickup Discount Amount Limit</label>
-                                <input type="text" className="form-control" id="pickupDiscountAmountLimit" placeholder="Enter pickup discount amount limit" value={addInfo.pickupDiscountAmountLimit} required name="pickupDiscountAmountLimit" onChange={handleInputs} />
-                            </div>
-
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="pickupDiscountOrderLimit">Pickup Discount Order Limit</label>
-                                <input type="text" className="form-control" id="pickupDiscountOrderLimit" placeholder="Enter pickup discount order limit" required value={addInfo.pickupDiscountOrderLimit} name="pickupDiscountOrderLimit" onChange={handleInputs} />
-                            </div>
-
-                            <div className="mb-3 row">
-                                <div className="col-sm-6">
-                                    <div className="form-check">
-                                        <label className="form-check-label" htmlFor="deliveryFree">Delivery Free</label>
-                                        <input type="checkbox" className="form-check-input" id="deliveryFree" checked={addInfo.deliveryFree} name="deliveryFree" onChange={handleCheckBox} />
-
-                                    </div>
-                                </div>
-
-                                <div className="col-sm-6">
-                                    <div className="form-check">
-                                        <label className="form-check-label" htmlFor="unlimitedFreeDelivery">Unlimited Free Delivery</label>
-                                        <input type="checkbox" className="form-check-input" id="unlimitedFreeDelivery" checked={addInfo.unlimitedFreeDelivery} name="unlimitedFreeDelivery" onChange={handleCheckBox} />
-
-                                    </div>
-                                </div>
-
-                                <div className="col-sm-6">
-                                    <div className="form-check">
-                                        <label className="form-check-label" htmlFor="pickupDiscount">Pickup Discount</label>
-                                        <input type="checkbox" className="form-check-input" id="pickupDiscount" checked={addInfo.pickupDiscount} name="pickupDiscount" onChange={handleCheckBox} />
-
-                                    </div>
-                                </div>
-
-                                <div className="col-sm-6">
-                                    <div className="form-check">
-                                        <label className="form-check-label" htmlFor="unlimitedPickupDiscount">Unlimited Pickup Discount</label>
-                                        <input type="checkbox" className="form-check-input" id="unlimitedPickupDiscount" checked={addInfo.unlimitedPickupDiscount} name="unlimitedPickupDiscount" onChange={handleCheckBox} />
-
-                                    </div>
-                                </div>
+                                <label className="form-label" htmlFor="restaurants">Permissions</label>
+                                <Select
+                                    value={newSelectedPermission}
+                                    onChange={handleNewSelectPermission}
+                                    options={allPermission}
+                                    isMulti={true}
+                                />
                             </div>
 
 
@@ -396,67 +363,24 @@ function Roles(props) {
 
                 {/* ============ edit modal start=============== */}
                 <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-                    <ModalHeader >Edit Subscription Type</ModalHeader>
+                    <ModalHeader >Edit Role</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleEdit} >
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="subscriptionTypeName">Subscription Type Name</label>
-                                <input type="text" className="form-control" id="subscriptionTypeName" placeholder="Enter subscription type name" required name="subscriptionTypeName" onChange={handleInputs} value={editInfo.subscriptionTypeName} />
+                                <label className="form-label" htmlFor="name">Role Name</label>
+                                <input type="text" className="form-control" id="name" placeholder="Enter role name" required name="name" onChange={handleEditInputs} value={editInfo.name} />
                             </div>
+
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="freeDeliveryAmountLimit">Free Delivery Amount Limit</label>
-                                <input type="text" className="form-control" id="freeDeliveryAmountLimit" placeholder="Enter free delivery amount limit" required name="freeDeliveryAmountLimit" onChange={handleInputs} value={editInfo.freeDeliveryAmountLimit} />
-                            </div>
-
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="freeDeliveryOrderLimit">Free Delivery Order Limit</label>
-                                <input type="text" className="form-control" id="freeDeliveryOrderLimit" placeholder="Enter Free Delivery Order Limit" required name="freeDeliveryOrderLimit" onChange={handleInputs} value={editInfo.freeDeliveryOrderLimit} />
-                            </div>
-
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="pickupDiscountAmountLimit">Pickup Discount Amount Limit</label>
-                                <input type="text" className="form-control" id="pickupDiscountAmountLimit" placeholder="Enter pickup discount amount limit" required name="pickupDiscountAmountLimit" onChange={handleInputs} value={editInfo.pickupDiscountAmountLimit} />
-                            </div>
-
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="pickupDiscountOrderLimit">Pickup Discount Order Limit</label>
-                                <input type="text" className="form-control" id="pickupDiscountOrderLimit" placeholder="Enter pickup discount order limit" required name="pickupDiscountOrderLimit" onChange={handleInputs} value={editInfo.pickupDiscountOrderLimit} />
-                            </div>
-
-                            <div className="mb-3 row">
-                                <div className="col-sm-6">
-                                    <div className="form-check">
-                                        <label className="form-check-label" htmlFor="deliveryFree">Delivery Free</label>
-                                        <input type="checkbox" className="form-check-input" id="deliveryFree" checked={editInfo.deliveryFree} name="deliveryFree" onChange={handleCheckBox} />
-
-                                    </div>
-                                </div>
-
-                                <div className="col-sm-6">
-                                    <div className="form-check">
-                                        <label className="form-check-label" htmlFor="unlimitedFreeDelivery">Unlimited Free Delivery</label>
-                                        <input type="checkbox" className="form-check-input" id="unlimitedFreeDelivery" checked={editInfo.unlimitedFreeDelivery} name="unlimitedFreeDelivery" onChange={handleCheckBox} />
-
-                                    </div>
-                                </div>
-
-                                <div className="col-sm-6">
-                                    <div className="form-check">
-                                        <label className="form-check-label" htmlFor="pickupDiscount">Pickup Discount</label>
-                                        <input type="checkbox" className="form-check-input" id="pickupDiscount" checked={editInfo.pickupDiscount} name="pickupDiscount" onChange={handleCheckBox} />
-
-                                    </div>
-                                </div>
-
-                                <div className="col-sm-6">
-                                    <div className="form-check">
-                                        <label className="form-check-label" htmlFor="unlimitedPickupDiscount">Unlimited Pickup Discount</label>
-                                        <input type="checkbox" className="form-check-input" id="unlimitedPickupDiscount" checked={editInfo.unlimitedPickupDiscount} name="unlimitedPickupDiscount" onChange={handleCheckBox} />
-
-                                    </div>
-                                </div>
+                                <label className="form-label" htmlFor="restaurants">Permissions</label>
+                                <Select
+                                    value={selectedPermission}
+                                    onChange={handleSelectPermission}
+                                    options={allPermission}
+                                    isMulti={true}
+                                />
                             </div>
 
 
@@ -514,40 +438,49 @@ function Roles(props) {
 const mapStateToProps = state => {
 
     const {
-        add_subscription_type_data,
-        add_subscription_type_error,
-        add_subscription_type_loading,
+        get_all_permission_data,
+        get_all_permission_loading
 
-        get_all_subscription_type_data,
-        get_all_subscription_type_error,
-        get_all_subscription_type_loading,
+    } = state.Permissions;
 
-        subscription_type_edit_data,
-        subscription_type_edit_loading,
+    const {
+        add_role_data,
+        add_role_error,
+        add_role_loading,
 
-        subscription_type_status_edit_data,
-        subscription_type_status_edit_loading,
+        get_all_role_data,
+        get_all_role_error,
+        get_all_role_loading,
 
-        subscription_type_delete_loading
+        role_edit_data,
+        role_edit_loading,
 
-    } = state.SubscriptionTypes;
+        role_status_edit_data,
+        role_status_edit_loading,
+
+        role_delete_loading
+
+    } = state.Roles;
 
     return {
-        add_subscription_type_data,
-        add_subscription_type_error,
-        add_subscription_type_loading,
+        get_all_permission_data,
+        get_all_permission_loading,
 
-        get_all_subscription_type_data,
-        get_all_subscription_type_error,
-        get_all_subscription_type_loading,
+        add_role_data,
+        add_role_error,
+        add_role_loading,
 
-        subscription_type_edit_data,
-        subscription_type_edit_loading,
+        get_all_role_data,
+        get_all_role_error,
+        get_all_role_loading,
 
-        subscription_type_status_edit_data,
-        subscription_type_status_edit_loading,
+        role_edit_data,
+        role_edit_loading,
 
-        subscription_type_delete_loading
+        role_status_edit_data,
+        role_status_edit_loading,
+
+        role_delete_loading
 
     };
 };
@@ -555,15 +488,16 @@ const mapStateToProps = state => {
 export default withRouter(
     connect(mapStateToProps,
         {
-            addSubscriptionTypeAction,
-            addSubscriptionTypeFresh,
-            getAllSubscriptionTypeAction,
-            getAllSubscriptionTypeFresh,
-            subscriptionTypeUpdateAction,
-            subscriptionTypeUpdateFresh,
-            subscriptionTypeDeleteAction,
-            subscriptionTypeDeleteFresh,
-            subscriptionTypeStatusUpdateAction,
-            subscriptionTypeStatusUpdateFresh
+            getAllPermissionAction,
+            addRoleAction,
+            addRoleFresh,
+            getAllRoleAction,
+            getAllRoleFresh,
+            roleUpdateAction,
+            roleUpdateFresh,
+            roleDeleteAction,
+            roleDeleteFresh,
+            roleStatusUpdateAction,
+            roleStatusUpdateFresh
         })(Roles)
 );
