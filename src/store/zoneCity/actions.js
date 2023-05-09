@@ -8,7 +8,9 @@ import {
     CITY_STATUS_EDIT,
     CITY_STATUS_EDIT_FRESH,
     CITY_DELETE,
-    CITY_DELETE_FRESH
+    CITY_DELETE_FRESH,
+    SERVER_SIDE_PAGINATION,
+    SERVER_SIDE_PAGINATION_FRESH
 
 } from "./actionTypes"
 import axios from "axios";
@@ -226,6 +228,44 @@ export const cityDeleteFresh = () => {
     return dispatch =>
         dispatch({
             type: CITY_DELETE_FRESH,
+            status: false,
+        });
+};
+
+
+export const getServerSidePaginationAction = (index, limit) => {
+    var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=${limit}`;
+    //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
+    const formData = {};
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+        };
+        axios
+            .get(url, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: SERVER_SIDE_PAGINATION,
+                    payload: response.data,
+                    status: "Success",
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: SERVER_SIDE_PAGINATION,
+                    status: "Failed",
+                });
+            });
+    };
+};
+
+export const serverSidePaginationFresh = () => {
+    console.log("======= hello from fresh =========");
+    return dispatch =>
+        dispatch({
+            type: SERVER_SIDE_PAGINATION_FRESH,
             status: false,
         });
 };

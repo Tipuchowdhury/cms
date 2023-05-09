@@ -169,8 +169,8 @@ function AddMenu(props) {
         setIsCheckAddOns(!isCheckAddOns)
     }
     console.log(props?.get_category_by_id_data?.preset_add_ons);
-
-    const [addOnsNew, setAddOnsNew] = useState([props?.get_category_by_id_data?.preset_add_ons]);
+    const addOnsTemplateNew_ = { add_on_name: "", add_on_price: "" }
+    const [addOnsNew, setAddOnsNew] = useState([addOnsTemplateNew_]);
     console.log(addOnsNew);
 
     const handleAddOnsCatNew = (e, index) => {
@@ -265,6 +265,12 @@ function AddMenu(props) {
 
 
     }
+
+    // const handleAddOnsCatNew = (e, index) => {
+    //     console.log(index);
+    //     const updatedValue = addNewCategory.map((row, i) => index === i ? Object.assign(row, { [e.target.name]: e.target.value }) : row);
+    //     setAddNewCategory(updatedValue)
+    // }
     console.log(addOnUnderCategory);
     function handleAddCategoryRow() {
         console.log("I am in add category rpw");

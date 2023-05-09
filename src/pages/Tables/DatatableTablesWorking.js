@@ -20,6 +20,10 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit/dist/rea
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import "./datatables.scss";
+import { getServerSidePaginationAction } from 'store/actions';
+import withRouter from 'components/Common/withRouter'; ` `
+import { connect } from "react-redux";
+import City from 'pages/City/City';
 
 // Table data
 const productsdata = [
@@ -33,88 +37,7 @@ const productsdata = [
     salary: "$162,700",
   },
 
-  {
-    id: 2,
-    name: "Angelica Ramos",
-    position: "Chief Executive Officer (CEO)",
-    office: "London",
-    age: "47",
-    startdate: "2009/10/09",
-    salary: "$1,200,000",
-  },
 
-  {
-    id: 3,
-    name: "Ashton Cox",
-    position: "Junior Technical Author",
-    office: "San Francisco",
-    age: "66",
-    startdate: "2009/01/12",
-    salary: "$86,000",
-  },
-
-  {
-    id: 4,
-    name: "Bradley Greer",
-    position: "Software Engineer",
-    office: "London",
-    age: "41",
-    startdate: "2012/10/13",
-    salary: "$132,000",
-  },
-
-  {
-    id: 5,
-    name: "Brenden Wagner",
-    position: "Software Engineer",
-    office: "San Francisco",
-    age: "28",
-    startdate: "2011/06/07",
-    salary: "$206,850",
-  },
-];
-
-const columns = [
-  {
-    dataField: "id",
-    text: "Id",
-    sort: true,
-  },
-  {
-    dataField: "reference",
-    text: "Reference",
-    sort: true,
-  },
-  {
-    dataField: "owner",
-    text: "Owner",
-    sort: true,
-  },
-  {
-    dataField: "tenant",
-    text: "Tenant",
-    sort: true,
-  },
-  {
-    dataField: "manager",
-    text: "Manager",
-    sort: true,
-  },
-  {
-    dataField: "teams",
-    text: "Teams",
-    sort: true,
-  },
-  {
-    dataField: "labels",
-    text: "Labels",
-    sort: true,
-  },
-  {
-    dataField: "days",
-    text: "Days",
-    sort: true,
-  },
 ];
 
 const defaultSorted = [
@@ -124,10 +47,6 @@ const defaultSorted = [
   },
 ];
 
-// Select All Button operation
-// const selectRow = {
-//   mode: "checkbox",
-// };
 
 const { SearchBar } = Search;
 
@@ -156,85 +75,167 @@ const DatatableTables2 = props => {
   //     history.push(props.url ? props.url + row.id : '', { id: row.id });
   //   }
   // };
-
+  console.log(props?.totalData);
+  console.log(props?.dataLimit);
   const pageOptions = {
-    sizePerPage: 10,
-    totalSize: props.products ? props.products.length : productsdata.length, // replace later with size(customers),
+    sizePerPage: props.dataLimit ? props.dataLimit : 10,
+    //totalSize: props.products ? props.products.length : productsdata.length, // replace later with size(customers),
+    totalSize: props?.totalData, // replace later with size(customers),
     custom: true,
   };
+  console.log(props.key);
+
+  //========== test ============= 
+
+
+  const options = {
+    sizePerPage: props?.dataLimit ? props?.dataLimit : "",
+    //custom: true,
+    totalSize: props?.totalCount,
+    onSizePerPageChange: (sizePerPage, page) => {
+      console.log('Size per page change!!!');
+      console.log('Newest size per page:' + sizePerPage);
+      console.log('Newest page:' + page);
+      props.setPagination({
+        pageIndex: page,
+        dataLimit: sizePerPage
+      })
+    },
+    onPageChange: (page, sizePerPage) => {
+      console.log('Page change!!!');
+      console.log('Newest size per page:' + sizePerPage);
+      console.log('Newest page:' + page);
+      //props.getServerSidePaginationAction(page, sizePerPage);
+      props.setPagination({
+        pageIndex: page,
+        dataLimit: sizePerPage
+      })
+
+      props.index = page;
+      props.count = sizePerPage;
+    }
+  };
+  //========== test ============= 
+
+
+  // const ConsoleLog = ({ children }) => {
+  //   console.log(children);
+  //   return false;
+  // }
+  const handlePage = (e) => {
+    console.log("I am hereerererrrrr");
+    console.log(e);
+
+    props.getServerSidePaginationAction(e, 2)
+  }
 
   return (
     <React.Fragment>
       <PaginationProvider
-        pagination={paginationFactory(pageOptions)}
-        keyField={props.key ? key : "1"}
+        pagination={paginationFactory(options)}
+        keyField="id"
         columns={props.columnData ? props.columnData : columns}
         data={props.products ? props.products : productsdata}
+
       >
         {({ paginationProps, paginationTableProps }) => (
-          <ToolkitProvider
-            keyField="key_number"
-            columns={props.columnData ? props.columnData : columns}
-            data={props.products ? props.products : productsdata}
-            search
-          >
-            {toolkitProps => (
-              <React.Fragment>
-                <Row>
-                  <div className="d-flex justify-content-end search-box">
-                    <SearchBar {...toolkitProps.searchProps} />
-                    {/* <i className="bx bx-search-alt search-icon" /> */}
-                  </div>
-                  {/* <Col md="4">
-                    <div className="search-box d-inline-block">
-                      <div className="position-relative">
-                        <SearchBar
-                          {...toolkitProps.searchProps}
-                        />
-                        <i className="bx bx-search-alt search-icon" />
-                      </div>
-                    </div>
-                  </Col> */}
-                </Row>
+          <>
+            <ToolkitProvider
+              keyField="key_number"
+              columns={props.columnData ? props.columnData : columns}
+              data={props.products ? props.products : productsdata}
+              search
 
-                <Row>
-                  <Col xl="12">
-                    <div className="table-responsive">
+            >
+              {toolkitProps => (
+                <React.Fragment>
+                  <Row>
+                    <div className="d-flex justify-content-end search-box">
+                      <SearchBar {...toolkitProps.searchProps} />
+                      {/* <i className="bx bx-search-alt search-icon" /> */}
+                    </div>
+                    {/* <Col md="4">
+                      <div className="search-box d-inline-block">
+                        <div className="position-relative">
+                          <SearchBar
+                            {...toolkitProps.searchProps}
+                          />
+                          <i className="bx bx-search-alt search-icon" />
+                        </div>
+                      </div>
+                    </Col> */}
+                  </Row>
+
+                  <Row >
+                    <Col xl="12" className="text-md-right ms-auto">
+                      {/* <div className="table-responsive"> */}
                       <BootstrapTable
-                        keyField={props.key}
+                        //keyField={props.key}
+                        keyField="id"
                         responsive
-                        bordered={false}
-                        striped={false}
-                        defaultSorted={defaultSorted}
+                        // bordered={false}
+                        // striped={false}
+                        // defaultSorted={defaultSorted}
                         // selectRow={selectRow}
-                        classes={"table align-middle table-nowrap"}
+                        classes={"table align-middle table-nowrap "}
                         headerWrapperClasses={"thead-light"}
                         {...toolkitProps.baseProps}
                         {...paginationTableProps}
 
                       // rowEvents={rowEvents}
                       />
-                    </div>
-                  </Col>
-                </Row>
 
-                <Row className="align-items-md-center mt-30">
-                  <Col className="inner-custom-pagination d-flex">
-                    <div className="d-inline">
-                      <SizePerPageDropdownStandalone {...paginationProps} />
-                    </div>
-                    <div className="text-md-right ms-auto">
-                      <PaginationListStandalone {...paginationProps} />
-                    </div>
-                  </Col>
-                </Row>
-              </React.Fragment>
-            )}
-          </ToolkitProvider>
+                      {/* </div> */}
+                    </Col>
+
+                  </Row>
+
+                  {/* <Row className="align-items-md-center mt-30">
+                    <Col className="inner-custom-pagination d-flex">
+                      <div className="d-inline">
+                        <SizePerPageDropdownStandalone {...paginationProps} />
+                      </div>
+                      <div className="text-md-right ms-auto">
+                        <PaginationListStandalone {...paginationProps} />
+                      </div>
+                    </Col>
+                  </Row> */}
+                </React.Fragment>
+              )}
+
+            </ToolkitProvider>
+          </>
         )}
       </PaginationProvider>
     </React.Fragment>
+    // <BootstrapTable
+    //   keyField="id"
+    //   //keyField="1"
+    //   columns={props.columnData ? props.columnData : columns}
+    //   data={props.products ? props.products : productsdata}
+    //   pagination={paginationFactory(options)}
+    // />
   );
 };
 
-export default DatatableTables2;
+//export default DatatableTables2;
+
+const mapStateToProps = state => {
+
+  const {
+
+
+  } = state.zoneCity;
+
+  return {
+
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps,
+    {
+
+      getServerSidePaginationAction
+    })(DatatableTables2)
+);

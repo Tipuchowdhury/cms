@@ -27,18 +27,6 @@ export const userRegistrationNew = (user, file, role) => {
     console.log(file)
     console.log(url);
     let formData = new FormData();
-    // let formData = {
-    //     first_name: user.first_name,
-    //     last_name: user.last_name,
-    //     present_address: user.present_address,
-    //     permanent_address: user.permanent_address,
-    //     mobile_number: user.mobileNumber,
-    //     email: user.email,
-    //     role_name: role,
-    //     password: user.password,
-    //     confirm_password: user.confirmPassword
-
-    // };
     formData.append("first_name", user.first_name);
     formData.append("last_name", user.last_name);
     formData.append("present_address", user.present_address);
@@ -48,10 +36,24 @@ export const userRegistrationNew = (user, file, role) => {
     formData.append("role_id", role);
     formData.append("password", user.password);
     formData.append("confirm_password", user.confirmPassword);
-    formData.append("image", "https://unsplash.com/photos/OHjxA8bfrwg");
+    formData.append("image", file);
+
+    // let formData = {
+    //     first_name: user.first_name,
+    //     last_name: user.last_name,
+    //     present_address: user.present_address,
+    //     permanent_address: user.permanent_address,
+    //     mobile_number: user.mobileNumber,
+    //     email: user.email,
+    //     password: user.password,
+    //     confirm_password: user.confirmPassword,
+    //     image: file
+    // }
+
+    console.log(formData);
     return dispatch => {
         const headers = {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             // 'content-type': 'application/x-www-form-urlencoded'
 
             "Access-Control-Allow-Origin": "*",
@@ -60,7 +62,8 @@ export const userRegistrationNew = (user, file, role) => {
         axios
             .post(url, formData, { headers: headers })
             .then(response => {
-                localStorage.setItem("authUser", JSON.stringify(response.data));
+                //localStorage.setItem("authUser", JSON.stringify(response.data));
+                localStorage.setItem("foodi-jwt", JSON.stringify(response.data));
                 dispatch({
                     type: "REGISTER_USER",
                     payload: response.data,

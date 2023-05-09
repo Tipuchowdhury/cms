@@ -30,11 +30,11 @@ const Authmiddleware = (props) => {
 
   const Layout = getLayout(layoutType);
 
-  // if (!localStorage.getItem("authUser")) {
-  //   return (
-  //     <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
-  //   );
-  // }
+  if (!localStorage.getItem("foodi-jwt")) {
+    return (
+      <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
+    );
+  }
 
   return (
     <React.Fragment>
