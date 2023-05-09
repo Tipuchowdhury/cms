@@ -44,6 +44,7 @@ const ProfileMenu = props => {
         isOpen={menu}
         toggle={() => setMenu(!menu)}
         className="d-inline-block"
+
       >
         <DropdownToggle
           className="btn header-item waves-effect"

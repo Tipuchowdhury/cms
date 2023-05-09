@@ -8,7 +8,7 @@ import { Link } from "react-router-dom"
 // Redux Store
 import { showRightSidebarAction, toggleLeftmenu } from "../../store/actions"
 // reactstrap
-import { Row, Col, Dropdown, DropdownToggle, DropdownMenu,DropdownItem } from "reactstrap"
+import { Row, Col, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap"
 
 // Import menuDropdown
 import LanguageDropdown from "../CommonForBoth/TopbarDropdown/LanguageDropdown"
@@ -51,7 +51,7 @@ const Header = props => {
       }
     }
   }
-  
+
 
   return (
     <React.Fragment>
@@ -76,48 +76,48 @@ const Header = props => {
                   <img src={logolightImg} alt="" height="18" />
                 </span>
               </Link>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  props.toggleLeftmenu(!props.leftMenu)
-                }}
-                className="btn btn-sm me-2 font-size-24 d-lg-none header-item waves-effect waves-light"
-                id="vertical-menu-btn"
-              >
-                <i className="mdi mdi-menu"></i>
-              </button>
-              </div>
-            <div className="d-flex">
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                props.toggleLeftmenu(!props.leftMenu)
+              }}
+              className="btn btn-sm me-2 font-size-24 d-lg-none header-item waves-effect waves-light"
+              id="vertical-menu-btn"
+            >
+              <i className="mdi mdi-menu"></i>
+            </button>
+          </div>
+          <div className="d-flex">
             <form className="app-search d-none d-lg-block">
-                <div className="position-relative">
-                    <input type="text" className="form-control" placeholder="Search..." />
-                    <span className="fa fa-search"></span>
-                </div>
+              <div className="position-relative">
+                <input type="text" className="form-control" placeholder="Search..." />
+                <span className="fa fa-search"></span>
+              </div>
             </form>
             <LanguageDropdown />
             <div className="dropdown d-none d-lg-inline-block">
-                <button type="button" className="btn header-item noti-icon waves-effect" onClick={() => {
-                    toggleFullscreen()
-                  }} data-bs-toggle="fullscreen">
-                    <i className="mdi mdi-fullscreen"></i>
-                </button>
+              <button type="button" className="btn header-item noti-icon waves-effect" onClick={() => {
+                toggleFullscreen()
+              }} data-bs-toggle="fullscreen">
+                <i className="mdi mdi-fullscreen"></i>
+              </button>
             </div>
-            <NotificationDropdown />      
-            <ProfileMenu />        
+            <NotificationDropdown />
+            <ProfileMenu />
             <div className="dropdown d-inline-block">
-                <button
-                  onClick={() => {
-                    props.showRightSidebarAction(!props.showRightSidebar)
-                  }}
-                  type="button"
-                  className="btn header-item noti-icon right-bar-toggle waves-effect"
-                >
-                  <i className="mdi mdi-cog-outline"></i>
-                </button>
-              </div>
+              <button
+                onClick={() => {
+                  props.showRightSidebarAction(!props.showRightSidebar)
+                }}
+                type="button"
+                className="btn header-item noti-icon right-bar-toggle waves-effect"
+              >
+                <i className="mdi mdi-cog-outline"></i>
+              </button>
             </div>
           </div>
+        </div>
       </header>
     </React.Fragment>
   )

@@ -10,6 +10,7 @@ import {
   FORGET_PASSWORD_FRESH
 } from "./actionTypes"
 import axios from "axios";
+import { toast } from "react-toastify"
 
 export const userLogin = (user) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Authentication/login";
@@ -35,7 +36,7 @@ export const userLogin = (user) => {
     axios
       .post(url, formData, { headers: headers })
       .then(response => {
-        localStorage.setItem("jwt", JSON.stringify(response.data));
+        localStorage.setItem("foodi-jwt", JSON.stringify(response.data));
         console.log(response);
         dispatch({
           type: USER_LOGIN,
@@ -49,6 +50,7 @@ export const userLogin = (user) => {
           //payload: response,
           status: "Failed",
         });
+        toast.error("Something went wrong !!!")
       });
   };
 
