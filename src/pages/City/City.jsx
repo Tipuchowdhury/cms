@@ -8,11 +8,11 @@ import { Link, useNavigate } from "react-router-dom";
 import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { addCityAction, addCityFresh, getAllCityAction, getAllCityFresh, cityNameEditAction, cityNameEditFresh, cityDeleteAction, cityDeleteFresh, cityStatusEditAction, cityStatusEditFresh } from 'store/zoneCity/actions';
+import { addCityAction, addCityFresh, getAllCityAction, getAllCityFresh, cityNameEditAction, cityNameEditFresh, cityDeleteAction, cityDeleteFresh, cityStatusEditAction, cityStatusEditFresh, getServerSidePaginationAction, serverSidePaginationFresh } from 'store/zoneCity/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 
 function City(props) {
-
+    console.log(props);
     const [name, setName] = useState("")
     const [modal, setModal] = useState(false);
     const [cityId, setCityId] = useState();
@@ -23,6 +23,9 @@ function City(props) {
     const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
     const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
 
+    // server-side pagination
+    const index = undefined;
+    const count = undefined;
     // delete modal
     const [deleteItem, setDeleteItem] = useState()
     const [modalDel, setModalDel] = useState(false);
@@ -143,13 +146,35 @@ function City(props) {
         }
     ];
 
+    // const [pagination2, setPagination2] = useState({
+    //     pageIndex: "",
+    //     dataLimit: ""
+    // })
 
+    // const [pagination, setPagination] = useState({
+    //     pageIndex: pagination2.pageIndex ? pagination2.pageIndex : 0,
+    //     dataLimit: pagination2.dataLimit ? pagination2.dataLimit : 0,
+    // })
+
+    const [pagination, setPagination] = useState({
+        pageIndex: 1,
+        dataLimit: 1,
+    })
+
+
+    console.log(pagination);
     useEffect(() => {
         console.log("=======hello", props.city_name_edit_loading);
         if (props.get_all_city_loading == false) {
             console.log("I am in get all city loading ")
             props.getAllCityAction();
         }
+
+        if (props.get_server_side_pagination_loading == false) {
+            props.getServerSidePaginationAction(pagination.pageIndex, pagination.dataLimit);
+            //props.serverSidePaginationFresh();
+        }
+
 
         if (props.add_city_loading === "Success") {
             toast.success("City Addedd Successfully");
@@ -189,10 +214,13 @@ function City(props) {
 
         }
 
+        props.getServerSidePaginationAction(pagination.pageIndex, pagination.dataLimit);
+    }, [props.add_city_loading, props.city_name_edit_loading, props.city_delete_loading, props.city_status_edit_loading, props.get_server_side_pagination_loading, pagination.pageIndex, pagination.dataLimit]);
 
-    }, [props.add_city_loading, props.city_name_edit_loading, props.city_delete_loading, props.city_status_edit_loading]);
-
-
+    console.log(props.get_server_side_pagination_data);
+    console.log(pagination.pageIndex);
+    console.log(pagination.dataLimit);
+    console.log(index, count);
     return (
         <React.Fragment>
 
@@ -218,8 +246,10 @@ function City(props) {
                                         </Button>
                                     </div>
 
-                                    {props.get_all_city_data ? props.get_all_city_data.length > 0 ? <DatatableTablesWorking products={props.get_all_city_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} /> : null : null}
+                                    {/* {props.get_all_city_data ? props.get_all_city_data.length > 0 ? <DatatableTablesWorking products={props.get_all_city_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} /> : null : null} */}
+                                    {props.get_server_side_pagination_data?.data ? props.get_server_side_pagination_data?.data?.length > 0 ? <DatatableTablesWorking products={props.get_server_side_pagination_data?.data} columnData={activeData} defaultSorted={defaultSorted} pageIndex={pagination.pageIndex} dataLimit={pagination.dataLimit} totalData={props.get_server_side_pagination_data?.count} totalCount={props.get_server_side_pagination_data?.count} setPagination={setPagination} index={index} count={count} /> : null : null}
+
 
                                 </CardBody>
                             </Card>
@@ -327,7 +357,10 @@ const mapStateToProps = state => {
 
         city_name_edit_loading,
         city_status_edit_loading,
-        city_delete_loading
+        city_delete_loading,
+
+        get_server_side_pagination_data,
+        get_server_side_pagination_loading
     } = state.zoneCity;
 
     return {
@@ -341,7 +374,10 @@ const mapStateToProps = state => {
 
         city_name_edit_loading,
         city_status_edit_loading,
-        city_delete_loading
+        city_delete_loading,
+
+        get_server_side_pagination_data,
+        get_server_side_pagination_loading
     };
 };
 
@@ -357,6 +393,8 @@ export default withRouter(
             cityDeleteAction,
             cityDeleteFresh,
             cityStatusEditAction,
-            cityStatusEditFresh
+            cityStatusEditFresh,
+            getServerSidePaginationAction,
+            serverSidePaginationFresh
         })(City)
 );

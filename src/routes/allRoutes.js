@@ -23,7 +23,6 @@ import ForgetPwd from "../pages/Authentication/ForgetPassword"
 
 //  // Inner Authentication
 import Login1 from "../pages/AuthenticationInner/Login"
-import Login2 from "../pages/AuthenticationInner/Login2"
 import Register1 from "../pages/AuthenticationInner/Register"
 import Register2 from "../pages/AuthenticationInner/Register2"
 import Recoverpw from "../pages/AuthenticationInner/Recoverpw"
@@ -175,7 +174,7 @@ const userRoutes = [
   { path: "/add-zone", component: <AddZone /> },
   { path: "/city", component: <City /> },
 
-  // Users 
+  // Users
   { path: "/register", component: <Register1 /> },
   { path: "/manage-users", component: <ManageUsers /> },
 
@@ -187,7 +186,6 @@ const userRoutes = [
   { path: "/add-rider", component: <AddRider /> },
 
   { path: "/subscription-types", component: <SubscriptionTypes /> },
-
 
   // Restaurant
   { path: "/cuisine", component: <Cuisine /> },
@@ -213,11 +211,9 @@ const userRoutes = [
   { path: "/time-slot", component: <MenuTimeSlot /> },
   { path: "/add-time-slot", component: <AddTimeSlot /> },
 
-
   // Sliders or Promotions
   { path: "/slider", component: <Slider /> },
   { path: "/add-slider", component: <SliderAdd /> },
-
 
   // CRM
   { path: "/reward-point-settings", component: <RewardPoint /> },
@@ -239,12 +235,9 @@ const userRoutes = [
   { path: "/operation-time-slot", component: <PlatfromOperationTimeSlot /> },
   { path: "/system-option", component: <SystemOption /> },
 
-
-
   // Notification
   { path: "/notification", component: <Notification /> },
   { path: "/add-notification", component: <AddNotification /> },
-
 
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },
@@ -336,7 +329,6 @@ const authRoutes = [
 
   // Authentication Inner
   //{ path: "/pages-login", component: <Login1 /> },
-  { path: "/pages-login-2", component: <Login2 /> },
   //{ path: "/pages-register", component: <Register1 /> },
   { path: "/pages-register-2", component: <Register2 /> },
   // { path: "/page-recoverpw", component: <Recoverpw /> },

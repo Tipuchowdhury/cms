@@ -56,7 +56,7 @@ function SystemOption(props) {
         //console.log(e);
         name = e.target.name;
         value = e.target.value;
-        // console.log(name2, value2);
+        console.log(name, value);
 
         let updatedList = options.map(option => {
             if (option.name == name) {
@@ -67,9 +67,10 @@ function SystemOption(props) {
 
         setOptions(updatedList);
     }
+    //console.log(options);
 
     const handleAddCheckBox = (e) => {
-        // console.log(e);
+
         name = e.target.name;
         checked = e.target.checked;
         let updatedList = options.map(option => {
@@ -89,7 +90,7 @@ function SystemOption(props) {
     }
 
     const handleEditInputs = (e) => {
-        // console.log(e);
+
         name = e.target.name;
         value = e.target.value;
         setEditInfo({ ...editInfo, [name]: value });
@@ -108,7 +109,7 @@ function SystemOption(props) {
     }
 
     const handleEdit = (data) => {
-        console.log(data);
+
         // e.preventDefault();
         props.systemOptionUpdateAction(data);
     }
@@ -120,7 +121,7 @@ function SystemOption(props) {
 
     const handleStatusUpdate = () => {
 
-        // console.log(editInfo);
+
         // props.systemOptionStatusUpdateAction({
         //     ...editInfo,
         //     is_active: !editInfo.is_active,
@@ -143,10 +144,10 @@ function SystemOption(props) {
     //const [abirInfo, setAbirInfo] = useState([]);
     const receiveOptions = (idx, data) => {
         //setEditInfo(data)
-        console.log(idx, data);
+
         //setAbirInfo({ ...abirInfo, data });
     }
-    //console.log(abirInfo);
+
 
 
 
@@ -213,6 +214,7 @@ function SystemOption(props) {
     }, []);
 
     const [options, setOptions] = useState([]);
+    const [enumData, setEnumData] = useState([]);
 
     useEffect(() => {
         setOptions(props.get_all_system_option_data)
@@ -221,13 +223,80 @@ function SystemOption(props) {
 
     console.log(options);
 
-    let id = 0;
+    const enums = options?.filter(obj => {
+        return obj.type === 'enum';
+    });
+
+    const newList = enums ? enums?.map((item, key) => {
+        return { value: item.possible_value.split(", ") };
+    }) : "";
+
+    // const newList = [
+    //     {
+    //         id: 0,
+    //         optionList: [
+    //             { value: "red", label: "Red" },
+    //             { value: "green", label: "Green" }
+
+    //         ]
+    //     },
+    //     {
+    //         id: 1,
+    //         optionList: [
+
+    //             { value: "green", label: "Green" },
+    //             { value: "yellow", label: "Yellow" }
+    //         ]
+    //     },
+    //     {
+    //         id: 2,
+    //         optionList: [
+    //             { value: "yellow", label: "Yellow" },
+    //             { value: "blue", label: "Blue" }
+    //         ]
+    //     },
+    //     {
+    //         id: 3,
+    //         optionList: [
+    //             { value: "blue", label: "Blue" },
+    //             { value: "white", label: "White" }
+    //         ]
+
+    //     }
+    // ]
+
+    // const optionList = [
+    //     { value: "red", label: "Red" },
+    //     { value: "green", label: "Green" },
+    //     { value: "yellow", label: "Yellow" },
+    //     { value: "blue", label: "Blue" },
+    //     { value: "white", label: "White" }
+    // ];
+
+
 
     // {
     //     options ? <>{
-    //         options.map(option => receiveOptions(id++, option))
+    //         options?.map(option => {
+    //             if (option.type == "enum") {
+    //                 setEnumData({ ...enumData, id: option._id, list: option.possible_value })
+    //             }
+    //         })
     //     }</> : ''
     // }
+
+    // let enumList = enumData?.map(data => {
+    //     if (data.name == name) {
+    //         return { ...data, value: value };
+    //     }
+    //     return data;
+    // });
+
+
+    // setEnumData(enumList);
+    // console.log(enums);
+    // console.log(newList[0]);
+    // console.log(enums[1]["possible_value"]);
 
 
 
@@ -236,9 +305,9 @@ function SystemOption(props) {
     useEffect(() => {
 
 
-        // if (props.get_all_system_option_loading == false) {
-        //     props.getAllSystemOptionAction();
-        // }
+        if (props.get_all_system_option_loading == false) {
+            props.getAllSystemOptionAction();
+        }
 
         if (props.add_system_option_loading === "Success") {
             toast.success("Option Added Successfully");
@@ -264,12 +333,14 @@ function SystemOption(props) {
             toast.success("Option Updated");
             //toggleEditModal();
             props.systemOptionUpdateFresh();
+            // props.getAllSystemOptionAction();
         }
 
         if (props.system_option_edit_loading === "Failed") {
             toast.error("Something went wrong");
             // toggleEditModal();
             props.systemOptionUpdateFresh();
+            // props.getAllSystemOptionAction();
         }
 
         if (props.system_option_status_edit_loading === "Success") {
@@ -289,7 +360,7 @@ function SystemOption(props) {
 
 
         if (props.system_option_delete_loading === "Success") {
-            // console.log("I am in the delete")
+
             toast.success("Option Deleted");
             toggleDel();
             //  props.systemOptionDeleteFresh();
@@ -298,11 +369,8 @@ function SystemOption(props) {
     }, [props.add_system_option_loading, props.system_option_edit_loading,
     props.system_option_delete_loading, props.system_option_status_edit_loading]);
 
+    let i = 0;
 
-
-
-
-    // console.log(props.get_all_system_option_data);
     return (
         <React.Fragment>
 
@@ -324,7 +392,7 @@ function SystemOption(props) {
 
                                     {props.get_all_system_option_data ? props.get_all_system_option_data.length > 0 ? <>
                                         {
-                                            options.map(option =>
+                                            options?.map(option =>
                                                 <form key={option._id} className="mt-1"  >
                                                     <Row className="mb-3">
                                                         <div className="col-sm-2">
@@ -336,11 +404,18 @@ function SystemOption(props) {
                                                                 <input type="text" className="form-control" value={option.value} name={option.name} id={option.name} onChange={handleAddInputs} />
                                                                 : ''}
 
-                                                            {/* {option.type === "enum" ? <
-                                                            <input type="text" className="form-control" value={option.value} name={option.name} id={option.name} onChange={handleAddInputs} />
-                                                         : ''} */}
+                                                            {/* {option.type === "enum" ?
+                                                                <Select value={option.value} options={newList[i++]} isMulti={true} /> : ''} */}
+
+                                                            {option.type === "enum" ?
+                                                                <Input id={option.name} name={option.name} className="form-control" value={option.value} onChange={handleAddInputs} type="select" >
+                                                                    <option>Choose...</option>
+                                                                    {
+                                                                        newList[i++]?.value?.map(list => <option value={list}>{list.toUpperCase()}</option>)
+                                                                    }
 
 
+                                                                </Input> : ''}
 
                                                             {option.type === "on_off" ?
                                                                 <input type="checkbox" className="form-check-input" id={option.name} checked={option.value} name={option.name} onChange={handleAddCheckBox} />
