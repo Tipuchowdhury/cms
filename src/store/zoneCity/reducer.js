@@ -9,7 +9,9 @@ import {
     CITY_DELETE,
     CITY_DELETE_FRESH,
     CITY_STATUS_EDIT,
-    CITY_STATUS_EDIT_FRESH
+    CITY_STATUS_EDIT_FRESH,
+    SERVER_SIDE_PAGINATION,
+    SERVER_SIDE_PAGINATION_FRESH
 
 } from "./actionTypes"
 
@@ -32,7 +34,11 @@ const initialState = {
     city_status_edit_data: null,
     city_status_edit_loading: false,
 
-    city_delete_loading: false
+    city_delete_loading: false,
+
+    get_server_side_pagination_data: null,
+    get_server_side_pagination_error: null,
+    get_server_side_pagination_loading: false,
 }
 
 const zoneCity = (state = initialState, action) => {
@@ -44,7 +50,8 @@ const zoneCity = (state = initialState, action) => {
                 add_city_data: action.payload,
                 add_city_error: null,
                 add_city_loading: action.status,
-                get_all_city_loading: false
+                //get_all_city_loading: false,
+                get_server_side_pagination_loading: false
             }
             break;
 
@@ -116,7 +123,24 @@ const zoneCity = (state = initialState, action) => {
                 city_delete_loading: action.status,
                 get_all_city_loading: false
             }
+            break;
+        case SERVER_SIDE_PAGINATION:
+            state = {
+                ...state,
+                get_server_side_pagination_data: action.payload,
+                get_server_side_pagination_error: null,
+                get_server_side_pagination_loading: action.status,
 
+            }
+            break;
+
+        case SERVER_SIDE_PAGINATION_FRESH:
+            state = {
+                ...state,
+                get_server_side_pagination_loading: action.status,
+                //get_all_city_loading: false
+            }
+            break;
     }
     return state
 }

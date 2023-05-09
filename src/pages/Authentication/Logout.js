@@ -10,10 +10,14 @@ import { useNavigate } from 'react-router-dom';
 const Logout = props => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   useEffect(() => {
+    console.log(props);
+    localStorage.removeItem("foodi-jwt");
+    //props.logoutUserSuccess();
+    navigate("/login")
     dispatch(logoutUser(navigate));
-  }, [dispatch,navigate]);
+  }, [dispatch, navigate]);
 
   return <></>;
 };
