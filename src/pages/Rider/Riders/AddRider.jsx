@@ -81,8 +81,6 @@ function AddRider(props) {
         city_id: location.state ? location.state.city_id : "",
         // zone: location.state ? location.state.zone : "",
 
-
-
         image: location.state ? location.state.image : "",
         nid_front: location.state ? location.state.nid_front : "",
         nid_back: location.state ? location.state.nid_back : "",
@@ -107,12 +105,12 @@ function AddRider(props) {
         vehicleTypes = props.get_all_vehicle_type_data;
     }
 
-
     const common_zones = props?.get_all_zone_data?.filter((elem) => location?.state?.zones?.find(({ zone_id }) => elem._id === zone_id));
 
     const zone_data_edit = common_zones ? common_zones?.map((item, key) => {
         return { label: item.name, value: item._id };
     }) : "";
+
     //select multiple zone
     const [selectedZone, setSelectedZone] = useState(zone_data_edit ? zone_data_edit : "");
     const handleSelectZone = (e) => {
