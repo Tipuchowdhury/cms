@@ -331,6 +331,21 @@ const SidebarContent = props => {
                 </li>
               </ul>
             </li>
+
+            <li>
+              <Link to="/#" className="has-arrow waves-effect">
+                <i className="ti-shield"></i>
+                <span>{props.t("Roles & Permissions")}</span>
+              </Link>
+              <ul className="sub-menu" aria-expanded="false">
+                <li>
+                  <Link to="/permissions">{props.t("Permissions")} </Link>
+                </li>
+                <li>
+                  <Link to="/roles">{props.t("Roles")} </Link>
+                </li>
+              </ul>
+            </li>
             {/* <li>
               <Link to="/calendar" className=" waves-effect">
                 <i className="ti-calendar"></i>
