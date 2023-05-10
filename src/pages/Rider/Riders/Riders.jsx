@@ -122,7 +122,7 @@ function Riders(props) {
 
     const activeData = [
         {
-            dataField: "name",
+            dataField: "first_name",
             text: "Name",
             sort: true,
         },
@@ -141,7 +141,7 @@ function Riders(props) {
     ]
     const defaultSorted = [
         {
-            dataField: "name",
+            dataField: "first_name",
             order: "desc",
         },
     ]

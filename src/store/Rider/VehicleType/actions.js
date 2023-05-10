@@ -20,20 +20,20 @@ var token = JSON.parse(localStorage.getItem("jwt"))
 export const addVehicleTypeAction = (id, data) => {
   var url = process.env.REACT_APP_LOCALHOST + "/VehicleType/Post"
 
-
-
-  let dataObject = {
+  let formData = {
     _id: id,
     ...data,
   };
 
-  const formData = convertToFormData(dataObject)
+  // console.log(dataObject);
+
+  // const formData = convertToFormData(dataObject)
 
   return dispatch => {
 
     const headers = {
-      "Content-Type": "multipart/form-data",
-      // "Content-Type": "application/json",
+      // "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -105,16 +105,16 @@ export const getAllVehicleTypeFresh = () => {
 export const vehicleTypeEditAction = (data) => {
   var url = process.env.REACT_APP_LOCALHOST + "/VehicleType/Put"
 
-  const dataObject = {
+  const formData = {
     ...data,
   };
 
-  const formData = convertToFormData(dataObject)
+  // onst formData = convertToFormData(dataObject)
   // console.log(formData);
   return dispatch => {
     const headers = {
-      "Content-Type": "multipart/form-data",
-      // "Content-Type": "application/json",
+      // "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
 
       "Access-Control-Allow-Origin": "*",
     }
@@ -150,13 +150,13 @@ export const vehicleTypeEditFresh = () => {
 export const vehicleTypeStatusEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/VehicleType/Put"
 
-  const dataObject = data;
+  const formData = data;
 
-  const formData = convertToFormData(dataObject)
+  // const formData = convertToFormData(dataObject)
   return dispatch => {
     const headers = {
-      "Content-Type": "multipart/form-data",
-      // "Content-Type": "application/json",
+      // "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
 
       "Access-Control-Allow-Origin": "*",
     }
