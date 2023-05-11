@@ -113,6 +113,7 @@ function AddRider(props) {
 
     //select multiple zone
     const [selectedZone, setSelectedZone] = useState(zone_data_edit ? zone_data_edit : "");
+
     const handleSelectZone = (e) => {
 
         setSelectedZone(e)
@@ -311,6 +312,8 @@ function AddRider(props) {
         props.get_all_zone_loading,
         props.get_all_vehicle_type_loading,
     ])
+
+    //console.log(selectedZone);
 
 
     return (
