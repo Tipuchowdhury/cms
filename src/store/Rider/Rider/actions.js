@@ -9,6 +9,8 @@ import {
   RIDER_DELETE_FRESH,
   RIDER_STATUS_EDIT,
   RIDER_STATUS_EDIT_FRESH,
+  RIDER_APPROVED_EDIT,
+  RIDER_APPROVED_EDIT_FRESH
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -207,6 +209,46 @@ export const riderStatusEditFresh = () => {
   return dispatch => {
     dispatch({
       type: RIDER_STATUS_EDIT_FRESH,
+      payload: null,
+      status: false,
+    })
+  }
+}
+
+export const riderApprovedEditAction = data => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Rider/Put"
+  const dataObject = data
+  console.log(dataObject)
+  const formData = convertToFormData(dataObject)
+  return dispatch => {
+    const headers = {
+      "Content-Type": "multipart/form-data",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: RIDER_APPROVED_EDIT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: RIDER_APPROVED_EDIT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const riderApprovedEditFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: RIDER_APPROVED_EDIT_FRESH,
       payload: null,
       status: false,
     })

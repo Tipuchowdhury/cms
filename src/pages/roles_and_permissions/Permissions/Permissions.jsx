@@ -86,11 +86,33 @@ function Permissions(props) {
         setEditInfo({ ...editInfo, [name]: checked });
     }
 
+    const routeTemplate = { route: "" }
+    // const [route, setRoute] = useState(location.state ? location.state.preset_add_ons : [routeTemplate]);
+    const [route, setRoute] = useState([routeTemplate]);
+    const handleRoute = (e, index) => {
+        // console.log(index);
+        const updatedValue = route.map((row, i) => index === i ? Object.assign(row, { [e.target.name]: e.target.value }) : row);
+        setRoute(updatedValue)
+
+    }
+    function handleAddRowNested() {
+        setRoute([...route, routeTemplate]);
+    }
+
+    const handleRowDelete = (index) => {
+        const filteredTime = [...route];
+        if (filteredTime.length > 1) {
+            filteredTime.splice(index, 1);
+            setRoute(filteredTime)
+        }
+
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const val = uuidv4();
 
-        props.addPermissionAction(addInfo);
+        props.addPermissionAction(addInfo, route);
     }
 
     const handleEditPermission = (row) => {
@@ -343,6 +365,35 @@ function Permissions(props) {
                                     </div>
                                 </div>
                             </div>
+
+                            {route.map((row, idx) => (
+                                <React.Fragment key={idx}>
+                                    <div data-repeater-list="group-a" id={"addr" + idx}>
+                                        <div data-repeater-item className="row">
+
+                                            <div className="mb-3 col-lg-10">
+                                                <label className="form-label" htmlFor="route">Route</label>
+                                                <input type="text" id="route" className="form-control" name="route" placeholder="Route" value={row.route} onChange={(e) => handleRoute(e, idx)} />
+                                            </div>
+
+
+                                            <Col lg={2} className="align-self-center d-grid mt-3">
+                                                <input data-repeater-delete type="button" className="btn btn-primary" value="Delete" onClick={() => (handleRowDelete(idx))} />
+                                            </Col>
+                                        </div>
+
+                                    </div>
+                                </React.Fragment>
+                            ))}
+                            <Button
+                                onClick={() => {
+                                    handleAddRowNested();
+                                }}
+                                color="success"
+                                className="btn btn-success mt-3 mt-lg-0"
+                            >
+                                Add
+                            </Button>
 
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>

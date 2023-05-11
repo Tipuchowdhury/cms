@@ -32,6 +32,8 @@ import {
     riderEditFresh,
     riderStatusEditAction,
     riderStatusEditFresh,
+    riderApprovedEditAction,
+    riderApprovedEditFresh
 } from "store/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 
@@ -51,6 +53,7 @@ function Riders(props) {
     const [deleteItem, setDeleteItem] = useState()
     const [modalDel, setModalDel] = useState(false)
     const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
+    const [modalApprovedUpdate, setModalApprovedUpdate] = useState(false)
 
     const toggleDel = () => setModalDel(!modalDel)
     const handleDelete = () => {
@@ -59,6 +62,7 @@ function Riders(props) {
         props.riderDeleteAction(deleteItem)
     }
     const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
+    const toggleApproved = () => setModalApprovedUpdate(!modalApprovedUpdate)
 
     const toggle = () => setModal(!modal)
     const handleSubmit = e => {
@@ -84,6 +88,13 @@ function Riders(props) {
         toggleStatus()
     }
 
+    const handleApprovedModal = row => {
+        // console.log(row);
+        setEditInfo(row)
+
+        toggleApproved()
+    }
+
     const handleStatusUpdate = () => {
         // console.log(editInfo)
         props.riderStatusEditAction({
@@ -91,6 +102,15 @@ function Riders(props) {
             is_active: !editInfo.is_active,
         })
     }
+
+    const handleApprovedUpdate = () => {
+        // console.log(editInfo)
+        props.riderApprovedEditAction({
+            ...editInfo,
+            is_approve: !editInfo.is_approve,
+        })
+    }
+
     const actionRef = (cell, row) => (
         <div style={{ display: "flex", gap: 10 }}>
             <Button
@@ -120,6 +140,16 @@ function Riders(props) {
         </Button>
     )
 
+    const approvedRef = (cell, row) => (
+        <Button
+            color={row.is_approve ? "info" : "warning"}
+            className="btn waves-effect waves-light"
+            onClick={() => handleApprovedModal(row)}
+        >
+            {row.is_approve ? "Approved" : "Disapprove "}
+        </Button>
+    )
+
     const activeData = [
         {
             dataField: "first_name",
@@ -127,10 +157,21 @@ function Riders(props) {
             sort: true,
         },
         {
+            dataField: "mobile_number",
+            text: "Mobile Number",
+            sort: true,
+        },
+        {
             dataField: "is_active",
             text: "Status",
             sort: true,
             formatter: statusRef,
+        },
+        {
+            dataField: "is_approve",
+            text: "Aprroved",
+            sort: true,
+            formatter: approvedRef,
         },
         {
             //dataField: "he",
@@ -169,9 +210,31 @@ function Riders(props) {
             props.riderStatusEditFresh()
         }
 
+        if (props.rider_status_edit_loading === "Failed") {
+            toast.error("Something went wrong")
+            // toggleStatus()
+            props.riderStatusEditFresh()
+        }
+
+        if (props.rider_approved_edit_loading === "Success") {
+            toast.success("Approved Status Updated")
+            toggleApproved()
+            props.riderApprovedEditFresh()
+        }
+
+        if (props.rider_approved_edit_loading === "Failed") {
+            toast.error("Something went wrong")
+            // toggleStatus()
+            props.riderApprovedEditFresh()
+        }
+
         if (props.rider_delete_loading === "Success") {
             //  console.log("I am in the delete")
             toast.success("Rider Deleted")
+            props.riderDeleteFresh()
+        }
+        if (props.rider_delete_loading === "Failed") {
+            toast.error("Something went wrong")
             props.riderDeleteFresh()
         }
     }, [
@@ -179,6 +242,7 @@ function Riders(props) {
         props.rider_name_edit_loading,
         props.rider_delete_loading,
         props.rider_status_edit_loading,
+        props.rider_approved_edit_loading,
     ])
 
     return (
@@ -290,6 +354,36 @@ function Riders(props) {
                     </ModalFooter>
                 </Modal>
                 {/* ============ status update modal ends=============== */}
+
+
+                {/* ============ status update modal starts=============== */}
+                <Modal isOpen={modalApprovedUpdate} toggle={toggleApproved} centered>
+                    <ModalHeader
+                        className="text-center"
+                        style={{ textAlign: "center", margin: "0 auto" }}
+                    >
+                        <div className="icon-box">
+                            <i
+                                className="fa fa-exclamation-circle"
+                                style={{ color: "#DCA218", fontSize: "40px" }}
+                            ></i>
+                        </div>
+                        Are you sure?
+                    </ModalHeader>
+                    <ModalBody>
+                        Do you want to {editInfo.is_approve ? "disapprove " : "approve"} this
+                        rider?{" "}
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="secondary" onClick={toggleApproved}>
+                            Cancel
+                        </Button>{" "}
+                        <Button color="primary" onClick={handleApprovedUpdate}>
+                            Update
+                        </Button>
+                    </ModalFooter>
+                </Modal>
+                {/* ============ status update modal ends=============== */}
             </div>
         </React.Fragment>
     )
@@ -308,6 +402,8 @@ const mapStateToProps = state => {
         rider_edit_loading,
         rider_status_edit_data,
         rider_status_edit_loading,
+        rider_approved_edit_data,
+        rider_approved_edit_loading,
     } = state.Rider
 
     return {
@@ -325,6 +421,9 @@ const mapStateToProps = state => {
 
         rider_status_edit_data,
         rider_status_edit_loading,
+
+        rider_approved_edit_data,
+        rider_approved_edit_loading,
     }
 }
 
@@ -339,5 +438,7 @@ export default withRouter(
         riderStatusEditAction,
         riderEditFresh,
         riderStatusEditFresh,
+        riderApprovedEditAction,
+        riderApprovedEditFresh
     })(Riders)
 )
