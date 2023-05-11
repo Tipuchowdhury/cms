@@ -28,6 +28,11 @@ function Permissions(props) {
     const toggleDel = () => setModalDel(!modalDel);
     const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
 
+    const routeTemplate = { route: "" }
+    // const [route, setRoute] = useState(location.state ? location.state.preset_add_ons : [routeTemplate]);
+    const [route, setRoute] = useState([routeTemplate]);
+    const [routeEdit, setRouteEdit] = useState([routeTemplate]);
+
 
     const [addInfo, setAddInfo] = useState({
         module_name: "",
@@ -48,6 +53,24 @@ function Permissions(props) {
         is_delete: false,
         is_active: true
     });
+
+    const handleEditPermission = (row) => {
+        // console.log(row);
+
+        setEditInfo(prevState => ({
+            _id: row._id,
+            module_name: row.module_name,
+            is_create: row.is_create,
+            is_read: row.is_read,
+            is_update: row.is_update,
+            is_delete: row.is_delete,
+            is_active: row.is_active,
+        }));
+        routeForEdit(row.routes)
+
+        toggleEditModal();
+
+    }
 
     const [deleteItem, setDeleteItem] = useState();
 
@@ -86,17 +109,43 @@ function Permissions(props) {
         setEditInfo({ ...editInfo, [name]: checked });
     }
 
-    const routeTemplate = { route: "" }
-    // const [route, setRoute] = useState(location.state ? location.state.preset_add_ons : [routeTemplate]);
-    const [route, setRoute] = useState([routeTemplate]);
+
+    const routeForEdit = (nn) => {
+        // console.log(nn);
+        // console.log(props?.get_all_branch_data);
+        // const common_permissions = props?.get_all_permission_data?.filter((elem) => nn?.find(({ permission_id }) => elem._id === permission_id));
+        //console.log(common_restaurants);
+
+        const selectedRoute = nn ? nn.map((item, key) => {
+            return { route: item.route };
+        }) : [];
+
+        setRouteEdit(selectedRoute);
+
+    }
+
+
     const handleRoute = (e, index) => {
         // console.log(index);
         const updatedValue = route.map((row, i) => index === i ? Object.assign(row, { [e.target.name]: e.target.value }) : row);
         setRoute(updatedValue)
 
     }
+
+    const handleRouteEdit = (e, index) => {
+        // console.log(e);
+        const updatedValue = routeEdit.map((row, i) => index === i ? Object.assign(row, { [e.target.name]: e.target.value }) : row);
+        setRouteEdit(updatedValue)
+
+    }
+
+
     function handleAddRowNested() {
         setRoute([...route, routeTemplate]);
+    }
+
+    function handleEditRowNested() {
+        setRouteEdit([...routeEdit, routeTemplate]);
     }
 
     const handleRowDelete = (index) => {
@@ -108,6 +157,14 @@ function Permissions(props) {
 
     }
 
+    const handleRowEditDelete = (index) => {
+        const filteredTime = [...routeEdit];
+        if (filteredTime.length > 1) {
+            filteredTime.splice(index, 1);
+            setRouteEdit(filteredTime)
+        }
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const val = uuidv4();
@@ -115,26 +172,11 @@ function Permissions(props) {
         props.addPermissionAction(addInfo, route);
     }
 
-    const handleEditPermission = (row) => {
-        // console.log(row);
 
-        setEditInfo(prevState => ({
-            _id: row._id,
-            module_name: row.module_name,
-            is_create: row.is_create,
-            is_read: row.is_read,
-            is_update: row.is_update,
-            is_delete: row.is_delete,
-            is_active: row.is_active,
-        }));
-
-        toggleEditModal();
-
-    }
 
     const handleEdit = (e) => {
         e.preventDefault();
-        props.permissionUpdateAction(editInfo);
+        props.permissionUpdateAction(editInfo, routeEdit);
 
         //toggleEditModal();
 
@@ -457,6 +499,35 @@ function Permissions(props) {
                                     </div>
                                 </div>
                             </div>
+
+                            {routeEdit.map((row, idx) => (
+                                <React.Fragment key={idx}>
+                                    <div data-repeater-list="group-a" id={"addr" + idx}>
+                                        <div data-repeater-item className="row">
+
+                                            <div className="mb-3 col-lg-10">
+                                                <label className="form-label" htmlFor="route">Route</label>
+                                                <input type="text" id="route" className="form-control" name="route" placeholder="Route" value={row.route} onChange={(e) => handleRouteEdit(e, idx)} />
+                                            </div>
+
+
+                                            <Col lg={2} className="align-self-center d-grid mt-3">
+                                                <input data-repeater-delete type="button" className="btn btn-primary" value="Delete" onClick={() => (handleRowEditDelete(idx))} />
+                                            </Col>
+                                        </div>
+
+                                    </div>
+                                </React.Fragment>
+                            ))}
+                            <Button
+                                onClick={() => {
+                                    handleEditRowNested();
+                                }}
+                                color="success"
+                                className="btn btn-success mt-3 mt-lg-0"
+                            >
+                                Add
+                            </Button>
 
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>

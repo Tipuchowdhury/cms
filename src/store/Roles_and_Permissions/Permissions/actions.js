@@ -110,11 +110,23 @@ export const getAllPermissionFresh = () => {
 };
 
 
-export const permissionUpdateAction = (editData) => {
+export const permissionUpdateAction = (editData, routes) => {
     // console.log(editData);
 
     var url = process.env.REACT_APP_LOCALHOST + "/Permission/Put";
-    const formData = editData;
+
+    const data =
+        routes?.length > 0
+            ? routes.map(item => {
+                const route_id = uuidv4()
+                return {
+                    _id: route_id,
+                    route: item.route,
+                    permission_id: editData._id,
+                }
+            })
+            : null
+    const formData = { ...editData, routes: data };
     return dispatch => {
         const headers = {
             "Content-Type": "application/json",
