@@ -1,18 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
-import { Badge, Button, Card, CardBody, CardTitle, Col, Container, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
+import { Button, Card, CardBody, CardTitle, Col, Container, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import Breadcrumbs from 'components/Common/Breadcrumb';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Link, useNavigate } from "react-router-dom";
 import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import { addCityAction, addCityFresh, getAllCityAction, getAllCityFresh, cityNameEditAction, cityNameEditFresh, cityDeleteAction, cityDeleteFresh, cityStatusEditAction, cityStatusEditFresh, getServerSidePaginationAction, serverSidePaginationFresh } from 'store/zoneCity/actions';
-import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
+import { addCityAction, addCityFresh, getAllCityAction, getAllCityFresh, cityNameEditAction, cityNameEditFresh, cityDeleteAction, cityDeleteFresh, cityStatusEditAction, cityStatusEditFresh, getServerSidePaginationAction, serverSidePaginationFresh, getServerSidePaginationSearchAction, getServerSidePaginationSearchFresh } from 'store/zoneCity/actions';
+import DataTable from 'react-data-table-component';
+
 
 function City(props) {
-    console.log(props);
     const [name, setName] = useState("")
     const [modal, setModal] = useState(false);
     const [cityId, setCityId] = useState();
@@ -23,9 +22,6 @@ function City(props) {
     const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
     const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
 
-    // server-side pagination
-    const index = undefined;
-    const count = undefined;
     // delete modal
     const [deleteItem, setDeleteItem] = useState()
     const [modalDel, setModalDel] = useState(false);
@@ -33,7 +29,6 @@ function City(props) {
     const toggleDel = () => setModalDel(!modalDel);
     const handleDelete = () => {
         toggleDel();
-        console.log(deleteItem)
         props.cityDeleteAction(deleteItem);
     }
 
@@ -43,15 +38,12 @@ function City(props) {
         e.preventDefault();
         toggle();
         const val = uuidv4();
-        console.log(name)
-        console.log(val);
         props.addCityAction(name, val);
     }
-    const handleEditCityName = (row) => {
-        console.log(row);
-        setCityId(row._id);
-        setCityName(row.name);
-        setIsActive(row.is_active);
+    const handleEditCityName = (cell, row) => {
+        setCityId(cell._id);
+        setCityName(cell.name);
+        setIsActive(cell.is_active);
         toggleEditModal();
     }
     const handleCityName = (e) => {
@@ -76,8 +68,6 @@ function City(props) {
     const handleEditModalSubmit = (e) => {
         e.preventDefault();
         toggleEditModal();
-        console.log(cityname)
-        console.log(cityId);
         props.cityNameEditAction(cityname, cityId, isActive);
     }
     const handleDeleteModal = (row) => {
@@ -89,7 +79,7 @@ function City(props) {
             <Button
                 color="primary"
                 className="btn btn-primary waves-effect waves-light"
-                onClick={() => handleEditCityName(row)}
+                onClick={() => handleEditCityName(cell, row)}
             >
                 Edit
             </Button>{" "}
@@ -103,39 +93,31 @@ function City(props) {
         </div>
 
 
-
-    // const statusRef = (cell, row) => <Badge color="secondary" style={{ padding: "12px" }}>Deactivate</Badge>
-
-    // const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
-
     const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
         className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
 
-
-    console.log(props.add_city_loading);
-    console.log(props.get_all_city_data);
-    console.log(props.city_name_edit_loading);
-    console.log(props.get_all_city_loading);
+    const textRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.name}</span>
 
 
     const activeData = [
 
         {
-            dataField: "name",
-            text: "Name",
-            sort: true,
+            selector: "name",
+            name: "Name",
+            sortable: true,
+            cell: textRef
         },
         {
             dataField: "",
-            text: "Status",
-            sort: true,
-            formatter: statusRef
+            name: "Status",
+            sortable: true,
+            cell: statusRef
         },
         {
             //dataField: "he",
-            text: "Action",
-            sort: true,
-            formatter: actionRef,
+            name: "Action",
+            sortable: true,
+            cell: actionRef,
         },
 
     ];
@@ -146,33 +128,29 @@ function City(props) {
         }
     ];
 
-    // const [pagination2, setPagination2] = useState({
-    //     pageIndex: "",
-    //     dataLimit: ""
-    // })
 
-    // const [pagination, setPagination] = useState({
-    //     pageIndex: pagination2.pageIndex ? pagination2.pageIndex : 0,
-    //     dataLimit: pagination2.dataLimit ? pagination2.dataLimit : 0,
-    // })
+    // server side pagination
+    const [page, setPage] = useState(1);
+    const countPerPage = 10;
+    const handleFilter = (e) => {
+        if (e.target.value?.length > 0) {
+            props.getServerSidePaginationSearchAction(e.target.value);
+        } else {
+            props.getServerSidePaginationSearchFresh();
+        }
 
-    const [pagination, setPagination] = useState({
-        pageIndex: 1,
-        dataLimit: 1,
-    })
+    }
 
-
-    console.log(pagination);
+    console.log(props.get_server_side_pagination_data);
+    console.log(props.get_server_side_pagination_search_data);
     useEffect(() => {
-        console.log("=======hello", props.city_name_edit_loading);
         if (props.get_all_city_loading == false) {
-            console.log("I am in get all city loading ")
             props.getAllCityAction();
         }
 
         if (props.get_server_side_pagination_loading == false) {
-            props.getServerSidePaginationAction(pagination.pageIndex, pagination.dataLimit);
-            //props.serverSidePaginationFresh();
+            props.getServerSidePaginationAction(page, countPerPage);
+            props.serverSidePaginationFresh();
         }
 
 
@@ -214,13 +192,10 @@ function City(props) {
 
         }
 
-        props.getServerSidePaginationAction(pagination.pageIndex, pagination.dataLimit);
-    }, [props.add_city_loading, props.city_name_edit_loading, props.city_delete_loading, props.city_status_edit_loading, props.get_server_side_pagination_loading, pagination.pageIndex, pagination.dataLimit]);
+        props.getServerSidePaginationAction(page, countPerPage);
+    }, [props.add_city_loading, props.city_name_edit_loading, props.city_delete_loading, props.city_status_edit_loading, props.get_server_side_pagination_loading, page, countPerPage, props.get_server_side_pagination_search_loading]);
 
-    console.log(props.get_server_side_pagination_data);
-    console.log(pagination.pageIndex);
-    console.log(pagination.dataLimit);
-    console.log(index, count);
+
     return (
         <React.Fragment>
 
@@ -246,10 +221,24 @@ function City(props) {
                                         </Button>
                                     </div>
 
-                                    {/* {props.get_all_city_data ? props.get_all_city_data.length > 0 ? <DatatableTablesWorking products={props.get_all_city_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} /> : null : null} */}
-                                    {props.get_server_side_pagination_data?.data ? props.get_server_side_pagination_data?.data?.length > 0 ? <DatatableTablesWorking products={props.get_server_side_pagination_data?.data} columnData={activeData} defaultSorted={defaultSorted} pageIndex={pagination.pageIndex} dataLimit={pagination.dataLimit} totalData={props.get_server_side_pagination_data?.count} totalCount={props.get_server_side_pagination_data?.count} setPagination={setPagination} index={index} count={count} /> : null : null}
+                                    <div className='text-end'><input type='text' placeholder="City Name" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
+                                    <DataTable
+                                        //title="Employees"
+                                        columns={activeData}
+                                        data={props.get_server_side_pagination_search_data != null ? props.get_server_side_pagination_search_data?.data : props?.get_server_side_pagination_data?.data}
+                                        highlightOnHover
+                                        pagination
+                                        paginationServer
+                                        paginationTotalRows={props.get_server_side_pagination_search_data != null ? props.get_server_side_pagination_search_data?.count : props.get_server_side_pagination_data?.count}
+                                        paginationPerPage={countPerPage}
+                                        paginationComponentOptions={{
+                                            noRowsPerPage: true,
+                                            //noRowsPerPage: false,
 
+                                        }}
+
+                                        onChangePage={(page) => setPage(page)}
+                                    />
 
                                 </CardBody>
                             </Card>
@@ -360,7 +349,11 @@ const mapStateToProps = state => {
         city_delete_loading,
 
         get_server_side_pagination_data,
-        get_server_side_pagination_loading
+        get_server_side_pagination_loading,
+
+
+        get_server_side_pagination_search_data,
+        get_server_side_pagination_search_loading,
     } = state.zoneCity;
 
     return {
@@ -377,7 +370,11 @@ const mapStateToProps = state => {
         city_delete_loading,
 
         get_server_side_pagination_data,
-        get_server_side_pagination_loading
+        get_server_side_pagination_loading,
+
+        get_server_side_pagination_search_data,
+        get_server_side_pagination_search_loading,
+
     };
 };
 
@@ -395,6 +392,8 @@ export default withRouter(
             cityStatusEditAction,
             cityStatusEditFresh,
             getServerSidePaginationAction,
-            serverSidePaginationFresh
+            serverSidePaginationFresh,
+            getServerSidePaginationSearchAction,
+            getServerSidePaginationSearchFresh
         })(City)
 );

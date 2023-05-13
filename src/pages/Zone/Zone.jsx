@@ -18,11 +18,12 @@ import { ToastContainer, toast } from "react-toastify"
 import { Link, useNavigate } from "react-router-dom"
 import AddZone from "./AddZone/AddZone"
 import {
-  getAllZoneAction, zoneStatusEditAction, zoneStatusEditActionFresh, zoneDeleteAction, zoneDeleteFresh
+  getAllZoneAction, zoneStatusEditAction, zoneStatusEditActionFresh, zoneDeleteAction, zoneDeleteFresh, getServerSidePaginationZoneAction, getServerSidePaginationZoneSearchAction, getServerSidePaginationSearchZoneFresh
 } from "store/actions"
 import withRouter from "components/Common/withRouter";
 import { connect } from "react-redux"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
+import DataTable from 'react-data-table-component';
 
 function Zone(props) {
 
@@ -101,37 +102,46 @@ function Zone(props) {
       {row.is_active ? "Active" : "Deactivate"}
     </Button>
   )
-
+  const textRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.name}</span>
   const activeData = [
     {
-      dataField: "name",
-      text: "Area Name",
-      sort: true,
+      selector: "name",
+      name: "Area Name",
+      sortable: true,
+      cell: textRef
     },
     {
-      dataField: "",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      selector: "",
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
     {
-      dataField: "hello",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      selector: "",
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
-  const defaultSorted = [
-    {
-      dataField: "name",
-      order: "desc",
-    },
-  ]
+
+  // server side pagination
+  const [page, setPage] = useState(1);
+  const countPerPage = 10;
+  const handleFilter = (e) => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationZoneSearchAction(e.target.value);
+    } else {
+      props.getServerSidePaginationSearchZoneFresh();
+    }
+
+  }
 
   useEffect(() => {
     if (props.get_all_zone_loading == false) {
       props.getAllZoneAction()
     }
+
+    props.getServerSidePaginationZoneAction(page, countPerPage);
 
     if (props.edit_zone_status_loading == "Success") {
       toast.success("Zone Status Updated Successfully");
@@ -154,8 +164,12 @@ function Zone(props) {
       // toggleStatus();
       props.zoneDeleteFresh();
     }
-  }, [props.get_all_zone_loading, props.edit_zone_status_loading, props.zone_delete_loading])
-  // console.log(props.get_all_zone_data)
+  }, [props.get_all_zone_loading, props.edit_zone_status_loading, props.zone_delete_loading, props.get_server_side_pagination_zone_loading, page, countPerPage])
+
+  console.log(props.get_all_zone_data)
+  console.log(page)
+  console.log(props.get_server_side_pagination_zone_data)
+  console.log(props.get_server_side_pagination_zone_search_data)
   return (
     <React.Fragment>
       <ToastContainer />
@@ -193,7 +207,7 @@ function Zone(props) {
                       </Button>
                     </Link>
                   </div>
-                  {props.get_all_zone_data ? (
+                  {/* {props.get_all_zone_data ? (
                     props.get_all_zone_data.length > 0 ? (
                       <DatatableTablesWorking
                         products={props.get_all_zone_data}
@@ -202,7 +216,26 @@ function Zone(props) {
                         key={props.get_all_zone_data?._id}
                       />
                     ) : null
-                  ) : null}
+                  ) : null} */}
+                  <div className='text-end'><input type='text' placeholder="Zone Name" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
+                  <DataTable
+                    columns={activeData}
+                    //data={props?.get_server_side_pagination_zone_data?.data}
+                    data={props.get_server_side_pagination_zone_search_data != null ? props.get_server_side_pagination_zone_search_data?.data : props?.get_server_side_pagination_zone_data?.data}
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    //paginationTotalRows={props?.get_server_side_pagination_zone_data?.count}
+                    paginationTotalRows={props.get_server_side_pagination_zone_search_data != null ? props.get_server_side_pagination_zone_search_data?.count : props.get_server_side_pagination_zone_data?.count}
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={{
+                      noRowsPerPage: true,
+                      //noRowsPerPage: false,
+
+                    }}
+
+                    onChangePage={(page) => setPage(page)}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -262,14 +295,26 @@ function Zone(props) {
 //export default Zone
 
 const mapStateToProps = state => {
-  const { get_all_zone_data, get_all_zone_error, get_all_zone_loading, edit_zone_status_loading, zone_delete_loading } =
+  const { get_all_zone_data,
+    get_all_zone_error,
+    get_all_zone_loading,
+    edit_zone_status_loading,
+    zone_delete_loading,
+    get_server_side_pagination_zone_data,
+    get_server_side_pagination_zone_loading,
+    get_server_side_pagination_zone_search_data,
+  } =
     state.Restaurant
   return {
     get_all_zone_data,
     get_all_zone_error,
     get_all_zone_loading,
     edit_zone_status_loading,
-    zone_delete_loading
+    zone_delete_loading,
+    get_server_side_pagination_zone_data,
+    get_server_side_pagination_zone_loading,
+    get_server_side_pagination_zone_search_data,
+
   }
 }
 
@@ -279,6 +324,9 @@ export default withRouter(
     zoneStatusEditAction,
     zoneStatusEditActionFresh,
     zoneDeleteAction,
-    zoneDeleteFresh
+    zoneDeleteFresh,
+    getServerSidePaginationZoneAction,
+    getServerSidePaginationZoneSearchAction,
+    getServerSidePaginationSearchZoneFresh
   })(Zone)
 )

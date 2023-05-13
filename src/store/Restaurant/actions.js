@@ -50,6 +50,10 @@ import {
   GET_CATEGORY_BY_ID_FRESH,
   ADD_BRANCH_FRESH,
   EDIT_BRANCH_FRESH,
+  SERVER_SIDE_PAGINATION_ZONE,
+  SERVER_SIDE_PAGINATION_ZONE_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_ZONE_FRESH
+
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -1604,3 +1608,71 @@ export const getCategoryByIdFresh = () => {
     })
   }
 }
+
+export const getServerSidePaginationZoneAction = (index, limit) => {
+  var url = process.env.REACT_APP_LOCALHOST + `/Zone/Search?page=${index}&limit=${limit}`;
+  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
+  const formData = {};
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    };
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ZONE,
+          payload: response.data,
+          status: "Success",
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ZONE,
+          status: "Failed",
+        });
+      });
+  };
+};
+
+export const getServerSidePaginationZoneSearchAction = (name) => {
+  console.log(name);
+  var url = process.env.REACT_APP_LOCALHOST + `/Zone/Search?zone_name=${name}`;
+  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=1&limit=2`;
+  console.log(url);
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    };
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ZONE_SEARCH,
+          payload: response.data,
+          status: "Success",
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ZONE_SEARCH,
+          status: "Failed",
+        });
+      });
+  };
+};
+
+export const getServerSidePaginationSearchZoneFresh = () => {
+  console.log("======= hello from getServerSidePaginationSearchZoneFresh =========");
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_ZONE_FRESH,
+      status: false,
+      payload: null
+    });
+};

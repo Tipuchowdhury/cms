@@ -50,7 +50,11 @@ import {
     EDIT_MENU_TIME_SLOT,
     EDIT_MENU_TIME_SLOT_FRESH,
     GET_CATEGORY_BY_ID,
-    GET_CATEGORY_BY_ID_FRESH
+    GET_CATEGORY_BY_ID_FRESH,
+
+    SERVER_SIDE_PAGINATION_ZONE,
+    SERVER_SIDE_PAGINATION_ZONE_SEARCH,
+    SERVER_SIDE_PAGINATION_SEARCH_ZONE_FRESH
 
 
 } from "./actionTypes"
@@ -145,6 +149,13 @@ const initialState = {
     get_category_by_id_data: null,
     get_category_by_id_error: null,
     get_category_by_id_loading: false,
+
+    get_server_side_pagination_zone_data: null,
+    get_server_side_pagination_zone_error: null,
+    get_server_side_pagination_zone_loading: false,
+
+    get_server_side_pagination_zone_search_data: null,
+    get_server_side_pagination_zone_search_loading: false,
 }
 
 const Restaurant = (state = initialState, action) => {
@@ -249,7 +260,8 @@ const Restaurant = (state = initialState, action) => {
                 add_zone_data: action.payload,
                 add_zone_error: null,
                 add_zone_loading: action.status,
-                get_all_zone_loading: false
+                //get_all_zone_loading: false
+                get_server_side_pagination_zone_loading: false
             }
             break;
 
@@ -572,6 +584,33 @@ const Restaurant = (state = initialState, action) => {
                 ...state,
                 get_category_by_id_data: action.payload,
                 get_category_by_id_loading: action.status
+            }
+            break;
+
+        case SERVER_SIDE_PAGINATION_ZONE:
+            state = {
+                ...state,
+                get_server_side_pagination_zone_data: action.payload,
+                get_server_side_pagination_zone_error: null,
+                get_server_side_pagination_zone_loading: action.status,
+
+            }
+            break;
+
+        case SERVER_SIDE_PAGINATION_ZONE_SEARCH:
+            state = {
+                ...state,
+                get_server_side_pagination_zone_search_data: action.payload,
+                get_server_side_pagination_zone_search_loading: action.status,
+
+            }
+            break;
+
+        case SERVER_SIDE_PAGINATION_SEARCH_ZONE_FRESH:
+            state = {
+                ...state,
+                get_server_side_pagination_zone_search_data: action.payload,
+                get_server_side_pagination_zone_search_loading: action.status,
             }
             break;
 

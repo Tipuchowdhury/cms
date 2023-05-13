@@ -10,7 +10,12 @@ import {
     CITY_DELETE,
     CITY_DELETE_FRESH,
     SERVER_SIDE_PAGINATION,
-    SERVER_SIDE_PAGINATION_FRESH
+    SERVER_SIDE_PAGINATION_FRESH,
+    SERVER_SIDE_PAGINATION_SEARCH,
+    SERVER_SIDE_PAGINATION_SEARCH_FRESH,
+
+
+    SERVER_SIDE_PAGINATION_ZONE
 
 } from "./actionTypes"
 import axios from "axios";
@@ -269,3 +274,48 @@ export const serverSidePaginationFresh = () => {
             status: false,
         });
 };
+
+
+export const getServerSidePaginationSearchAction = (name) => {
+    console.log(name);
+    var url = process.env.REACT_APP_LOCALHOST + `/City/Search?city_name=${name}`;
+    //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=1&limit=2`;
+    console.log(url);
+
+    return dispatch => {
+        console.log("=== Ia am here =====");
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+        };
+        axios
+            .get(url, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: SERVER_SIDE_PAGINATION_SEARCH,
+                    payload: response.data,
+                    status: "Success",
+                });
+            })
+            .catch(error => {
+                dispatch({
+                    type: SERVER_SIDE_PAGINATION_SEARCH,
+                    status: "Failed",
+                });
+            });
+    };
+};
+
+
+export const getServerSidePaginationSearchFresh = () => {
+    console.log("======= hello from getServerSidePaginationSearchFresh =========");
+    return dispatch =>
+        dispatch({
+            type: SERVER_SIDE_PAGINATION_SEARCH_FRESH,
+            status: false,
+            payload: null
+        });
+};
+
+
