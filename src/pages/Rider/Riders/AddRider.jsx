@@ -66,10 +66,14 @@ function AddRider(props) {
         first_name: location.state ? location.state.first_name : "",
         last_name: location.state ? location.state.last_name : "",
         mobile_number: location.state ? location.state.mobile_number : "",
+        email: location.state ? location.state.email : "",
         mac: location.state ? location.state.mac : "",
         imei: location.state ? location.state.imei : "",
         bkash_no: location.state ? location.state.bkash_no : "",
         nagad_no: location.state ? location.state.nagad_no : "",
+
+        otp: location.state ? location.state.otp : 0,
+        otp_expire_time: location.state ? location.state.otp_expire_time : "2023-05-15T07:19:23.9515226",
 
         password: location.state ? location.state.password : "",
         confirm_password: location.state ? location.state.confirm_password : "",
@@ -92,6 +96,9 @@ function AddRider(props) {
         house_nameplate: location.state ? location.state.house_nameplate : "",
 
         is_active: location.state ? location.state.is_active : true,
+        is_new: location.state ? location.state.is_new : true,
+        is_verified: location.state ? location.state.is_verified : true,
+        is_approve: location.state ? location.state.is_approve : false,
     })
 
 
@@ -378,6 +385,16 @@ function AddRider(props) {
                                         <div className="col-md-10">
                                             <input type="text" className="form-control" id="mobile_number" placeholder="Enter mobile name"
                                                 name="mobile_number" onChange={handleInputs} value={RiderInfo.mobile_number ?? ""} required
+                                            />
+                                        </div>
+                                    </Row>
+
+                                    <Row className="mb-3">
+                                        <label htmlFor="email" className="col-md-2 col-form-label" > Email
+                                        </label>
+                                        <div className="col-md-10">
+                                            <input type="text" className="form-control" id="email" placeholder="Enter email"
+                                                name="email" onChange={handleInputs} value={RiderInfo.email ?? ""}
                                             />
                                         </div>
                                     </Row>
