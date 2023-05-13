@@ -550,7 +550,7 @@ function AddMenu(props) {
                       type="text"
                       className="form-control"
                       id="name"
-                      placeholder="Enter menu name"
+                      placeholder="Enter menu description"
                       name="menu_description"
                       onChange={handleInputs}
                       value={info.menu_description ?? ""}
@@ -568,7 +568,8 @@ function AddMenu(props) {
                   </label>
                   <div className="col-md-10">
                     <input
-                      type="text"
+                      type="number"
+                      step={0.5}
                       className="form-control"
                       id="name"
                       placeholder="Enter menu price"
@@ -592,7 +593,7 @@ function AddMenu(props) {
                       type="text"
                       className="form-control"
                       id="name"
-                      placeholder="Enter menu price"
+                      placeholder="Enter pickup price"
                       name="pickup_menu_price"
                       onChange={handleInputs}
                       value={info.pickup_menu_price ?? ""}
@@ -613,7 +614,7 @@ function AddMenu(props) {
                       type="text"
                       className="form-control"
                       id="Variation_group_name"
-                      placeholder="Enter variation name"
+                      placeholder="Enter variation group name"
                       name="Variation_group_name"
                       onChange={handleInputs}
                       value={info.Variation_group_name ?? ""}
@@ -634,7 +635,7 @@ function AddMenu(props) {
                       type="text"
                       className="form-control"
                       id="Variation_grp_desc"
-                      placeholder="Enter variation name"
+                      placeholder="Enter variation description"
                       name="Variation_grp_desc"
                       onChange={handleInputs}
                       value={info.Variation_grp_desc ?? ""}
@@ -769,7 +770,7 @@ function AddMenu(props) {
                                     type="text"
                                     className="form-control"
                                     id="Variation_group_name"
-                                    placeholder="Enter variation name"
+                                    placeholder="Enter variation group name"
                                     name="variation_group_name"
                                     value={row.variation_group_name ?? ""}
                                     onChange={e => handleAddOnsCat(e, idx)}
@@ -787,7 +788,7 @@ function AddMenu(props) {
                                     type="text"
                                     className="form-control"
                                     id="Variation_grp_desc"
-                                    placeholder="Enter variation name"
+                                    placeholder="Enter variation description"
                                     name="variation_group_desc"
                                     value={row.variation_group_desc ?? ""}
                                     onChange={e => handleAddOnsCat(e, idx)}
@@ -1095,7 +1096,7 @@ function AddMenu(props) {
                       type="number"
                       className="form-control"
                       id="vat"
-                      placeholder="Enter vat amount"
+                      placeholder="Enter vat"
                       name="vat"
                       onChange={handleInputs}
                       value={info.vat ?? ""}
@@ -1116,7 +1117,7 @@ function AddMenu(props) {
                       type="number"
                       className="form-control"
                       id="sd"
-                      placeholder="Enter sd amount"
+                      placeholder="Enter sd"
                       name="sd"
                       onChange={handleInputs}
                       value={info.sd ?? ""}
