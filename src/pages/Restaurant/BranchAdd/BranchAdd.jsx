@@ -39,9 +39,9 @@ function BranchAdd(props) {
     // const map_value_for_edit = location.state?.location?.coordinates?.map((defaultProps) => Number(defaultProps.lng) + "," + Number(defaultProps.lat));
 
     const [state2, setState2] = useState({
-        location: location.state ? map_value_for_edit : `${defaultProps.lat},${defaultProps.lng}`,
-        lat: location.state ? map_value_for_edit[0] : 23.8103,
-        lng: location.state ? map_value_for_edit[1] : 90.4125,
+        location: location.state ? `${map_value_for_edit[1]},${map_value_for_edit[0]}` : `${defaultProps.lat},${defaultProps.lng}`,
+        lat: location.state ? map_value_for_edit[1] : 23.8103,
+        lng: location.state ? map_value_for_edit[0] : 90.4125,
     });
     const [selectedGroup, setselectedGroup] = useState(null);
     const restaurant_time_for_edit = location.state?.working_hours?.map((item) => ({
@@ -83,30 +83,6 @@ function BranchAdd(props) {
         cover_image: location.state ? location.state.cover_image : "",
     })
 
-    const [zoneInfo, setZoneInfo] = useState({
-        name: location.state ? location.state.name : undefined,
-        restaurant: location.state ? location.state.parent_restaurant_id : undefined,
-        phone_number: location.state ? location.state.phone_number : "",
-        zonal_admin: location.state ? location.state.zonal_admin : "",
-        address: location.state ? location.state.address : "",
-        cuisine: "",
-        location: undefined,
-        price_range: location.state ? location.state.price_range : "",
-        popularity_sort_value: location.state ? location.state.popularity_sort_value : 0,
-        is_take_pre_order: location.state ? location.state.is_take_pre_order.toString() : "",
-        is_veg: location.state ? location.state.is_veg.toString() : "",
-        is_popular: location.state ? location.state.is_popular.toString() : "",
-        is_delivery: location.state ? location.state.is_delivery.toString() : "",
-        is_pickup: location.state ? location.state.is_pickup.toString() : "",
-        is_dine: location.state ? location.state.is_dine.toString() : "",
-        commission: location.state ? location.state.commission : undefined,
-        minimum_order_value: location.state ? location.state.min_order_value : undefined,
-        delivery_time: location.state ? location.state.delivery_time : undefined,
-        pickup_time: location.state ? location.state.pickup_time : undefined,
-        email: location.state ? location.state.email : "",
-        link: location.state ? location.state.share_link : "",
-
-    })
 
 
     // get all restaurant
@@ -137,6 +113,8 @@ function BranchAdd(props) {
 
 
     const [selectedCuisine, setSelectedCuisine] = useState(cuisine_data_edit ? cuisine_data_edit : "");
+
+    console.log(selectedCuisine)
     const handleSelectCuisine = (e) => {
 
         setSelectedCuisine(e)
@@ -151,6 +129,31 @@ function BranchAdd(props) {
     function handleSelectGroup(selectedGroup) {
         setselectedGroup(selectedGroup);
     }
+
+    const [zoneInfo, setZoneInfo] = useState({
+        name: location.state ? location.state.name : undefined,
+        restaurant: location.state ? location.state.parent_restaurant_id : undefined,
+        phone_number: location.state ? location.state.phone_number : "",
+        zonal_admin: location.state ? location.state.zonal_admin : "",
+        address: location.state ? location.state.address : "",
+        cuisine: "",
+        location: undefined,
+        price_range: location.state ? location.state.price_range : "",
+        popularity_sort_value: location.state ? location.state.popularity_sort_value : 0,
+        is_take_pre_order: location.state ? location.state.is_take_pre_order.toString() : "",
+        is_veg: location.state ? location.state.is_veg.toString() : "",
+        is_popular: location.state ? location.state.is_popular.toString() : "",
+        is_delivery: location.state ? location.state.is_delivery.toString() : "",
+        is_pickup: location.state ? location.state.is_pickup.toString() : "",
+        is_dine: location.state ? location.state.is_dine.toString() : "",
+        commission: location.state ? location.state.commission : undefined,
+        minimum_order_value: location.state ? location.state.min_order_value : undefined,
+        delivery_time: location.state ? location.state.delivery_time : undefined,
+        pickup_time: location.state ? location.state.pickup_time : undefined,
+        email: location.state ? location.state.email : "",
+        link: location.state ? location.state.share_link : "",
+
+    })
 
     let name, value;
     const handleInputs = (e) => {

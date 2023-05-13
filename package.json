@@ -154,8 +154,10 @@
     "autoprefixer": "10.4.5"
   },
   "devDependencies": {
+    "@welldone-software/why-did-you-render": "^7.0.1",
     "eslint-config-standard-react": "^9.2.0",
     "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^2.1.1"
   }
 }

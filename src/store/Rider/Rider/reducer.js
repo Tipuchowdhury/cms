@@ -10,6 +10,8 @@ import {
   RIDER_DELETE_FRESH,
   RIDER_STATUS_EDIT,
   RIDER_STATUS_EDIT_FRESH,
+  RIDER_APPROVED_EDIT,
+  RIDER_APPROVED_EDIT_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -29,6 +31,9 @@ const initialState = {
 
   rider_status_edit_data: null,
   rider_status_edit_loading: false,
+
+  rider_approved_edit_data: null,
+  rider_approved_edit_loading: false,
 
   rider_delete_loading: false,
 }
@@ -97,6 +102,22 @@ const Rider = (state = initialState, action) => {
       state = {
         ...state,
         rider_status_edit_loading: action.status,
+      }
+      break
+
+    case RIDER_APPROVED_EDIT:
+      state = {
+        ...state,
+        rider_approved_edit_data: action.payload,
+        rider_approved_edit_loading: action.status,
+        get_all_rider_loading: false,
+      }
+      break
+
+    case RIDER_APPROVED_EDIT_FRESH:
+      state = {
+        ...state,
+        rider_approved_edit_loading: action.status,
       }
       break
 

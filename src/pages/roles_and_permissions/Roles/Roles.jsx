@@ -118,7 +118,6 @@ function Roles(props) {
         newPerm(row.permissions);
 
         toggleEditModal();
-
     }
 
     const newPerm = (nn) => {
@@ -130,6 +129,8 @@ function Roles(props) {
         const permission_data_edit = common_permissions ? common_permissions.map((item, key) => {
             return { label: item.module_name, value: item._id };
         }) : "";
+
+        setSelectedPermission(permission_data_edit);
 
     }
 

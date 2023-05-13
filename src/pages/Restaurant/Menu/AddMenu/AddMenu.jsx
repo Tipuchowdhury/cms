@@ -223,21 +223,42 @@ function AddMenu(props) {
   // }
 
   const [valueByID, setValue] = useState()
-  const checkHandlerAddOns = () => {
-    setIsCheckAddOns(!isCheckAddOns)
+  const checkHandlerAddOns = categoryIndex => {
+    const newCat = [...addNewCategory]
+    newCat[categoryIndex] = {
+      ...newCat[categoryIndex],
+      cat_is_multiple: !newCat[categoryIndex].cat_is_multiple,
+    }
+
+    setAddNewCategory(newCat)
+  }
+
+  const handleCatMaxChoice = (e, categoryIndex) => {
+    const newCat = [...addNewCategory]
+    newCat[categoryIndex] = {
+      ...newCat[categoryIndex],
+      cat_max_choice: e.target.value,
+    }
+
+    setAddNewCategory(newCat)
   }
 
   const [addOnsNew, setAddOnsNew] = useState([
     props?.get_category_by_id_data?.preset_add_ons,
   ])
 
-  const handleAddOnsCatNew = (e, index) => {
-    const updatedValue = addOnsNew.map((row, i) =>
-      index === i
-        ? Object.assign(row, { [e.target.name]: e.target.value })
-        : row
-    )
-    setAddOnsNew(updatedValue)
+  const handleAddOnsCatNew = (e, categoryIndex, addonIndex) => {
+    const newCat = [...addNewCategory]
+    newCat[categoryIndex] = {
+      ...newCat[categoryIndex],
+      add_ons: newCat[categoryIndex].add_ons.map((addOn, index) => {
+        return index === addonIndex
+          ? { ...addOn, [e.target.name]: e.target.value }
+          : addOn
+      }),
+    }
+
+    setAddNewCategory(newCat)
   }
 
   const handleRowDeleteNew = index => {
@@ -279,13 +300,19 @@ function AddMenu(props) {
     filteredTime.splice(index, 1)
     setAddOnUnderCategory(filteredTime)
   }
-  function handleAddRowNestedNew(add_on_category_id) {
+  function handleAddRowNestedNew(add_on_category_id, categoryIndex) {
     const addOnsTemplateNew = {
       add_on_category_id: add_on_category_id,
       add_on_name: "",
       add_on_price: "",
     }
-    setAddOnUnderCategory([...addOnUnderCategory, addOnsTemplateNew])
+    const newCat = [...addNewCategory]
+    newCat[categoryIndex] = {
+      ...newCat[categoryIndex],
+      add_ons: [...newCat[categoryIndex].add_ons, addOnsTemplateNew],
+    }
+
+    setAddNewCategory(newCat)
   }
 
   /*
@@ -523,7 +550,7 @@ function AddMenu(props) {
                       type="text"
                       className="form-control"
                       id="name"
-                      placeholder="Enter menu name"
+                      placeholder="Enter menu description"
                       name="menu_description"
                       onChange={handleInputs}
                       value={info.menu_description ?? ""}
@@ -541,7 +568,8 @@ function AddMenu(props) {
                   </label>
                   <div className="col-md-10">
                     <input
-                      type="text"
+                      type="number"
+                      step={0.5}
                       className="form-control"
                       id="name"
                       placeholder="Enter menu price"
@@ -565,7 +593,7 @@ function AddMenu(props) {
                       type="text"
                       className="form-control"
                       id="name"
-                      placeholder="Enter menu price"
+                      placeholder="Enter pickup price"
                       name="pickup_menu_price"
                       onChange={handleInputs}
                       value={info.pickup_menu_price ?? ""}
@@ -586,7 +614,7 @@ function AddMenu(props) {
                       type="text"
                       className="form-control"
                       id="Variation_group_name"
-                      placeholder="Enter variation name"
+                      placeholder="Enter variation group name"
                       name="Variation_group_name"
                       onChange={handleInputs}
                       value={info.Variation_group_name ?? ""}
@@ -607,7 +635,7 @@ function AddMenu(props) {
                       type="text"
                       className="form-control"
                       id="Variation_grp_desc"
-                      placeholder="Enter variation name"
+                      placeholder="Enter variation description"
                       name="Variation_grp_desc"
                       onChange={handleInputs}
                       value={info.Variation_grp_desc ?? ""}
@@ -742,7 +770,7 @@ function AddMenu(props) {
                                     type="text"
                                     className="form-control"
                                     id="Variation_group_name"
-                                    placeholder="Enter variation name"
+                                    placeholder="Enter variation group name"
                                     name="variation_group_name"
                                     value={row.variation_group_name ?? ""}
                                     onChange={e => handleAddOnsCat(e, idx)}
@@ -760,7 +788,7 @@ function AddMenu(props) {
                                     type="text"
                                     className="form-control"
                                     id="Variation_grp_desc"
-                                    placeholder="Enter variation name"
+                                    placeholder="Enter variation description"
                                     name="variation_group_desc"
                                     value={row.variation_group_desc ?? ""}
                                     onChange={e => handleAddOnsCat(e, idx)}
@@ -1068,7 +1096,7 @@ function AddMenu(props) {
                       type="number"
                       className="form-control"
                       id="vat"
-                      placeholder="Enter vat amount"
+                      placeholder="Enter vat"
                       name="vat"
                       onChange={handleInputs}
                       value={info.vat ?? ""}
@@ -1089,7 +1117,7 @@ function AddMenu(props) {
                       type="number"
                       className="form-control"
                       id="sd"
-                      placeholder="Enter sd amount"
+                      placeholder="Enter sd"
                       name="sd"
                       onChange={handleInputs}
                       value={info.sd ?? ""}
@@ -1233,11 +1261,14 @@ function AddMenu(props) {
                     />
                     Multiple Selection
                     {/* {addOnsNew?.map((row, idx) => ( */}
-                    {itemCat?.add_ons?.map((row, idx) => (
-                      <React.Fragment key={idx}>
-                        {console.log("idx :", idx)}
+                    {itemCat?.add_ons?.map((row, addon_index) => (
+                      <React.Fragment key={addon_index}>
+                        {console.log("addon_index :", addon_index)}
                         {console.log("itemCat :", itemCat)}
-                        <div data-repeater-list="group-a" id={"addr" + idx}>
+                        <div
+                          data-repeater-list="group-a"
+                          id={"addr" + addon_index}
+                        >
                           <div data-repeater-item className="row">
                             <div className="mb-3 col-lg-4">
                               <label className="form-label" htmlFor="startTime">
@@ -1250,7 +1281,9 @@ function AddMenu(props) {
                                 name="add_on_name"
                                 placeholder="Add-ons name"
                                 value={row.add_on_name}
-                                onChange={e => handleAddOnsCatNew(e, idx)}
+                                onChange={e =>
+                                  handleAddOnsCatNew(e, idx, addon_index)
+                                }
                               />
                             </div>
 
@@ -1265,7 +1298,9 @@ function AddMenu(props) {
                                 name="add_on_price"
                                 placeholder="Price"
                                 value={row.add_on_price}
-                                onChange={e => handleAddOnsCatNew(e, idx)}
+                                onChange={e =>
+                                  handleAddOnsCatNew(e, idx, addon_index)
+                                }
                               />
                             </div>
 
@@ -1278,14 +1313,14 @@ function AddMenu(props) {
                                 type="button"
                                 className="btn btn-primary"
                                 value="Delete"
-                                onClick={() => handleRowDeleteNew(idx)}
+                                onClick={() => handleRowDeleteNew(addon_index)}
                               />
                             </Col>
                           </div>
                         </div>
                       </React.Fragment>
                     ))}
-                    {addOnUnderCategory.map((row, idx) =>
+                    {/* {addOnUnderCategory.map((row, idx) =>
                       row.add_on_category_id == itemCat.add_on_category_id ? (
                         <React.Fragment key={idx}>
                           <div data-repeater-list="group-a" id={"addr" + idx}>
@@ -1345,10 +1380,10 @@ function AddMenu(props) {
                           </div>
                         </React.Fragment>
                       ) : null
-                    )}
+                    )} */}
                     <Button
                       onClick={() => {
-                        handleAddRowNestedNew(itemCat.add_on_category_id)
+                        handleAddRowNestedNew(itemCat.add_on_category_id, idx)
                       }}
                       color="success"
                       className="btn btn-success mt-3 mt-lg-0"

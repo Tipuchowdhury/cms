@@ -256,7 +256,7 @@ function Cuisine(props) {
 
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="username">Cuisine Name</label>
-                                <input type="text" className="form-control" id="username" placeholder="Enter city name" required value={name} onChange={(e) => setName(e.target.value)} />
+                                <input type="text" className="form-control" id="username" placeholder="Enter cuisine name" required value={name} onChange={(e) => setName(e.target.value)} />
                             </div>
                             <Row>
                                 <div className="col-sm-6 mb-3">
@@ -320,7 +320,7 @@ function Cuisine(props) {
 
                 {/* ============ edit modal start=============== */}
                 <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-                    <ModalHeader toggle={toggleEditModal}>Edit city name</ModalHeader>
+                    <ModalHeader toggle={toggleEditModal}>Edit cuisine name</ModalHeader>
                     <ModalBody>
                         <form className="mt-1" onSubmit={handleEditModal}>
 

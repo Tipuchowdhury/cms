@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import {
     getAllSystemOptionAction, getAllSystemOptionFresh, systemOptionUpdateAction,
-    systemOptionUpdateFresh
+    systemOptionUpdateFresh, getAllReasonAction
 } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
@@ -20,43 +20,13 @@ function SystemOption(props) {
 
     document.title = "System Option | Foodi"
 
-    const [modal, setModal] = useState(false);
-    const [editModal, setEditModal] = useState(false);
-    const [modalDel, setModalDel] = useState(false);
-    const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
-
-
-
-    const toggle = () => setModal(!modal);
-    const toggleEditModal = () => {
-
-        setEditModal(!editModal);
-    }
-    const toggleDel = () => setModalDel(!modalDel);
-    const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
-
-    const [addInfo, setAddInfo] = useState({
-        day: 0,
-        start_time: "",
-        end_time: "",
-        is_active: true,
-    });
-
-    // const [editInfo, setEditInfo] = useState([{ id: 0, name: "abir", type: "string" }, { id: 1, name: "nibir", type: "enum" }]);
-
-    const [editInfo, setEditInfo] = useState([]);
-
-
-
-    const [deleteItem, setDeleteItem] = useState();
-
+    const [systemOnOffReason, setSystemOnOffReason] = useState(false)
 
     let name, value, checked;
     const handleAddInputs = (e) => {
-        //console.log(e);
+
         name = e.target.name;
         value = e.target.value;
-        console.log(name, value);
 
         let updatedList = options.map(option => {
             if (option.name == name) {
@@ -67,45 +37,30 @@ function SystemOption(props) {
 
         setOptions(updatedList);
     }
-    //console.log(options);
 
     const handleAddCheckBox = (e) => {
 
         name = e.target.name;
         checked = e.target.checked;
+        let valueNum = checked ? 1 : 0;
+
+        if (name == "is_system_off" && checked == true) {
+            setSystemOnOffReason(true)
+        }
+
+        if (name == "is_system_off" && checked == false) {
+            setSystemOnOffReason(false)
+        }
+
+
+
         let updatedList = options.map(option => {
             if (option.name == name) {
-                return { ...option, value: checked };
+                return { ...option, value: valueNum };
             }
             return option;
         });
-
         setOptions(updatedList);
-
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        //props.addSystemOptionAction(addInfo);
-    }
-
-    const handleEditInputs = (e) => {
-
-        name = e.target.name;
-        value = e.target.value;
-        setEditInfo({ ...editInfo, [name]: value });
-    }
-
-
-    const handleEditSlider = (row) => {
-        setEditInfo(prevState => ({
-            _id: row._id,
-            day: row.day,
-            is_active: row.is_active,
-            start_time: moment({ hour: row.open_hour, minute: row.open_minute }).format('HH:mm'),
-            end_time: moment({ hour: row.close_hour, minute: row.close_minute }).format('HH:mm'),
-        }));
-        toggleEditModal();
     }
 
     const handleEdit = (data) => {
@@ -114,189 +69,36 @@ function SystemOption(props) {
         props.systemOptionUpdateAction(data);
     }
 
-    const handleStatusModal = (row) => {
-        setEditInfo(row);
-        toggleStatus();
-    }
-
-    const handleStatusUpdate = () => {
-
-
-        // props.systemOptionStatusUpdateAction({
-        //     ...editInfo,
-        //     is_active: !editInfo.is_active,
-        // })
-
-    }
-
-    const handleDeleteModal = (row) => {
-        setDeleteItem(row._id);
-        toggleDel();
-    }
-    const handleDelete = () => {
-
-        //props.systemOptionDeleteAction(deleteItem);
-    }
-
-
-
-
-    //const [abirInfo, setAbirInfo] = useState([]);
-    const receiveOptions = (idx, data) => {
-        //setEditInfo(data)
-
-        //setAbirInfo({ ...abirInfo, data });
-    }
-
-
-
-
-    // const actionRef = (cell, row) =>
-    //     <div style={{ display: "flex", gap: 10 }}>
-    //         <Button color="primary" className="btn btn-primary waves-effect waves-light" onClick={() => handleEditSlider(row)}
-    //         >
-    //             Edit
-    //         </Button>{" "}
-    //         <Button color="danger" className="btn btn-danger waves-effect waves-light"
-    //             onClick={() => handleDeleteModal(row)}
-    //         >
-    //             Delete
-    //         </Button>{" "}
-    //     </div>
-
-
-
-    // const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
-    //     className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
-
-    // const weekday = ['0', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Satuday', 'Sunday'];
-    // const mainday = (cell, row) => <>{weekday[row.day]}</>
-
-    // const activeData = [
-
-    //     {
-    //         dataField: "day",
-    //         text: "Day",
-    //         sort: true,
-    //         formatter: mainday
-    //     },
-    //     {
-    //         dataField: "",
-    //         text: "Status",
-    //         sort: true,
-    //         formatter: statusRef
-    //     },
-
-    //     {
-    //         //dataField: "hello",
-    //         text: "Action",
-    //         sort: true,
-    //         formatter: actionRef,
-    //     },
-
-    // ];
-    // const defaultSorted = [
-    //     {
-    //         dataField: "day",
-    //         order: "desc"
-    //     }
-    // ];
-
-    useEffect(() => {
-
-
-        if (props.get_all_system_option_loading == false) {
-            props.getAllSystemOptionAction();
-        }
-
-
-
-    }, []);
-
     const [options, setOptions] = useState([]);
-    const [enumData, setEnumData] = useState([]);
+
 
     useEffect(() => {
         setOptions(props.get_all_system_option_data)
 
+        props.get_all_system_option_data?.filter(obj => {
+            if (obj.type === 'on_off' && obj.name === 'is_system_off' && obj.value === "1") {
+                setSystemOnOffReason(true)
+            }
+        });
     }, [])
 
-    console.log(options);
-
     const enums = options?.filter(obj => {
-        return obj.type === 'enum';
+        return obj.type === 'enum' && obj.name != 'system_off_reason';
     });
+
 
     const newList = enums ? enums?.map((item, key) => {
         return { value: item.possible_value.split(", ") };
     }) : "";
 
-    // const newList = [
-    //     {
-    //         id: 0,
-    //         optionList: [
-    //             { value: "red", label: "Red" },
-    //             { value: "green", label: "Green" }
 
-    //         ]
-    //     },
-    //     {
-    //         id: 1,
-    //         optionList: [
-
-    //             { value: "green", label: "Green" },
-    //             { value: "yellow", label: "Yellow" }
-    //         ]
-    //     },
-    //     {
-    //         id: 2,
-    //         optionList: [
-    //             { value: "yellow", label: "Yellow" },
-    //             { value: "blue", label: "Blue" }
-    //         ]
-    //     },
-    //     {
-    //         id: 3,
-    //         optionList: [
-    //             { value: "blue", label: "Blue" },
-    //             { value: "white", label: "White" }
-    //         ]
-
-    //     }
-    // ]
-
-    // const optionList = [
-    //     { value: "red", label: "Red" },
-    //     { value: "green", label: "Green" },
-    //     { value: "yellow", label: "Yellow" },
-    //     { value: "blue", label: "Blue" },
-    //     { value: "white", label: "White" }
-    // ];
+    let vehicleTypes = [];
+    if (props.get_all_reason_data?.length > 0) {
+        vehicleTypes = props.get_all_reason_data;
+    }
 
 
 
-    // {
-    //     options ? <>{
-    //         options?.map(option => {
-    //             if (option.type == "enum") {
-    //                 setEnumData({ ...enumData, id: option._id, list: option.possible_value })
-    //             }
-    //         })
-    //     }</> : ''
-    // }
-
-    // let enumList = enumData?.map(data => {
-    //     if (data.name == name) {
-    //         return { ...data, value: value };
-    //     }
-    //     return data;
-    // });
-
-
-    // setEnumData(enumList);
-    // console.log(enums);
-    // console.log(newList[0]);
-    // console.log(enums[1]["possible_value"]);
 
 
 
@@ -304,30 +106,14 @@ function SystemOption(props) {
 
     useEffect(() => {
 
+        if (props.get_all_reason_loading == false) {
+            props.getAllReasonAction();
+        }
 
         if (props.get_all_system_option_loading == false) {
             props.getAllSystemOptionAction();
         }
 
-        if (props.add_system_option_loading === "Success") {
-            toast.success("Option Added Successfully");
-            toggle();
-            setAddInfo({
-                ...addInfo,
-                day: 0,
-                start_time: "",
-                end_time: "",
-                is_active: true,
-            });
-            // props.addSystemOptionFresh();
-        }
-
-
-        if (props.add_system_option_loading === "Failed") {
-            toast.error("Something went wrong");
-            // props.addSystemOptionFresh();
-
-        }
 
         if (props.system_option_edit_loading === "Success") {
             toast.success("Option Updated");
@@ -343,33 +129,9 @@ function SystemOption(props) {
             // props.getAllSystemOptionAction();
         }
 
-        if (props.system_option_status_edit_loading === "Success") {
-            toast.success("Option Status Updated");
-            toggleStatus();
-            // props.systemOptionStatusUpdateFresh();
+    }, [props.system_option_edit_loading, props.get_all_reason_loading]);
 
-        }
-
-        if (props.system_option_status_edit_loading === "Failed") {
-            toast.error("Something went wrong");
-            // toggleEditModal();
-            // props.systemOptionStatusUpdateFresh();
-
-        }
-
-
-
-        if (props.system_option_delete_loading === "Success") {
-
-            toast.success("Option Deleted");
-            toggleDel();
-            //  props.systemOptionDeleteFresh();
-        }
-
-    }, [props.add_system_option_loading, props.system_option_edit_loading,
-    props.system_option_delete_loading, props.system_option_status_edit_loading]);
-
-    let i = 0;
+    let i = 0, j = 0;
 
     return (
         <React.Fragment>
@@ -404,37 +166,45 @@ function SystemOption(props) {
                                                                 <input type="text" className="form-control" value={option.value} name={option.name} id={option.name} onChange={handleAddInputs} />
                                                                 : ''}
 
-                                                            {/* {option.type === "enum" ?
-                                                                <Select value={option.value} options={newList[i++]} isMulti={true} /> : ''} */}
+                                                            {option.type === "on_off" ?
+                                                                <input type="checkbox" className="form-check-input" id={option.name} checked={Number(option.value)} name={option.name} onChange={handleAddCheckBox} />
+                                                                : ''}
+
 
                                                             {option.type === "enum" ?
-                                                                <Input id={option.name} name={option.name} className="form-control" value={option.value} onChange={handleAddInputs} type="select" >
-                                                                    <option>Choose...</option>
-                                                                    {
-                                                                        newList[i++]?.value?.map(list => <option value={list}>{list.toUpperCase()}</option>)
-                                                                    }
+                                                                option.name === "system_off_reason" ? systemOnOffReason ?
+                                                                    <Input id={option.name} name={option.name} className="form-control" value={option.value} onChange={handleAddInputs} type="select" >
+                                                                        {
+                                                                            vehicleTypes.map(vehicleType => <option key={vehicleType._id} value={vehicleType._id}>{vehicleType.name}</option>)
+                                                                        }
+
+                                                                    </Input> :
+                                                                    <Input id={option.name} name={option.name} className="form-control" value={option.value} onChange={handleAddInputs} type="select" disabled >
+
+                                                                        {
+                                                                            vehicleTypes.map(vehicleType => <option key={vehicleType._id} value={vehicleType._id}>{vehicleType.name}</option>)
+                                                                        }
+
+                                                                    </Input> :
+                                                                    <Input id={option.name} name={option.name} className="form-control" value={option.value} onChange={handleAddInputs} type="select" >
+                                                                        <option value="">Choose...</option>
+                                                                        {
+                                                                            newList[i++]?.value?.map(list => <option value={list}>{list.toUpperCase()}</option>)
+                                                                        }
+
+                                                                    </Input> :
+                                                                ''}
 
 
-                                                                </Input> : ''}
-
-                                                            {option.type === "on_off" ?
-                                                                <input type="checkbox" className="form-check-input" id={option.name} checked={option.value} name={option.name} onChange={handleAddCheckBox} />
-                                                                : ''}
 
                                                         </div>
 
                                                         <div className="col-sm-2">
-                                                            {/* <Button color="primary" className='btn btn-sm'>
-                                                                Upate
-                                                            </Button> */}
+
 
                                                             <Button color="primary" className="btn btn-primary btn-sm waves-effect waves-light" onClick={() => handleEdit(option)}>Edit</Button>
                                                         </div>
 
-
-                                                        {/* <div className="col-sm-10">
-                                                            <input type="text" className="form-control" value={option.value} name={option.name} id={option.name} onChange={handleAddInputs} />
-                                                        </div> */}
                                                     </Row>
 
                                                 </form>
@@ -442,150 +212,12 @@ function SystemOption(props) {
                                         }
                                     </> : null : null}
 
-                                    {/* {
-                                        options.map(option => <p key={option._id} >{option.display_name}</p>)
-                                    } */}
-
-                                    {/* <form className="mt-1" onSubmit={handleEdit} >
-                                        <Row className="mb-3">
-                                            <div className="col-sm-4">
-                                                <label className="form-label" htmlFor="fg">Color Foreground:</label>
-                                            </div>
-
-
-                                            <div className="col-sm-8">
-                                                <input type="text" className="form-control" value="" name="fg" id="fg" onChange={handleAddInputs} />
-                                            </div>
-                                        </Row>
-
-                                    </form> */}
-
-
                                 </CardBody>
                             </Card>
                         </Col>
                     </Row>
                 </Container>
 
-                {/* ============ create modal start=============== */}
-                {/* <Modal isOpen={modal} toggle={toggle} centered>
-                    <ModalHeader toggle={toggle}>New SystemOption</ModalHeader>
-                    <ModalBody>
-                        <form className="mt-1" onSubmit={handleSubmit}>
-
-                            <Row className="mb-3 px-3">
-                                <label className="form-label" htmlFor="day">Day</label>
-                                <Input id="day" name="day" className="form-control" placeholder="select day" value={addInfo.day} onChange={handleAddInputs} type="select" >
-                                    <option>Choose...</option>
-                                    <option value="6">Saturday</option>
-                                    <option value="7">Sunday</option>
-                                    <option value="1">Monday</option>
-                                    <option value="2">Tuesday</option>
-                                    <option value="3">Wednesday</option>
-                                    <option value="4">Thursday</option>
-                                    <option value="5">Friday</option>
-                                </Input>
-                            </Row>
-                            <Row className="mb-3 px-3">
-                                <label className="form-label" htmlFor="start_time">Operation Start Time</label>
-                                <input type="time" id="start_time" className="form-control" name="start_time" value={addInfo.start_time} onChange={handleAddInputs} />
-                            </Row>
-                            <Row className="mb-3 px-3">
-                                <label className="form-label" htmlFor="end_time">Operation End Time</label>
-                                <input type="time" id="end_time" className="form-control" name="end_time" value={addInfo.end_time} onChange={handleAddInputs} />
-                            </Row>
-
-                            <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
-                                <Button color="secondary" onClick={toggle}>
-                                    Cancel
-                                </Button>{' '}
-                                <Button color="primary" type='submit'>
-                                    Submit
-                                </Button>
-
-                            </div>
-
-                        </form>
-                    </ModalBody>
-                </Modal> */}
-                {/* ============ create modal end=============== */}
-
-                {/* ============ edit modal start=============== */}
-                {/* <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-                    <ModalHeader >Edit SystemOption</ModalHeader>
-                    <ModalBody>
-                        <form className="mt-1" onSubmit={handleEdit} >
-
-                            <Row className="mb-3 px-3">
-                                <label className="form-label" htmlFor="day">Day</label>
-                                <Input id="day" name="day" className="form-control" placeholder="select day" value={editInfo.day} onChange={handleEditInputs} type="select" >
-                                    <option>Choose...</option>
-                                    <option value="6">Saturday</option>
-                                    <option value="7">Sunday</option>
-                                    <option value="1">Monday</option>
-                                    <option value="2">Tuesday</option>
-                                    <option value="3">Wednesday</option>
-                                    <option value="4">Thursday</option>
-                                    <option value="5">Friday</option>
-                                </Input>
-                            </Row>
-                            <Row className="mb-3 px-3">
-                                <label className="form-label" htmlFor="start_time">Operation Start Time</label>
-                                <input type="time" id="start_time" className="form-control" name="start_time" value={editInfo.start_time} onChange={handleEditInputs} />
-                            </Row>
-                            <Row className="mb-3 px-3">
-                                <label className="form-label" htmlFor="end_time">Operation End Time</label>
-                                <input type="time" id="end_time" className="form-control" name="end_time" value={editInfo.end_time} onChange={handleEditInputs} />
-                            </Row>
-
-                            <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
-                                <Button color="primary" type="submit">
-                                    Submit
-                                </Button>{' '}
-                                <Button color="secondary" onClick={toggleEditModal}>
-                                    Cancel
-                                </Button>
-                            </div>
-
-                        </form>
-                    </ModalBody>
-
-                </Modal> */}
-                {/* ============ edit modal ends=============== */}
-
-
-                {/* ============ delete modal starts=============== */}
-                {/* <Modal isOpen={modalDel} toggle={toggleDel} centered>
-                    <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
-                        <div className="icon-box">
-                            <i className="fa red-circle fa-trash" style={{ color: "red", fontSize: "40px" }}></i>
-                        </div>
-                        Are you sure?
-                    </ModalHeader>
-                    <ModalBody>Do you really want to delete these records? This process cannot be undone.</ModalBody>
-                    <ModalFooter>
-                        <Button color="secondary" onClick={toggleDel}>Cancel</Button>{' '}
-                        <Button color="danger" onClick={handleDelete}>Delete</Button>
-                    </ModalFooter>
-                </Modal> */}
-                {/* ============ delete modal ends=============== */}
-
-
-                {/* ============ status update modal starts=============== */}
-                {/* <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
-                    <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
-                        <div className="icon-box">
-                            <i className="fa fa-exclamation-circle" style={{ color: "#DCA218", fontSize: "40px" }}></i>
-                        </div>
-                        Are you sure?
-                    </ModalHeader>
-                    <ModalBody>Do you really want to update status these records? </ModalBody>
-                    <ModalFooter>
-                        <Button color="secondary" onClick={toggleStatus}>Cancel</Button>{' '}
-                        <Button color="primary" onClick={handleStatusUpdate}>Update</Button>
-                    </ModalFooter>
-                </Modal> */}
-                {/* ============ status update modal ends=============== */}
             </div>
         </React.Fragment>
     )
@@ -593,6 +225,12 @@ function SystemOption(props) {
 
 
 const mapStateToProps = state => {
+
+    const {
+        get_all_reason_loading,
+        get_all_reason_data,
+
+    } = state.Reason;
 
 
     const {
@@ -615,6 +253,10 @@ const mapStateToProps = state => {
     } = state.SystemOption;
 
     return {
+
+        get_all_reason_loading,
+        get_all_reason_data,
+
         add_system_option_data,
         add_system_option_error,
         add_system_option_loading,
@@ -636,7 +278,7 @@ const mapStateToProps = state => {
 export default withRouter(
     connect(mapStateToProps,
         {
-
+            getAllReasonAction,
             getAllSystemOptionAction,
             getAllSystemOptionFresh,
             systemOptionUpdateAction,

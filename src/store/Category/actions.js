@@ -17,12 +17,13 @@ import axios from "axios"
 var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
-export const addCategoryAction = (name, id, image) => {
+export const addCategoryAction = (name, id, restaurant, image) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Category/Post"
 
   const dataObject = {
     _id: id,
     category_name: name,
+    restaurant_id: restaurant,
     image: image,
   }
 
@@ -103,12 +104,13 @@ export const getAllCategoryFresh = () => {
   }
 }
 
-export const categoryNameEditAction = (name, id, image, is_active) => {
+export const categoryNameEditAction = (name, id, restaurant, image, is_active) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Category/Put"
 
   const dataObject = {
     _id: id,
     category_name: name,
+    restaurant_id: restaurant,
     image: image,
     is_active: is_active,
   }
@@ -153,11 +155,12 @@ export const categoryNameEditFresh = () => {
   }
 }
 
-export const categoryStatusEditAction = (name, id, image, is_active) => {
+export const categoryStatusEditAction = (name, id, restaurant, image, is_active) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Category/Put"
   const dataObject = {
     _id: id,
     category_name: name,
+    restaurant_id: restaurant,
     image: image,
     is_active: !(is_active),
   }

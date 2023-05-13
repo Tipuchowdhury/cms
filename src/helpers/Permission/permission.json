@@ -1,0 +1,450 @@
+[
+    {
+        "id": 1,
+        "permission_name": "city-create"
+    },
+    {
+        "id": 2,
+        "permission_name": "city-read"
+    },
+    {
+        "id": 3,
+        "permission_name": "city-edit"
+    },
+    {
+        "id": 4,
+        "permission_name": "city-delete"
+    },
+    {
+        "id": 5,
+        "permission_name": "zone-create"
+    },
+    {
+        "id": 6,
+        "permission_name": "zone-read"
+    },
+    {
+        "id": 7,
+        "permission_name": "zone-edit"
+    },
+    {
+        "id": 8,
+        "permission_name": "zone-delete"
+    },
+    {
+        "id": 9,
+        "permission_name": "user-create"
+    },
+    {
+        "id": 10,
+        "permission_name": "user-read"
+    },
+    {
+        "id": 11,
+        "permission_name": "user-edit"
+    },
+    {
+        "id": 12,
+        "permission_name": "user-delete"
+    },
+    {
+        "id": 13,
+        "permission_name": "customer-create"
+    },
+    {
+        "id": 14,
+        "permission_name": "customer-read"
+    },
+    {
+        "id": 15,
+        "permission_name": "customer-edit"
+    },
+    {
+        "id": 16,
+        "permission_name": "customer-delete"
+    },
+    {
+        "id": 17,
+        "permission_name": "vehicleType-create"
+    },
+    {
+        "id": 18,
+        "permission_name": "vehicleType-read"
+    },
+    {
+        "id": 19,
+        "permission_name": "vehicleType-edit"
+    },
+    {
+        "id": 20,
+        "permission_name": "vehicleType-delete"
+    },
+    {
+        "id": 21,
+        "permission_name": "rider-create"
+    },
+    {
+        "id": 22,
+        "permission_name": "rider-read"
+    },
+    {
+        "id": 23,
+        "permission_name": "rider-edit"
+    },
+    {
+        "id": 24,
+        "permission_name": "rider-delete"
+    },
+    {
+        "id": 25,
+        "permission_name": "subscriptionType-create"
+    },
+    {
+        "id": 26,
+        "permission_name": "subscriptionType-read"
+    },
+    {
+        "id": 27,
+        "permission_name": "subscriptionType-edit"
+    },
+    {
+        "id": 28,
+        "permission_name": "subscriptionType-delete"
+    },
+    {
+        "id": 29,
+        "permission_name": "cuisine-create"
+    },
+    {
+        "id": 30,
+        "permission_name": "cuisine-read"
+    },
+    {
+        "id": 31,
+        "permission_name": "cuisine-edit"
+    },
+    {
+        "id": 32,
+        "permission_name": "cuisine-delete"
+    },
+    {
+        "id": 33,
+        "permission_name": "restaurant-create"
+    },
+    {
+        "id": 34,
+        "permission_name": "restaurant-read"
+    },
+    {
+        "id": 35,
+        "permission_name": "restaurant-edit"
+    },
+    {
+        "id": 36,
+        "permission_name": "restaurant-delete"
+    },
+    {
+        "id": 37,
+        "permission_name": "branchAttribute-create"
+    },
+    {
+        "id": 38,
+        "permission_name": "branchAttribute-read"
+    },
+    {
+        "id": 39,
+        "permission_name": "branchAttribute-edit"
+    },
+    {
+        "id": 40,
+        "permission_name": "branchAttribute-delete"
+    },
+    {
+        "id": 41,
+        "permission_name": "category-create"
+    },
+    {
+        "id": 42,
+        "permission_name": "category-read"
+    },
+    {
+        "id": 43,
+        "permission_name": "category-edit"
+    },
+    {
+        "id": 44,
+        "permission_name": "category-delete"
+    },
+    {
+        "id": 45,
+        "permission_name": "menu-create"
+    },
+    {
+        "id": 46,
+        "permission_name": "menu-read"
+    },
+    {
+        "id": 47,
+        "permission_name": "menu-edit"
+    },
+    {
+        "id": 48,
+        "permission_name": "menu-delete"
+    },
+    {
+        "id": 49,
+        "permission_name": "addOnsCategory-create"
+    },
+    {
+        "id": 50,
+        "permission_name": "addOnsCategory-read"
+    },
+    {
+        "id": 51,
+        "permission_name": "addOnsCategory-edit"
+    },
+    {
+        "id": 52,
+        "permission_name": "addOnsCategory-delete"
+    },
+    {
+        "id": 49,
+        "permission_name": "menuTimeSlot-create"
+    },
+    {
+        "id": 50,
+        "permission_name": "menuTimeSlot-read"
+    },
+    {
+        "id": 51,
+        "permission_name": "menuTimeSlot-edit"
+    },
+    {
+        "id": 52,
+        "permission_name": "menuTimeSlot-delete"
+    },
+    {
+        "id": 53,
+        "permission_name": "branch-create"
+    },
+    {
+        "id": 54,
+        "permission_name": "branch-read"
+    },
+    {
+        "id": 55,
+        "permission_name": "branch-edit"
+    },
+    {
+        "id": 56,
+        "permission_name": "branch-delete"
+    },
+    {
+        "id": 57,
+        "permission_name": "campaign-create"
+    },
+    {
+        "id": 58,
+        "permission_name": "campaign-read"
+    },
+    {
+        "id": 59,
+        "permission_name": "campaign-edit"
+    },
+    {
+        "id": 60,
+        "permission_name": "campaign-delete"
+    },
+    {
+        "id": 61,
+        "permission_name": "coupon-create"
+    },
+    {
+        "id": 62,
+        "permission_name": "coupon-read"
+    },
+    {
+        "id": 63,
+        "permission_name": "coupon-edit"
+    },
+    {
+        "id": 64,
+        "permission_name": "coupon-delete"
+    },
+    {
+        "id": 65,
+        "permission_name": "rewardPointSettings-create"
+    },
+    {
+        "id": 66,
+        "permission_name": "rewardPointSettings-read"
+    },
+    {
+        "id": 67,
+        "permission_name": "rewardPointSettings-edit"
+    },
+    {
+        "id": 68,
+        "permission_name": "rewardPointSettings-delete"
+    },
+    {
+        "id": 69,
+        "permission_name": "voucherSetting-create"
+    },
+    {
+        "id": 70,
+        "permission_name": "voucherSetting-read"
+    },
+    {
+        "id": 71,
+        "permission_name": "voucherSetting-edit"
+    },
+    {
+        "id": 72,
+        "permission_name": "voucherSetting-delete"
+    },
+    {
+        "id": 73,
+        "permission_name": "notification-create"
+    },
+    {
+        "id": 74,
+        "permission_name": "notification-read"
+    },
+    {
+        "id": 75,
+        "permission_name": "notification-edit"
+    },
+    {
+        "id": 76,
+        "permission_name": "notification-delete"
+    },
+    {
+        "id": 77,
+        "permission_name": "popUpBanner-create"
+    },
+    {
+        "id": 78,
+        "permission_name": "popUpBanner-read"
+    },
+    {
+        "id": 79,
+        "permission_name": "popUpBanner-edit"
+    },
+    {
+        "id": 80,
+        "permission_name": "popUpBanner-delete"
+    },
+    {
+        "id": 81,
+        "permission_name": "review&Ratings-create"
+    },
+    {
+        "id": 82,
+        "permission_name": "review&Ratings-read"
+    },
+    {
+        "id": 83,
+        "permission_name": "review&Ratings-edit"
+    },
+    {
+        "id": 84,
+        "permission_name": "review&Ratings-delete"
+    },
+    {
+        "id": 85,
+        "permission_name": "systemOnOffReason-create"
+    },
+    {
+        "id": 86,
+        "permission_name": "systemOnOffReason-read"
+    },
+    {
+        "id": 87,
+        "permission_name": "systemOnOffReason-edit"
+    },
+    {
+        "id": 88,
+        "permission_name": "systemOnOffReason-delete"
+    },
+    {
+        "id": 89,
+        "permission_name": "systemOperationTimeSlot-create"
+    },
+    {
+        "id": 90,
+        "permission_name": "systemOperationTimeSlot-read"
+    },
+    {
+        "id": 91,
+        "permission_name": "systemOperationTimeSlot-edit"
+    },
+    {
+        "id": 92,
+        "permission_name": "systemOperationTimeSlot-delete"
+    },
+    {
+        "id": 93,
+        "permission_name": "systemOption-create"
+    },
+    {
+        "id": 94,
+        "permission_name": "systemOption-read"
+    },
+    {
+        "id": 95,
+        "permission_name": "systemOption-edit"
+    },
+    {
+        "id": 96,
+        "permission_name": "systemOption-delete"
+    },
+    {
+        "id": 97,
+        "permission_name": "permissions-create"
+    },
+    {
+        "id": 98,
+        "permission_name": "permissions-read"
+    },
+    {
+        "id": 99,
+        "permission_name": "permissions-edit"
+    },
+    {
+        "id": 100,
+        "permission_name": "permissions-delete"
+    },
+    {
+        "id": 101,
+        "permission_name": "roles-create"
+    },
+    {
+        "id": 102,
+        "permission_name": "roles-read"
+    },
+    {
+        "id": 103,
+        "permission_name": "roles-edit"
+    },
+    {
+        "id": 104,
+        "permission_name": "roles-delete"
+    },
+    {
+        "id": 105,
+        "permission_name": "promotion-create"
+    },
+    {
+        "id": 106,
+        "permission_name": "promotion-read"
+    },
+    {
+        "id": 107,
+        "permission_name": "promotion-edit"
+    },
+    {
+        "id": 108,
+        "permission_name": "promotion-delete"
+    }
+]
