@@ -55,8 +55,6 @@ function Slider(props) {
     const [deleteItem, setDeleteItem] = useState();
 
     const [newSelectedRestaurant, setNewSelectedRestaurant] = useState([]);
-    const [restaurant, setRestaurant] = useState([]);
-
 
 
     const [selectedRestaurant, setSelectedRestaurant] = useState([]);
