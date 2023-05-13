@@ -6,13 +6,31 @@ import { v4 as uuidv4 } from "uuid";
 var token = JSON.parse(localStorage.getItem("jwt"));
 
 
-export const addPermissionAction = (addData) => {
+export const addPermissionAction = (addData, routes) => {
     var url = process.env.REACT_APP_LOCALHOST + "/Permission/Post";
 
+    // console.log(routes);
+
     const val = uuidv4();
+
+    const data =
+        routes?.length > 0
+            ? routes.map(item => {
+                const route_id = uuidv4()
+                return {
+                    _id: route_id,
+                    route: item.route,
+                    permission_id: val,
+                }
+            })
+            : null
+
+    // console.log(data);
+
     const formData = {
         _id: val,
-        ...addData
+        ...addData,
+        routes: data
     };
     // console.log(formData);
     return dispatch => {
@@ -92,11 +110,23 @@ export const getAllPermissionFresh = () => {
 };
 
 
-export const permissionUpdateAction = (editData) => {
+export const permissionUpdateAction = (editData, routes) => {
     // console.log(editData);
 
     var url = process.env.REACT_APP_LOCALHOST + "/Permission/Put";
-    const formData = editData;
+
+    const data =
+        routes?.length > 0
+            ? routes.map(item => {
+                const route_id = uuidv4()
+                return {
+                    _id: route_id,
+                    route: item.route,
+                    permission_id: editData._id,
+                }
+            })
+            : null
+    const formData = { ...editData, routes: data };
     return dispatch => {
         const headers = {
             "Content-Type": "application/json",

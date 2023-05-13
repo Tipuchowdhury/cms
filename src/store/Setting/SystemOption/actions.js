@@ -106,7 +106,7 @@ export const getAllSystemOptionFresh = () => {
 };
 
 export const systemOptionUpdateAction = (editData) => {
-    console.log(editData);
+    // console.log(editData);
 
     var url = process.env.REACT_APP_LOCALHOST + "/SystemOption/Put";
 

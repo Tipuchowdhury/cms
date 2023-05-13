@@ -28,12 +28,12 @@ function VehicleTypes(props) {
     const toggleDel = () => setModalDel(!modalDel);
     const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
 
-    const [addImages, setAddImages] = useState({
-        image: "",
-    })
-    const [editImages, setEditImages] = useState({
-        image: "",
-    })
+    // const [addImages, setAddImages] = useState({
+    //     image: "",
+    // })
+    // const [editImages, setEditImages] = useState({
+    //     image: "",
+    // })
 
     const [addInfo, setAddInfo] = useState({
         type: "",
@@ -60,7 +60,7 @@ function VehicleTypes(props) {
             maximum_no_of_received_order_at_a_time: row.maximum_no_of_received_order_at_a_time,
             is_active: row.is_active,
         }));
-        setEditImages({ ...editImages, image: row.image })
+        // setEditImages({ ...editImages, image: row.image })
 
         toggleEditModal();
     }
@@ -78,29 +78,25 @@ function VehicleTypes(props) {
         setAddInfo({ ...addInfo, [name]: value });
     }
 
-    const handleAddFile = (e) => {
-        // setAddInfo({
-        //     ...addInfo,
-        //     image: e.target.value,
-        // });
-        name = e.target.name
-        value = e.target.files[0]
-        setAddInfo({ ...addInfo, [name]: value })
-        const reader = new FileReader()
+    // const handleAddFile = (e) => {
+    //     name = e.target.name
+    //     value = e.target.files[0]
+    //     setAddInfo({ ...addInfo, [name]: value })
+    //     const reader = new FileReader()
 
-        reader.onload = () => {
-            setAddImages({ ...addImages, [name]: reader.result })
-        }
+    //     reader.onload = () => {
+    //         setAddImages({ ...addImages, [name]: reader.result })
+    //     }
 
-        reader.readAsDataURL(value)
-    }
+    //     reader.readAsDataURL(value)
+    // }
 
-    const handleAddCheckBox = (e) => {
-        // console.log(e);
-        name = e.target.name;
-        checked = e.target.checked;
-        setAddInfo({ ...addInfo, [name]: checked });
-    }
+    // const handleAddCheckBox = (e) => {
+    //     name = e.target.name;
+    //     checked = e.target.checked;
+    //     setAddInfo({ ...addInfo, [name]: checked });
+    // }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const id = uuidv4()
@@ -109,36 +105,30 @@ function VehicleTypes(props) {
 
 
     const handleEditInputs = (e) => {
-        // console.log(e);
         name = e.target.name;
         value = e.target.value;
         setEditInfo({ ...editInfo, [name]: value });
     }
 
-    const handleEditFile = (e) => {
-        // setEditInfo({
-        //     ...editInfo,
-        //     image: e.target.value,
-        // });
+    // const handleEditFile = (e) => {
 
-        name = e.target.name
-        value = e.target.files[0]
-        setEditInfo({ ...editInfo, [name]: value })
-        const reader2 = new FileReader()
+    //     name = e.target.name
+    //     value = e.target.files[0]
+    //     setEditInfo({ ...editInfo, [name]: value })
+    //     const reader2 = new FileReader()
 
-        reader2.onload = () => {
-            setEditImages({ ...editImages, [name]: reader2.result })
-        }
+    //     reader2.onload = () => {
+    //         setEditImages({ ...editImages, [name]: reader2.result })
+    //     }
 
-        reader2.readAsDataURL(value)
-    }
+    //     reader2.readAsDataURL(value)
+    // }
 
-    const handleEditCheckBox = (e) => {
-        // console.log(e);
-        name = e.target.name;
-        checked = e.target.checked;
-        setEditInfo({ ...editInfo, [name]: checked });
-    }
+    // const handleEditCheckBox = (e) => {
+    //     name = e.target.name;
+    //     checked = e.target.checked;
+    //     setEditInfo({ ...editInfo, [name]: checked });
+    // }
 
     const handleEditSubmit = (e) => {
         e.preventDefault();
@@ -151,21 +141,18 @@ function VehicleTypes(props) {
     }
 
     const handleStatusUpdate = () => {
-
-        // console.log(editInfo);
         props.vehicleTypeStatusEditAction({
             ...editInfo,
             is_active: !editInfo.is_active,
         })
-
     }
 
     const handleDeleteModal = (row) => {
         setDeleteItem(row._id);
         toggleDel();
     }
-    const handleDelete = () => {
 
+    const handleDelete = () => {
         props.vehicleTypeDeleteAction(deleteItem);
     }
 
@@ -239,7 +226,7 @@ function VehicleTypes(props) {
                 is_active: true,
             });
 
-            setAddImages("");
+            // setAddImages("");
             props.addVehicleTypeFresh();
         }
 

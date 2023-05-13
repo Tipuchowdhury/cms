@@ -55,7 +55,6 @@ function Slider(props) {
     const [deleteItem, setDeleteItem] = useState();
 
     const [newSelectedRestaurant, setNewSelectedRestaurant] = useState([]);
-    const [restaurant, setRestaurant] = useState([]);
 
 
     const [selectedRestaurant, setSelectedRestaurant] = useState([]);
@@ -160,7 +159,7 @@ function Slider(props) {
             is_active: row.is_active,
         }));
 
-        setRestaurant(row.restaurants)
+        // setRestaurant(row.restaurants)
         newRest(row.restaurants);
 
         toggleEditModal();
