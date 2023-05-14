@@ -151,7 +151,7 @@ function BranchAdd(props) {
         delivery_time: location.state ? location.state.delivery_time : undefined,
         pickup_time: location.state ? location.state.pickup_time : undefined,
         email: location.state ? location.state.email : "",
-        link: location.state ? location.state.share_link : "",
+        share_link: "",
 
     })
 
@@ -454,17 +454,17 @@ function BranchAdd(props) {
                                     </Row>
                                 )}
 
-                                <Row className="mb-3">
+                                {/* <Row className="mb-3">
                                     <label
-                                        htmlFor="example-text-input"
+                                        htmlFor="share_link"
                                         className="col-md-2 col-form-label"
                                     >
                                         Link
                                     </label>
                                     <div className="col-md-10">
-                                        <input type="text" className="form-control" id="city" placeholder="Enter address" name="link" value={zoneInfo.link} onChange={handleInputs} />
+                                        <input type="text" className="form-control" id="share_link" placeholder="Enter share link" name="share_link" value={zoneInfo.share_link} onChange={handleInputs} />
                                     </div>
-                                </Row>
+                                </Row> */}
 
 
                                 <Row className="mb-3">
@@ -517,9 +517,9 @@ function BranchAdd(props) {
                                                 className="btn-check"
                                                 id="btnradio4"
                                                 autoComplete="off"
-                                                name="price_range" onChange={handleInputs} value="high"
+                                                name="price_range" onChange={handleInputs} value="৳৳৳"
                                                 //checked={zoneInfo.price_range == "high"}
-                                                checked={zoneInfo.price_range == "high" ? "high" : ""}
+                                                checked={zoneInfo.price_range == "৳৳৳" ? "৳৳৳" : ""}
                                             />
                                             <label
                                                 className="btn btn-outline-secondary"
@@ -531,11 +531,11 @@ function BranchAdd(props) {
                                             <input
                                                 type="radio"
                                                 className="btn-check"
-                                                name="price_range" onChange={handleInputs} value="medium"
+                                                name="price_range" onChange={handleInputs} value="৳৳"
                                                 id="btnradio5"
                                                 autoComplete="off"
                                                 //checked={zoneInfo.price_range == "medium"}
-                                                checked={zoneInfo.price_range == "medium" ? "medium" : ""}
+                                                checked={zoneInfo.price_range == "৳৳" ? "৳৳" : ""}
                                             />
                                             <label
                                                 className="btn btn-outline-secondary"
@@ -547,11 +547,11 @@ function BranchAdd(props) {
                                             <input
                                                 type="radio"
                                                 className="btn-check"
-                                                name="price_range" onChange={handleInputs} value="low"
+                                                name="price_range" onChange={handleInputs} value="৳"
                                                 id="btnradio6"
                                                 autoComplete="off"
                                                 //checked={zoneInfo.price_range == "low"}
-                                                checked={zoneInfo.price_range == "low" ? "low" : ""}
+                                                checked={zoneInfo.price_range == "৳" ? "৳" : ""}
                                             />
                                             <label
                                                 className="btn btn-outline-secondary"

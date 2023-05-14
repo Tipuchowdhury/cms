@@ -137,7 +137,7 @@ export const riderEditAction = (id, data, selectedZone) => {
     ...data,
     zones: zone,
   }
-  // console.log(formData)
+  console.log(dataObject)
   const formData = convertToFormData(dataObject)
 
   return dispatch => {
