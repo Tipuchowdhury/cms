@@ -24,7 +24,7 @@ import {
   getAllCuisneAction,
   // getAllAdminUsersAction, //TODO: change it to normal customer
   getAllRestaurantAction,
-  // TODO: Get Menu Action
+  getAllRestaurantMenuItemAction,
   getAllZoneAction,
   getAllCustomerAction,
 } from "store/actions"
@@ -58,9 +58,10 @@ function AddCoupon(props) {
       label: "Category Wise",
       value: "category_wise",
     },
-    //   {
-    //   label: "Menu Item Wise", value: "menu_item_wise"
-    // },
+    {
+      label: "Menu Item Wise",
+      value: "menu_item_wise"
+    },
     {
       label: "Subscription Type Wise",
       value: "subscription_wise",
@@ -168,7 +169,7 @@ function AddCoupon(props) {
     }))
   }
 
-  console.log("cuisineData", cuisineData)
+  // console.log("cuisineData", cuisineData)
 
   //select multiple user
   const common_user = props?.get_all_customer_data?.filter(elem =>
@@ -224,6 +225,34 @@ function AddCoupon(props) {
   if (props.get_all_zone_data?.length > 0) {
     zoneData = props.get_all_zone_data?.map((item, key) => ({
       label: item.name,
+      value: item._id,
+    }))
+  }
+
+  const common_menu = props?.get_all_menu_data?.filter(elem =>
+    location?.state?.menu_items?.find(({ menu_item_id }) => elem._id === menu_item_id)
+  )
+
+  const menu_data_edit = common_menu
+    ? common_menu?.map((item, key) => {
+      return {
+        label: item.menu_name,
+        value: item._id,
+      }
+    })
+    : ""
+
+  const [selectedMenuItem, setSelectedMenuItem] = useState(
+    menu_data_edit ? menu_data_edit : ""
+  )
+  const handleSelectMenu = e => {
+    setSelectedMenuItem(e)
+  }
+
+  let menuData = undefined
+  if (props.get_all_menu_data?.length > 0) {
+    menuData = props.get_all_menu_data?.map((item, key) => ({
+      label: item.menu_name,
       value: item._id,
     }))
   }
@@ -381,6 +410,7 @@ function AddCoupon(props) {
       selectedSubType,
       selectedUser,
       selectedZone,
+      selectedMenuItem,
       gradual
     )
   }
@@ -399,6 +429,7 @@ function AddCoupon(props) {
       selectedSubType,
       selectedUser,
       selectedZone,
+      selectedMenuItem,
       gradual
     )
   }
@@ -407,6 +438,10 @@ function AddCoupon(props) {
   useEffect(() => {
     if (props.get_all_branch_loading == false) {
       props.getAllBranchAction()
+    }
+
+    if (props.get_all_menu_loading == false) {
+      props.getAllRestaurantMenuItemAction()
     }
 
     if (props.get_all_category_loading == false) {
@@ -452,6 +487,7 @@ function AddCoupon(props) {
     props.get_all_customer_loading,
     props.get_all_subscription_type_loading,
     props.get_all_category_loading,
+    props.get_all_menu_loading,
   ])
 
   console.log(props.get_all_branch_data)
@@ -680,6 +716,27 @@ function AddCoupon(props) {
                           value={selectedZone}
                           onChange={handleSelectZone}
                           options={zoneData}
+                          isMulti={true}
+                        />
+                      </div>
+                    </Row>
+                  ) : (
+                    ""
+                  )}
+
+                  {selectedCouponType?.value == "menu_item_wise" ? (
+                    <Row className="mb-3">
+                      <label
+                        htmlFor="example-text-input"
+                        className="col-md-2 col-form-label"
+                      >
+                        Menu Item
+                      </label>
+                      <div className="col-md-10">
+                        <Select
+                          value={selectedMenuItem}
+                          onChange={handleSelectMenu}
+                          options={menuData}
                           isMulti={true}
                         />
                       </div>
@@ -1176,6 +1233,8 @@ const mapStateToProps = state => {
     get_all_zone_data,
     get_all_zone_error,
     get_all_zone_loading,
+    get_all_menu_data,
+    get_all_menu_loading,
   } = state.Restaurant
   const {
     get_all_category_data,
@@ -1197,6 +1256,8 @@ const mapStateToProps = state => {
 
   const { add_coupon_loading, coupon_edit_loading } = state.Coupon
   return {
+    get_all_menu_data,
+    get_all_menu_loading,
     get_all_branch_loading,
     get_all_branch_data,
     add_coupon_loading,
@@ -1221,6 +1282,7 @@ const mapStateToProps = state => {
 
 export default withRouter(
   connect(mapStateToProps, {
+    getAllRestaurantMenuItemAction,
     getAllBranchAction,
     addCouponAction,
     addCouponFresh,

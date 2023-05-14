@@ -328,7 +328,7 @@ export const branchAddAction = (
     delivery_charge: zoneInfo.delivery_time,
   }
 
-  console.log(dataObject)
+  //console.log(dataObject)
   const formData = convertToFormData(dataObject)
 
   formData.append("location.coordinates[0]", Number(lng))
