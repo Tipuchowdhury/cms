@@ -29,6 +29,7 @@ export const addCouponAction = (
   selectedSubType,
   selectedUser,
   selectedZone,
+  selectedMenu,
   gradual
 ) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Coupon/Post"
@@ -116,6 +117,18 @@ export const addCouponAction = (
       })
       : []
 
+  selectedMenu =
+    selectedMenu?.length > 0
+      ? selectedMenu.map(item => {
+        const val = uuidv4()
+        return {
+          _id: val,
+          menu_item_id: item.value,
+          coupon_id: id,
+        }
+      })
+      : []
+
   gradual =
     gradual?.length > 0
       ? gradual.map(item => {
@@ -151,7 +164,7 @@ export const addCouponAction = (
     categories: selectedCategory,
     cuisines: selectedCuisine,
     customers: selectedUser,
-    menu_items: [],
+    menu_items: selectedMenu,
     subscription_types: selectedSubType,
     zones: selectedZone,
     gradual_informations: gradual,
@@ -242,6 +255,7 @@ export const couponEditAction = (id, data, selectedCouponType,
   selectedSubType,
   selectedUser,
   selectedZone,
+  selectedMenu,
   gradual) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Coupon/Put"
   const selectedBranchData =
@@ -328,6 +342,18 @@ export const couponEditAction = (id, data, selectedCouponType,
       })
       : []
 
+  selectedMenu =
+    selectedMenu?.length > 0
+      ? selectedMenu.map(item => {
+        const val = uuidv4()
+        return {
+          _id: val,
+          menu_item_id: item.value,
+          coupon_id: id,
+        }
+      })
+      : []
+
   gradual =
     gradual?.length > 0
       ? gradual.map(item => {
@@ -363,7 +389,7 @@ export const couponEditAction = (id, data, selectedCouponType,
     categories: selectedCategory,
     cuisines: selectedCuisine,
     customers: selectedUser,
-    menu_items: [],
+    menu_items: selectedMenu,
     subscription_types: selectedSubType,
     zones: selectedZone,
     gradual_informations: gradual,
