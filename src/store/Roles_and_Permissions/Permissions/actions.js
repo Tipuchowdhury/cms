@@ -21,6 +21,7 @@ export const addPermissionAction = (addData, routes) => {
                     _id: route_id,
                     route: item.route,
                     permission_id: val,
+                    is_active: true
                 }
             })
             : null
@@ -123,6 +124,7 @@ export const permissionUpdateAction = (editData, routes) => {
                     _id: route_id,
                     route: item.route,
                     permission_id: editData._id,
+                    is_active: true
                 }
             })
             : null

@@ -328,38 +328,38 @@ export const branchAddAction = (
     delivery_charge: 100,
   }
 
-  console.log(dataObject)
+  //console.log(dataObject)
   const formData = convertToFormData(dataObject)
 
   formData.append("location.coordinates[0]", Number(lng))
   formData.append("location.coordinates[1]", Number(lat))
   formData.append("location[type]", "Point")
 
-  // return dispatch => {
-  //   const headers = {
-  //     "Content-Type": "multipart/form-data",
-  //     "Access-Control-Allow-Origin": "*",
-  //   }
+  return dispatch => {
+    const headers = {
+      "Content-Type": "multipart/form-data",
+      "Access-Control-Allow-Origin": "*",
+    }
 
-  //   axios
-  //     .post(url, formData, { headers: headers })
-  //     .then(response => {
-  //       dispatch({
-  //         type: ADD_BRANCH,
-  //         payload: response.data,
-  //         status: "Success",
-  //       })
-  //       // toast.success("Branch Addedd Successfully")
-  //     })
-  //     .catch(error => {
-  //       dispatch({
-  //         type: ADD_BRANCH,
-  //         payload: error,
-  //         status: "Failed",
-  //       })
-  //       // toast.error("Branch Add Failed")
-  //     })
-  // }
+    axios
+      .post(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: ADD_BRANCH,
+          payload: response.data,
+          status: "Success",
+        })
+        // toast.success("Branch Addedd Successfully")
+      })
+      .catch(error => {
+        dispatch({
+          type: ADD_BRANCH,
+          payload: error,
+          status: "Failed",
+        })
+        // toast.error("Branch Add Failed")
+      })
+  }
 }
 
 export const branchEditAction = (
