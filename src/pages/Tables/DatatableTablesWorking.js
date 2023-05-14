@@ -73,6 +73,46 @@ const productsdata = [
     salary: "$206,850",
   },
 ];
+  {
+    id: 2,
+    name: "Angelica Ramos",
+    position: "Chief Executive Officer (CEO)",
+    office: "London",
+    age: "47",
+    startdate: "2009/10/09",
+    salary: "$1,200,000",
+  },
+
+  {
+    id: 3,
+    name: "Ashton Cox",
+    position: "Junior Technical Author",
+    office: "San Francisco",
+    age: "66",
+    startdate: "2009/01/12",
+    salary: "$86,000",
+  },
+
+  {
+    id: 4,
+    name: "Bradley Greer",
+    position: "Software Engineer",
+    office: "London",
+    age: "41",
+    startdate: "2012/10/13",
+    salary: "$132,000",
+  },
+
+  {
+    id: 5,
+    name: "Brenden Wagner",
+    position: "Software Engineer",
+    office: "San Francisco",
+    age: "28",
+    startdate: "2011/06/07",
+    salary: "$206,850",
+  },
+];
 
 const columns = [
   {

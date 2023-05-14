@@ -19,7 +19,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { Link, useNavigate } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
-  ; ` `
+;` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -34,18 +34,22 @@ import {
   categoryDeleteFresh,
   categoryStatusEditAction,
   categoryStatusEditFresh,
+  getServerSidePaginationCategoryAction,
+  getServerSidePaginationCategorySearchAction,
+  getServerSidePaginationSearchCategoryFresh,
 } from "store/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
+import DataTable from "react-data-table-component"
 
 function Category(props) {
   const [name, setName] = useState("")
   const [modal, setModal] = useState(false)
   const [categoryId, setCategoryId] = useState()
   const [categoryName, setCategoryName] = useState()
-  const [categoryImage, setCategoryImage] = useState();
-  const [restaurantId, setRestaurantId] = useState();
-  const [restaurantIdEdit, setRestaurantIdEdit] = useState();
-  const [isActive, setIsActive] = useState();
+  const [categoryImage, setCategoryImage] = useState()
+  const [restaurantId, setRestaurantId] = useState()
+  const [restaurantIdEdit, setRestaurantIdEdit] = useState()
+  const [isActive, setIsActive] = useState()
   const [addImages, setAddImages] = useState({
     image: "",
   })
@@ -55,10 +59,9 @@ function Category(props) {
 
   const [editModal, setEditModal] = useState(false)
   const [reload, setReload] = useState(false)
-  const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
+  const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
 
-
-  const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
+  const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
 
   // delete modal
   const [deleteItem, setDeleteItem] = useState()
@@ -91,19 +94,18 @@ function Category(props) {
   }
 
   const handleEditCategoryName = row => {
-    setCategoryId(row._id);
-    setCategoryName(row.category_name);
-    setRestaurantIdEdit(row.restaurant_id);
-    setEditImages({ ...editImages, image: row.image });
-    setIsActive(row.is_active);
+    setCategoryId(row._id)
+    setCategoryName(row.category_name)
+    setRestaurantIdEdit(row.restaurant_id)
+    setEditImages({ ...editImages, image: row.image })
+    setIsActive(row.is_active)
     toggleEditModal()
   }
   const handleCategoryName = e => {
     setCategoryName(e.target.value)
   }
 
-  const handleAddFile = (event) => {
-
+  const handleAddFile = event => {
     let name = event.target.name
     let value = event.target.files[0]
     setCategoryImage(value)
@@ -117,8 +119,7 @@ function Category(props) {
     reader.readAsDataURL(value)
   }
 
-  const handleEditFile = (event) => {
-
+  const handleEditFile = event => {
     let name = event.target.name
     let value = event.target.files[0]
     setCategoryImage(value)
@@ -135,32 +136,43 @@ function Category(props) {
   const handleEditModalSubmit = e => {
     e.preventDefault()
     toggleEditModal()
-    props.categoryNameEditAction(categoryName, categoryId, restaurantIdEdit, categoryImage, isActive)
+    props.categoryNameEditAction(
+      categoryName,
+      categoryId,
+      restaurantIdEdit,
+      categoryImage,
+      isActive
+    )
   }
   const handleDeleteModal = row => {
     setDeleteItem(row._id)
     toggleDel()
   }
 
-  const handleStatusModal = (row) => {
+  const handleStatusModal = row => {
     setCategoryId(row._id)
-    setCategoryName(row.category_name);
-    setRestaurantIdEdit(row.restaurant_id);
-    setCategoryImage(row.image);
-    setIsActive(row.is_active);
+    setCategoryName(row.category_name)
+    setRestaurantIdEdit(row.restaurant_id)
+    setCategoryImage(row.image)
+    setIsActive(row.is_active)
 
-    toggleStatus();
+    toggleStatus()
   }
 
-  let allRestaurant = [];
+  let allRestaurant = []
   if (props.get_all_branch_data?.length > 0) {
     allRestaurant = props.get_all_branch_data
   }
 
   const handleStatusUpdate = e => {
-
     e.preventDefault()
-    props.categoryStatusEditAction(categoryName, categoryId, restaurantIdEdit, categoryImage, isActive)
+    props.categoryStatusEditAction(
+      categoryName,
+      categoryId,
+      restaurantIdEdit,
+      categoryImage,
+      isActive
+    )
     // toggleDel();
   }
   const actionRef = (cell, row) => (
@@ -182,45 +194,70 @@ function Category(props) {
     </div>
   )
 
+  const statusRef = (cell, row) => (
+    <Button
+      color={row.is_active ? "success" : "secondary"}
+      className="btn waves-effect waves-light"
+      onClick={() => handleStatusModal(row)}
+    >
+      {row.is_active ? "Active" : "Deactivate"}
+    </Button>
+  )
 
-  const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
-    className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
-
+  const textRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.category_name}</span>
+  )
 
   const activeData = [
     {
-      dataField: "category_name",
-      text: "Name",
-      sort: true,
+      selector: row => row.category_name,
+      name: "Name",
+      sortable: true,
+      cell: textRef,
     },
     {
-      dataField: "is_active",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      selector: row => row.is_active,
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
     {
-      //dataField: "he",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
-    },
-  ]
-  const defaultSorted = [
-    {
-      dataField: "name",
-      order: "desc",
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
 
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationCategorySearchAction(e.target.value)
+    } else {
+      props.getServerSidePaginationSearchCategoryFresh()
+    }
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
+
   useEffect(() => {
     if (props.get_all_branch_loading == false) {
-      props.getAllBranchAction();
+      props.getAllBranchAction()
     }
     if (props.get_all_category_loading == false) {
       console.log("I am in get all category loading ")
       props.getAllCategoryAction()
     }
+
+    props.getServerSidePaginationCategoryAction(page, countPerPage)
 
     if (props.add_category_loading === "Success") {
       toast.success("Category Added Successfully")
@@ -238,14 +275,14 @@ function Category(props) {
     }
 
     if (props.category_status_edit_loading === "Success") {
-      toast.success("Category Status Updated");
-      toggleStatus();
-      props.categoryStatusEditFresh();
+      toast.success("Category Status Updated")
+      toggleStatus()
+      props.categoryStatusEditFresh()
     }
 
     if (props.category_status_edit_loading === "Failed") {
-      toast.error("Something went wrong");
-      props.categoryStatusEditFresh();
+      toast.error("Something went wrong")
+      props.categoryStatusEditFresh()
     }
 
     if (props.category_delete_loading === "Success") {
@@ -258,7 +295,9 @@ function Category(props) {
     props.category_name_edit_loading,
     props.category_delete_loading,
     props.category_status_edit_loading,
-    props.get_all_branch_loading
+    props.get_all_branch_loading,
+    page,
+    countPerPage,
   ])
 
   return (
@@ -303,7 +342,7 @@ function Category(props) {
                     </Button>
                   </div>
 
-                  {props.get_all_category_data ? (
+                  {/* {props.get_all_category_data ? (
                     props.get_all_category_data.length > 0 ? (
                       <DatatableTablesWorking
                         products={props.get_all_category_data}
@@ -311,7 +350,43 @@ function Category(props) {
                         defaultSorted={defaultSorted}
                       />
                     ) : null
-                  ) : null}
+                  ) : null} */}
+                  <div className="text-end">
+                    <input
+                      type="text"
+                      placeholder="Search Category"
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid gray",
+                      }}
+                      onChange={e => handleFilter(e)}
+                    />
+                  </div>
+                  <DataTable
+                    columns={activeData}
+                    data={
+                      props.get_server_side_pagination_category_search_data !=
+                      null
+                        ? props.get_server_side_pagination_category_search_data
+                            ?.data
+                        : props?.get_server_side_pagination_category_data?.data
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_category_search_data !=
+                      null
+                        ? props.get_server_side_pagination_category_search_data
+                            ?.count
+                        : props.get_server_side_pagination_category_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={page => setPage(page)}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -337,15 +412,26 @@ function Category(props) {
                 />
               </div>
 
-
               <div className="mb-3">
-                <label htmlFor="restaurant_id" className="form-label" > Restaurant </label>
-                <Input id="restaurant_id" name="restaurant_id" className="form-control" placeholder="select restaurant" value={restaurantId} onChange={handleAddSelect} type="select" >
+                <label htmlFor="restaurant_id" className="form-label">
+                  {" "}
+                  Restaurant{" "}
+                </label>
+                <Input
+                  id="restaurant_id"
+                  name="restaurant_id"
+                  className="form-control"
+                  placeholder="select restaurant"
+                  value={restaurantId}
+                  onChange={handleAddSelect}
+                  type="select"
+                >
                   <option>Choose...</option>
-                  {
-                    allRestaurant.map(restaurant => <option key={restaurant._id} value={restaurant._id}>{restaurant.name}</option>)
-                  }
-
+                  {allRestaurant.map(restaurant => (
+                    <option key={restaurant._id} value={restaurant._id}>
+                      {restaurant.name}
+                    </option>
+                  ))}
                 </Input>
               </div>
 
@@ -353,9 +439,14 @@ function Category(props) {
                 <label className="form-label" htmlFor="image">
                   Category Image
                 </label>
-                <input type="file" className="form-control" name="image" id="image" onChange={handleAddFile} />
+                <input
+                  type="file"
+                  className="form-control"
+                  name="image"
+                  id="image"
+                  onChange={handleAddFile}
+                />
               </div>
-
 
               {addImages?.image && (
                 <Row className="mb-3">
@@ -391,22 +482,55 @@ function Category(props) {
           <ModalBody>
             <form className="mt-1" onSubmit={handleEditModalSubmit}>
               <div className="mb-3">
-                <label className="form-label" htmlFor="categoryName"> Category Name </label>
-                <input name="categoryName" type="text" className="form-control" id="categoryName" placeholder="Enter category name" required value={categoryName ? categoryName : ""} onChange={handleCategoryName} />
+                <label className="form-label" htmlFor="categoryName">
+                  {" "}
+                  Category Name{" "}
+                </label>
+                <input
+                  name="categoryName"
+                  type="text"
+                  className="form-control"
+                  id="categoryName"
+                  placeholder="Enter category name"
+                  required
+                  value={categoryName ? categoryName : ""}
+                  onChange={handleCategoryName}
+                />
               </div>
               <div className="mb-3">
-                <label htmlFor="restaurant_id" className="form-label"> Restaurant </label>
-                <Input id="restaurant_id" name="restaurant_id" className="form-control" placeholder="select restaurant" value={restaurantIdEdit} onChange={handleEditSelect} type="select" >
+                <label htmlFor="restaurant_id" className="form-label">
+                  {" "}
+                  Restaurant{" "}
+                </label>
+                <Input
+                  id="restaurant_id"
+                  name="restaurant_id"
+                  className="form-control"
+                  placeholder="select restaurant"
+                  value={restaurantIdEdit}
+                  onChange={handleEditSelect}
+                  type="select"
+                >
                   <option>Choose...</option>
-                  {
-                    allRestaurant.map(restaurant => <option key={restaurant._id} value={restaurant._id}>{restaurant.name}</option>)
-                  }
-
+                  {allRestaurant.map(restaurant => (
+                    <option key={restaurant._id} value={restaurant._id}>
+                      {restaurant.name}
+                    </option>
+                  ))}
                 </Input>
               </div>
               <div className="mb-3">
-                <label className="form-label" htmlFor="image"> Image </label>
-                <input type="file" className="form-control" name="image" id="image" onChange={handleEditFile} />
+                <label className="form-label" htmlFor="image">
+                  {" "}
+                  Image{" "}
+                </label>
+                <input
+                  type="file"
+                  className="form-control"
+                  name="image"
+                  id="image"
+                  onChange={handleEditFile}
+                />
               </div>
               {editImages?.image && (
                 <Row className="mb-3">
@@ -469,16 +593,28 @@ function Category(props) {
 
         {/* ============ status update modal starts=============== */}
         <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
-          <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
+          <ModalHeader
+            className="text-center"
+            style={{ textAlign: "center", margin: "0 auto" }}
+          >
             <div className="icon-box">
-              <i className="fa fa-exclamation-circle" style={{ color: "#DCA218", fontSize: "40px" }}></i>
+              <i
+                className="fa fa-exclamation-circle"
+                style={{ color: "#DCA218", fontSize: "40px" }}
+              ></i>
             </div>
             Are you sure?
           </ModalHeader>
-          <ModalBody>Do you really want to update status these records? </ModalBody>
+          <ModalBody>
+            Do you really want to update status these records?{" "}
+          </ModalBody>
           <ModalFooter>
-            <Button color="secondary" onClick={toggleStatus}>Cancel</Button>{' '}
-            <Button color="primary" onClick={handleStatusUpdate}>Update</Button>
+            <Button color="secondary" onClick={toggleStatus}>
+              Cancel
+            </Button>{" "}
+            <Button color="primary" onClick={handleStatusUpdate}>
+              Update
+            </Button>
           </ModalFooter>
         </Modal>
         {/* ============ status update modal ends=============== */}
@@ -488,12 +624,7 @@ function Category(props) {
 }
 
 const mapStateToProps = state => {
-  const {
-
-    get_all_branch_loading,
-    get_all_branch_data,
-
-  } = state.Restaurant;
+  const { get_all_branch_loading, get_all_branch_data } = state.Restaurant
 
   const {
     add_category_data,
@@ -507,6 +638,9 @@ const mapStateToProps = state => {
     category_name_edit_loading,
     category_status_edit_loading,
     category_delete_loading,
+
+    get_server_side_pagination_category_data,
+    get_server_side_pagination_category_search_data,
   } = state.Category
 
   return {
@@ -525,6 +659,9 @@ const mapStateToProps = state => {
 
     category_status_edit_loading,
     category_delete_loading,
+
+    get_server_side_pagination_category_data,
+    get_server_side_pagination_category_search_data,
   }
 }
 
@@ -540,6 +677,9 @@ export default withRouter(
     categoryDeleteAction,
     categoryDeleteFresh,
     categoryStatusEditAction,
-    categoryStatusEditFresh
+    categoryStatusEditFresh,
+    getServerSidePaginationCategoryAction,
+    getServerSidePaginationCategorySearchAction,
+    getServerSidePaginationSearchCategoryFresh,
   })(Category)
 )

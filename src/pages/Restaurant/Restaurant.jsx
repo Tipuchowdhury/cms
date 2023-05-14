@@ -26,8 +26,11 @@ import {
   restaurantStatusUpdateAction,
   restaurantDeleteAction,
   restaurantDeleteFresh,
+  getServerSidePaginationRestaurantAction,
+  getServerSidePaginationRestaurantSearchAction,
+  getServerSidePaginationSearchRestaurantFresh,
 } from "store/actions"
-import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
+import DataTable from "react-data-table-component"
 
 function Restaurant(props) {
   const [name, setName] = useState("")
@@ -118,8 +121,6 @@ function Restaurant(props) {
     </div>
   )
 
-  // const statusRef = (cell, row) => <Badge color="success" style={{ padding: "12px" }}>Activate</Badge>
-  // const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
   const statusRef = (cell, row) => (
     <Button
       color={row.is_active ? "success" : "secondary"}
@@ -130,36 +131,55 @@ function Restaurant(props) {
     </Button>
   )
 
+  const textRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.name}</span>
+  )
   const activeData = [
     {
-      dataField: "name",
-      text: "Name",
-      sort: true,
+      selector: row => row.name,
+      name: "Name",
+      sortable: true,
+      cell: textRef,
     },
     {
-      dataField: "",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      selector: row => "",
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
     {
-      dataField: "hello",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      selector: row => "",
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
-  const defaultSorted = [
-    {
-      dataField: "name",
-      order: "desc",
-    },
-  ]
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationRestaurantSearchAction(e.target.value)
+    } else {
+      props.getServerSidePaginationSearchRestaurantFresh()
+    }
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
 
   useEffect(() => {
     if (props.get_all_restaurant_loading == false) {
       props.getAllRestaurantAction()
     }
+
+    props.getServerSidePaginationRestaurantAction(page, countPerPage)
 
     if (props.restaurant_delete_loading === "Success") {
       // console.log("I am in the delete")
@@ -167,9 +187,15 @@ function Restaurant(props) {
       toggleDel()
       props.restaurantDeleteFresh()
     }
-  }, [props.get_all_restaurant_loading, props.restaurant_delete_loading])
+  }, [
+    props.get_all_restaurant_loading,
+    props.restaurant_delete_loading,
+    page,
+    countPerPage,
+  ])
 
   console.log(props.get_all_restaurant_data)
+  console.log(props.get_server_side_pagination_restaurant_data)
   return (
     <React.Fragment>
       <div className="page-content">
@@ -205,16 +231,46 @@ function Restaurant(props) {
                     </Button>
                   </div>
 
-                  {props.get_all_restaurant_data ? (
-                    props.get_all_restaurant_data.length > 0 ? (
-                      <DatatableTablesWorking
-                        products={props.get_all_restaurant_data}
-                        columnData={activeData}
-                        defaultSorted={defaultSorted}
-                        key={props.get_all_restaurant_data?._id}
-                      />
-                    ) : null
-                  ) : null}
+                  <div className="text-end">
+                    <input
+                      type="text"
+                      placeholder="Search Restaurant"
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid gray",
+                      }}
+                      onChange={e => handleFilter(e)}
+                    />
+                  </div>
+                  <DataTable
+                    columns={activeData}
+                    data={
+                      props.get_server_side_pagination_restaurant_search_data !=
+                      null
+                        ? props
+                            .get_server_side_pagination_restaurant_search_data
+                            ?.data
+                        : props?.get_server_side_pagination_restaurant_data
+                            ?.data
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_restaurant_search_data !=
+                      null
+                        ? props
+                            .get_server_side_pagination_restaurant_search_data
+                            ?.count
+                        : props.get_server_side_pagination_restaurant_data
+                            ?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={page => setPage(page)}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -232,7 +288,7 @@ function Restaurant(props) {
                   type="text"
                   className="form-control"
                   id="username"
-                  placeholder="Enter restaurant name"
+                  placeholder="Enter city name"
                   required
                   value={name}
                   onChange={e => setName(e.target.value)}
@@ -360,6 +416,8 @@ const mapStateToProps = state => {
     get_all_restaurant_loading,
 
     restaurant_delete_loading,
+    get_server_side_pagination_restaurant_data,
+    get_server_side_pagination_restaurant_search_data,
   } = state.Restaurant
 
   return {
@@ -371,6 +429,8 @@ const mapStateToProps = state => {
     get_all_restaurant_loading,
 
     restaurant_delete_loading,
+    get_server_side_pagination_restaurant_data,
+    get_server_side_pagination_restaurant_search_data,
   }
 }
 
@@ -382,5 +442,8 @@ export default withRouter(
     restaurantStatusUpdateAction,
     restaurantDeleteAction,
     restaurantDeleteFresh,
+    getServerSidePaginationRestaurantAction,
+    getServerSidePaginationRestaurantSearchAction,
+    getServerSidePaginationSearchRestaurantFresh,
   })(Restaurant)
 )

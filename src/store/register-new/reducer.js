@@ -12,7 +12,8 @@ import {
     USER_STATUS_UPDATE,
     USER_STATUS_UPDATE_FRESH,
     USER_DELETE,
-    USER_DELETE_FRESH
+    USER_DELETE_FRESH,
+    SERVER_SIDE_PAGINATION_USER
 } from "./actionTypes"
 
 const initialState = {
@@ -41,7 +42,11 @@ const initialState = {
     user_status_update_error: null,
     user_status_update_loading: false,
 
-    user_delete_loading: false
+    user_delete_loading: false,
+
+    get_server_side_pagination_user_data: null,
+    get_server_side_pagination_user_error: null,
+    get_server_side_pagination_user_loading: false,
 
 }
 
@@ -146,6 +151,16 @@ const registerNew = (state = initialState, action) => {
                 user_delete_loading: action.status,
                 get_all_user_loading: false
             }
+
+        case SERVER_SIDE_PAGINATION_USER:
+            state = {
+                ...state,
+                get_server_side_pagination_user_data: action.payload,
+                get_server_side_pagination_user_error: null,
+                get_server_side_pagination_user_loading: action.status,
+
+            }
+            break;
 
     }
     return state

@@ -11,7 +11,11 @@ import {
     CITY_STATUS_EDIT,
     CITY_STATUS_EDIT_FRESH,
     SERVER_SIDE_PAGINATION,
-    SERVER_SIDE_PAGINATION_FRESH
+    SERVER_SIDE_PAGINATION_FRESH,
+    SERVER_SIDE_PAGINATION_SEARCH,
+    SERVER_SIDE_PAGINATION_SEARCH_FRESH,
+
+
 
 } from "./actionTypes"
 
@@ -39,6 +43,12 @@ const initialState = {
     get_server_side_pagination_data: null,
     get_server_side_pagination_error: null,
     get_server_side_pagination_loading: false,
+
+    get_server_side_pagination_search_data: null,
+    get_server_side_pagination_search_loading: false,
+
+
+
 }
 
 const zoneCity = (state = initialState, action) => {
@@ -141,6 +151,26 @@ const zoneCity = (state = initialState, action) => {
                 //get_all_city_loading: false
             }
             break;
+
+        case SERVER_SIDE_PAGINATION_SEARCH:
+            state = {
+                ...state,
+                get_server_side_pagination_search_data: action.payload,
+                get_server_side_pagination_search_loading: action.status,
+
+            }
+            break;
+
+        case SERVER_SIDE_PAGINATION_SEARCH_FRESH:
+            state = {
+                ...state,
+                get_server_side_pagination_search_data: action.payload,
+                get_server_side_pagination_search_loading: action.status,
+            }
+            break;
+
+
+
     }
     return state
 }
