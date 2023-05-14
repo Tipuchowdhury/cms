@@ -315,7 +315,7 @@ export const branchAddAction = (
     is_veg: JSON.parse(zoneInfo.is_veg),
     is_popular: JSON.parse(zoneInfo.is_popular),
     commission: JSON.parse(zoneInfo.commission),
-    min_order_value: 1,
+    min_order_value: zoneInfo.minimum_order_value,
     delivery_time: JSON.parse(zoneInfo.delivery_time),
     parent_restaurant_id: zoneInfo.restaurant,
     working_hours: all_working_hours,
@@ -325,7 +325,7 @@ export const branchAddAction = (
     is_delivery: JSON.parse(zoneInfo.is_delivery),
     is_pickup: JSON.parse(zoneInfo.is_pickup),
     is_dine: JSON.parse(zoneInfo.is_dine),
-    delivery_charge: 100,
+    delivery_charge: zoneInfo.delivery_time,
   }
 
   console.log(dataObject)
@@ -432,12 +432,12 @@ export const branchEditAction = (
     is_veg: JSON.parse(zoneInfo.is_veg),
     is_popular: JSON.parse(zoneInfo.is_popular),
     commission: JSON.parse(zoneInfo.commission),
-    min_order_value: 1,
+    min_order_value: zoneInfo.minimum_order_value,
     delivery_time: JSON.parse(zoneInfo.delivery_time),
     parent_restaurant_id: zoneInfo.restaurant,
     working_hours: all_working_hours,
     cuisines: data,
-    delivery_charge: 100,
+    delivery_charge: zoneInfo.delivery_time,
   }
 
   const formData = convertToFormData(dataObject)
