@@ -52,7 +52,21 @@ import {
   EDIT_BRANCH_FRESH,
   SERVER_SIDE_PAGINATION_ZONE,
   SERVER_SIDE_PAGINATION_ZONE_SEARCH,
-  SERVER_SIDE_PAGINATION_SEARCH_ZONE_FRESH
+  SERVER_SIDE_PAGINATION_SEARCH_ZONE_FRESH,
+
+  SERVER_SIDE_PAGINATION_CUISINE,
+  SERVER_SIDE_PAGINATION_CUISINE_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_CUISINE_FRESH,
+
+  SERVER_SIDE_PAGINATION_RESTAURANT,
+  SERVER_SIDE_PAGINATION_RESTAURANT_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_RESTAURANT_FRESH,
+
+  SERVER_SIDE_PAGINATION_BRANCH,
+  SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
+
+
 
 } from "./actionTypes"
 import axios from "axios"
@@ -1074,11 +1088,12 @@ export const addOnCategoryStatusEditActionFresh = () => {
 
 export const addCuisineAction = (id, name) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Post"
+  console.log(id, name);
 
   let formData = {
     _id: id,
     name: name,
-    imane: "https://unsplash.com/photos/kcA-c3f_3FE",
+    image: "https://unsplash.com/photos/kcA-c3f_3FE",
   }
 
   return dispatch => {
@@ -1676,3 +1691,202 @@ export const getServerSidePaginationSearchZoneFresh = () => {
       payload: null
     });
 };
+
+
+export const getServerSidePaginationCuisineAction = (index, limit) => {
+  var url = process.env.REACT_APP_LOCALHOST + `/Cuisine/Search?page=${index}&limit=${limit}`;
+
+  const formData = {};
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    };
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUISINE,
+          payload: response.data,
+          status: "Success",
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUISINE,
+          status: "Failed",
+        });
+      });
+  };
+};
+
+export const getServerSidePaginationCuisineSearchAction = (name) => {
+  console.log(name);
+  var url = process.env.REACT_APP_LOCALHOST + `/Cuisine/Search?name=${name}`;
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    };
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUISINE_SEARCH,
+          payload: response.data,
+          status: "Success",
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUISINE_SEARCH,
+          status: "Failed",
+        });
+      });
+  };
+};
+
+export const getServerSidePaginationSearchCuisineFresh = () => {
+
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_CUISINE_FRESH,
+      status: false,
+      payload: null
+    });
+};
+
+
+export const getServerSidePaginationRestaurantAction = (index, limit) => {
+  var url = process.env.REACT_APP_LOCALHOST + `/Restaurant/Search?page=${index}&limit=${limit}`;
+
+  const formData = {};
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    };
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_RESTAURANT,
+          payload: response.data,
+          status: "Success",
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_RESTAURANT,
+          status: "Failed",
+        });
+      });
+  };
+};
+
+export const getServerSidePaginationRestaurantSearchAction = (name) => {
+  console.log(name);
+  var url = process.env.REACT_APP_LOCALHOST + `/Restaurant/Search?name=${name}`;
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    };
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_RESTAURANT_SEARCH,
+          payload: response.data,
+          status: "Success",
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_RESTAURANT_SEARCH,
+          status: "Failed",
+        });
+      });
+  };
+};
+
+export const getServerSidePaginationSearchRestaurantFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_RESTAURANT_FRESH,
+      status: false,
+      payload: null
+    });
+};
+
+export const getServerSidePaginationBranchAction = (index, limit) => {
+  var url = process.env.REACT_APP_LOCALHOST + `/Branch/Search?page=${index}&limit=${limit}`;
+
+  const formData = {};
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    };
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_BRANCH,
+          payload: response.data,
+          status: "Success",
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_BRANCH,
+          status: "Failed",
+        });
+      });
+  };
+};
+
+export const getServerSidePaginationBranchSearchAction = (name) => {
+  console.log(name);
+  var url = process.env.REACT_APP_LOCALHOST + `/Branch/Search?name=${name}`;
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    };
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
+          payload: response.data,
+          status: "Success",
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
+          status: "Failed",
+        });
+      });
+  };
+};
+
+export const getServerSidePaginationSearchBranchFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
+      status: false,
+      payload: null
+    });
+};
+

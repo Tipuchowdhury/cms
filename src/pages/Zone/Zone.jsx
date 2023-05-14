@@ -86,13 +86,7 @@ function Zone(props) {
     </div>
   )
 
-  // const statusRef = (cell, row) => (
-  //   <Badge color="success" style={{ padding: "12px" }}>
-  //     Activate
-  //   </Badge>
-  // )
 
-  // const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
   const statusRef = (cell, row) => (
     <Button
       color={row.is_active ? "success" : "secondary"}
@@ -105,19 +99,19 @@ function Zone(props) {
   const textRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.name}</span>
   const activeData = [
     {
-      selector: "name",
+      selector: row => row.name,
       name: "Area Name",
       sortable: true,
       cell: textRef
     },
     {
-      selector: "",
+      selector: row => "",
       name: "Status",
       sortable: true,
       cell: statusRef,
     },
     {
-      selector: "",
+      selector: row => "",
       name: "Action",
       sortable: true,
       cell: actionRef,
@@ -126,7 +120,7 @@ function Zone(props) {
 
   // server side pagination
   const [page, setPage] = useState(1);
-  const countPerPage = 10;
+  const [countPerPage, setCountPerPage] = useState(10);
   const handleFilter = (e) => {
     if (e.target.value?.length > 0) {
       props.getServerSidePaginationZoneSearchAction(e.target.value);
@@ -135,6 +129,16 @@ function Zone(props) {
     }
 
   }
+
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page);
+    setCountPerPage(newPerPage);
+  };
 
   useEffect(() => {
     if (props.get_all_zone_loading == false) {
@@ -207,32 +211,17 @@ function Zone(props) {
                       </Button>
                     </Link>
                   </div>
-                  {/* {props.get_all_zone_data ? (
-                    props.get_all_zone_data.length > 0 ? (
-                      <DatatableTablesWorking
-                        products={props.get_all_zone_data}
-                        columnData={activeData}
-                        defaultSorted={defaultSorted}
-                        key={props.get_all_zone_data?._id}
-                      />
-                    ) : null
-                  ) : null} */}
-                  <div className='text-end'><input type='text' placeholder="Zone Name" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
+                  <div className='text-end'><input type='text' placeholder="Search Zone" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
                   <DataTable
                     columns={activeData}
-                    //data={props?.get_server_side_pagination_zone_data?.data}
                     data={props.get_server_side_pagination_zone_search_data != null ? props.get_server_side_pagination_zone_search_data?.data : props?.get_server_side_pagination_zone_data?.data}
                     highlightOnHover
                     pagination
                     paginationServer
-                    //paginationTotalRows={props?.get_server_side_pagination_zone_data?.count}
                     paginationTotalRows={props.get_server_side_pagination_zone_search_data != null ? props.get_server_side_pagination_zone_search_data?.count : props.get_server_side_pagination_zone_data?.count}
                     paginationPerPage={countPerPage}
-                    paginationComponentOptions={{
-                      noRowsPerPage: true,
-                      //noRowsPerPage: false,
-
-                    }}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
 
                     onChangePage={(page) => setPage(page)}
                   />

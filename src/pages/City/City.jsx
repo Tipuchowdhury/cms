@@ -102,7 +102,7 @@ function City(props) {
     const activeData = [
 
         {
-            selector: "name",
+            selector: row => row.name,
             name: "Name",
             sortable: true,
             cell: textRef
@@ -131,7 +131,7 @@ function City(props) {
 
     // server side pagination
     const [page, setPage] = useState(1);
-    const countPerPage = 10;
+    const [countPerPage, setCountPerPage] = useState(10);
     const handleFilter = (e) => {
         if (e.target.value?.length > 0) {
             props.getServerSidePaginationSearchAction(e.target.value);
@@ -140,6 +140,16 @@ function City(props) {
         }
 
     }
+
+    const paginationComponentOptions = {
+        selectAllRowsItem: true,
+        //selectAllRowsItemText: "ALL"
+    };
+
+    const handlePerRowsChange = async (newPerPage, page) => {
+        console.log(newPerPage, page);
+        setCountPerPage(newPerPage);
+    };
 
     console.log(props.get_server_side_pagination_data);
     console.log(props.get_server_side_pagination_search_data);
@@ -193,7 +203,7 @@ function City(props) {
         }
 
         props.getServerSidePaginationAction(page, countPerPage);
-    }, [props.add_city_loading, props.city_name_edit_loading, props.city_delete_loading, props.city_status_edit_loading, props.get_server_side_pagination_loading, page, countPerPage, props.get_server_side_pagination_search_loading]);
+    }, [props.add_city_loading, props.city_name_edit_loading, props.city_delete_loading, props.city_status_edit_loading, props.get_server_side_pagination_loading, page, countPerPage]);
 
 
     return (
@@ -221,7 +231,7 @@ function City(props) {
                                         </Button>
                                     </div>
 
-                                    <div className='text-end'><input type='text' placeholder="City Name" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
+                                    <div className='text-end'><input type='text' placeholder="Search City" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
                                     <DataTable
                                         //title="Employees"
                                         columns={activeData}
@@ -231,11 +241,13 @@ function City(props) {
                                         paginationServer
                                         paginationTotalRows={props.get_server_side_pagination_search_data != null ? props.get_server_side_pagination_search_data?.count : props.get_server_side_pagination_data?.count}
                                         paginationPerPage={countPerPage}
-                                        paginationComponentOptions={{
-                                            noRowsPerPage: true,
-                                            //noRowsPerPage: false,
+                                        // paginationComponentOptions={{
+                                        //     noRowsPerPage: true,
+                                        //     //noRowsPerPage: false,
 
-                                        }}
+                                        // }}
+                                        paginationComponentOptions={paginationComponentOptions}
+                                        onChangeRowsPerPage={handlePerRowsChange}
 
                                         onChangePage={(page) => setPage(page)}
                                     />

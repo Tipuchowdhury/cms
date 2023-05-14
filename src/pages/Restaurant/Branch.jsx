@@ -7,11 +7,12 @@ import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import {
-    getAllBranchAction, branchStatusEditAction, editBranchStatusFresh, branchPopularEditAction, editBranchPopularFresh, branchDeleteAction, branchDeleteFresh
+    getAllBranchAction, branchStatusEditAction, editBranchStatusFresh, branchPopularEditAction, editBranchPopularFresh, branchDeleteAction, branchDeleteFresh, getServerSidePaginationBranchAction, getServerSidePaginationBranchSearchAction, getServerSidePaginationSearchBranchFresh
 } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import DataTable from 'react-data-table-component';
 
 
 function Branch(props) {
@@ -111,58 +112,73 @@ function Branch(props) {
             {row.is_popular ? "Popular" : "Regular"}
         </Button>
     )
+    const textRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.name}</span>
 
     const activeData = [
 
         {
-            dataField: "name",
-            text: "Branch Name",
-            sort: true,
+            selector: row => row.name,
+            name: "Branch Name",
+            sortable: true,
+            cell: textRef
         },
-        // {
-        //     //dataField: "",
-        //     text: "Restaurant Name",
-        //     sort: true,
-        //     //formatter: statusRef
-        // },
+
         {
-            dataField: "phone_number",
-            text: "Phone",
-            sort: true,
+            selector: row => row.phone_number,
+            name: "Phone",
+            sortable: true,
             //formatter: actionRef,
         },
         {
-            dataField: "is_active",
-            text: "Status",
-            sort: true,
-            formatter: statusRef,
+            selector: row => row.is_active,
+            name: "Status",
+            sortable: true,
+            cell: statusRef,
         },
         {
-            dataField: "is_popular",
-            text: "Popular/Regular",
-            sort: true,
-            formatter: popularRef,
+            selector: row => row.is_popular,
+            name: "Popular/Regular",
+            sortable: true,
+            cell: popularRef,
         },
         {
-            //dataField: "hello",
-            text: "Action",
-            sort: true,
-            formatter: actionRef,
+            selector: row => "",
+            name: "Action",
+            sortable: true,
+            cell: actionRef,
         },
 
     ];
-    const defaultSorted = [
-        {
-            dataField: "name",
-            order: "desc"
+
+
+    // server side pagination
+    const [page, setPage] = useState(1);
+    const [countPerPage, setCountPerPage] = useState(10);
+    const handleFilter = (e) => {
+        if (e.target.value?.length > 0) {
+            props.getServerSidePaginationBranchSearchAction(e.target.value);
+        } else {
+            props.getServerSidePaginationSearchBranchFresh();
         }
-    ];
+
+    }
+    const paginationComponentOptions = {
+        selectAllRowsItem: true,
+        //selectAllRowsItemText: "ALL"
+    };
+
+    const handlePerRowsChange = async (newPerPage, page) => {
+        console.log(newPerPage, page);
+        setCountPerPage(newPerPage);
+    };
 
 
     useEffect(() => {
         if (props.get_all_branch_loading == false) {
             props.getAllBranchAction();
         }
+
+        props.getServerSidePaginationBranchAction(page, countPerPage)
 
         if (props.edit_branch_status_loading === "Success") {
             toast.success("Branch Status Updated Successfully");
@@ -191,7 +207,7 @@ function Branch(props) {
             toggleDel();
             props.branchDeleteFresh();
         }
-    }, [props.get_all_branch_loading, props.edit_branch_status_loading, props.edit_branch_popular_loading, props.branch_delete_loading]);
+    }, [props.get_all_branch_loading, props.edit_branch_status_loading, props.edit_branch_popular_loading, props.branch_delete_loading, page, countPerPage]);
 
     console.log(props.get_all_branch_data);
     return (
@@ -213,8 +229,24 @@ function Branch(props) {
                                             </Button>
                                         </Link>
                                     </div>
-                                    {props.get_all_branch_data ? props.get_all_branch_data.length > 0 ? <DatatableTablesWorking products={props.get_all_branch_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_branch_data?._id} /> : null : null}
+                                    {/* {props.get_all_branch_data ? props.get_all_branch_data.length > 0 ? <DatatableTablesWorking products={props.get_all_branch_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_branch_data?._id} /> : null : null} */}
+
+
+                                    <div className='text-end'><input type='text' placeholder="Search Branch" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
+                                    <DataTable
+                                        columns={activeData}
+                                        data={props.get_server_side_pagination_branch_search_data != null ? props.get_server_side_pagination_branch_search_data?.data : props?.get_server_side_pagination_branch_data?.data}
+                                        highlightOnHover
+                                        pagination
+                                        paginationServer
+                                        paginationTotalRows={props.get_server_side_pagination_branch_search_data != null ? props.get_server_side_pagination_branch_search_data?.count : props.get_server_side_pagination_branch_data?.count}
+                                        paginationPerPage={countPerPage}
+                                        paginationComponentOptions={paginationComponentOptions}
+                                        onChangeRowsPerPage={handlePerRowsChange}
+
+                                        onChangePage={(page) => setPage(page)}
+                                    />
 
                                 </CardBody>
                             </Card>
@@ -304,7 +336,10 @@ const mapStateToProps = state => {
         get_all_branch_data,
         edit_branch_status_loading,
         edit_branch_popular_loading,
-        branch_delete_loading
+        branch_delete_loading,
+
+        get_server_side_pagination_branch_data,
+        get_server_side_pagination_branch_search_data,
     } = state.Restaurant;
 
     return {
@@ -312,7 +347,10 @@ const mapStateToProps = state => {
         get_all_branch_data,
         edit_branch_status_loading,
         edit_branch_popular_loading,
-        branch_delete_loading
+        branch_delete_loading,
+
+        get_server_side_pagination_branch_data,
+        get_server_side_pagination_branch_search_data
     };
 };
 
@@ -325,6 +363,9 @@ export default withRouter(
             branchPopularEditAction,
             editBranchPopularFresh,
             branchDeleteAction,
-            branchDeleteFresh
+            branchDeleteFresh,
+            getServerSidePaginationBranchAction,
+            getServerSidePaginationBranchSearchAction,
+            getServerSidePaginationSearchBranchFresh,
         })(Branch)
 );

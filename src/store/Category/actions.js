@@ -9,6 +9,10 @@ import {
   CATEGORY_STATUS_EDIT_FRESH,
   CATEGORY_DELETE,
   CATEGORY_DELETE_FRESH,
+
+  SERVER_SIDE_PAGINATION_CATEGORY,
+  SERVER_SIDE_PAGINATION_CATEGORY_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_CATEGORY_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 
@@ -221,3 +225,68 @@ export const categoryDeleteFresh = () => {
       status: false,
     })
 }
+
+export const getServerSidePaginationCategoryAction = (index, limit) => {
+  var url = process.env.REACT_APP_LOCALHOST + `/Category/Search?page=${index}&limit=${limit}`;
+
+  const formData = {};
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    };
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CATEGORY,
+          payload: response.data,
+          status: "Success",
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CATEGORY,
+          status: "Failed",
+        });
+      });
+  };
+};
+
+export const getServerSidePaginationCategorySearchAction = (name) => {
+  console.log(name);
+  var url = process.env.REACT_APP_LOCALHOST + `/Category/Search?name=${name}`;
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    };
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CATEGORY_SEARCH,
+          payload: response.data,
+          status: "Success",
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CATEGORY_SEARCH,
+          status: "Failed",
+        });
+      });
+  };
+};
+
+export const getServerSidePaginationSearchCategoryFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_CATEGORY_FRESH,
+      status: false,
+      payload: null
+    });
+};

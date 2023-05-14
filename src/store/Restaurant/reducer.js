@@ -54,7 +54,21 @@ import {
 
     SERVER_SIDE_PAGINATION_ZONE,
     SERVER_SIDE_PAGINATION_ZONE_SEARCH,
-    SERVER_SIDE_PAGINATION_SEARCH_ZONE_FRESH
+    SERVER_SIDE_PAGINATION_SEARCH_ZONE_FRESH,
+
+    SERVER_SIDE_PAGINATION_CUISINE,
+    SERVER_SIDE_PAGINATION_CUISINE_SEARCH,
+    SERVER_SIDE_PAGINATION_SEARCH_CUISINE_FRESH,
+
+    SERVER_SIDE_PAGINATION_RESTAURANT,
+    SERVER_SIDE_PAGINATION_RESTAURANT_SEARCH,
+    SERVER_SIDE_PAGINATION_SEARCH_RESTAURANT_FRESH,
+
+    SERVER_SIDE_PAGINATION_BRANCH,
+    SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
+    SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
+
+
 
 
 } from "./actionTypes"
@@ -150,12 +164,39 @@ const initialState = {
     get_category_by_id_error: null,
     get_category_by_id_loading: false,
 
+    // server side pagination ZONE
     get_server_side_pagination_zone_data: null,
     get_server_side_pagination_zone_error: null,
     get_server_side_pagination_zone_loading: false,
 
     get_server_side_pagination_zone_search_data: null,
     get_server_side_pagination_zone_search_loading: false,
+
+    // server side pagination CUISINE
+    get_server_side_pagination_cuisine_data: null,
+    get_server_side_pagination_cuisine_error: null,
+    get_server_side_pagination_cuisine_loading: false,
+
+    get_server_side_pagination_cuisine_search_data: null,
+    get_server_side_pagination_cuisine_search_loading: false,
+
+    // server side pagination restaurant
+    get_server_side_pagination_restaurant_data: null,
+    get_server_side_pagination_restaurant_error: null,
+    get_server_side_pagination_restaurant_loading: false,
+
+    get_server_side_pagination_restaurant_search_data: null,
+    get_server_side_pagination_restaurant_search_loading: false,
+
+    // server side pagination branch
+    get_server_side_pagination_branch_data: null,
+    get_server_side_pagination_branch_error: null,
+    get_server_side_pagination_branch_loading: false,
+
+    get_server_side_pagination_branch_search_data: null,
+    get_server_side_pagination_branch_search_loading: false,
+
+
 }
 
 const Restaurant = (state = initialState, action) => {
@@ -613,6 +654,91 @@ const Restaurant = (state = initialState, action) => {
                 get_server_side_pagination_zone_search_loading: action.status,
             }
             break;
+
+        case SERVER_SIDE_PAGINATION_CUISINE:
+            state = {
+                ...state,
+                get_server_side_pagination_cuisine_data: action.payload,
+                get_server_side_pagination_cuisine_error: null,
+                get_server_side_pagination_cuisine_loading: action.status,
+
+            }
+            break;
+
+        case SERVER_SIDE_PAGINATION_CUISINE_SEARCH:
+            state = {
+                ...state,
+                get_server_side_pagination_cuisine_search_data: action.payload,
+                get_server_side_pagination_cuisine_search_loading: action.status,
+
+            }
+            break;
+
+        case SERVER_SIDE_PAGINATION_SEARCH_CUISINE_FRESH:
+            state = {
+                ...state,
+                get_server_side_pagination_cuisine_search_data: action.payload,
+                get_server_side_pagination_cuisine_search_loading: action.status,
+            }
+            break;
+
+
+        case SERVER_SIDE_PAGINATION_RESTAURANT:
+            state = {
+                ...state,
+                get_server_side_pagination_restaurant_data: action.payload,
+                get_server_side_pagination_restaurant_error: null,
+                get_server_side_pagination_restaurant_loading: action.status,
+
+            }
+            break;
+
+        case SERVER_SIDE_PAGINATION_RESTAURANT_SEARCH:
+            state = {
+                ...state,
+                get_server_side_pagination_restaurant_search_data: action.payload,
+                get_server_side_pagination_restaurant_search_loading: action.status,
+
+            }
+            break;
+
+        case SERVER_SIDE_PAGINATION_SEARCH_RESTAURANT_FRESH:
+            state = {
+                ...state,
+                get_server_side_pagination_restaurant_search_data: action.payload,
+                get_server_side_pagination_restaurant_search_loading: action.status,
+            }
+            break;
+
+        case SERVER_SIDE_PAGINATION_BRANCH:
+            state = {
+                ...state,
+                get_server_side_pagination_branch_data: action.payload,
+                get_server_side_pagination_branch_error: null,
+                get_server_side_pagination_branch_loading: action.status,
+
+            }
+            break;
+
+        case SERVER_SIDE_PAGINATION_BRANCH_SEARCH:
+            state = {
+                ...state,
+                get_server_side_pagination_branch_search_data: action.payload,
+                get_server_side_pagination_branch_search_loading: action.status,
+
+            }
+            break;
+
+        case SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH:
+            state = {
+                ...state,
+                get_server_side_pagination_branch_search_data: action.payload,
+                get_server_side_pagination_branch_search_loading: action.status,
+            }
+            break;
+
+
+
 
     }
     return state

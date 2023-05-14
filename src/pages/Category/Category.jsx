@@ -32,8 +32,12 @@ import {
   categoryDeleteFresh,
   categoryStatusEditAction,
   categoryStatusEditFresh,
+  getServerSidePaginationCategoryAction,
+  getServerSidePaginationCategorySearchAction,
+  getServerSidePaginationSearchCategoryFresh
 } from "store/Category/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
+import DataTable from 'react-data-table-component';
 
 function Category(props) {
   const [name, setName] = useState("")
@@ -127,16 +131,12 @@ function Category(props) {
     </div>
   )
 
-  // const statusRef = (cell, row) => (
-  //   <Badge color="secondary" style={{ padding: "12px" }}>
-  //     Deactivate
-  //   </Badge>
-  // )
 
-  // const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
 
   const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
     className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
+
+  const textRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.category_name}</span>
 
   console.log(props.add_category_loading)
   console.log(props.get_all_category_data)
@@ -145,29 +145,46 @@ function Category(props) {
 
   const activeData = [
     {
-      dataField: "category_name",
-      text: "Name",
-      sort: true,
+      selector: row => row.category_name,
+      name: "Name",
+      sortable: true,
+      cell: textRef
     },
     {
-      dataField: "is_active",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      selector: row => row.is_active,
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
     {
-      //dataField: "he",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
-  const defaultSorted = [
-    {
-      dataField: "name",
-      order: "desc",
-    },
-  ]
+
+
+  // server side pagination
+  const [page, setPage] = useState(1);
+  const [countPerPage, setCountPerPage] = useState(10);
+  const handleFilter = (e) => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationCategorySearchAction(e.target.value);
+    } else {
+      props.getServerSidePaginationSearchCategoryFresh();
+    }
+
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page);
+    setCountPerPage(newPerPage);
+  };
+
 
   useEffect(() => {
     console.log("=======hello", props.category_name_edit_loading)
@@ -175,6 +192,8 @@ function Category(props) {
       console.log("I am in get all category loading ")
       props.getAllCategoryAction()
     }
+
+    props.getServerSidePaginationCategoryAction(page, countPerPage);
 
     if (props.add_category_loading === "Success") {
       toast.success("Category Added Successfully")
@@ -212,6 +231,7 @@ function Category(props) {
     props.category_name_edit_loading,
     props.category_delete_loading,
     props.category_status_edit_loading,
+    page, countPerPage
   ])
 
   return (
@@ -256,7 +276,7 @@ function Category(props) {
                     </Button>
                   </div>
 
-                  {props.get_all_category_data ? (
+                  {/* {props.get_all_category_data ? (
                     props.get_all_category_data.length > 0 ? (
                       <DatatableTablesWorking
                         products={props.get_all_category_data}
@@ -264,7 +284,21 @@ function Category(props) {
                         defaultSorted={defaultSorted}
                       />
                     ) : null
-                  ) : null}
+                  ) : null} */}
+                  <div className='text-end'><input type='text' placeholder="Search Category" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
+                  <DataTable
+                    columns={activeData}
+                    data={props.get_server_side_pagination_category_search_data != null ? props.get_server_side_pagination_category_search_data?.data : props?.get_server_side_pagination_category_data?.data}
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={props.get_server_side_pagination_category_search_data != null ? props.get_server_side_pagination_category_search_data?.count : props.get_server_side_pagination_category_data?.count}
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+
+                    onChangePage={(page) => setPage(page)}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -401,6 +435,9 @@ const mapStateToProps = state => {
     category_name_edit_loading,
     category_status_edit_loading,
     category_delete_loading,
+
+    get_server_side_pagination_category_data,
+    get_server_side_pagination_category_search_data,
   } = state.Category
 
   return {
@@ -416,6 +453,9 @@ const mapStateToProps = state => {
 
     category_status_edit_loading,
     category_delete_loading,
+
+    get_server_side_pagination_category_data,
+    get_server_side_pagination_category_search_data
   }
 }
 
@@ -430,6 +470,9 @@ export default withRouter(
     categoryDeleteAction,
     categoryDeleteFresh,
     categoryStatusEditAction,
-    categoryStatusEditFresh
+    categoryStatusEditFresh,
+    getServerSidePaginationCategoryAction,
+    getServerSidePaginationCategorySearchAction,
+    getServerSidePaginationSearchCategoryFresh
   })(Category)
 )
