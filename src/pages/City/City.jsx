@@ -137,20 +137,6 @@ function City(props) {
     </Button>
   )
 
-  // const statusRef = (cell, row) => <Badge color="secondary" style={{ padding: "12px" }}>Deactivate</Badge>
-
-  // const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
-
-  const statusRef = (cell, row) => (
-    <Button
-      color={row.is_active ? "success" : "secondary"}
-      className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
-    >
-      {row.is_active ? "Active" : "Deactivate"}
-    </Button>
-  )
-
   console.log(props.add_city_loading)
   console.log(props.get_all_city_data)
   console.log(props.city_name_edit_loading)
