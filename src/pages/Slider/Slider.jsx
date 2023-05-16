@@ -132,10 +132,10 @@ function Slider(props) {
 
 
     const newRest = (nn) => {
-        console.log(nn);
-        console.log(props?.get_all_branch_data);
+        // console.log(nn);
+        // console.log(props?.get_all_branch_data);
         const common_restaurants = props?.get_all_branch_data?.filter((elem) => nn?.find(({ res_id }) => elem._id === res_id));
-        console.log(common_restaurants);
+        // console.log(common_restaurants);
 
         const restaurant_data_edit = common_restaurants ? common_restaurants.map((item, key) => {
             return { label: item.name, value: item._id };
@@ -145,7 +145,7 @@ function Slider(props) {
 
 
     const handleEditSlider = (row) => {
-        console.log(row);
+        // console.log(row);
 
         setEditInfo(prevState => ({
             _id: row._id,
@@ -251,6 +251,8 @@ function Slider(props) {
 
 
     useEffect(() => {
+        props.get_all_branch_data
+
         if (props.get_all_branch_loading == false) {
             props.getAllBranchAction();
         }
