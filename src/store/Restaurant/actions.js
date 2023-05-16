@@ -1458,6 +1458,8 @@ export const addRestaurantMenuAction = (
                   const _addon_id = uuidv4()
                   return {
                     ...add_ons,
+                    add_ons_name: add_ons.add_on_name,
+                    add_ons_price: add_ons.add_on_price,
                     _id: _addon_id,
                     variation_and_add_on_category_id: _id,
                   }
@@ -1469,6 +1471,8 @@ export const addRestaurantMenuAction = (
           }
         })
       : []
+
+  console.log("variationData :", variationData)
 
   const menuTimingData =
     menuTiming.length > 0
