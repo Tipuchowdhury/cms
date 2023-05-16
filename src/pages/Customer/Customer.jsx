@@ -373,9 +373,9 @@ function Customer(props) {
                                 <CardBody>
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
                                         <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Customers</CardTitle>
-                                        <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
+                                        {/* <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
                                             Add Customer
-                                        </Button>
+                                        </Button> */}
                                     </div>
 
                                     {props.get_all_customer_data ? props.get_all_customer_data.length > 0 ? <DatatableTablesWorking products={props.get_all_customer_data}
@@ -485,7 +485,7 @@ function Customer(props) {
                                 <input type="text" className="form-control" id="mobile" placeholder="Enter mobile" required name="mobile" value={editInfo.mobile} onChange={handleEditInputs} />
                             </div>
 
-                            <div className="mb-3">
+                            {/* <div className="mb-3">
                                 <label className="form-label" htmlFor="image">Image</label>
                                 <input type="file" className="form-control" id="image" name="image" onChange={handleEditFile} />
                             </div>
@@ -503,7 +503,7 @@ function Customer(props) {
                                         />
                                     </div>
                                 </Row>
-                            )}
+                            )} */}
 
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="subscription_type_id">Subscription Types</label>
@@ -519,9 +519,9 @@ function Customer(props) {
 
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
-                                <Button color="primary" type="submit">
+                                {/* <Button color="primary" type="submit">
                                     Submit
-                                </Button>{' '}
+                                </Button>{' '} */}
                                 <Button color="secondary" onClick={toggleEditModal}>
                                     Cancel
                                 </Button>
