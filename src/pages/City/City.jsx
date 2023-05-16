@@ -18,7 +18,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { Link, useNavigate } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -180,7 +180,7 @@ function City(props) {
 
   const [pagination, setPagination] = useState({
     pageIndex: 1,
-    dataLimit: 1,
+    dataLimit: 200,
   })
 
   console.log(pagination)
