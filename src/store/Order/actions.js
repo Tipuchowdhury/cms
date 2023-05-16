@@ -117,7 +117,7 @@ export const orderEditFresh = () => {
 }
 
 export const orderStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Order/ChangeOrderStatus"
+  var url = `${process.env.REACT_APP_LOCALHOST}/Order/ChangeOrderStatus?order_id=${data._id}&order_status=${data.status}`
   let formData = { order_id: data._id, order_status: data.status }
 
   return dispatch => {
@@ -127,7 +127,7 @@ export const orderStatusEditAction = data => {
       "Access-Control-Allow-Origin": "*",
     }
     axios
-      .put(url, formData, { headers: headers })
+      .put(url, { headers: headers })
       .then(response => {
         dispatch({
           type: ORDER_STATUS_EDIT,
@@ -220,7 +220,7 @@ export const getAvailableRider = zone_id => {
 }
 
 export const orderAssignRider = (order_id, rider_id) => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Order/AssaignRider"
+  var url = `${process.env.REACT_APP_LOCALHOST}/Order/AssaignRider?order_id=${order_id}&rider_id=${rider_id}`
 
   let data = {
     rider_id,
@@ -232,7 +232,7 @@ export const orderAssignRider = (order_id, rider_id) => {
       "Access-Control-Allow-Origin": "*",
     }
     axios
-      .put(url, data, { headers: headers })
+      .put(url, { headers: headers })
       .then(response => {
         dispatch({
           type: ASSIGN_RIDER,
