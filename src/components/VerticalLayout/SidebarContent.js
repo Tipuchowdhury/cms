@@ -155,6 +155,14 @@ const SidebarContent = props => {
             </li>
 
             <li>
+              <Link to="/dispatch" className="waves-effect">
+                <i className="ti-desktop"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
+                <span>{props.t("Dispatch")}</span>
+              </Link>
+            </li>
+
+            <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="mdi mdi-city-variant-outline"></i>
                 <span>{props.t("Zone & City")}</span>
@@ -181,19 +189,13 @@ const SidebarContent = props => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/customers">
-                    {props.t("Customers")}
-                  </Link>
+                  <Link to="/customers">{props.t("Customers")}</Link>
                 </li>
                 <li>
-                  <Link to="/vehicle-types">
-                    {props.t("Vehicle Types")}
-                  </Link>
+                  <Link to="/vehicle-types">{props.t("Vehicle Types")}</Link>
                 </li>
                 <li>
-                  <Link to="/riders">
-                    {props.t("Riders")}
-                  </Link>
+                  <Link to="/riders">{props.t("Riders")}</Link>
                 </li>
                 <li>
                   <Link to="/subscription-types">
@@ -222,7 +224,9 @@ const SidebarContent = props => {
                   <Link to="/restaurant">{props.t("Manage Restaurant")}</Link>
                 </li>
                 <li>
-                  <Link to="/branch-attribute">{props.t("Branch Attribute")}</Link>
+                  <Link to="/branch-attribute">
+                    {props.t("Branch Attribute")}
+                  </Link>
                 </li>
                 <li>
                   <Link to="/manage-branch">{props.t("Manage Branch")} </Link>
@@ -324,7 +328,9 @@ const SidebarContent = props => {
                   <Link to="/reason">{props.t("System On Off Reason")} </Link>
                 </li>
                 <li>
-                  <Link to="/operation-time-slot">{props.t("System Operation Time Slot")} </Link>
+                  <Link to="/operation-time-slot">
+                    {props.t("System Operation Time Slot")}{" "}
+                  </Link>
                 </li>
                 <li>
                   <Link to="/system-option">{props.t("System Option")} </Link>

@@ -36,6 +36,7 @@ import VehicleType from "./Rider/VehicleType/reducer"
 import Rider from "./Rider/Rider/reducer"
 import Permissions from "./Roles_and_Permissions/Permissions/reducer"
 import Roles from "./Roles_and_Permissions/Roles/reducer"
+import Order from "./Order/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -67,6 +68,7 @@ const rootReducer = combineReducers({
   Rider,
   Permissions,
   Roles,
+  Order,
 })
 
 export default rootReducer
