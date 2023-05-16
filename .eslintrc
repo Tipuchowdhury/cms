@@ -10,5 +10,6 @@
       "modules": true,
       "experimentalObjectRestSpread": true
     }
-  }
+  },
+  "extends": ["plugin:react-hooks/recommended"]
 }

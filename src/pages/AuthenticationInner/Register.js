@@ -1,24 +1,38 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 
-import { Row, Col, CardBody, Card, Container, Alert, Input, CardTitle } from "reactstrap";
+import {
+  Row,
+  Col,
+  CardBody,
+  Card,
+  Container,
+  Alert,
+  Input,
+  CardTitle,
+} from "reactstrap"
 
 // import images
-import logoSm from "../../assets/images/logo-sm.png";
+import logoSm from "../../assets/images/logo-sm.png"
 //redux
-import { connect, useSelector, useDispatch } from "react-redux";
-import withRouter from 'components/Common/withRouter'; ` `
+import { connect, useSelector, useDispatch } from "react-redux"
+import withRouter from "components/Common/withRouter"
+;` `
 //import { userRegistration, dataForTesting } from "store/actions";
-import { userRegistrationNew, userRegistrationFresh, getAllUsersRolesAction } from "store/register-new/actions";
+import {
+  userRegistrationNew,
+  userRegistrationFresh,
+  getAllUsersRolesAction,
+} from "store/register-new/actions"
 // import toastr from "toastr";
 // import "toastr/build/toastr.min.css"
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Breadcrumbs from 'components/Common/Breadcrumb';
-import Select from "react-select";
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import Breadcrumbs from "components/Common/Breadcrumb"
+import Select from "react-select"
 
-const Register = (props) => {
-  document.title = "Register | Foodi";
+const Register = props => {
+  document.title = "Register | Foodi"
 
   const [registerInfo, setRegisterInfo] = useState({
     first_name: "",
@@ -29,7 +43,7 @@ const Register = (props) => {
     email: "",
     role: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   })
 
   const [file, setFile] = useState()
@@ -49,94 +63,100 @@ const Register = (props) => {
     }
 
     reader.readAsDataURL(value)
-
   }
 
-  const [role, setRole] = useState();
-  const [passwordStatus, setPasswordStatus] = useState(false);
-  const navigate = useNavigate();
-  let name, value;
-  const handleInputs = (e) => {
-    console.log(e);
-    name = e.target.name;
-    value = e.target.value;
+  const [role, setRole] = useState()
+  const [passwordStatus, setPasswordStatus] = useState(false)
+  const navigate = useNavigate()
+  let name, value
+  const handleInputs = e => {
+    console.log(e)
+    name = e.target.name
+    value = e.target.value
     setRegisterInfo({ ...registerInfo, [name]: value })
-
   }
   // const getRole = (e) => {
   //   console.log(e.target.value)
   //   setRole(e.target.value)
   // }
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(registerInfo);
-    console.log(role);
+  const handleSubmit = e => {
+    e.preventDefault()
+    console.log(registerInfo)
+    console.log(role)
     if (registerInfo.password === registerInfo.confirmPassword) {
-
       console.log(registerInfo)
       console.log(file)
       console.log(role)
 
-      props.userRegistrationNew(registerInfo, file, role);
+      props.userRegistrationNew(registerInfo, file, role)
       //props.dataForTesting();
     } else {
-      setPasswordStatus(true);
+      setPasswordStatus(true)
       setTimeout(() => {
-        setPasswordStatus(false);
+        setPasswordStatus(false)
       }, "3000")
-
     }
-    setRole();
-
+    setRole()
   }
-  let userData = undefined;
+  let userData = undefined
   if (props.get_all_user_roles_data?.length > 0) {
     userData = props.get_all_user_roles_data?.map((item, key) => (
       <option key={item._id} value={item._id}>
         {item.name}
       </option>
-    ));
+    ))
   }
 
-  console.log(props.get_all_user_roles_data);
-  console.log(userData);
+  console.log(props.get_all_user_roles_data)
+  console.log(userData)
   useEffect(() => {
     if (props.registration_loading == "Success") {
       console.log("=====registration success====")
 
-      toast.success("Submitted");
-      props.userRegistrationFresh();
+      toast.success("Submitted")
+      props.userRegistrationFresh()
       navigate("/upload-token")
-
     }
 
     if (props.registration_loading == "Failed") {
       console.log("=====registration failed====")
-      toast.error("Registration Failed");
-      props.userRegistrationFresh();
-
+      toast.error("Registration Failed")
+      props.userRegistrationFresh()
     }
 
     if (props.get_all_user_roles_loading === false) {
-      props.getAllUsersRolesAction();
+      props.getAllUsersRolesAction()
     }
-  }, [props.registration_loading, props.registration_data]);
+  }, [props.registration_loading, props.registration_data])
 
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Breadcrumbs maintitle="Foodi" title="Users" breadcrumbItem="Add New User" />
+          <Breadcrumbs
+            maintitle="Foodi"
+            title="Users"
+            breadcrumbItem="Add New User"
+          />
 
           <Row>
             <Col className="col-12">
               <Card style={{ border: "none" }}>
                 <CardBody>
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
-                    <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Add a New User </CardTitle>
-
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginBottom: "0px",
+                      marginTop: "20px",
+                      backgroundColor: "#1E417D",
+                      padding: "15px",
+                    }}
+                  >
+                    <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
+                      Add a New User{" "}
+                    </CardTitle>
                   </div>
-
                 </CardBody>
               </Card>
             </Col>
@@ -146,9 +166,13 @@ const Register = (props) => {
       <Row>
         <Col className="col-10 mx-auto">
           <form className="mb-4" onSubmit={handleSubmit}>
-            {passwordStatus ? <Alert color="warning">
-              <strong>Warning!</strong> Password didn't match. Please check.
-            </Alert> : ""}
+            {passwordStatus ? (
+              <Alert color="warning">
+                <strong>Warning!</strong> Password didn't match. Please check.
+              </Alert>
+            ) : (
+              ""
+            )}
 
             <Row className="mb-3">
               <label
@@ -158,7 +182,14 @@ const Register = (props) => {
                 First Name
               </label>
               <div className="col-md-10">
-                <input type="text" className="form-control" id="first_name" placeholder="Enter username" name="first_name" onChange={handleInputs} />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="first_name"
+                  placeholder="Enter first name"
+                  name="first_name"
+                  onChange={handleInputs}
+                />
               </div>
             </Row>
 
@@ -170,16 +201,29 @@ const Register = (props) => {
                 Last Name
               </label>
               <div className="col-md-10">
-                <input type="text" className="form-control" id="last_name" placeholder="Enter username" name="last_name" onChange={handleInputs} />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="last_name"
+                  placeholder="Enter first name"
+                  name="last_name"
+                  onChange={handleInputs}
+                />
               </div>
             </Row>
 
             <Row className="mb-3">
-              <label htmlFor="image" className="col-md-2 col-form-label" >
+              <label htmlFor="image" className="col-md-2 col-form-label">
                 Image
               </label>
               <div className="col-md-10">
-                <input type="file" className="form-control" id="image" name="image" onChange={handleChange} />
+                <input
+                  type="file"
+                  className="form-control"
+                  id="image"
+                  name="image"
+                  onChange={handleChange}
+                />
               </div>
             </Row>
 
@@ -206,7 +250,14 @@ const Register = (props) => {
                 Present Address
               </label>
               <div className="col-md-10">
-                <input type="text" className="form-control" id="present_address" placeholder="Enter username" name="present_address" onChange={handleInputs} />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="present_address"
+                  placeholder="Present Address"
+                  name="present_address"
+                  onChange={handleInputs}
+                />
               </div>
             </Row>
 
@@ -218,7 +269,14 @@ const Register = (props) => {
                 Permanent Address
               </label>
               <div className="col-md-10">
-                <input type="text" className="form-control" id="permanent_address" placeholder="Enter username" name="permanent_address" onChange={handleInputs} />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="permanent_address"
+                  placeholder="Permanent Address"
+                  name="permanent_address"
+                  onChange={handleInputs}
+                />
               </div>
             </Row>
 
@@ -230,7 +288,14 @@ const Register = (props) => {
                 Mobile Number
               </label>
               <div className="col-md-10">
-                <input type="number" className="form-control" id="mobileNumber" placeholder="Enter mobile number" name="mobileNumber" onChange={handleInputs} />
+                <input
+                  type="number"
+                  className="form-control"
+                  id="mobileNumber"
+                  placeholder="Enter mobile number"
+                  name="mobileNumber"
+                  onChange={handleInputs}
+                />
               </div>
             </Row>
 
@@ -242,7 +307,14 @@ const Register = (props) => {
                 Email
               </label>
               <div className="col-md-10">
-                <input type="email" className="form-control" id="useremail" placeholder="Enter email" name="email" onChange={handleInputs} />
+                <input
+                  type="email"
+                  className="form-control"
+                  id="useremail"
+                  placeholder="Enter email"
+                  name="email"
+                  onChange={handleInputs}
+                />
               </div>
             </Row>
 
@@ -276,7 +348,15 @@ const Register = (props) => {
                 Password
               </label>
               <div className="col-md-10">
-                <input type="password" className="form-control" id="userpassword" placeholder="Enter password" name="password" onChange={handleInputs} required />
+                <input
+                  type="password"
+                  className="form-control"
+                  id="userpassword"
+                  placeholder="Enter password"
+                  name="password"
+                  onChange={handleInputs}
+                  required
+                />
               </div>
             </Row>
 
@@ -288,22 +368,39 @@ const Register = (props) => {
                 Confirm Password
               </label>
               <div className="col-md-10">
-                <input type="password" className="form-control" id="userconfirmpassword" placeholder="Enter password" name="confirmPassword" onChange={handleInputs} required />
+                <input
+                  type="password"
+                  className="form-control"
+                  id="userconfirmpassword"
+                  placeholder="Confirm password"
+                  name="confirmPassword"
+                  onChange={handleInputs}
+                  required
+                />
               </div>
             </Row>
 
             <div className="mb-3 row">
               <div className="col-12 text-end">
-                <button className="btn btn-primary w-md waves-effect waves-light" type="submit">Register</button>
+                <button
+                  className="btn btn-primary w-md waves-effect waves-light"
+                  type="submit"
+                >
+                  Register
+                </button>
               </div>
             </div>
 
             <div className="mt-2 mb-0 row">
               <div className="col-12 mt-4">
-                <p className="mb-0">By registering you agree to the Foodi <Link to="#" className="text-primary">Terms of Use</Link></p>
+                <p className="mb-0">
+                  By registering you agree to the Foodi{" "}
+                  <Link to="#" className="text-primary">
+                    Terms of Use
+                  </Link>
+                </p>
               </div>
             </div>
-
           </form>
         </Col>
       </Row>
@@ -414,20 +511,19 @@ const Register = (props) => {
         </Container>
       </div> */}
     </React.Fragment>
-  );
-};
+  )
+}
 
 const mapStateToProps = state => {
-
-  const { error,
+  const {
+    error,
     registration_data,
     registration_error,
     registration_loading,
 
     get_all_user_roles_data,
     get_all_user_roles_loading,
-
-  } = state.registerNew;
+  } = state.registerNew
 
   return {
     error,
@@ -437,16 +533,13 @@ const mapStateToProps = state => {
 
     get_all_user_roles_data,
     get_all_user_roles_loading,
-
-  };
-};
+  }
+}
 
 export default withRouter(
-  connect(mapStateToProps,
-    {
-      userRegistrationNew,
-      userRegistrationFresh,
-      getAllUsersRolesAction
-    })(Register)
-);
-
+  connect(mapStateToProps, {
+    userRegistrationNew,
+    userRegistrationFresh,
+    getAllUsersRolesAction,
+  })(Register)
+)

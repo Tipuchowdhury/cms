@@ -55,6 +55,18 @@ import {
   GET_CATEGORY_BY_ID,
   GET_CATEGORY_BY_ID_FRESH,
   ADD_BRANCH_FRESH,
+  SERVER_SIDE_PAGINATION_ZONE,
+  SERVER_SIDE_PAGINATION_ZONE_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_ZONE_FRESH,
+  SERVER_SIDE_PAGINATION_CUISINE,
+  SERVER_SIDE_PAGINATION_CUISINE_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_CUISINE_FRESH,
+  SERVER_SIDE_PAGINATION_RESTAURANT,
+  SERVER_SIDE_PAGINATION_RESTAURANT_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_RESTAURANT_FRESH,
+  SERVER_SIDE_PAGINATION_BRANCH,
+  SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -269,30 +281,30 @@ export const branchAddAction = (
   const data =
     selectedCuisine?.length > 0
       ? selectedCuisine.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          cuisine_id: item.value,
-          branch_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            cuisine_id: item.value,
+            branch_id: id,
+          }
+        })
       : null
 
   // console.log(data)
   const all_working_hours =
     time?.length > 0
       ? time.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          day: Number(item.day),
-          open_hour: moment(item.startTime, "HH:mm").get("hours"),
-          open_min: moment(item.startTime, "HH:mm").get("minutes"),
-          close_hour: moment(item.endTime, "HH:mm").get("hours"),
-          close_minute: moment(item.endTime, "HH:mm").get("minutes"),
-          branch_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            day: Number(item.day),
+            open_hour: moment(item.startTime, "HH:mm").get("hours"),
+            open_min: moment(item.startTime, "HH:mm").get("minutes"),
+            close_hour: moment(item.endTime, "HH:mm").get("hours"),
+            close_minute: moment(item.endTime, "HH:mm").get("minutes"),
+            branch_id: id,
+          }
+        })
       : null
 
   const dataObject = {
@@ -315,7 +327,7 @@ export const branchAddAction = (
     is_veg: JSON.parse(zoneInfo.is_veg),
     is_popular: JSON.parse(zoneInfo.is_popular),
     commission: JSON.parse(zoneInfo.commission),
-    min_order_value: 1,
+    min_order_value: zoneInfo.minimum_order_value,
     delivery_time: JSON.parse(zoneInfo.delivery_time),
     parent_restaurant_id: zoneInfo.restaurant,
     working_hours: all_working_hours,
@@ -325,7 +337,7 @@ export const branchAddAction = (
     is_delivery: JSON.parse(zoneInfo.is_delivery),
     is_pickup: JSON.parse(zoneInfo.is_pickup),
     is_dine: JSON.parse(zoneInfo.is_dine),
-    delivery_charge: 100,
+    delivery_charge: zoneInfo.delivery_time,
   }
 
   //console.log(dataObject)
@@ -387,30 +399,30 @@ export const branchEditAction = (
   const data =
     selectedCuisine?.length > 0
       ? selectedCuisine.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          cuisine_id: item.value,
-          branch_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            cuisine_id: item.value,
+            branch_id: id,
+          }
+        })
       : null
 
   // console.log(data)
   const all_working_hours =
     time?.length > 0
       ? time.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          day: Number(item.day),
-          open_hour: moment(item.startTime, "HH:mm").get("hours"),
-          open_min: moment(item.startTime, "HH:mm").get("minutes"),
-          close_hour: moment(item.endTime, "HH:mm").get("hours"),
-          close_minute: moment(item.endTime, "HH:mm").get("minutes"),
-          branch_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            day: Number(item.day),
+            open_hour: moment(item.startTime, "HH:mm").get("hours"),
+            open_min: moment(item.startTime, "HH:mm").get("minutes"),
+            close_hour: moment(item.endTime, "HH:mm").get("hours"),
+            close_minute: moment(item.endTime, "HH:mm").get("minutes"),
+            branch_id: id,
+          }
+        })
       : null
   const dataObject = {
     name: zoneInfo.name,
@@ -432,12 +444,12 @@ export const branchEditAction = (
     is_veg: JSON.parse(zoneInfo.is_veg),
     is_popular: JSON.parse(zoneInfo.is_popular),
     commission: JSON.parse(zoneInfo.commission),
-    min_order_value: 1,
+    min_order_value: zoneInfo.minimum_order_value,
     delivery_time: JSON.parse(zoneInfo.delivery_time),
     parent_restaurant_id: zoneInfo.restaurant,
     working_hours: all_working_hours,
     cuisines: data,
-    delivery_charge: 100,
+    delivery_charge: zoneInfo.delivery_time,
   }
 
   const formData = convertToFormData(dataObject)
@@ -677,27 +689,27 @@ export const zoneAddAction = (
   const data =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          branch_id: item.value,
-          zone_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            branch_id: item.value,
+            zone_id: id,
+          }
+        })
       : null
 
   const delivery_charges =
     deliveryCharge?.length > 0
       ? deliveryCharge.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          distance_start_in_kilometer: Number(item.distanceStart),
-          distance_end_in_kilometer: Number(item.distanceEnd),
-          delivery_charge: Number(item.deliveryCharge),
-          zone_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            distance_start_in_kilometer: Number(item.distanceStart),
+            distance_end_in_kilometer: Number(item.distanceEnd),
+            delivery_charge: Number(item.deliveryCharge),
+            zone_id: id,
+          }
+        })
       : null
 
   const allData = path.map(item => [Number(item.lng), Number(item.lat)])
@@ -797,27 +809,27 @@ export const zoneEditAction = (
   const data =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          branch_id: item.value,
-          zone_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            branch_id: item.value,
+            zone_id: id,
+          }
+        })
       : null
 
   const delivery_charges =
     deliveryCharge?.length > 0
       ? deliveryCharge.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          distance_start_in_kilometer: Number(item.distanceStart),
-          distance_end_in_kilometer: Number(item.distanceEnd),
-          delivery_charge: Number(item.deliveryCharge),
-          zone_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            distance_start_in_kilometer: Number(item.distanceStart),
+            distance_end_in_kilometer: Number(item.distanceEnd),
+            delivery_charge: Number(item.deliveryCharge),
+            zone_id: id,
+          }
+        })
       : null
 
   const allData = path.map(item => [Number(item.lat), Number(item.lng)])
@@ -1007,15 +1019,15 @@ export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
   const data =
     addOns?.length > 0
       ? addOns.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          add_on_name: item.add_on_name,
-          add_on_price: item.add_on_price,
-          add_on_category_name: category.name,
-          add_on_category_id: val,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            add_on_name: item.add_on_name,
+            add_on_price: item.add_on_price,
+            add_on_category_name: category.name,
+            add_on_category_id: val,
+          }
+        })
       : null
   const val_id = uuidv4()
   // console.log(data)
@@ -1068,15 +1080,15 @@ export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
   const data =
     addOns?.length > 0
       ? addOns.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          add_on_name: item.add_on_name,
-          add_on_price: item.add_on_price,
-          add_on_category_name: category.name,
-          add_on_category_id: val,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            add_on_name: item.add_on_name,
+            add_on_price: item.add_on_price,
+            add_on_category_name: category.name,
+            add_on_category_id: val,
+          }
+        })
       : null
   const val_id = uuidv4()
   // console.log(data)
@@ -1161,6 +1173,7 @@ export const addOnCategoryStatusEditActionFresh = () => {
 
 export const addCuisineAction = (id, name, file, color) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Post"
+  console.log(id, name)
   console.log(file)
 
   let dataObject = {
@@ -1437,38 +1450,38 @@ export const addRestaurantMenuAction = (
   const variationData =
     isChecked && variations?.length > 0
       ? variations.map(item => {
-        const _id = uuidv4()
-        return {
-          ...item,
-          add_on_categories: item.add_on_categories.map(addon_cats => {
-            return {
-              ...addon_cats,
-              add_ons: addon_cats.add_ons.map(add_ons => {
-                const _addon_id = uuidv4()
-                return {
-                  ...add_ons,
-                  _id: _addon_id,
-                  variation_and_add_on_category_id: _id,
-                }
-              }),
-            }
-          }),
-          _id: _id,
-          menu_id: val,
-        }
-      })
+          const _id = uuidv4()
+          return {
+            ...item,
+            add_on_categories: item.add_on_categories.map(addon_cats => {
+              return {
+                ...addon_cats,
+                add_ons: addon_cats.add_ons.map(add_ons => {
+                  const _addon_id = uuidv4()
+                  return {
+                    ...add_ons,
+                    _id: _addon_id,
+                    variation_and_add_on_category_id: _id,
+                  }
+                }),
+              }
+            }),
+            _id: _id,
+            menu_id: val,
+          }
+        })
       : []
 
   const menuTimingData =
     menuTiming.length > 0
       ? menuTiming.map(item => {
-        const _id = uuidv4()
-        return {
-          _id: _id,
-          menu_item_time_slot_id: item._id,
-          menu_id: val,
-        }
-      })
+          const _id = uuidv4()
+          return {
+            _id: _id,
+            menu_item_time_slot_id: item._id,
+            menu_id: val,
+          }
+        })
       : []
 
   let dataObject = {
@@ -1827,4 +1840,277 @@ export const getCategoryByIdFresh = () => {
       payload: null,
     })
   }
+}
+
+export const getServerSidePaginationZoneAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Zone/Search?page=${index}&limit=${limit}`
+  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ZONE,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ZONE,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationZoneSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Zone/Search?zone_name=${name}`
+  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=1&limit=2`;
+  console.log(url)
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ZONE_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ZONE_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchZoneFresh = () => {
+  console.log(
+    "======= hello from getServerSidePaginationSearchZoneFresh ========="
+  )
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_ZONE_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getServerSidePaginationCuisineAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Cuisine/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUISINE,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUISINE,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationCuisineSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Cuisine/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUISINE_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUISINE_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchCuisineFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_CUISINE_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getServerSidePaginationRestaurantAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Restaurant/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_RESTAURANT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_RESTAURANT,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationRestaurantSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Restaurant/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_RESTAURANT_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_RESTAURANT_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchRestaurantFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_RESTAURANT_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getServerSidePaginationBranchAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Branch/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_BRANCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_BRANCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationBranchSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Branch/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchBranchFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
+      status: false,
+      payload: null,
+    })
 }
