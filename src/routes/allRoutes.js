@@ -151,6 +151,7 @@ import Riders from "pages/Rider/Riders/Riders"
 import AddRider from "pages/Rider/Riders/AddRider"
 import Permissions from "pages/roles_and_permissions/Permissions/Permissions"
 import Roles from "pages/roles_and_permissions/Roles/Roles"
+import Order from "pages/Order/Order"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -241,6 +242,8 @@ const userRoutes = [
   { path: "/permissions", component: <Permissions /> },
   { path: "/roles", component: <Roles /> },
 
+  // Orders
+  { path: "/dispatch", component: <Order /> },
 
   // Notification
   { path: "/notification", component: <Notification /> },
