@@ -8,7 +8,7 @@ import {
   VEHICLE_TYPE_DELETE,
   VEHICLE_TYPE_DELETE_FRESH,
   EDIT_VEHICLE_TYPE_STATUS,
-  EDIT_VEHICLE_TYPE_STATUS_FRESH
+  EDIT_VEHICLE_TYPE_STATUS_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -23,14 +23,13 @@ export const addVehicleTypeAction = (id, data) => {
   let formData = {
     _id: id,
     ...data,
-  };
+  }
 
   // console.log(dataObject);
 
   // const formData = convertToFormData(dataObject)
 
   return dispatch => {
-
     const headers = {
       // "Content-Type": "multipart/form-data",
       "Content-Type": "application/json",
@@ -102,12 +101,12 @@ export const getAllVehicleTypeFresh = () => {
   }
 }
 
-export const vehicleTypeEditAction = (data) => {
+export const vehicleTypeEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/VehicleType/Put"
 
   const formData = {
     ...data,
-  };
+  }
 
   // onst formData = convertToFormData(dataObject)
   // console.log(formData);
@@ -150,7 +149,7 @@ export const vehicleTypeEditFresh = () => {
 export const vehicleTypeStatusEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/VehicleType/Put"
 
-  const formData = data;
+  const formData = data
 
   // const formData = convertToFormData(dataObject)
   return dispatch => {

@@ -18,7 +18,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { Link, useNavigate } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
-  ; ` `
+;` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -33,7 +33,11 @@ import {
 } from "store/CRM/RewardPoints/actions"
 
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
-import { getAllSubscriptionTypeAction, rewardStatusEditAction, rewardStatusEditActionFresh } from "store/actions"
+import {
+  getAllSubscriptionTypeAction,
+  rewardStatusEditAction,
+  rewardStatusEditActionFresh,
+} from "store/actions"
 import Select from "react-select"
 
 function RewardPoint(props) {
@@ -45,15 +49,15 @@ function RewardPoint(props) {
   const [editModal, setEditModal] = useState(false)
   const [reload, setReload] = useState(false)
 
-  const [statusItem, setStatusItem] = useState(false);
-  const [modalStatusUpdate, setModalStatusUpdate] = useState(false);
+  const [statusItem, setStatusItem] = useState(false)
+  const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
 
-  const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate);
+  const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
 
-  const handleStatusModal = (row) => {
+  const handleStatusModal = row => {
     //  console.log(row);
-    setStatusItem(row);
-    toggleStatus();
+    setStatusItem(row)
+    toggleStatus()
   }
 
   const handleStatusUpdate = () => {
@@ -67,9 +71,9 @@ function RewardPoint(props) {
   const [deleteItem, setDeleteItem] = useState()
   const [modalDel, setModalDel] = useState(false)
 
-  const [selectedSubscription, setSelectedSubscription] = useState([]);
-  const handleSelectSubscription = (e) => {
-    var new_data = [e];
+  const [selectedSubscription, setSelectedSubscription] = useState([])
+  const handleSelectSubscription = e => {
+    var new_data = [e]
     //console.log(new_data)
     setSelectedSubscription(new_data)
   }
@@ -90,26 +94,30 @@ function RewardPoint(props) {
     props.addRewardPointAction(val, value, selectedSubType.value)
   }
 
-  const editSubscriptionType = (subscription_type) => {
-    const common_subs = props?.get_all_subscription_type_data?.filter((elem) => subscription_type?.find(({ sub_id }) => elem._id === sub_id));
+  const editSubscriptionType = subscription_type => {
+    const common_subs = props?.get_all_subscription_type_data?.filter(elem =>
+      subscription_type?.find(({ sub_id }) => elem._id === sub_id)
+    )
 
-    const subs_data_edit = common_subs ? common_subs.map((item, key) => {
-      return { label: item.name, value: item._id };
-    }) : "";
-    setSelectedSubscription(subs_data_edit);
-
+    const subs_data_edit = common_subs
+      ? common_subs.map((item, key) => {
+          return { label: item.name, value: item._id }
+        })
+      : ""
+    setSelectedSubscription(subs_data_edit)
   }
 
   const handleEditRewardPointName = row => {
     // console.log(row)
     setRewardPointId(row._id)
     setValue(row.per_point_value)
-    setRewardStatus(row.is_active);
+    setRewardStatus(row.is_active)
     //setSelectedSubType(row.subscription_type_id)
-    const new_array = [{
-      sub_id: row.subscription_type_id
-    }
-    ];
+    const new_array = [
+      {
+        sub_id: row.subscription_type_id,
+      },
+    ]
     editSubscriptionType(new_array)
     toggleEditModal()
   }
@@ -120,7 +128,12 @@ function RewardPoint(props) {
   const handleEditModalSubmit = e => {
     e.preventDefault()
     toggleEditModal()
-    props.rewardPointNameEditAction(value, rewardPointId, selectedSubscription[0].value, rewardStatus)
+    props.rewardPointNameEditAction(
+      value,
+      rewardPointId,
+      selectedSubscription[0].value,
+      rewardStatus
+    )
   }
   const handleDeleteModal = row => {
     setDeleteItem(row._id)
@@ -133,8 +146,8 @@ function RewardPoint(props) {
 
   const sub_type_data_edit = common_sub_type
     ? common_sub_type?.map((item, key) => {
-      return { label: item.name, value: item._id }
-    })
+        return { label: item.name, value: item._id }
+      })
     : ""
   //select multiple branch
   const [selectedSubType, setSelectedSubType] = useState(
@@ -182,8 +195,15 @@ function RewardPoint(props) {
   //   </Badge>
   // )
 
-  const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
-    className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
+  const statusRef = (cell, row) => (
+    <Button
+      color={row.is_active ? "success" : "secondary"}
+      className="btn waves-effect waves-light"
+      onClick={() => handleStatusModal(row)}
+    >
+      {row.is_active ? "Active" : "Deactivate"}
+    </Button>
+  )
 
   console.log(props.add_rewardPoint_loading)
   console.log(props.get_all_rewardPoint_data)
@@ -443,16 +463,28 @@ function RewardPoint(props) {
 
         {/* ============ status update modal starts=============== */}
         <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
-          <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
+          <ModalHeader
+            className="text-center"
+            style={{ textAlign: "center", margin: "0 auto" }}
+          >
             <div className="icon-box">
-              <i className="fa fa-exclamation-circle" style={{ color: "#DCA218", fontSize: "40px" }}></i>
+              <i
+                className="fa fa-exclamation-circle"
+                style={{ color: "#DCA218", fontSize: "40px" }}
+              ></i>
             </div>
             Are you sure?
           </ModalHeader>
-          <ModalBody>Do you really want to update status these records? </ModalBody>
+          <ModalBody>
+            Do you really want to update status these records?{" "}
+          </ModalBody>
           <ModalFooter>
-            <Button color="secondary" onClick={toggleStatus}>Cancel</Button>{' '}
-            <Button color="primary" onClick={handleStatusUpdate}>Update</Button>
+            <Button color="secondary" onClick={toggleStatus}>
+              Cancel
+            </Button>{" "}
+            <Button color="primary" onClick={handleStatusUpdate}>
+              Update
+            </Button>
           </ModalFooter>
         </Modal>
         {/* ============ status update modal ends=============== */}
@@ -506,6 +538,6 @@ export default withRouter(
     rewardPointDeleteFresh,
     getAllSubscriptionTypeAction,
     rewardStatusEditAction,
-    rewardStatusEditActionFresh
+    rewardStatusEditActionFresh,
   })(RewardPoint)
 )

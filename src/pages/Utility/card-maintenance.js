@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types"
 import React from "react"
 import { Col, Card, CardBody } from "reactstrap"
 
@@ -15,7 +15,7 @@ const CardMaintenance = props => {
 }
 
 CardMaintenance.propTypes = {
-  children: PropTypes.any
+  children: PropTypes.any,
 }
 
 export default CardMaintenance

@@ -54,7 +54,6 @@ const SocialSource = () => {
               <Col xs="4" key={"_li_" + key}>
                 <div className="social-source text-center mt-3">
                   <div className="avatar-xs mx-auto mb-3">
-
                     <span
                       className={
                         "avatar-title rounded-circle " +

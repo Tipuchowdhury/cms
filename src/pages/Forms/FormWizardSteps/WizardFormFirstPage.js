@@ -211,8 +211,7 @@ const WizardFormFirstPage = props => {
         >
           {" "}
           Previous{" "}
-        </button>
-        {" "}
+        </button>{" "}
         &nbsp;
         <button type="submit" className="btn btn-primary next">
           {" "}
@@ -227,5 +226,5 @@ export default reduxForm({
   form: "wizard", // <------ same form name
   destroyOnUnmount: false, // <------ preserve form data
   forceUnregisterOnUnmount: true, // <------ unregister fields on unmount
-  validate
+  validate,
 })(WizardFormFirstPage)

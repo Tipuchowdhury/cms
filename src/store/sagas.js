@@ -8,7 +8,6 @@ import ProfileSaga from "./auth/profile/saga"
 import LayoutSaga from "./layout/saga"
 import calendarSaga from "./calendar/saga"
 
-
 export default function* rootSaga() {
   yield all([
     //public

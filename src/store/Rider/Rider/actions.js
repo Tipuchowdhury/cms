@@ -10,7 +10,7 @@ import {
   RIDER_STATUS_EDIT,
   RIDER_STATUS_EDIT_FRESH,
   RIDER_APPROVED_EDIT,
-  RIDER_APPROVED_EDIT_FRESH
+  RIDER_APPROVED_EDIT_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -20,21 +20,22 @@ import { v4 as uuidv4 } from "uuid"
 // token
 var token = JSON.parse(localStorage.getItem("jwt"))
 
-
 export const addRiderAction = (id, data, selectedZone) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Rider/Post"
 
   // console.log(selectedZone);
 
-  const zone = selectedZone?.length > 0 ? selectedZone.map(item => {
-    const val = uuidv4()
-    return {
-      _id: val,
-      zone_id: item.value,
-      rider_id: id,
-    }
-  }) : null
-
+  const zone =
+    selectedZone?.length > 0
+      ? selectedZone.map(item => {
+          const val = uuidv4()
+          return {
+            _id: val,
+            zone_id: item.value,
+            rider_id: id,
+          }
+        })
+      : null
 
   const dataObject = {
     _id: id,
@@ -122,15 +123,17 @@ export const getAllRiderFresh = () => {
 export const riderEditAction = (id, data, selectedZone) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Rider/Put"
 
-  const zone = selectedZone?.length > 0 ? selectedZone.map(item => {
-    const val = uuidv4()
-    return {
-      _id: val,
-      zone_id: item.value,
-      rider_id: id,
-    }
-  }) : null
-
+  const zone =
+    selectedZone?.length > 0
+      ? selectedZone.map(item => {
+          const val = uuidv4()
+          return {
+            _id: val,
+            zone_id: item.value,
+            rider_id: id,
+          }
+        })
+      : null
 
   const dataObject = {
     _id: id,

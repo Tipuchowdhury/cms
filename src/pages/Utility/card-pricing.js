@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types"
 import React from "react"
 import { Link } from "react-router-dom"
 import { Card, CardBody, Col } from "reactstrap"
@@ -31,7 +31,8 @@ const CardPricing = props => {
                 <sup>
                   <small>$</small>
                 </sup>
-                {props.pricing.price}/<span className="font-size-16">{props.pricing.duration}</span>
+                {props.pricing.price}/
+                <span className="font-size-16">{props.pricing.duration}</span>
               </h1>
             </div>
             <div className="d-grid mt-5">
@@ -50,7 +51,7 @@ const CardPricing = props => {
 }
 
 CardPricing.propTypes = {
-  pricing: PropTypes.object
+  pricing: PropTypes.object,
 }
 
 export default CardPricing

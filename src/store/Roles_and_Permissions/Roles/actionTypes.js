@@ -1,6 +1,6 @@
-export const ADD_ROLE = "ADD_ROLE";
+export const ADD_ROLE = "ADD_ROLE"
 export const ADD_ROLE_FRESH = "ADD_ROLE_FRESH"
-export const GET_ALL_ROLE = "GET_ALL_ROLE";
+export const GET_ALL_ROLE = "GET_ALL_ROLE"
 export const GET_ALL_ROLE_FRESH = "GET_ALL_ROLE_FRESH"
 export const ROLE_EDIT = "ROLE_EDIT"
 export const ROLE_STATUS_EDIT = "ROLE_STATUS_EDIT"

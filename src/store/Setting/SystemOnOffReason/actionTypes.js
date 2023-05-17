@@ -1,6 +1,6 @@
-export const ADD_REASON = "ADD_REASON";
+export const ADD_REASON = "ADD_REASON"
 export const ADD_REASON_FRESH = "ADD_REASON_FRESH"
-export const GET_ALL_REASON = "GET_ALL_REASON";
+export const GET_ALL_REASON = "GET_ALL_REASON"
 export const GET_ALL_REASON_FRESH = "GET_ALL_REASON_FRESH"
 export const REASON_EDIT = "REASON_EDIT"
 export const REASON_STATUS_EDIT = "REASON_STATUS_EDIT"

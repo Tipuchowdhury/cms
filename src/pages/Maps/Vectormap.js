@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types"
 import React from "react"
 import { VectorMap } from "react-jvectormap"
 import "./jquery-jvectormap.scss"
@@ -40,7 +40,7 @@ const Vectormap = props => {
 Vectormap.propTypes = {
   color: PropTypes.string,
   value: PropTypes.any,
-  width: PropTypes.any
+  width: PropTypes.any,
 }
 
 export default Vectormap

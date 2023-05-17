@@ -25,7 +25,7 @@ class SettingMenu extends Component {
             color="primary"
             className="arrow-none waves-effect waves-light"
           >
-            <i className="mdi mdi-settings ms-2"/> Settings
+            <i className="mdi mdi-settings ms-2" /> Settings
           </DropdownToggle>
           <DropdownMenu className="language-switch" end>
             <DropdownItem tag="a" href="#">
@@ -37,7 +37,7 @@ class SettingMenu extends Component {
             <DropdownItem tag="a" href="#">
               Something else here
             </DropdownItem>
-            <div className="dropdown-divider"/>
+            <div className="dropdown-divider" />
             <DropdownItem tag="a" href="#">
               Separated link
             </DropdownItem>

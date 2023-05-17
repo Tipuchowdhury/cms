@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types"
 import React from "react"
 
 const LiVerticalTimeline = props => {
@@ -33,7 +33,7 @@ const LiVerticalTimeline = props => {
 }
 
 LiVerticalTimeline.propTypes = {
-  status: PropTypes.object
+  status: PropTypes.object,
 }
 
 export default LiVerticalTimeline

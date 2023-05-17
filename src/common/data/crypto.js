@@ -146,7 +146,7 @@ const wallet = {
       amountinUSD: "$ 9067.62",
     },
   ],
-};
+}
 
 const cryptoOrders = [
   {
@@ -277,6 +277,6 @@ const cryptoOrders = [
     valueinUSD: "$ 1773.01",
     status: "completed",
   },
-];
+]
 
-export { wallet, cryptoOrders };
+export { wallet, cryptoOrders }

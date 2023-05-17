@@ -17,13 +17,13 @@ class ActivityComp extends Component {
             <ul className="verti-timeline list-unstyled">
               <li className="event-list">
                 <div className="event-timeline-dot">
-                  <i className="bx bx-right-arrow-circle font-size-18"/>
+                  <i className="bx bx-right-arrow-circle font-size-18" />
                 </div>
                 <Media>
                   <div className="me-3">
                     <h5 className="font-size-14">
                       22 Nov{" "}
-                      <i className="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"/>
+                      <i className="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2" />
                     </h5>
                   </div>
                   <Media body>
@@ -34,13 +34,13 @@ class ActivityComp extends Component {
 
               <li className="event-list">
                 <div className="event-timeline-dot">
-                  <i className="bx bx-right-arrow-circle font-size-18"/>
+                  <i className="bx bx-right-arrow-circle font-size-18" />
                 </div>
                 <Media>
                   <div className="me-3">
                     <h5 className="font-size-14">
                       17 Nov{" "}
-                      <i className="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"/>
+                      <i className="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2" />
                     </h5>
                   </div>
                   <Media body>
@@ -53,13 +53,13 @@ class ActivityComp extends Component {
               </li>
               <li className="event-list active">
                 <div className="event-timeline-dot">
-                  <i className="bx bxs-right-arrow-circle font-size-18 bx-fade-right"/>
+                  <i className="bx bxs-right-arrow-circle font-size-18 bx-fade-right" />
                 </div>
                 <Media>
                   <div className="me-3">
                     <h5 className="font-size-14">
                       15 Nov{" "}
-                      <i className="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"/>
+                      <i className="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2" />
                     </h5>
                   </div>
                   <Media body>
@@ -69,13 +69,13 @@ class ActivityComp extends Component {
               </li>
               <li className="event-list">
                 <div className="event-timeline-dot">
-                  <i className="bx bx-right-arrow-circle font-size-18"/>
+                  <i className="bx bx-right-arrow-circle font-size-18" />
                 </div>
                 <Media>
                   <div className="me-3">
                     <h5 className="font-size-14">
                       12 Nov{" "}
-                      <i className="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"/>
+                      <i className="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2" />
                     </h5>
                   </div>
                   <Media body>
@@ -89,7 +89,7 @@ class ActivityComp extends Component {
                 to="#"
                 className="btn btn-primary waves-effect waves-light btn-sm"
               >
-                View More <i className="mdi mdi-arrow-right ms-1"/>
+                View More <i className="mdi mdi-arrow-right ms-1" />
               </Link>
             </div>
           </CardBody>

@@ -9,7 +9,7 @@ const TopCities = () => {
           <CardTitle className="mb-4">Top Cities Selling Product</CardTitle>
           <div className="text-center">
             <div className="mb-4">
-              <i className="bx bx-map-pin text-primary display-4"/>
+              <i className="bx bx-map-pin text-primary display-4" />
             </div>
             <h3>1,456</h3>
             <p>San Francisco</p>

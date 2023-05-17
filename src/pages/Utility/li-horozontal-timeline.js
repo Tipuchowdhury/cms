@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types"
 import React from "react"
 
 const LiHorizontalTimeline = props => {
@@ -17,7 +17,7 @@ const LiHorizontalTimeline = props => {
             <h5 className="mb-4">{props.event.title}</h5>
           </div>
           <div className="event-down-icon">
-            <i className="bx bx-down-arrow-circle h1 text-primary down-arrow-icon"/>
+            <i className="bx bx-down-arrow-circle h1 text-primary down-arrow-icon" />
           </div>
 
           <div className="mt-3 px-3">
@@ -31,7 +31,7 @@ const LiHorizontalTimeline = props => {
 
 LiHorizontalTimeline.propTypes = {
   event: PropTypes.object,
-  key: PropTypes.any
+  key: PropTypes.any,
 }
 
 export default LiHorizontalTimeline
