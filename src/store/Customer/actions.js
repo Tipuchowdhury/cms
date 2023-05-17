@@ -33,8 +33,8 @@ export const addCustomerAction = (id, data, sub_id) => {
   return dispatch => {
 
     const headers = {
-      "Content-Type": "multipart/form-data",
-      // "Content-Type": "application/json",
+      //"Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -116,7 +116,7 @@ export const customerEditAction = (data, sub_id) => {
   return dispatch => {
     const headers = {
       "Content-Type": "multipart/form-data",
-      // "Content-Type": "application/json",
+      //"Content-Type": "application/json",
 
       "Access-Control-Allow-Origin": "*",
     }

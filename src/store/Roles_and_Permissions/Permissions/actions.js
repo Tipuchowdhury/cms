@@ -19,7 +19,7 @@ export const addPermissionAction = (addData, routes) => {
                 const route_id = uuidv4()
                 return {
                     _id: route_id,
-                    route: item.route,
+                    path: item.path,
                     permission_id: val,
                     is_active: true
                 }
@@ -59,7 +59,6 @@ export const addPermissionAction = (addData, routes) => {
                     status: "Failed",
                 });
             });
-
     };
 
 };
@@ -122,13 +121,14 @@ export const permissionUpdateAction = (editData, routes) => {
                 const route_id = uuidv4()
                 return {
                     _id: route_id,
-                    route: item.route,
+                    path: item.path,
                     permission_id: editData._id,
                     is_active: true
                 }
             })
             : null
     const formData = { ...editData, routes: data };
+    // console.log(formData)
     return dispatch => {
         const headers = {
             "Content-Type": "application/json",

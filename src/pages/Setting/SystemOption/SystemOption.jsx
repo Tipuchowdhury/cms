@@ -71,8 +71,8 @@ function SystemOption(props) {
 
     const [options, setOptions] = useState([]);
 
-
     useEffect(() => {
+        //console.log(props.get_all_system_option_data)
         setOptions(props.get_all_system_option_data)
 
         props.get_all_system_option_data?.filter(obj => {
@@ -80,7 +80,7 @@ function SystemOption(props) {
                 setSystemOnOffReason(true)
             }
         });
-    }, [])
+    }, [props.get_all_system_option_data])
 
     const enums = options?.filter(obj => {
         return obj.type === 'enum' && obj.name != 'system_off_reason';

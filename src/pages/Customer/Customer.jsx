@@ -36,8 +36,8 @@ function Customer(props) {
     })
 
     const [addInfo, setAddInfo] = useState({
-        first_name: "",
-        last_name: "",
+        firstName: "",
+        lastName: "",
         email: "",
         mobile: "",
         image: "",
@@ -56,8 +56,8 @@ function Customer(props) {
 
     const [editInfo, setEditInfo] = useState({
         _id: "",
-        first_name: "",
-        last_name: "",
+        firstName: "",
+        lastName: "",
         email: "",
         mobile: "",
         image: "",
@@ -68,8 +68,8 @@ function Customer(props) {
 
         setEditInfo(prevState => ({
             _id: row._id,
-            first_name: row.first_name,
-            last_name: row.last_name,
+            firstName: row.firstName,
+            lastName: row.lastName,
             email: row.email,
             mobile: row.mobile,
             image: row.image,
@@ -247,12 +247,12 @@ function Customer(props) {
     const activeData = [
 
         {
-            dataField: "first_name",
+            dataField: "firstName",
             text: "First Name",
             sort: true,
         },
         {
-            dataField: "last_name",
+            dataField: "lastName",
             text: "Last Name",
             sort: true,
         },
@@ -283,7 +283,7 @@ function Customer(props) {
     ];
     const defaultSorted = [
         {
-            dataField: "first_name",
+            dataField: "firstName",
             order: "desc"
         }
     ];
@@ -304,8 +304,8 @@ function Customer(props) {
             toggle();
             setAddInfo({
                 ...addInfo,
-                first_name: "",
-                last_name: "",
+                firstName: "",
+                lastName: "",
                 email: "",
                 mobile: "",
                 image: "",
@@ -373,9 +373,9 @@ function Customer(props) {
                                 <CardBody>
                                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "40px", marginTop: "20px", backgroundColor: "#1E417D", padding: "15px" }}>
                                         <CardTitle className="h4" style={{ color: "#FFFFFF" }}>Customers</CardTitle>
-                                        <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
+                                        {/* <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
                                             Add Customer
-                                        </Button>
+                                        </Button> */}
                                     </div>
 
                                     {props.get_all_customer_data ? props.get_all_customer_data.length > 0 ? <DatatableTablesWorking products={props.get_all_customer_data}
@@ -394,13 +394,13 @@ function Customer(props) {
                         <form className="mt-1" onSubmit={handleSubmit}>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="first_name">First Name</label>
-                                <input type="text" className="form-control" id="first_name" placeholder="Enter First Name" required name="first_name" value={addInfo.first_name} onChange={handleAddInputs} />
+                                <label className="form-label" htmlFor="firstName">First Name</label>
+                                <input type="text" className="form-control" id="firstName" placeholder="Enter First Name" required name="firstName" value={addInfo.firstName} onChange={handleAddInputs} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="last_name">Last Name</label>
-                                <input type="text" className="form-control" id="last_name" placeholder="Enter last name" required name="last_name" value={addInfo.last_name} onChange={handleAddInputs} />
+                                <label className="form-label" htmlFor="lastName">Last Name</label>
+                                <input type="text" className="form-control" id="lastName" placeholder="Enter last name" required name="lastName" value={addInfo.lastName} onChange={handleAddInputs} />
                             </div>
 
                             <div className="mb-3">
@@ -415,7 +415,7 @@ function Customer(props) {
 
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="image">Image</label>
-                                <input type="file" className="form-control" id="image" required name="image" onChange={handleAddFile} />
+                                <input type="file" className="form-control" id="image" name="image" onChange={handleAddFile} />
                             </div>
 
                             {addImages?.image && (
@@ -466,13 +466,13 @@ function Customer(props) {
                         <form className="mt-1" onSubmit={handleEditSubmit} >
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="first_name">First Name</label>
-                                <input type="text" className="form-control" id="first_name" placeholder="Enter First Name" required name="first_name" value={editInfo.first_name} onChange={handleEditInputs} />
+                                <label className="form-label" htmlFor="firstName">First Name</label>
+                                <input type="text" className="form-control" id="firstName" placeholder="Enter First Name" required name="firstName" value={editInfo.firstName} onChange={handleEditInputs} />
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label" htmlFor="last_name">Last Name</label>
-                                <input type="text" className="form-control" id="last_name" placeholder="Enter last name" required name="last_name" value={editInfo.last_name} onChange={handleEditInputs} />
+                                <label className="form-label" htmlFor="lastName">Last Name</label>
+                                <input type="text" className="form-control" id="lastName" placeholder="Enter last name" required name="lastName" value={editInfo.lastName} onChange={handleEditInputs} />
                             </div>
 
                             <div className="mb-3">
@@ -485,9 +485,9 @@ function Customer(props) {
                                 <input type="text" className="form-control" id="mobile" placeholder="Enter mobile" required name="mobile" value={editInfo.mobile} onChange={handleEditInputs} />
                             </div>
 
-                            <div className="mb-3">
+                            {/* <div className="mb-3">
                                 <label className="form-label" htmlFor="image">Image</label>
-                                <input type="file" className="form-control" id="image" required name="image" onChange={handleEditFile} />
+                                <input type="file" className="form-control" id="image" name="image" onChange={handleEditFile} />
                             </div>
 
                             {editImages?.image && (
@@ -503,7 +503,7 @@ function Customer(props) {
                                         />
                                     </div>
                                 </Row>
-                            )}
+                            )} */}
 
                             <div className="mb-3">
                                 <label className="form-label" htmlFor="subscription_type_id">Subscription Types</label>
@@ -519,9 +519,9 @@ function Customer(props) {
 
 
                             <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
-                                <Button color="primary" type="submit">
+                                {/* <Button color="primary" type="submit">
                                     Submit
-                                </Button>{' '}
+                                </Button>{' '} */}
                                 <Button color="secondary" onClick={toggleEditModal}>
                                     Cancel
                                 </Button>

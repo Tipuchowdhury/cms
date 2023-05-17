@@ -281,30 +281,30 @@ export const branchAddAction = (
   const data =
     selectedCuisine?.length > 0
       ? selectedCuisine.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            cuisine_id: item.value,
-            branch_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          cuisine_id: item.value,
+          branch_id: id,
+        }
+      })
       : null
 
   // console.log(data)
   const all_working_hours =
     time?.length > 0
       ? time.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            day: Number(item.day),
-            open_hour: moment(item.startTime, "HH:mm").get("hours"),
-            open_min: moment(item.startTime, "HH:mm").get("minutes"),
-            close_hour: moment(item.endTime, "HH:mm").get("hours"),
-            close_minute: moment(item.endTime, "HH:mm").get("minutes"),
-            branch_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          day: Number(item.day),
+          open_hour: moment(item.startTime, "HH:mm").get("hours"),
+          open_min: moment(item.startTime, "HH:mm").get("minutes"),
+          close_hour: moment(item.endTime, "HH:mm").get("hours"),
+          close_minute: moment(item.endTime, "HH:mm").get("minutes"),
+          branch_id: id,
+        }
+      })
       : null
 
   const dataObject = {
@@ -399,30 +399,30 @@ export const branchEditAction = (
   const data =
     selectedCuisine?.length > 0
       ? selectedCuisine.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            cuisine_id: item.value,
-            branch_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          cuisine_id: item.value,
+          branch_id: id,
+        }
+      })
       : null
 
   // console.log(data)
   const all_working_hours =
     time?.length > 0
       ? time.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            day: Number(item.day),
-            open_hour: moment(item.startTime, "HH:mm").get("hours"),
-            open_min: moment(item.startTime, "HH:mm").get("minutes"),
-            close_hour: moment(item.endTime, "HH:mm").get("hours"),
-            close_minute: moment(item.endTime, "HH:mm").get("minutes"),
-            branch_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          day: Number(item.day),
+          open_hour: moment(item.startTime, "HH:mm").get("hours"),
+          open_min: moment(item.startTime, "HH:mm").get("minutes"),
+          close_hour: moment(item.endTime, "HH:mm").get("hours"),
+          close_minute: moment(item.endTime, "HH:mm").get("minutes"),
+          branch_id: id,
+        }
+      })
       : null
   const dataObject = {
     name: zoneInfo.name,
@@ -443,6 +443,9 @@ export const branchEditAction = (
     phone_number: zoneInfo.phone_number,
     is_veg: JSON.parse(zoneInfo.is_veg),
     is_popular: JSON.parse(zoneInfo.is_popular),
+    is_delivery: JSON.parse(zoneInfo.is_delivery),
+    is_pickup: JSON.parse(zoneInfo.is_pickup),
+    is_dine: JSON.parse(zoneInfo.is_dine),
     commission: JSON.parse(zoneInfo.commission),
     min_order_value: zoneInfo.minimum_order_value,
     delivery_time: JSON.parse(zoneInfo.delivery_time),
@@ -510,6 +513,9 @@ export const branchStatusEditAction = data => {
     phone_number: data.phone_number,
     is_veg: JSON.parse(data.is_veg),
     is_popular: JSON.parse(data.is_popular),
+    is_delivery: JSON.parse(data.is_delivery),
+    is_pickup: JSON.parse(data.is_pickup),
+    is_dine: JSON.parse(data.is_dine),
     commission: JSON.parse(data.commission),
     min_order_value: 1,
     delivery_time: JSON.parse(data.delivery_time),
@@ -574,6 +580,9 @@ export const branchPopularEditAction = data => {
     phone_number: data.phone_number,
     is_veg: JSON.parse(data.is_veg),
     is_popular: JSON.parse(data.is_popular),
+    is_delivery: JSON.parse(data.is_delivery),
+    is_pickup: JSON.parse(data.is_pickup),
+    is_dine: JSON.parse(data.is_dine),
     commission: JSON.parse(data.commission),
     min_order_value: 1,
     delivery_time: JSON.parse(data.delivery_time),
@@ -689,27 +698,27 @@ export const zoneAddAction = (
   const data =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            branch_id: item.value,
-            zone_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          branch_id: item.value,
+          zone_id: id,
+        }
+      })
       : null
 
   const delivery_charges =
     deliveryCharge?.length > 0
       ? deliveryCharge.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            distance_start_in_kilometer: Number(item.distanceStart),
-            distance_end_in_kilometer: Number(item.distanceEnd),
-            delivery_charge: Number(item.deliveryCharge),
-            zone_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          distance_start_in_kilometer: Number(item.distanceStart),
+          distance_end_in_kilometer: Number(item.distanceEnd),
+          delivery_charge: Number(item.deliveryCharge),
+          zone_id: id,
+        }
+      })
       : null
 
   const allData = path.map(item => [Number(item.lng), Number(item.lat)])
@@ -809,27 +818,27 @@ export const zoneEditAction = (
   const data =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            branch_id: item.value,
-            zone_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          branch_id: item.value,
+          zone_id: id,
+        }
+      })
       : null
 
   const delivery_charges =
     deliveryCharge?.length > 0
       ? deliveryCharge.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            distance_start_in_kilometer: Number(item.distanceStart),
-            distance_end_in_kilometer: Number(item.distanceEnd),
-            delivery_charge: Number(item.deliveryCharge),
-            zone_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          distance_start_in_kilometer: Number(item.distanceStart),
+          distance_end_in_kilometer: Number(item.distanceEnd),
+          delivery_charge: Number(item.deliveryCharge),
+          zone_id: id,
+        }
+      })
       : null
 
   const allData = path.map(item => [Number(item.lat), Number(item.lng)])
@@ -1019,15 +1028,15 @@ export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
   const data =
     addOns?.length > 0
       ? addOns.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            add_on_name: item.add_on_name,
-            add_on_price: item.add_on_price,
-            add_on_category_name: category.name,
-            add_on_category_id: val,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          add_on_name: item.add_on_name,
+          add_on_price: item.add_on_price,
+          add_on_category_name: category.name,
+          add_on_category_id: val,
+        }
+      })
       : null
   const val_id = uuidv4()
   // console.log(data)
@@ -1080,15 +1089,15 @@ export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
   const data =
     addOns?.length > 0
       ? addOns.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            add_on_name: item.add_on_name,
-            add_on_price: item.add_on_price,
-            add_on_category_name: category.name,
-            add_on_category_id: val,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          add_on_name: item.add_on_name,
+          add_on_price: item.add_on_price,
+          add_on_category_name: category.name,
+          add_on_category_id: val,
+        }
+      })
       : null
   const val_id = uuidv4()
   // console.log(data)
@@ -1450,38 +1459,38 @@ export const addRestaurantMenuAction = (
   const variationData =
     isChecked && variations?.length > 0
       ? variations.map(item => {
-          const _id = uuidv4()
-          return {
-            ...item,
-            add_on_categories: item.add_on_categories.map(addon_cats => {
-              return {
-                ...addon_cats,
-                add_ons: addon_cats.add_ons.map(add_ons => {
-                  const _addon_id = uuidv4()
-                  return {
-                    ...add_ons,
-                    _id: _addon_id,
-                    variation_and_add_on_category_id: _id,
-                  }
-                }),
-              }
-            }),
-            _id: _id,
-            menu_id: val,
-          }
-        })
+        const _id = uuidv4()
+        return {
+          ...item,
+          add_on_categories: item.add_on_categories.map(addon_cats => {
+            return {
+              ...addon_cats,
+              add_ons: addon_cats.add_ons.map(add_ons => {
+                const _addon_id = uuidv4()
+                return {
+                  ...add_ons,
+                  _id: _addon_id,
+                  variation_and_add_on_category_id: _id,
+                }
+              }),
+            }
+          }),
+          _id: _id,
+          menu_id: val,
+        }
+      })
       : []
 
   const menuTimingData =
     menuTiming.length > 0
       ? menuTiming.map(item => {
-          const _id = uuidv4()
-          return {
-            _id: _id,
-            menu_item_time_slot_id: item._id,
-            menu_id: val,
-          }
-        })
+        const _id = uuidv4()
+        return {
+          _id: _id,
+          menu_item_time_slot_id: item._id,
+          menu_id: val,
+        }
+      })
       : []
 
   let dataObject = {
