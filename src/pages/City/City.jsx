@@ -11,6 +11,7 @@ import {
   ModalFooter,
   ModalHeader,
   Row,
+  Spinner,
 } from "reactstrap"
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { toast } from "react-toastify"
@@ -36,6 +37,7 @@ import {
   getServerSidePaginationSearchFresh,
 } from "store/zoneCity/actions"
 import DataTable from "react-data-table-component"
+import CustomLoader from "components/CustomLoader/CustomLoader"
 
 function City(props) {
   const [name, setName] = useState("")
@@ -314,6 +316,7 @@ function City(props) {
                     paginationComponentOptions={paginationComponentOptions}
                     onChangeRowsPerPage={handlePerRowsChange}
                     progressPending={!props.get_server_side_pagination_loading}
+                    progressComponent={<CustomLoader />}
                     onChangePage={page => setPage(page)}
                   />
                 </CardBody>
