@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import ChartistGraph from "react-chartist";
+import React, { Component } from "react"
+import ChartistGraph from "react-chartist"
 
 class piechart extends Component {
   render() {
     var pieChartData = {
       series: [5, 3, 4],
-      labels: ["42%", "25%", "33%"]
-    };
+      labels: ["42%", "25%", "33%"],
+    }
     var pieChartOptions = {
-      showLabel: true
-    };
+      showLabel: true,
+    }
     return (
       <React.Fragment>
         <ChartistGraph
@@ -19,8 +19,8 @@ class piechart extends Component {
           type={"Pie"}
         />
       </React.Fragment>
-    );
+    )
   }
 }
 
-export default piechart;
+export default piechart

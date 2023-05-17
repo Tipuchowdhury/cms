@@ -1,4 +1,4 @@
-// 
+//
 // gallary.scss
 //
 
@@ -32,7 +32,7 @@
   visibility: hidden;
   overflow: hidden;
   -webkit-transform: translateX(-100%);
-          transform: translateX(-100%);
+  transform: translateX(-100%);
 }
 
 .project-item-overlay h4 {
@@ -62,6 +62,6 @@
 
 .overlay-container:hover .project-item-overlay {
   -webkit-transform: translateX(0%);
-          transform: translateX(0%);
+  transform: translateX(0%);
   visibility: visible;
 }

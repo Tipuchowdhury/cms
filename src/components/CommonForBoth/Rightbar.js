@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from 'prop-types';
+import React from "react"
+import PropTypes from "prop-types"
 
-import { connect } from "react-redux";
+import { connect } from "react-redux"
 import {
   changeLayout,
   changeLayoutWidth,
@@ -9,17 +9,17 @@ import {
   changeSidebarType,
   changeTopbarTheme,
   showRightSidebarAction,
-} from "../../store/actions";
+} from "../../store/actions"
 
 //SimpleBar
-import SimpleBar from "simplebar-react";
+import SimpleBar from "simplebar-react"
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
 //Import images
-import layout1 from "../../assets/images/layouts/layout-1.jpg";
-import layout2 from "../../assets/images/layouts/layout-2.jpg";
-import layout3 from "../../assets/images/layouts/layout-3.jpg";
+import layout1 from "../../assets/images/layouts/layout-1.jpg"
+import layout2 from "../../assets/images/layouts/layout-2.jpg"
+import layout3 from "../../assets/images/layouts/layout-3.jpg"
 
 const RightSidebar = props => {
   return (
@@ -31,8 +31,8 @@ const RightSidebar = props => {
               <Link
                 to="#"
                 onClick={e => {
-                  e.preventDefault();
-                  props.showRightSidebarAction(false);
+                  e.preventDefault()
+                  props.showRightSidebarAction(false)
                 }}
                 className="right-bar-toggle float-end"
               >
@@ -54,7 +54,7 @@ const RightSidebar = props => {
                   checked={props.layoutType === "vertical"}
                   onChange={e => {
                     if (e.target.checked) {
-                      props.changeLayout(e.target.value);
+                      props.changeLayout(e.target.value)
                     }
                   }}
                 />
@@ -68,7 +68,7 @@ const RightSidebar = props => {
                   checked={props.layoutType === "horizontal"}
                   onChange={e => {
                     if (e.target.checked) {
-                      props.changeLayout(e.target.value);
+                      props.changeLayout(e.target.value)
                     }
                   }}
                 />
@@ -89,7 +89,7 @@ const RightSidebar = props => {
                   checked={props.layoutWidth === "fluid"}
                   onChange={e => {
                     if (e.target.checked) {
-                      props.changeLayoutWidth(e.target.value);
+                      props.changeLayoutWidth(e.target.value)
                     }
                   }}
                 />{" "}
@@ -103,7 +103,7 @@ const RightSidebar = props => {
                   checked={props.layoutWidth === "boxed"}
                   onChange={e => {
                     if (e.target.checked) {
-                      props.changeLayoutWidth(e.target.value);
+                      props.changeLayoutWidth(e.target.value)
                     }
                   }}
                 />{" "}
@@ -123,7 +123,7 @@ const RightSidebar = props => {
                   checked={props.topbarTheme === "light"}
                   onChange={e => {
                     if (e.target.checked) {
-                      props.changeTopbarTheme(e.target.value);
+                      props.changeTopbarTheme(e.target.value)
                     }
                   }}
                 />
@@ -137,7 +137,7 @@ const RightSidebar = props => {
                   checked={props.topbarTheme === "dark"}
                   onChange={e => {
                     if (e.target.checked) {
-                      props.changeTopbarTheme(e.target.value);
+                      props.changeTopbarTheme(e.target.value)
                     }
                   }}
                 />
@@ -161,7 +161,7 @@ const RightSidebar = props => {
                       checked={props.leftSideBarType === "default"}
                       onChange={e => {
                         if (e.target.checked) {
-                          props.changeSidebarType(e.target.value);
+                          props.changeSidebarType(e.target.value)
                         }
                       }}
                     />
@@ -175,7 +175,7 @@ const RightSidebar = props => {
                       checked={props.leftSideBarType === "compact"}
                       onChange={e => {
                         if (e.target.checked) {
-                          props.changeSidebarType(e.target.value);
+                          props.changeSidebarType(e.target.value)
                         }
                       }}
                     />
@@ -189,7 +189,7 @@ const RightSidebar = props => {
                       checked={props.leftSideBarType === "icon"}
                       onChange={e => {
                         if (e.target.checked) {
-                          props.changeSidebarType(e.target.value);
+                          props.changeSidebarType(e.target.value)
                         }
                       }}
                     />
@@ -210,7 +210,7 @@ const RightSidebar = props => {
                       checked={props.leftSideBarTheme === "light"}
                       onChange={e => {
                         if (e.target.checked) {
-                          props.changeSidebarTheme(e.target.value);
+                          props.changeSidebarTheme(e.target.value)
                         }
                       }}
                     />
@@ -225,7 +225,7 @@ const RightSidebar = props => {
                       checked={props.leftSideBarTheme === "dark"}
                       onChange={e => {
                         if (e.target.checked) {
-                          props.changeSidebarTheme(e.target.value);
+                          props.changeSidebarTheme(e.target.value)
                         }
                       }}
                     />
@@ -240,7 +240,7 @@ const RightSidebar = props => {
                       checked={props.leftSideBarTheme === "colored"}
                       onChange={e => {
                         if (e.target.checked) {
-                          props.changeSidebarTheme(e.target.value);
+                          props.changeSidebarTheme(e.target.value)
                         }
                       }}
                     />
@@ -254,10 +254,7 @@ const RightSidebar = props => {
               <h6 className="text-center">Choose Layouts</h6>
 
               <div className="mb-2">
-                <Link
-                  to="//veltrix-v.react.themesbrand.com"
-                  target="_blank"
-                >
+                <Link to="//veltrix-v.react.themesbrand.com" target="_blank">
                   <img
                     src={layout1}
                     className="img-fluid img-thumbnail"
@@ -267,8 +264,10 @@ const RightSidebar = props => {
               </div>
 
               <div className="mb-2">
-                <Link to="//veltrix-v-dark.react.themesbrand.com"
-                  target="_blank">
+                <Link
+                  to="//veltrix-v-dark.react.themesbrand.com"
+                  target="_blank"
+                >
                   <img
                     src={layout2}
                     className="img-fluid img-thumbnail"
@@ -278,8 +277,10 @@ const RightSidebar = props => {
               </div>
 
               <div className="mb-2">
-                <Link to="//veltrix-v-rtl.react.themesbrand.com"
-                  target="_blank">
+                <Link
+                  to="//veltrix-v-rtl.react.themesbrand.com"
+                  target="_blank"
+                >
                   <img
                     src={layout3}
                     className="img-fluid img-thumbnail"
@@ -301,8 +302,8 @@ const RightSidebar = props => {
       </div>
       <div className="rightbar-overlay" />
     </React.Fragment>
-  );
-};
+  )
+}
 
 RightSidebar.propTypes = {
   changeLayout: PropTypes.func,
@@ -315,12 +316,12 @@ RightSidebar.propTypes = {
   leftSideBarTheme: PropTypes.any,
   leftSideBarType: PropTypes.any,
   showRightSidebarAction: PropTypes.func,
-  topbarTheme: PropTypes.any
-};
+  topbarTheme: PropTypes.any,
+}
 
 const mapStateToProps = state => {
-  return { ...state.Layout };
-};
+  return { ...state.Layout }
+}
 
 export default connect(mapStateToProps, {
   changeLayout,
@@ -329,4 +330,4 @@ export default connect(mapStateToProps, {
   changeLayoutWidth,
   changeTopbarTheme,
   showRightSidebarAction,
-})(RightSidebar);
+})(RightSidebar)

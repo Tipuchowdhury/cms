@@ -8,7 +8,7 @@ import {
   REWARD_POINT_DELETE,
   REWARD_POINT_DELETE_FRESH,
   EDIT_REWARD_STATUS,
-  EDIT_REWARD_STATUS_FRESH
+  EDIT_REWARD_STATUS_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 

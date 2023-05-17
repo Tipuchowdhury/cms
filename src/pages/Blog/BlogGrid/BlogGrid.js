@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 import {
   Card,
   Col,
@@ -7,21 +7,21 @@ import {
   Row,
   TabContent,
   TabPane,
-} from "reactstrap";
+} from "reactstrap"
 
-import classnames from "classnames";
+import classnames from "classnames"
 
-import img1 from "../../../assets/images/small/img-2.jpg";
-import img2 from "../../../assets/images/small/img-6.jpg";
-import img3 from "../../../assets/images/small/img-1.jpg";
-import { Link } from "react-router-dom";
+import img1 from "../../../assets/images/small/img-2.jpg"
+import img2 from "../../../assets/images/small/img-6.jpg"
+import img3 from "../../../assets/images/small/img-1.jpg"
+import { Link } from "react-router-dom"
 
 const BlogGrid = () => {
-  const [activeTab, toggleTab] = useState("1");
+  const [activeTab, toggleTab] = useState("1")
 
   const toggle = tab => {
-    if (activeTab !== tab) toggleTab(tab);
-  };
+    if (activeTab !== tab) toggleTab(tab)
+  }
   return (
     <React.Fragment>
       <Col xl={9} lg={8}>
@@ -37,7 +37,7 @@ const BlogGrid = () => {
                   active: activeTab === "1",
                 })}
                 onClick={() => {
-                  toggleTab("1");
+                  toggleTab("1")
                 }}
               >
                 All Post
@@ -50,7 +50,7 @@ const BlogGrid = () => {
                   active: activeTab === "2",
                 })}
                 onClick={() => {
-                  toggleTab("2");
+                  toggleTab("2")
                 }}
               >
                 Archive
@@ -518,6 +518,6 @@ const BlogGrid = () => {
         </Card>
       </Col>
     </React.Fragment>
-  );
-};
-export default BlogGrid;
+  )
+}
+export default BlogGrid

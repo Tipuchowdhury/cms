@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types"
 import React from "react"
 import { Col, Modal, ModalBody, Row } from "reactstrap"
 
@@ -46,7 +46,7 @@ const DeleteModal = ({ show, onDeleteClick, onCloseClick }) => {
 DeleteModal.propTypes = {
   onCloseClick: PropTypes.func,
   onDeleteClick: PropTypes.func,
-  show: PropTypes.any
+  show: PropTypes.any,
 }
 
 export default DeleteModal

@@ -2,10 +2,7 @@ import axios from "axios"
 // import MockAdapter from "axios-mock-adapter"
 import * as url from "../url_helper"
 import accessToken from "../jwt-token-access/accessToken"
-import {
-  calenderDefaultCategories,
-  events,
-} from "../../common/data"
+import { calenderDefaultCategories, events } from "../../common/data"
 
 let users = [
   {
@@ -262,7 +259,6 @@ const fakeBackend = () => {
       })
     })
   })
-
 }
 
 export default fakeBackend

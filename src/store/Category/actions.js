@@ -10,6 +10,9 @@ import {
   CATEGORY_STATUS_EDIT_FRESH,
   CATEGORY_DELETE,
   CATEGORY_DELETE_FRESH,
+  SERVER_SIDE_PAGINATION_CATEGORY,
+  SERVER_SIDE_PAGINATION_CATEGORY_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_CATEGORY_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 
@@ -104,7 +107,13 @@ export const getAllCategoryFresh = () => {
   }
 }
 
-export const categoryNameEditAction = (name, id, restaurant, image, is_active) => {
+export const categoryNameEditAction = (
+  name,
+  id,
+  restaurant,
+  image,
+  is_active
+) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Category/Put"
 
   const dataObject = {
@@ -143,8 +152,6 @@ export const categoryNameEditAction = (name, id, restaurant, image, is_active) =
   }
 }
 
-
-
 export const categoryNameEditFresh = () => {
   return dispatch => {
     dispatch({
@@ -155,14 +162,20 @@ export const categoryNameEditFresh = () => {
   }
 }
 
-export const categoryStatusEditAction = (name, id, restaurant, image, is_active) => {
+export const categoryStatusEditAction = (
+  name,
+  id,
+  restaurant,
+  image,
+  is_active
+) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Category/Put"
   const dataObject = {
     _id: id,
     category_name: name,
     restaurant_id: restaurant,
     image: image,
-    is_active: !(is_active),
+    is_active: !is_active,
   }
 
   const formData = convertToFormData(dataObject)
@@ -235,5 +248,72 @@ export const categoryDeleteFresh = () => {
     dispatch({
       type: CATEGORY_DELETE_FRESH,
       status: false,
+    })
+}
+
+export const getServerSidePaginationCategoryAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Category/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CATEGORY,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CATEGORY,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationCategorySearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Category/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CATEGORY_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CATEGORY_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchCategoryFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_CATEGORY_FRESH,
+      status: false,
+      payload: null,
     })
 }

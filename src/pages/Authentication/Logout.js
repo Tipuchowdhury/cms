@@ -1,30 +1,29 @@
-import PropTypes from 'prop-types';
-import React, { useEffect } from "react";
-import withRouter from 'components/Common/withRouter';
+import PropTypes from "prop-types"
+import React, { useEffect } from "react"
+import withRouter from "components/Common/withRouter"
 
-import { logoutUser } from "../../store/actions";
+import { logoutUser } from "../../store/actions"
 //redux
-import { useDispatch } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
 const Logout = props => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => {
-    console.log(props);
-    localStorage.removeItem("foodi-jwt");
+    console.log(props)
+    localStorage.removeItem("foodi-jwt")
     //props.logoutUserSuccess();
     navigate("/login")
-    dispatch(logoutUser(navigate));
-  }, [dispatch, navigate]);
+    dispatch(logoutUser(navigate))
+  }, [dispatch, navigate])
 
-  return <></>;
-};
+  return <></>
+}
 
 Logout.propTypes = {
-  history: PropTypes.object
-};
+  history: PropTypes.object,
+}
 
-
-export default withRouter(Logout);
+export default withRouter(Logout)

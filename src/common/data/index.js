@@ -2,8 +2,4 @@
 
 import { calenderDefaultCategories, events } from "./calender"
 
-
-export {
-  events,
-  calenderDefaultCategories,
-}
+export { events, calenderDefaultCategories }

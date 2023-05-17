@@ -8,7 +8,7 @@ import {
   TEST_DATA,
   USER_LOGIN_FRESH,
   FORGET_PASSWORD,
-  FORGET_PASSWORD_FRESH
+  FORGET_PASSWORD_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -24,7 +24,6 @@ const initialState = {
   forget_password_loading: false,
 
   test_data: null,
-
 }
 
 const login = (state = initialState, action) => {
@@ -76,7 +75,6 @@ const login = (state = initialState, action) => {
       state = {
         ...state,
         test_data: action.payload,
-
       }
       break
     case API_ERROR:

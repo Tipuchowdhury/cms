@@ -1,6 +1,6 @@
-export const ADD_POPUP = "ADD_POPUP";
+export const ADD_POPUP = "ADD_POPUP"
 export const ADD_POPUP_FRESH = "ADD_POPUP_FRESH"
-export const GET_ALL_POPUP = "GET_ALL_POPUP";
+export const GET_ALL_POPUP = "GET_ALL_POPUP"
 export const GET_ALL_POPUP_FRESH = "GET_ALL_POPUP_FRESH"
 export const POPUP_EDIT = "POPUP_EDIT"
 export const POPUP_STATUS_EDIT = "POPUP_STATUS_EDIT"

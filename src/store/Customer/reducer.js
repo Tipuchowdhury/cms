@@ -9,8 +9,7 @@ import {
   CUSTOMER_DELETE,
   CUSTOMER_DELETE_FRESH,
   EDIT_CUSTOMER_STATUS,
-  EDIT_CUSTOMER_STATUS_FRESH
-
+  EDIT_CUSTOMER_STATUS_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -90,13 +89,13 @@ const Customer = (state = initialState, action) => {
         edit_cutomer_status_loading: action.status,
         get_all_customer_loading: false,
       }
-      break;
+      break
     case EDIT_CUSTOMER_STATUS_FRESH:
       state = {
         ...state,
         edit_cutomer_status_loading: action.status,
       }
-      break;
+      break
 
     case CUSTOMER_DELETE:
       state = {

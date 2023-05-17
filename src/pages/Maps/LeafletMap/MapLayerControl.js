@@ -40,11 +40,7 @@ export default class MapLayerControl extends Component {
   render() {
     const center = [this.state.lat, this.state.lng]
     return (
-      <Map
-        center={center}
-        zoom={this.state.zoom}
-        style={{ height: "300px" }}
-      >
+      <Map center={center} zoom={this.state.zoom} style={{ height: "300px" }}>
         <LayersControl position="topright">
           <BaseLayer checked name="OpenStreetMap.Mapnik">
             <TileLayer

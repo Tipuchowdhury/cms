@@ -92,9 +92,9 @@ function BranchAdd(props) {
   }
 
   const toggle = () => setModal(!modal)
-  const onMarkerClick = e => { }
+  const onMarkerClick = e => {}
 
-  const onMapClickHandler = e => { }
+  const onMapClickHandler = e => {}
 
   const moveMarker = (props, marker, e) => {
     setDefaultProps({ lat: e.latLng.lat(), lng: e.latLng.lng() })
@@ -143,8 +143,8 @@ function BranchAdd(props) {
     () =>
       common_cuisines
         ? common_cuisines?.map((item, key) => {
-          return { label: item.name, value: item._id }
-        })
+            return { label: item.name, value: item._id }
+          })
         : "",
     [common_cuisines]
   )

@@ -13,6 +13,7 @@ import {
   USER_STATUS_UPDATE_FRESH,
   USER_DELETE,
   USER_DELETE_FRESH,
+  SERVER_SIDE_PAGINATION_USER,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -359,3 +360,31 @@ export const userDeleteFresh = () => {
       status: false,
     })
 }
+
+// export const getServerSidePaginationUserAction = (index, limit) => {
+//     var url = process.env.REACT_APP_LOCALHOST + `/Zone/Search?page=${index}&limit=${limit}`;
+//     //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
+//     const formData = {};
+//     return dispatch => {
+//         const headers = {
+//             "Content-Type": "application/json",
+
+//             "Access-Control-Allow-Origin": "*",
+//         };
+//         axios
+//             .get(url, { headers: headers })
+//             .then(response => {
+//                 dispatch({
+//                     type: SERVER_SIDE_PAGINATION_ZONE,
+//                     payload: response.data,
+//                     status: "Success",
+//                 });
+//             })
+//             .catch(error => {
+//                 dispatch({
+//                     type: SERVER_SIDE_PAGINATION_ZONE,
+//                     status: "Failed",
+//                 });
+//             });
+//     };
+// };
