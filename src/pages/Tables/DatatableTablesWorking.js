@@ -1,38 +1,29 @@
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-import React, { useEffect, useState } from "react";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css"
+import React, { useEffect, useState } from "react"
 
-import { Row, Col, Card, CardBody, CardTitle } from "reactstrap";
-
+import { Row, Col, Card, CardBody, CardTitle } from "reactstrap"
 
 // datatable related plugins
-import BootstrapTable from "react-bootstrap-table-next";
+import BootstrapTable from "react-bootstrap-table-next"
 import paginationFactory, {
   PaginationProvider,
   PaginationListStandalone,
   SizePerPageDropdownStandalone,
-} from "react-bootstrap-table2-paginator";
+} from "react-bootstrap-table2-paginator"
 
 // import ToolkitProvider, {
 //   Search,
 // } from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min'
+import ToolkitProvider, {
+  Search,
+} from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min"
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
-import "./datatables.scss";
+import Breadcrumbs from "../../components/Common/Breadcrumb"
+import "./datatables.scss"
 
 // Table data
 const productsdata = [
-  {
-    id: 1,
-    name: "Airi Satou",
-    position: "Accountant",
-    office: "Tokyo",
-    age: "33",
-    startdate: "2008/11/28",
-    salary: "$162,700",
-  },
-
   {
     id: 2,
     name: "Angelica Ramos",
@@ -72,7 +63,7 @@ const productsdata = [
     startdate: "2011/06/07",
     salary: "$206,850",
   },
-];
+]
 
 const columns = [
   {
@@ -115,27 +106,26 @@ const columns = [
     text: "Days",
     sort: true,
   },
-];
+]
 
 const defaultSorted = [
   {
     dataField: "id",
     order: "asc",
   },
-];
+]
 
 // Select All Button operation
 // const selectRow = {
 //   mode: "checkbox",
 // };
 
-const { SearchBar } = Search;
+const { SearchBar } = Search
 
 //meta title
-document.title = "Data Tables | Skote - React Admin & Dashboard Template";
+document.title = "Data Tables | Skote - React Admin & Dashboard Template"
 
 const DatatableTables2 = props => {
-
   //let history = useHistory();
 
   // const [state, setState] = useState({
@@ -150,7 +140,6 @@ const DatatableTables2 = props => {
   //   });
   // }, [props]);
 
-
   // const rowEvents = {
   //   onClick: (e, row, rowIndex) => {
   //     history.push(props.url ? props.url + row.id : '', { id: row.id });
@@ -161,7 +150,7 @@ const DatatableTables2 = props => {
     sizePerPage: 10,
     totalSize: props.products ? props.products.length : productsdata.length, // replace later with size(customers),
     custom: true,
-  };
+  }
 
   return (
     <React.Fragment>
@@ -212,7 +201,7 @@ const DatatableTables2 = props => {
                         {...toolkitProps.baseProps}
                         {...paginationTableProps}
 
-                      // rowEvents={rowEvents}
+                        // rowEvents={rowEvents}
                       />
                     </div>
                   </Col>
@@ -234,7 +223,7 @@ const DatatableTables2 = props => {
         )}
       </PaginationProvider>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default DatatableTables2;
+export default DatatableTables2
