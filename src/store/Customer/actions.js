@@ -154,8 +154,8 @@ export const customerStatusEditAction = data => {
   const formData = convertToFormData(dataObject)
   return dispatch => {
     const headers = {
-      "Content-Type": "multipart/form-data",
-      // "Content-Type": "application/json",
+      //"Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
 
       "Access-Control-Allow-Origin": "*",
     }

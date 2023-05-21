@@ -152,6 +152,9 @@ import AddRider from "pages/Rider/Riders/AddRider"
 import Permissions from "pages/roles_and_permissions/Permissions/Permissions"
 import Roles from "pages/roles_and_permissions/Roles/Roles"
 import Order from "pages/Order/Order"
+import Refund from "pages/Refund/Refund"
+import ZoneUtilization from "pages/ZoneUtilization/ZoneUtilization"
+import RiderList from "pages/ZoneUtilization/RiderList"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -244,6 +247,13 @@ const userRoutes = [
 
   // Orders
   { path: "/dispatch", component: <Order /> },
+
+  // Refund
+  { path: "/refund", component: <Refund /> },
+
+  // Zone Utilization
+  { path: "/zone-utilization", component: <ZoneUtilization /> },
+  { path: "/rider-list", component: <RiderList /> },
 
   // Notification
   { path: "/notification", component: <Notification /> },
