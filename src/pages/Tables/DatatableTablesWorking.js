@@ -4,12 +4,12 @@ import React, { useEffect, useState } from "react"
 import { Row, Col, Card, CardBody, CardTitle } from "reactstrap"
 
 // datatable related plugins
-import BootstrapTable from "react-bootstrap-table-next"
-import paginationFactory, {
-  PaginationProvider,
-  PaginationListStandalone,
-  SizePerPageDropdownStandalone,
-} from "react-bootstrap-table2-paginator"
+// import BootstrapTable from "react-bootstrap-table-next"
+// import paginationFactory, {
+//   PaginationProvider,
+//   PaginationListStandalone,
+//   SizePerPageDropdownStandalone,
+// } from "react-bootstrap-table2-paginator"
 
 // import ToolkitProvider, {
 //   Search,
@@ -152,77 +152,83 @@ const DatatableTables2 = props => {
     custom: true,
   }
 
+  // return (
+  //   <React.Fragment>
+  //     <PaginationProvider
+  //       pagination={paginationFactory(pageOptions)}
+  //       keyField={props.key ? key : "1"}
+  //       columns={props.columnData ? props.columnData : columns}
+  //       data={props.products ? props.products : productsdata}
+  //     >
+  //       {({ paginationProps, paginationTableProps }) => (
+  //         <ToolkitProvider
+  //           keyField="key_number"
+  //           columns={props.columnData ? props.columnData : columns}
+  //           data={props.products ? props.products : productsdata}
+  //           search
+  //         >
+  //           {toolkitProps => (
+  //             <React.Fragment>
+  //               <Row>
+  //                 <div className="d-flex justify-content-end search-box">
+  //                   <SearchBar {...toolkitProps.searchProps} />
+  //                   {/* <i className="bx bx-search-alt search-icon" /> */}
+  //                 </div>
+  //                 {/* <Col md="4">
+  //                   <div className="search-box d-inline-block">
+  //                     <div className="position-relative">
+  //                       <SearchBar
+  //                         {...toolkitProps.searchProps}
+  //                       />
+  //                       <i className="bx bx-search-alt search-icon" />
+  //                     </div>
+  //                   </div>
+  //                 </Col> */}
+  //               </Row>
+
+  //               <Row>
+  //                 <Col xl="12">
+  //                   <div className="table-responsive">
+  //                     <BootstrapTable
+  //                       keyField={props.key}
+  //                       responsive
+  //                       bordered={false}
+  //                       striped={false}
+  //                       defaultSorted={defaultSorted}
+  //                       // selectRow={selectRow}
+  //                       classes={"table align-middle"}
+  //                       headerWrapperClasses={"thead-light"}
+  //                       {...toolkitProps.baseProps}
+  //                       {...paginationTableProps}
+
+  //                       // rowEvents={rowEvents}
+  //                     />
+  //                   </div>
+  //                 </Col>
+  //               </Row>
+
+  //               <Row className="align-items-md-center mt-30">
+  //                 <Col className="inner-custom-pagination d-flex">
+  //                   <div className="d-inline">
+  //                     <SizePerPageDropdownStandalone {...paginationProps} />
+  //                   </div>
+  //                   <div className="text-md-right ms-auto">
+  //                     <PaginationListStandalone {...paginationProps} />
+  //                   </div>
+  //                 </Col>
+  //               </Row>
+  //             </React.Fragment>
+  //           )}
+  //         </ToolkitProvider>
+  //       )}
+  //     </PaginationProvider>
+  //   </React.Fragment>
+  // )
+
   return (
-    <React.Fragment>
-      <PaginationProvider
-        pagination={paginationFactory(pageOptions)}
-        keyField={props.key ? key : "1"}
-        columns={props.columnData ? props.columnData : columns}
-        data={props.products ? props.products : productsdata}
-      >
-        {({ paginationProps, paginationTableProps }) => (
-          <ToolkitProvider
-            keyField="key_number"
-            columns={props.columnData ? props.columnData : columns}
-            data={props.products ? props.products : productsdata}
-            search
-          >
-            {toolkitProps => (
-              <React.Fragment>
-                <Row>
-                  <div className="d-flex justify-content-end search-box">
-                    <SearchBar {...toolkitProps.searchProps} />
-                    {/* <i className="bx bx-search-alt search-icon" /> */}
-                  </div>
-                  {/* <Col md="4">
-                    <div className="search-box d-inline-block">
-                      <div className="position-relative">
-                        <SearchBar
-                          {...toolkitProps.searchProps}
-                        />
-                        <i className="bx bx-search-alt search-icon" />
-                      </div>
-                    </div>
-                  </Col> */}
-                </Row>
-
-                <Row>
-                  <Col xl="12">
-                    <div className="table-responsive">
-                      <BootstrapTable
-                        keyField={props.key}
-                        responsive
-                        bordered={false}
-                        striped={false}
-                        defaultSorted={defaultSorted}
-                        // selectRow={selectRow}
-                        classes={"table align-middle"}
-                        headerWrapperClasses={"thead-light"}
-                        {...toolkitProps.baseProps}
-                        {...paginationTableProps}
-
-                        // rowEvents={rowEvents}
-                      />
-                    </div>
-                  </Col>
-                </Row>
-
-                <Row className="align-items-md-center mt-30">
-                  <Col className="inner-custom-pagination d-flex">
-                    <div className="d-inline">
-                      <SizePerPageDropdownStandalone {...paginationProps} />
-                    </div>
-                    <div className="text-md-right ms-auto">
-                      <PaginationListStandalone {...paginationProps} />
-                    </div>
-                  </Col>
-                </Row>
-              </React.Fragment>
-            )}
-          </ToolkitProvider>
-        )}
-      </PaginationProvider>
-    </React.Fragment>
+    <>
+      <table></table>
+    </>
   )
 }
 

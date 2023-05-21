@@ -7,23 +7,10 @@ import { Link } from "react-router-dom"
 
 // Redux Store
 import { showRightSidebarAction, toggleLeftmenu } from "../../store/actions"
-// reactstrap
-import {
-  Row,
-  Col,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from "reactstrap"
 
 // Import menuDropdown
-import LanguageDropdown from "../CommonForBoth/TopbarDropdown/LanguageDropdown"
 import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDropdown"
 import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu"
-
-//i18n
-import { withTranslation } from "react-i18next"
 
 // import images
 import logodarkImg from "../../assets/images/logo-dark.png"
@@ -104,7 +91,6 @@ const Header = props => {
                 <span className="fa fa-search"></span>
               </div>
             </form>
-            <LanguageDropdown />
             <div className="dropdown d-none d-lg-inline-block">
               <button
                 type="button"
@@ -153,4 +139,4 @@ const mapStatetoProps = state => {
 export default connect(mapStatetoProps, {
   showRightSidebarAction,
   toggleLeftmenu,
-})(withTranslation()(Header))
+})(Header)

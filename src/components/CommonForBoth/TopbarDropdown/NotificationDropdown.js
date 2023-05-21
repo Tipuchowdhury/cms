@@ -4,9 +4,6 @@ import { Link } from "react-router-dom"
 import { Dropdown, DropdownToggle, DropdownMenu, Row, Col } from "reactstrap"
 import SimpleBar from "simplebar-react"
 
-//i18n
-import { withTranslation } from "react-i18next"
-
 const NotificationDropdown = props => {
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false)
@@ -84,7 +81,7 @@ const NotificationDropdown = props => {
   )
 }
 
-export default withTranslation()(NotificationDropdown)
+export default NotificationDropdown
 
 NotificationDropdown.propTypes = {
   t: PropTypes.any,

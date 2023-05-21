@@ -5,9 +5,6 @@ import { Link } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
 import classname from "classnames"
 
-//i18n
-import { withTranslation } from "react-i18next"
-
 import { connect } from "react-redux"
 
 const Navbar = props => {
@@ -620,6 +617,4 @@ const mapStatetoProps = state => {
   return { leftMenu }
 }
 
-export default withRouter(
-  connect(mapStatetoProps, {})(withTranslation()(Navbar))
-)
+export default withRouter(connect(mapStatetoProps, {})(Navbar))

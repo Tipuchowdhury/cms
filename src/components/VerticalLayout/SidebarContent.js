@@ -9,9 +9,6 @@ import MetisMenu from "metismenujs"
 import withRouter from "components/Common/withRouter"
 import { Link, useLocation } from "react-router-dom"
 
-//i18n
-import { withTranslation } from "react-i18next"
-
 const SidebarContent = props => {
   const location = useLocation()
   const ref = useRef()
@@ -724,4 +721,4 @@ SidebarContent.propTypes = {
   t: PropTypes.any,
 }
 
-export default withRouter(withTranslation()(SidebarContent))
+export default withRouter(SidebarContent)

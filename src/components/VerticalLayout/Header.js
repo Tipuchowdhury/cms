@@ -2,29 +2,16 @@ import PropTypes from "prop-types"
 import React, { useState } from "react"
 
 import { connect } from "react-redux"
-import {
-  Form,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
-  Input,
-  Button,
-} from "reactstrap"
 
 import { Link } from "react-router-dom"
 
 // Import menuDropdown
-import LanguageDropdown from "../CommonForBoth/TopbarDropdown/LanguageDropdown"
 import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDropdown"
 import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu"
 
 import logodarkImg from "../../assets/images/logo-dark.png"
 import logosmImg from "../../assets/images/logo-sm.png"
 import logolightImg from "../../assets/images/logo-light.png"
-
-//i18n
-import { withTranslation } from "react-i18next"
 
 // Redux Store
 import {
@@ -231,4 +218,4 @@ export default connect(mapStatetoProps, {
   showRightSidebarAction,
   toggleLeftmenu,
   changeSidebarType,
-})(withTranslation()(Header))
+})(Header)

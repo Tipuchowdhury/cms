@@ -7,8 +7,6 @@ import {
   DropdownItem,
 } from "reactstrap"
 
-//i18n
-import { withTranslation } from "react-i18next"
 // Redux
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
@@ -87,6 +85,4 @@ const mapStatetoProps = state => {
   return { error, success }
 }
 
-export default withRouter(
-  connect(mapStatetoProps, {})(withTranslation()(ProfileMenu))
-)
+export default withRouter(connect(mapStatetoProps, {})(ProfileMenu))

@@ -21,11 +21,6 @@ import { connect } from "react-redux"
 import withRouter from "components/Common/withRouter"
 import { useEffect } from "react"
 import Breadcrumbs from "components/Common/Breadcrumb"
-import { boolean } from "yup"
-import Select from "react-select"
-import { v4 as uuidv4 } from "uuid"
-import moment from "moment"
-import { useLocation, useNavigate } from "react-router-dom"
 
 const LoadingContainer = () => <div>Loading...</div>
 
