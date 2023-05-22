@@ -1511,6 +1511,7 @@ export const addRestaurantMenuAction = (
     sd: Number(info.sd),
     restaurant_id: info.restaurant,
     category_id: info.category,
+    recipe_time: Number(info.recipe_time),
     is_delivery: JSON.parse(info.is_delivery),
     is_pickup: JSON.parse(info.is_pickup),
     is_dine: JSON.parse(info.is_dine),
