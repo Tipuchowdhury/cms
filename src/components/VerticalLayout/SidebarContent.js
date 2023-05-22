@@ -155,6 +155,14 @@ const SidebarContent = props => {
             </li>
 
             <li>
+              <Link to="/zone-utilization" className="waves-effect">
+                <i className="ti-desktop"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
+                <span>{props.t("Zone Utilization")}</span>
+              </Link>
+            </li>
+
+            <li>
               <Link to="/dispatch" className="waves-effect">
                 <i className="ti-desktop"></i>
                 {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
@@ -315,6 +323,14 @@ const SidebarContent = props => {
                 <i className="ti-star"></i>
                 {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("Review & Ratings")}</span>
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/refund" className="waves-effect">
+                <i className="ti-money"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
+                <span>{props.t("Refund")}</span>
               </Link>
             </li>
 
