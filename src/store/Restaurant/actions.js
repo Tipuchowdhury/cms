@@ -1470,6 +1470,9 @@ export const addRestaurantMenuAction = (
                   return {
                     ...add_ons,
                     _id: _addon_id,
+                    add_ons_name: add_ons.add_on_name,
+                    add_ons_price: add_ons.add_on_price,
+                    addoncat_id: addon_cats.add_on_category_id,
                     variation_and_add_on_category_id: _id,
                   }
                 }),
@@ -1508,6 +1511,7 @@ export const addRestaurantMenuAction = (
     sd: Number(info.sd),
     restaurant_id: info.restaurant,
     category_id: info.category,
+    recipe_time: Number(info.recipe_time),
     is_delivery: JSON.parse(info.is_delivery),
     is_pickup: JSON.parse(info.is_pickup),
     is_dine: JSON.parse(info.is_dine),
@@ -1533,7 +1537,7 @@ export const addRestaurantMenuAction = (
           payload: response.data,
           status: "Success",
         })
-        toast.success("Menu Addedd Successfully")
+        toast.success("Menu Added Successfully")
       })
       .catch(error => {
         dispatch({
