@@ -153,20 +153,22 @@ const SidebarContent = props => {
                 <span>{props.t("Dashboard")}</span>
               </Link>
             </li>
-            <li>
+
+            {/* <li>
               <Link to="/zone-utilization" className="waves-effect">
                 <i className="ti-desktop"></i>
-                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("Zone Utilization")}</span>
               </Link>
-            </li>
+            </li> */}
+
             <li>
               <Link to="/dispatch" className="waves-effect">
                 <i className="ti-desktop"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("Dispatch")}</span>
               </Link>
-            </li>{" "}
-            */}
+            </li>
+
             <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="mdi mdi-city-variant-outline"></i>
@@ -181,6 +183,7 @@ const SidebarContent = props => {
                 </li>
               </ul>
             </li>
+
             <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="ti-user"></i>
@@ -214,6 +217,7 @@ const SidebarContent = props => {
                 </li> */}
               </ul>
             </li>
+
             <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="mdi mdi-silverware-fork-knife"></i>
@@ -264,6 +268,7 @@ const SidebarContent = props => {
                 <span>{props.t("Promotion")}</span>
               </Link>
             </li>
+
             {/* <li>
               <Link to="/branch-attribute" className="waves-effect">
                 <i className="ti-list"></i>
@@ -295,6 +300,7 @@ const SidebarContent = props => {
                 </li>
               </ul>
             </li>
+
             <li>
               <Link to="/notification" className="waves-effect">
                 <i className="ti-bell"></i>
@@ -302,6 +308,7 @@ const SidebarContent = props => {
                 <span>{props.t("Notification")}</span>
               </Link>
             </li>
+
             <li>
               <Link to="/popup-banner" className="waves-effect">
                 <i className="ti-image"></i>
@@ -309,6 +316,7 @@ const SidebarContent = props => {
                 <span>{props.t("PopUp Banner ")}</span>
               </Link>
             </li>
+
             <li>
               <Link to="/review" className="waves-effect">
                 <i className="ti-star"></i>
@@ -316,13 +324,14 @@ const SidebarContent = props => {
                 <span>{props.t("Review & Ratings")}</span>
               </Link>
             </li>
+            {/*
             <li>
               <Link to="/refund" className="waves-effect">
                 <i className="ti-money"></i>
-                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("Refund")}</span>
               </Link>
-            </li>
+            </li> */}
+
             <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="ti-settings"></i>
@@ -342,6 +351,7 @@ const SidebarContent = props => {
                 </li>
               </ul>
             </li>
+
             <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="ti-shield"></i>
