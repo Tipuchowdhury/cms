@@ -1,6 +1,6 @@
-export const ADD_SLIDER = "ADD_SLIDER";
+export const ADD_SLIDER = "ADD_SLIDER"
 export const ADD_SLIDER_FRESH = "ADD_SLIDER_FRESH"
-export const GET_ALL_SLIDER = "GET_ALL_SLIDER";
+export const GET_ALL_SLIDER = "GET_ALL_SLIDER"
 export const GET_ALL_SLIDER_FRESH = "GET_ALL_SLIDER_FRESH"
 export const SLIDER_EDIT = "SLIDER_EDIT"
 export const SLIDER_STATUS_EDIT = "SLIDER_STATUS_EDIT"

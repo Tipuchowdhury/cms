@@ -9,8 +9,7 @@ import {
   REWARD_POINT_DELETE,
   REWARD_POINT_DELETE_FRESH,
   EDIT_REWARD_STATUS,
-  EDIT_REWARD_STATUS_FRESH
-
+  EDIT_REWARD_STATUS_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -90,14 +89,13 @@ const RewardPoints = (state = initialState, action) => {
         edit_reward_status_loading: action.status,
         get_all_rewardPoint_loading: false,
       }
-      break;
+      break
     case EDIT_REWARD_STATUS_FRESH:
       state = {
         ...state,
         edit_reward_status_loading: action.status,
       }
-      break;
-
+      break
 
     case REWARD_POINT_DELETE:
       state = {

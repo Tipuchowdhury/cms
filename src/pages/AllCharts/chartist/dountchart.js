@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import ChartistGraph from "react-chartist";
+import React, { Component } from "react"
+import ChartistGraph from "react-chartist"
 
 class dountchart extends Component {
   render() {
     var dountChartData = {
       series: [10, 20, 50, 20, 5, 50, 15],
-      labels: [1, 2, 3, 4, 5, 6, 7]
-    };
+      labels: [1, 2, 3, 4, 5, 6, 7],
+    }
     var dountChartOptions = {
       donut: true,
       showLabel: false,
@@ -16,9 +16,9 @@ class dountchart extends Component {
         // from: -pathLength + 'px',
         to: "0px",
         // easing: Chartist.Svg.Easing.easeOutQuint,
-        fill: "freeze"
-      }
-    };
+        fill: "freeze",
+      },
+    }
 
     return (
       <React.Fragment>
@@ -29,8 +29,8 @@ class dountchart extends Component {
           type={"Pie"}
         />
       </React.Fragment>
-    );
+    )
   }
 }
 
-export default dountchart;
+export default dountchart

@@ -55,6 +55,18 @@ import {
   GET_CATEGORY_BY_ID,
   GET_CATEGORY_BY_ID_FRESH,
   ADD_BRANCH_FRESH,
+  SERVER_SIDE_PAGINATION_ZONE,
+  SERVER_SIDE_PAGINATION_ZONE_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_ZONE_FRESH,
+  SERVER_SIDE_PAGINATION_CUISINE,
+  SERVER_SIDE_PAGINATION_CUISINE_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_CUISINE_FRESH,
+  SERVER_SIDE_PAGINATION_RESTAURANT,
+  SERVER_SIDE_PAGINATION_RESTAURANT_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_RESTAURANT_FRESH,
+  SERVER_SIDE_PAGINATION_BRANCH,
+  SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -1170,6 +1182,7 @@ export const addOnCategoryStatusEditActionFresh = () => {
 
 export const addCuisineAction = (id, name, file, color) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Post"
+  console.log(id, name)
   console.log(file)
 
   let dataObject = {
@@ -1450,17 +1463,16 @@ export const addRestaurantMenuAction = (
           return {
             ...item,
             add_on_categories: item.add_on_categories.map(addon_cats => {
-              const addon_cat_id = uuidv4()
               return {
                 ...addon_cats,
-                _id: addon_cat_id,
                 add_ons: addon_cats.add_ons.map(add_ons => {
                   const _addon_id = uuidv4()
                   return {
                     ...add_ons,
+                    _id: _addon_id,
                     add_ons_name: add_ons.add_on_name,
                     add_ons_price: add_ons.add_on_price,
-                    _id: _addon_id,
+                    addoncat_id: addon_cats.add_on_category_id,
                     variation_and_add_on_category_id: _id,
                   }
                 }),
@@ -1501,6 +1513,7 @@ export const addRestaurantMenuAction = (
     sd: Number(info.sd),
     restaurant_id: info.restaurant,
     category_id: info.category,
+    recipe_time: Number(info.recipe_time),
     is_delivery: JSON.parse(info.is_delivery),
     is_pickup: JSON.parse(info.is_pickup),
     is_dine: JSON.parse(info.is_dine),
@@ -1526,7 +1539,7 @@ export const addRestaurantMenuAction = (
           payload: response.data,
           status: "Success",
         })
-        toast.success("Menu Addedd Successfully")
+        toast.success("Menu Added Successfully")
       })
       .catch(error => {
         dispatch({
@@ -1842,4 +1855,277 @@ export const getCategoryByIdFresh = () => {
       payload: null,
     })
   }
+}
+
+export const getServerSidePaginationZoneAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Zone/Search?page=${index}&limit=${limit}`
+  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ZONE,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ZONE,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationZoneSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Zone/Search?zone_name=${name}`
+  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=1&limit=2`;
+  console.log(url)
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ZONE_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ZONE_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchZoneFresh = () => {
+  console.log(
+    "======= hello from getServerSidePaginationSearchZoneFresh ========="
+  )
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_ZONE_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getServerSidePaginationCuisineAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Cuisine/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUISINE,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUISINE,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationCuisineSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Cuisine/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUISINE_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUISINE_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchCuisineFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_CUISINE_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getServerSidePaginationRestaurantAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Restaurant/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_RESTAURANT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_RESTAURANT,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationRestaurantSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Restaurant/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_RESTAURANT_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_RESTAURANT_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchRestaurantFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_RESTAURANT_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getServerSidePaginationBranchAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Branch/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_BRANCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_BRANCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationBranchSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Branch/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchBranchFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
+      status: false,
+      payload: null,
+    })
 }

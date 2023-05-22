@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import ChartistGraph from "react-chartist";
+import React, { Component } from "react"
+import ChartistGraph from "react-chartist"
 
 class stackedbarchart extends Component {
   render() {
@@ -8,18 +8,18 @@ class stackedbarchart extends Component {
       series: [
         [800000, 1200000, 1400000, 1300000, 1520000, 1400000],
         [200000, 400000, 500000, 300000, 452000, 500000],
-        [160000, 290000, 410000, 600000, 588000, 410000]
-      ]
-    };
+        [160000, 290000, 410000, 600000, 588000, 410000],
+      ],
+    }
     var barChartOptions = {
       stackBars: true,
-      style: 'stroke-width: 30px',
+      style: "stroke-width: 30px",
       axisY: {
-        labelInterpolationFnc: function(value) {
-          return value / 1000 + "k";
-        }
-      }
-    };
+        labelInterpolationFnc: function (value) {
+          return value / 1000 + "k"
+        },
+      },
+    }
     return (
       <React.Fragment>
         <ChartistGraph
@@ -29,8 +29,8 @@ class stackedbarchart extends Component {
           type={"Bar"}
         />
       </React.Fragment>
-    );
+    )
   }
 }
 
-export default stackedbarchart;
+export default stackedbarchart

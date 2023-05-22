@@ -64,6 +64,7 @@ function AddMenu(props) {
     is_pickup: location.state ? location.state.is_pickup.toString() : "true",
     is_dine: location.state ? location.state.is_dine.toString() : "true",
     menu_price: location.state ? location.state.menu_price : "",
+    recipe_time: location.state ? location.state.recipe_time : "",
     pickup_menu_price: location.state ? location.state.pickup_menu_price : "",
     vat: location.state ? location.state.vat : "",
     sd: location.state ? location.state.sd : "",
@@ -525,6 +526,29 @@ function AddMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
+                    Restaurant Name
+                  </label>
+                  <div className="col-md-10">
+                    <Input
+                      id="exampleSelect"
+                      name="restaurant"
+                      value={info.restaurant}
+                      //required={true}
+                      onChange={handleInputs}
+                      type="select"
+                      required
+                    >
+                      <option>Choose...</option>
+                      {branchData}
+                    </Input>
+                  </div>
+                </Row>
+
+                <Row className="mb-3">
+                  <label
+                    htmlFor="example-text-input"
+                    className="col-md-2 col-form-label"
+                  >
                     Menu Name
                   </label>
                   <div className="col-md-10">
@@ -593,13 +617,34 @@ function AddMenu(props) {
                   </label>
                   <div className="col-md-10">
                     <input
-                      type="text"
+                      type="number"
                       className="form-control"
                       id="name"
                       placeholder="Enter pickup price"
                       name="pickup_menu_price"
                       onChange={handleInputs}
                       value={info.pickup_menu_price ?? ""}
+                      required
+                    />
+                  </div>
+                </Row>
+
+                <Row className="mb-3">
+                  <label
+                    htmlFor="example-text-input"
+                    className="col-md-2 col-form-label"
+                  >
+                    Preparation Time
+                  </label>
+                  <div className="col-md-10">
+                    <input
+                      type="number"
+                      className="form-control"
+                      id="name"
+                      placeholder="Enter preparation time"
+                      name="recipe_time"
+                      onChange={handleInputs}
+                      value={info.recipe_time ?? ""}
                       required
                     />
                   </div>
@@ -1039,28 +1084,6 @@ function AddMenu(props) {
                         No
                       </label>
                     </div>
-                  </div>
-                </Row>
-                <Row className="mb-3">
-                  <label
-                    htmlFor="example-text-input"
-                    className="col-md-2 col-form-label"
-                  >
-                    Restaurant Name
-                  </label>
-                  <div className="col-md-10">
-                    <Input
-                      id="exampleSelect"
-                      name="restaurant"
-                      value={info.restaurant}
-                      //required={true}
-                      onChange={handleInputs}
-                      type="select"
-                      required
-                    >
-                      <option>Choose...</option>
-                      {branchData}
-                    </Input>
                   </div>
                 </Row>
 

@@ -2,7 +2,7 @@
 // components-rtl.scss
 //
 
-.mini-stat .mini-stat-label{
+.mini-stat .mini-stat-label {
   left: 0;
   right: auto;
   padding: 2px 32px 2px 10px;
@@ -11,22 +11,20 @@
 
 // dropdown
 
-.dropdown-megamenu{
-  &.show{
-    left: 20px!important;
+.dropdown-megamenu {
+  &.show {
+    left: 20px !important;
   }
 }
 
-
 // icons
 
-.icon-list-demo{
-  i{
+.icon-list-demo {
+  i {
     margin-left: 12px;
     margin-right: 0;
   }
 }
-
 
 // Breadcrumb
 
@@ -36,33 +34,30 @@
   padding-right: 0;
 }
 
-
-
-
 // Invoice
 
 @media print {
   .content-page,
   .content,
   body {
-      margin-right: 0;
+    margin-right: 0;
   }
 }
 
-// Demos button 
+// Demos button
 .demos-show-btn {
   left: 0;
   right: auto;
   border-radius: 0 6px 6px 0;
 }
 
-.faq.accordion-button{
+.faq.accordion-button {
   &:after {
-    content: '\F0377';
+    content: "\F0377";
     left: 20px !important;
   }
 
   &.collapsed::after {
-    content: '\F0419';
+    content: "\F0419";
   }
 }

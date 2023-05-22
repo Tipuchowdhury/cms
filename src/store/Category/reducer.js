@@ -10,6 +10,9 @@ import {
   GET_CATEGORY_NAME_BY_ID,
   CATEGORY_DELETE,
   CATEGORY_DELETE_FRESH,
+  SERVER_SIDE_PAGINATION_CATEGORY,
+  SERVER_SIDE_PAGINATION_CATEGORY_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_CATEGORY_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -31,6 +34,14 @@ const initialState = {
   category_status_edit_loading: false,
 
   category_delete_loading: false,
+
+  // server side pagination category
+  get_server_side_pagination_category_data: null,
+  get_server_side_pagination_category_error: null,
+  get_server_side_pagination_category_loading: false,
+
+  get_server_side_pagination_category_search_data: null,
+  get_server_side_pagination_category_search_loading: false,
 }
 
 const category = (state = initialState, action) => {
@@ -113,6 +124,31 @@ const category = (state = initialState, action) => {
         category_delete_loading: action.status,
         get_all_category_loading: false,
       }
+      break
+    case SERVER_SIDE_PAGINATION_CATEGORY:
+      state = {
+        ...state,
+        get_server_side_pagination_category_data: action.payload,
+        get_server_side_pagination_category_error: null,
+        get_server_side_pagination_category_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_CATEGORY_SEARCH:
+      state = {
+        ...state,
+        get_server_side_pagination_category_search_data: action.payload,
+        get_server_side_pagination_category_search_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_SEARCH_CATEGORY_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_category_search_data: action.payload,
+        get_server_side_pagination_category_search_loading: action.status,
+      }
+      break
   }
   return state
 }

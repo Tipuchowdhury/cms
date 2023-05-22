@@ -113,7 +113,7 @@ class FirebaseAuthBackend {
     })
   }
 
-  addNewUserToFirestore = (user) => {
+  addNewUserToFirestore = user => {
     const collection = firebase.firestore().collection("users")
     const { profile } = user.additionalUserInfo
     const details = {
@@ -123,7 +123,7 @@ class FirebaseAuthBackend {
       email: profile.email,
       picture: profile.picture,
       createdDtm: firebase.firestore.FieldValue.serverTimestamp(),
-      lastLoginTime: firebase.firestore.FieldValue.serverTimestamp()
+      lastLoginTime: firebase.firestore.FieldValue.serverTimestamp(),
     }
     collection.doc(firebase.auth().currentUser.uid).set(details)
     return { user, details }
