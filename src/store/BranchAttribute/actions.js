@@ -1,4 +1,8 @@
-import { ADD_BRANCH_ATTRIBUTE, ADD_BRANCH_ATTRIBUTE_FRESH, GET_ALL_BRANCH_ATTRIBUTE, GET_ALL_BRANCH_ATTRIBUTE_FRESH, BRANCH_ATTRIBUTE_EDIT, BRANCH_ATTRIBUTE_EDIT_FRESH, BRANCH_ATTRIBUTE_DELETE, BRANCH_ATTRIBUTE_DELETE_FRESH, BRANCH_ATTRIBUTE_STATUS_EDIT, BRANCH_ATTRIBUTE_STATUS_EDIT_FRESH } from "./actionTypes";
+import {
+    ADD_BRANCH_ATTRIBUTE, ADD_BRANCH_ATTRIBUTE_FRESH, GET_ALL_BRANCH_ATTRIBUTE, GET_ALL_BRANCH_ATTRIBUTE_FRESH, BRANCH_ATTRIBUTE_EDIT, BRANCH_ATTRIBUTE_EDIT_FRESH, BRANCH_ATTRIBUTE_DELETE, BRANCH_ATTRIBUTE_DELETE_FRESH, BRANCH_ATTRIBUTE_STATUS_EDIT, BRANCH_ATTRIBUTE_STATUS_EDIT_FRESH, SERVER_SIDE_PAGINATION_BRANCH_ATTRIBUTE,
+    SERVER_SIDE_PAGINATION_BRANCH_ATTRIBUTE_SEARCH,
+    SERVER_SIDE_PAGINATION_SEARCH_BRANCH_ATTRIBUTE_FRESH,
+} from "./actionTypes";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
@@ -215,3 +219,69 @@ export const branchAttributeDeleteFresh = () => {
             status: false,
         });
 };
+
+export const getServerSidePaginationBranchAttributeAction = (index, limit) => {
+    var url =
+        process.env.REACT_APP_LOCALHOST + `/Branch/Search?page=${index}&limit=${limit}`
+
+    const formData = {}
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+        }
+        axios
+            .get(url, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: SERVER_SIDE_PAGINATION_BRANCH,
+                    payload: response.data,
+                    status: "Success",
+                })
+            })
+            .catch(error => {
+                dispatch({
+                    type: SERVER_SIDE_PAGINATION_BRANCH,
+                    status: "Failed",
+                })
+            })
+    }
+}
+
+export const getServerSidePaginationBranchAttributeSearchAction = name => {
+    console.log(name)
+    var url = process.env.REACT_APP_LOCALHOST + `/Branch/Search?name=${name}`
+
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+        }
+        axios
+            .get(url, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
+                    payload: response.data,
+                    status: "Success",
+                })
+            })
+            .catch(error => {
+                dispatch({
+                    type: SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
+                    status: "Failed",
+                })
+            })
+    }
+}
+
+export const getServerSidePaginationSearchBranchAttributeFresh = () => {
+    return dispatch =>
+        dispatch({
+            type: SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
+            status: false,
+            payload: null,
+        })
+}

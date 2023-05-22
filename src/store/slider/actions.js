@@ -1,4 +1,8 @@
-import { ADD_SLIDER, ADD_SLIDER_FRESH, GET_ALL_SLIDER, GET_ALL_SLIDER_FRESH, SLIDER_EDIT, SLIDER_EDIT_FRESH, SLIDER_DELETE, SLIDER_DELETE_FRESH, SLIDER_STATUS_EDIT, SLIDER_STATUS_EDIT_FRESH } from "./actionTypes";
+import {
+    ADD_SLIDER, ADD_SLIDER_FRESH, GET_ALL_SLIDER, GET_ALL_SLIDER_FRESH, SLIDER_EDIT, SLIDER_EDIT_FRESH, SLIDER_DELETE, SLIDER_DELETE_FRESH, SLIDER_STATUS_EDIT, SLIDER_STATUS_EDIT_FRESH, SERVER_SIDE_PAGINATION_PROMOTION,
+    SERVER_SIDE_PAGINATION_PROMOTION_SEARCH,
+    SERVER_SIDE_PAGINATION_SEARCH_PROMOTION_FRESH,
+} from "./actionTypes";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
@@ -254,3 +258,69 @@ export const promotionDeleteFresh = () => {
             status: false,
         });
 };
+
+
+export const getServerSidePaginationPromotionAction = (index, limit) => {
+    var url = process.env.REACT_APP_LOCALHOST + `/Promotion/Search?page=${index}&limit=${limit}`
+
+    const formData = {}
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+        }
+        axios
+            .get(url, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: SERVER_SIDE_PAGINATION_PROMOTION,
+                    payload: response.data,
+                    status: "Success",
+                })
+            })
+            .catch(error => {
+                dispatch({
+                    type: SERVER_SIDE_PAGINATION_PROMOTION,
+                    status: "Failed",
+                })
+            })
+    }
+}
+
+export const getServerSidePaginationPromotionSearchAction = name => {
+    console.log(name)
+    var url = process.env.REACT_APP_LOCALHOST + `/Promotion/Search?name=${name}`
+
+    return dispatch => {
+        const headers = {
+            "Content-Type": "application/json",
+
+            "Access-Control-Allow-Origin": "*",
+        }
+        axios
+            .get(url, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: SERVER_SIDE_PAGINATION_PROMOTION_SEARCH,
+                    payload: response.data,
+                    status: "Success",
+                })
+            })
+            .catch(error => {
+                dispatch({
+                    type: SERVER_SIDE_PAGINATION_PROMOTION_SEARCH,
+                    status: "Failed",
+                })
+            })
+    }
+}
+
+export const getServerSidePaginationSearchPromotionFresh = () => {
+    return dispatch =>
+        dispatch({
+            type: SERVER_SIDE_PAGINATION_SEARCH_PROMOTION_FRESH,
+            status: false,
+            payload: null,
+        })
+}

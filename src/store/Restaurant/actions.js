@@ -67,6 +67,21 @@ import {
   SERVER_SIDE_PAGINATION_BRANCH,
   SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
+
+  SERVER_SIDE_PAGINATION_MENU,
+  SERVER_SIDE_PAGINATION_MENU_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_MENU_FRESH,
+
+  SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
+  SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH,
+
+  SERVER_SIDE_PAGINATION_MENU_TIME,
+  SERVER_SIDE_PAGINATION_MENU_TIME_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_MENU_TIME_FRESH,
+
+  GET_ZONE_BY_ID,
+  GET_ZONE_BY_ID_FRESH
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -281,30 +296,30 @@ export const branchAddAction = (
   const data =
     selectedCuisine?.length > 0
       ? selectedCuisine.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            cuisine_id: item.value,
-            branch_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          cuisine_id: item.value,
+          branch_id: id,
+        }
+      })
       : null
 
   // console.log(data)
   const all_working_hours =
     time?.length > 0
       ? time.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            day: Number(item.day),
-            open_hour: moment(item.startTime, "HH:mm").get("hours"),
-            open_min: moment(item.startTime, "HH:mm").get("minutes"),
-            close_hour: moment(item.endTime, "HH:mm").get("hours"),
-            close_minute: moment(item.endTime, "HH:mm").get("minutes"),
-            branch_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          day: Number(item.day),
+          open_hour: moment(item.startTime, "HH:mm").get("hours"),
+          open_min: moment(item.startTime, "HH:mm").get("minutes"),
+          close_hour: moment(item.endTime, "HH:mm").get("hours"),
+          close_minute: moment(item.endTime, "HH:mm").get("minutes"),
+          branch_id: id,
+        }
+      })
       : null
 
   const dataObject = {
@@ -399,30 +414,30 @@ export const branchEditAction = (
   const data =
     selectedCuisine?.length > 0
       ? selectedCuisine.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            cuisine_id: item.value,
-            branch_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          cuisine_id: item.value,
+          branch_id: id,
+        }
+      })
       : null
 
   // console.log(data)
   const all_working_hours =
     time?.length > 0
       ? time.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            day: Number(item.day),
-            open_hour: moment(item.startTime, "HH:mm").get("hours"),
-            open_min: moment(item.startTime, "HH:mm").get("minutes"),
-            close_hour: moment(item.endTime, "HH:mm").get("hours"),
-            close_minute: moment(item.endTime, "HH:mm").get("minutes"),
-            branch_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          day: Number(item.day),
+          open_hour: moment(item.startTime, "HH:mm").get("hours"),
+          open_min: moment(item.startTime, "HH:mm").get("minutes"),
+          close_hour: moment(item.endTime, "HH:mm").get("hours"),
+          close_minute: moment(item.endTime, "HH:mm").get("minutes"),
+          branch_id: id,
+        }
+      })
       : null
   const dataObject = {
     name: zoneInfo.name,
@@ -689,27 +704,27 @@ export const zoneAddAction = (
   const data =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            branch_id: item.value,
-            zone_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          branch_id: item.value,
+          zone_id: id,
+        }
+      })
       : null
 
   const delivery_charges =
     deliveryCharge?.length > 0
       ? deliveryCharge.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            distance_start_in_kilometer: Number(item.distanceStart),
-            distance_end_in_kilometer: Number(item.distanceEnd),
-            delivery_charge: Number(item.deliveryCharge),
-            zone_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          distance_start_in_kilometer: Number(item.distanceStart),
+          distance_end_in_kilometer: Number(item.distanceEnd),
+          delivery_charge: Number(item.deliveryCharge),
+          zone_id: id,
+        }
+      })
       : null
 
   const allData = path.map(item => [Number(item.lng), Number(item.lat)])
@@ -790,6 +805,42 @@ export const getAllZoneAction = () => {
   }
 }
 
+export const getZoneByIdAction = (id) => {
+  //var url = process.env.REACT_APP_LOCALHOST + "/Zone/Get"
+  var url = process.env.REACT_APP_LOCALHOST + `/Zone/GetById?id=${id}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_ZONE_BY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_ZONE_BY_ID,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getZoneByIdActionFresh = () => {
+  console.log("=========hererererer=======");
+  return dispatch =>
+    dispatch({
+      type: GET_ZONE_BY_ID_FRESH,
+      status: false,
+    })
+}
+
 export const zoneEditAction = (
   id,
   zoneInfo,
@@ -809,27 +860,27 @@ export const zoneEditAction = (
   const data =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            branch_id: item.value,
-            zone_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          branch_id: item.value,
+          zone_id: id,
+        }
+      })
       : null
 
   const delivery_charges =
     deliveryCharge?.length > 0
       ? deliveryCharge.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            distance_start_in_kilometer: Number(item.distanceStart),
-            distance_end_in_kilometer: Number(item.distanceEnd),
-            delivery_charge: Number(item.deliveryCharge),
-            zone_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          distance_start_in_kilometer: Number(item.distanceStart),
+          distance_end_in_kilometer: Number(item.distanceEnd),
+          delivery_charge: Number(item.deliveryCharge),
+          zone_id: id,
+        }
+      })
       : null
 
   const allData = path.map(item => [Number(item.lat), Number(item.lng)])
@@ -1019,15 +1070,15 @@ export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
   const data =
     addOns?.length > 0
       ? addOns.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            add_on_name: item.add_on_name,
-            add_on_price: item.add_on_price,
-            add_on_category_name: category.name,
-            add_on_category_id: val,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          add_on_name: item.add_on_name,
+          add_on_price: item.add_on_price,
+          add_on_category_name: category.name,
+          add_on_category_id: val,
+        }
+      })
       : null
   const val_id = uuidv4()
   // console.log(data)
@@ -1080,15 +1131,15 @@ export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
   const data =
     addOns?.length > 0
       ? addOns.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            add_on_name: item.add_on_name,
-            add_on_price: item.add_on_price,
-            add_on_category_name: category.name,
-            add_on_category_id: val,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          add_on_name: item.add_on_name,
+          add_on_price: item.add_on_price,
+          add_on_category_name: category.name,
+          add_on_category_id: val,
+        }
+      })
       : null
   const val_id = uuidv4()
   // console.log(data)
@@ -1450,38 +1501,38 @@ export const addRestaurantMenuAction = (
   const variationData =
     isChecked && variations?.length > 0
       ? variations.map(item => {
-          const _id = uuidv4()
-          return {
-            ...item,
-            add_on_categories: item.add_on_categories.map(addon_cats => {
-              return {
-                ...addon_cats,
-                add_ons: addon_cats.add_ons.map(add_ons => {
-                  const _addon_id = uuidv4()
-                  return {
-                    ...add_ons,
-                    _id: _addon_id,
-                    variation_and_add_on_category_id: _id,
-                  }
-                }),
-              }
-            }),
-            _id: _id,
-            menu_id: val,
-          }
-        })
+        const _id = uuidv4()
+        return {
+          ...item,
+          add_on_categories: item.add_on_categories.map(addon_cats => {
+            return {
+              ...addon_cats,
+              add_ons: addon_cats.add_ons.map(add_ons => {
+                const _addon_id = uuidv4()
+                return {
+                  ...add_ons,
+                  _id: _addon_id,
+                  variation_and_add_on_category_id: _id,
+                }
+              }),
+            }
+          }),
+          _id: _id,
+          menu_id: val,
+        }
+      })
       : []
 
   const menuTimingData =
     menuTiming.length > 0
       ? menuTiming.map(item => {
-          const _id = uuidv4()
-          return {
-            _id: _id,
-            menu_item_time_slot_id: item._id,
-            menu_id: val,
-          }
-        })
+        const _id = uuidv4()
+        return {
+          _id: _id,
+          menu_item_time_slot_id: item._id,
+          menu_id: val,
+        }
+      })
       : []
 
   let dataObject = {
@@ -1982,9 +2033,7 @@ export const getServerSidePaginationSearchCuisineFresh = () => {
 }
 
 export const getServerSidePaginationRestaurantAction = (index, limit) => {
-  var url =
-    process.env.REACT_APP_LOCALHOST +
-    `/Restaurant/Search?page=${index}&limit=${limit}`
+  var url = process.env.REACT_APP_LOCALHOST + `/Restaurant/Search?page=${index}&limit=${limit}`
 
   const formData = {}
   return dispatch => {
@@ -2110,6 +2159,138 @@ export const getServerSidePaginationSearchBranchFresh = () => {
   return dispatch =>
     dispatch({
       type: SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getServerSidePaginationMenuAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST + `/MenuItem/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_MENU,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_MENU,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationMenuSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/MenuItem/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_MENU_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_MENU_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchMenuFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_MENU_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getServerSidePaginationAddOnsCategoryAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST + `/AddOnCategory/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationAddOnsCategorySearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/AddOnCategory/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchAddOnsCategoryFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH,
       status: false,
       payload: null,
     })

@@ -7,10 +7,13 @@ import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import {
-    getAllAddOnsCategoryAction, addOnCategoryDeleteAction, addOnCategoryDeleteFresh, addOnCategoryStatusEditAction, addOnCategoryStatusEditActionFresh
+    getAllAddOnsCategoryAction, addOnCategoryDeleteAction, addOnCategoryDeleteFresh, addOnCategoryStatusEditAction, addOnCategoryStatusEditActionFresh, getServerSidePaginationAddOnsCategoryAction,
+    getServerSidePaginationAddOnsCategorySearchAction,
+    getServerSidePaginationSearchAddOnsCategoryFresh
 } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link, useNavigate } from 'react-router-dom';
+import DataTable from 'react-data-table-component';
 
 function AddOnsCategory(props) {
     const navigate = useNavigate();
@@ -106,25 +109,26 @@ function AddOnsCategory(props) {
     const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
         className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
 
-
+    const textRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.name}</span>
     const activeData = [
 
         {
-            dataField: "name",
-            text: "Name",
-            sort: true,
+            selector: row => row.name,
+            name: "Name",
+            sortable: true,
+            cell: textRef
         },
         {
-            dataField: "",
-            text: "Status",
-            sort: true,
-            formatter: statusRef
+            selector: row => "",
+            name: "Status",
+            sortable: true,
+            cell: statusRef
         },
         {
-            dataField: "hello",
-            text: "Action",
-            sort: true,
-            formatter: actionRef,
+            selector: row => "",
+            name: "Action",
+            sortable: true,
+            cell: actionRef,
         },
 
     ];
@@ -135,11 +139,34 @@ function AddOnsCategory(props) {
         }
     ];
 
+    // server side pagination
+    const [page, setPage] = useState(1);
+    const [countPerPage, setCountPerPage] = useState(10);
+    const handleFilter = (e) => {
+        if (e.target.value?.length > 0) {
+            props.getServerSidePaginationAddOnsCategorySearchAction(e.target.value);
+        } else {
+            props.getServerSidePaginationSearchAddOnsCategoryFresh();
+        }
+
+    }
+    const paginationComponentOptions = {
+        selectAllRowsItem: true,
+        //selectAllRowsItemText: "ALL"
+    };
+
+    const handlePerRowsChange = async (newPerPage, page) => {
+        console.log(newPerPage, page);
+        setCountPerPage(newPerPage);
+    };
+
 
     useEffect(() => {
         if (props.get_all_addOns_category_loading == false) {
             props.getAllAddOnsCategoryAction();
         }
+
+        props.getServerSidePaginationAddOnsCategoryAction(page, countPerPage)
 
         if (props.add_on_category_delete_loading === "Success") {
             toast.success("ADD on Category Deleted Successfully");
@@ -158,7 +185,7 @@ function AddOnsCategory(props) {
         }
 
 
-    }, [props.get_all_addOns_category_loading, props.add_on_category_delete_loading, props.edit_add_on_category_status_loading]);
+    }, [props.get_all_addOns_category_loading, props.add_on_category_delete_loading, props.edit_add_on_category_status_loading, page, countPerPage]);
 
     // console.log(props.get_all_addOns_category_data);
     return (
@@ -182,8 +209,22 @@ function AddOnsCategory(props) {
 
                                     </div>
 
-                                    {props.get_all_addOns_category_data ? props.get_all_addOns_category_data.length > 0 ? <DatatableTablesWorking products={props.get_all_addOns_category_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_addOns_category_data?._id} /> : null : null}
+                                    {/* {props.get_all_addOns_category_data ? props.get_all_addOns_category_data.length > 0 ? <DatatableTablesWorking products={props.get_all_addOns_category_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_addOns_category_data?._id} /> : null : null} */}
+                                    <div className='text-end'><input type='text' placeholder="Search category" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
+                                    <DataTable
+                                        columns={activeData}
+                                        data={props.get_server_side_pagination_addOns_category_search_data != null ? props.get_server_side_pagination_addOns_category_search_data?.data : props?.get_server_side_pagination_addOns_category_data?.data}
+                                        highlightOnHover
+                                        pagination
+                                        paginationServer
+                                        paginationTotalRows={props.get_server_side_pagination_addOns_category_search_data != null ? props.get_server_side_pagination_addOns_category_search_data?.count : props.get_server_side_pagination_addOns_category_data?.count}
+                                        paginationPerPage={countPerPage}
+                                        paginationComponentOptions={paginationComponentOptions}
+                                        onChangeRowsPerPage={handlePerRowsChange}
+
+                                        onChangePage={(page) => setPage(page)}
+                                    />
 
                                 </CardBody>
                             </Card>
@@ -260,7 +301,10 @@ const mapStateToProps = state => {
         get_all_addOns_category_error,
         get_all_addOns_category_loading,
         add_on_category_delete_loading,
-        edit_add_on_category_status_loading
+        edit_add_on_category_status_loading,
+        get_server_side_pagination_addOns_category_data,
+        get_server_side_pagination_addOns_category_search_data
+
     } = state.Restaurant;
 
     return {
@@ -268,7 +312,10 @@ const mapStateToProps = state => {
         get_all_addOns_category_error,
         get_all_addOns_category_loading,
         add_on_category_delete_loading,
-        edit_add_on_category_status_loading
+        edit_add_on_category_status_loading,
+        get_server_side_pagination_addOns_category_data,
+        get_server_side_pagination_addOns_category_search_data
+
     };
 };
 
@@ -279,6 +326,9 @@ export default withRouter(
             addOnCategoryDeleteAction,
             addOnCategoryDeleteFresh,
             addOnCategoryStatusEditAction,
-            addOnCategoryStatusEditActionFresh
+            addOnCategoryStatusEditActionFresh,
+            getServerSidePaginationAddOnsCategoryAction,
+            getServerSidePaginationAddOnsCategorySearchAction,
+            getServerSidePaginationSearchAddOnsCategoryFresh
         })(AddOnsCategory)
 );

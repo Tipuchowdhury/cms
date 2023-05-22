@@ -121,6 +121,7 @@ import BranchAdd from "pages/Restaurant/BranchAdd/BranchAdd"
 import EmailForRecoverPassword from "pages/AuthenticationInner/Email-for-recover-password"
 import Category from "pages/Category/Category"
 import AddZone from "pages/Zone/AddZone/AddZone"
+import EditZone from "pages/Zone/AddZone/EditZone"
 import Menu from "pages/Restaurant/Menu/Menu"
 import Campaign from "pages/Campaign/Campaign"
 import AddCampaign from "pages/Campaign/AddCampaign"
@@ -174,6 +175,7 @@ const userRoutes = [
   // Zone & City
   { path: "/zone", component: <Zone /> },
   { path: "/add-zone", component: <AddZone /> },
+  { path: "/edit-zone", component: <EditZone /> },
   { path: "/city", component: <City /> },
 
   // Users

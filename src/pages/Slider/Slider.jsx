@@ -7,12 +7,15 @@ import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import {
     addSliderAction, getAllBranchAction, addSliderFresh, getAllSliderAction, getAllSliderFresh, promotionUpdateAction, promotionUpdateFresh, promotionStatusUpdateAction, promotionStatusUpdateFresh, promotionDeleteAction,
-    promotionDeleteFresh
+    promotionDeleteFresh, getServerSidePaginationPromotionAction,
+    getServerSidePaginationPromotionSearchAction,
+    getServerSidePaginationSearchPromotionFresh
 } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Select from "react-select";
+import DataTable from 'react-data-table-component';
 
 
 function Slider(props) {
@@ -218,42 +221,61 @@ function Slider(props) {
         className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
 
     // console.log(props.get_all_slider_data);
+    const textRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.name}</span>
 
 
     const activeData = [
 
         {
-            dataField: "name",
-            text: "Promotion Name",
-            sort: true,
+            selector: row => row.name,
+            name: "Promotion Name",
+            sortable: true,
+            cell: textRef
         },
         {
-            dataField: "",
-            text: "Status",
-            sort: true,
-            formatter: statusRef
+            selector: row => "",
+            name: "Status",
+            sortable: true,
+            cell: statusRef
         },
 
         {
-            //dataField: "hello",
-            text: "Action",
-            sort: true,
-            formatter: actionRef,
+
+            selector: row => "",
+            name: "Action",
+            sortable: true,
+            cell: actionRef,
         },
 
     ];
-    const defaultSorted = [
-        {
-            dataField: "name",
-            order: "desc"
+
+    // server side pagination
+    const [page, setPage] = useState(1);
+    const [countPerPage, setCountPerPage] = useState(10);
+    const handleFilter = (e) => {
+        if (e.target.value?.length > 0) {
+            props.getServerSidePaginationPromotionSearchAction(e.target.value);
+        } else {
+            props.getServerSidePaginationSearchPromotionFresh();
         }
-    ];
 
+    }
+    const paginationComponentOptions = {
+        selectAllRowsItem: true,
+        //selectAllRowsItemText: "ALL"
+    };
+
+    const handlePerRowsChange = async (newPerPage, page) => {
+        console.log(newPerPage, page);
+        setCountPerPage(newPerPage);
+    };
 
     useEffect(() => {
         if (props.get_all_branch_loading == false) {
             props.getAllBranchAction();
         }
+
+        props.getServerSidePaginationPromotionAction(page, countPerPage)
 
         if (props.get_all_slider_loading == false) {
             // console.log("I am in get all slider loading ")
@@ -322,7 +344,7 @@ function Slider(props) {
         }
 
     }, [props.get_all_branch_loading, props.add_slider_loading, props.slider_edit_loading,
-    props.slider_delete_loading, props.slider_status_edit_loading]);
+    props.slider_delete_loading, props.slider_status_edit_loading, page, countPerPage]);
 
     // console.log(props.get_all_slider_data);
 
@@ -343,9 +365,22 @@ function Slider(props) {
                                             Add Promotion
                                         </Button>
                                     </div>
-                                    {props.get_all_slider_data ? props.get_all_slider_data.length > 0 ? <DatatableTablesWorking products={props.get_all_slider_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_slider_data?._id} /> : null : null}
+                                    {/* {props.get_all_slider_data ? props.get_all_slider_data.length > 0 ? <DatatableTablesWorking products={props.get_all_slider_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_slider_data?._id} /> : null : null} */}
+                                    <div className='text-end'><input type='text' placeholder="Search Promotion" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
+                                    <DataTable
+                                        columns={activeData}
+                                        data={props.get_server_side_pagination_promotion_search_data != null ? props.get_server_side_pagination_promotion_search_data?.data : props?.get_server_side_pagination_promotion_data?.data}
+                                        highlightOnHover
+                                        pagination
+                                        paginationServer
+                                        paginationTotalRows={props.get_server_side_pagination_promotion_search_data != null ? props.get_server_side_pagination_promotion_search_data?.count : props.get_server_side_pagination_promotion_data?.count}
+                                        paginationPerPage={countPerPage}
+                                        paginationComponentOptions={paginationComponentOptions}
+                                        onChangeRowsPerPage={handlePerRowsChange}
 
+                                        onChangePage={(page) => setPage(page)}
+                                    />
                                 </CardBody>
                             </Card>
                         </Col>
@@ -592,7 +627,10 @@ const mapStateToProps = state => {
         slider_status_edit_data,
         slider_status_edit_loading,
 
-        slider_delete_loading
+        slider_delete_loading,
+
+        get_server_side_pagination_promotion_data,
+        get_server_side_pagination_promotion_search_data
     } = state.Sliders;
 
     return {
@@ -613,7 +651,9 @@ const mapStateToProps = state => {
         slider_status_edit_data,
         slider_status_edit_loading,
 
-        slider_delete_loading
+        slider_delete_loading,
+        get_server_side_pagination_promotion_data,
+        get_server_side_pagination_promotion_search_data
     };
 };
 
@@ -630,6 +670,9 @@ export default withRouter(
             promotionStatusUpdateAction,
             promotionStatusUpdateFresh,
             promotionDeleteAction,
-            promotionDeleteFresh
+            promotionDeleteFresh,
+            getServerSidePaginationPromotionAction,
+            getServerSidePaginationPromotionSearchAction,
+            getServerSidePaginationSearchPromotionFresh
         })(Slider)
 );

@@ -67,6 +67,21 @@ import {
   SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
   DELETE_MENU_TIME_SLOT,
   DELETE_MENU_TIME_SLOT_FRESH,
+
+  SERVER_SIDE_PAGINATION_MENU,
+  SERVER_SIDE_PAGINATION_MENU_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_MENU_FRESH,
+
+  SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
+  SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH,
+
+  SERVER_SIDE_PAGINATION_MENU_TIME,
+  SERVER_SIDE_PAGINATION_MENU_TIME_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_MENU_TIME_FRESH,
+
+  GET_ZONE_BY_ID,
+  GET_ZONE_BY_ID_FRESH
 } from "./actionTypes"
 
 const initialState = {
@@ -194,6 +209,35 @@ const initialState = {
 
   get_server_side_pagination_branch_search_data: null,
   get_server_side_pagination_branch_search_loading: false,
+
+  // server side pagination menu
+  get_server_side_pagination_menu_data: null,
+  get_server_side_pagination_menu_error: null,
+  get_server_side_pagination_menu_loading: false,
+
+  get_server_side_pagination_menu_search_data: null,
+  get_server_side_pagination_menu_search_loading: false,
+
+  // server side pagination addOns category
+  get_server_side_pagination_addOns_category_data: null,
+  get_server_side_pagination_addOns_category_error: null,
+  get_server_side_pagination_addOns_category_loading: false,
+
+  get_server_side_pagination_addOns_category_search_data: null,
+  get_server_side_pagination_addOns_category_search_loading: false,
+
+  // server side pagination menu-timeSlot
+  get_server_side_pagination_menu_time_data: null,
+  get_server_side_pagination_menu_time_error: null,
+  get_server_side_pagination_menu_time_loading: false,
+
+  get_server_side_pagination_menu_time_search_data: null,
+  get_server_side_pagination_menu_time_search_loading: false,
+
+
+  get_zone_by_id_data: null,
+  get_zone_by_id_error: null,
+  get_zone_by_id_loading: false,
 }
 
 const Restaurant = (state = initialState, action) => {
@@ -733,13 +777,102 @@ const Restaurant = (state = initialState, action) => {
         get_server_side_pagination_branch_search_data: action.payload,
         get_server_side_pagination_branch_search_loading: action.status,
       }
-      break
+      break;
 
     case SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH:
       state = {
         ...state,
         get_server_side_pagination_branch_search_data: action.payload,
         get_server_side_pagination_branch_search_loading: action.status,
+      }
+      break;
+
+    case SERVER_SIDE_PAGINATION_MENU:
+      state = {
+        ...state,
+        get_server_side_pagination_menu_data: action.payload,
+        get_server_side_pagination_menu_error: null,
+        get_server_side_pagination_menu_loading: action.status,
+      }
+      break;
+    case SERVER_SIDE_PAGINATION_MENU_SEARCH:
+      state = {
+        ...state,
+        get_server_side_pagination_menu_search_data: action.payload,
+        get_server_side_pagination_menu_search_loading: action.status,
+      }
+      break;
+
+    case SERVER_SIDE_PAGINATION_SEARCH_MENU_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_menu_search_data: action.payload,
+        get_server_side_pagination_menu_search_loading: action.status,
+      }
+      break;
+
+    case SERVER_SIDE_PAGINATION_ADDONS_CATEGORY:
+      state = {
+        ...state,
+        get_server_side_pagination_addOns_category_data: action.payload,
+        get_server_side_pagination_addOns_category_error: null,
+        get_server_side_pagination_addOns_category_loading: action.status,
+      }
+      break;
+
+    case SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH:
+      state = {
+        ...state,
+        get_server_side_pagination_addOns_category_search_data: action.payload,
+        get_server_side_pagination_addOns_category_search_loading: action.status,
+      }
+      break;
+
+    case SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_addOns_category_search_data: action.payload,
+        get_server_side_pagination_addOns_category_search_loading: action.status,
+      }
+      break;
+
+    case SERVER_SIDE_PAGINATION_MENU_TIME:
+      state = {
+        ...state,
+        get_server_side_pagination_menu_time_data: action.payload,
+        get_server_side_pagination_menu_time_error: null,
+        get_server_side_pagination_menu_time_loading: action.status,
+      }
+      break;
+    case SERVER_SIDE_PAGINATION_MENU_TIME_SEARCH:
+      state = {
+        ...state,
+        get_server_side_pagination_menu_time_search_data: action.payload,
+        get_server_side_pagination_menu_time_search_loading: action.status,
+      }
+      break;
+
+    case SERVER_SIDE_PAGINATION_SEARCH_MENU_TIME_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_menu_time_search_data: action.payload,
+        get_server_side_pagination_menu_time_search_loading: action.status,
+      }
+      break;
+
+    case GET_ZONE_BY_ID:
+      state = {
+        ...state,
+        get_zone_by_id_data: action.payload,
+        get_zone_by_id_error: null,
+        get_zone_by_id_loading: action.status,
+      }
+      break;
+
+    case GET_ZONE_BY_ID_FRESH:
+      state = {
+        ...state,
+        get_zone_by_id_loading: action.status,
       }
       break
   }

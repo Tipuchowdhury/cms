@@ -16,12 +16,13 @@ import {
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { toast } from "react-toastify"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import { Link, useNavigate } from "react-router-dom"
-import { getAllRestaurantMenuItemAction } from "store/actions"
+import { getAllRestaurantMenuItemAction, getServerSidePaginationMenuAction, getServerSidePaginationMenuSearchAction, getServerSidePaginationSearchMenuFresh } from "store/actions";
+import DataTable from 'react-data-table-component';
 
 function Menu(props) {
   const navigate = useNavigate()
@@ -63,49 +64,67 @@ function Menu(props) {
       Activate
     </Badge>
   )
+  const textRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.name}</span>
+  const priceRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.price}</span>
 
   const activeData = [
     {
-      dataField: "menu_name",
-      text: "Title",
-      sort: true,
+
+      selector: row => row.name,
+      name: "Title",
+      sortable: true,
+      cell: textRef
     },
     {
-      dataField: "menu_price",
-      text: "Price",
-      sort: true,
+      selector: row => row.price,
+      name: "Price",
+      sortable: true,
+      cell: priceRef
     },
 
-    // {
-    //     dataField: "menu_price",
-    //     text: "Assigned Branch",
-    //     sort: true,
-    // },
+
     {
-      dataField: "",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      selector: row => "",
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
     {
-      dataField: "hello",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      selector: row => "",
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
-  const defaultSorted = [
-    {
-      dataField: "name",
-      order: "desc",
-    },
-  ]
+
+
+  // server side pagination
+  const [page, setPage] = useState(1);
+  const [countPerPage, setCountPerPage] = useState(10);
+  const handleFilter = (e) => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationMenuSearchAction(e.target.value);
+    } else {
+      props.getServerSidePaginationSearchMenuFresh();
+    }
+
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page);
+    setCountPerPage(newPerPage);
+  };
 
   useEffect(() => {
     if (props.get_all_menu_loading == false) {
       props.getAllRestaurantMenuItemAction()
     }
-  }, [props.get_all_menu_loading])
+    props.getServerSidePaginationMenuAction(page, countPerPage)
+  }, [props.get_all_menu_loading, page, countPerPage])
 
   console.log(props.get_all_menu_data)
   return (
@@ -144,7 +163,7 @@ function Menu(props) {
                     </Link>
                   </div>
 
-                  {props.get_all_menu_data ? (
+                  {/* {props.get_all_menu_data ? (
                     props.get_all_menu_data.length > 0 ? (
                       <DatatableTablesWorking
                         products={props.get_all_menu_data}
@@ -153,7 +172,21 @@ function Menu(props) {
                         key={props.get_all_menu_data?._id}
                       />
                     ) : null
-                  ) : null}
+                  ) : null} */}
+                  <div className='text-end'><input type='text' placeholder="Search Menu" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
+                  <DataTable
+                    columns={activeData}
+                    data={props.get_server_side_pagination_menu_search_data != null ? props.get_server_side_pagination_menu_search_data?.data : props?.get_server_side_pagination_menu_data?.data}
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={props.get_server_side_pagination_menu_search_data != null ? props.get_server_side_pagination_menu_search_data?.count : props.get_server_side_pagination_menu_data?.count}
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+
+                    onChangePage={(page) => setPage(page)}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -181,18 +214,27 @@ function Menu(props) {
 }
 
 const mapStateToProps = state => {
-  const { get_all_menu_data, get_all_menu_error, get_all_menu_loading } =
+  const { get_all_menu_data,
+    get_all_menu_error,
+    get_all_menu_loading,
+    get_server_side_pagination_menu_data,
+    get_server_side_pagination_menu_search_data } =
     state.Restaurant
 
   return {
     get_all_menu_data,
     get_all_menu_error,
     get_all_menu_loading,
+    get_server_side_pagination_menu_data,
+    get_server_side_pagination_menu_search_data
   }
 }
 
 export default withRouter(
   connect(mapStateToProps, {
     getAllRestaurantMenuItemAction,
+    getServerSidePaginationMenuAction,
+    getServerSidePaginationMenuSearchAction,
+    getServerSidePaginationSearchMenuFresh
   })(Menu)
 )

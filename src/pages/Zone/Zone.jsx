@@ -18,7 +18,7 @@ import { ToastContainer, toast } from "react-toastify"
 import { Link, useNavigate } from "react-router-dom"
 import AddZone from "./AddZone/AddZone"
 import {
-  getAllZoneAction, zoneStatusEditAction, zoneStatusEditActionFresh, zoneDeleteAction, zoneDeleteFresh, getServerSidePaginationZoneAction, getServerSidePaginationZoneSearchAction, getServerSidePaginationSearchZoneFresh
+  getAllZoneAction, zoneStatusEditAction, zoneStatusEditActionFresh, zoneDeleteAction, zoneDeleteFresh, getServerSidePaginationZoneAction, getServerSidePaginationZoneSearchAction, getServerSidePaginationSearchZoneFresh, getZoneByIdAction
 } from "store/actions"
 import withRouter from "components/Common/withRouter";
 import { connect } from "react-redux"
@@ -56,9 +56,12 @@ function Zone(props) {
     })
   }
   const navigate = useNavigate()
-  const handleEdit = row => {
+  const handleEdit = (row, cell) => {
     console.log(row)
-    navigate("/add-zone", { state: row })
+    console.log(cell);
+
+    //props.getZoneByIdAction(cell._id)
+    navigate("/edit-zone", { state: cell })
   }
 
   const handleDelete = () => {
@@ -72,7 +75,7 @@ function Zone(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEdit(row)}
+        onClick={() => handleEdit(row, cell)}
       >
         Edit
       </Button>{" "}
@@ -316,6 +319,7 @@ export default withRouter(
     zoneDeleteFresh,
     getServerSidePaginationZoneAction,
     getServerSidePaginationZoneSearchAction,
-    getServerSidePaginationSearchZoneFresh
+    getServerSidePaginationSearchZoneFresh,
+    getZoneByIdAction
   })(Zone)
 )

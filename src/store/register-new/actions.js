@@ -13,7 +13,12 @@ import {
   USER_STATUS_UPDATE_FRESH,
   USER_DELETE,
   USER_DELETE_FRESH,
+
   SERVER_SIDE_PAGINATION_USER,
+  SERVER_SIDE_PAGINATION_USER_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_USER_FRESH,
+  GET_USER_BY_ID,
+  GET_USER_BY_ID_FRESH
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -24,10 +29,7 @@ import { convertToFormData } from "helpers/functions"
 
 export const userRegistrationNew = (user, file, role) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Authentication/register"
-  console.log(user)
-  console.log(role)
-  console.log(file)
-  console.log(url)
+
   let formData = new FormData()
   formData.append("first_name", user.first_name)
   formData.append("last_name", user.last_name)
@@ -361,30 +363,68 @@ export const userDeleteFresh = () => {
     })
 }
 
-// export const getServerSidePaginationUserAction = (index, limit) => {
-//     var url = process.env.REACT_APP_LOCALHOST + `/Zone/Search?page=${index}&limit=${limit}`;
-//     //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
-//     const formData = {};
-//     return dispatch => {
-//         const headers = {
-//             "Content-Type": "application/json",
+export const getServerSidePaginationUserAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST + `/User/Search?page=${index}&limit=${limit}`
 
-//             "Access-Control-Allow-Origin": "*",
-//         };
-//         axios
-//             .get(url, { headers: headers })
-//             .then(response => {
-//                 dispatch({
-//                     type: SERVER_SIDE_PAGINATION_ZONE,
-//                     payload: response.data,
-//                     status: "Success",
-//                 });
-//             })
-//             .catch(error => {
-//                 dispatch({
-//                     type: SERVER_SIDE_PAGINATION_ZONE,
-//                     status: "Failed",
-//                 });
-//             });
-//     };
-// };
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_USER,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_USER,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationUserSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/User/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_USER_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_USER_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchUserFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_USER_FRESH,
+      status: false,
+      payload: null,
+    })
+}

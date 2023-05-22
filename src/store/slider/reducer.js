@@ -1,5 +1,9 @@
 import {
-    ADD_SLIDER, ADD_SLIDER_FRESH, GET_ALL_SLIDER, GET_ALL_SLIDER_FRESH, SLIDER_EDIT, SLIDER_EDIT_FRESH, SLIDER_DELETE, SLIDER_DELETE_FRESH, SLIDER_STATUS_EDIT, SLIDER_STATUS_EDIT_FRESH
+    ADD_SLIDER, ADD_SLIDER_FRESH, GET_ALL_SLIDER, GET_ALL_SLIDER_FRESH, SLIDER_EDIT, SLIDER_EDIT_FRESH, SLIDER_DELETE, SLIDER_DELETE_FRESH, SLIDER_STATUS_EDIT, SLIDER_STATUS_EDIT_FRESH,
+
+    SERVER_SIDE_PAGINATION_PROMOTION,
+    SERVER_SIDE_PAGINATION_PROMOTION_SEARCH,
+    SERVER_SIDE_PAGINATION_SEARCH_PROMOTION_FRESH,
 } from "./actionTypes";
 
 const initialState = {
@@ -21,7 +25,15 @@ const initialState = {
     slider_status_edit_data: null,
     slider_status_edit_loading: false,
 
-    slider_delete_loading: false
+    slider_delete_loading: false,
+
+    // server side pagination promotion
+    get_server_side_pagination_promotion_data: null,
+    get_server_side_pagination_promotion_error: null,
+    get_server_side_pagination_promotion_loading: false,
+
+    get_server_side_pagination_promotion_search_data: null,
+    get_server_side_pagination_promotion_search_loading: false,
 }
 
 const Sliders = (state = initialState, action) => {
@@ -106,6 +118,31 @@ const Sliders = (state = initialState, action) => {
                 slider_delete_loading: action.status,
                 get_all_slider_loading: false
             }
+            break;
+
+        case SERVER_SIDE_PAGINATION_PROMOTION:
+            state = {
+                ...state,
+                get_server_side_pagination_promotion_data: action.payload,
+                get_server_side_pagination_promotion_error: null,
+                get_server_side_pagination_promotion_loading: action.status,
+            }
+            break;
+        case SERVER_SIDE_PAGINATION_PROMOTION_SEARCH:
+            state = {
+                ...state,
+                get_server_side_pagination_promotion_search_data: action.payload,
+                get_server_side_pagination_promotion_search_loading: action.status,
+            }
+            break;
+
+        case SERVER_SIDE_PAGINATION_SEARCH_PROMOTION_FRESH:
+            state = {
+                ...state,
+                get_server_side_pagination_promotion_search_data: action.payload,
+                get_server_side_pagination_promotion_search_loading: action.status,
+            }
+            break;
     }
     return state
 }
