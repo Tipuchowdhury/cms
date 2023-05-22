@@ -67,6 +67,8 @@ import {
   SERVER_SIDE_PAGINATION_BRANCH,
   SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
+  DELETE_RESTAURANT_MENU,
+  DELETE_RESTAURANT_MENU_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -1574,6 +1576,43 @@ export const getAllRestaurantMenuItemAction = () => {
         })
       })
   }
+}
+
+export const restaurantMenuItemDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Delete"
+  console.log(id)
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+
+    axios
+      .delete(url, { params: { id: id } }, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: DELETE_RESTAURANT_MENU,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: DELETE_RESTAURANT_MENU,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const restaurantMenuItemDeleteFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: DELETE_RESTAURANT_MENU_FRESH,
+      status: false,
+    })
 }
 
 export const addRestaurantMenuAddFresh = () => {

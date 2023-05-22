@@ -21,12 +21,17 @@ import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import { Link, useNavigate } from "react-router-dom"
-import { getAllRestaurantMenuItemAction } from "store/actions"
+import {
+  getAllRestaurantMenuItemAction,
+  restaurantMenuItemDeleteAction,
+  restaurantMenuItemDeleteFresh,
+} from "store/actions"
 
 function Menu(props) {
   const navigate = useNavigate()
 
   const [modalDel, setModalDel] = useState(false)
+  const [deleteItem, setDeleteItem] = useState()
 
   const toggleDel = () => setModalDel(!modalDel)
 
@@ -34,10 +39,13 @@ function Menu(props) {
     navigate("/add-menu", { state: row })
   }
 
-  const handleDelete = () => {
+  const handleDeleteModal = row => {
+    setDeleteItem(row._id)
     toggleDel()
-    console.log(deleteItem)
-    props.cityDeleteAction(deleteItem)
+  }
+
+  const handleDelete = () => {
+    props.restaurantMenuItemDeleteAction(deleteItem)
   }
   const actionRef = (cell, row) => (
     <div style={{ display: "flex", gap: 10 }}>
@@ -51,7 +59,7 @@ function Menu(props) {
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDelete(row)}
+        onClick={() => handleDeleteModal(row)}
       >
         Delete
       </Button>{" "}
@@ -105,7 +113,14 @@ function Menu(props) {
     if (props.get_all_menu_loading == false) {
       props.getAllRestaurantMenuItemAction()
     }
-  }, [props.get_all_menu_loading])
+
+    if (props.restaurant_menu_delete_loading === "Success") {
+      //  console.log("I am in the delete")
+      toast.success("Menu Deleted")
+      props.restaurantMenuItemDeleteFresh()
+      toggleDel()
+    }
+  }, [props.get_all_menu_loading, props.restaurant_menu_delete_loading])
 
   console.log(props.get_all_menu_data)
   return (
@@ -161,19 +176,32 @@ function Menu(props) {
         </Container>
 
         {/* ============ delete modal starts=============== */}
-        {/* <Modal isOpen={modalDel} toggle={toggleDel} centered>
-                    <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
-                        <div className="icon-box">
-                            <i className="fa red-circle fa-trash" style={{ color: "red", fontSize: "40px" }}></i>
-                        </div>
-                        <h2>Are you sure?</h2>
-                    </ModalHeader>
-                    <ModalBody>Do you really want to delete these records? This process cannot be undone.</ModalBody>
-                    <ModalFooter>
-                        <Button color="secondary" onClick={toggleDel}>Cancel</Button>{' '}
-                        <Button color="danger" onClick={handleDelete}>Delete</Button>
-                    </ModalFooter>
-                </Modal> */}
+        <Modal isOpen={modalDel} toggle={toggleDel} centered>
+          <ModalHeader
+            className="text-center"
+            style={{ textAlign: "center", margin: "0 auto" }}
+          >
+            <div className="icon-box">
+              <i
+                className="fa red-circle fa-trash"
+                style={{ color: "red", fontSize: "40px" }}
+              ></i>
+            </div>
+            <h2>Are you sure?</h2>
+          </ModalHeader>
+          <ModalBody>
+            Do you really want to delete these records? This process cannot be
+            undone.
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={toggleDel}>
+              Cancel
+            </Button>{" "}
+            <Button color="danger" onClick={handleDelete}>
+              Delete
+            </Button>
+          </ModalFooter>
+        </Modal>
         {/* ============ delete modal ends=============== */}
       </div>
     </React.Fragment>
@@ -181,18 +209,25 @@ function Menu(props) {
 }
 
 const mapStateToProps = state => {
-  const { get_all_menu_data, get_all_menu_error, get_all_menu_loading } =
-    state.Restaurant
+  const {
+    get_all_menu_data,
+    get_all_menu_error,
+    get_all_menu_loading,
+    restaurant_menu_delete_loading,
+  } = state.Restaurant
 
   return {
     get_all_menu_data,
     get_all_menu_error,
     get_all_menu_loading,
+    restaurant_menu_delete_loading,
   }
 }
 
 export default withRouter(
   connect(mapStateToProps, {
     getAllRestaurantMenuItemAction,
+    restaurantMenuItemDeleteAction,
+    restaurantMenuItemDeleteFresh,
   })(Menu)
 )

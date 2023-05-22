@@ -67,6 +67,8 @@ import {
   SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
   DELETE_MENU_TIME_SLOT,
   DELETE_MENU_TIME_SLOT_FRESH,
+  DELETE_RESTAURANT_MENU,
+  DELETE_RESTAURANT_MENU_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -138,6 +140,8 @@ const initialState = {
   add_restaurant_menu_data: null,
   add_restaurant_menu_error: null,
   add_restaurant_menu_loading: false,
+
+  restaurant_menu_delete_loading: false,
 
   get_all_menu_data: null,
   get_all_menu_error: null,
@@ -536,6 +540,20 @@ const Restaurant = (state = initialState, action) => {
         get_all_menu_loading: action.status,
       }
       break
+
+    case DELETE_RESTAURANT_MENU:
+      state = {
+        ...state,
+        restaurant_menu_delete_loading: action.status,
+        get_all_menu_loading: false,
+      }
+      break
+    case DELETE_RESTAURANT_MENU_FRESH:
+      state = {
+        ...state,
+        restaurant_menu_delete_loading: action.status,
+        get_all_menu_loading: false,
+      }
     case EDIT_ADD_ONS_CATEGORY:
       state = {
         ...state,
