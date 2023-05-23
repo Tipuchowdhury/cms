@@ -26,6 +26,7 @@ import {
   restaurantMenuItemDeleteAction,
   restaurantMenuItemDeleteFresh,
   restaurantMenuStatusEditAction,
+  restaurantMenuStatusEditFresh,
 } from "store/actions"
 
 function Menu(props) {
@@ -134,6 +135,16 @@ function Menu(props) {
   ]
 
   useEffect(() => {
+    if (props.restaurant_menu_status_edit_loading === "Success") {
+      toast.success("Status Updated")
+      toggleStatus()
+      props.restaurantMenuStatusEditFresh()
+    }
+
+    if (props.restaurant_menu_status_edit_loading === "False") {
+      toast.error("Couldn't update")
+    }
+
     if (props.get_all_menu_loading == false) {
       props.getAllRestaurantMenuItemAction()
     }
@@ -144,7 +155,11 @@ function Menu(props) {
       props.restaurantMenuItemDeleteFresh()
       toggleDel()
     }
-  }, [props.get_all_menu_loading, props.restaurant_menu_delete_loading])
+  }, [
+    props.get_all_menu_loading,
+    props.restaurant_menu_delete_loading,
+    props.restaurant_menu_status_edit_loading,
+  ])
 
   console.log(props.get_all_menu_data)
   return (
@@ -267,6 +282,7 @@ const mapStateToProps = state => {
     get_all_menu_error,
     get_all_menu_loading,
     restaurant_menu_delete_loading,
+    restaurant_menu_status_edit_loading,
   } = state.Restaurant
 
   return {
@@ -274,6 +290,7 @@ const mapStateToProps = state => {
     get_all_menu_error,
     get_all_menu_loading,
     restaurant_menu_delete_loading,
+    restaurant_menu_status_edit_loading,
   }
 }
 
@@ -283,5 +300,6 @@ export default withRouter(
     restaurantMenuItemDeleteAction,
     restaurantMenuItemDeleteFresh,
     restaurantMenuStatusEditAction,
+    restaurantMenuStatusEditFresh,
   })(Menu)
 )

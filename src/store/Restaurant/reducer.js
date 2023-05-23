@@ -578,6 +578,7 @@ const Restaurant = (state = initialState, action) => {
       state = {
         ...state,
         restaurant_menu_status_edit_loading: action.status,
+        get_all_menu_loading: false,
       }
       break
 
