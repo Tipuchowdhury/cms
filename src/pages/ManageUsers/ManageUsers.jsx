@@ -28,9 +28,13 @@ import {
   userStatusUpdateFresh,
   userDeleteAction,
   userDeleteFresh,
+  getServerSidePaginationUserAction,
+  getServerSidePaginationUserSearchAction,
+  getServerSidePaginationSearchUserFresh,
 } from "store/register-new/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import { Link } from "react-router-dom"
+import DataTable from "react-data-table-component"
 
 function ManageUsers(props) {
   const user_update_state = useSelector(
@@ -45,19 +49,20 @@ function ManageUsers(props) {
   const toggle = () => setModal(!modal)
   const toggleDel = () => setModalDel(!modalDel)
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
-  const handleEditUser = row => {
+  const handleEditUser = (row, cell) => {
+    console.log(cell)
     console.log(row)
     toggle()
     setRegisterInfo(prevState => ({
-      first_name: row.first_name,
-      last_name: row.last_name,
-      present_address: row.present_address,
-      permanent_address: row.permanent_address,
-      mobileNumber: row.mobile_number,
-      email: row.email,
-      image: row.image,
-      id: row._id,
-      is_active: row.is_active,
+      first_name: cell.first_name,
+      last_name: cell.last_name,
+      present_address: cell.present_address,
+      permanent_address: cell.permanent_address,
+      mobileNumber: cell.mobile_number,
+      email: cell.email,
+      image: cell.image,
+      id: cell._id,
+      is_active: cell.is_active,
     }))
     setRole(row.role_id)
     setAddImages({ ...addImages, image: row.image })
@@ -159,7 +164,7 @@ function ManageUsers(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEditUser(row)}
+        onClick={() => handleEditUser(row, cell)}
       >
         Edit
       </Button>{" "}
@@ -184,52 +189,67 @@ function ManageUsers(props) {
       {row.is_active ? "Active" : "Deactivate"}
     </Button>
   )
-
+  const textRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.name}</span>
+  )
+  const phoneRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.mobile_number}</span>
+  )
   const activeData = [
     {
-      dataField: "first_name",
-      text: "User",
-      sort: true,
+      selector: row => row.name,
+      name: "User",
+      sortable: true,
+      cell: textRef,
     },
     {
-      dataField: "mobile_number",
-      text: "Mobile Number",
-      sort: true,
-      //formatter: statusRef
-    },
-    // {
-    //     dataField: "role_name",
-    //     text: "User Type",
-    //     sort: true,
-    //     //formatter: actionRef,
-    // },
-
-    {
-      dataField: "Status",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      selector: row => row.mobile_number,
+      name: "Mobile Number",
+      sortable: true,
+      cell: phoneRef,
     },
 
     {
-      dataField: "",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      selector: row => row.Status,
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
-  ]
-  const defaultSorted = [
+
     {
-      dataField: "name",
-      order: "desc",
+      selector: row => "",
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
-  // console.log(props.get_all_user_data);
-  // console.log(props.get_all_user_roles_data,);
+
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationUserSearchAction(e.target.value)
+    } else {
+      props.getServerSidePaginationSearchUserFresh()
+    }
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
+
   useEffect(() => {
     if (props.get_all_user_loading === false) {
       props.getAllAdminUsersAction()
     }
+
+    props.getServerSidePaginationUserAction(page, countPerPage)
 
     if (props.get_all_user_roles_loading === false) {
       props.getAllUsersRolesAction()
@@ -265,6 +285,8 @@ function ManageUsers(props) {
     props.user_update_loading,
     props.user_status_update_loading,
     props.user_delete_loading,
+    page,
+    countPerPage,
   ])
 
   return (
@@ -305,42 +327,48 @@ function ManageUsers(props) {
                     </Link>
                   </div>
 
-                  {props.get_all_user_data ? (
-                    props.get_all_user_data.length > 0 ? (
-                      <DatatableTablesWorking
-                        products={props.get_all_user_data}
-                        columnData={activeData}
-                        defaultSorted={defaultSorted}
-                      />
-                    ) : null
-                  ) : null}
+                  {/* {props.get_all_user_data ? props.get_all_user_data.length > 0 ? <DatatableTablesWorking products={props.get_all_user_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} /> : null : null} */}
+
+                  <div className="text-end">
+                    <input
+                      type="text"
+                      placeholder="Search User"
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid gray",
+                      }}
+                      onChange={e => handleFilter(e)}
+                    />
+                  </div>
+                  <DataTable
+                    columns={activeData}
+                    data={
+                      props.get_server_side_pagination_user_search_data != null
+                        ? props.get_server_side_pagination_user_search_data
+                            ?.data
+                        : props?.get_server_side_pagination_user_data?.data
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_user_search_data != null
+                        ? props.get_server_side_pagination_user_search_data
+                            ?.count
+                        : props.get_server_side_pagination_user_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={page => setPage(page)}
+                  />
                 </CardBody>
               </Card>
             </Col>
           </Row>
         </Container>
-        {/* <Modal isOpen={modal} toggle={toggle} centered>
-            <ModalHeader toggle={toggle}>Modal title</ModalHeader>
-            <ModalBody>
-                <form className="mt-1" onSubmit={handleSubmit}>
-
-                    <div className="mb-3">
-                        <label className="form-label" htmlFor="username">City Name</label>
-                        <input type="text" className="form-control" id="username" placeholder="Enter city name" required value={name} onChange={(e) => setName(e.target.value)} />
-                    </div>
-                    <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
-                        <Button color="secondary" onClick={toggle}>
-                            Cancel
-                        </Button>{' '}
-                        <Button color="primary" type='submit'>
-                            Submit
-                        </Button>
-
-                    </div>
-
-                </form>
-            </ModalBody>
-        </Modal> */}
 
         {/* ============ edit modal start=============== */}
         <Modal isOpen={modal} toggle={toggle}>
@@ -465,14 +493,7 @@ function ManageUsers(props) {
                   <label className="form-label" htmlFor="Role">
                     Role
                   </label>
-                  {/* <Input type="select" name="role" id="exampleSelect" onChange={(e) => getRole(e)}>
-                          <option value="Admin">Admin</option>
-                          <option value="User">User</option>
-                          <option value="Super User">Super User</option>
-                          <option value="Zonal Admin">Zonal Admin</option>
-                          <option value="Central Admin">Central Admin</option>
 
-                        </Input> */}
                   <Input
                     id="exampleSelect"
                     name="manager"
@@ -485,16 +506,6 @@ function ManageUsers(props) {
                     {userData}
                   </Input>
                 </div>
-
-                {/* <div className="mb-3">
-                                    <label className="form-label" htmlFor="userpassword">Password</label>
-                                    <input type="password" className="form-control" id="userpassword" placeholder="Enter password" name="password" onChange={handleInputs} required />
-                                </div>
-
-                                <div className="mb-3">
-                                    <label className="form-label" htmlFor="userpassword">Confirm Password</label>
-                                    <input type="password" className="form-control" id="userconfirmpassword" placeholder="Enter password" name="confirmPassword" onChange={handleInputs} required />
-                                </div> */}
 
                 <div className="mb-3 row">
                   <div className="col-12 text-end">
@@ -592,6 +603,9 @@ const mapStateToProps = state => {
     user_status_update_loading,
 
     user_delete_loading,
+
+    get_server_side_pagination_user_data,
+    get_server_side_pagination_user_search_data,
   } = state.registerNew
 
   return {
@@ -610,6 +624,9 @@ const mapStateToProps = state => {
     user_status_update_loading,
 
     user_delete_loading,
+
+    get_server_side_pagination_user_data,
+    get_server_side_pagination_user_search_data,
   }
 }
 
@@ -623,5 +640,8 @@ export default withRouter(
     userStatusUpdateFresh,
     userDeleteAction,
     userDeleteFresh,
+    getServerSidePaginationUserAction,
+    getServerSidePaginationUserSearchAction,
+    getServerSidePaginationSearchUserFresh,
   })(ManageUsers)
 )

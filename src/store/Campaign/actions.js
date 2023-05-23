@@ -9,6 +9,10 @@ import {
   CAMPAIGN_DELETE_FRESH,
   CAMPAIGN_STATUS_EDIT,
   CAMPAIGN_STATUS_EDIT_FRESH,
+
+  SERVER_SIDE_PAGINATION_CAMPAIGN,
+  SERVER_SIDE_PAGINATION_CAMPAIGN_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_CAMPAIGN_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -254,5 +258,70 @@ export const campaignDeleteFresh = () => {
     dispatch({
       type: CAMPAIGN_DELETE_FRESH,
       status: false,
+    })
+}
+
+export const getServerSidePaginationCampaignAction = (index, limit) => {
+  var url = process.env.REACT_APP_LOCALHOST + `/Campaign/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CAMPAIGN,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CAMPAIGN,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationCampaignSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Campaign/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CAMPAIGN_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CAMPAIGN_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchCampaignFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_CAMPAIGN_FRESH,
+      status: false,
+      payload: null,
     })
 }

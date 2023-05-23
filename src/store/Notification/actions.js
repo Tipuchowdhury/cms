@@ -9,6 +9,10 @@ import {
   NOTIFICATION_DELETE_FRESH,
   NOTIFICATION_STATUS_EDIT,
   NOTIFICATION_STATUS_EDIT_FRESH,
+
+  SERVER_SIDE_PAGINATION_NOTIFICATION,
+  SERVER_SIDE_PAGINATION_NOTIFICATION_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_NOTIFICATION_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -244,5 +248,71 @@ export const notificationDeleteFresh = () => {
     dispatch({
       type: NOTIFICATION_DELETE_FRESH,
       status: false,
+    })
+}
+
+
+export const getServerSidePaginationNotificationAction = (index, limit) => {
+  var url = process.env.REACT_APP_LOCALHOST + `/Notification/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_NOTIFICATION,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_NOTIFICATION,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationNotificationSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Notification/Search?title=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_NOTIFICATION_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_NOTIFICATION_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchNotificationFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_NOTIFICATION_FRESH,
+      status: false,
+      payload: null,
     })
 }

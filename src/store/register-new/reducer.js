@@ -14,6 +14,10 @@ import {
   USER_DELETE,
   USER_DELETE_FRESH,
   SERVER_SIDE_PAGINATION_USER,
+  SERVER_SIDE_PAGINATION_USER_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_USER_FRESH,
+  GET_USER_BY_ID,
+  GET_USER_BY_ID_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -41,11 +45,23 @@ const initialState = {
   user_status_update_error: null,
   user_status_update_loading: false,
 
+  user_status_update_data: null,
+  user_status_update_error: null,
+  user_status_update_loading: false,
+
   user_delete_loading: false,
 
+  // SERVER SIDE USER
   get_server_side_pagination_user_data: null,
   get_server_side_pagination_user_error: null,
   get_server_side_pagination_user_loading: false,
+
+  get_server_side_pagination_user_search_data: null,
+  get_server_side_pagination_user_search_loading: false,
+
+  get_user_by_id_data: null,
+  get_user_by_id_error: null,
+  get_user_by_id_loading: false,
 }
 
 const registerNew = (state = initialState, action) => {
@@ -149,12 +165,63 @@ const registerNew = (state = initialState, action) => {
         get_all_user_loading: false,
       }
 
+    case USER_STATUS_UPDATE_FRESH:
+      state = {
+        ...state,
+        user_status_update_loading: action.status,
+      }
+      break
+    case USER_DELETE:
+      state = {
+        ...state,
+        user_delete_loading: action.status,
+        get_all_user_loading: false,
+      }
+      break
+    case USER_DELETE_FRESH:
+      state = {
+        ...state,
+        user_delete_loading: action.status,
+        get_all_user_loading: false,
+      }
+
     case SERVER_SIDE_PAGINATION_USER:
       state = {
         ...state,
         get_server_side_pagination_user_data: action.payload,
         get_server_side_pagination_user_error: null,
         get_server_side_pagination_user_loading: action.status,
+      }
+      break
+    case SERVER_SIDE_PAGINATION_USER_SEARCH:
+      state = {
+        ...state,
+        get_server_side_pagination_user_search_data: action.payload,
+        get_server_side_pagination_user_search_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_SEARCH_USER_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_user_search_data: action.payload,
+        get_server_side_pagination_user_search_loading: action.status,
+      }
+      break
+
+    case GET_USER_BY_ID:
+      state = {
+        ...state,
+        get_user_by_id_data: action.payload,
+        get_user_by_id_error: null,
+        get_user_by_id_loading: action.status,
+      }
+      break
+
+    case GET_USER_BY_ID_FRESH:
+      state = {
+        ...state,
+        get_user_by_id_loading: action.status,
       }
       break
   }

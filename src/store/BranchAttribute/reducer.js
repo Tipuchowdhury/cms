@@ -9,6 +9,9 @@ import {
   BRANCH_ATTRIBUTE_DELETE_FRESH,
   BRANCH_ATTRIBUTE_STATUS_EDIT,
   BRANCH_ATTRIBUTE_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_BRANCH_ATTRIBUTE,
+  SERVER_SIDE_PAGINATION_BRANCH_ATTRIBUTE_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_BRANCH_ATTRIBUTE_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -29,7 +32,18 @@ const initialState = {
   branch_attribute_status_edit_data: null,
   branch_attribute_status_edit_loading: false,
 
+  branch_attribute_status_edit_data: null,
+  branch_attribute_status_edit_loading: false,
+
   branch_attribute_delete_loading: false,
+
+  // server side pagination branch attribute
+  get_server_side_pagination_branch_attribute_data: null,
+  get_server_side_pagination_branch_attribute_error: null,
+  get_server_side_pagination_branch_attribute_loading: false,
+
+  get_server_side_pagination_branch_attribute_search_data: null,
+  get_server_side_pagination_branch_attribute_search_loading: false,
 }
 
 const BranchAttribute = (state = initialState, action) => {
@@ -99,6 +113,22 @@ const BranchAttribute = (state = initialState, action) => {
       }
       break
 
+    case BRANCH_ATTRIBUTE_STATUS_EDIT:
+      state = {
+        ...state,
+        branch_attribute_status_edit_data: action.payload,
+        branch_attribute_status_edit_loading: action.status,
+        get_all_branch_attribute_loading: false,
+      }
+      break
+
+    case BRANCH_ATTRIBUTE_STATUS_EDIT_FRESH:
+      state = {
+        ...state,
+        branch_attribute_status_edit_loading: action.status,
+      }
+      break
+
     case BRANCH_ATTRIBUTE_DELETE:
       state = {
         ...state,
@@ -112,6 +142,33 @@ const BranchAttribute = (state = initialState, action) => {
         branch_attribute_delete_loading: action.status,
         get_all_branch_attribute_loading: false,
       }
+      break
+    case SERVER_SIDE_PAGINATION_BRANCH_ATTRIBUTE:
+      state = {
+        ...state,
+        get_server_side_pagination_branch_attribute_data: action.payload,
+        get_server_side_pagination_branch_attribute_error: null,
+        get_server_side_pagination_branch_attribute_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_BRANCH_ATTRIBUTE_SEARCH:
+      state = {
+        ...state,
+        get_server_side_pagination_branch_attribute_search_data: action.payload,
+        get_server_side_pagination_branch_attribute_search_loading:
+          action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_SEARCH_BRANCH_ATTRIBUTE_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_branch_attribute_search_data: action.payload,
+        get_server_side_pagination_branch_attribute_search_loading:
+          action.status,
+      }
+      break
   }
   return state
 }

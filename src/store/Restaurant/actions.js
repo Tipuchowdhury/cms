@@ -67,6 +67,15 @@ import {
   SERVER_SIDE_PAGINATION_BRANCH,
   SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
+  SERVER_SIDE_PAGINATION_MENU,
+  SERVER_SIDE_PAGINATION_MENU_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_MENU_FRESH,
+  SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
+  SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH,
+  SERVER_SIDE_PAGINATION_MENU_TIME,
+  SERVER_SIDE_PAGINATION_MENU_TIME_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_MENU_TIME_FRESH,
   GET_ZONE_BY_ID,
   GET_ZONE_BY_ID_FRESH,
   DELETE_RESTAURANT_MENU,
@@ -805,6 +814,7 @@ export const getAllZoneAction = () => {
       })
   }
 }
+
 export const getZoneByIdAction = id => {
   //var url = process.env.REACT_APP_LOCALHOST + "/Zone/Get"
   var url = process.env.REACT_APP_LOCALHOST + `/Zone/GetById?id=${id}`
@@ -2243,6 +2253,141 @@ export const getServerSidePaginationSearchBranchFresh = () => {
   return dispatch =>
     dispatch({
       type: SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getServerSidePaginationMenuAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/MenuItem/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_MENU,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_MENU,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationMenuSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/MenuItem/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_MENU_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_MENU_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchMenuFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_MENU_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getServerSidePaginationAddOnsCategoryAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/AddOnCategory/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationAddOnsCategorySearchAction = name => {
+  console.log(name)
+  var url =
+    process.env.REACT_APP_LOCALHOST + `/AddOnCategory/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchAddOnsCategoryFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH,
       status: false,
       payload: null,
     })

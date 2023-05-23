@@ -62,8 +62,8 @@ function Zone(props) {
   }
   const navigate = useNavigate()
   const handleEdit = (row, cell) => {
-    // console.log(row)
-    // console.log(cell)
+    console.log(row)
+    console.log(cell)
 
     //props.getZoneByIdAction(cell._id)
     navigate("/edit-zone", { state: cell })
@@ -79,7 +79,7 @@ function Zone(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEdit(row, cell)}
+        onClick={() => handleEdit(row, cell, cell)}
       >
         Edit
       </Button>{" "}
@@ -362,6 +362,7 @@ export default withRouter(
     getServerSidePaginationZoneAction,
     getServerSidePaginationZoneSearchAction,
     getServerSidePaginationSearchZoneFresh,
+    getZoneByIdAction,
     getZoneByIdAction,
   })(Zone)
 )
