@@ -67,6 +67,8 @@ import {
   SERVER_SIDE_PAGINATION_BRANCH,
   SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
+  GET_ZONE_BY_ID,
+  GET_ZONE_BY_ID_FRESH,
   DELETE_RESTAURANT_MENU,
   DELETE_RESTAURANT_MENU_FRESH,
   RESTAURANT_MENU_STATUS_EDIT,
@@ -77,6 +79,7 @@ import { toast } from "react-toastify"
 import { v4 as uuidv4 } from "uuid"
 import moment from "moment"
 import { convertToFormData } from "helpers/functions"
+import CustomLoader from "components/CustomLoader/CustomLoader"
 
 // token
 // var authUser = JSON.parse(localStorage.getItem("user"));
@@ -802,6 +805,41 @@ export const getAllZoneAction = () => {
       })
   }
 }
+export const getZoneByIdAction = id => {
+  //var url = process.env.REACT_APP_LOCALHOST + "/Zone/Get"
+  var url = process.env.REACT_APP_LOCALHOST + `/Zone/GetById?id=${id}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_ZONE_BY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_ZONE_BY_ID,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getZoneByIdActionFresh = () => {
+  console.log("=========hererererer=======")
+  return dispatch =>
+    dispatch({
+      type: GET_ZONE_BY_ID_FRESH,
+      status: false,
+    })
+}
 
 export const zoneEditAction = (
   id,
@@ -845,7 +883,7 @@ export const zoneEditAction = (
         })
       : null
 
-  const allData = path.map(item => [Number(item.lat), Number(item.lng)])
+  const allData = path.map(item => [Number(item.lng), Number(item.lat)])
   console.log(allData)
   let formData = {
     _id: id,
