@@ -62,8 +62,8 @@ function Customer(props) {
   })
 
   const [addInfo, setAddInfo] = useState({
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     mobile: "",
     image: "",
@@ -79,8 +79,8 @@ function Customer(props) {
 
   const [editInfo, setEditInfo] = useState({
     _id: "",
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     mobile: "",
     image: "",
@@ -90,8 +90,8 @@ function Customer(props) {
   const handleEdit = row => {
     setEditInfo(prevState => ({
       _id: row._id,
-      first_name: row.first_name,
-      last_name: row.last_name,
+      firstName: row.firstName,
+      lastName: row.lastName,
       email: row.email,
       mobile: row.mobile,
       image: row.image,
@@ -284,8 +284,8 @@ function Customer(props) {
   )
   const activeData = [
     {
-      //dataField: "first_name",
-      selector: row => row.name,
+      //dataField: "firstName",
+      selector: row => row.firstName,
       name: "Name",
       sortable: true,
       cell: textRef,
@@ -307,38 +307,22 @@ function Customer(props) {
 
     {
       //dataField: "hello",
-      selector: row => "",
-      name: "Action",
-      sortable: true,
-      cell: actionRef,
+      text: "Action",
+      sort: true,
+      formatter: actionRef,
     },
   ]
-  // server side pagination
-  const [page, setPage] = useState(1)
-  const [countPerPage, setCountPerPage] = useState(10)
-  const handleFilter = e => {
-    if (e.target.value?.length > 0) {
-      props.getServerSidePaginationCustomerSearchAction(e.target.value)
-    } else {
-      props.getServerSidePaginationSearchCustomerFresh()
-    }
-  }
-  const paginationComponentOptions = {
-    selectAllRowsItem: true,
-    //selectAllRowsItemText: "ALL"
-  }
-
-  const handlePerRowsChange = async (newPerPage, page) => {
-    console.log(newPerPage, page)
-    setCountPerPage(newPerPage)
-  }
+  const defaultSorted = [
+    {
+      dataField: "firstName",
+      order: "desc",
+    },
+  ]
 
   useEffect(() => {
     if (props.get_all_subscription_type_loading == false) {
       props.getAllSubscriptionTypeAction()
     }
-
-    props.getServerSidePaginationCustomerAction(page, countPerPage)
 
     if (props.get_all_customer_loading == false) {
       props.getAllCustomerAction()
@@ -349,8 +333,8 @@ function Customer(props) {
       toggle()
       setAddInfo({
         ...addInfo,
-        first_name: "",
-        last_name: "",
+        firstName: "",
+        lastName: "",
         email: "",
         mobile: "",
         image: "",
@@ -404,8 +388,6 @@ function Customer(props) {
     props.customer_edit_loading,
     props.customer_delete_loading,
     props.edit_cutomer_status_loading,
-    page,
-    countPerPage,
   ])
 
   return (
@@ -443,45 +425,16 @@ function Customer(props) {
                     </Button>
                   </div>
 
-                  {/* {props.get_all_customer_data ? props.get_all_customer_data.length > 0 ? <DatatableTablesWorking products={props.get_all_customer_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_customer_data?._id} /> : null : null} */}
-
-                  <div className="text-end">
-                    <input
-                      type="text"
-                      placeholder="Search Customer"
-                      style={{
-                        padding: "10px",
-                        borderRadius: "8px",
-                        border: "1px solid gray",
-                      }}
-                      onChange={e => handleFilter(e)}
-                    />
-                  </div>
-                  <DataTable
-                    columns={activeData}
-                    data={
-                      props.get_server_side_pagination_customer_search_data !=
-                      null
-                        ? props.get_server_side_pagination_customer_search_data
-                            ?.data
-                        : props?.get_server_side_pagination_customer_data?.data
-                    }
-                    highlightOnHover
-                    pagination
-                    paginationServer
-                    paginationTotalRows={
-                      props.get_server_side_pagination_customer_search_data !=
-                      null
-                        ? props.get_server_side_pagination_customer_search_data
-                            ?.count
-                        : props.get_server_side_pagination_customer_data?.count
-                    }
-                    paginationPerPage={countPerPage}
-                    paginationComponentOptions={paginationComponentOptions}
-                    onChangeRowsPerPage={handlePerRowsChange}
-                    onChangePage={page => setPage(page)}
-                  />
+                  {props.get_all_customer_data ? (
+                    props.get_all_customer_data.length > 0 ? (
+                      <DatatableTablesWorking
+                        products={props.get_all_customer_data}
+                        columnData={activeData}
+                        defaultSorted={defaultSorted}
+                        key={props.get_all_customer_data?._id}
+                      />
+                    ) : null
+                  ) : null}
                 </CardBody>
               </Card>
             </Col>
@@ -494,33 +447,33 @@ function Customer(props) {
           <ModalBody>
             <form className="mt-1" onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className="form-label" htmlFor="first_name">
+                <label className="form-label" htmlFor="firstName">
                   First Name
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="first_name"
+                  id="firstName"
                   placeholder="Enter First Name"
                   required
-                  name="first_name"
-                  value={addInfo.first_name}
+                  name="firstName"
+                  value={addInfo.firstName}
                   onChange={handleAddInputs}
                 />
               </div>
 
               <div className="mb-3">
-                <label className="form-label" htmlFor="last_name">
+                <label className="form-label" htmlFor="lastName">
                   Last Name
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="last_name"
+                  id="lastName"
                   placeholder="Enter last name"
                   required
-                  name="last_name"
-                  value={addInfo.last_name}
+                  name="lastName"
+                  value={addInfo.lastName}
                   onChange={handleAddInputs}
                 />
               </div>
@@ -615,37 +568,37 @@ function Customer(props) {
 
         {/* ============ edit modal start=============== */}
         <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-          <ModalHeader>Edit PopUp Banner</ModalHeader>
+          <ModalHeader>Edit Customer</ModalHeader>
           <ModalBody>
             <form className="mt-1" onSubmit={handleEditSubmit}>
               <div className="mb-3">
-                <label className="form-label" htmlFor="first_name">
+                <label className="form-label" htmlFor="firstName">
                   First Name
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="first_name"
+                  id="firstName"
                   placeholder="Enter First Name"
                   required
-                  name="first_name"
-                  value={editInfo.first_name}
+                  name="firstName"
+                  value={editInfo.firstName}
                   onChange={handleEditInputs}
                 />
               </div>
 
               <div className="mb-3">
-                <label className="form-label" htmlFor="last_name">
+                <label className="form-label" htmlFor="lastName">
                   Last Name
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="last_name"
+                  id="lastName"
                   placeholder="Enter last name"
                   required
-                  name="last_name"
-                  value={editInfo.last_name}
+                  name="lastName"
+                  value={editInfo.lastName}
                   onChange={handleEditInputs}
                 />
               </div>

@@ -48,10 +48,10 @@ function Permissions(props) {
   const toggleDel = () => setModalDel(!modalDel)
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
 
-  const routeTemplate = { route: "" }
-  // const [route, setRoute] = useState(location.state ? location.state.preset_add_ons : [routeTemplate]);
-  const [route, setRoute] = useState([routeTemplate])
-  const [routeEdit, setRouteEdit] = useState([routeTemplate])
+  const pathTemplate = { path: "" }
+  // const [path, setPath] = useState(location.state ? location.state.preset_add_ons : [pathTemplate]);
+  const [path, setPath] = useState([pathTemplate])
+  const [pathEdit, setPathEdit] = useState([pathTemplate])
 
   const [addInfo, setAddInfo] = useState({
     module_name: "",
@@ -73,7 +73,7 @@ function Permissions(props) {
   })
 
   const handleEditPermission = row => {
-    // console.log(row);
+    //console.log(row);
 
     setEditInfo(prevState => ({
       _id: row._id,
@@ -84,7 +84,7 @@ function Permissions(props) {
       is_delete: row.is_delete,
       is_active: row.is_active,
     }))
-    routeForEdit(row.routes)
+    pathForEdit(row.routes)
 
     toggleEditModal()
   }
@@ -124,62 +124,62 @@ function Permissions(props) {
     setEditInfo({ ...editInfo, [name]: checked })
   }
 
-  const routeForEdit = nn => {
+  const pathForEdit = nn => {
     // console.log(nn);
     // console.log(props?.get_all_branch_data);
     // const common_permissions = props?.get_all_permission_data?.filter((elem) => nn?.find(({ permission_id }) => elem._id === permission_id));
     //console.log(common_restaurants);
 
-    const selectedRoute = nn
+    const selectedPath = nn
       ? nn.map((item, key) => {
-          return { route: item.route }
+          return { path: item.path }
         })
       : []
 
-    setRouteEdit(selectedRoute)
+    setPathEdit(selectedPath)
   }
 
-  const handleRoute = (e, index) => {
+  const handlePath = (e, index) => {
     // console.log(index);
-    const updatedValue = route.map((row, i) =>
+    const updatedValue = path.map((row, i) =>
       index === i
         ? Object.assign(row, { [e.target.name]: e.target.value })
         : row
     )
-    setRoute(updatedValue)
+    setPath(updatedValue)
   }
 
-  const handleRouteEdit = (e, index) => {
+  const handlePathEdit = (e, index) => {
     // console.log(e);
-    const updatedValue = routeEdit.map((row, i) =>
+    const updatedValue = pathEdit.map((row, i) =>
       index === i
         ? Object.assign(row, { [e.target.name]: e.target.value })
         : row
     )
-    setRouteEdit(updatedValue)
+    setPathEdit(updatedValue)
   }
 
   function handleAddRowNested() {
-    setRoute([...route, routeTemplate])
+    setPath([...path, pathTemplate])
   }
 
   function handleEditRowNested() {
-    setRouteEdit([...routeEdit, routeTemplate])
+    setPathEdit([...pathEdit, pathTemplate])
   }
 
   const handleRowDelete = index => {
-    const filteredTime = [...route]
+    const filteredTime = [...path]
     if (filteredTime.length > 1) {
       filteredTime.splice(index, 1)
-      setRoute(filteredTime)
+      setPath(filteredTime)
     }
   }
 
   const handleRowEditDelete = index => {
-    const filteredTime = [...routeEdit]
+    const filteredTime = [...pathEdit]
     if (filteredTime.length > 1) {
       filteredTime.splice(index, 1)
-      setRouteEdit(filteredTime)
+      setPathEdit(filteredTime)
     }
   }
 
@@ -187,12 +187,12 @@ function Permissions(props) {
     e.preventDefault()
     const val = uuidv4()
 
-    props.addPermissionAction(addInfo, route)
+    props.addPermissionAction(addInfo, path)
   }
 
   const handleEdit = e => {
     e.preventDefault()
-    props.permissionUpdateAction(editInfo, routeEdit)
+    props.permissionUpdateAction(editInfo, pathEdit)
 
     //toggleEditModal();
   }
@@ -482,22 +482,22 @@ function Permissions(props) {
                 </div>
               </div>
 
-              {route.map((row, idx) => (
+              {path.map((row, idx) => (
                 <React.Fragment key={idx}>
                   <div data-repeater-list="group-a" id={"addr" + idx}>
                     <div data-repeater-item className="row">
                       <div className="mb-3 col-lg-10">
-                        <label className="form-label" htmlFor="route">
-                          Route
+                        <label className="form-label" htmlFor="path">
+                          Path
                         </label>
                         <input
                           type="text"
-                          id="route"
+                          id="path"
                           className="form-control"
-                          name="route"
-                          placeholder="Route"
-                          value={row.route}
-                          onChange={e => handleRoute(e, idx)}
+                          name="path"
+                          placeholder="Path"
+                          value={row.path}
+                          onChange={e => handlePath(e, idx)}
                         />
                       </div>
 
@@ -626,22 +626,22 @@ function Permissions(props) {
                 </div>
               </div>
 
-              {routeEdit.map((row, idx) => (
+              {pathEdit.map((row, idx) => (
                 <React.Fragment key={idx}>
                   <div data-repeater-list="group-a" id={"addr" + idx}>
                     <div data-repeater-item className="row">
                       <div className="mb-3 col-lg-10">
-                        <label className="form-label" htmlFor="route">
-                          Route
+                        <label className="form-label" htmlFor="path">
+                          Path
                         </label>
                         <input
                           type="text"
-                          id="route"
+                          id="path"
                           className="form-control"
-                          name="route"
-                          placeholder="Route"
-                          value={row.route}
-                          onChange={e => handleRouteEdit(e, idx)}
+                          name="path"
+                          placeholder="Path"
+                          value={row.path}
+                          onChange={e => handlePathEdit(e, idx)}
                         />
                       </div>
 

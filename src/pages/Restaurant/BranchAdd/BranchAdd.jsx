@@ -173,6 +173,8 @@ function BranchAdd(props) {
     setselectedGroup(selectedGroup)
   }
 
+  //console.log(location.state);
+
   const [zoneInfo, setZoneInfo] = useState({
     name: location.state ? location.state.name : undefined,
     restaurant: location.state

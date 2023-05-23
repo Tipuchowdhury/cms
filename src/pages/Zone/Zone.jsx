@@ -83,14 +83,14 @@ function Zone(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEdit(row, cell)}
+        onClick={() => handleEdit(row, cell, cell)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        onClick={() => handleDeleteModal(cell)}
       >
         Delete
       </Button>{" "}
@@ -188,10 +188,10 @@ function Zone(props) {
     countPerPage,
   ])
 
-  console.log(props.get_all_zone_data)
-  console.log(page)
-  console.log(props.get_server_side_pagination_zone_data)
-  console.log(props.get_server_side_pagination_zone_search_data)
+  // console.log(props.get_all_zone_data)
+  // console.log(page)
+  // console.log(props.get_server_side_pagination_zone_data)
+  // console.log(props.get_server_side_pagination_zone_search_data)
   return (
     <React.Fragment>
       <ToastContainer />

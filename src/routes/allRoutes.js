@@ -121,7 +121,7 @@ import BranchAdd from "pages/Restaurant/BranchAdd/BranchAdd"
 import EmailForRecoverPassword from "pages/AuthenticationInner/Email-for-recover-password"
 import Category from "pages/Category/Category"
 import AddZone from "pages/Zone/AddZone/AddZone"
-import EditZone from "pages/Zone/AddZone/EditZone"
+import EditZone from "pages/Zone/AddZone/EditZone2"
 import Menu from "pages/Restaurant/Menu/Menu"
 import Campaign from "pages/Campaign/Campaign"
 import AddCampaign from "pages/Campaign/AddCampaign"
@@ -152,6 +152,10 @@ import Riders from "pages/Rider/Riders/Riders"
 import AddRider from "pages/Rider/Riders/AddRider"
 import Permissions from "pages/roles_and_permissions/Permissions/Permissions"
 import Roles from "pages/roles_and_permissions/Roles/Roles"
+import Order from "pages/Order/Order"
+import Refund from "pages/Refund/Refund"
+import ZoneUtilization from "pages/ZoneUtilization/ZoneUtilization"
+import RiderList from "pages/ZoneUtilization/RiderList"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -242,6 +246,16 @@ const userRoutes = [
   // Roles & Permissions
   { path: "/permissions", component: <Permissions /> },
   { path: "/roles", component: <Roles /> },
+
+  // Orders
+  { path: "/dispatch", component: <Order /> },
+
+  // Refund
+  { path: "/refund", component: <Refund /> },
+
+  // Zone Utilization
+  { path: "/zone-utilization", component: <ZoneUtilization /> },
+  { path: "/rider-list", component: <RiderList /> },
 
   // Notification
   { path: "/notification", component: <Notification /> },

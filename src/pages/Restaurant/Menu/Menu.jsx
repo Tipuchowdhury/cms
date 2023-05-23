@@ -17,6 +17,7 @@ import Breadcrumbs from "components/Common/Breadcrumb"
 import { toast } from "react-toastify"
 import withRouter from "components/Common/withRouter"
 ;` `
+;` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
@@ -26,6 +27,9 @@ import {
   getServerSidePaginationMenuAction,
   getServerSidePaginationMenuSearchAction,
   getServerSidePaginationSearchMenuFresh,
+  restaurantMenuItemDeleteAction,
+  restaurantMenuItemDeleteFresh,
+  restaurantMenuStatusEditAction,
 } from "store/actions"
 import DataTable from "react-data-table-component"
 
@@ -33,6 +37,9 @@ function Menu(props) {
   const navigate = useNavigate()
 
   const [modalDel, setModalDel] = useState(false)
+  const [deleteItem, setDeleteItem] = useState()
+  const [editInfo, setEditInfo] = useState(false)
+  const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
 
   const toggleDel = () => setModalDel(!modalDel)
 
@@ -40,10 +47,13 @@ function Menu(props) {
     navigate("/add-menu", { state: row })
   }
 
-  const handleDelete = () => {
+  const handleDeleteModal = row => {
+    setDeleteItem(row._id)
     toggleDel()
-    console.log(deleteItem)
-    props.cityDeleteAction(deleteItem)
+  }
+
+  const handleDelete = () => {
+    props.restaurantMenuItemDeleteAction(deleteItem)
   }
   const actionRef = (cell, row) => (
     <div style={{ display: "flex", gap: 10 }}>
@@ -57,7 +67,7 @@ function Menu(props) {
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDelete(row)}
+        onClick={() => handleDeleteModal(row)}
       >
         Delete
       </Button>{" "}
@@ -65,9 +75,13 @@ function Menu(props) {
   )
 
   const statusRef = (cell, row) => (
-    <Badge color="success" style={{ padding: "8px" }}>
-      Activate
-    </Badge>
+    <Button
+      color={row.is_active ? "success" : "secondary"}
+      className="btn waves-effect waves-light"
+      onClick={() => handleStatusModal(row)}
+    >
+      {row.is_active ? "Active" : "Deactivate"}
+    </Button>
   )
   const textRef = (cell, row) => (
     <span style={{ fontSize: "16px" }}>{cell.name}</span>
@@ -75,6 +89,23 @@ function Menu(props) {
   const priceRef = (cell, row) => (
     <span style={{ fontSize: "16px" }}>{cell.price}</span>
   )
+
+  const handleStatusModal = row => {
+    // console.log(row);
+    setEditInfo(row)
+
+    toggleStatus()
+  }
+
+  const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
+
+  const handleStatusUpdate = () => {
+    // console.log(editInfo)
+    props.restaurantMenuStatusEditAction({
+      ...editInfo,
+      is_active: !editInfo.is_active,
+    })
+  }
 
   const activeData = [
     {
@@ -129,7 +160,19 @@ function Menu(props) {
       props.getAllRestaurantMenuItemAction()
     }
     props.getServerSidePaginationMenuAction(page, countPerPage)
-  }, [props.get_all_menu_loading, page, countPerPage])
+
+    if (props.restaurant_menu_delete_loading === "Success") {
+      //  console.log("I am in the delete")
+      toast.success("Menu Deleted")
+      props.restaurantMenuItemDeleteFresh()
+      toggleDel()
+    }
+  }, [
+    props.get_all_menu_loading,
+    props.restaurant_menu_delete_loading,
+    page,
+    countPerPage,
+  ])
 
   console.log(props.get_all_menu_data)
   return (
@@ -219,20 +262,62 @@ function Menu(props) {
         </Container>
 
         {/* ============ delete modal starts=============== */}
-        {/* <Modal isOpen={modalDel} toggle={toggleDel} centered>
-                    <ModalHeader className="text-center" style={{ textAlign: "center", margin: "0 auto" }}>
-                        <div className="icon-box">
-                            <i className="fa red-circle fa-trash" style={{ color: "red", fontSize: "40px" }}></i>
-                        </div>
-                        <h2>Are you sure?</h2>
-                    </ModalHeader>
-                    <ModalBody>Do you really want to delete these records? This process cannot be undone.</ModalBody>
-                    <ModalFooter>
-                        <Button color="secondary" onClick={toggleDel}>Cancel</Button>{' '}
-                        <Button color="danger" onClick={handleDelete}>Delete</Button>
-                    </ModalFooter>
-                </Modal> */}
+        <Modal isOpen={modalDel} toggle={toggleDel} centered>
+          <ModalHeader
+            className="text-center"
+            style={{ textAlign: "center", margin: "0 auto" }}
+          >
+            <div className="icon-box">
+              <i
+                className="fa red-circle fa-trash"
+                style={{ color: "red", fontSize: "40px" }}
+              ></i>
+            </div>
+            <h2>Are you sure?</h2>
+          </ModalHeader>
+          <ModalBody>
+            Do you really want to delete these records? This process cannot be
+            undone.
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={toggleDel}>
+              Cancel
+            </Button>{" "}
+            <Button color="danger" onClick={handleDelete}>
+              Delete
+            </Button>
+          </ModalFooter>
+        </Modal>
         {/* ============ delete modal ends=============== */}
+
+        {/* ============ status update modal starts=============== */}
+        <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
+          <ModalHeader
+            className="text-center"
+            style={{ textAlign: "center", margin: "0 auto" }}
+          >
+            <div className="icon-box">
+              <i
+                className="fa fa-exclamation-circle"
+                style={{ color: "#DCA218", fontSize: "40px" }}
+              ></i>
+            </div>
+            Are you sure?
+          </ModalHeader>
+          <ModalBody>
+            Do you want to {editInfo.is_active ? "deactivate" : "activate"} this
+            record?{" "}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={toggleStatus}>
+              Cancel
+            </Button>{" "}
+            <Button color="primary" onClick={handleStatusUpdate}>
+              Update
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/* ============ status update modal ends=============== */}
       </div>
     </React.Fragment>
   )
@@ -241,10 +326,13 @@ function Menu(props) {
 const mapStateToProps = state => {
   const {
     get_all_menu_data,
+
     get_all_menu_error,
+
     get_all_menu_loading,
     get_server_side_pagination_menu_data,
     get_server_side_pagination_menu_search_data,
+    restaurant_menu_delete_loading,
   } = state.Restaurant
 
   return {
@@ -253,6 +341,7 @@ const mapStateToProps = state => {
     get_all_menu_loading,
     get_server_side_pagination_menu_data,
     get_server_side_pagination_menu_search_data,
+    restaurant_menu_delete_loading,
   }
 }
 
@@ -262,5 +351,8 @@ export default withRouter(
     getServerSidePaginationMenuAction,
     getServerSidePaginationMenuSearchAction,
     getServerSidePaginationSearchMenuFresh,
+    restaurantMenuItemDeleteAction,
+    restaurantMenuItemDeleteFresh,
+    restaurantMenuStatusEditAction,
   })(Menu)
 )

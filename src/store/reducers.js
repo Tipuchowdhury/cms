@@ -36,6 +36,10 @@ import VehicleType from "./Rider/VehicleType/reducer"
 import Rider from "./Rider/Rider/reducer"
 import Permissions from "./Roles_and_Permissions/Permissions/reducer"
 import Roles from "./Roles_and_Permissions/Roles/reducer"
+import Order from "./Order/reducer"
+import Refunds from "./Refund/reducer"
+import ZoneUtilization from "./ZoneUtilization/reducer"
+import RiderList from "./RiderList/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -67,6 +71,10 @@ const rootReducer = combineReducers({
   Rider,
   Permissions,
   Roles,
+  Order,
+  Refunds,
+  ZoneUtilization,
+  RiderList,
 })
 
 export default rootReducer

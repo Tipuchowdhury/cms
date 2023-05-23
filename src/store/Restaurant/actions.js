@@ -78,12 +78,17 @@ import {
   SERVER_SIDE_PAGINATION_SEARCH_MENU_TIME_FRESH,
   GET_ZONE_BY_ID,
   GET_ZONE_BY_ID_FRESH,
+  DELETE_RESTAURANT_MENU,
+  DELETE_RESTAURANT_MENU_FRESH,
+  RESTAURANT_MENU_STATUS_EDIT,
+  RESTAURANT_MENU_STATUS_EDIT_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
 import { v4 as uuidv4 } from "uuid"
 import moment from "moment"
 import { convertToFormData } from "helpers/functions"
+import CustomLoader from "components/CustomLoader/CustomLoader"
 
 // token
 // var authUser = JSON.parse(localStorage.getItem("user"));
@@ -454,6 +459,9 @@ export const branchEditAction = (
     phone_number: zoneInfo.phone_number,
     is_veg: JSON.parse(zoneInfo.is_veg),
     is_popular: JSON.parse(zoneInfo.is_popular),
+    is_delivery: JSON.parse(zoneInfo.is_delivery),
+    is_pickup: JSON.parse(zoneInfo.is_pickup),
+    is_dine: JSON.parse(zoneInfo.is_dine),
     commission: JSON.parse(zoneInfo.commission),
     min_order_value: zoneInfo.minimum_order_value,
     delivery_time: JSON.parse(zoneInfo.delivery_time),
@@ -521,6 +529,9 @@ export const branchStatusEditAction = data => {
     phone_number: data.phone_number,
     is_veg: JSON.parse(data.is_veg),
     is_popular: JSON.parse(data.is_popular),
+    is_delivery: JSON.parse(data.is_delivery),
+    is_pickup: JSON.parse(data.is_pickup),
+    is_dine: JSON.parse(data.is_dine),
     commission: JSON.parse(data.commission),
     min_order_value: 1,
     delivery_time: JSON.parse(data.delivery_time),
@@ -585,6 +596,9 @@ export const branchPopularEditAction = data => {
     phone_number: data.phone_number,
     is_veg: JSON.parse(data.is_veg),
     is_popular: JSON.parse(data.is_popular),
+    is_delivery: JSON.parse(data.is_delivery),
+    is_pickup: JSON.parse(data.is_pickup),
+    is_dine: JSON.parse(data.is_dine),
     commission: JSON.parse(data.commission),
     min_order_value: 1,
     delivery_time: JSON.parse(data.delivery_time),
@@ -879,7 +893,7 @@ export const zoneEditAction = (
         })
       : null
 
-  const allData = path.map(item => [Number(item.lat), Number(item.lng)])
+  const allData = path.map(item => [Number(item.lng), Number(item.lat)])
   console.log(allData)
   let formData = {
     _id: id,
@@ -1514,6 +1528,9 @@ export const addRestaurantMenuAction = (
                   return {
                     ...add_ons,
                     _id: _addon_id,
+                    add_ons_name: add_ons.add_on_name,
+                    add_ons_price: add_ons.add_on_price,
+                    addoncat_id: addon_cats.add_on_category_id,
                     variation_and_add_on_category_id: _id,
                   }
                 }),
@@ -1552,6 +1569,7 @@ export const addRestaurantMenuAction = (
     sd: Number(info.sd),
     restaurant_id: info.restaurant,
     category_id: info.category,
+    recipe_time: Number(info.recipe_time),
     is_delivery: JSON.parse(info.is_delivery),
     is_pickup: JSON.parse(info.is_pickup),
     is_dine: JSON.parse(info.is_dine),
@@ -1577,7 +1595,7 @@ export const addRestaurantMenuAction = (
           payload: response.data,
           status: "Success",
         })
-        toast.success("Menu Addedd Successfully")
+        toast.success("Menu Added Successfully")
       })
       .catch(error => {
         dispatch({
@@ -1613,6 +1631,84 @@ export const getAllRestaurantMenuItemAction = () => {
           status: "Failed",
         })
       })
+  }
+}
+
+export const restaurantMenuItemDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Delete"
+  console.log(id)
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+
+    axios
+      .delete(url, { params: { id: id } }, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: DELETE_RESTAURANT_MENU,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: DELETE_RESTAURANT_MENU,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const restaurantMenuItemDeleteFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: DELETE_RESTAURANT_MENU_FRESH,
+      status: false,
+    })
+}
+
+export const restaurantMenuStatusEditAction = data => {
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Put"
+  let dataObject = { ...data }
+
+  const formData = convertToFormData(dataObject)
+  // console.log(formData);
+  return dispatch => {
+    const headers = {
+      // "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: RESTAURANT_MENU_STATUS_EDIT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: RESTAURANT_MENU_STATUS_EDIT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const restaurantMenuStatusEditFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: RESTAURANT_MENU_STATUS_EDIT_FRESH,
+      payload: null,
+      status: false,
+    })
   }
 }
 

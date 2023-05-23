@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import {
-  Badge,
   Button,
   Card,
   CardBody,
@@ -8,10 +7,6 @@ import {
   Col,
   Container,
   Input,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
   Row,
 } from "reactstrap"
 import Breadcrumbs from "components/Common/Breadcrumb"
@@ -19,7 +14,6 @@ import { toast } from "react-toastify"
 import withRouter from "components/Common/withRouter"
 ;` `
 import { connect } from "react-redux"
-import { v4 as uuidv4 } from "uuid"
 import {
   getAllSystemOptionAction,
   getAllSystemOptionFresh,
@@ -27,11 +21,6 @@ import {
   systemOptionUpdateFresh,
   getAllReasonAction,
 } from "store/actions"
-import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
-import { Link } from "react-router-dom"
-import { useNavigate } from "react-router-dom"
-import Select from "react-select"
-import moment from "moment"
 
 function SystemOption(props) {
   document.title = "System Option | Foodi"
@@ -56,7 +45,7 @@ function SystemOption(props) {
   const handleAddCheckBox = e => {
     name = e.target.name
     checked = e.target.checked
-    let valueNum = checked ? 1 : 0
+    let valueNum = checked ? "1" : "0"
 
     if (name == "is_system_off" && checked == true) {
       setSystemOnOffReason(true)
@@ -82,19 +71,25 @@ function SystemOption(props) {
 
   const [options, setOptions] = useState([])
 
-  useEffect(() => {
-    setOptions(props.get_all_system_option_data)
+  const [optionCopy, setOptionCopy] = useState([])
 
-    props.get_all_system_option_data?.filter(obj => {
-      if (
-        obj.type === "on_off" &&
-        obj.name === "is_system_off" &&
-        obj.value === "1"
-      ) {
-        setSystemOnOffReason(true)
-      }
-    })
-  }, [])
+  useEffect(() => {
+    //console.log(props.get_all_system_option_data)
+    if (props.get_all_system_option_data) {
+      setOptions(props.get_all_system_option_data)
+      setOptionCopy(props.get_all_system_option_data)
+
+      props.get_all_system_option_data?.filter(obj => {
+        if (
+          obj.type === "on_off" &&
+          obj.name === "is_system_off" &&
+          obj.value === "1"
+        ) {
+          setSystemOnOffReason(true)
+        }
+      })
+    }
+  }, [props.get_all_system_option_data])
 
   const enums = options?.filter(obj => {
     return obj.type === "enum" && obj.name != "system_off_reason"
@@ -173,8 +168,10 @@ function SystemOption(props) {
                   {props.get_all_system_option_data ? (
                     props.get_all_system_option_data.length > 0 ? (
                       <>
-                        {options?.map(option => (
+                        {options?.map((option, index) => (
                           <form key={option._id} className="mt-1">
+                            {console.log("option :", option)}
+                            {console.log("index :", optionCopy[index])}
                             <Row className="mb-3">
                               <div className="col-sm-2">
                                 <label
@@ -189,7 +186,11 @@ function SystemOption(props) {
                                 {option.type === "single_value" ? (
                                   <input
                                     type="text"
-                                    className="form-control"
+                                    className={`form-control ${
+                                      optionCopy[index]?.value !== option.value
+                                        ? "border-warning"
+                                        : ""
+                                    }`}
                                     value={option.value}
                                     name={option.name}
                                     id={option.name}
@@ -202,7 +203,11 @@ function SystemOption(props) {
                                 {option.type === "on_off" ? (
                                   <input
                                     type="checkbox"
-                                    className="form-check-input"
+                                    className={`form-check-input ${
+                                      optionCopy[index]?.value !== option.value
+                                        ? "border-warning"
+                                        : ""
+                                    }`}
                                     id={option.name}
                                     checked={Number(option.value)}
                                     name={option.name}
@@ -218,7 +223,12 @@ function SystemOption(props) {
                                       <Input
                                         id={option.name}
                                         name={option.name}
-                                        className="form-control"
+                                        className={`form-control ${
+                                          optionCopy[index]?.value !==
+                                          option.value
+                                            ? "border-warning"
+                                            : ""
+                                        }`}
                                         value={option.value}
                                         onChange={handleAddInputs}
                                         type="select"
@@ -236,7 +246,12 @@ function SystemOption(props) {
                                       <Input
                                         id={option.name}
                                         name={option.name}
-                                        className="form-control"
+                                        className={`form-control ${
+                                          optionCopy[index]?.value !==
+                                          option.value
+                                            ? "border-warning"
+                                            : ""
+                                        }`}
                                         value={option.value}
                                         onChange={handleAddInputs}
                                         type="select"
@@ -256,7 +271,12 @@ function SystemOption(props) {
                                     <Input
                                       id={option.name}
                                       name={option.name}
-                                      className="form-control"
+                                      className={`form-control ${
+                                        optionCopy[index]?.value !==
+                                        option.value
+                                          ? "border-warning"
+                                          : ""
+                                      }`}
                                       value={option.value}
                                       onChange={handleAddInputs}
                                       type="select"
@@ -274,15 +294,19 @@ function SystemOption(props) {
                                 )}
                               </div>
 
-                              <div className="col-sm-2">
-                                <Button
-                                  color="primary"
-                                  className="btn btn-primary btn-sm waves-effect waves-light"
-                                  onClick={() => handleEdit(option)}
-                                >
-                                  Edit
-                                </Button>
-                              </div>
+                              {optionCopy[index]?.value !== option.value ? (
+                                <div className="col-sm-2">
+                                  <Button
+                                    color="primary"
+                                    className="btn btn-warning btn-sm waves-effect waves-light"
+                                    onClick={() => handleEdit(option)}
+                                  >
+                                    <i className="fas fa-check"></i>
+                                  </Button>
+                                </div>
+                              ) : (
+                                ""
+                              )}
                             </Row>
                           </form>
                         ))}

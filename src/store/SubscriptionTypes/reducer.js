@@ -112,7 +112,7 @@ const SubscriptionTypes = (state = initialState, action) => {
         subscription_type_delete_loading: action.status,
         get_all_subscription_type_loading: false,
       }
-      bresk
+      break
   }
   return state
 }
