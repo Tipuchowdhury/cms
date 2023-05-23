@@ -1,15 +1,38 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardBody, CardTitle, CardSubtitle, Label, Container, Row, Col, Input } from 'reactstrap';
-import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react";
-import { Polygon } from "@react-google-maps/api";
-import { connect } from "react-redux";
-import withRouter from 'components/Common/withRouter';
-import Select from "react-select";
-import Breadcrumbs from 'components/Common/Breadcrumb';
-import { getAllBranchAction, getAllCityAction, zoneAddAction, zoneEditAction, zoneAddFresh, zoneEditFresh, getZoneByIdAction } from 'store/actions';
-import { useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useCallback } from "react"
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Card,
+  CardBody,
+  CardTitle,
+  CardSubtitle,
+  Label,
+  Container,
+  Row,
+  Col,
+  Input,
+} from "reactstrap"
+import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react"
+import { Polygon } from "@react-google-maps/api"
+import { connect } from "react-redux"
+import withRouter from "components/Common/withRouter"
+import Select from "react-select"
+import Breadcrumbs from "components/Common/Breadcrumb"
+import {
+  getAllBranchAction,
+  getAllCityAction,
+  zoneAddAction,
+  zoneEditAction,
+  zoneAddFresh,
+  zoneEditFresh,
+  getZoneByIdAction,
+} from "store/actions"
+import { useEffect } from "react"
+import { v4 as uuidv4 } from "uuid"
+import { useLocation, useNavigate } from "react-router-dom"
 
 const LoadingContainer = () => <div>Loading...</div>
 
@@ -121,10 +144,8 @@ function AddZone(props) {
     console.log(e)
   }
 
-    };
-
-    console.log(location.state);
-    //console.log(location.state._id);
+  console.log(location.state)
+  //console.log(location.state._id);
 
   const [zoneInfo, setZoneInfo] = useState({
     area: location.state ? location.state.name : "",
@@ -141,7 +162,7 @@ function AddZone(props) {
     setZoneInfo({ ...zoneInfo, [name]: value })
   }
 
-    const allData = path?.map((item) => Number(item.lng) + "," + Number(item.lat));
+  const allData = path?.map(item => Number(item.lng) + "," + Number(item.lat))
 
   console.log(allData)
 
@@ -234,15 +255,23 @@ function AddZone(props) {
       props.zoneAddFresh()
     }
 
-        if (props.edit_zone_loading == "Success") {
-            navigate("/zone");
-            props.zoneEditFresh();
-        }
-        if (location?.state?._id) {
-            props.getZoneByIdAction(location?.state?._id);
-        }
+    if (props.edit_zone_loading == "Success") {
+      navigate("/zone")
+      props.zoneEditFresh()
+    }
+    if (location?.state?._id) {
+      props.getZoneByIdAction(location?.state?._id)
+    }
+  }, [
+    props.get_all_branch_loading,
+    props.get_all_city_loading,
+    props.add_zone_loading,
+    props.edit_zone_loading,
+  ])
 
-    }, [props.get_all_branch_loading, props.get_all_city_loading, props.add_zone_loading, props.edit_zone_loading]);
+  console.log(props.get_all_branch_data)
+  console.log(props.get_all_city_data)
+  console.log(props.get_zone_by_id_data)
 
   return (
     <>
@@ -429,15 +458,24 @@ function AddZone(props) {
                   </Row>
                   {/* ==================restaurant time================= */}
 
-                                    {deliveryCharge?.map((row, idx) => (
-                                        <React.Fragment key={idx}>
-                                            <div data-repeater-list="group-a" id={"addr" + idx}>
-                                                <div data-repeater-item className="row">
-
-                                                    <div className="mb-3 col-lg-3">
-                                                        <label className="form-label" htmlFor="startTime">Distance Start(km)</label>
-                                                        <input type="number" id="startTime" className="form-control" name="distanceStart" placeholder="Distance start" value={row.distanceStart} onChange={(e) => handleTimeChange(e, idx)} />
-                                                    </div>
+                  {deliveryCharge?.map((row, idx) => (
+                    <React.Fragment key={idx}>
+                      <div data-repeater-list="group-a" id={"addr" + idx}>
+                        <div data-repeater-item className="row">
+                          <div className="mb-3 col-lg-3">
+                            <label className="form-label" htmlFor="startTime">
+                              Distance Start(km)
+                            </label>
+                            <input
+                              type="number"
+                              id="startTime"
+                              className="form-control"
+                              name="distanceStart"
+                              placeholder="Distance start"
+                              value={row.distanceStart}
+                              onChange={e => handleTimeChange(e, idx)}
+                            />
+                          </div>
 
                           <div className="mb-3 col-lg-3">
                             <label className="form-label" htmlFor="subject">
@@ -513,26 +551,21 @@ function AddZone(props) {
 }
 
 const mapStateToProps = state => {
-    const {
+  const {
+    get_all_branch_loading,
+    get_all_branch_data,
+    add_zone_loading,
+    edit_zone_loading,
+    get_zone_by_id_data,
+  } = state.Restaurant
 
-        get_all_branch_loading,
-        get_all_branch_data,
-        add_zone_loading,
-        edit_zone_loading,
-        get_zone_by_id_data
-
-    } = state.Restaurant;
-
-    const {
-        get_all_city_data,
-        get_all_city_error,
-        get_all_city_loading,
-    } = state.zoneCity;
-    return {
-        get_all_branch_loading,
-        get_all_branch_data,
-        edit_zone_loading,
-        get_zone_by_id_data,
+  const { get_all_city_data, get_all_city_error, get_all_city_loading } =
+    state.zoneCity
+  return {
+    get_all_branch_loading,
+    get_all_branch_data,
+    edit_zone_loading,
+    get_zone_by_id_data,
 
     get_all_city_data,
     get_all_city_error,
@@ -542,19 +575,19 @@ const mapStateToProps = state => {
 }
 
 export default withRouter(
-    connect(mapStateToProps, {
-        getAllBranchAction,
-        getAllCityAction,
-        zoneAddAction,
-        zoneEditAction,
-        zoneAddFresh,
-        zoneEditFresh,
-        getZoneByIdAction
-    })(
-        GoogleApiWrapper({
-            apiKey: "AIzaSyDJkREeL-PpO7Z45k-MsD5sJD_m1mzNGEk",
-            LoadingContainer: LoadingContainer,
-            v: "3",
-        })(AddZone)
-    )
-);
+  connect(mapStateToProps, {
+    getAllBranchAction,
+    getAllCityAction,
+    zoneAddAction,
+    zoneEditAction,
+    zoneAddFresh,
+    zoneEditFresh,
+    getZoneByIdAction,
+  })(
+    GoogleApiWrapper({
+      apiKey: "AIzaSyDJkREeL-PpO7Z45k-MsD5sJD_m1mzNGEk",
+      LoadingContainer: LoadingContainer,
+      v: "3",
+    })(AddZone)
+  )
+)
