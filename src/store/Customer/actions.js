@@ -9,10 +9,9 @@ import {
   CUSTOMER_DELETE_FRESH,
   EDIT_CUSTOMER_STATUS,
   EDIT_CUSTOMER_STATUS_FRESH,
-
   SERVER_SIDE_PAGINATION_CUSTOMER,
   SERVER_SIDE_PAGINATION_CUSTOMER_SEARCH,
-  SERVER_SIDE_PAGINATION_SEARCH_CUSTOMER_FRESH
+  SERVER_SIDE_PAGINATION_SEARCH_CUSTOMER_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -24,18 +23,15 @@ var token = JSON.parse(localStorage.getItem("jwt"))
 export const addCustomerAction = (id, data, sub_id) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Customer/Post"
 
-
-
   let dataObject = {
     _id: id,
     ...data,
     subscription_type_id: sub_id,
-  };
+  }
 
   const formData = convertToFormData(dataObject)
 
   return dispatch => {
-
     const headers = {
       "Content-Type": "multipart/form-data",
       // "Content-Type": "application/json",
@@ -112,8 +108,8 @@ export const customerEditAction = (data, sub_id) => {
 
   const dataObject = {
     ...data,
-    subscription_type_id: sub_id
-  };
+    subscription_type_id: sub_id,
+  }
 
   const formData = convertToFormData(dataObject)
   // console.log(formData);
@@ -156,7 +152,7 @@ export const customerEditFresh = () => {
 export const customerStatusEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/Customer/Put"
 
-  const dataObject = data;
+  const dataObject = data
 
   const formData = convertToFormData(dataObject)
   return dispatch => {
@@ -232,7 +228,9 @@ export const customerDeleteFresh = () => {
 }
 
 export const getServerSidePaginationCustomerAction = (index, limit) => {
-  var url = process.env.REACT_APP_LOCALHOST + `/Customer/Search?page=${index}&limit=${limit}`
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Customer/Search?page=${index}&limit=${limit}`
 
   const formData = {}
   return dispatch => {

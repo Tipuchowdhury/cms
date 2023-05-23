@@ -10,11 +10,9 @@ import {
   CUSTOMER_DELETE_FRESH,
   EDIT_CUSTOMER_STATUS,
   EDIT_CUSTOMER_STATUS_FRESH,
-
   SERVER_SIDE_PAGINATION_CUSTOMER,
   SERVER_SIDE_PAGINATION_CUSTOMER_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_CUSTOMER_FRESH,
-
 } from "./actionTypes"
 
 const initialState = {
@@ -102,13 +100,13 @@ const Customer = (state = initialState, action) => {
         edit_cutomer_status_loading: action.status,
         get_all_customer_loading: false,
       }
-      break;
+      break
     case EDIT_CUSTOMER_STATUS_FRESH:
       state = {
         ...state,
         edit_cutomer_status_loading: action.status,
       }
-      break;
+      break
 
     case CUSTOMER_DELETE:
       state = {
@@ -123,7 +121,7 @@ const Customer = (state = initialState, action) => {
         customer_delete_loading: action.status,
         get_all_customer_loading: false,
       }
-      break;
+      break
 
     case SERVER_SIDE_PAGINATION_CUSTOMER:
       state = {

@@ -1,321 +1,303 @@
 import {
-    ADD_CITY,
-    ADD_CITY_FRESH,
-    GET_ALL_CITY,
-    GET_ALL_CITY_FRESH,
-    CITY_NAME_EDIT,
-    CITY_NAME_EDIT_FRESH,
-    CITY_STATUS_EDIT,
-    CITY_STATUS_EDIT_FRESH,
-    CITY_DELETE,
-    CITY_DELETE_FRESH,
-    SERVER_SIDE_PAGINATION,
-    SERVER_SIDE_PAGINATION_FRESH,
-    SERVER_SIDE_PAGINATION_SEARCH,
-    SERVER_SIDE_PAGINATION_SEARCH_FRESH,
-
-
-    SERVER_SIDE_PAGINATION_ZONE
-
+  ADD_CITY,
+  ADD_CITY_FRESH,
+  GET_ALL_CITY,
+  GET_ALL_CITY_FRESH,
+  CITY_NAME_EDIT,
+  CITY_NAME_EDIT_FRESH,
+  CITY_STATUS_EDIT,
+  CITY_STATUS_EDIT_FRESH,
+  CITY_DELETE,
+  CITY_DELETE_FRESH,
+  SERVER_SIDE_PAGINATION,
+  SERVER_SIDE_PAGINATION_FRESH,
+  SERVER_SIDE_PAGINATION_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_FRESH,
+  SERVER_SIDE_PAGINATION_ZONE,
 } from "./actionTypes"
-import axios from "axios";
-
+import axios from "axios"
 
 // token
-var token = JSON.parse(localStorage.getItem("jwt"));
+var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
 export const addCityAction = (name, id) => {
-    var url = process.env.REACT_APP_LOCALHOST + "/City/Post";
+  var url = process.env.REACT_APP_LOCALHOST + "/City/Post"
 
-    const formData = {
-        _id: id,
-        name: name,
-    };
-    return dispatch => {
-        console.log("-in the dispatch----")
+  const formData = {
+    _id: id,
+    name: name,
+  }
+  return dispatch => {
+    console.log("-in the dispatch----")
 
-        const headers = {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-        };
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
 
-        axios
-            .post(url, formData, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: "ADD_CITY",
-                    payload: response.data,
-                    status: "Success",
-                });
-            })
+    axios
+      .post(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: "ADD_CITY",
+          payload: response.data,
+          status: "Success",
+        })
+      })
 
-            .catch(error => {
-                dispatch({
-                    type: "ADD_CITY",
-                    payload: error,
-                    status: "Failed",
-                });
-            });
-
-    };
-
-};
+      .catch(error => {
+        dispatch({
+          type: "ADD_CITY",
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
 
 export const addCityFresh = () => {
-    return dispatch =>
-        dispatch({
-            type: ADD_CITY_FRESH,
-            status: false,
-        });
-};
-
-
+  return dispatch =>
+    dispatch({
+      type: ADD_CITY_FRESH,
+      status: false,
+    })
+}
 
 export const getAllCityAction = () => {
-    var url = process.env.REACT_APP_LOCALHOST + "/City/Get";
-    const formData = {};
-    return dispatch => {
-        const headers = {
-            "Content-Type": "application/json",
+  var url = process.env.REACT_APP_LOCALHOST + "/City/Get"
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
 
-            "Access-Control-Allow-Origin": "*",
-        };
-        axios
-            .get(url, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: GET_ALL_CITY,
-                    payload: response.data,
-                    status: "Success",
-                });
-            })
-            .catch(error => {
-                dispatch({
-                    type: GET_ALL_CITY,
-                    status: "Failed",
-                });
-            });
-    };
-};
-
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_ALL_CITY,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_ALL_CITY,
+          status: "Failed",
+        })
+      })
+  }
+}
 
 export const getAllCityFresh = () => {
-    return dispatch => {
-        dispatch({
-            type: "GET_ALL_CITY_FRESH",
-            payload: null,
-            status: "Success",
-        });
-    };
-};
+  return dispatch => {
+    dispatch({
+      type: "GET_ALL_CITY_FRESH",
+      payload: null,
+      status: "Success",
+    })
+  }
+}
 
 export const cityNameEditAction = (name, id, is_active) => {
+  var url = process.env.REACT_APP_LOCALHOST + "/City/Put"
+  const formData = {
+    _id: id,
+    name: name,
+    is_active: is_active,
+  }
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
 
-    var url = process.env.REACT_APP_LOCALHOST + "/City/Put";
-    const formData = {
-        _id: id,
-        name: name,
-        is_active: is_active,
-    };
-    return dispatch => {
-        const headers = {
-            "Content-Type": "application/json",
-
-            "Access-Control-Allow-Origin": "*",
-
-        };
-        axios
-            .put(url, formData, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: CITY_NAME_EDIT,
-                    payload: response.data,
-                    status: "Success",
-                });
-            })
-            .catch(error => {
-                dispatch({
-                    type: CITY_NAME_EDIT,
-                    payload: error,
-                    status: "Failed",
-                });
-            });
-    };
-};
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: CITY_NAME_EDIT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: CITY_NAME_EDIT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
 
 export const cityNameEditFresh = () => {
-    return dispatch => {
-        dispatch({
-            type: CITY_NAME_EDIT_FRESH,
-            payload: null,
-            status: false,
-        });
-    }
-};
+  return dispatch => {
+    dispatch({
+      type: CITY_NAME_EDIT_FRESH,
+      payload: null,
+      status: false,
+    })
+  }
+}
 
 export const cityStatusEditAction = (name, id, is_active) => {
+  var url = process.env.REACT_APP_LOCALHOST + "/City/Put"
+  const formData = {
+    _id: id,
+    name: name,
+    is_active: !is_active,
+  }
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
 
-    var url = process.env.REACT_APP_LOCALHOST + "/City/Put";
-    const formData = {
-        _id: id,
-        name: name,
-        is_active: !(is_active),
-    };
-    return dispatch => {
-        const headers = {
-            "Content-Type": "application/json",
-
-            "Access-Control-Allow-Origin": "*",
-
-        };
-        axios
-            .put(url, formData, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: CITY_STATUS_EDIT,
-                    payload: response.data,
-                    status: "Success",
-                });
-            })
-            .catch(error => {
-                dispatch({
-                    type: CITY_STATUS_EDIT,
-                    payload: error,
-                    status: "Failed",
-                });
-            });
-    };
-};
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: CITY_STATUS_EDIT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: CITY_STATUS_EDIT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
 
 export const cityStatusEditFresh = () => {
-    return dispatch => {
-        dispatch({
-            type: CITY_STATUS_EDIT_FRESH,
-            payload: null,
-            status: false,
-        });
+  return dispatch => {
+    dispatch({
+      type: CITY_STATUS_EDIT_FRESH,
+      payload: null,
+      status: false,
+    })
+  }
+}
+
+export const cityDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/City/Delete"
+  console.log(id)
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
     }
-};
 
-export const cityDeleteAction = (id) => {
-    var url = process.env.REACT_APP_LOCALHOST + "/City/Delete";
-    console.log(id);
-
-    return dispatch => {
-        const headers = {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-        };
-
-        axios
-            .delete(url, { params: { id: id } }, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: "CITY_DELETE",
-                    payload: response.data,
-                    status: "Success",
-                });
-            })
-            .catch(error => {
-                dispatch({
-                    type: "CITY_DELETE",
-                    payload: error,
-                    status: "Failed",
-                });
-            });
-
-    };
-
-};
+    axios
+      .delete(url, { params: { id: id } }, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: "CITY_DELETE",
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: "CITY_DELETE",
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
 
 export const cityDeleteFresh = () => {
-    return dispatch =>
-        dispatch({
-            type: CITY_DELETE_FRESH,
-            status: false,
-        });
-};
-
+  return dispatch =>
+    dispatch({
+      type: CITY_DELETE_FRESH,
+      status: false,
+    })
+}
 
 export const getServerSidePaginationAction = (index, limit) => {
-    var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=${limit}`;
-    //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
-    const formData = {};
-    return dispatch => {
-        const headers = {
-            "Content-Type": "application/json",
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/City/Search?page=${index}&limit=${limit}`
+  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
 
-            "Access-Control-Allow-Origin": "*",
-        };
-        axios
-            .get(url, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: SERVER_SIDE_PAGINATION,
-                    payload: response.data,
-                    status: "Success",
-                });
-            })
-            .catch(error => {
-                dispatch({
-                    type: SERVER_SIDE_PAGINATION,
-                    status: "Failed",
-                });
-            });
-    };
-};
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION,
+          status: "Failed",
+        })
+      })
+  }
+}
 
 export const serverSidePaginationFresh = () => {
-    console.log("======= hello from fresh =========");
-    return dispatch =>
+  console.log("======= hello from fresh =========")
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_FRESH,
+      status: false,
+    })
+}
+
+export const getServerSidePaginationSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/City/Search?city_name=${name}`
+  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=1&limit=2`;
+  console.log(url)
+
+  return dispatch => {
+    console.log("=== Ia am here =====")
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
         dispatch({
-            type: SERVER_SIDE_PAGINATION_FRESH,
-            status: false,
-        });
-};
-
-
-export const getServerSidePaginationSearchAction = (name) => {
-    console.log(name);
-    var url = process.env.REACT_APP_LOCALHOST + `/City/Search?city_name=${name}`;
-    //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=1&limit=2`;
-    console.log(url);
-
-    return dispatch => {
-        console.log("=== Ia am here =====");
-        const headers = {
-            "Content-Type": "application/json",
-
-            "Access-Control-Allow-Origin": "*",
-        };
-        axios
-            .get(url, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: SERVER_SIDE_PAGINATION_SEARCH,
-                    payload: response.data,
-                    status: "Success",
-                });
-            })
-            .catch(error => {
-                dispatch({
-                    type: SERVER_SIDE_PAGINATION_SEARCH,
-                    status: "Failed",
-                });
-            });
-    };
-};
-
+          type: SERVER_SIDE_PAGINATION_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
 
 export const getServerSidePaginationSearchFresh = () => {
-    console.log("======= hello from getServerSidePaginationSearchFresh =========");
-    return dispatch =>
-        dispatch({
-            type: SERVER_SIDE_PAGINATION_SEARCH_FRESH,
-            status: false,
-            payload: null
-        });
-};
-
-
+  console.log("======= hello from getServerSidePaginationSearchFresh =========")
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_FRESH,
+      status: false,
+      payload: null,
+    })
+}

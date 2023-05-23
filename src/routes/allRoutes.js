@@ -243,7 +243,6 @@ const userRoutes = [
   { path: "/permissions", component: <Permissions /> },
   { path: "/roles", component: <Roles /> },
 
-
   // Notification
   { path: "/notification", component: <Notification /> },
   { path: "/add-notification", component: <AddNotification /> },

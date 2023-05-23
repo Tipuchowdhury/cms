@@ -7,21 +7,20 @@ import {
   USER_LOGIN,
   USER_LOGIN_FRESH,
   FORGET_PASSWORD,
-  FORGET_PASSWORD_FRESH
+  FORGET_PASSWORD_FRESH,
 } from "./actionTypes"
-import axios from "axios";
+import axios from "axios"
 import { toast } from "react-toastify"
 
-export const userLogin = (user) => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Authentication/login";
+export const userLogin = user => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Authentication/login"
   console.log(user)
-  console.log(url);
+  console.log(url)
 
   const formData = {
     email: user.email,
     password: user.password,
-
-  };
+  }
   return dispatch => {
     console.log("-in the dispatch----")
     console.log(url)
@@ -32,29 +31,28 @@ export const userLogin = (user) => {
       // 'content-type': 'application/x-www-form-urlencoded'
 
       "Access-Control-Allow-Origin": "*",
-    };
+    }
     axios
       .post(url, formData, { headers: headers })
       .then(response => {
-        localStorage.setItem("foodi-jwt", JSON.stringify(response.data));
-        console.log(response);
+        localStorage.setItem("foodi-jwt", JSON.stringify(response.data))
+        console.log(response)
         dispatch({
           type: USER_LOGIN,
           payload: response,
           status: "Success",
-        });
+        })
       })
       .catch(err => {
         dispatch({
           type: USER_LOGIN,
           //payload: response,
           status: "Failed",
-        });
+        })
         toast.error("Something went wrong !!!")
-      });
-  };
-
-};
+      })
+  }
+}
 
 export const userLoginFresh = () => {
   console.log("===== I am in the fresh ========")
@@ -62,46 +60,43 @@ export const userLoginFresh = () => {
     dispatch({
       type: USER_LOGIN_FRESH,
       status: false,
-    });
-};
+    })
+}
 
 export const forgetPasswordAction = (token, password, confirmPassword) => {
-
-  var url = process.env.REACT_APP_LOCALHOST + "/Authentication/reset-password";
+  var url = process.env.REACT_APP_LOCALHOST + "/Authentication/reset-password"
 
   const formData = {
     token: token,
     password: password,
     confirm_password: confirmPassword,
-
-  };
+  }
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
       // 'content-type': 'application/x-www-form-urlencoded'
 
       "Access-Control-Allow-Origin": "*",
-    };
+    }
     axios
       .post(url, formData, { headers: headers })
       .then(response => {
-        console.log(response);
+        console.log(response)
         dispatch({
           type: FORGET_PASSWORD,
           //payload: response,
           status: "Success",
-        });
+        })
       })
       .catch(err => {
         dispatch({
           type: FORGET_PASSWORD,
           //payload: response,
           status: "Failed",
-        });
-      });
-  };
-
-};
+        })
+      })
+  }
+}
 
 export const forgetPasswordFresh = () => {
   console.log("===== I am in the fresh ========")
@@ -109,10 +104,8 @@ export const forgetPasswordFresh = () => {
     dispatch({
       type: FORGET_PASSWORD_FRESH,
       status: false,
-    });
-};
-
-
+    })
+}
 
 export const loginUser = (user, history) => {
   return {

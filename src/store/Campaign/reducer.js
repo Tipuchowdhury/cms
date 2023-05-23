@@ -10,7 +10,6 @@ import {
   CAMPAIGN_DELETE_FRESH,
   CAMPAIGN_STATUS_EDIT,
   CAMPAIGN_STATUS_EDIT_FRESH,
-
   SERVER_SIDE_PAGINATION_CAMPAIGN,
   SERVER_SIDE_PAGINATION_CAMPAIGN_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_CAMPAIGN_FRESH,
@@ -125,7 +124,7 @@ const campaign = (state = initialState, action) => {
         campaign_delete_loading: action.status,
         get_all_campaign_loading: false,
       }
-      break;
+      break
     case SERVER_SIDE_PAGINATION_CAMPAIGN:
       state = {
         ...state,
@@ -133,14 +132,14 @@ const campaign = (state = initialState, action) => {
         get_server_side_paginationcampaignu_error: null,
         get_server_side_pagination_campaign_loading: action.status,
       }
-      break;
+      break
     case SERVER_SIDE_PAGINATION_CAMPAIGN_SEARCH:
       state = {
         ...state,
         get_server_side_pagination_campaign_search_data: action.payload,
         get_server_side_pagination_campaign_search_loading: action.status,
       }
-      break;
+      break
 
     case SERVER_SIDE_PAGINATION_SEARCH_CAMPAIGN_FRESH:
       state = {
@@ -148,7 +147,7 @@ const campaign = (state = initialState, action) => {
         get_server_side_pagination_campaign_search_data: action.payload,
         get_server_side_pagination_campaign_search_loading: action.status,
       }
-      break;
+      break
   }
   return state
 }

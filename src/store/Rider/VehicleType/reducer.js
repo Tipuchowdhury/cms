@@ -9,8 +9,7 @@ import {
   VEHICLE_TYPE_DELETE,
   VEHICLE_TYPE_DELETE_FRESH,
   EDIT_VEHICLE_TYPE_STATUS,
-  EDIT_VEHICLE_TYPE_STATUS_FRESH
-
+  EDIT_VEHICLE_TYPE_STATUS_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -90,13 +89,13 @@ const VehicleType = (state = initialState, action) => {
         edit_vehicle_type_status_loading: action.status,
         get_all_vehicle_type_loading: false,
       }
-      break;
+      break
     case EDIT_VEHICLE_TYPE_STATUS_FRESH:
       state = {
         ...state,
         edit_vehicle_type_status_loading: action.status,
       }
-      break;
+      break
 
     case VEHICLE_TYPE_DELETE:
       state = {

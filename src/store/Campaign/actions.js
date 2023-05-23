@@ -9,7 +9,6 @@ import {
   CAMPAIGN_DELETE_FRESH,
   CAMPAIGN_STATUS_EDIT,
   CAMPAIGN_STATUS_EDIT_FRESH,
-
   SERVER_SIDE_PAGINATION_CAMPAIGN,
   SERVER_SIDE_PAGINATION_CAMPAIGN_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_CAMPAIGN_FRESH,
@@ -23,19 +22,18 @@ import { convertToFormData } from "helpers/functions"
 var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
-
 export const addCampaignAction = (id, data, selectedBranch) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Campaign/Post"
   const selectedBranchData =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          res_id: item.value,
-          campaign_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            res_id: item.value,
+            campaign_id: id,
+          }
+        })
       : null
   // console.log(selectedBranchData);
   // const formData = {
@@ -133,13 +131,13 @@ export const campaignEditAction = (id, data, selectedBranch) => {
   const selectedBranchData =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          res_id: item.value,
-          campaign_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            res_id: item.value,
+            campaign_id: id,
+          }
+        })
       : null
 
   const dataObject = {
@@ -185,11 +183,10 @@ export const campaignEditFresh = () => {
 }
 
 export const campaignStatusEditAction = data => {
-
   var url = process.env.REACT_APP_LOCALHOST + "/Campaign/Put"
-  let dataObject = { ...data };
+  let dataObject = { ...data }
 
-  const formData = convertToFormData(dataObject);
+  const formData = convertToFormData(dataObject)
   // console.log(formData);
   return dispatch => {
     const headers = {
@@ -264,7 +261,9 @@ export const campaignDeleteFresh = () => {
 }
 
 export const getServerSidePaginationCampaignAction = (index, limit) => {
-  var url = process.env.REACT_APP_LOCALHOST + `/Campaign/Search?page=${index}&limit=${limit}`
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Campaign/Search?page=${index}&limit=${limit}`
 
   const formData = {}
   return dispatch => {

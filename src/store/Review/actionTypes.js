@@ -1,6 +1,6 @@
-export const ADD_REVIEW = "ADD_REVIEW";
+export const ADD_REVIEW = "ADD_REVIEW"
 export const ADD_REVIEW_FRESH = "ADD_REVIEW_FRESH"
-export const GET_ALL_REVIEW = "GET_ALL_REVIEW";
+export const GET_ALL_REVIEW = "GET_ALL_REVIEW"
 export const GET_ALL_REVIEW_FRESH = "GET_ALL_REVIEW_FRESH"
 export const REVIEW_EDIT = "REVIEW_EDIT"
 export const REVIEW_STATUS_EDIT = "REVIEW_STATUS_EDIT"

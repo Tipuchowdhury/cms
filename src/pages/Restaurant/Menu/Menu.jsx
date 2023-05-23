@@ -16,13 +16,18 @@ import {
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { toast } from "react-toastify"
 import withRouter from "components/Common/withRouter"
-  ; ` `
+;` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import { Link, useNavigate } from "react-router-dom"
-import { getAllRestaurantMenuItemAction, getServerSidePaginationMenuAction, getServerSidePaginationMenuSearchAction, getServerSidePaginationSearchMenuFresh } from "store/actions";
-import DataTable from 'react-data-table-component';
+import {
+  getAllRestaurantMenuItemAction,
+  getServerSidePaginationMenuAction,
+  getServerSidePaginationMenuSearchAction,
+  getServerSidePaginationSearchMenuFresh,
+} from "store/actions"
+import DataTable from "react-data-table-component"
 
 function Menu(props) {
   const navigate = useNavigate()
@@ -64,24 +69,26 @@ function Menu(props) {
       Activate
     </Badge>
   )
-  const textRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.name}</span>
-  const priceRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.price}</span>
+  const textRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.name}</span>
+  )
+  const priceRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.price}</span>
+  )
 
   const activeData = [
     {
-
       selector: row => row.name,
       name: "Title",
       sortable: true,
-      cell: textRef
+      cell: textRef,
     },
     {
       selector: row => row.price,
       name: "Price",
       sortable: true,
-      cell: priceRef
+      cell: priceRef,
     },
-
 
     {
       selector: row => "",
@@ -97,27 +104,25 @@ function Menu(props) {
     },
   ]
 
-
   // server side pagination
-  const [page, setPage] = useState(1);
-  const [countPerPage, setCountPerPage] = useState(10);
-  const handleFilter = (e) => {
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
     if (e.target.value?.length > 0) {
-      props.getServerSidePaginationMenuSearchAction(e.target.value);
+      props.getServerSidePaginationMenuSearchAction(e.target.value)
     } else {
-      props.getServerSidePaginationSearchMenuFresh();
+      props.getServerSidePaginationSearchMenuFresh()
     }
-
   }
   const paginationComponentOptions = {
     selectAllRowsItem: true,
     //selectAllRowsItemText: "ALL"
-  };
+  }
 
   const handlePerRowsChange = async (newPerPage, page) => {
-    console.log(newPerPage, page);
-    setCountPerPage(newPerPage);
-  };
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
 
   useEffect(() => {
     if (props.get_all_menu_loading == false) {
@@ -173,19 +178,39 @@ function Menu(props) {
                       />
                     ) : null
                   ) : null} */}
-                  <div className='text-end'><input type='text' placeholder="Search Menu" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
+                  <div className="text-end">
+                    <input
+                      type="text"
+                      placeholder="Search Menu"
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid gray",
+                      }}
+                      onChange={e => handleFilter(e)}
+                    />
+                  </div>
                   <DataTable
                     columns={activeData}
-                    data={props.get_server_side_pagination_menu_search_data != null ? props.get_server_side_pagination_menu_search_data?.data : props?.get_server_side_pagination_menu_data?.data}
+                    data={
+                      props.get_server_side_pagination_menu_search_data != null
+                        ? props.get_server_side_pagination_menu_search_data
+                            ?.data
+                        : props?.get_server_side_pagination_menu_data?.data
+                    }
                     highlightOnHover
                     pagination
                     paginationServer
-                    paginationTotalRows={props.get_server_side_pagination_menu_search_data != null ? props.get_server_side_pagination_menu_search_data?.count : props.get_server_side_pagination_menu_data?.count}
+                    paginationTotalRows={
+                      props.get_server_side_pagination_menu_search_data != null
+                        ? props.get_server_side_pagination_menu_search_data
+                            ?.count
+                        : props.get_server_side_pagination_menu_data?.count
+                    }
                     paginationPerPage={countPerPage}
                     paginationComponentOptions={paginationComponentOptions}
                     onChangeRowsPerPage={handlePerRowsChange}
-
-                    onChangePage={(page) => setPage(page)}
+                    onChangePage={page => setPage(page)}
                   />
                 </CardBody>
               </Card>
@@ -214,19 +239,20 @@ function Menu(props) {
 }
 
 const mapStateToProps = state => {
-  const { get_all_menu_data,
+  const {
+    get_all_menu_data,
     get_all_menu_error,
     get_all_menu_loading,
     get_server_side_pagination_menu_data,
-    get_server_side_pagination_menu_search_data } =
-    state.Restaurant
+    get_server_side_pagination_menu_search_data,
+  } = state.Restaurant
 
   return {
     get_all_menu_data,
     get_all_menu_error,
     get_all_menu_loading,
     get_server_side_pagination_menu_data,
-    get_server_side_pagination_menu_search_data
+    get_server_side_pagination_menu_search_data,
   }
 }
 
@@ -235,6 +261,6 @@ export default withRouter(
     getAllRestaurantMenuItemAction,
     getServerSidePaginationMenuAction,
     getServerSidePaginationMenuSearchAction,
-    getServerSidePaginationSearchMenuFresh
+    getServerSidePaginationSearchMenuFresh,
   })(Menu)
 )

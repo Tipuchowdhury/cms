@@ -37,8 +37,8 @@ function AddCampaign(props) {
 
   const branch_data_edit = common_branches
     ? common_branches?.map((item, key) => {
-      return { label: item.name, value: item._id }
-    })
+        return { label: item.name, value: item._id }
+      })
     : ""
   const [selectedBranch, setSelectedBranch] = useState(
     branch_data_edit ? branch_data_edit : ""
@@ -58,7 +58,6 @@ function AddCampaign(props) {
   const [images, setImages] = useState({
     image: location.state ? location.state.image : "",
   })
-
 
   // console.log(location.state)
   const [campaignInfo, setCampaignInfo] = useState({
@@ -97,12 +96,11 @@ function AddCampaign(props) {
     setCampaignInfo({ ...campaignInfo, [name]: value })
   }
 
-  const handleCheckBox = (e) => {
+  const handleCheckBox = e => {
     // console.log(e);
-    name = e.target.name;
-    checked = e.target.checked;
+    name = e.target.name
+    checked = e.target.checked
     setCampaignInfo({ ...campaignInfo, [name]: checked })
-
   }
 
   const handleFiles = e => {
@@ -248,21 +246,28 @@ function AddCampaign(props) {
                     >
                       Image
                     </label>
-                    {location.state?.image ? <div className="col-md-10">
-                      <input type="file"
-                        className="form-control"
-                        name="image" id="image"
-                        onChange={handleFiles}
-                      />
-                    </div> : <div className="col-md-10">
-                      <input type="file"
-                        className="form-control"
-                        name="image" id="image"
-                        onChange={handleFiles}
-                        required
-                      />
-                    </div>}
-
+                    {location.state?.image ? (
+                      <div className="col-md-10">
+                        <input
+                          type="file"
+                          className="form-control"
+                          name="image"
+                          id="image"
+                          onChange={handleFiles}
+                        />
+                      </div>
+                    ) : (
+                      <div className="col-md-10">
+                        <input
+                          type="file"
+                          className="form-control"
+                          name="image"
+                          id="image"
+                          onChange={handleFiles}
+                          required
+                        />
+                      </div>
+                    )}
                   </Row>
 
                   {images?.image && (
@@ -298,30 +303,56 @@ function AddCampaign(props) {
                   </Row>
 
                   <Row className="mb-3">
-
                     <div className="col-sm-4">
                       <div className="form-check">
-                        <label className="form-check-label" htmlFor="is_delivery">Delivery</label>
-                        <input type="checkbox" className="form-check-input" id="is_delivery" checked={campaignInfo.is_delivery} name="is_delivery" onChange={handleCheckBox} />
-
+                        <label
+                          className="form-check-label"
+                          htmlFor="is_delivery"
+                        >
+                          Delivery
+                        </label>
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id="is_delivery"
+                          checked={campaignInfo.is_delivery}
+                          name="is_delivery"
+                          onChange={handleCheckBox}
+                        />
                       </div>
                     </div>
 
                     <div className="col-sm-4">
                       <div className="form-check">
-                        <label className="form-check-label" htmlFor="is_pickup">Pickup</label>
-                        <input type="checkbox" className="form-check-input" id="is_pickup" checked={campaignInfo.is_pickup} name="is_pickup" onChange={handleCheckBox} />
+                        <label className="form-check-label" htmlFor="is_pickup">
+                          Pickup
+                        </label>
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id="is_pickup"
+                          checked={campaignInfo.is_pickup}
+                          name="is_pickup"
+                          onChange={handleCheckBox}
+                        />
                       </div>
                     </div>
 
                     <div className="col-sm-4">
                       <div className="form-check">
-                        <label className="form-check-label" htmlFor="is_dine">Dine</label>
-                        <input type="checkbox" className="form-check-input" id="is_dine" checked={campaignInfo.is_dine} name="is_dine" onChange={handleCheckBox} />
-
+                        <label className="form-check-label" htmlFor="is_dine">
+                          Dine
+                        </label>
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id="is_dine"
+                          checked={campaignInfo.is_dine}
+                          name="is_dine"
+                          onChange={handleCheckBox}
+                        />
                       </div>
                     </div>
-
                   </Row>
 
                   <Row className="mb-3">

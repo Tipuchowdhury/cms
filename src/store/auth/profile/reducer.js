@@ -1,4 +1,9 @@
-import { PROFILE_ERROR, PROFILE_SUCCESS, EDIT_PROFILE, RESET_PROFILE_FLAG } from "./actionTypes"
+import {
+  PROFILE_ERROR,
+  PROFILE_SUCCESS,
+  EDIT_PROFILE,
+  RESET_PROFILE_FLAG,
+} from "./actionTypes"
 
 const initialState = {
   error: "",
@@ -16,7 +21,7 @@ const profile = (state = initialState, action) => {
     case PROFILE_ERROR:
       state = { ...state, error: action.payload }
       break
-    case RESET_PROFILE_FLAG :
+    case RESET_PROFILE_FLAG:
       state = { ...state, success: null }
       break
     default:

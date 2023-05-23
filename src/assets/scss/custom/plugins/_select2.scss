@@ -1,15 +1,13 @@
-
 //
 // Select 2
 //
 
 .select2-container {
-
   .select2-selection--single {
     background-color: $input-bg;
     border: 1px solid $input-border-color;
     height: 38px;
-    &:focus{
+    &:focus {
       outline: none;
     }
 
@@ -24,7 +22,7 @@
       width: 34px;
       right: 3px;
 
-      b{
+      b {
         border-color: $gray-500 transparent transparent transparent;
         border-width: 6px 6px 0 6px;
       }
@@ -34,10 +32,8 @@
 
 .select2-container--open {
   .select2-selection--single {
-
     .select2-selection__arrow {
-
-      b{
+      b {
         border-color: transparent transparent $gray-500 transparent !important;
         border-width: 0 6px 6px 6px !important;
       }
@@ -47,25 +43,25 @@
 
 .select2-container--default {
   .select2-search--dropdown {
-      padding: 10px;
-      background-color: $dropdown-bg;
-      .select2-search__field {
-          border: 1px solid  $input-border-color;
-          background-color: $input-bg;
-          color: $gray-600;
-          outline: none;
-      }
+    padding: 10px;
+    background-color: $dropdown-bg;
+    .select2-search__field {
+      border: 1px solid $input-border-color;
+      background-color: $input-bg;
+      color: $gray-600;
+      outline: none;
+    }
   }
   .select2-results__option--highlighted[aria-selected] {
-      background-color: $primary;
+    background-color: $primary;
   }
-  .select2-results__option[aria-selected=true] {
-      background-color: $dropdown-link-active-bg;
-      color: $dropdown-link-active-color;
-      &:hover {
-          background-color: $primary;
-          color: $white;
-      }
+  .select2-results__option[aria-selected="true"] {
+    background-color: $dropdown-link-active-bg;
+    color: $dropdown-link-active-color;
+    &:hover {
+      background-color: $primary;
+      color: $white;
+    }
   }
 }
 
@@ -80,7 +76,7 @@
 }
 
 .select2-search {
-  input{
+  input {
     border: 1px solid $gray-300;
   }
 }
@@ -90,17 +86,17 @@
     min-height: 38px;
     background-color: $input-bg;
     border: 1px solid $input-border-color !important;
-  
+
     .select2-selection__rendered {
       padding: 2px 10px;
     }
     .select2-search__field {
       border: 0;
       color: $input-color;
-      &::placeholder{
-          color: $input-color;
+      &::placeholder {
+        color: $input-color;
       }
-  }
+    }
     .select2-selection__choice {
       background-color: $gray-200;
       border: 1px solid $gray-300;
@@ -110,12 +106,10 @@
   }
 }
 
-.select2-container--default{
+.select2-container--default {
   &.select2-container--focus {
-    .select2-selection--multiple{
+    .select2-selection--multiple {
       border-color: $gray-400;
     }
   }
 }
-
-

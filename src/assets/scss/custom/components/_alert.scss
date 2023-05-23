@@ -4,6 +4,7 @@
     font-size: 10px;
     padding: $alert-padding-y * 1.5 $alert-padding-x;
     box-shadow: none;
-    background: transparent escape-svg($btn-close-bg-dark) center / $btn-close-width auto no-repeat;
+    background: transparent escape-svg($btn-close-bg-dark) center /
+      $btn-close-width auto no-repeat;
   }
 }

@@ -15,7 +15,7 @@ const isUserAuthenticated = () => {
 }
 
 // Register Method
-const postFakeRegister = (data) => post(url.POST_FAKE_REGISTER, data)
+const postFakeRegister = data => post(url.POST_FAKE_REGISTER, data)
 
 // Login Method
 const postFakeLogin = data => post(url.POST_FAKE_LOGIN, data)

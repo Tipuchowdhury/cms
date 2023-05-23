@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { Row, Col, Card, CardBody, CardTitle } from "reactstrap";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react"
+import { Row, Col, Card, CardBody, CardTitle } from "reactstrap"
+import { useNavigate } from "react-router-dom"
 
 // datatable related plugins
-import BootstrapTable from "react-bootstrap-table-next";
+import BootstrapTable from "react-bootstrap-table-next"
 import paginationFactory, {
   PaginationProvider,
   PaginationListStandalone,
   SizePerPageDropdownStandalone,
-} from "react-bootstrap-table2-paginator";
+} from "react-bootstrap-table2-paginator"
 
 import ToolkitProvider, {
   Search,
-} from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
+} from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit"
 
 //Import Breadcrumb
 //import Breadcrumbs from "../../components/Common/Breadcrumb";
-import "./datatables.scss";
+import "./datatables.scss"
 
 // Table data
 const productsdata = [
@@ -69,7 +69,7 @@ const productsdata = [
     startdate: "2011/06/07",
     salary: "$206,850",
   },
-];
+]
 
 const columns = [
   {
@@ -112,41 +112,39 @@ const columns = [
     text: "Days",
     sort: true,
   },
-];
+]
 
 const defaultSorted = [
   {
     dataField: "id",
     order: "asc",
   },
-];
+]
 
 // Select All Button operation
 // const selectRow = {
 //   mode: "checkbox",
 // };
 
-const { SearchBar } = Search;
+const { SearchBar } = Search
 
 //meta title
-document.title = "Data Tables | Skote - React Admin & Dashboard Template";
+document.title = "Data Tables | Skote - React Admin & Dashboard Template"
 
 const DatatableTables2 = props => {
-
-  let navigate = useNavigate();
+  let navigate = useNavigate()
 
   const [state, setState] = useState({
     page: 1,
     sizePerPage: 10,
     productData: props.products ? props.products.data : null,
-  });
+  })
   useEffect(() => {
     setState({
       ...state,
       productData: props.products ? props.products.data : null,
-    });
-  }, [props]);
-
+    })
+  }, [props])
 
   // const rowEvents = {
   //   onClick: (e, row, rowIndex) => {
@@ -158,7 +156,7 @@ const DatatableTables2 = props => {
     sizePerPage: 10,
     totalSize: props.products ? props.products.length : productsdata.length, // replace later with size(customers),
     custom: true,
-  };
+  }
 
   return (
     <React.Fragment>
@@ -209,7 +207,7 @@ const DatatableTables2 = props => {
                         {...toolkitProps.baseProps}
                         {...paginationTableProps}
 
-                      // rowEvents={rowEvents}
+                        // rowEvents={rowEvents}
                       />
                     </div>
                   </Col>
@@ -231,7 +229,7 @@ const DatatableTables2 = props => {
         )}
       </PaginationProvider>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default DatatableTables2;
+export default DatatableTables2

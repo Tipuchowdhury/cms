@@ -9,7 +9,6 @@ import {
   NOTIFICATION_DELETE_FRESH,
   NOTIFICATION_STATUS_EDIT,
   NOTIFICATION_STATUS_EDIT_FRESH,
-
   SERVER_SIDE_PAGINATION_NOTIFICATION,
   SERVER_SIDE_PAGINATION_NOTIFICATION_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_NOTIFICATION_FRESH,
@@ -23,19 +22,18 @@ import { v4 as uuidv4 } from "uuid"
 var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
-
 export const addNotificationAction = (id, data, selectedUser) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Notification/Post"
   const selectedUserData =
     selectedUser?.length > 0
       ? selectedUser.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          customer_id: item.value,
-          notification_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            customer_id: item.value,
+            notification_id: id,
+          }
+        })
       : null
 
   // console.log(selectedUserData);
@@ -127,13 +125,13 @@ export const notificationEditAction = (id, data, selectedUser) => {
   const selectedUserData =
     selectedUser?.length > 0
       ? selectedUser.map(item => {
-        const val = uuidv4()
-        return {
-          _id: val,
-          customer_id: item.value,
-          notification_id: id,
-        }
-      })
+          const val = uuidv4()
+          return {
+            _id: val,
+            customer_id: item.value,
+            notification_id: id,
+          }
+        })
       : null
   const dataObject = {
     _id: id,
@@ -252,9 +250,10 @@ export const notificationDeleteFresh = () => {
     })
 }
 
-
 export const getServerSidePaginationNotificationAction = (index, limit) => {
-  var url = process.env.REACT_APP_LOCALHOST + `/Notification/Search?page=${index}&limit=${limit}`
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Notification/Search?page=${index}&limit=${limit}`
 
   const formData = {}
   return dispatch => {
@@ -283,7 +282,8 @@ export const getServerSidePaginationNotificationAction = (index, limit) => {
 
 export const getServerSidePaginationNotificationSearchAction = name => {
   console.log(name)
-  var url = process.env.REACT_APP_LOCALHOST + `/Notification/Search?title=${name}`
+  var url =
+    process.env.REACT_APP_LOCALHOST + `/Notification/Search?title=${name}`
 
   return dispatch => {
     const headers = {

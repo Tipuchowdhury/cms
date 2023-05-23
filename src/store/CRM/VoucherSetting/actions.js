@@ -22,15 +22,17 @@ var token = JSON.parse(localStorage.getItem("jwt"))
 export const addVoucherSettingAction = (id, data, selectedBranch) => {
   var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Post"
 
-  const restaurants = selectedBranch?.length > 0 ? selectedBranch.map(item => {
-    const val = uuidv4()
-    return {
-      _id: val,
-      res_id: item.value,
-      voucher_setting_id: id,
-    }
-  }) : null
-
+  const restaurants =
+    selectedBranch?.length > 0
+      ? selectedBranch.map(item => {
+          const val = uuidv4()
+          return {
+            _id: val,
+            res_id: item.value,
+            voucher_setting_id: id,
+          }
+        })
+      : null
 
   const dataObject = {
     _id: id,
@@ -118,15 +120,17 @@ export const getAllVoucherSettingFresh = () => {
 export const voucherSettingEditAction = (id, data, selectedBranch) => {
   var url = process.env.REACT_APP_LOCALHOST + "/VoucherSetting/Put"
 
-  const restaurants = selectedBranch?.length > 0 ? selectedBranch.map(item => {
-    const val = uuidv4()
-    return {
-      _id: val,
-      res_id: item.value,
-      voucher_setting_id: id,
-    }
-  }) : null
-
+  const restaurants =
+    selectedBranch?.length > 0
+      ? selectedBranch.map(item => {
+          const val = uuidv4()
+          return {
+            _id: val,
+            res_id: item.value,
+            voucher_setting_id: id,
+          }
+        })
+      : null
 
   const dataObject = {
     _id: id,

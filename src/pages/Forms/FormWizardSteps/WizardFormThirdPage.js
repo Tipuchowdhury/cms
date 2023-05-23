@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types"
 import React from "react"
 import { reduxForm } from "redux-form"
 import validate from "./validate"
@@ -131,7 +131,7 @@ const WizardFormThirdPage = props => {
 
 WizardFormThirdPage.propTypes = {
   handleSubmit: PropTypes.func,
-  previousPage: PropTypes.func
+  previousPage: PropTypes.func,
 }
 
 export default reduxForm({

@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import ReactEcharts from "echarts-for-react";
-import * as echarts from 'echarts'
+import React, { Component } from "react"
+import ReactEcharts from "echarts-for-react"
+import * as echarts from "echarts"
 
 var data = [
   [
@@ -45,7 +45,7 @@ var data = [
     [38225, 81.4, 64715810, "United Kingdom", 2015],
     [53354, 79.1, 321773631, "United States", 2015],
   ],
-];
+]
 
 class Bubble extends Component {
   getOption = () => {
@@ -102,13 +102,13 @@ class Bubble extends Component {
           data: data[0],
           type: "scatter",
           symbolSize: function (data) {
-            return Math.sqrt(data[2]) / 5e2;
+            return Math.sqrt(data[2]) / 5e2
           },
           label: {
             emphasis: {
               show: true,
               formatter: function (param) {
-                return param.data[3];
+                return param.data[3]
               },
               position: "top",
             },
@@ -136,13 +136,13 @@ class Bubble extends Component {
           data: data[1],
           type: "scatter",
           symbolSize: function (data) {
-            return Math.sqrt(data[2]) / 5e2;
+            return Math.sqrt(data[2]) / 5e2
           },
           label: {
             emphasis: {
               show: true,
               formatter: function (param) {
-                return param.data[3];
+                return param.data[3]
               },
               position: "top",
             },
@@ -166,14 +166,14 @@ class Bubble extends Component {
           },
         },
       ],
-    };
-  };
+    }
+  }
   render() {
     return (
       <React.Fragment>
         <ReactEcharts style={{ height: "350px" }} option={this.getOption()} />
       </React.Fragment>
-    );
+    )
   }
 }
-export default Bubble;
+export default Bubble

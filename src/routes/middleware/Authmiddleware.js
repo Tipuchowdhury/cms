@@ -1,45 +1,45 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import VerticalLayout from "components/VerticalLayout";
-import HorizontalLayout from "components/HorizontalLayout";
+import React from "react"
+import { Navigate } from "react-router-dom"
+import { useSelector } from "react-redux"
+import VerticalLayout from "components/VerticalLayout"
+import HorizontalLayout from "components/HorizontalLayout"
 
 //constants
-import { layoutTypes } from "../../constants/layout";
+import { layoutTypes } from "../../constants/layout"
 
-const Authmiddleware = (props) => {
-
+const Authmiddleware = props => {
   const { layoutType } = useSelector(state => ({
     layoutType: state.Layout.layoutType,
-  }));
+  }))
 
-  const getLayout = (layoutType) => {
-    let Layout = VerticalLayout;
+  const getLayout = layoutType => {
+    let Layout = VerticalLayout
     switch (layoutType) {
       case layoutTypes.VERTICAL:
-        Layout = VerticalLayout;
-        break;
+        Layout = VerticalLayout
+        break
       case layoutTypes.HORIZONTAL:
-        Layout = HorizontalLayout;
-        break;
+        Layout = HorizontalLayout
+        break
       default:
-        break;
+        break
     }
-    return Layout;
-  };
+    return Layout
+  }
 
-  const Layout = getLayout(layoutType);
+  const Layout = getLayout(layoutType)
 
   if (!localStorage.getItem("foodi-jwt")) {
     return (
       <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
-    );
+    )
   }
 
   return (
     <React.Fragment>
       <Layout>{props.children}</Layout>
-    </React.Fragment>);
-};
+    </React.Fragment>
+  )
+}
 
-export default Authmiddleware;
+export default Authmiddleware
