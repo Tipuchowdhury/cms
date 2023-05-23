@@ -35,7 +35,11 @@ export const userLogin = user => {
     axios
       .post(url, formData, { headers: headers })
       .then(response => {
-        localStorage.setItem("foodi-jwt", JSON.stringify(response.data))
+        localStorage.setItem("foodi-jwt", JSON.stringify(response.data.jwt))
+        localStorage.setItem(
+          "permissions",
+          JSON.stringify(response.data.permissions.result)
+        )
         console.log(response)
         dispatch({
           type: USER_LOGIN,
