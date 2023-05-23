@@ -10,6 +10,9 @@ import {
   CUSTOMER_DELETE_FRESH,
   EDIT_CUSTOMER_STATUS,
   EDIT_CUSTOMER_STATUS_FRESH,
+  SERVER_SIDE_PAGINATION_CUSTOMER,
+  SERVER_SIDE_PAGINATION_CUSTOMER_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_CUSTOMER_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -30,6 +33,14 @@ const initialState = {
   edit_cutomer_status_loading: false,
 
   customer_delete_loading: false,
+
+  // server side pagination customer
+  get_server_side_pagination_customer_data: null,
+  get_server_side_pagination_customer_error: null,
+  get_server_side_pagination_customer_loading: false,
+
+  get_server_side_pagination_customer_search_data: null,
+  get_server_side_pagination_customer_search_loading: false,
 }
 
 const Customer = (state = initialState, action) => {
@@ -110,6 +121,32 @@ const Customer = (state = initialState, action) => {
         customer_delete_loading: action.status,
         get_all_customer_loading: false,
       }
+      break
+
+    case SERVER_SIDE_PAGINATION_CUSTOMER:
+      state = {
+        ...state,
+        get_server_side_pagination_customer_data: action.payload,
+        get_server_side_pagination_customer_error: null,
+        get_server_side_pagination_customer_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_CUSTOMER_SEARCH:
+      state = {
+        ...state,
+        get_server_side_pagination_customer_search_data: action.payload,
+        get_server_side_pagination_customer_search_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_SEARCH_CUSTOMER_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_customer_search_data: action.payload,
+        get_server_side_pagination_customer_search_loading: action.status,
+      }
+      break
   }
   return state
 }

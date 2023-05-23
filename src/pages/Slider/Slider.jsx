@@ -156,12 +156,12 @@ function Slider(props) {
   }
 
   const newRest = nn => {
-    // console.log(nn);
-    // console.log(props?.get_all_branch_data);
+    console.log(nn)
+    console.log(props?.get_all_branch_data)
     const common_restaurants = props?.get_all_branch_data?.filter(elem =>
       nn?.find(({ res_id }) => elem._id === res_id)
     )
-    // console.log(common_restaurants);
+    console.log(common_restaurants)
 
     const restaurant_data_edit = common_restaurants
       ? common_restaurants.map((item, key) => {
@@ -172,7 +172,7 @@ function Slider(props) {
   }
 
   const handleEditSlider = row => {
-    // console.log(row);
+    console.log(row)
 
     setEditInfo(prevState => ({
       _id: row._id,
@@ -270,22 +270,34 @@ function Slider(props) {
     },
 
     {
-      //dataField: "hello",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      selector: row => "",
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
-  const defaultSorted = [
-    {
-      dataField: "name",
-      order: "desc",
-    },
-  ]
+
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationPromotionSearchAction(e.target.value)
+    } else {
+      props.getServerSidePaginationSearchPromotionFresh()
+    }
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
 
   useEffect(() => {
-    props.get_all_branch_data
-
     if (props.get_all_branch_loading == false) {
       props.getAllBranchAction()
     }
@@ -848,6 +860,8 @@ const mapStateToProps = state => {
     slider_status_edit_loading,
 
     slider_delete_loading,
+    get_server_side_pagination_promotion_data,
+    get_server_side_pagination_promotion_search_data,
   }
 }
 

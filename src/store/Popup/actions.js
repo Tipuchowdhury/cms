@@ -9,6 +9,9 @@ import {
   POPUP_DELETE_FRESH,
   POPUP_STATUS_EDIT,
   POPUP_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_POPUP,
+  SERVER_SIDE_PAGINATION_POPUP_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_POPUP_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -225,5 +228,73 @@ export const popUpDeleteFresh = () => {
     dispatch({
       type: POPUP_DELETE_FRESH,
       status: false,
+    })
+}
+
+export const getServerSidePaginationPopupAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/PopUpBanner/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_POPUP,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_POPUP,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationPopupSearchAction = name => {
+  console.log(name)
+  var url =
+    process.env.REACT_APP_LOCALHOST + `/PopUpBanner/Search?title=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_POPUP_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_POPUP_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchPopupFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_POPUP_FRESH,
+      status: false,
+      payload: null,
     })
 }

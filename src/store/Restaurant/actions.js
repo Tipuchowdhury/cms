@@ -944,9 +944,15 @@ export const zoneEditFresh = () => {
 }
 
 export const zoneStatusEditAction = data => {
+  console.log(data)
   var url = process.env.REACT_APP_LOCALHOST + "/Zone/Put"
 
   const formData = data
+  // const formData = {
+  //   _id: data._id,
+  //   is_active: data.is_active
+
+  // }
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",

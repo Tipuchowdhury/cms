@@ -45,10 +45,6 @@ const initialState = {
   user_status_update_error: null,
   user_status_update_loading: false,
 
-  user_status_update_data: null,
-  user_status_update_error: null,
-  user_status_update_loading: false,
-
   user_delete_loading: false,
 
   // SERVER SIDE USER
@@ -144,26 +140,6 @@ const registerNew = (state = initialState, action) => {
         get_all_user_loading: false,
       }
       break
-
-    case USER_STATUS_UPDATE_FRESH:
-      state = {
-        ...state,
-        user_status_update_loading: action.status,
-      }
-      break
-    case USER_DELETE:
-      state = {
-        ...state,
-        user_delete_loading: action.status,
-        get_all_user_loading: false,
-      }
-      break
-    case USER_DELETE_FRESH:
-      state = {
-        ...state,
-        user_delete_loading: action.status,
-        get_all_user_loading: false,
-      }
 
     case USER_STATUS_UPDATE_FRESH:
       state = {

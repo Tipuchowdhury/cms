@@ -32,9 +32,6 @@ const initialState = {
   branch_attribute_status_edit_data: null,
   branch_attribute_status_edit_loading: false,
 
-  branch_attribute_status_edit_data: null,
-  branch_attribute_status_edit_loading: false,
-
   branch_attribute_delete_loading: false,
 
   // server side pagination branch attribute
@@ -94,22 +91,6 @@ const BranchAttribute = (state = initialState, action) => {
       state = {
         ...state,
         branch_attribute_edit_loading: action.status,
-      }
-      break
-
-    case BRANCH_ATTRIBUTE_STATUS_EDIT:
-      state = {
-        ...state,
-        branch_attribute_status_edit_data: action.payload,
-        branch_attribute_status_edit_loading: action.status,
-        get_all_branch_attribute_loading: false,
-      }
-      break
-
-    case BRANCH_ATTRIBUTE_STATUS_EDIT_FRESH:
-      state = {
-        ...state,
-        branch_attribute_status_edit_loading: action.status,
       }
       break
 

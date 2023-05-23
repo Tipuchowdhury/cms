@@ -32,9 +32,6 @@ const initialState = {
   slider_status_edit_data: null,
   slider_status_edit_loading: false,
 
-  slider_status_edit_data: null,
-  slider_status_edit_loading: false,
-
   slider_delete_loading: false,
 
   // server side pagination promotion
@@ -94,22 +91,6 @@ const Sliders = (state = initialState, action) => {
       state = {
         ...state,
         slider_edit_loading: action.status,
-      }
-      break
-
-    case SLIDER_STATUS_EDIT:
-      state = {
-        ...state,
-        slider_status_edit_data: action.payload,
-        slider_status_edit_loading: action.status,
-        get_all_slider_loading: false,
-      }
-      break
-
-    case SLIDER_STATUS_EDIT_FRESH:
-      state = {
-        ...state,
-        slider_status_edit_loading: action.status,
       }
       break
 

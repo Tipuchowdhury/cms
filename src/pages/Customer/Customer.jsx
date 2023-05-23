@@ -31,11 +31,15 @@ import {
   customerStatusEditActionFresh,
   customerDeleteAction,
   customerDeleteFresh,
+  getServerSidePaginationCustomerAction,
+  getServerSidePaginationCustomerSearchAction,
+  getServerSidePaginationSearchCustomerFresh,
 } from "store/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import Select from "react-select"
+import DataTable from "react-data-table-component"
 
 function Customer(props) {
   document.title = "Customer | Foodi"
@@ -268,36 +272,37 @@ function Customer(props) {
       className="btn waves-effect waves-light"
       onClick={() => handleStatusModal(row)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
 
+  const textRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.name}</span>
+  )
+  const phoneRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.mobile}</span>
+  )
   const activeData = [
     {
-      dataField: "firstName",
-      text: "First Name",
-      sort: true,
+      //dataField: "firstName",
+      selector: row => row.firstName,
+      name: "Name",
+      sortable: true,
+      cell: textRef,
     },
+
     {
-      dataField: "lastName",
-      text: "Last Name",
-      sort: true,
-    },
-    {
-      dataField: "email",
-      text: "Email",
-      sort: true,
-    },
-    {
-      dataField: "mobile",
-      text: "Mobile",
-      sort: true,
+      selector: row => row.mobile,
+      name: "Mobile",
+      sortable: true,
+      cell: phoneRef,
     },
     {
       dataField: "",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      selector: row => "",
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
 
     {
@@ -412,9 +417,12 @@ function Customer(props) {
                     <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
                       Customers
                     </CardTitle>
-                    {/* <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
-                                            Add Customer
-                                        </Button> */}
+                    <Button
+                      style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
+                      onClick={toggle}
+                    >
+                      Add Customer
+                    </Button>
                   </div>
 
                   {props.get_all_customer_data ? (
@@ -510,6 +518,7 @@ function Customer(props) {
                   type="file"
                   className="form-control"
                   id="image"
+                  required
                   name="image"
                   onChange={handleAddFile}
                 />
@@ -559,7 +568,7 @@ function Customer(props) {
 
         {/* ============ edit modal start=============== */}
         <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-          <ModalHeader>Edit PopUp Banner</ModalHeader>
+          <ModalHeader>Edit Customer</ModalHeader>
           <ModalBody>
             <form className="mt-1" onSubmit={handleEditSubmit}>
               <div className="mb-3">
@@ -626,25 +635,34 @@ function Customer(props) {
                 />
               </div>
 
-              {/* <div className="mb-3">
-                                <label className="form-label" htmlFor="image">Image</label>
-                                <input type="file" className="form-control" id="image" name="image" onChange={handleEditFile} />
-                            </div>
+              <div className="mb-3">
+                <label className="form-label" htmlFor="image">
+                  Image
+                </label>
+                <input
+                  type="file"
+                  className="form-control"
+                  id="image"
+                  required
+                  name="image"
+                  onChange={handleEditFile}
+                />
+              </div>
 
-                            {editImages?.image && (
-                                <Row className="mb-3">
-                                    <label className="col-md-2">
-                                        <span></span>
-                                    </label>
-                                    <div className="col-md-10">
-                                        <img
-                                            src={editImages.image}
-                                            alt="preview"
-                                            style={{ width: "50%" }}
-                                        />
-                                    </div>
-                                </Row>
-                            )} */}
+              {editImages?.image && (
+                <Row className="mb-3">
+                  <label className="col-md-2">
+                    <span></span>
+                  </label>
+                  <div className="col-md-10">
+                    <img
+                      src={editImages.image}
+                      alt="preview"
+                      style={{ width: "50%" }}
+                    />
+                  </div>
+                </Row>
+              )}
 
               <div className="mb-3">
                 <label className="form-label" htmlFor="subscription_type_id">
@@ -662,9 +680,9 @@ function Customer(props) {
               <div
                 style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
               >
-                {/* <Button color="primary" type="submit">
-                                    Submit
-                                </Button>{' '} */}
+                <Button color="primary" type="submit">
+                  Submit
+                </Button>{" "}
                 <Button color="secondary" onClick={toggleEditModal}>
                   Cancel
                 </Button>
@@ -754,6 +772,9 @@ const mapStateToProps = state => {
     edit_cutomer_status_loading,
 
     customer_delete_loading,
+
+    get_server_side_pagination_customer_data,
+    get_server_side_pagination_customer_search_data,
   } = state.Customer
 
   return {
@@ -774,6 +795,9 @@ const mapStateToProps = state => {
     edit_cutomer_status_loading,
 
     customer_delete_loading,
+
+    get_server_side_pagination_customer_data,
+    get_server_side_pagination_customer_search_data,
   }
 }
 
@@ -790,5 +814,8 @@ export default withRouter(
     customerStatusEditActionFresh,
     customerDeleteAction,
     customerDeleteFresh,
+    getServerSidePaginationCustomerAction,
+    getServerSidePaginationCustomerSearchAction,
+    getServerSidePaginationSearchCustomerFresh,
   })(Customer)
 )
