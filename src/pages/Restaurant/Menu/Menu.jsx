@@ -25,6 +25,7 @@ import {
   getAllRestaurantMenuItemAction,
   restaurantMenuItemDeleteAction,
   restaurantMenuItemDeleteFresh,
+  restaurantMenuStatusEditAction,
 } from "store/actions"
 
 function Menu(props) {
@@ -32,6 +33,8 @@ function Menu(props) {
 
   const [modalDel, setModalDel] = useState(false)
   const [deleteItem, setDeleteItem] = useState()
+  const [editInfo, setEditInfo] = useState(false)
+  const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
 
   const toggleDel = () => setModalDel(!modalDel)
 
@@ -67,10 +70,31 @@ function Menu(props) {
   )
 
   const statusRef = (cell, row) => (
-    <Badge color="success" style={{ padding: "8px" }}>
-      Activate
-    </Badge>
+    <Button
+      color={row.is_active ? "success" : "secondary"}
+      className="btn waves-effect waves-light"
+      onClick={() => handleStatusModal(row)}
+    >
+      {row.is_active ? "Active" : "Deactivate"}
+    </Button>
   )
+
+  const handleStatusModal = row => {
+    // console.log(row);
+    setEditInfo(row)
+
+    toggleStatus()
+  }
+
+  const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
+
+  const handleStatusUpdate = () => {
+    // console.log(editInfo)
+    props.restaurantMenuStatusEditAction({
+      ...editInfo,
+      is_active: !editInfo.is_active,
+    })
+  }
 
   const activeData = [
     {
@@ -203,6 +227,35 @@ function Menu(props) {
           </ModalFooter>
         </Modal>
         {/* ============ delete modal ends=============== */}
+
+        {/* ============ status update modal starts=============== */}
+        <Modal isOpen={modalStatusUpdate} toggle={toggleStatus} centered>
+          <ModalHeader
+            className="text-center"
+            style={{ textAlign: "center", margin: "0 auto" }}
+          >
+            <div className="icon-box">
+              <i
+                className="fa fa-exclamation-circle"
+                style={{ color: "#DCA218", fontSize: "40px" }}
+              ></i>
+            </div>
+            Are you sure?
+          </ModalHeader>
+          <ModalBody>
+            Do you want to {editInfo.is_active ? "deactivate" : "activate"} this
+            record?{" "}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={toggleStatus}>
+              Cancel
+            </Button>{" "}
+            <Button color="primary" onClick={handleStatusUpdate}>
+              Update
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/* ============ status update modal ends=============== */}
       </div>
     </React.Fragment>
   )
@@ -229,5 +282,6 @@ export default withRouter(
     getAllRestaurantMenuItemAction,
     restaurantMenuItemDeleteAction,
     restaurantMenuItemDeleteFresh,
+    restaurantMenuStatusEditAction,
   })(Menu)
 )

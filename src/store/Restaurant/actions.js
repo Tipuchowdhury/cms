@@ -69,6 +69,8 @@ import {
   SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
   DELETE_RESTAURANT_MENU,
   DELETE_RESTAURANT_MENU_FRESH,
+  RESTAURANT_MENU_STATUS_EDIT,
+  RESTAURANT_MENU_STATUS_EDIT_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -1613,6 +1615,47 @@ export const restaurantMenuItemDeleteFresh = () => {
       type: DELETE_RESTAURANT_MENU_FRESH,
       status: false,
     })
+}
+
+export const restaurantMenuStatusEditAction = data => {
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Put"
+  let dataObject = { ...data }
+
+  const formData = convertToFormData(dataObject)
+  // console.log(formData);
+  return dispatch => {
+    const headers = {
+      // "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: RESTAURANT_MENU_STATUS_EDIT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: RESTAURANT_MENU_STATUS_EDIT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const restaurantMenuStatusEditFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: RESTAURANT_MENU_STATUS_EDIT_FRESH,
+      payload: null,
+      status: false,
+    })
+  }
 }
 
 export const addRestaurantMenuAddFresh = () => {
