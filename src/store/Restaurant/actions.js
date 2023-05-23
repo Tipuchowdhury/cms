@@ -1057,25 +1057,24 @@ export const editBranchPopularFresh = () => {
 // }
 
 export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
-  // console.log(addOns)
-  // console.log(parseInt(category.num_of_choice))
+  //console.log(addOns)
+  // console.log(category, isChecked)
 
   var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Post"
   // console.log(addOns?.length)
 
-  const data =
-    addOns?.length > 0
-      ? addOns.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            add_on_name: item.add_on_name,
-            add_on_price: item.add_on_price,
-            add_on_category_name: category.name,
-            add_on_category_id: val,
-          }
-        })
-      : null
+  const data = addOns
+    .filter(addOn => addOn.add_on_name != "")
+    .map(item => {
+      const val = uuidv4()
+      return {
+        _id: val,
+        add_on_name: item.add_on_name,
+        add_on_price: item.add_on_price,
+        add_on_category_name: category.name,
+        add_on_category_id: val,
+      }
+    })
   const val_id = uuidv4()
   // console.log(data)
 
@@ -1120,23 +1119,22 @@ export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
 
 export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
   // console.log(val, category, isChecked, addOns)
-  // console.log(parseInt(category.num_of_choice))
+  // console.log(category, isChecked)
 
   var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Put"
 
-  const data =
-    addOns?.length > 0
-      ? addOns.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            add_on_name: item.add_on_name,
-            add_on_price: item.add_on_price,
-            add_on_category_name: category.name,
-            add_on_category_id: val,
-          }
-        })
-      : null
+  const data = addOns
+    .filter(addOn => addOn.add_on_name != "")
+    .map(item => {
+      const val = uuidv4()
+      return {
+        _id: val,
+        add_on_name: item.add_on_name,
+        add_on_price: item.add_on_price,
+        add_on_category_name: category.name,
+        add_on_category_id: val,
+      }
+    })
   const val_id = uuidv4()
   // console.log(data)
 
