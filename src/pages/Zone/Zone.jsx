@@ -37,8 +37,12 @@ function Zone(props) {
   const toggleDel = () => setModalDel(!modalDel);
 
 
-  const handleStatusModal = row => {
-    setEditInfo(row)
+  const handleStatusModal = (row, cell) => {
+
+    console.log(row);
+    console.log(cell);
+    //setEditInfo(row)
+    setEditInfo(cell)
 
     toggleStatus()
   }
@@ -50,6 +54,7 @@ function Zone(props) {
 
   const handleStatusUpdate = () => {
     console.log(editInfo)
+
     props.zoneStatusEditAction({
       ...editInfo,
       is_active: !editInfo.is_active,
@@ -92,11 +97,11 @@ function Zone(props) {
 
   const statusRef = (cell, row) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(row, cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
   const textRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.name}</span>

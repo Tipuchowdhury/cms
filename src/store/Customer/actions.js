@@ -8,7 +8,11 @@ import {
   CUSTOMER_DELETE,
   CUSTOMER_DELETE_FRESH,
   EDIT_CUSTOMER_STATUS,
-  EDIT_CUSTOMER_STATUS_FRESH
+  EDIT_CUSTOMER_STATUS_FRESH,
+
+  SERVER_SIDE_PAGINATION_CUSTOMER,
+  SERVER_SIDE_PAGINATION_CUSTOMER_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_CUSTOMER_FRESH
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -224,5 +228,70 @@ export const customerDeleteFresh = () => {
     dispatch({
       type: CUSTOMER_DELETE_FRESH,
       status: false,
+    })
+}
+
+export const getServerSidePaginationCustomerAction = (index, limit) => {
+  var url = process.env.REACT_APP_LOCALHOST + `/Customer/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUSTOMER,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUSTOMER,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationCustomerSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Customer/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUSTOMER_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUSTOMER_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchCustomerFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_CUSTOMER_FRESH,
+      status: false,
+      payload: null,
     })
 }

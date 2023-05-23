@@ -6,13 +6,15 @@ import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import {
-    addPopUpAction, addPopUpFresh, getAllPopUpAction, getAllPopUpFresh, popUpUpdateAction, popUpUpdateFresh, popUpStatusUpdateAction, popUpStatusUpdateFresh, popUpDeleteAction, popUpDeleteFresh
+    addPopUpAction, addPopUpFresh, getAllPopUpAction, getAllPopUpFresh, popUpUpdateAction, popUpUpdateFresh, popUpStatusUpdateAction, popUpStatusUpdateFresh, popUpDeleteAction, popUpDeleteFresh, getServerSidePaginationPopupAction,
+    getServerSidePaginationPopupSearchAction,
+    getServerSidePaginationSearchPopupFresh
 } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Select from "react-select";
-
+import DataTable from 'react-data-table-component';
 
 function Popup(props) {
 
@@ -187,38 +189,54 @@ function Popup(props) {
 
 
 
-    const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
-        className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
-
+    const statusRef = (cell, row) => <Button color={cell.is_active ? "success" : "secondary"}
+        className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{cell.is_active ? "Active" : "Deactivate"}</Button>
+    const textRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.title}</span>
 
     const activeData = [
 
         {
-            dataField: "title",
-            text: "Title",
-            sort: true,
+            selector: row => row.title,
+            name: "Title",
+            sortable: true,
+            cell: textRef
         },
         {
-            dataField: "",
-            text: "Status",
-            sort: true,
-            formatter: statusRef
+            selector: row => "",
+            name: "Status",
+            sortable: true,
+            cell: statusRef
         },
 
         {
             //dataField: "hello",
-            text: "Action",
-            sort: true,
-            formatter: actionRef,
+            selector: row => "",
+            name: "Action",
+            sortable: true,
+            cell: actionRef,
         },
 
     ];
-    const defaultSorted = [
-        {
-            dataField: "title",
-            order: "desc"
+    // server side pagination
+    const [page, setPage] = useState(1);
+    const [countPerPage, setCountPerPage] = useState(10);
+    const handleFilter = (e) => {
+        if (e.target.value?.length > 0) {
+            props.getServerSidePaginationPopupSearchAction(e.target.value);
+        } else {
+            props.getServerSidePaginationSearchPopupFresh();
         }
-    ];
+
+    }
+    const paginationComponentOptions = {
+        selectAllRowsItem: true,
+        //selectAllRowsItemText: "ALL"
+    };
+
+    const handlePerRowsChange = async (newPerPage, page) => {
+        console.log(newPerPage, page);
+        setCountPerPage(newPerPage);
+    };
 
 
     useEffect(() => {
@@ -228,6 +246,7 @@ function Popup(props) {
             props.getAllPopUpAction();
         }
 
+        props.getServerSidePaginationPopupAction(page, countPerPage)
 
         if (props.add_popup_loading === "Success") {
             toast.success("PopUp Banner Added Successfully");
@@ -286,7 +305,7 @@ function Popup(props) {
         }
 
     }, [props.add_popup_loading, props.popup_edit_loading,
-    props.popup_delete_loading, props.popup_status_edit_loading]);
+    props.popup_delete_loading, props.popup_status_edit_loading, page, countPerPage]);
 
 
     return (
@@ -307,8 +326,20 @@ function Popup(props) {
                                         </Button>
                                     </div>
 
-                                    {props.get_all_popup_data ? props.get_all_popup_data.length > 0 ? <DatatableTablesWorking products={props.get_all_popup_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_popup_data?._id} /> : null : null}
+                                    <div className='text-end'><input type='text' placeholder="Search Popup" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
+                                    <DataTable
+                                        columns={activeData}
+                                        data={props.get_server_side_pagination_popup_search_data != null ? props.get_server_side_pagination_popup_search_data?.data : props?.get_server_side_pagination_popup_data?.data}
+                                        highlightOnHover
+                                        pagination
+                                        paginationServer
+                                        paginationTotalRows={props.get_server_side_pagination_popup_search_data != null ? props.get_server_side_pagination_popup_search_data?.count : props.get_server_side_pagination_popup_data?.count}
+                                        paginationPerPage={countPerPage}
+                                        paginationComponentOptions={paginationComponentOptions}
+                                        onChangeRowsPerPage={handlePerRowsChange}
+
+                                        onChangePage={(page) => setPage(page)}
+                                    />
 
                                 </CardBody>
                             </Card>
@@ -493,7 +524,10 @@ const mapStateToProps = state => {
         popup_status_edit_data,
         popup_status_edit_loading,
 
-        popup_delete_loading
+        popup_delete_loading,
+
+        get_server_side_pagination_popup_data,
+        get_server_side_pagination_popup_search_data
 
     } = state.Popup;
 
@@ -512,7 +546,10 @@ const mapStateToProps = state => {
         popup_status_edit_data,
         popup_status_edit_loading,
 
-        popup_delete_loading
+        popup_delete_loading,
+
+        get_server_side_pagination_popup_data,
+        get_server_side_pagination_popup_search_data
     };
 };
 
@@ -529,5 +566,8 @@ export default withRouter(
             popUpStatusUpdateFresh,
             popUpDeleteAction,
             popUpDeleteFresh,
+            getServerSidePaginationPopupAction,
+            getServerSidePaginationPopupSearchAction,
+            getServerSidePaginationSearchPopupFresh
         })(Popup)
 );

@@ -6,12 +6,16 @@ import withRouter from 'components/Common/withRouter'; ` `
 import { connect } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import {
-    getAllSubscriptionTypeAction, addCustomerAction, addCustomerFresh, getAllCustomerAction, getAllCustomerFresh, customerEditAction, customerEditFresh, customerStatusEditAction, customerStatusEditActionFresh, customerDeleteAction, customerDeleteFresh
+    getAllSubscriptionTypeAction, addCustomerAction, addCustomerFresh, getAllCustomerAction, getAllCustomerFresh, customerEditAction, customerEditFresh, customerStatusEditAction, customerStatusEditActionFresh, customerDeleteAction, customerDeleteFresh,
+    getServerSidePaginationCustomerAction,
+    getServerSidePaginationCustomerSearchAction,
+    getServerSidePaginationSearchCustomerFresh
 } from 'store/actions';
 import DatatableTablesWorking from 'pages/Tables/DatatableTablesWorking';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Select from "react-select";
+import DataTable from 'react-data-table-component';
 
 
 function Customer(props) {
@@ -241,52 +245,63 @@ function Customer(props) {
 
 
     const statusRef = (cell, row) => <Button color={row.is_active ? "success" : "secondary"}
-        className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{row.is_active ? "Active" : "Deactivate"}</Button>
+        className="btn waves-effect waves-light" onClick={() => handleStatusModal(row)}>{cell.is_active ? "Active" : "Deactivate"}</Button>
 
-
+    const textRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.name}</span>
+    const phoneRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.mobile}</span>
     const activeData = [
 
         {
-            dataField: "first_name",
-            text: "First Name",
-            sort: true,
+            //dataField: "first_name",
+            selector: row => row.name,
+            name: "Name",
+            sortable: true,
+            cell: textRef
         },
+
         {
-            dataField: "last_name",
-            text: "Last Name",
-            sort: true,
-        },
-        {
-            dataField: "email",
-            text: "Email",
-            sort: true,
-        },
-        {
-            dataField: "mobile",
-            text: "Mobile",
-            sort: true,
+            selector: row => row.mobile,
+            name: "Mobile",
+            sortable: true,
+            cell: phoneRef
         },
         {
             dataField: "",
-            text: "Status",
-            sort: true,
-            formatter: statusRef
+            selector: row => "",
+            name: "Status",
+            sortable: true,
+            cell: statusRef
         },
 
         {
             //dataField: "hello",
-            text: "Action",
-            sort: true,
-            formatter: actionRef,
+            selector: row => "",
+            name: "Action",
+            sortable: true,
+            cell: actionRef,
         },
 
     ];
-    const defaultSorted = [
-        {
-            dataField: "first_name",
-            order: "desc"
+    // server side pagination
+    const [page, setPage] = useState(1);
+    const [countPerPage, setCountPerPage] = useState(10);
+    const handleFilter = (e) => {
+        if (e.target.value?.length > 0) {
+            props.getServerSidePaginationCustomerSearchAction(e.target.value);
+        } else {
+            props.getServerSidePaginationSearchCustomerFresh();
         }
-    ];
+
+    }
+    const paginationComponentOptions = {
+        selectAllRowsItem: true,
+        //selectAllRowsItemText: "ALL"
+    };
+
+    const handlePerRowsChange = async (newPerPage, page) => {
+        console.log(newPerPage, page);
+        setCountPerPage(newPerPage);
+    };
 
 
     useEffect(() => {
@@ -294,6 +309,8 @@ function Customer(props) {
         if (props.get_all_subscription_type_loading == false) {
             props.getAllSubscriptionTypeAction()
         }
+
+        props.getServerSidePaginationCustomerAction(page, countPerPage)
 
         if (props.get_all_customer_loading == false) {
             props.getAllCustomerAction();
@@ -357,7 +374,7 @@ function Customer(props) {
         }
 
     }, [props.get_all_subscription_type_loading, props.add_customer_loading, props.customer_edit_loading,
-    props.customer_delete_loading, props.edit_cutomer_status_loading]);
+    props.customer_delete_loading, props.edit_cutomer_status_loading, page, countPerPage]);
 
 
     return (
@@ -378,8 +395,23 @@ function Customer(props) {
                                         </Button>
                                     </div>
 
-                                    {props.get_all_customer_data ? props.get_all_customer_data.length > 0 ? <DatatableTablesWorking products={props.get_all_customer_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_customer_data?._id} /> : null : null}
+                                    {/* {props.get_all_customer_data ? props.get_all_customer_data.length > 0 ? <DatatableTablesWorking products={props.get_all_customer_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_customer_data?._id} /> : null : null} */}
+
+                                    <div className='text-end'><input type='text' placeholder="Search Customer" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
+                                    <DataTable
+                                        columns={activeData}
+                                        data={props.get_server_side_pagination_customer_search_data != null ? props.get_server_side_pagination_customer_search_data?.data : props?.get_server_side_pagination_customer_data?.data}
+                                        highlightOnHover
+                                        pagination
+                                        paginationServer
+                                        paginationTotalRows={props.get_server_side_pagination_customer_search_data != null ? props.get_server_side_pagination_customer_search_data?.count : props.get_server_side_pagination_customer_data?.count}
+                                        paginationPerPage={countPerPage}
+                                        paginationComponentOptions={paginationComponentOptions}
+                                        onChangeRowsPerPage={handlePerRowsChange}
+
+                                        onChangePage={(page) => setPage(page)}
+                                    />
 
                                 </CardBody>
                             </Card>
@@ -574,7 +606,7 @@ function Customer(props) {
 
 const mapStateToProps = state => {
 
-    const { get_all_subscription_type_loading, get_all_subscription_type_data } =
+    const { get_all_subscription_type_loading, get_all_subscription_type_data, } =
         state.SubscriptionTypes
 
     const {
@@ -591,7 +623,12 @@ const mapStateToProps = state => {
 
         edit_cutomer_status_loading,
 
-        customer_delete_loading
+        customer_delete_loading,
+
+        get_server_side_pagination_customer_data,
+        get_server_side_pagination_customer_search_data
+
+
 
     } = state.Customer;
 
@@ -613,7 +650,10 @@ const mapStateToProps = state => {
 
         edit_cutomer_status_loading,
 
-        customer_delete_loading
+        customer_delete_loading,
+
+        get_server_side_pagination_customer_data,
+        get_server_side_pagination_customer_search_data
     };
 };
 
@@ -631,5 +671,8 @@ export default withRouter(
             customerStatusEditActionFresh,
             customerDeleteAction,
             customerDeleteFresh,
+            getServerSidePaginationCustomerAction,
+            getServerSidePaginationCustomerSearchAction,
+            getServerSidePaginationSearchCustomerFresh
         })(Customer)
 );

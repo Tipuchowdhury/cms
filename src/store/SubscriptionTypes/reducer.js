@@ -1,5 +1,6 @@
 import {
-    ADD_SUBSCRIPTION_TYPE, ADD_SUBSCRIPTION_TYPE_FRESH, GET_ALL_SUBSCRIPTION_TYPE, GET_ALL_SUBSCRIPTION_TYPE_FRESH, SUBSCRIPTION_TYPE_EDIT, SUBSCRIPTION_TYPE_EDIT_FRESH, SUBSCRIPTION_TYPE_DELETE, SUBSCRIPTION_TYPE_DELETE_FRESH, SUBSCRIPTION_TYPE_STATUS_EDIT, SUBSCRIPTION_TYPE_STATUS_EDIT_FRESH
+    ADD_SUBSCRIPTION_TYPE, ADD_SUBSCRIPTION_TYPE_FRESH, GET_ALL_SUBSCRIPTION_TYPE, GET_ALL_SUBSCRIPTION_TYPE_FRESH, SUBSCRIPTION_TYPE_EDIT, SUBSCRIPTION_TYPE_EDIT_FRESH, SUBSCRIPTION_TYPE_DELETE, SUBSCRIPTION_TYPE_DELETE_FRESH, SUBSCRIPTION_TYPE_STATUS_EDIT, SUBSCRIPTION_TYPE_STATUS_EDIT_FRESH,
+
 } from "./actionTypes";
 
 const initialState = {
@@ -21,7 +22,9 @@ const initialState = {
     subscription_type_status_edit_data: null,
     subscription_type_status_edit_loading: false,
 
-    subscription_type_delete_loading: false
+    subscription_type_delete_loading: false,
+
+
 }
 
 const SubscriptionTypes = (state = initialState, action) => {
@@ -106,6 +109,9 @@ const SubscriptionTypes = (state = initialState, action) => {
                 subscription_type_delete_loading: action.status,
                 get_all_subscription_type_loading: false
             }
+            bresk;
+
+
     }
     return state
 }
