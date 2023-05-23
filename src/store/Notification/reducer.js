@@ -10,7 +10,6 @@ import {
   NOTIFICATION_DELETE_FRESH,
   NOTIFICATION_STATUS_EDIT,
   NOTIFICATION_STATUS_EDIT_FRESH,
-
   SERVER_SIDE_PAGINATION_NOTIFICATION,
   SERVER_SIDE_PAGINATION_NOTIFICATION_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_NOTIFICATION_FRESH,
@@ -125,7 +124,7 @@ const notification = (state = initialState, action) => {
         notification_delete_loading: action.status,
         get_all_notification_loading: false,
       }
-      break;
+      break
 
     case SERVER_SIDE_PAGINATION_NOTIFICATION:
       state = {
@@ -134,14 +133,14 @@ const notification = (state = initialState, action) => {
         get_server_side_pagination_notification_error: null,
         get_server_side_pagination_notification_loading: action.status,
       }
-      break;
+      break
     case SERVER_SIDE_PAGINATION_NOTIFICATION_SEARCH:
       state = {
         ...state,
         get_server_side_pagination_notification_search_data: action.payload,
         get_server_side_pagination_notification_search_loading: action.status,
       }
-      break;
+      break
 
     case SERVER_SIDE_PAGINATION_SEARCH_NOTIFICATION_FRESH:
       state = {
@@ -149,7 +148,7 @@ const notification = (state = initialState, action) => {
         get_server_side_pagination_notification_search_data: action.payload,
         get_server_side_pagination_notification_search_loading: action.status,
       }
-      break;
+      break
   }
   return state
 }

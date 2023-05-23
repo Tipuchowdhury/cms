@@ -13,12 +13,11 @@ import {
   USER_STATUS_UPDATE_FRESH,
   USER_DELETE,
   USER_DELETE_FRESH,
-
   SERVER_SIDE_PAGINATION_USER,
   SERVER_SIDE_PAGINATION_USER_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_USER_FRESH,
   GET_USER_BY_ID,
-  GET_USER_BY_ID_FRESH
+  GET_USER_BY_ID_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -365,7 +364,8 @@ export const userDeleteFresh = () => {
 
 export const getServerSidePaginationUserAction = (index, limit) => {
   var url =
-    process.env.REACT_APP_LOCALHOST + `/User/Search?page=${index}&limit=${limit}`
+    process.env.REACT_APP_LOCALHOST +
+    `/User/Search?page=${index}&limit=${limit}`
 
   const formData = {}
   return dispatch => {

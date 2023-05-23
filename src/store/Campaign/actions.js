@@ -9,7 +9,6 @@ import {
   CAMPAIGN_DELETE_FRESH,
   CAMPAIGN_STATUS_EDIT,
   CAMPAIGN_STATUS_EDIT_FRESH,
-
   SERVER_SIDE_PAGINATION_CAMPAIGN,
   SERVER_SIDE_PAGINATION_CAMPAIGN_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_CAMPAIGN_FRESH,
@@ -262,7 +261,9 @@ export const campaignDeleteFresh = () => {
 }
 
 export const getServerSidePaginationCampaignAction = (index, limit) => {
-  var url = process.env.REACT_APP_LOCALHOST + `/Campaign/Search?page=${index}&limit=${limit}`
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Campaign/Search?page=${index}&limit=${limit}`
 
   const formData = {}
   return dispatch => {

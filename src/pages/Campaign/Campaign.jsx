@@ -34,10 +34,10 @@ import {
   campaignStatusEditFresh,
   getServerSidePaginationCampaignAction,
   getServerSidePaginationCampaignSearchAction,
-  getServerSidePaginationSearchCampaignFresh
+  getServerSidePaginationSearchCampaignFresh,
 } from "store/Campaign/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
-import DataTable from 'react-data-table-component';
+import DataTable from "react-data-table-component"
 
 function Campaign(props) {
   const [name, setName] = useState("")
@@ -121,15 +121,16 @@ function Campaign(props) {
     </Button>
   )
 
-  const textRef = (cell, row) => <span style={{ fontSize: "16px" }}>{cell.name}</span>
-
+  const textRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.name}</span>
+  )
 
   const activeData = [
     {
       selector: row => row.name,
       name: "Name",
       sortable: true,
-      cell: textRef
+      cell: textRef,
     },
     {
       selector: row => row.is_active,
@@ -153,25 +154,24 @@ function Campaign(props) {
   ]
 
   // server side pagination
-  const [page, setPage] = useState(1);
-  const [countPerPage, setCountPerPage] = useState(10);
-  const handleFilter = (e) => {
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
     if (e.target.value?.length > 0) {
-      props.getServerSidePaginationCampaignSearchAction(e.target.value);
+      props.getServerSidePaginationCampaignSearchAction(e.target.value)
     } else {
-      props.getServerSidePaginationSearchCampaignFresh();
+      props.getServerSidePaginationSearchCampaignFresh()
     }
-
   }
   const paginationComponentOptions = {
     selectAllRowsItem: true,
     //selectAllRowsItemText: "ALL"
-  };
+  }
 
   const handlePerRowsChange = async (newPerPage, page) => {
-    console.log(newPerPage, page);
-    setCountPerPage(newPerPage);
-  };
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
 
   useEffect(() => {
     // console.log("=======hello", props.campaign_name_edit_loading)
@@ -208,7 +208,8 @@ function Campaign(props) {
     props.campaign_name_edit_loading,
     props.campaign_delete_loading,
     props.campaign_status_edit_loading,
-    page, countPerPage
+    page,
+    countPerPage,
   ])
 
   return (
@@ -264,19 +265,41 @@ function Campaign(props) {
                     ) : null
                   ) : null} */}
 
-                  <div className='text-end'><input type='text' placeholder="Search Campaign" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
+                  <div className="text-end">
+                    <input
+                      type="text"
+                      placeholder="Search Campaign"
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid gray",
+                      }}
+                      onChange={e => handleFilter(e)}
+                    />
+                  </div>
                   <DataTable
                     columns={activeData}
-                    data={props.get_server_side_pagination_campaign_search_data != null ? props.get_server_side_pagination_campaign_search_data?.data : props?.get_server_side_pagination_campaign_data?.data}
+                    data={
+                      props.get_server_side_pagination_campaign_search_data !=
+                      null
+                        ? props.get_server_side_pagination_campaign_search_data
+                            ?.data
+                        : props?.get_server_side_pagination_campaign_data?.data
+                    }
                     highlightOnHover
                     pagination
                     paginationServer
-                    paginationTotalRows={props.get_server_side_pagination_campaign_search_data != null ? props.get_server_side_pagination_campaign_search_data?.count : props.get_server_side_pagination_campaign_data?.count}
+                    paginationTotalRows={
+                      props.get_server_side_pagination_campaign_search_data !=
+                      null
+                        ? props.get_server_side_pagination_campaign_search_data
+                            ?.count
+                        : props.get_server_side_pagination_campaign_data?.count
+                    }
                     paginationPerPage={countPerPage}
                     paginationComponentOptions={paginationComponentOptions}
                     onChangeRowsPerPage={handlePerRowsChange}
-
-                    onChangePage={(page) => setPage(page)}
+                    onChangePage={page => setPage(page)}
                   />
                 </CardBody>
               </Card>
@@ -392,7 +415,7 @@ const mapStateToProps = state => {
     campaign_status_edit_loading,
 
     get_server_side_pagination_campaign_data,
-    get_server_side_pagination_campaign_search_data
+    get_server_side_pagination_campaign_search_data,
   } = state.Campaign
 
   return {
@@ -409,7 +432,7 @@ const mapStateToProps = state => {
     campaign_status_edit_loading,
 
     get_server_side_pagination_campaign_data,
-    get_server_side_pagination_campaign_search_data
+    get_server_side_pagination_campaign_search_data,
   }
 }
 
@@ -426,6 +449,6 @@ export default withRouter(
     campaignStatusEditFresh,
     getServerSidePaginationCampaignAction,
     getServerSidePaginationCampaignSearchAction,
-    getServerSidePaginationSearchCampaignFresh
+    getServerSidePaginationSearchCampaignFresh,
   })(Campaign)
 )

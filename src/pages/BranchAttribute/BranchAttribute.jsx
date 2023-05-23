@@ -33,8 +33,8 @@ import {
   branchAttributeStatusUpdateFresh,
 } from "store/BranchAttribute/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
-import { toast } from "react-toastify";
-import DataTable from 'react-data-table-component';
+import { toast } from "react-toastify"
+import DataTable from "react-data-table-component"
 
 function BranchAttribute(props) {
   document.title = "Branch Attribute | Foodi"
@@ -180,28 +180,25 @@ function BranchAttribute(props) {
     },
   ]
 
-
   // server side pagination
-  const [page, setPage] = useState(1);
-  const [countPerPage, setCountPerPage] = useState(10);
-  const handleFilter = (e) => {
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
     if (e.target.value?.length > 0) {
-      props.getServerSidePaginationCuisineSearchAction(e.target.value);
+      props.getServerSidePaginationCuisineSearchAction(e.target.value)
     } else {
-      props.getServerSidePaginationSearchCuisineFresh();
+      props.getServerSidePaginationSearchCuisineFresh()
     }
-
   }
   const paginationComponentOptions = {
     selectAllRowsItem: true,
     //selectAllRowsItemText: "ALL"
-  };
+  }
 
   const handlePerRowsChange = async (newPerPage, page) => {
-    console.log(newPerPage, page);
-    setCountPerPage(newPerPage);
-  };
-
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
 
   useEffect(() => {
     if (props.get_all_branch_attribute_loading == false) {
@@ -304,7 +301,7 @@ function BranchAttribute(props) {
                       <DatatableTablesWorking
                         products={props.get_all_branch_attribute_data}
                         columnData={activeData}
-                      //defaultSorted={defaultSorted}
+                        //defaultSorted={defaultSorted}
                       />
                     ) : null
                   ) : null}

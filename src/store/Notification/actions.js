@@ -9,7 +9,6 @@ import {
   NOTIFICATION_DELETE_FRESH,
   NOTIFICATION_STATUS_EDIT,
   NOTIFICATION_STATUS_EDIT_FRESH,
-
   SERVER_SIDE_PAGINATION_NOTIFICATION,
   SERVER_SIDE_PAGINATION_NOTIFICATION_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_NOTIFICATION_FRESH,
@@ -251,9 +250,10 @@ export const notificationDeleteFresh = () => {
     })
 }
 
-
 export const getServerSidePaginationNotificationAction = (index, limit) => {
-  var url = process.env.REACT_APP_LOCALHOST + `/Notification/Search?page=${index}&limit=${limit}`
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Notification/Search?page=${index}&limit=${limit}`
 
   const formData = {}
   return dispatch => {
@@ -282,7 +282,8 @@ export const getServerSidePaginationNotificationAction = (index, limit) => {
 
 export const getServerSidePaginationNotificationSearchAction = name => {
   console.log(name)
-  var url = process.env.REACT_APP_LOCALHOST + `/Notification/Search?title=${name}`
+  var url =
+    process.env.REACT_APP_LOCALHOST + `/Notification/Search?title=${name}`
 
   return dispatch => {
     const headers = {
