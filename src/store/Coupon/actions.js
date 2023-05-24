@@ -438,6 +438,7 @@ export const couponEditAction = (
           payload: response.data,
           status: "Success",
         })
+        toast.success("Coupon Edited Successfully")
       })
       .catch(error => {
         dispatch({
@@ -445,6 +446,7 @@ export const couponEditAction = (
           payload: error,
           status: "Failed",
         })
+        toast.error("Coupon Edited Fail")
       })
   }
 }
