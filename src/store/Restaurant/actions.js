@@ -67,12 +67,19 @@ import {
   SERVER_SIDE_PAGINATION_BRANCH,
   SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
+  GET_ZONE_BY_ID,
+  GET_ZONE_BY_ID_FRESH,
+  DELETE_RESTAURANT_MENU,
+  DELETE_RESTAURANT_MENU_FRESH,
+  RESTAURANT_MENU_STATUS_EDIT,
+  RESTAURANT_MENU_STATUS_EDIT_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
 import { v4 as uuidv4 } from "uuid"
 import moment from "moment"
 import { convertToFormData } from "helpers/functions"
+import CustomLoader from "components/CustomLoader/CustomLoader"
 
 // token
 // var authUser = JSON.parse(localStorage.getItem("user"));
@@ -798,6 +805,41 @@ export const getAllZoneAction = () => {
       })
   }
 }
+export const getZoneByIdAction = id => {
+  //var url = process.env.REACT_APP_LOCALHOST + "/Zone/Get"
+  var url = process.env.REACT_APP_LOCALHOST + `/Zone/GetById?id=${id}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_ZONE_BY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_ZONE_BY_ID,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getZoneByIdActionFresh = () => {
+  console.log("=========hererererer=======")
+  return dispatch =>
+    dispatch({
+      type: GET_ZONE_BY_ID_FRESH,
+      status: false,
+    })
+}
 
 export const zoneEditAction = (
   id,
@@ -841,7 +883,7 @@ export const zoneEditAction = (
         })
       : null
 
-  const allData = path.map(item => [Number(item.lat), Number(item.lng)])
+  const allData = path.map(item => [Number(item.lng), Number(item.lat)])
   console.log(allData)
   let formData = {
     _id: id,
@@ -1019,25 +1061,24 @@ export const editBranchPopularFresh = () => {
 // }
 
 export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
-  // console.log(addOns)
-  // console.log(parseInt(category.num_of_choice))
+  //console.log(addOns)
+  // console.log(category, isChecked)
 
   var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Post"
   // console.log(addOns?.length)
 
-  const data =
-    addOns?.length > 0
-      ? addOns.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            add_on_name: item.add_on_name,
-            add_on_price: item.add_on_price,
-            add_on_category_name: category.name,
-            add_on_category_id: val,
-          }
-        })
-      : null
+  const data = addOns
+    .filter(addOn => addOn.add_on_name != "")
+    .map(item => {
+      const val = uuidv4()
+      return {
+        _id: val,
+        add_on_name: item.add_on_name,
+        add_on_price: item.add_on_price,
+        add_on_category_name: category.name,
+        add_on_category_id: val,
+      }
+    })
   const val_id = uuidv4()
   // console.log(data)
 
@@ -1082,23 +1123,22 @@ export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
 
 export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
   // console.log(val, category, isChecked, addOns)
-  // console.log(parseInt(category.num_of_choice))
+  // console.log(category, isChecked)
 
   var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Put"
 
-  const data =
-    addOns?.length > 0
-      ? addOns.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            add_on_name: item.add_on_name,
-            add_on_price: item.add_on_price,
-            add_on_category_name: category.name,
-            add_on_category_id: val,
-          }
-        })
-      : null
+  const data = addOns
+    .filter(addOn => addOn.add_on_name != "")
+    .map(item => {
+      const val = uuidv4()
+      return {
+        _id: val,
+        add_on_name: item.add_on_name,
+        add_on_price: item.add_on_price,
+        add_on_category_name: category.name,
+        add_on_category_id: val,
+      }
+    })
   const val_id = uuidv4()
   // console.log(data)
 
@@ -1575,6 +1615,84 @@ export const getAllRestaurantMenuItemAction = () => {
           status: "Failed",
         })
       })
+  }
+}
+
+export const restaurantMenuItemDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Delete"
+  console.log(id)
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+
+    axios
+      .delete(url, { params: { id: id } }, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: DELETE_RESTAURANT_MENU,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: DELETE_RESTAURANT_MENU,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const restaurantMenuItemDeleteFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: DELETE_RESTAURANT_MENU_FRESH,
+      status: false,
+    })
+}
+
+export const restaurantMenuStatusEditAction = data => {
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Put"
+  let dataObject = { ...data }
+
+  const formData = convertToFormData(dataObject)
+  // console.log(formData);
+  return dispatch => {
+    const headers = {
+      // "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: RESTAURANT_MENU_STATUS_EDIT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: RESTAURANT_MENU_STATUS_EDIT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const restaurantMenuStatusEditFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: RESTAURANT_MENU_STATUS_EDIT_FRESH,
+      payload: null,
+      status: false,
+    })
   }
 }
 

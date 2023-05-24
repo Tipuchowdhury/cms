@@ -70,7 +70,7 @@ const Register = props => {
   const navigate = useNavigate()
   let name, value
   const handleInputs = e => {
-    console.log(e)
+    //console.log(e)
     name = e.target.name
     value = e.target.value
     setRegisterInfo({ ...registerInfo, [name]: value })
@@ -81,12 +81,12 @@ const Register = props => {
   // }
   const handleSubmit = e => {
     e.preventDefault()
-    console.log(registerInfo)
-    console.log(role)
+    //console.log(registerInfo)
+    //console.log(role)
     if (registerInfo.password === registerInfo.confirmPassword) {
-      console.log(registerInfo)
-      console.log(file)
-      console.log(role)
+      //console.log(registerInfo)
+      //console.log(file)
+      //console.log(role)
 
       props.userRegistrationNew(registerInfo, file, role)
       //props.dataForTesting();
@@ -107,8 +107,8 @@ const Register = props => {
     ))
   }
 
-  console.log(props.get_all_user_roles_data)
-  console.log(userData)
+  // console.log(props.get_all_user_roles_data)
+  // console.log(userData)
   useEffect(() => {
     if (props.registration_loading == "Success") {
       console.log("=====registration success====")

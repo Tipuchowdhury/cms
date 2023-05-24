@@ -7,7 +7,6 @@ import {
   CardTitle,
   Col,
   Container,
-  Input,
   Modal,
   ModalBody,
   ModalFooter,
@@ -23,7 +22,6 @@ import withRouter from "components/Common/withRouter"
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
-  getAllBranchAction,
   addCategoryAction,
   addCategoryFresh,
   getAllCategoryAction,
@@ -34,12 +32,8 @@ import {
   categoryDeleteFresh,
   categoryStatusEditAction,
   categoryStatusEditFresh,
-  getServerSidePaginationCategoryAction,
-  getServerSidePaginationCategorySearchAction,
-  getServerSidePaginationSearchCategoryFresh,
-} from "store/actions"
+} from "store/Category/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
-import DataTable from "react-data-table-component"
 
 function Category(props) {
   const [name, setName] = useState("")
@@ -47,15 +41,7 @@ function Category(props) {
   const [categoryId, setCategoryId] = useState()
   const [categoryName, setCategoryName] = useState()
   const [categoryImage, setCategoryImage] = useState()
-  const [restaurantId, setRestaurantId] = useState()
-  const [restaurantIdEdit, setRestaurantIdEdit] = useState()
   const [isActive, setIsActive] = useState()
-  const [addImages, setAddImages] = useState({
-    image: "",
-  })
-  const [editImages, setEditImages] = useState({
-    image: "",
-  })
 
   const [editModal, setEditModal] = useState(false)
   const [reload, setReload] = useState(false)
@@ -65,7 +51,6 @@ function Category(props) {
 
   // delete modal
   const [deleteItem, setDeleteItem] = useState()
-
   const [modalDel, setModalDel] = useState(false)
 
   const toggleDel = () => setModalDel(!modalDel)
@@ -82,55 +67,20 @@ function Category(props) {
     e.preventDefault()
     toggle()
     const val = uuidv4()
-    props.addCategoryAction(categoryName, val, restaurantId, categoryImage)
+    console.log(name)
+    console.log(val)
+    props.addCategoryAction(categoryName, val, categoryImage)
   }
-
-  const handleAddSelect = e => {
-    setRestaurantId(e.target.value)
-  }
-
-  const handleEditSelect = e => {
-    setRestaurantIdEdit(e.target.value)
-  }
-
   const handleEditCategoryName = row => {
+    console.log(row)
     setCategoryId(row._id)
     setCategoryName(row.category_name)
-    setRestaurantIdEdit(row.restaurant_id)
-    setEditImages({ ...editImages, image: row.image })
+    setCategoryImage(row.image)
     setIsActive(row.is_active)
     toggleEditModal()
   }
   const handleCategoryName = e => {
     setCategoryName(e.target.value)
-  }
-
-  const handleAddFile = event => {
-    let name = event.target.name
-    let value = event.target.files[0]
-    setCategoryImage(value)
-
-    const reader = new FileReader()
-
-    reader.onload = () => {
-      setAddImages({ ...addImages, [name]: reader.result })
-    }
-
-    reader.readAsDataURL(value)
-  }
-
-  const handleEditFile = event => {
-    let name = event.target.name
-    let value = event.target.files[0]
-    setCategoryImage(value)
-
-    const reader2 = new FileReader()
-
-    reader2.onload = () => {
-      setEditImages({ ...editImages, [name]: reader2.result })
-    }
-
-    reader2.readAsDataURL(value)
   }
 
   const handleEditModalSubmit = e => {
@@ -139,7 +89,6 @@ function Category(props) {
     props.categoryNameEditAction(
       categoryName,
       categoryId,
-      restaurantIdEdit,
       categoryImage,
       isActive
     )
@@ -152,16 +101,10 @@ function Category(props) {
   const handleStatusModal = row => {
     setCategoryId(row._id)
     setCategoryName(row.category_name)
-    setRestaurantIdEdit(row.restaurant_id)
     setCategoryImage(row.image)
     setIsActive(row.is_active)
 
     toggleStatus()
-  }
-
-  let allRestaurant = []
-  if (props.get_all_branch_data?.length > 0) {
-    allRestaurant = props.get_all_branch_data
   }
 
   const handleStatusUpdate = e => {
@@ -169,7 +112,6 @@ function Category(props) {
     props.categoryStatusEditAction(
       categoryName,
       categoryId,
-      restaurantIdEdit,
       categoryImage,
       isActive
     )
@@ -194,6 +136,14 @@ function Category(props) {
     </div>
   )
 
+  // const statusRef = (cell, row) => (
+  //   <Badge color="secondary" style={{ padding: "12px" }}>
+  //     Deactivate
+  //   </Badge>
+  // )
+
+  // const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
+
   const statusRef = (cell, row) => (
     <Button
       color={row.is_active ? "success" : "secondary"}
@@ -204,60 +154,43 @@ function Category(props) {
     </Button>
   )
 
-  const textRef = (cell, row) => (
-    <span style={{ fontSize: "16px" }}>{cell.category_name}</span>
-  )
+  console.log(props.add_category_loading)
+  console.log(props.get_all_category_data)
+  console.log(props.category_name_edit_loading)
+  console.log(props.get_all_category_loading)
 
   const activeData = [
     {
-      selector: row => row.category_name,
-      name: "Name",
-      sortable: true,
-      cell: textRef,
+      dataField: "category_name",
+      text: "Name",
+      sort: true,
     },
     {
-      selector: row => row.is_active,
-      name: "Status",
-      sortable: true,
-      cell: statusRef,
+      dataField: "is_active",
+      text: "Status",
+      sort: true,
+      formatter: statusRef,
     },
     {
-      name: "Action",
-      sortable: true,
-      cell: actionRef,
+      //dataField: "he",
+      text: "Action",
+      sort: true,
+      formatter: actionRef,
+    },
+  ]
+  const defaultSorted = [
+    {
+      dataField: "name",
+      order: "desc",
     },
   ]
 
-  // server side pagination
-  const [page, setPage] = useState(1)
-  const [countPerPage, setCountPerPage] = useState(10)
-  const handleFilter = e => {
-    if (e.target.value?.length > 0) {
-      props.getServerSidePaginationCategorySearchAction(e.target.value)
-    } else {
-      props.getServerSidePaginationSearchCategoryFresh()
-    }
-  }
-  const paginationComponentOptions = {
-    selectAllRowsItem: true,
-    //selectAllRowsItemText: "ALL"
-  }
-
-  const handlePerRowsChange = async (newPerPage, page) => {
-    console.log(newPerPage, page)
-    setCountPerPage(newPerPage)
-  }
-
   useEffect(() => {
-    if (props.get_all_branch_loading == false) {
-      props.getAllBranchAction()
-    }
+    console.log("=======hello", props.category_name_edit_loading)
     if (props.get_all_category_loading == false) {
       console.log("I am in get all category loading ")
       props.getAllCategoryAction()
     }
-
-    props.getServerSidePaginationCategoryAction(page, countPerPage)
 
     if (props.add_category_loading === "Success") {
       toast.success("Category Added Successfully")
@@ -295,9 +228,6 @@ function Category(props) {
     props.category_name_edit_loading,
     props.category_delete_loading,
     props.category_status_edit_loading,
-    props.get_all_branch_loading,
-    page,
-    countPerPage,
   ])
 
   return (
@@ -342,7 +272,7 @@ function Category(props) {
                     </Button>
                   </div>
 
-                  {/* {props.get_all_category_data ? (
+                  {props.get_all_category_data ? (
                     props.get_all_category_data.length > 0 ? (
                       <DatatableTablesWorking
                         products={props.get_all_category_data}
@@ -350,43 +280,7 @@ function Category(props) {
                         defaultSorted={defaultSorted}
                       />
                     ) : null
-                  ) : null} */}
-                  <div className="text-end">
-                    <input
-                      type="text"
-                      placeholder="Search Category"
-                      style={{
-                        padding: "10px",
-                        borderRadius: "8px",
-                        border: "1px solid gray",
-                      }}
-                      onChange={e => handleFilter(e)}
-                    />
-                  </div>
-                  <DataTable
-                    columns={activeData}
-                    data={
-                      props.get_server_side_pagination_category_search_data !=
-                      null
-                        ? props.get_server_side_pagination_category_search_data
-                            ?.data
-                        : props?.get_server_side_pagination_category_data?.data
-                    }
-                    highlightOnHover
-                    pagination
-                    paginationServer
-                    paginationTotalRows={
-                      props.get_server_side_pagination_category_search_data !=
-                      null
-                        ? props.get_server_side_pagination_category_search_data
-                            ?.count
-                        : props.get_server_side_pagination_category_data?.count
-                    }
-                    paginationPerPage={countPerPage}
-                    paginationComponentOptions={paginationComponentOptions}
-                    onChangeRowsPerPage={handlePerRowsChange}
-                    onChangePage={page => setPage(page)}
-                  />
+                  ) : null}
                 </CardBody>
               </Card>
             </Col>
@@ -411,57 +305,19 @@ function Category(props) {
                   onChange={e => setCategoryName(e.target.value)}
                 />
               </div>
-
               <div className="mb-3">
-                <label htmlFor="restaurant_id" className="form-label">
-                  {" "}
-                  Restaurant{" "}
-                </label>
-                <Input
-                  id="restaurant_id"
-                  name="restaurant_id"
-                  className="form-control"
-                  placeholder="select restaurant"
-                  value={restaurantId}
-                  onChange={handleAddSelect}
-                  type="select"
-                >
-                  <option>Choose...</option>
-                  {allRestaurant.map(restaurant => (
-                    <option key={restaurant._id} value={restaurant._id}>
-                      {restaurant.name}
-                    </option>
-                  ))}
-                </Input>
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label" htmlFor="image">
+                <label className="form-label" htmlFor="categoryImage">
                   Category Image
                 </label>
                 <input
+                  name="categoryImage"
                   type="file"
                   className="form-control"
-                  name="image"
-                  id="image"
-                  onChange={handleAddFile}
+                  id="categoryImage"
+                  value={categoryImage}
+                  onChange={e => setCategoryImage(e.target.value)}
                 />
               </div>
-
-              {addImages?.image && (
-                <Row className="mb-3">
-                  <label className="col-md-2">
-                    <span></span>
-                  </label>
-                  <div className="col-md-10">
-                    <img
-                      src={addImages.image}
-                      alt="preview"
-                      style={{ width: "50%" }}
-                    />
-                  </div>
-                </Row>
-              )}
               <div
                 style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
               >
@@ -498,54 +354,18 @@ function Category(props) {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="restaurant_id" className="form-label">
-                  {" "}
-                  Restaurant{" "}
-                </label>
-                <Input
-                  id="restaurant_id"
-                  name="restaurant_id"
-                  className="form-control"
-                  placeholder="select restaurant"
-                  value={restaurantIdEdit}
-                  onChange={handleEditSelect}
-                  type="select"
-                >
-                  <option>Choose...</option>
-                  {allRestaurant.map(restaurant => (
-                    <option key={restaurant._id} value={restaurant._id}>
-                      {restaurant.name}
-                    </option>
-                  ))}
-                </Input>
-              </div>
-              <div className="mb-3">
-                <label className="form-label" htmlFor="image">
+                <label className="form-label" htmlFor="categoryImage">
                   {" "}
                   Image{" "}
                 </label>
                 <input
+                  name="categoryImage"
                   type="file"
                   className="form-control"
-                  name="image"
-                  id="image"
-                  onChange={handleEditFile}
+                  id="categoryImage"
+                  onChange={e => setCategoryImage(e.target.value)}
                 />
               </div>
-              {editImages?.image && (
-                <Row className="mb-3">
-                  <label className="col-md-2">
-                    <span></span>
-                  </label>
-                  <div className="col-md-10">
-                    <img
-                      src={editImages.image}
-                      alt="preview"
-                      style={{ width: "50%" }}
-                    />
-                  </div>
-                </Row>
-              )}
               <div
                 style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
               >
@@ -624,8 +444,6 @@ function Category(props) {
 }
 
 const mapStateToProps = state => {
-  const { get_all_branch_loading, get_all_branch_data } = state.Restaurant
-
   const {
     add_category_data,
     add_category_error,
@@ -638,15 +456,9 @@ const mapStateToProps = state => {
     category_name_edit_loading,
     category_status_edit_loading,
     category_delete_loading,
-
-    get_server_side_pagination_category_data,
-    get_server_side_pagination_category_search_data,
   } = state.Category
 
   return {
-    get_all_branch_loading,
-    get_all_branch_data,
-
     add_category_data,
     add_category_error,
     add_category_loading,
@@ -659,15 +471,11 @@ const mapStateToProps = state => {
 
     category_status_edit_loading,
     category_delete_loading,
-
-    get_server_side_pagination_category_data,
-    get_server_side_pagination_category_search_data,
   }
 }
 
 export default withRouter(
   connect(mapStateToProps, {
-    getAllBranchAction,
     addCategoryAction,
     addCategoryFresh,
     getAllCategoryAction,
@@ -678,8 +486,5 @@ export default withRouter(
     categoryDeleteFresh,
     categoryStatusEditAction,
     categoryStatusEditFresh,
-    getServerSidePaginationCategoryAction,
-    getServerSidePaginationCategorySearchAction,
-    getServerSidePaginationSearchCategoryFresh,
   })(Category)
 )

@@ -52,10 +52,10 @@ export const userRegistrationNew = (user, file, role) => {
   //     image: file
   // }
 
-  console.log(formData)
+  // console.log(formData)
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      //"Content-Type": "application/json",
       // 'content-type': 'application/x-www-form-urlencoded'
 
       "Content-Type": "multipart/form-data",

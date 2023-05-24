@@ -26,6 +26,7 @@ import {
   getServerSidePaginationZoneAction,
   getServerSidePaginationZoneSearchAction,
   getServerSidePaginationSearchZoneFresh,
+  getZoneByIdAction,
 } from "store/actions"
 import withRouter from "components/Common/withRouter"
 import { connect } from "react-redux"
@@ -53,16 +54,19 @@ function Zone(props) {
   }
 
   const handleStatusUpdate = () => {
-    console.log(editInfo)
+    //console.log(editInfo)
     props.zoneStatusEditAction({
       ...editInfo,
       is_active: !editInfo.is_active,
     })
   }
   const navigate = useNavigate()
-  const handleEdit = row => {
-    console.log(row)
-    navigate("/add-zone", { state: row })
+  const handleEdit = (row, cell) => {
+    // console.log(row)
+    // console.log(cell)
+
+    //props.getZoneByIdAction(cell._id)
+    navigate("/edit-zone", { state: cell })
   }
 
   const handleDelete = () => {
@@ -75,14 +79,14 @@ function Zone(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEdit(row)}
+        onClick={() => handleEdit(row, cell)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        onClick={() => handleDeleteModal(cell)}
       >
         Delete
       </Button>{" "}
@@ -139,7 +143,7 @@ function Zone(props) {
   }
 
   const handlePerRowsChange = async (newPerPage, page) => {
-    console.log(newPerPage, page)
+    // console.log(newPerPage, page)
     setCountPerPage(newPerPage)
   }
 
@@ -180,10 +184,10 @@ function Zone(props) {
     countPerPage,
   ])
 
-  console.log(props.get_all_zone_data)
-  console.log(page)
-  console.log(props.get_server_side_pagination_zone_data)
-  console.log(props.get_server_side_pagination_zone_search_data)
+  // console.log(props.get_all_zone_data)
+  // console.log(page)
+  // console.log(props.get_server_side_pagination_zone_data)
+  // console.log(props.get_server_side_pagination_zone_search_data)
   return (
     <React.Fragment>
       <ToastContainer />
@@ -358,5 +362,6 @@ export default withRouter(
     getServerSidePaginationZoneAction,
     getServerSidePaginationZoneSearchAction,
     getServerSidePaginationSearchZoneFresh,
+    getZoneByIdAction,
   })(Zone)
 )

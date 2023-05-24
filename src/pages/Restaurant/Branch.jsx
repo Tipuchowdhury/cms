@@ -27,14 +27,10 @@ import {
   editBranchPopularFresh,
   branchDeleteAction,
   branchDeleteFresh,
-  getServerSidePaginationBranchAction,
-  getServerSidePaginationBranchSearchAction,
-  getServerSidePaginationSearchBranchFresh,
 } from "store/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
-import DataTable from "react-data-table-component"
 
 function Branch(props) {
   const [statusInfo, setStatusInfo] = useState(false)
@@ -134,70 +130,55 @@ function Branch(props) {
       {row.is_popular ? "Popular" : "Regular"}
     </Button>
   )
-  const textRef = (cell, row) => (
-    <span style={{ fontSize: "16px" }}>{cell.name}</span>
-  )
 
   const activeData = [
     {
-      selector: row => row.name,
-      name: "Branch Name",
-      sortable: true,
-      cell: textRef,
+      dataField: "name",
+      text: "Branch Name",
+      sort: true,
     },
-
+    // {
+    //     //dataField: "",
+    //     text: "Restaurant Name",
+    //     sort: true,
+    //     //formatter: statusRef
+    // },
     {
-      selector: row => row.phone_number,
-      name: "Phone",
-      sortable: true,
+      dataField: "phone_number",
+      text: "Phone",
+      sort: true,
       //formatter: actionRef,
     },
     {
-      selector: row => row.is_active,
-      name: "Status",
-      sortable: true,
-      cell: statusRef,
+      dataField: "is_active",
+      text: "Status",
+      sort: true,
+      formatter: statusRef,
     },
     {
-      selector: row => row.is_popular,
-      name: "Popular/Regular",
-      sortable: true,
-      cell: popularRef,
+      dataField: "is_popular",
+      text: "Popular/Regular",
+      sort: true,
+      formatter: popularRef,
     },
     {
-      selector: row => "",
-      name: "Action",
-      sortable: true,
-      cell: actionRef,
+      //dataField: "hello",
+      text: "Action",
+      sort: true,
+      formatter: actionRef,
     },
   ]
-
-  // server side pagination
-  const [page, setPage] = useState(1)
-  const [countPerPage, setCountPerPage] = useState(10)
-  const handleFilter = e => {
-    if (e.target.value?.length > 0) {
-      props.getServerSidePaginationBranchSearchAction(e.target.value)
-    } else {
-      props.getServerSidePaginationSearchBranchFresh()
-    }
-  }
-  const paginationComponentOptions = {
-    selectAllRowsItem: true,
-    //selectAllRowsItemText: "ALL"
-  }
-
-  const handlePerRowsChange = async (newPerPage, page) => {
-    console.log(newPerPage, page)
-    setCountPerPage(newPerPage)
-  }
+  const defaultSorted = [
+    {
+      dataField: "name",
+      order: "desc",
+    },
+  ]
 
   useEffect(() => {
     if (props.get_all_branch_loading == false) {
       props.getAllBranchAction()
     }
-
-    props.getServerSidePaginationBranchAction(page, countPerPage)
 
     if (props.edit_branch_status_loading === "Success") {
       toast.success("Branch Status Updated Successfully")
@@ -231,11 +212,9 @@ function Branch(props) {
     props.edit_branch_status_loading,
     props.edit_branch_popular_loading,
     props.branch_delete_loading,
-    page,
-    countPerPage,
   ])
 
-  // console.log(props.get_all_branch_data);
+  console.log(props.get_all_branch_data)
   return (
     <React.Fragment>
       <div className="page-content">
@@ -271,45 +250,16 @@ function Branch(props) {
                       </Button>
                     </Link>
                   </div>
-                  {/* {props.get_all_branch_data ? props.get_all_branch_data.length > 0 ? <DatatableTablesWorking products={props.get_all_branch_data}
-                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_branch_data?._id} /> : null : null} */}
-
-                  <div className="text-end">
-                    <input
-                      type="text"
-                      placeholder="Search Branch"
-                      style={{
-                        padding: "10px",
-                        borderRadius: "8px",
-                        border: "1px solid gray",
-                      }}
-                      onChange={e => handleFilter(e)}
-                    />
-                  </div>
-                  <DataTable
-                    columns={activeData}
-                    data={
-                      props.get_server_side_pagination_branch_search_data !=
-                      null
-                        ? props.get_server_side_pagination_branch_search_data
-                            ?.data
-                        : props?.get_server_side_pagination_branch_data?.data
-                    }
-                    highlightOnHover
-                    pagination
-                    paginationServer
-                    paginationTotalRows={
-                      props.get_server_side_pagination_branch_search_data !=
-                      null
-                        ? props.get_server_side_pagination_branch_search_data
-                            ?.count
-                        : props.get_server_side_pagination_branch_data?.count
-                    }
-                    paginationPerPage={countPerPage}
-                    paginationComponentOptions={paginationComponentOptions}
-                    onChangeRowsPerPage={handlePerRowsChange}
-                    onChangePage={page => setPage(page)}
-                  />
+                  {props.get_all_branch_data ? (
+                    props.get_all_branch_data.length > 0 ? (
+                      <DatatableTablesWorking
+                        products={props.get_all_branch_data}
+                        columnData={activeData}
+                        defaultSorted={defaultSorted}
+                        key={props.get_all_branch_data?._id}
+                      />
+                    ) : null
+                  ) : null}
                 </CardBody>
               </Card>
             </Col>
@@ -414,9 +364,6 @@ const mapStateToProps = state => {
     edit_branch_status_loading,
     edit_branch_popular_loading,
     branch_delete_loading,
-
-    get_server_side_pagination_branch_data,
-    get_server_side_pagination_branch_search_data,
   } = state.Restaurant
 
   return {
@@ -425,9 +372,6 @@ const mapStateToProps = state => {
     edit_branch_status_loading,
     edit_branch_popular_loading,
     branch_delete_loading,
-
-    get_server_side_pagination_branch_data,
-    get_server_side_pagination_branch_search_data,
   }
 }
 
@@ -440,8 +384,5 @@ export default withRouter(
     editBranchPopularFresh,
     branchDeleteAction,
     branchDeleteFresh,
-    getServerSidePaginationBranchAction,
-    getServerSidePaginationBranchSearchAction,
-    getServerSidePaginationSearchBranchFresh,
   })(Branch)
 )
