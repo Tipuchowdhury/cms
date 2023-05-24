@@ -67,11 +67,15 @@ function AddCoupon(props) {
       value: "subscription_wise",
     },
   ])
+
+  const [disabledDiscountAmount, setDisabledDiscountAmount] = useState(
+    location?.state?.is_percent.toString() == "true" ? false : true
+  )
   //select multiple branch
   const common_coupon_types = couponTypes?.filter(
     elem => elem.value === location?.state?.coupon_type_name
   )
-  console.log("common_coupon_types :", common_coupon_types)
+  // console.log("common_coupon_types :", common_coupon_types)
 
   const coupon_data_edit = common_coupon_types
     ? common_coupon_types?.map((item, key) => {
@@ -79,13 +83,13 @@ function AddCoupon(props) {
       })
     : ""
 
-  console.log(coupon_data_edit)
+  // console.log(coupon_data_edit)
 
   const [selectedCouponType, setSelectedCouponType] = useState(
     coupon_data_edit ? coupon_data_edit[0] : ""
   )
 
-  console.log(selectedCouponType?.value)
+  // console.log(selectedCouponType?.value)
 
   const handleSelectCouponType = e => {
     //console.log(e.value);
@@ -334,10 +338,10 @@ function AddCoupon(props) {
       ? location.state.end_time
       : new Date().toISOString(),
   })
-  console.log("tt", new Date().toISOString())
+  // console.log("tt", new Date().toISOString())
   const handleTimeChange = e => {
-    console.log("e :", e.target.value)
-    console.log(new Date(e.target.value).toISOString())
+    // console.log("e :", e.target.value)
+    // console.log(new Date(e.target.value).toISOString())
     name = e.target.name
     value = e.target.value
     let new_time_string = `${value}:00Z`
@@ -381,7 +385,7 @@ function AddCoupon(props) {
     }
   }
   const handleGradualChange = (e, index) => {
-    console.log(index)
+    // console.log(index)
     const updatedValue = gradual.map((row, i) =>
       index === i
         ? Object.assign(row, { [e.target.name]: e.target.value })
@@ -391,17 +395,26 @@ function AddCoupon(props) {
   }
   let name, value
   const handleInputs = e => {
-    console.log(e)
+    // console.log(e.target.name, e.target.value)
     name = e.target.name
     value = e.target.value
+    console.log(name, value)
     name === "name" ? (value = e.target.value.toUpperCase()) : ""
+    if (name === "is_percent" && value === "false") {
+      setDisabledDiscountAmount(true)
+    }
+    if (name === "is_percent" && value === "true") {
+      setDisabledDiscountAmount(false)
+    }
     setCouponInfo({ ...couponInfo, [name]: value })
   }
+
+  console.log(disabledDiscountAmount)
 
   const handleSubmit = e => {
     e.preventDefault()
     const uniqueId = uuidv4()
-    console.log(couponInfo)
+    // console.log(couponInfo)
     props.addCouponAction(
       uniqueId,
       couponInfo,
@@ -419,7 +432,7 @@ function AddCoupon(props) {
 
   const handleSubmitForEdit = e => {
     e.preventDefault()
-    console.log("======================I am in the edit form==================")
+    // console.log("======================I am in the edit form==================")
 
     props.couponEditAction(
       location.state._id,
@@ -436,7 +449,7 @@ function AddCoupon(props) {
     )
   }
 
-  console.log(props.add_coupon_loading)
+  // console.log(props.add_coupon_loading)
   useEffect(() => {
     if (props.get_all_branch_loading == false) {
       props.getAllBranchAction()
@@ -467,7 +480,7 @@ function AddCoupon(props) {
       props.getAllSubscriptionTypeAction()
     }
 
-    console.log("add_coupon_loading :", props.add_coupon_loading)
+    // console.log("add_coupon_loading :", props.add_coupon_loading)
     if (props.add_coupon_loading === "Success") {
       // redirect
       props.addCouponFresh()
@@ -492,7 +505,7 @@ function AddCoupon(props) {
     props.get_all_menu_loading,
   ])
 
-  console.log(props.get_all_branch_data)
+  // console.log(props.get_all_branch_data)
 
   return (
     <>
@@ -985,7 +998,7 @@ function AddCoupon(props) {
                         name="maximum_discount_amount"
                         onChange={handleInputs}
                         value={couponInfo.maximum_discount_amount ?? ""}
-                        required
+                        disabled={disabledDiscountAmount ? true : false}
                       />
                     </div>
                   </Row>

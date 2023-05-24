@@ -129,18 +129,31 @@ export const addCouponAction = (
         })
       : []
 
-  gradual =
-    gradual?.length > 0
-      ? gradual.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            sequence: item.sequence,
-            discount_percent: item.discount_percent,
-            coupon_id: id,
-          }
-        })
-      : []
+  // gradual =
+  //   gradual?.length > 0
+  //     ? gradual.map(item => {
+  //         const val = uuidv4()
+  //         return {
+  //           _id: val,
+  //           sequence: item.sequence,
+  //           discount_percent: item.discount_percent,
+  //           coupon_id: id,
+  //         }
+  //       })
+  //     : []
+
+  const gradual_data = gradual
+    .filter(data => data.sequence != "")
+    .map(item => {
+      const val = uuidv4()
+      return {
+        _id: val,
+        sequence: item.sequence,
+        discount_percent: item.discount_percent,
+        coupon_id: id,
+      }
+    })
+
   // const formData = {
   //   _id: id,
   //   ...data,
@@ -167,7 +180,7 @@ export const addCouponAction = (
     menu_items: selectedMenu,
     subscription_types: selectedSubType,
     zones: selectedZone,
-    gradual_informations: gradual,
+    gradual_informations: gradual_data,
     restaurants: [],
   }
   const formData = convertToFormData(dataObject)
@@ -358,18 +371,29 @@ export const couponEditAction = (
         })
       : []
 
-  gradual =
-    gradual?.length > 0
-      ? gradual.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            sequence: item.sequence,
-            discount_percent: item.discount_percent,
-            coupon_id: id,
-          }
-        })
-      : []
+  gradual = gradual
+    .filter(data => data.sequence != "")
+    .map(item => {
+      const val = uuidv4()
+      return {
+        _id: val,
+        sequence: item.sequence,
+        discount_percent: item.discount_percent,
+        coupon_id: id,
+      }
+    })
+
+  // const gradual_data = gradual
+  //   .filter(data => data.sequence != "")
+  //   .map(item => {
+  //     const val = uuidv4()
+  //     return {
+  //       _id: val,
+  //       sequence: item.sequence,
+  //       discount_percent: item.discount_percent,
+  //       coupon_id: id,
+  //     }
+  //   })
   // const formData = {
   //   _id: id,
   //   ...data,

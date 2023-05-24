@@ -7,6 +7,7 @@ import {
   CardTitle,
   Col,
   Container,
+  Input,
   Modal,
   ModalBody,
   ModalFooter,
@@ -20,6 +21,8 @@ import withRouter from "components/Common/withRouter"
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
+  getAllBranchAction,
+  getAllCampaignAction,
   addPopUpAction,
   addPopUpFresh,
   getAllPopUpAction,
@@ -43,6 +46,8 @@ function Popup(props) {
   const [editModal, setEditModal] = useState(false)
   const [modalDel, setModalDel] = useState(false)
   const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
+  const [redirect, setRedirect] = useState(false)
+  const [redirectEdit, setRedirectEdit] = useState(false)
 
   const [addImages, setAddImages] = useState({
     image: "",
@@ -59,6 +64,10 @@ function Popup(props) {
   const [addInfo, setAddInfo] = useState({
     title: "",
     description: "",
+    is_redirect: false,
+    redirection_type: "",
+    restaurant_id: "",
+    campaign_id: "",
     cancellable: true,
     image: "",
     is_active: true,
@@ -68,6 +77,10 @@ function Popup(props) {
     _id: "",
     title: "",
     description: "",
+    is_redirect: false,
+    redirection_type: "",
+    restaurant_id: "",
+    campaign_id: "",
     cancellable: true,
     image: "",
     is_active: true,
@@ -75,12 +88,45 @@ function Popup(props) {
 
   const [deleteItem, setDeleteItem] = useState()
 
+  const [redirectionType, setRedirectionType] = useState([
+    {
+      label: "Restaurant",
+      value: "restaurant",
+    },
+    {
+      label: "Campaign",
+      value: "campaign",
+    },
+  ])
+
+  // console.log(coupon_data_edit)
+
+  const [selectedRedirectionType, setSelectedRedirectionType] = useState("")
+  const [selectedRedirectionTypeEdit, setSelectedRedirectionTypeEdit] =
+    useState("")
+
+  let restaurants = []
+  if (props.get_all_branch_data?.length > 0) {
+    restaurants = props.get_all_branch_data
+  }
+
+  let campaigns = []
+  if (props.get_all_campaign_data?.length > 0) {
+    campaigns = props.get_all_campaign_data
+  }
+
+  // console.log(props.get_all_branch_data)
+  // console.log(props.get_all_campaign_data)
+
   let name, value, checked
   const handleAddInputs = e => {
-    // console.log(e);
+    // console.log(e.target.name, e.target.value)
     name = e.target.name
     value = e.target.value
     setAddInfo({ ...addInfo, [name]: value })
+    if (name === "redirection_type") {
+      setSelectedRedirectionType(value)
+    }
   }
 
   const handleAddFile = e => {
@@ -106,7 +152,13 @@ function Popup(props) {
     name = e.target.name
     checked = e.target.checked
     setAddInfo({ ...addInfo, [name]: checked })
+
+    if (name === "is_redirect") {
+      setRedirect(checked)
+    }
   }
+  // console.log(redirect)
+
   const handleSubmit = e => {
     e.preventDefault()
     props.addPopUpAction(addInfo)
@@ -117,6 +169,9 @@ function Popup(props) {
     name = e.target.name
     value = e.target.value
     setEditInfo({ ...editInfo, [name]: value })
+    if (name === "redirection_type") {
+      setSelectedRedirectionTypeEdit(value)
+    }
   }
 
   const handleEditFile = e => {
@@ -142,6 +197,9 @@ function Popup(props) {
     name = e.target.name
     checked = e.target.checked
     setEditInfo({ ...editInfo, [name]: checked })
+    if (name === "is_redirect") {
+      setRedirectEdit(checked)
+    }
   }
 
   const handleEditSlider = row => {
@@ -149,15 +207,40 @@ function Popup(props) {
       _id: row._id,
       title: row.title,
       description: row.description,
+      is_redirect: row.is_redirect,
+      redirection_type: row.redirection_type,
+      restaurant_id: row.restaurant_id,
+      campaign_id: row.campaign_id,
       cancellable: row.cancellable,
       image: row.image,
       is_active: row.is_active,
     }))
 
+    setType(row.is_redirect, row.redirection_type)
+
     setEditImages({ ...editImages, image: row.image })
 
     toggleEditModal()
   }
+
+  const setType = (is_redirect_data, redirection_type_data) => {
+    //console.log(is_redirect_data, redirection_type_data)
+    setRedirectEdit(is_redirect_data)
+    const common_redirection_types = redirectionType?.filter(
+      elem => elem.value === redirection_type_data
+    )
+    // console.log("common_coupon_types :", common_coupon_types)
+
+    const redirection_type_edit = common_redirection_types
+      ? common_redirection_types?.map((item, key) => {
+          return { label: item.label, value: item.value }
+        })
+      : ""
+
+    setSelectedRedirectionTypeEdit(redirection_type_data)
+  }
+
+  // console.log(redirectEdit, selectedRedirectionTypeEdit)
 
   const handleEdit = e => {
     e.preventDefault()
@@ -242,6 +325,13 @@ function Popup(props) {
   ]
 
   useEffect(() => {
+    if (props.get_all_branch_loading == false) {
+      props.getAllBranchAction()
+    }
+    if (props.get_all_campaign_loading == false) {
+      props.getAllCampaignAction()
+    }
+
     if (props.get_all_popup_loading == false) {
       props.getAllPopUpAction()
     }
@@ -253,6 +343,10 @@ function Popup(props) {
         ...addInfo,
         title: "",
         description: "",
+        is_redirect: false,
+        redirection_type: "",
+        restaurant_id: "",
+        campaign_id: "",
         cancellable: true,
         image: "",
         is_active: true,
@@ -301,6 +395,8 @@ function Popup(props) {
     props.popup_edit_loading,
     props.popup_delete_loading,
     props.popup_status_edit_loading,
+    props.get_all_campaign_data,
+    props.get_all_branch_loading,
   ])
 
   return (
@@ -389,6 +485,109 @@ function Popup(props) {
                   required
                 ></textarea>
               </div>
+
+              <div className="mb-3">
+                <div className="form-check">
+                  <label className="form-label" htmlFor="is_redirect">
+                    Redirect
+                  </label>
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    id="is_redirect"
+                    checked={addInfo.is_redirect}
+                    name="is_redirect"
+                    onChange={handleAddCheckBox}
+                  />
+                </div>
+              </div>
+
+              {redirect == true ? (
+                <Row className="mb-3">
+                  <label htmlFor="redirection_type" className="col-form-label">
+                    Redirection Type
+                  </label>
+                  <div className="">
+                    <Input
+                      id="redirection_type"
+                      name="redirection_type"
+                      className="form-control"
+                      placeholder="Select redirection type"
+                      value={addInfo.redirection_type}
+                      onChange={handleAddInputs}
+                      type="select"
+                    >
+                      <option value="">Choose...</option>
+                      {redirectionType.map(redirection_type => (
+                        <option
+                          key={redirection_type.value}
+                          value={redirection_type.value}
+                        >
+                          {redirection_type.label}
+                        </option>
+                      ))}
+                    </Input>
+                  </div>
+                </Row>
+              ) : (
+                ""
+              )}
+
+              {redirect == true && selectedRedirectionType == "campaign" ? (
+                <Row className="mb-3">
+                  <label htmlFor="campaign_id" className="col-form-label">
+                    Campaign
+                  </label>
+                  <div className="">
+                    <Input
+                      id="campaign_id"
+                      name="campaign_id"
+                      className="form-control"
+                      placeholder="select Campaign"
+                      value={addInfo.campaign_id}
+                      onChange={handleAddInputs}
+                      type="select"
+                    >
+                      <option value="">Choose...</option>
+                      {campaigns.map(campaign => (
+                        <option key={campaign._id} value={campaign._id}>
+                          {campaign.name}
+                        </option>
+                      ))}
+                    </Input>
+                  </div>
+                </Row>
+              ) : (
+                ""
+              )}
+
+              {redirect == true && selectedRedirectionType == "restaurant" ? (
+                <Row className="mb-3">
+                  <label htmlFor="restaurant_id" className="col-form-label">
+                    Restaurant
+                  </label>
+                  <div className="">
+                    <Input
+                      id="restaurant_id"
+                      name="restaurant_id"
+                      className="form-control"
+                      placeholder="Select Restaurant"
+                      value={addInfo.restaurant_id}
+                      onChange={handleAddInputs}
+                      type="select"
+                    >
+                      <option value="">Choose...</option>
+                      {restaurants.map(restaurant => (
+                        <option key={restaurant._id} value={restaurant._id}>
+                          {restaurant.name}
+                        </option>
+                      ))}
+                    </Input>
+                  </div>
+                </Row>
+              ) : (
+                ""
+              )}
 
               <div className="mb-3">
                 <label className="form-label" htmlFor="image">
@@ -487,6 +686,111 @@ function Popup(props) {
               </div>
 
               <div className="mb-3">
+                <div className="form-check">
+                  <label className="form-label" htmlFor="is_redirect">
+                    Redirect
+                  </label>
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    id="is_redirect"
+                    checked={editInfo.is_redirect}
+                    name="is_redirect"
+                    onChange={handleEditCheckBox}
+                  />
+                </div>
+              </div>
+
+              {redirectEdit == true ? (
+                <Row className="mb-3">
+                  <label htmlFor="redirection_type" className="col-form-label">
+                    Redirection Type
+                  </label>
+                  <div className="">
+                    <Input
+                      id="redirection_type"
+                      name="redirection_type"
+                      className="form-control"
+                      placeholder="Select redirection type"
+                      value={editInfo.redirection_type}
+                      onChange={handleEditInputs}
+                      type="select"
+                    >
+                      <option value="">Choose...</option>
+                      {redirectionType.map(redirection_type => (
+                        <option
+                          key={redirection_type.value}
+                          value={redirection_type.value}
+                        >
+                          {redirection_type.label}
+                        </option>
+                      ))}
+                    </Input>
+                  </div>
+                </Row>
+              ) : (
+                ""
+              )}
+
+              {redirectEdit == true &&
+              selectedRedirectionTypeEdit == "campaign" ? (
+                <Row className="mb-3">
+                  <label htmlFor="campaign_id" className="col-form-label">
+                    Campaign
+                  </label>
+                  <div className="">
+                    <Input
+                      id="campaign_id"
+                      name="campaign_id"
+                      className="form-control"
+                      placeholder="select Campaign"
+                      value={editInfo.campaign_id}
+                      onChange={handleEditInputs}
+                      type="select"
+                    >
+                      <option value="">Choose...</option>
+                      {campaigns.map(campaign => (
+                        <option key={campaign._id} value={campaign._id}>
+                          {campaign.name}
+                        </option>
+                      ))}
+                    </Input>
+                  </div>
+                </Row>
+              ) : (
+                ""
+              )}
+
+              {redirectEdit == true &&
+              selectedRedirectionTypeEdit == "restaurant" ? (
+                <Row className="mb-3">
+                  <label htmlFor="restaurant_id" className="col-form-label">
+                    Restaurant
+                  </label>
+                  <div className="">
+                    <Input
+                      id="restaurant_id"
+                      name="restaurant_id"
+                      className="form-control"
+                      placeholder="Select Restaurant"
+                      value={editInfo.restaurant_id}
+                      onChange={handleEditInputs}
+                      type="select"
+                    >
+                      <option value="">Choose...</option>
+                      {restaurants.map(restaurant => (
+                        <option key={restaurant._id} value={restaurant._id}>
+                          {restaurant.name}
+                        </option>
+                      ))}
+                    </Input>
+                  </div>
+                </Row>
+              ) : (
+                ""
+              )}
+
+              <div className="mb-3">
                 <label className="form-label" htmlFor="image">
                   Image
                 </label>
@@ -494,7 +798,6 @@ function Popup(props) {
                   type="file"
                   className="form-control"
                   id="image"
-                  required
                   name="image"
                   onChange={handleEditFile}
                 />
@@ -608,6 +911,8 @@ function Popup(props) {
 }
 
 const mapStateToProps = state => {
+  const { get_all_branch_loading, get_all_branch_data } = state.Restaurant
+  const { get_all_campaign_loading, get_all_campaign_data } = state.Campaign
   const {
     add_popup_data,
     add_popup_error,
@@ -642,6 +947,12 @@ const mapStateToProps = state => {
     popup_status_edit_loading,
 
     popup_delete_loading,
+
+    get_all_branch_loading,
+    get_all_branch_data,
+
+    get_all_campaign_loading,
+    get_all_campaign_data,
   }
 }
 
@@ -657,5 +968,7 @@ export default withRouter(
     popUpStatusUpdateFresh,
     popUpDeleteAction,
     popUpDeleteFresh,
+    getAllBranchAction,
+    getAllCampaignAction,
   })(Popup)
 )
