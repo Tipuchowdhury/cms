@@ -1184,6 +1184,8 @@ export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
 export const addOnCategoryStatusEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Put"
 
+  data.is_active = !data.is_active
+
   const formData = data
   return dispatch => {
     const headers = {
