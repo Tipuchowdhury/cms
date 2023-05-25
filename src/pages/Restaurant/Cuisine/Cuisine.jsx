@@ -19,9 +19,6 @@ import withRouter from "components/Common/withRouter"
 ;` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
-import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
-import { Link } from "react-router-dom"
-import { useNavigate } from "react-router-dom"
 import {
   addCuisineAction,
   getAllCuisneAction,
@@ -29,7 +26,11 @@ import {
   cuisineStatusEditAction,
   cuisineDeleteAction,
   cuisineDeleteFresh,
+  getServerSidePaginationCuisineAction,
+  getServerSidePaginationCuisineSearchAction,
+  getServerSidePaginationSearchCuisineFresh,
 } from "store/actions"
+import DataTable from "react-data-table-component"
 
 function Cuisine(props) {
   const [name, setName] = useState()
@@ -39,8 +40,30 @@ function Cuisine(props) {
   const [modal, setModal] = useState(false)
   const toggle = () => setModal(!modal)
   const [editModal, setEditModal] = useState(false)
-  const toggleEditModal = () => setEditModal(!editModal)
+  const [color, setColor] = useState({
+    fg: "#ffffff",
+    bg: "#ffffff",
+  })
+
+  const [editColor, setEditColor] = useState({
+    fg: "#ffffff",
+    bg: "#ffffff",
+  })
+  // const toggleEditModal = () => {
+  //     setAddImages({ ...addImages, image: "" });
+  //     setEditModal(!editModal);
+  // }
   const [file, setFile] = useState()
+  const [addImages, setAddImages] = useState({
+    image: "",
+  })
+  const [editImages, setEditImages] = useState({
+    image: "",
+  })
+
+  const toggleEditModal = () => {
+    setEditModal(!editModal)
+  }
 
   const [editInfo, setEditInfo] = useState(false)
   const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
@@ -59,7 +82,7 @@ function Cuisine(props) {
   }
 
   const handleStatusModal = row => {
-    console.log(row)
+    // console.log(row);
     setEditInfo(row)
 
     toggleStatus()
@@ -79,9 +102,11 @@ function Cuisine(props) {
     setId(row._id)
     setEditName(row.name)
     setStatus(row.is_active)
+    setEditImages({ ...editImages, image: row.image })
+    setEditColor({ ...editColor, fg: row.color.fg, bg: row.color.bg })
     toggleEditModal()
   }
-  console.log(editName)
+  // console.log(addImages);
   const actionRef = (cell, row) => (
     <div style={{ display: "flex", gap: 10 }}>
       <Button
@@ -101,8 +126,6 @@ function Cuisine(props) {
     </div>
   )
 
-  // const statusRef = (cell, row) => <Badge color="success" style={{ padding: "12px" }}>Activated</Badge>
-
   const statusRef = (cell, row) => (
     <Button
       color={row.is_active ? "success" : "secondary"}
@@ -112,60 +135,115 @@ function Cuisine(props) {
       {row.is_active ? "Active" : "Deactivate"}
     </Button>
   )
+  const textRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.name}</span>
+  )
 
   const activeData = [
     {
-      dataField: "name",
-      text: "Cuisine Name",
-      sort: true,
+      selector: row => row.name,
+      name: "Cuisine Name",
+      sortable: true,
+      cell: textRef,
     },
     {
-      dataField: "",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      selector: row => "",
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
 
     {
-      dataField: "",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
-    },
-  ]
-  const defaultSorted = [
-    {
-      dataField: "name",
-      order: "desc",
+      selector: row => "",
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
 
-  const handleChange = event => {
-    console.log(event.target.files[0])
-    setFile(event.target.files[0])
+  const handleEditFile = event => {
+    let name = event.target.name
+    let value = event.target.files[0]
+    setFile(value)
+
+    const reader2 = new FileReader()
+
+    reader2.onload = () => {
+      setEditImages({ ...editImages, [name]: reader2.result })
+    }
+
+    reader2.readAsDataURL(value)
+  }
+  const handleAddFile = event => {
+    let name = event.target.name
+    let value = event.target.files[0]
+    setFile(value)
+
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      setAddImages({ ...addImages, [name]: reader.result })
+    }
+
+    reader.readAsDataURL(value)
+  }
+
+  const handleAddColors = e => {
+    let name = e.target.name
+    let value = e.target.value
+    setColor({ ...color, [name]: value })
+  }
+
+  const handleEditColors = e => {
+    let name = e.target.name
+    let value = e.target.value
+    setEditColor({ ...editColor, [name]: value })
   }
 
   const handleSubmit = e => {
     e.preventDefault()
-    console.log(name)
-    console.log(file)
+    //console.log(name);
+    console.log(color)
     const id = uuidv4()
-    props.addCuisineAction(id, name)
+    props.addCuisineAction(id, name, file, color)
     toggle()
     setName("")
   }
 
   const handleEditModal = e => {
     e.preventDefault(e)
-    console.log(editName)
-    props.cuisineEditAction(id, editName, status)
+    // console.log(editName);
+    props.cuisineEditAction(id, editName, status, file, editColor)
     toggleEditModal()
     setEditName("")
   }
+
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationCuisineSearchAction(e.target.value)
+    } else {
+      props.getServerSidePaginationSearchCuisineFresh()
+    }
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
+
   useEffect(() => {
     if (props.get_all_cuisine_loading == false) {
       props.getAllCuisneAction()
     }
+
+    props.getServerSidePaginationCuisineAction(page, countPerPage)
 
     if (props.cuisine_delete_loading === "Success") {
       // console.log("I am in the delete")
@@ -173,10 +251,16 @@ function Cuisine(props) {
       toggleDel()
       props.cuisineDeleteFresh()
     }
-  }, [props.get_all_cuisine_loading, props.cuisine_delete_loading])
+  }, [
+    props.get_all_cuisine_loading,
+    props.cuisine_delete_loading,
+    page,
+    countPerPage,
+  ])
 
   console.log(props.get_all_cuisine_data)
   console.log(props.get_all_cuisine_loading)
+  console.log(props.get_server_side_pagination_cuisine_data)
   return (
     <React.Fragment>
       <div className="page-content">
@@ -212,16 +296,43 @@ function Cuisine(props) {
                       Add Cuisine
                     </Button>
                   </div>
-                  {props.get_all_cuisine_data ? (
-                    props.get_all_cuisine_data.length > 0 ? (
-                      <DatatableTablesWorking
-                        products={props.get_all_cuisine_data}
-                        columnData={activeData}
-                        defaultSorted={defaultSorted}
-                        key={props.get_all_cuisine_data?._id}
-                      />
-                    ) : null
-                  ) : null}
+
+                  <div className="text-end">
+                    <input
+                      type="text"
+                      placeholder="Search Cuisine"
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid gray",
+                      }}
+                      onChange={e => handleFilter(e)}
+                    />
+                  </div>
+                  <DataTable
+                    columns={activeData}
+                    data={
+                      props.get_server_side_pagination_cuisine_search_data !=
+                      null
+                        ? props.get_server_side_pagination_cuisine_search_data
+                            ?.data
+                        : props?.get_server_side_pagination_cuisine_data?.data
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_cuisine_search_data !=
+                      null
+                        ? props.get_server_side_pagination_cuisine_search_data
+                            ?.count
+                        : props.get_server_side_pagination_cuisine_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={page => setPage(page)}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -239,23 +350,69 @@ function Cuisine(props) {
                   type="text"
                   className="form-control"
                   id="username"
-                  placeholder="Enter city name"
+                  placeholder="Enter cuisine name"
                   required
                   value={name}
                   onChange={e => setName(e.target.value)}
                 />
               </div>
+              <Row>
+                <div className="col-sm-6 mb-3">
+                  <label className="form-label" htmlFor="fg">
+                    Color Foreground
+                  </label>
+                  <input
+                    type="color"
+                    style={{ width: 100, height: 50 }}
+                    className="form-control"
+                    value={color.fg}
+                    name="fg"
+                    id="fg"
+                    onChange={handleAddColors}
+                  />
+                </div>
+                <div className="col-sm-6 mb-3">
+                  <label className="form-label" htmlFor="bg">
+                    Color Background
+                  </label>
+                  <input
+                    type="color"
+                    style={{ width: 100, height: 50 }}
+                    className="form-control"
+                    value={color.bg}
+                    name="bg"
+                    id="bg"
+                    onChange={handleAddColors}
+                  />
+                </div>
+              </Row>
+
               <div className="mb-3">
-                <label className="form-label" htmlFor="username">
+                <label className="form-label" htmlFor="image">
                   Image
                 </label>
                 <input
                   type="file"
                   className="form-control"
-                  id="resume"
-                  onChange={handleChange}
+                  name="image"
+                  id="image"
+                  onChange={handleAddFile}
                 />
               </div>
+              {addImages?.image && (
+                <Row className="mb-3">
+                  <label className="col-md-2">
+                    <span></span>
+                  </label>
+                  <div className="col-md-10">
+                    <img
+                      src={addImages.image}
+                      alt="preview"
+                      style={{ width: "50%" }}
+                    />
+                  </div>
+                </Row>
+              )}
 
               <div
                 style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
@@ -302,7 +459,7 @@ function Cuisine(props) {
 
         {/* ============ edit modal start=============== */}
         <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-          <ModalHeader toggle={toggleEditModal}>Edit city name</ModalHeader>
+          <ModalHeader toggle={toggleEditModal}>Edit cuisine name</ModalHeader>
           <ModalBody>
             <form className="mt-1" onSubmit={handleEditModal}>
               <div className="mb-3">
@@ -319,6 +476,63 @@ function Cuisine(props) {
                   onChange={e => setEditName(e.target.value)}
                 />
               </div>
+              <Row>
+                <div className="col-sm-6 mb-3">
+                  <label className="form-label" htmlFor="fg">
+                    Color Foreground
+                  </label>
+                  <input
+                    type="color"
+                    style={{ width: 100, height: 50 }}
+                    className="form-control"
+                    value={editColor.fg}
+                    name="fg"
+                    id="fg"
+                    onChange={handleEditColors}
+                  />
+                </div>
+                <div className="col-sm-6 mb-3">
+                  <label className="form-label" htmlFor="bg">
+                    Color Background
+                  </label>
+                  <input
+                    type="color"
+                    style={{ width: 100, height: 50 }}
+                    className="form-control"
+                    value={editColor.bg}
+                    name="bg"
+                    id="bg"
+                    onChange={handleEditColors}
+                  />
+                </div>
+              </Row>
+
+              <div className="mb-3">
+                <label className="form-label" htmlFor="image">
+                  Image
+                </label>
+                <input
+                  type="file"
+                  className="form-control"
+                  name="image"
+                  id="image"
+                  onChange={handleEditFile}
+                />
+              </div>
+              {editImages?.image && (
+                <Row className="mb-3">
+                  <label className="col-md-2">
+                    <span></span>
+                  </label>
+                  <div className="col-md-10">
+                    <img
+                      src={editImages.image}
+                      alt="preview"
+                      style={{ width: "50%" }}
+                    />
+                  </div>
+                </Row>
+              )}
               <div
                 style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
               >
@@ -373,6 +587,9 @@ const mapStateToProps = state => {
     get_all_cuisine_error,
     get_all_cuisine_loading,
     cuisine_delete_loading,
+
+    get_server_side_pagination_cuisine_data,
+    get_server_side_pagination_cuisine_search_data,
   } = state.Restaurant
 
   return {
@@ -380,6 +597,9 @@ const mapStateToProps = state => {
     get_all_cuisine_error,
     get_all_cuisine_loading,
     cuisine_delete_loading,
+
+    get_server_side_pagination_cuisine_data,
+    get_server_side_pagination_cuisine_search_data,
   }
 }
 
@@ -391,5 +611,8 @@ export default withRouter(
     cuisineStatusEditAction,
     cuisineDeleteAction,
     cuisineDeleteFresh,
+    getServerSidePaginationCuisineAction,
+    getServerSidePaginationCuisineSearchAction,
+    getServerSidePaginationSearchCuisineFresh,
   })(Cuisine)
 )
