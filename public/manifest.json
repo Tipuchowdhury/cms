@@ -1,6 +1,6 @@
 {
-  "short_name": "Foodi",
-  "name": "Foodi Backoffice",
+  "short_name": "Foodi Backpanel",
+  "name": "Foodi Admin Backpanel",
   "icons": [
     {
       "src": "favicon.ico",
