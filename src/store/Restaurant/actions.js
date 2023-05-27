@@ -370,7 +370,6 @@ export const branchAddAction = (
           payload: response.data,
           status: "Success",
         })
-        // toast.success("Branch Addedd Successfully")
       })
       .catch(error => {
         dispatch({
@@ -515,7 +514,7 @@ export const branchEditAction = (
           payload: response.data,
           status: "Success",
         })
-        // toast.success("Branch Edited Successfully")
+        toast.success("Branch edited Successfully")
       })
       .catch(error => {
         dispatch({
@@ -523,7 +522,7 @@ export const branchEditAction = (
           payload: error,
           status: "Failed",
         })
-        // toast.error("Branch Edit Failed")
+        toast.error("Branch Edit Failed")
       })
   }
 }
