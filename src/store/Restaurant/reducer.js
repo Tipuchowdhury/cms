@@ -40,6 +40,8 @@ import {
   ADD_RESTAURANT_MENU,
   GET_RESTAURANT_MENU,
   ADD_RESTAURANT_MENU_FRESH,
+  EDIT_RESTAURANT_MENU,
+  EDIT_RESTAURANT_MENU_FRESH,
   EDIT_ADD_ONS_CATEGORY,
   EDIT_ADD_ONS_CATEGORY_FRESH,
   EDIT_ADD_ON_CATEGORY_STATUS,
@@ -140,6 +142,8 @@ const initialState = {
   add_restaurant_menu_data: null,
   add_restaurant_menu_error: null,
   add_restaurant_menu_loading: false,
+
+  edit_restaurant_menu_loading: false,
 
   get_all_menu_data: null,
   get_all_menu_error: null,
@@ -539,6 +543,24 @@ const Restaurant = (state = initialState, action) => {
         get_all_menu_data: action.payload,
         get_all_menu_error: action.error,
         get_all_menu_loading: action.status,
+      }
+      break
+
+    case EDIT_RESTAURANT_MENU:
+      state = {
+        ...state,
+
+        edit_restaurant_menu_loading: action.status,
+        get_all_menu_loading: false,
+
+        // edit_branch_popular_loading: action.status,
+        // get_all_branch_loading: false,
+      }
+      break
+    case EDIT_RESTAURANT_MENU_FRESH:
+      state = {
+        ...state,
+        edit_restaurant_menu_loading: action.status,
       }
       break
     case EDIT_ADD_ONS_CATEGORY:

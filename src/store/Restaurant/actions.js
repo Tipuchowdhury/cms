@@ -39,6 +39,8 @@ import {
   ADD_RESTAURANT_MENU,
   GET_RESTAURANT_MENU,
   ADD_RESTAURANT_MENU_FRESH,
+  EDIT_RESTAURANT_MENU,
+  EDIT_RESTAURANT_MENU_FRESH,
   EDIT_ADD_ONS_CATEGORY,
   EDIT_ADD_ONS_CATEGORY_FRESH,
   EDIT_ADD_ON_CATEGORY_STATUS,
@@ -1527,7 +1529,7 @@ export const addRestaurantMenuAction = (
           return {
             _id: _id,
             menu_item_time_slot_id: item._id,
-            menu_id: val,
+            menu_item_id: val,
           }
         })
       : []
@@ -1617,6 +1619,124 @@ export const addRestaurantMenuAddFresh = () => {
     dispatch({
       type: "ADD_RESTAURANT_MENU_FRESH",
       payload: null,
+      status: false,
+    })
+  }
+}
+
+export const editRestaurantMenuAction = (
+  val,
+  info,
+  isChecked,
+  variations,
+  menuTiming
+) => {
+  // console.log(val, category, isChecked, addOns)
+  // console.log(category, isChecked)
+
+  console.log(val, info, isChecked)
+
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Put"
+
+  const variationData =
+    isChecked && variations?.length > 0
+      ? variations.map(item => {
+          const _id = uuidv4()
+          return {
+            ...item,
+            add_on_categories: item.add_on_categories.map(addon_cats => {
+              return {
+                ...addon_cats,
+                add_ons: addon_cats.add_ons.map(add_ons => {
+                  const _addon_id = uuidv4()
+                  return {
+                    ...add_ons,
+                    _id: _addon_id,
+                    add_ons_name: add_ons.add_on_name,
+                    add_ons_price: add_ons.add_on_price,
+                    addoncat_id: addon_cats.add_on_category_id,
+                    variation_and_add_on_category_id: _id,
+                  }
+                }),
+              }
+            }),
+            _id: _id,
+            menu_id: val,
+          }
+        })
+      : []
+
+  const menuTimingData =
+    menuTiming.length > 0
+      ? menuTiming.map(item => {
+          const _id = uuidv4()
+          return {
+            _id: _id,
+            menu_item_time_slot_id: item._id,
+            menu_item_id: val,
+          }
+        })
+      : []
+
+  let dataObject = {
+    _id: val,
+    menu_name: info.name,
+    menu_price: Number(info.menu_price),
+    pickup_menu_price: Number(info.pickup_menu_price),
+    menu_group_id: info.restaurant,
+    variation_group_name: info.Variation_group_name,
+    variation_group_desc: info.Variation_grp_desc,
+    check_add_ons: isChecked === true ? 1 : 0,
+    is_popular: JSON.parse(info.is_popular),
+    description: info.menu_description,
+    vat: Number(info.vat),
+    sd: Number(info.sd),
+    restaurant_id: info.restaurant,
+    category_id: info.category,
+    recipe_time: Number(info.recipe_time),
+    is_delivery: JSON.parse(info.is_delivery),
+    is_pickup: JSON.parse(info.is_pickup),
+    is_dine: JSON.parse(info.is_dine),
+    variations: variationData,
+    menu_available_times: menuTimingData,
+    image: info.image,
+    slug: "test",
+    is_active: true,
+  }
+  const formData = convertToFormData(dataObject)
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "multipart/form-data",
+      "Access-Control-Allow-Origin": "*",
+    }
+
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: "EDIT_RESTAURANT_MENU",
+          payload: response.data,
+          status: "Success",
+        })
+        toast.success("Menu Edited Successfully")
+      })
+      .catch(error => {
+        dispatch({
+          type: "EDIT_RESTAURANT_MENU",
+          error: error,
+          status: "Failed",
+        })
+        toast.error("Menu Edit Failed")
+      })
+  }
+}
+
+export const editRestaurantMenuFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: "EDIT_RESTAURANT_MENU_FRESH",
+      //payload: null,
       status: false,
     })
   }
