@@ -28,6 +28,7 @@ export const addNotificationAction = (id, data, selectedUser) => {
           return {
             _id: val,
             customer_id: item.value,
+            device_id: item.device_id,
             notification_id: id,
           }
         })
@@ -126,6 +127,7 @@ export const notificationEditAction = (id, data, selectedUser) => {
           return {
             _id: val,
             customer_id: item.value,
+            device_id: item.device_id,
             notification_id: id,
           }
         })
