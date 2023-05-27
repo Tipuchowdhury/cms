@@ -71,6 +71,10 @@ import {
   SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
   GET_ZONE_BY_ID,
   GET_ZONE_BY_ID_FRESH,
+  DELETE_RESTAURANT_MENU,
+  DELETE_RESTAURANT_MENU_FRESH,
+  RESTAURANT_MENU_STATUS_EDIT,
+  RESTAURANT_MENU_STATUS_EDIT_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -1182,6 +1186,8 @@ export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
 export const addOnCategoryStatusEditAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Put"
 
+  data.is_active = !data.is_active
+
   const formData = data
   return dispatch => {
     const headers = {
@@ -1611,6 +1617,84 @@ export const getAllRestaurantMenuItemAction = () => {
           status: "Failed",
         })
       })
+  }
+}
+
+export const restaurantMenuItemDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Delete"
+  console.log(id)
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+
+    axios
+      .delete(url, { params: { id: id } }, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: DELETE_RESTAURANT_MENU,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: DELETE_RESTAURANT_MENU,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const restaurantMenuItemDeleteFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: DELETE_RESTAURANT_MENU_FRESH,
+      status: false,
+    })
+}
+
+export const restaurantMenuStatusEditAction = data => {
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Put"
+  let dataObject = { ...data }
+
+  const formData = convertToFormData(dataObject)
+  // console.log(formData);
+  return dispatch => {
+    const headers = {
+      // "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: RESTAURANT_MENU_STATUS_EDIT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: RESTAURANT_MENU_STATUS_EDIT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const restaurantMenuStatusEditFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: RESTAURANT_MENU_STATUS_EDIT_FRESH,
+      payload: null,
+      status: false,
+    })
   }
 }
 

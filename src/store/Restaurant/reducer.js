@@ -71,6 +71,10 @@ import {
   DELETE_MENU_TIME_SLOT_FRESH,
   GET_ZONE_BY_ID,
   GET_ZONE_BY_ID_FRESH,
+  DELETE_RESTAURANT_MENU,
+  DELETE_RESTAURANT_MENU_FRESH,
+  RESTAURANT_MENU_STATUS_EDIT,
+  RESTAURANT_MENU_STATUS_EDIT_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -142,6 +146,11 @@ const initialState = {
   add_restaurant_menu_data: null,
   add_restaurant_menu_error: null,
   add_restaurant_menu_loading: false,
+
+  restaurant_menu_delete_loading: false,
+
+  restaurant_menu_status_edit_data: null,
+  restaurant_menu_status_edit_loading: false,
 
   edit_restaurant_menu_loading: false,
 
@@ -543,6 +552,37 @@ const Restaurant = (state = initialState, action) => {
         get_all_menu_data: action.payload,
         get_all_menu_error: action.error,
         get_all_menu_loading: action.status,
+      }
+      break
+
+    case DELETE_RESTAURANT_MENU:
+      state = {
+        ...state,
+        restaurant_menu_delete_loading: action.status,
+        get_all_menu_loading: false,
+      }
+      break
+    case DELETE_RESTAURANT_MENU_FRESH:
+      state = {
+        ...state,
+        restaurant_menu_delete_loading: action.status,
+        get_all_menu_loading: false,
+      }
+
+    case RESTAURANT_MENU_STATUS_EDIT:
+      state = {
+        ...state,
+        restaurant_menu_status_edit_data: action.payload,
+        restaurant_menu_status_edit_loading: action.status,
+        get_all_campaign_loading: false,
+      }
+      break
+
+    case RESTAURANT_MENU_STATUS_EDIT_FRESH:
+      state = {
+        ...state,
+        restaurant_menu_status_edit_loading: action.status,
+        get_all_menu_loading: false,
       }
       break
 
