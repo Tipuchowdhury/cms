@@ -461,8 +461,39 @@ export const branchEditAction = (
     parent_restaurant_id: zoneInfo.restaurant,
     working_hours: all_working_hours,
     cuisines: data,
+    share_link: zoneInfo.link,
+    pickup_time: JSON.parse(zoneInfo.pickup_time),
     delivery_charge: zoneInfo.delivery_time,
   }
+
+  // const dataObject = {
+  //   name: zoneInfo.name,
+  //   _id: id,
+  //   email: zoneInfo.email,
+  //   address: zoneInfo.address,
+  //   popularity_sort_value: JSON.parse(zoneInfo.popularity_sort_value),
+  //   price_range: zoneInfo.price_range,
+  //   image: file,
+  //   cover_image: coverFile,
+  //   slug: currentPath,
+  //   zonal_admin: zoneInfo.zonal_admin,
+  //   is_take_pre_order: JSON.parse(zoneInfo.is_take_pre_order),
+  //   phone_number: zoneInfo.phone_number,
+  //   is_veg: JSON.parse(zoneInfo.is_veg),
+  //   is_popular: JSON.parse(zoneInfo.is_popular),
+  //   commission: JSON.parse(zoneInfo.commission),
+  //   min_order_value: zoneInfo.minimum_order_value,
+  //   delivery_time: JSON.parse(zoneInfo.delivery_time),
+  //   parent_restaurant_id: zoneInfo.restaurant,
+  //   working_hours: all_working_hours,
+  //   cuisines: data,
+  //   share_link: zoneInfo.link,
+  //   pickup_time: JSON.parse(zoneInfo.pickup_time),
+  //   is_delivery: JSON.parse(zoneInfo.is_delivery),
+  //   is_pickup: JSON.parse(zoneInfo.is_pickup),
+  //   is_dine: JSON.parse(zoneInfo.is_dine),
+  //   delivery_charge: zoneInfo.delivery_time,
+  // }
 
   const formData = convertToFormData(dataObject)
 
