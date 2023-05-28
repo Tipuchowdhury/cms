@@ -141,6 +141,12 @@ function AddCoupon(props) {
   const [selectedCategory, setSelectedCategory] = useState(
     category_data_edit ? category_data_edit : ""
   )
+
+  useEffect(() => {
+    if (props.get_all_category_loading === "Success")
+      setSelectedCategory(category_data_edit)
+  }, [props.get_all_category_loading])
+
   const handleSelectCategory = e => {
     setSelectedCategory(e)
   }
@@ -152,6 +158,8 @@ function AddCoupon(props) {
       value: item._id,
     }))
   }
+
+  // console.log(props.get_all_category_data)
 
   //select multiple cuisine
   const common_cuisine = props?.get_all_cuisine_data?.filter(elem =>
@@ -167,6 +175,12 @@ function AddCoupon(props) {
   const [selectedCuisine, setSelectedCuisine] = useState(
     cuisine_data_edit ? cuisine_data_edit : ""
   )
+
+  useEffect(() => {
+    if (props.get_all_cuisine_loading === "Success")
+      setSelectedCuisine(cuisine_data_edit)
+  }, [props.get_all_cuisine_loading])
+
   const handleSelectCuisine = e => {
     setSelectedCuisine(e)
   }
@@ -191,7 +205,7 @@ function AddCoupon(props) {
   const user_data_edit = common_user
     ? common_user?.map((item, key) => {
         return {
-          label: `${item.first_name} ${item.last_name}`,
+          label: `${item.firstName} ${item.lastName}`,
           value: item._id,
         }
       })
@@ -199,6 +213,12 @@ function AddCoupon(props) {
   const [selectedUser, setSelectedUser] = useState(
     user_data_edit ? user_data_edit : ""
   )
+
+  useEffect(() => {
+    if (props.get_all_customer_loading === "Success")
+      setSelectedUser(user_data_edit)
+  }, [props.get_all_customer_loading])
+
   const handleSelectUser = e => {
     setSelectedUser(e)
   }
@@ -206,7 +226,7 @@ function AddCoupon(props) {
   let userData = undefined
   if (props.get_all_customer_data?.length > 0) {
     userData = props.get_all_customer_data?.map((item, key) => ({
-      label: `${item.first_name} ${item.last_name}`,
+      label: `${item.firstName} ${item.lastName}`,
       value: item._id,
     }))
   }
@@ -227,6 +247,12 @@ function AddCoupon(props) {
   const [selectedZone, setSelectedZone] = useState(
     zone_data_edit ? zone_data_edit : ""
   )
+
+  useEffect(() => {
+    if (props.get_all_zone_loading === "Success")
+      setSelectedZone(zone_data_edit)
+  }, [props.get_all_zone_loading])
+
   const handleSelectZone = e => {
     setSelectedZone(e)
   }
@@ -257,6 +283,12 @@ function AddCoupon(props) {
   const [selectedMenuItem, setSelectedMenuItem] = useState(
     menu_data_edit ? menu_data_edit : ""
   )
+
+  useEffect(() => {
+    if (props.get_all_menu_loading === "Success")
+      setSelectedMenuItem(menu_data_edit)
+  }, [props.get_all_menu_loading])
+
   const handleSelectMenu = e => {
     setSelectedMenuItem(e)
   }
@@ -288,6 +320,12 @@ function AddCoupon(props) {
   const [selectedSubType, setSelectedSubType] = useState(
     subscription_type_data_edit ? subscription_type_data_edit : ""
   )
+
+  useEffect(() => {
+    if (props.get_all_subscription_type_loading === "Success")
+      setSelectedSubType(subscription_type_data_edit)
+  }, [props.get_all_subscription_type_loading])
+
   const handleSelectSubType = e => {
     setSelectedSubType(e)
   }
@@ -415,7 +453,7 @@ function AddCoupon(props) {
     setCouponInfo({ ...couponInfo, [name]: value })
   }
 
-  console.log(disabledDiscountAmount)
+  // console.log(disabledDiscountAmount)
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -457,8 +495,6 @@ function AddCoupon(props) {
 
   // console.log(props.add_coupon_loading)
   useEffect(() => {
-    props.get_all_branch_data
-
     if (props.get_all_branch_loading == false) {
       props.getAllBranchAction()
     }
@@ -511,7 +547,6 @@ function AddCoupon(props) {
     props.get_all_subscription_type_loading,
     props.get_all_category_loading,
     props.get_all_menu_loading,
-    props.get_all_branch_data,
   ])
 
   // console.log(props.get_all_branch_data)
