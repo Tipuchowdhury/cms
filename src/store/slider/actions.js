@@ -11,6 +11,7 @@ import {
   SLIDER_STATUS_EDIT_FRESH,
 } from "./actionTypes"
 import axios from "axios"
+import { convertToFormData } from "helpers/functions"
 import { v4 as uuidv4 } from "uuid"
 
 // token
@@ -33,7 +34,7 @@ export const addSliderAction = (addData, selectedRestaurant) => {
         })
       : null
 
-  let formData = {
+  let objectData = {
     _id: slider_id,
     name: addData.name,
     start_date: addData.start_date,
@@ -46,13 +47,15 @@ export const addSliderAction = (addData, selectedRestaurant) => {
     restaurants: data,
   }
 
+  const formData = convertToFormData(objectData)
+
   // console.log(formData);
 
   return dispatch => {
     // console.log("-in the dispatch----")
 
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -138,7 +141,7 @@ export const promotionUpdateAction = (editData, selectedRestaurant) => {
           }
         })
       : null
-  const formData = {
+  const objectData = {
     _id: editData._id,
     name: editData.name,
     start_date: editData.start_date,
@@ -150,10 +153,12 @@ export const promotionUpdateAction = (editData, selectedRestaurant) => {
     is_active: editData.is_active,
     restaurants: data,
   }
+
+  const formData = convertToFormData(objectData)
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
-
+      // "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
     axios
@@ -186,11 +191,11 @@ export const promotionUpdateFresh = () => {
 
 export const promotionStatusUpdateAction = editData => {
   var url = process.env.REACT_APP_LOCALHOST + "/Promotion/Put"
-  const formData = editData
-
+  const objectData = editData
+  const formData = convertToFormData(objectData)
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
     axios

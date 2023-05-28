@@ -40,7 +40,8 @@ function AddNotification(props) {
   const user_data_edit = common_users
     ? common_users?.map((item, key) => {
         return {
-          label: `${item.first_name} ${item.last_name}`,
+          label: `${item.firstName} ${item.lastName}`,
+          device_id: `${item.device_id ?? ""}`,
           value: item._id,
         }
       })
@@ -52,11 +53,11 @@ function AddNotification(props) {
     setSelectedUser(e)
   }
 
-  // TODO: Get Customers
   let userData = undefined
   if (props.get_all_customer_data?.length > 0) {
     userData = props.get_all_customer_data?.map((item, key) => ({
-      label: `${item.first_name} ${item.last_name}`,
+      label: `${item.firstName} ${item.lastName}`,
+      device_id: `${item.device_id ?? ""}`,
       value: item._id,
     }))
   }

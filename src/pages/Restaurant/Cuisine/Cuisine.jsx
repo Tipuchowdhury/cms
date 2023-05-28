@@ -208,6 +208,9 @@ function Cuisine(props) {
     props.addCuisineAction(id, name, file, color)
     toggle()
     setName("")
+    setFile("")
+    setColor({ ...color, fg: "#ffffff", bg: "#ffffff" })
+    setAddImages({ ...addImages, image: "" })
   }
 
   const handleEditModal = e => {

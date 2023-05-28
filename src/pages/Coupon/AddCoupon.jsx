@@ -97,7 +97,7 @@ function AddCoupon(props) {
   }
   //select multiple branch
   const common_branches = props?.get_all_branch_data?.filter(elem =>
-    location?.state?.restaurants?.find(({ res_id }) => elem._id === res_id)
+    location?.state?.branches?.find(({ branch_id }) => elem._id === branch_id)
   )
 
   const branch_data_edit = common_branches
@@ -108,6 +108,12 @@ function AddCoupon(props) {
   const [selectedBranch, setSelectedBranch] = useState(
     branch_data_edit ? branch_data_edit : ""
   )
+
+  useEffect(() => {
+    if (props.get_all_branch_loading === "Success")
+      setSelectedBranch(branch_data_edit)
+  }, [props.get_all_branch_loading])
+
   const handleSelectBranch = e => {
     setSelectedBranch(e)
   }
@@ -135,6 +141,12 @@ function AddCoupon(props) {
   const [selectedCategory, setSelectedCategory] = useState(
     category_data_edit ? category_data_edit : ""
   )
+
+  useEffect(() => {
+    if (props.get_all_category_loading === "Success")
+      setSelectedCategory(category_data_edit)
+  }, [props.get_all_category_loading])
+
   const handleSelectCategory = e => {
     setSelectedCategory(e)
   }
@@ -146,6 +158,8 @@ function AddCoupon(props) {
       value: item._id,
     }))
   }
+
+  // console.log(props.get_all_category_data)
 
   //select multiple cuisine
   const common_cuisine = props?.get_all_cuisine_data?.filter(elem =>
@@ -161,6 +175,12 @@ function AddCoupon(props) {
   const [selectedCuisine, setSelectedCuisine] = useState(
     cuisine_data_edit ? cuisine_data_edit : ""
   )
+
+  useEffect(() => {
+    if (props.get_all_cuisine_loading === "Success")
+      setSelectedCuisine(cuisine_data_edit)
+  }, [props.get_all_cuisine_loading])
+
   const handleSelectCuisine = e => {
     setSelectedCuisine(e)
   }
@@ -185,7 +205,7 @@ function AddCoupon(props) {
   const user_data_edit = common_user
     ? common_user?.map((item, key) => {
         return {
-          label: `${item.first_name} ${item.last_name}`,
+          label: `${item.firstName} ${item.lastName}`,
           value: item._id,
         }
       })
@@ -193,6 +213,12 @@ function AddCoupon(props) {
   const [selectedUser, setSelectedUser] = useState(
     user_data_edit ? user_data_edit : ""
   )
+
+  useEffect(() => {
+    if (props.get_all_customer_loading === "Success")
+      setSelectedUser(user_data_edit)
+  }, [props.get_all_customer_loading])
+
   const handleSelectUser = e => {
     setSelectedUser(e)
   }
@@ -200,7 +226,7 @@ function AddCoupon(props) {
   let userData = undefined
   if (props.get_all_customer_data?.length > 0) {
     userData = props.get_all_customer_data?.map((item, key) => ({
-      label: `${item.first_name} ${item.last_name}`,
+      label: `${item.firstName} ${item.lastName}`,
       value: item._id,
     }))
   }
@@ -221,6 +247,12 @@ function AddCoupon(props) {
   const [selectedZone, setSelectedZone] = useState(
     zone_data_edit ? zone_data_edit : ""
   )
+
+  useEffect(() => {
+    if (props.get_all_zone_loading === "Success")
+      setSelectedZone(zone_data_edit)
+  }, [props.get_all_zone_loading])
+
   const handleSelectZone = e => {
     setSelectedZone(e)
   }
@@ -251,6 +283,12 @@ function AddCoupon(props) {
   const [selectedMenuItem, setSelectedMenuItem] = useState(
     menu_data_edit ? menu_data_edit : ""
   )
+
+  useEffect(() => {
+    if (props.get_all_menu_loading === "Success")
+      setSelectedMenuItem(menu_data_edit)
+  }, [props.get_all_menu_loading])
+
   const handleSelectMenu = e => {
     setSelectedMenuItem(e)
   }
@@ -282,6 +320,12 @@ function AddCoupon(props) {
   const [selectedSubType, setSelectedSubType] = useState(
     subscription_type_data_edit ? subscription_type_data_edit : ""
   )
+
+  useEffect(() => {
+    if (props.get_all_subscription_type_loading === "Success")
+      setSelectedSubType(subscription_type_data_edit)
+  }, [props.get_all_subscription_type_loading])
+
   const handleSelectSubType = e => {
     setSelectedSubType(e)
   }
@@ -304,13 +348,13 @@ function AddCoupon(props) {
     description: location.state ? location.state.description : "",
     coupon_type_id: location.state ? location.state.coupon_type_id : "",
     coupon_type_name: location.state ? location.state.coupon_type_name : "",
-    is_gradual: location.state ? location.state.is_gradual.toString() : "",
+    is_gradual: location.state ? location.state.is_gradual.toString() : "false",
     use_limit: location.state ? location.state.use_limit : 0,
     is_auto_apply: location.state
       ? location.state.is_auto_apply.toString()
-      : "",
+      : "false",
     daily_use_limit: location.state ? location.state.daily_use_limit : 0,
-    is_percent: location.state ? location.state.is_percent.toString() : "",
+    is_percent: location.state ? location.state.is_percent.toString() : "true",
     is_active: location.state ? location.state.is_active : true,
     discount_in_amount: location.state ? location.state.discount_in_amount : 0,
     discount_in_percent: location.state
@@ -400,16 +444,16 @@ function AddCoupon(props) {
     value = e.target.value
     console.log(name, value)
     name === "name" ? (value = e.target.value.toUpperCase()) : ""
-    if (name === "is_percent" && value === "false") {
-      setDisabledDiscountAmount(true)
-    }
-    if (name === "is_percent" && value === "true") {
-      setDisabledDiscountAmount(false)
-    }
+    // if (name === "is_percent" && value === "false") {
+    //   setDisabledDiscountAmount(true)
+    // }
+    // if (name === "is_percent" && value === "true") {
+    //   setDisabledDiscountAmount(false)
+    // }
     setCouponInfo({ ...couponInfo, [name]: value })
   }
 
-  console.log(disabledDiscountAmount)
+  // console.log(disabledDiscountAmount)
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -552,7 +596,7 @@ function AddCoupon(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      Name
+                      Name <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <input
@@ -573,7 +617,7 @@ function AddCoupon(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      Type
+                      Type <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <Select
@@ -601,7 +645,6 @@ function AddCoupon(props) {
                         name="description"
                         onChange={handleInputs}
                         value={couponInfo.description ?? ""}
-                        required
                       ></textarea>
                     </div>
                   </Row>
@@ -640,7 +683,7 @@ function AddCoupon(props) {
                         htmlFor="example-text-input"
                         className="col-md-2 col-form-label"
                       >
-                        Branches
+                        Branches <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-10">
                         <Select
@@ -648,6 +691,7 @@ function AddCoupon(props) {
                           onChange={handleSelectBranch}
                           options={branchDate}
                           isMulti={true}
+                          required
                         />
                       </div>
                     </Row>
@@ -661,7 +705,7 @@ function AddCoupon(props) {
                         htmlFor="example-text-input"
                         className="col-md-2 col-form-label"
                       >
-                        Categories
+                        Categories <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-10">
                         <Select
@@ -669,6 +713,7 @@ function AddCoupon(props) {
                           onChange={handleSelectCategory}
                           options={categoryData}
                           isMulti={true}
+                          required
                         />
                       </div>
                     </Row>
@@ -682,7 +727,7 @@ function AddCoupon(props) {
                         htmlFor="example-text-input"
                         className="col-md-2 col-form-label"
                       >
-                        Cuisines
+                        Cuisines <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-10">
                         <Select
@@ -690,6 +735,7 @@ function AddCoupon(props) {
                           onChange={handleSelectCuisine}
                           options={cuisineData}
                           isMulti={true}
+                          required
                         />
                       </div>
                     </Row>
@@ -703,7 +749,7 @@ function AddCoupon(props) {
                         htmlFor="example-text-input"
                         className="col-md-2 col-form-label"
                       >
-                        Users
+                        Users <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-10">
                         <Select
@@ -711,6 +757,7 @@ function AddCoupon(props) {
                           onChange={handleSelectUser}
                           options={userData}
                           isMulti={true}
+                          required
                         />
                       </div>
                     </Row>
@@ -724,7 +771,7 @@ function AddCoupon(props) {
                         htmlFor="example-text-input"
                         className="col-md-2 col-form-label"
                       >
-                        Zones
+                        Zones <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-10">
                         <Select
@@ -732,6 +779,7 @@ function AddCoupon(props) {
                           onChange={handleSelectZone}
                           options={zoneData}
                           isMulti={true}
+                          required
                         />
                       </div>
                     </Row>
@@ -745,7 +793,7 @@ function AddCoupon(props) {
                         htmlFor="example-text-input"
                         className="col-md-2 col-form-label"
                       >
-                        Menu Item
+                        Menu Item <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-10">
                         <Select
@@ -753,6 +801,7 @@ function AddCoupon(props) {
                           onChange={handleSelectMenu}
                           options={menuData}
                           isMulti={true}
+                          required
                         />
                       </div>
                     </Row>
@@ -766,7 +815,7 @@ function AddCoupon(props) {
                         htmlFor="example-text-input"
                         className="col-md-2 col-form-label"
                       >
-                        Subscription Type
+                        Subscription Type <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-10">
                         <Select
@@ -774,6 +823,7 @@ function AddCoupon(props) {
                           onChange={handleSelectSubType}
                           options={subTypeData}
                           isMulti={true}
+                          required
                         />
                       </div>
                     </Row>
@@ -841,7 +891,6 @@ function AddCoupon(props) {
                         name="use_limit"
                         onChange={handleInputs}
                         value={couponInfo.use_limit ?? ""}
-                        required
                       />
                     </div>
                   </Row>
@@ -851,7 +900,7 @@ function AddCoupon(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      Daily Use Limit
+                      Daily Use Limit <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <input
@@ -862,226 +911,6 @@ function AddCoupon(props) {
                         name="daily_use_limit"
                         onChange={handleInputs}
                         value={couponInfo.daily_use_limit ?? ""}
-                        required
-                      />
-                    </div>
-                  </Row>
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Discount Type
-                    </label>
-                    <div className="col-md-10">
-                      <div className="btn-group" role="group">
-                        <input
-                          type="radio"
-                          className="btn-check"
-                          id="is_percent"
-                          name="is_percent"
-                          value="true"
-                          onChange={handleInputs}
-                          checked={couponInfo.is_percent == "true"}
-                        />
-                        <label
-                          className="btn btn-outline-secondary"
-                          htmlFor="is_percent"
-                        >
-                          Percent
-                        </label>
-
-                        <input
-                          type="radio"
-                          className="btn-check"
-                          name="is_percent"
-                          value="false"
-                          onChange={handleInputs}
-                          id="is_percent1"
-                          checked={couponInfo.is_percent == "false"}
-                        />
-                        <label
-                          className="btn btn-outline-secondary"
-                          htmlFor="is_percent1"
-                        >
-                          Amount
-                        </label>
-                      </div>
-                    </div>
-                  </Row>
-
-                  {couponInfo?.is_percent == "false" ? (
-                    <Row className="mb-3">
-                      <label
-                        htmlFor="example-text-input"
-                        className="col-md-2 col-form-label"
-                      >
-                        Discount
-                      </label>
-                      <div className="col-md-10">
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="discount_in_amount"
-                          placeholder="Enter Discount"
-                          name="discount_in_amount"
-                          onChange={handleInputs}
-                          value={couponInfo.discount_in_amount ?? ""}
-                          required
-                        />
-                      </div>
-                    </Row>
-                  ) : (
-                    ""
-                  )}
-
-                  {couponInfo?.is_percent == "true" ? (
-                    <Row className="mb-3">
-                      <label
-                        htmlFor="example-text-input"
-                        className="col-md-2 col-form-label"
-                      >
-                        Discount (%)
-                      </label>
-                      <div className="col-md-10">
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="discount_in_percent"
-                          placeholder="Enter Discount in Percent"
-                          name="discount_in_percent"
-                          onChange={handleInputs}
-                          value={couponInfo.discount_in_percent ?? ""}
-                          required
-                        />
-                      </div>
-                    </Row>
-                  ) : (
-                    ""
-                  )}
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Minimum Order Amount
-                    </label>
-                    <div className="col-md-10">
-                      <input
-                        type="number"
-                        className="form-control"
-                        id="minimum_order_amount"
-                        placeholder="Minimum Order Amount"
-                        name="minimum_order_amount"
-                        onChange={handleInputs}
-                        value={couponInfo.minimum_order_amount ?? ""}
-                        required
-                      />
-                    </div>
-                  </Row>
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Maximum Discount Amount
-                    </label>
-                    <div className="col-md-10">
-                      <input
-                        type="number"
-                        className="form-control"
-                        id="maximum_discount_amount"
-                        placeholder="Maximum Discount Amount"
-                        name="maximum_discount_amount"
-                        onChange={handleInputs}
-                        value={couponInfo.maximum_discount_amount ?? ""}
-                        disabled={disabledDiscountAmount ? true : false}
-                      />
-                    </div>
-                  </Row>
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Valid Time Start
-                    </label>
-                    <div className="col-md-10">
-                      <input
-                        type="time"
-                        className="form-control"
-                        id="valid_time_in_a_day_start"
-                        placeholder="Valid Time Start"
-                        name="valid_time_in_a_day_start"
-                        onChange={handleInputs}
-                        value={couponInfo.valid_time_in_a_day_start ?? ""}
-                        required
-                      />
-                    </div>
-                  </Row>
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Valid Time End
-                    </label>
-                    <div className="col-md-10">
-                      <input
-                        type="time"
-                        className="form-control"
-                        id="valid_time_in_a_day_end"
-                        placeholder="Valid Time End"
-                        name="valid_time_in_a_day_end"
-                        onChange={handleInputs}
-                        value={couponInfo.valid_time_in_a_day_end ?? ""}
-                        required
-                      />
-                    </div>
-                  </Row>
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Start Time
-                    </label>
-                    <div className="col-md-10">
-                      <input
-                        type="datetime-local"
-                        id="start_time"
-                        className="form-control"
-                        name="start_time"
-                        placeholder="Start Time"
-                        value={couponInfo.start_time.slice(0, 16)}
-                        onChange={e => handleTimeChange(e)}
-                        required
-                      />
-                    </div>
-                  </Row>
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      End Time
-                    </label>
-                    <div className="col-md-10">
-                      <input
-                        type="datetime-local"
-                        id="end_time"
-                        className="form-control"
-                        name="end_time"
-                        placeholder="End Time"
-                        value={couponInfo.end_time.slice(0, 16)}
-                        onChange={e => handleTimeChange(e)}
                         required
                       />
                     </div>
@@ -1153,7 +982,7 @@ function AddCoupon(props) {
                           <div data-repeater-item className="row">
                             <div className="mb-3 col-lg-3">
                               <label className="form-label" htmlFor="sequence">
-                                Sequence
+                                Sequence <span className="text-danger">*</span>
                               </label>
                               <input
                                 type="number"
@@ -1163,6 +992,7 @@ function AddCoupon(props) {
                                 placeholder="Sequence"
                                 value={row.sequence}
                                 onChange={e => handleGradualChange(e, idx)}
+                                required
                               />
                             </div>
 
@@ -1171,7 +1001,8 @@ function AddCoupon(props) {
                                 className="form-label"
                                 htmlFor="discount_percent"
                               >
-                                Discount (%)
+                                Discount (%){" "}
+                                <span className="text-danger">*</span>
                               </label>
                               <input
                                 type="number"
@@ -1182,6 +1013,7 @@ function AddCoupon(props) {
                                 placeholder="Discount"
                                 value={row.discount_percent}
                                 onChange={e => handleGradualChange(e, idx)}
+                                required
                               />
                             </div>
 
@@ -1217,6 +1049,249 @@ function AddCoupon(props) {
                   ) : (
                     ""
                   )}
+
+                  {couponInfo?.is_gradual == "false" ? (
+                    <>
+                      <Row className="mb-3">
+                        <label
+                          htmlFor="example-text-input"
+                          className="col-md-2 col-form-label"
+                        >
+                          Discount Type
+                        </label>
+                        <div className="col-md-10">
+                          <div className="btn-group" role="group">
+                            <input
+                              type="radio"
+                              className="btn-check"
+                              id="is_percent"
+                              name="is_percent"
+                              value="true"
+                              onChange={handleInputs}
+                              checked={couponInfo.is_percent == "true"}
+                            />
+                            <label
+                              className="btn btn-outline-secondary"
+                              htmlFor="is_percent"
+                            >
+                              Percent
+                            </label>
+
+                            <input
+                              type="radio"
+                              className="btn-check"
+                              name="is_percent"
+                              value="false"
+                              onChange={handleInputs}
+                              id="is_percent1"
+                              checked={couponInfo.is_percent == "false"}
+                            />
+                            <label
+                              className="btn btn-outline-secondary"
+                              htmlFor="is_percent1"
+                            >
+                              Amount
+                            </label>
+                          </div>
+                        </div>
+                      </Row>
+
+                      {couponInfo?.is_percent == "false" ? (
+                        <Row className="mb-3">
+                          <label
+                            htmlFor="example-text-input"
+                            className="col-md-2 col-form-label"
+                          >
+                            Discount <span className="text-danger">*</span>
+                          </label>
+                          <div className="col-md-10">
+                            <input
+                              type="number"
+                              className="form-control"
+                              id="discount_in_amount"
+                              placeholder="Enter Discount"
+                              name="discount_in_amount"
+                              onChange={handleInputs}
+                              value={couponInfo.discount_in_amount ?? ""}
+                              required
+                            />
+                          </div>
+                        </Row>
+                      ) : (
+                        ""
+                      )}
+
+                      {couponInfo?.is_percent == "true" ? (
+                        <Row className="mb-3">
+                          <label
+                            htmlFor="example-text-input"
+                            className="col-md-2 col-form-label"
+                          >
+                            Discount (%) <span className="text-danger">*</span>
+                          </label>
+                          <div className="col-md-10">
+                            <input
+                              type="number"
+                              className="form-control"
+                              id="discount_in_percent"
+                              placeholder="Enter Discount in Percent"
+                              name="discount_in_percent"
+                              onChange={handleInputs}
+                              value={couponInfo.discount_in_percent ?? ""}
+                              required
+                            />
+                          </div>
+                        </Row>
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  ) : (
+                    ""
+                  )}
+
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="example-text-input"
+                      className="col-md-2 col-form-label"
+                    >
+                      Minimum Order Amount{" "}
+                      <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="minimum_order_amount"
+                        placeholder="Minimum Order Amount"
+                        name="minimum_order_amount"
+                        onChange={handleInputs}
+                        value={couponInfo.minimum_order_amount ?? ""}
+                        required
+                      />
+                    </div>
+                  </Row>
+
+                  {couponInfo?.is_gradual == "true" ||
+                  couponInfo?.is_percent == "false" ? (
+                    <Row className="mb-3">
+                      <label
+                        htmlFor="example-text-input"
+                        className="col-md-2 col-form-label"
+                      >
+                        Maximum Discount Amount{" "}
+                        <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-10">
+                        <input
+                          type="number"
+                          className="form-control"
+                          id="maximum_discount_amount"
+                          placeholder="Maximum Discount Amount"
+                          name="maximum_discount_amount"
+                          onChange={handleInputs}
+                          value={couponInfo.maximum_discount_amount ?? ""}
+                          required
+                        />
+                      </div>
+                    </Row>
+                  ) : (
+                    ""
+                  )}
+
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="example-text-input"
+                      className="col-md-2 col-form-label"
+                    >
+                      Valid Time Start
+                      {couponInfo.daily_use_limit > 0 ? (
+                        <span className="text-danger"> *</span>
+                      ) : (
+                        ""
+                      )}{" "}
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="time"
+                        className="form-control"
+                        id="valid_time_in_a_day_start"
+                        placeholder="Valid Time Start"
+                        name="valid_time_in_a_day_start"
+                        onChange={handleInputs}
+                        value={couponInfo.valid_time_in_a_day_start ?? ""}
+                        required={couponInfo.daily_use_limit > 0 ? true : false}
+                      />
+                    </div>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="example-text-input"
+                      className="col-md-2 col-form-label"
+                    >
+                      Valid Time End
+                      {couponInfo.daily_use_limit > 0 ? (
+                        <span className="text-danger"> *</span>
+                      ) : (
+                        ""
+                      )}{" "}
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="time"
+                        className="form-control"
+                        id="valid_time_in_a_day_end"
+                        placeholder="Valid Time End"
+                        name="valid_time_in_a_day_end"
+                        onChange={handleInputs}
+                        value={couponInfo.valid_time_in_a_day_end ?? ""}
+                        required={couponInfo.daily_use_limit > 0 ? true : false}
+                      />
+                    </div>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="example-text-input"
+                      className="col-md-2 col-form-label"
+                    >
+                      Start Time <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="datetime-local"
+                        id="start_time"
+                        className="form-control"
+                        name="start_time"
+                        placeholder="Start Time"
+                        value={couponInfo.start_time.slice(0, 16)}
+                        onChange={e => handleTimeChange(e)}
+                        required
+                      />
+                    </div>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="example-text-input"
+                      className="col-md-2 col-form-label"
+                    >
+                      End Time <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="datetime-local"
+                        id="end_time"
+                        className="form-control"
+                        name="end_time"
+                        placeholder="End Time"
+                        value={couponInfo.end_time.slice(0, 16)}
+                        onChange={e => handleTimeChange(e)}
+                        required
+                      />
+                    </div>
+                  </Row>
 
                   <div className="mb-3 row">
                     <div className="col-12 text-end">

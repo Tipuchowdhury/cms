@@ -68,6 +68,8 @@ function Popup(props) {
     redirection_type: "",
     restaurant_id: "",
     campaign_id: "",
+    start_date: new Date().toISOString(),
+    end_date: new Date().toISOString(),
     cancellable: true,
     image: "",
     is_active: true,
@@ -81,6 +83,8 @@ function Popup(props) {
     redirection_type: "",
     restaurant_id: "",
     campaign_id: "",
+    start_date: new Date().toISOString(),
+    end_date: new Date().toISOString(),
     cancellable: true,
     image: "",
     is_active: true,
@@ -130,11 +134,6 @@ function Popup(props) {
   }
 
   const handleAddFile = e => {
-    // setAddInfo({
-    //     ...addInfo,
-    //     image: e.target.value,
-    // });
-
     name = e.target.name
     value = e.target.files[0]
     setAddInfo({ ...addInfo, [name]: value })
@@ -145,6 +144,16 @@ function Popup(props) {
     }
 
     reader.readAsDataURL(value)
+  }
+
+  const handleAddTimeChange = e => {
+    name = e.target.name
+    value = e.target.value
+    let new_time_string = `${value}:00Z`
+    setAddInfo({
+      ...addInfo,
+      [name]: new Date(new_time_string).toISOString(),
+    })
   }
 
   const handleAddCheckBox = e => {
@@ -175,11 +184,6 @@ function Popup(props) {
   }
 
   const handleEditFile = e => {
-    // setEditInfo({
-    //     ...editInfo,
-    //     image: e.target.value,
-    // });
-
     name = e.target.name
     value = e.target.files[0]
     setEditInfo({ ...editInfo, [name]: value })
@@ -190,6 +194,16 @@ function Popup(props) {
     }
 
     reader2.readAsDataURL(value)
+  }
+
+  const handleEditTimeChange = e => {
+    name = e.target.name
+    value = e.target.value
+    let new_time_string = `${value}:00Z`
+    setEditInfo({
+      ...editInfo,
+      [name]: new Date(new_time_string).toISOString(),
+    })
   }
 
   const handleEditCheckBox = e => {
@@ -210,6 +224,8 @@ function Popup(props) {
       is_redirect: row.is_redirect,
       redirection_type: row.redirection_type,
       restaurant_id: row.restaurant_id,
+      start_date: row.start_date,
+      end_date: row.end_date,
       campaign_id: row.campaign_id,
       cancellable: row.cancellable,
       image: row.image,
@@ -347,6 +363,8 @@ function Popup(props) {
         redirection_type: "",
         restaurant_id: "",
         campaign_id: "",
+        start_date: new Date().toISOString(),
+        end_date: new Date().toISOString(),
         cancellable: true,
         image: "",
         is_active: true,
@@ -619,6 +637,40 @@ function Popup(props) {
               )}
 
               <div className="mb-3">
+                <label htmlFor="start_date" className="col-md-2 col-form-label">
+                  {" "}
+                  Start Time{" "}
+                </label>
+                <input
+                  type="datetime-local"
+                  id="start_date"
+                  className="form-control"
+                  name="start_date"
+                  placeholder="Start Time"
+                  value={addInfo.start_date.slice(0, 16)}
+                  onChange={e => handleAddTimeChange(e)}
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="end_date" className="col-md-2 col-form-label">
+                  {" "}
+                  Start Time{" "}
+                </label>
+                <input
+                  type="datetime-local"
+                  id="end_date"
+                  className="form-control"
+                  name="end_date"
+                  placeholder="Start Time"
+                  value={addInfo.end_date.slice(0, 16)}
+                  onChange={e => handleAddTimeChange(e)}
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
                 <div className="form-check">
                   <label className="form-label" htmlFor="cancellable">
                     Cancellable{" "}
@@ -817,6 +869,40 @@ function Popup(props) {
                   </div>
                 </Row>
               )}
+
+              <div className="mb-3">
+                <label htmlFor="start_date" className="col-md-2 col-form-label">
+                  {" "}
+                  Start Time{" "}
+                </label>
+                <input
+                  type="datetime-local"
+                  id="start_date"
+                  className="form-control"
+                  name="start_date"
+                  placeholder="Start Time"
+                  value={editInfo.start_date.slice(0, 16)}
+                  onChange={e => handleEditTimeChange(e)}
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="end_date" className="col-md-2 col-form-label">
+                  {" "}
+                  Start Time{" "}
+                </label>
+                <input
+                  type="datetime-local"
+                  id="end_date"
+                  className="form-control"
+                  name="end_date"
+                  placeholder="Start Time"
+                  value={editInfo.end_date.slice(0, 16)}
+                  onChange={e => handleEditTimeChange(e)}
+                  required
+                />
+              </div>
 
               <div className="mb-3">
                 <div className="form-check">
