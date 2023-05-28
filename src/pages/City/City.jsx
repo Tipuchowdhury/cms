@@ -79,6 +79,7 @@ function City(props) {
   }
 
   const handleStatusModal = row => {
+    // console.log(row)
     setCityId(row._id)
     setCityName(row.name)
     setIsActive(row.is_active)
@@ -122,9 +123,9 @@ function City(props) {
 
   const statusRef = (cell, row) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
       {row.is_active ? "Active" : "Deactivate"}
     </Button>

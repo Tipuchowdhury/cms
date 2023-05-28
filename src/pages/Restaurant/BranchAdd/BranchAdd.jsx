@@ -339,13 +339,13 @@ function BranchAdd(props) {
     }
 
     if (props.edit_branch_loading === "Success") {
-      toast.success("Branch edited Successfully")
+      // toast.success("Branch edited Successfully")
       props.editBranchFresh()
       naviagte("/manage-branch")
     }
 
     if (props.edit_branch_loading === "Failed") {
-      toast.error("Branch edited Failed")
+      // toast.error("Branch edited Failed")
       props.editBranchFresh()
       // naviagte("/manage-branch")
     }

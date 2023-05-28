@@ -69,18 +69,6 @@ export const addCouponAction = (
         })
       : []
 
-  selectedCategory =
-    selectedCategory?.length > 0
-      ? selectedCategory.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            category_id: item.value,
-            coupon_id: id,
-          }
-        })
-      : []
-
   selectedUser =
     selectedUser?.length > 0
       ? selectedUser.map(item => {
@@ -183,6 +171,7 @@ export const addCouponAction = (
     gradual_informations: gradual_data,
     restaurants: [],
   }
+
   const formData = convertToFormData(dataObject)
   return dispatch => {
     console.log("-in the dispatch----")
@@ -306,18 +295,6 @@ export const couponEditAction = (
           return {
             _id: val,
             cusine_id: item.value,
-            coupon_id: id,
-          }
-        })
-      : []
-
-  selectedCategory =
-    selectedCategory?.length > 0
-      ? selectedCategory.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            category_id: item.value,
             coupon_id: id,
           }
         })
