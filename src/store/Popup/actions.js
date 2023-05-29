@@ -116,6 +116,8 @@ export const popUpUpdateAction = editData => {
 
   const dataObject = editData
 
+  console.log(dataObject)
+
   const formData = convertToFormData(dataObject)
   return dispatch => {
     const headers = {

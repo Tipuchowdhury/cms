@@ -185,6 +185,8 @@ function BranchAdd(props) {
     address: location.state ? location.state.address : "",
     cuisine: "",
     location: undefined,
+    image: location.state ? location.state.image : "",
+    cover_image: location.state ? location.state.cover_image : "",
     price_range: location.state ? location.state.price_range : "",
     popularity_sort_value: location.state
       ? location.state.popularity_sort_value
@@ -216,12 +218,12 @@ function BranchAdd(props) {
   function handleChangeImage(event) {
     name = event.target.name
     value = event.target.files[0]
-    setFile(value)
+    setZoneInfo({ ...zoneInfo, [name]: value })
 
     const reader = new FileReader()
 
     reader.onload = () => {
-      setImages({ ...coverImages, [name]: reader.result })
+      setImages({ ...images, [name]: reader.result })
     }
 
     reader.readAsDataURL(value)
@@ -230,7 +232,7 @@ function BranchAdd(props) {
   function handleChangeCover(event) {
     name = event.target.name
     value = event.target.files[0]
-    setCoverFile(value)
+    setZoneInfo({ ...zoneInfo, [name]: value })
 
     const reader2 = new FileReader()
 
@@ -289,8 +291,8 @@ function BranchAdd(props) {
       zoneInfo,
       state2.lat,
       state2.lng,
-      file,
-      coverFile,
+      // file,
+      // coverFile,
       currentPath,
       selectedCuisine,
       time
@@ -305,8 +307,8 @@ function BranchAdd(props) {
       zoneInfo,
       state2.lat,
       state2.lng,
-      file,
-      coverFile,
+      // file,
+      // coverFile,
       currentPath,
       selectedCuisine,
       time

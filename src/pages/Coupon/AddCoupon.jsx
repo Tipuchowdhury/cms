@@ -1173,7 +1173,7 @@ function AddCoupon(props) {
                   </Row>
 
                   {couponInfo?.is_gradual == "true" ||
-                  couponInfo?.is_percent == "false" ? (
+                  couponInfo?.is_percent == "true" ? (
                     <Row className="mb-3">
                       <label
                         htmlFor="example-text-input"
