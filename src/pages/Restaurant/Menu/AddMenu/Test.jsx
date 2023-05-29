@@ -180,6 +180,10 @@ function AddMenu(props) {
   const [addOns, setAddOns] = useState(
     location.state ? location.state.variations : [addOnsTemplate]
   )
+
+  console.log(addOns)
+  const [variationsAddOnCategory, setVariationsAddOnCategory] = useState([])
+
   const handleAddOnsCat = (e, index) => {
     const updatedValue = addOns.map((row, i) =>
       index === i

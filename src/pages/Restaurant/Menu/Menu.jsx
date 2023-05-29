@@ -40,7 +40,7 @@ function Menu(props) {
   const toggleDel = () => setModalDel(!modalDel)
 
   const handleEdit = row => {
-    navigate("/add-menu", { state: row })
+    navigate("/edit-menu", { state: row })
   }
 
   const handleDeleteModal = row => {

@@ -1178,7 +1178,7 @@ export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
     _id: val,
     name: category.name,
     cat_is_multiple: isChecked,
-    cat_max_choice: parseInt(category.num_of_choice),
+    cat_max_choice: parseInt(category.cat_max_choice),
     language_slug: "en",
     add_on_category_desc: category.add_on_category_desc,
     variation_id: val_id,
@@ -1578,7 +1578,8 @@ export const addRestaurantMenuAction = (
     menu_group_id: info.restaurant,
     variation_group_name: info.Variation_group_name,
     variation_group_desc: info.Variation_grp_desc,
-    check_add_ons: isChecked === true ? 1 : 0,
+    // check_add_ons: isChecked === true ? 1 : 0,
+    has_variation: isChecked === true ? 1 : 0,
     is_popular: JSON.parse(info.is_popular),
     description: info.menu_description,
     vat: Number(info.vat),
@@ -1745,10 +1746,10 @@ export const editRestaurantMenuAction = (
   variations,
   menuTiming
 ) => {
-  // console.log(val, category, isChecked, addOns)
+  console.log(variations)
   // console.log(category, isChecked)
 
-  console.log(val, info, isChecked)
+  // console.log(val, info, isChecked)
 
   var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Put"
 
@@ -1768,6 +1769,10 @@ export const editRestaurantMenuAction = (
                     _id: _addon_id,
                     add_ons_name: add_ons.add_on_name,
                     add_ons_price: add_ons.add_on_price,
+                    max_choice: add_ons.add_on_price ? add_ons.add_on_price : 0,
+                    is_multiple: add_ons.is_multiple
+                      ? add_ons.is_multiple
+                      : false,
                     addoncat_id: addon_cats.add_on_category_id,
                     variation_and_add_on_category_id: _id,
                   }
@@ -1780,17 +1785,46 @@ export const editRestaurantMenuAction = (
         })
       : []
 
-  const menuTimingData =
-    menuTiming.length > 0
-      ? menuTiming.map(item => {
-          const _id = uuidv4()
-          return {
-            _id: _id,
-            menu_item_time_slot_id: item._id,
-            menu_item_id: val,
-          }
-        })
-      : []
+  // const menuTimingData =
+  //   menuTiming.length > 0
+  //     ? menuTiming.map(item => {
+  //         if (item.checked == true) {
+  //           const _id = uuidv4()
+  //           return {
+  //             _id: _id,
+  //             menu_item_time_slot_id: item._id,
+  //             menu_item_id: val,
+  //           }
+  //         }
+  //       })
+  //     : []
+
+  const menuTimingData = menuTiming
+    .filter(data => data.checked != false)
+    .map(item => {
+      if (item.checked == true) {
+        const _id = uuidv4()
+        return {
+          _id: _id,
+          menu_item_time_slot_id: item._id,
+          menu_item_id: val,
+        }
+      }
+    })
+
+  // gradual = gradual
+  //   .filter(data => data.sequence != "")
+  //   .map(item => {
+  //     const val = uuidv4()
+  //     return {
+  //       _id: val,
+  //       sequence: item.sequence,
+  //       discount_percent: item.discount_percent,
+  //       coupon_id: id,
+  //     }
+  //   })
+
+  // console.log(menuTimingData)
 
   let dataObject = {
     _id: val,
@@ -1800,7 +1834,8 @@ export const editRestaurantMenuAction = (
     menu_group_id: info.restaurant,
     variation_group_name: info.Variation_group_name,
     variation_group_desc: info.Variation_grp_desc,
-    check_add_ons: isChecked === true ? 1 : 0,
+    // check_add_ons: isChecked === true ? 1 : 0,
+    has_variation: isChecked === true ? 1 : 0,
     is_popular: JSON.parse(info.is_popular),
     description: info.menu_description,
     vat: Number(info.vat),
@@ -1817,6 +1852,7 @@ export const editRestaurantMenuAction = (
     slug: "test",
     is_active: true,
   }
+
   const formData = convertToFormData(dataObject)
 
   return dispatch => {

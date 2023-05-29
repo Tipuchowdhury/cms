@@ -30,6 +30,8 @@ import {
   getCategoryByIdAction,
   getCategoryByIdFresh,
   getAllCategoryAction,
+  editRestaurantMenuAction,
+  editRestaurantMenuFresh,
 } from "store/actions"
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { boolean } from "yup"
@@ -42,10 +44,12 @@ import axios from "axios"
 
 const LoadingContainer = () => <div>Loading...</div>
 
-function AddMenu(props) {
+function EditMenu(props) {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
+  const [dataUpdated, setDataUpdated] = useState(false)
+  // console.log(location.state)
   const [info, setInfo] = useState({
     name: location.state ? location.state.menu_name : "",
     menu_description: location.state ? location.state.description : "",
@@ -72,10 +76,12 @@ function AddMenu(props) {
 
   const [file, setFile] = useState()
   const [isChecked, setIsChecked] = useState(
-    location.state ? location.state.has_variation : false
+    location.state ? (location.state.has_variation == 1 ? true : false) : false
   )
   const [addVariation, setAddVariation] = useState(false)
   const [modal, setModal] = useState(false)
+  const [addNewCategory, setAddNewCategory] = useState([])
+
   const closeModal = () => {
     setModal(!modal)
     //props.getCategoryByIdFresh();
@@ -84,27 +90,81 @@ function AddMenu(props) {
     //     get_category_by_id_loading: false
     // }))
   }
-  const toggle = () => setModal(!modal)
+  const toggle = () => {
+    setModal(!modal)
+  }
 
+  const handleModal = add_on_categories => {
+    // console.log(add_on_categories)
+    let results = []
+    let add_ons_array = []
+
+    add_on_categories?.forEach((add_on_category, index) => {
+      add_on_category.add_ons?.forEach((add_on, index) => {
+        add_ons_array.push({
+          _id: add_on._id,
+          add_on_name: add_on.add_ons_name
+            ? add_on.add_ons_name
+            : add_on.add_on_name,
+          add_on_price: add_on.add_ons_price
+            ? add_on.add_ons_price
+            : add_on.add_on_price,
+          addoncat_id: add_on.addoncat_id,
+          is_multiple: add_on.is_multiple,
+          max_choice: add_on.max_choice,
+          variation_and_add_on_category_id:
+            add_on.variation_and_add_on_category_id,
+        })
+      })
+      results.push({
+        _id: add_on_category._id,
+        add_on_category_desc: add_on_category.add_on_category_desc,
+        add_on_category_id: add_on_category.add_on_category_id,
+        add_on_category_name: add_on_category.add_on_category_name,
+        add_ons: add_ons_array,
+        cat_is_multiple: add_on_category.cat_is_multiple,
+        cat_max_choice: add_on_category.cat_max_choice,
+        language_slug: add_on_category.language_slug,
+        variation_id: add_on_category.variation_id,
+      })
+      add_ons_array = []
+      // console.log(add_on_category)
+    })
+    setAddNewCategory(results)
+
+    toggle()
+  }
+
+  // console.log(addNewCategory)
   // ===========================start working from here ====================
   const [item, setItem] = useState([])
 
   const handleChangeTime = (e, ClickedItem) => {
     // Destructuring
-    const { value, checked } = e.target
-    console.log("checked :", checked)
-    console.log("checked :", ClickedItem)
+    // const { value, checked } = e.target
+    // console.log(ClickedItem)
+    // console.log(e.target.checked)
 
     // Case 1 : The user checks the box
-    if (checked) {
-      setItem([...item, ClickedItem])
-    } else {
-      setItem(item.filter(e => e !== ClickedItem))
-    }
-    console.log("item :", item)
-  }
+    // if (checked) {
+    //   setItem([...item, ClickedItem])
+    // } else {
+    //   setItem(item.filter(e => e !== ClickedItem))
+    // }
+    // console.log("item :", item)
 
-  console.log(item)
+    const newState = newData2.map(obj => {
+      // 👇️ if id equals 2, update country property
+      if (obj._id === ClickedItem._id) {
+        return { ...obj, checked: !obj.checked }
+      }
+
+      // 👇️ otherwise return the object as is
+      return obj
+    })
+
+    setNewData2(newState)
+  }
   // ===========================ends here ====================
 
   // get all branch
@@ -117,6 +177,94 @@ function AddMenu(props) {
       </option>
     ))
   }
+
+  let allTimeSlots = []
+  // if (props.get_all_menu_time_slot_data?.length > 0) {
+  //   allTimeSlots = props.get_all_menu_time_slot_data?.map((item, key) => ({
+  //     _id: item._id,
+  //     checked: false,
+  //     name: item.name,
+  //     start_time: item.start_time,
+  //     end_time: item.end_time,
+  //   }))
+  // }
+
+  //  const common_subscription_type =
+  //    props?.get_all_subscription_type_data?.filter(elem =>
+  //      location?.state?.subscription_types?.find(
+  //        ({ subscription_type_id }) => elem._id === subscription_type_id
+  //      )
+  //    )
+  // const data = allTimeSlots?.map(elem =>
+  //   location?.state?.menu_available_times?.map(
+  //     ({ menu_item_time_slot_id }) => elem._id === menu_item_time_slot_id
+  //   )
+  // )
+
+  const [timeSlots, setTimeSlots] = useState(allTimeSlots)
+
+  useEffect(() => {
+    if (props.get_all_menu_time_slot_loading === "Success") {
+      setTimeSlots(
+        props.get_all_menu_time_slot_data?.map((item, key) => ({
+          _id: item._id,
+          checked: false,
+          name: item.name,
+          start_time: item.start_time,
+          end_time: item.end_time,
+        }))
+      )
+
+      setDataUpdated(true)
+    }
+
+    // setTimeout(() => {
+    //   timeSlots?.length > 0
+    //     ? timeSlots?.map((elem, index) => {
+    //         location?.state?.menu_available_times?.map(item => {
+    //           if (elem._id === item.menu_item_time_slot_id) {
+    //             let new_time_slots = timeSlots
+    //             new_time_slots[index] = { ...elem, checked: true }
+    //             setTimeSlots(new_time_slots)
+    //           }
+    //         })
+    //       })
+    //     : ""
+
+    //   console.log("hahah", timeSlots)
+    // }, 2000)
+  }, [props.get_all_menu_time_slot_loading])
+
+  // console.log(timeSlots)
+  const [newData2, setNewData2] = useState()
+
+  useEffect(() => {
+    timeSlots?.length > 0
+      ? timeSlots?.map((elem, index) => {
+          location?.state?.menu_available_times?.map(item => {
+            if (elem._id === item.menu_item_time_slot_id) {
+              let new_time_slots = timeSlots
+              new_time_slots[index] = { ...elem, checked: true }
+              setTimeSlots(new_time_slots)
+            }
+          })
+        })
+      : []
+    setNewData2(timeSlots)
+  }, [timeSlots])
+
+  // console.log(newData2)
+
+  // const data =
+  //   timeSlots?.length > 0
+  //     ? timeSlots?.map(elem => {
+  //         location?.state?.menu_available_times?.map(item => {
+  //           if (elem._id === item.menu_item_time_slot_id) {
+  //             setTimeSlots({ ...item, checked: !item.checked })
+  //           }
+  //         })
+  //       })
+  //     : ""
 
   // get all category
 
@@ -170,13 +318,42 @@ function AddMenu(props) {
     _id: "",
     menu_id: "",
     variation_name: "",
-    variation_name: "",
+    variation_price: "",
     variation_group_name: "",
     variation_group_desc: "",
     add_on: false,
+    // add_on_categories: [
+    //   {
+    //     _id: "",
+    //     add_on_category_id: "",
+    //     variation_id: "",
+    //     add_on_category_name: "",
+    //     cat_is_multiple: false,
+    //     cat_max_choice: 0,
+    //     language_slug: "",
+    //     add_on_category_desc: "",
+    //     add_ons: [
+    //       {
+    //         _id: "",
+    //         add_ons_name: "",
+    //         max_choice: 0,
+    //         is_multiple: false,
+    //         add_ons_price: 0,
+    //         addoncat_id: "",
+    //         variation_and_add_on_category_id: "",
+    //       },
+    //     ],
+    //   },
+    // ],
     add_on_categories: [],
   }
-  const [addOns, setAddOns] = useState([addOnsTemplate])
+
+  const [addOns, setAddOns] = useState(
+    location.state ? location.state.variations : [addOnsTemplate]
+  )
+
+  // console.log(addOns)
+
   const handleAddOnsCat = (e, index) => {
     const updatedValue = addOns.map((row, i) =>
       index === i
@@ -184,23 +361,11 @@ function AddMenu(props) {
         : row
     )
     setAddOns(updatedValue)
-    console.log("setAddOns :", addOns)
-  }
-  const setCatMaxChoice = (value, categoryIndex) => {
-    //console.log(addNewCategory)
-    const newCat = [...addNewCategory]
-    //console.log(newCat)
-    //console.log(newCat[categoryIndex])
-    newCat[categoryIndex] = {
-      ...newCat[categoryIndex],
-      cat_max_choice: value,
-    }
-
-    setAddNewCategory(newCat)
+    // console.log("setAddOns :", addOns)
   }
   function handleAddRowNested() {
-    console.log(addOns)
-    console.log(addOnsTemplate)
+    // console.log(addOns)
+    // console.log(addOnsTemplate)
     setAddOns([...addOns, addOnsTemplate])
   }
   const handleRowDelete = index => {
@@ -252,6 +417,42 @@ function AddMenu(props) {
     setAddNewCategory(newCat)
   }
 
+  const setCatMaxChoice = (value, categoryIndex) => {
+    //console.log(addNewCategory)
+    const newCat = [...addNewCategory]
+    //console.log(newCat)
+    //console.log(newCat[categoryIndex])
+    newCat[categoryIndex] = {
+      ...newCat[categoryIndex],
+      cat_max_choice: value,
+    }
+
+    setAddNewCategory(newCat)
+  }
+
+  const checkTimeSelected = time_slot => {
+    // console.log(time_slot)
+    // const selectedTimeSlot = location.state
+    //   ? location.state.menu_available_times
+    //   : []
+    // let return_check = 0
+    // const found = selectedTimeSlot.map(obj => {
+    //   if (obj.menu_item_time_slot_id === time_slot_id._id) {
+    //     return_check = 1
+    //   }
+    // })
+    // return return_check
+    // const newState = timeSlots.map(obj => {
+    //   // 👇️ if id equals 2, update country property
+    //   if (obj._id === time_slot._id) {
+    //     return { ...obj, checked: !obj.checked }
+    //   }
+    //   // 👇️ otherwise return the object as is
+    //   return obj
+    // })
+    // setTimeSlots(newState)
+  }
+
   const handleCatMaxChoice = (e, categoryIndex) => {
     const newCat = [...addNewCategory]
     newCat[categoryIndex] = {
@@ -292,7 +493,6 @@ function AddMenu(props) {
     //console.log("aa", newAddOnCategory)
     setAddNewCategory(newAddOnCategory)
   }
-
   const [id, setID] = useState()
   const handleID = idx => {
     //alert(idx)
@@ -307,15 +507,15 @@ function AddMenu(props) {
   const [addOnUnderCategory, setAddOnUnderCategory] = useState([])
   const [addBtnStatus, setAddBtnStatus] = useState(false)
   const handleAddOnsUndeCategory = (e, index) => {
-    console.log("index :", index)
+    // console.log("index :", index)
     setAddBtnStatus(true)
     const updatedValue = addOnUnderCategory.map((row, i) => {
-      console.log("row :", row)
+      // console.log("row :", row)
       index === i
         ? Object.assign(row, { [e.target.name]: e.target.value })
         : row
     })
-    console.log("updatedValue :", updatedValue)
+    // console.log("updatedValue :", updatedValue)
     setAddOnUnderCategory(updatedValue)
   }
 
@@ -357,7 +557,12 @@ function AddMenu(props) {
     add_ons: [],
     // additionalAddOn: [],
   }
-  const [addNewCategory, setAddNewCategory] = useState([])
+  const [selectedAddonsCategory, setSelectedAddonsCategory] = useState([])
+  const handleSelectedAddOnsCategory = add_on_categories => {
+    setSelectedAddonsCategory(add_on_categories)
+  }
+
+  // console.log(selectedAddonsCategory)
 
   const handleInputsAddOns = (e, idx) => {
     addAddOnName = e.target.name
@@ -379,6 +584,7 @@ function AddMenu(props) {
     axios
       .get(url, { headers: headers })
       .then(response => {
+        // console.log(response)
         const updatedValue = addNewCategory.map((row, i) =>
           idx === i
             ? Object.assign(
@@ -396,7 +602,24 @@ function AddMenu(props) {
         )
         setAddNewCategory(updatedValue)
       })
-      .catch(error => {})
+      .catch(error => {
+        const updatedValue = addNewCategory.map((row, i) =>
+          idx === i
+            ? Object.assign(
+                row,
+                { _id: "" },
+                { add_on_category_id: "" },
+                { add_on_category_name: "" },
+                { cat_is_multiple: "" },
+                { cat_max_choice: "" },
+                { language_slug: "" },
+                { add_on_category_desc: "" },
+                { add_ons: [] }
+              )
+            : row
+        )
+        setAddNewCategory(updatedValue)
+      })
   }
 
   function handleAddCategoryRow() {
@@ -436,8 +659,20 @@ function AddMenu(props) {
     props.addRestaurantMenuAction(val, info, isChecked, addOns, item)
   }
 
+  const handleEditMenu = e => {
+    e.preventDefault()
+    props.editRestaurantMenuAction(
+      location.state._id,
+      info,
+      isChecked,
+      addOns,
+      newData2
+    )
+  }
+
   let newAddOnsArray = []
   const handleAddOnsForm = (e, idx) => {
+    //console.log(addNewCategory)
     e.preventDefault()
     //===== test ========
     const updatedValue = addOns.map((row, i) =>
@@ -448,12 +683,12 @@ function AddMenu(props) {
         : row
     )
     setAddOns(updatedValue)
-    console.log("addOns :", addOns)
+    // console.log("addOns :", addOns)
 
     setAddNewCategory([finalTemplate])
-    console.log("addNewCategory", addNewCategory)
+    // console.log("addNewCategory", addNewCategory)
     setAddOnUnderCategory([addOnsTemplateNew_test])
-    console.log("addOnUnderCategory", addOnUnderCategory)
+    // console.log("addOnUnderCategory", addOnUnderCategory)
 
     closeModal()
     // setAddNewCategory("");
@@ -487,6 +722,11 @@ function AddMenu(props) {
     if (props.get_all_category_loading == false) {
       props.getAllCategoryAction()
     }
+
+    if (props.edit_restaurant_menu_loading === "Success") {
+      navigate("/menu")
+      props.editRestaurantMenuFresh()
+    }
     // if (props.get_category_by_id_loading == "Success") {
     //     props.getCategoryByIdFresh();
     // }
@@ -502,6 +742,7 @@ function AddMenu(props) {
     props.get_category_by_id_data,
     props.get_category_by_id_loading,
     props.get_all_category_loading,
+    props.edit_restaurant_menu_loading,
   ])
 
   return (
@@ -541,7 +782,10 @@ function AddMenu(props) {
           </Row>
           <Row>
             <Col className="col-10 mx-auto">
-              <form className="mt-4" onSubmit={handleAddMenu}>
+              <form
+                className="mt-4"
+                onSubmit={location.state ? handleEditMenu : handleAddMenu}
+              >
                 <Row className="mb-3">
                   <label
                     htmlFor="example-text-input"
@@ -559,7 +803,7 @@ function AddMenu(props) {
                       type="select"
                       required
                     >
-                      <option>Choose...</option>
+                      <option value="">Choose...</option>
                       {branchData}
                     </Input>
                   </div>
@@ -754,11 +998,11 @@ function AddMenu(props) {
                   <div className="col-md-10">
                     <input
                       type="checkbox"
-                      id="cat_is_multiple"
-                      name="cat_is_multiple"
+                      id="has_variation"
+                      name="has_variation"
                       checked={isChecked}
                       onChange={checkHandler}
-                      value="true"
+                      // value="true"
                       style={{ margin: "15px 5px 20px 0px" }}
                     />
                   </div>
@@ -805,7 +1049,7 @@ function AddMenu(props) {
                                     className="form-control"
                                     name="variation_name"
                                     placeholder="Variation name"
-                                    value={row.addOnName}
+                                    value={row.variation_name}
                                     onChange={e => handleAddOnsCat(e, idx)}
                                   />
                                 </div>
@@ -823,7 +1067,7 @@ function AddMenu(props) {
                                     className="form-control"
                                     name="variation_price"
                                     placeholder="Price"
-                                    value={row.price}
+                                    value={row.variation_price}
                                     onChange={e => handleAddOnsCat(e, idx)}
                                   />
                                 </div>
@@ -892,7 +1136,13 @@ function AddMenu(props) {
                                     }}
                                     onClick={() => {
                                       {
-                                        toggle(), handleID(idx)
+                                        handleModal(
+                                          row.add_on_categories ?? ""
+                                        ),
+                                          handleID(idx)
+                                        //   handleSelectedAddOnsCategory(
+                                        //     row.add_on_categories ?? ""
+                                        //   )
                                       }
                                     }}
                                   />
@@ -1183,74 +1433,78 @@ function AddMenu(props) {
                   </label>
                   <div className="col-md-10">
                     {/* <input type="number" className="form-control" id="sd" placeholder="Enter sd amount" name="sd" onChange={handleInputs} value={info.sd ?? ""} required /> */}
-
-                    {props?.get_all_menu_time_slot_data?.map(item => (
-                      <Row className="mb-3">
-                        {/* <label
-                                                htmlFor="example-text-input"
-                                                className="col-md-2 col-form-label"
-                                            >
-
-                                            </label> */}
-                        <div
-                          className="col-md-10"
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <div style={{ marginTop: "30px" }}>
-                            <input
-                              type="checkbox"
-                              id="cat_is_multiple"
-                              name="cat_is_multiple"
-                              style={{ margin: "0px 15px 50px 0px" }}
-                              value="true"
-                              onChange={e => handleChangeTime(e, item)}
-                            />
-                            <span
-                              style={{ fontSize: "16px", fontWeight: "bold" }}
+                    {newData2?.length > 0 && dataUpdated
+                      ? newData2?.map(item => (
+                          <Row className="mb-3">
+                            <div
+                              className="col-md-10"
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                              }}
                             >
-                              {item?.name}
-                            </span>
-                          </div>
+                              <div style={{ marginTop: "30px" }}>
+                                <input
+                                  type="checkbox"
+                                  id="cat_is_multiple"
+                                  name="cat_is_multiple"
+                                  style={{ margin: "0px 15px 50px 0px" }}
+                                  // value="true"
 
-                          <div className="mb-3 col-lg-3">
-                            <label className="form-label" htmlFor="startTime">
-                              Start Time
-                            </label>
-                            <input
-                              type="time"
-                              id="startTime"
-                              className="form-control"
-                              name="start_time"
-                              placeholder="Add-ons name"
-                              value={moment({
-                                hour: item.start_time?.hour,
-                                minute: item?.start_time?.minute,
-                              }).format("HH:mm")}
-                            />
-                          </div>
+                                  checked={item.checked}
+                                  // checked={checkTimeSelected(item)}
+                                  onChange={e => handleChangeTime(e, item)}
+                                />
+                                <span
+                                  style={{
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {item?.name}
+                                </span>
+                              </div>
 
-                          <div className="mb-3 col-lg-3">
-                            <label className="form-label" htmlFor="subject">
-                              End Time
-                            </label>
-                            <input
-                              type="time"
-                              id="subject"
-                              className="form-control"
-                              name="end_time"
-                              placeholder="Price"
-                              value={moment({
-                                hour: item.end_time?.hour,
-                                minute: item?.end_time?.minute,
-                              }).format("HH:mm")}
-                            />
-                          </div>
-                        </div>
-                      </Row>
-                    ))}
+                              <div className="mb-3 col-lg-3">
+                                <label
+                                  className="form-label"
+                                  htmlFor="startTime"
+                                >
+                                  Start Time
+                                </label>
+                                <input
+                                  type="time"
+                                  id="startTime"
+                                  className="form-control"
+                                  name="start_time"
+                                  placeholder="Add-ons name"
+                                  value={moment({
+                                    hour: item.start_time?.hour,
+                                    minute: item?.start_time?.minute,
+                                  }).format("HH:mm")}
+                                />
+                              </div>
+
+                              <div className="mb-3 col-lg-3">
+                                <label className="form-label" htmlFor="subject">
+                                  End Time
+                                </label>
+                                <input
+                                  type="time"
+                                  id="subject"
+                                  className="form-control"
+                                  name="end_time"
+                                  placeholder="Price"
+                                  value={moment({
+                                    hour: item.end_time?.hour,
+                                    minute: item?.end_time?.minute,
+                                  }).format("HH:mm")}
+                                />
+                              </div>
+                            </div>
+                          </Row>
+                        ))
+                      : ""}
                   </div>
                 </Row>
 
@@ -1277,7 +1531,8 @@ function AddMenu(props) {
               // id === idx ?
 
               <React.Fragment key={idx}>
-                {console.log("itemCat1 :", itemCat)}
+                {console.log("A", addNewCategory)}
+                {/* {console.log("itemCat1 :", itemCat)} */}
                 <div>
                   <div className="mb-3">
                     <label className="form-label" htmlFor="username">
@@ -1291,7 +1546,7 @@ function AddMenu(props) {
                       onChange={e => handleInputsAddOns(e, idx)}
                       type="select"
                     >
-                      <option>Choose...</option>
+                      <option value="">Choose...</option>
                       {categoryData}
                     </Input>
                   </div>
@@ -1300,10 +1555,9 @@ function AddMenu(props) {
                     <input
                       type="checkbox"
                       id="cat_is_multiple"
-                      // onChange={checkHandlerAddOns(itemCat)}
-                      onChange={e => checkHandlerAddOns(idx)}
                       name="cat_is_multiple_add_ons"
                       checked={itemCat.cat_is_multiple}
+                      onChange={e => checkHandlerAddOns(idx)}
                       // value={itemCat.cat_is_multiple}
                       style={{ margin: "15px 5px 20px 0px" }}
                     />
@@ -1311,8 +1565,8 @@ function AddMenu(props) {
                     {/* {addOnsNew?.map((row, idx) => ( */}
                     {itemCat?.add_ons?.map((row, addon_index) => (
                       <React.Fragment key={addon_index}>
-                        {console.log("addon_index :", addon_index)}
-                        {console.log("itemCat :", itemCat)}
+                        {/* {console.log("addon_index :", addon_index)}
+                        {console.log("itemCat :", itemCat)} */}
                         <div
                           data-repeater-list="group-a"
                           id={"addr" + addon_index}
@@ -1460,6 +1714,7 @@ const mapStateToProps = state => {
 
     get_category_by_id_data,
     get_category_by_id_loading,
+    edit_restaurant_menu_loading,
   } = state.Restaurant
 
   const {
@@ -1490,6 +1745,8 @@ const mapStateToProps = state => {
     get_all_category_data,
     get_all_category_error,
     get_all_category_loading,
+
+    edit_restaurant_menu_loading,
   }
 }
 
@@ -1504,5 +1761,7 @@ export default withRouter(
     getCategoryByIdAction,
     getCategoryByIdFresh,
     getAllCategoryAction,
-  })(AddMenu)
+    editRestaurantMenuAction,
+    editRestaurantMenuFresh,
+  })(EditMenu)
 )
