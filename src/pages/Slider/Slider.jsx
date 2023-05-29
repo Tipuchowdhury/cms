@@ -473,7 +473,7 @@ function Slider(props) {
               <div className="mb-3">
                 <label htmlFor="end_date" className="col-md-2 col-form-label">
                   {" "}
-                  Start Time{" "}
+                  End Time{" "}
                 </label>
                 <input
                   type="datetime-local"

@@ -966,7 +966,7 @@ export const zoneEditFresh = () => {
 }
 
 export const zoneStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Zone/Put"
+  var url = `${process.env.REACT_APP_LOCALHOST}/Zone/isActive?id=${data.id}&is_active=${data.is_active}`
 
   const formData = data
   return dispatch => {

@@ -260,7 +260,7 @@ function Order(props) {
     // console.log("=======hello", props.order_name_edit_loading)
     if (props.get_all_order_loading == false) {
       //  console.log("I am in get all order loading ")
-      props.getAllOrderAction(0, 25)
+      props.getAllOrderAction(0, 500)
     }
 
     if (props.order_status_edit_loading === "Success") {

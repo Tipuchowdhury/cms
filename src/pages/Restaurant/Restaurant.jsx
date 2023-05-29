@@ -232,7 +232,7 @@ function Restaurant(props) {
                   type="text"
                   className="form-control"
                   id="username"
-                  placeholder="Enter city name"
+                  placeholder="Enter restaurant name"
                   required
                   value={name}
                   onChange={e => setName(e.target.value)}
@@ -267,7 +267,7 @@ function Restaurant(props) {
                   type="text"
                   className="form-control"
                   id="username1"
-                  placeholder="Enter city name"
+                  placeholder="Enter restaurant name"
                   required
                   value={restaurantName ? restaurantName : ""}
                   onChange={handleNameChange}

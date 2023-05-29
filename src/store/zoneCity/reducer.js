@@ -61,6 +61,7 @@ const zoneCity = (state = initialState, action) => {
       state = {
         ...state,
         add_city_loading: action.status,
+        get_all_city_loading: action.status,
       }
       break
 
