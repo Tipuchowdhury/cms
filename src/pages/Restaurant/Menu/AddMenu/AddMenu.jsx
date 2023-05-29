@@ -70,6 +70,8 @@ function AddMenu(props) {
     sd: location.state ? location.state.sd : "",
   })
 
+  const [addNewCategory, setAddNewCategory] = useState([])
+
   const [file, setFile] = useState()
   const [isChecked, setIsChecked] = useState(
     location.state ? location.state.has_variation : false
@@ -85,6 +87,47 @@ function AddMenu(props) {
     // }))
   }
   const toggle = () => setModal(!modal)
+
+  const handleModal = add_on_categories => {
+    // console.log(add_on_categories)
+    let results = []
+    let add_ons_array = []
+
+    add_on_categories?.forEach((add_on_category, index) => {
+      add_on_category.add_ons?.forEach((add_on, index) => {
+        add_ons_array.push({
+          _id: add_on._id,
+          add_on_name: add_on.add_ons_name
+            ? add_on.add_ons_name
+            : add_on.add_on_name,
+          add_on_price: add_on.add_ons_price
+            ? add_on.add_ons_price
+            : add_on.add_on_price,
+          addoncat_id: add_on.addoncat_id,
+          is_multiple: add_on.is_multiple,
+          max_choice: add_on.max_choice,
+          variation_and_add_on_category_id:
+            add_on.variation_and_add_on_category_id,
+        })
+      })
+      results.push({
+        _id: add_on_category._id,
+        add_on_category_desc: add_on_category.add_on_category_desc,
+        add_on_category_id: add_on_category.add_on_category_id,
+        add_on_category_name: add_on_category.add_on_category_name,
+        add_ons: add_ons_array,
+        cat_is_multiple: add_on_category.cat_is_multiple,
+        cat_max_choice: add_on_category.cat_max_choice,
+        language_slug: add_on_category.language_slug,
+        variation_id: add_on_category.variation_id,
+      })
+      add_ons_array = []
+      // console.log(add_on_category)
+    })
+    setAddNewCategory(results)
+
+    toggle()
+  }
 
   // ===========================start working from here ====================
   const [item, setItem] = useState([])
@@ -357,7 +400,6 @@ function AddMenu(props) {
     add_ons: [],
     // additionalAddOn: [],
   }
-  const [addNewCategory, setAddNewCategory] = useState([])
 
   const handleInputsAddOns = (e, idx) => {
     addAddOnName = e.target.name
@@ -892,7 +934,13 @@ function AddMenu(props) {
                                     }}
                                     onClick={() => {
                                       {
-                                        toggle(), handleID(idx)
+                                        handleModal(
+                                          row.add_on_categories ?? ""
+                                        ),
+                                          handleID(idx)
+                                        //   handleSelectedAddOnsCategory(
+                                        //     row.add_on_categories ?? ""
+                                        //   )
                                       }
                                     }}
                                   />

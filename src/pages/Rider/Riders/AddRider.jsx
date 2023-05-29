@@ -269,17 +269,58 @@ function AddRider(props) {
     setRiderInfo({ ...RiderInfo, [name]: checked })
   }
 
+  // const handleSubmit = e => {
+  //   e.preventDefault()
+  //   const uniqueId = uuidv4()
+
+  //   props.addRiderAction(uniqueId, RiderInfo, selectedZone)
+  // }
+
   const handleSubmit = e => {
     e.preventDefault()
-    const uniqueId = uuidv4()
+    let status = 0
+    if (RiderInfo.password !== RiderInfo.confirm_password) {
+      status = 1
+      toast.error("Password and Confirm password are not matched")
+    }
 
-    props.addRiderAction(uniqueId, RiderInfo, selectedZone)
+    if (RiderInfo.mobile_number.length != 11) {
+      status = 1
+      toast.error("Mobile number should be 11 digit")
+    }
+
+    if (isNaN(RiderInfo.mobile_number)) {
+      status = 1
+      toast.error("Mobile number should be numeric digit")
+    }
+
+    if (status == 0) {
+      const uniqueId = uuidv4()
+      props.addRiderAction(uniqueId, RiderInfo, selectedZone)
+    }
   }
 
   const handleSubmitForEdit = e => {
     e.preventDefault()
+    let status = 0
+    // if (RiderInfo.password !== RiderInfo.confirm_password) {
+    //   status = 1
+    //   toast.error("Password and Confirm password are not matched")
+    // }
 
-    props.riderEditAction(location.state._id, RiderInfo, selectedZone)
+    if (RiderInfo.mobile_number.length != 11) {
+      status = 1
+      toast.error("Mobile number should be 11 digit")
+    }
+
+    if (isNaN(RiderInfo.mobile_number)) {
+      status = 1
+      toast.error("Mobile number should be numeric digit")
+    }
+
+    if (status == 0) {
+      props.riderEditAction(location.state._id, RiderInfo, selectedZone)
+    }
   }
 
   useEffect(() => {

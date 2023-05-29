@@ -387,15 +387,15 @@ export const branchEditAction = (
   zoneInfo,
   lat,
   lng,
-  file,
-  coverFile,
+  // file,
+  // coverFile,
   currentPath,
   selectedCuisine,
   time
 ) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put"
   // console.log(id)
-  // console.log(zoneInfo)
+  console.log(zoneInfo)
   // console.log(location)
   // console.log(file)
   // console.log(coverFile)
@@ -443,8 +443,8 @@ export const branchEditAction = (
     address: zoneInfo.address,
     popularity_sort_value: JSON.parse(zoneInfo.popularity_sort_value),
     price_range: zoneInfo.price_range,
-    image: file,
-    cover_image: coverFile,
+    image: zoneInfo.image,
+    cover_image: zoneInfo.cover_image,
     slug: currentPath,
     zonal_admin: zoneInfo.zonal_admin,
     is_take_pre_order: JSON.parse(zoneInfo.is_take_pre_order),
@@ -1767,8 +1767,12 @@ export const editRestaurantMenuAction = (
                   return {
                     ...add_ons,
                     _id: _addon_id,
-                    add_ons_name: add_ons.add_on_name,
-                    add_ons_price: add_ons.add_on_price,
+                    add_ons_name: add_ons.add_on_name
+                      ? add_ons.add_on_name
+                      : add_ons.add_ons_name,
+                    add_ons_price: add_ons.add_on_price
+                      ? add_ons.add_on_price
+                      : add_ons.add_ons_price,
                     max_choice: add_ons.add_on_price ? add_ons.add_on_price : 0,
                     is_multiple: add_ons.is_multiple
                       ? add_ons.is_multiple

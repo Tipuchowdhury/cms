@@ -480,7 +480,7 @@ function Slider(props) {
                   id="end_date"
                   className="form-control"
                   name="end_date"
-                  placeholder="Start Time"
+                  placeholder="End Time"
                   value={addInfo.end_date.slice(0, 16)}
                   onChange={e => handleAddTimeChange(e)}
                   required
@@ -625,14 +625,14 @@ function Slider(props) {
               <div className="mb-3">
                 <label htmlFor="end_date" className="col-md-2 col-form-label">
                   {" "}
-                  Start Time{" "}
+                  End Time{" "}
                 </label>
                 <input
                   type="datetime-local"
                   id="end_date"
                   className="form-control"
                   name="end_date"
-                  placeholder="Start Time"
+                  placeholder="End Time"
                   value={editInfo.end_date.slice(0, 16)}
                   onChange={e => handleEditTimeChange(e)}
                   required
