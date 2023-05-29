@@ -182,9 +182,7 @@ function AddMenu(props) {
   )
 
   console.log(addOns)
-  const 
-
-
+  const [variationsAddOnCategory, setVariationsAddOnCategory] = useState([])
 
   const handleAddOnsCat = (e, index) => {
     const updatedValue = addOns.map((row, i) =>
