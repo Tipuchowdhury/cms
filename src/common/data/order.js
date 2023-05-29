@@ -4,7 +4,7 @@ export const orderStatuses = {
   cancel: "cancel",
   assigned: "assigned",
   preparing: "preparing",
-  onGoing: "onGoing",
+  onGoing: "ongoing",
   delivered: "delivered",
   not_delivered: "not_delivered",
 }
@@ -15,7 +15,7 @@ export const orderStatusNames = {
   cancel: "Cancelled",
   assigned: "Assigned",
   preparing: "Preparing",
-  onGoing: "OnGoing",
+  ongoing: "OnGoing",
   delivered: "Delivered",
   not_delivered: "Not Delivered",
 }

@@ -56,7 +56,7 @@ function Zone(props) {
   const handleStatusUpdate = () => {
     //console.log(editInfo)
     props.zoneStatusEditAction({
-      ...editInfo,
+      id: editInfo._id,
       is_active: !editInfo.is_active,
     })
   }
@@ -95,11 +95,11 @@ function Zone(props) {
 
   const statusRef = (cell, row) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
   const textRef = (cell, row) => (

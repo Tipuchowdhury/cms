@@ -38,6 +38,7 @@ import {
 } from "store/Order/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import { orderStatusNames, orderStatuses } from "common/data/order"
+import moment from "moment"
 
 function Order(props) {
   const [riderModalInfo, setRiderModalInfo] = useState("")
@@ -106,6 +107,15 @@ function Order(props) {
       >
         <span className="fa fa-check"></span> Accept
       </Button>{" "}
+      <br />
+      <Button
+        disabled={!(row.order_status == orderStatuses.placed)}
+        color="danger"
+        className="btn btn-sm waves-effect waves-light mb-1"
+        onClick={() => handleStatusModal(row._id, orderStatuses.cancel)}
+      >
+        <span className="fa fa-times"></span> Cancel
+      </Button>{" "}
       <br></br>
       <Button
         className="btn btn-sm btn-warning waves-effect waves-light mb-1"
@@ -149,6 +159,17 @@ function Order(props) {
       sort: true,
     },
     {
+      text: "Order Time",
+      sort: true,
+      formatter: (cell, row) => (
+        <div>
+          <span>{moment(row.order_date).format("DD-MM-YYYY")}</span>
+          <br />
+          <span>{moment(row.order_date).format("hh:MM:SS A")}</span>
+        </div>
+      ),
+    },
+    {
       dataField: "order_type",
       text: "Order Type",
       sort: true,
@@ -164,7 +185,6 @@ function Order(props) {
       sort: true,
     },
     {
-      // dataField: "customer_name",
       text: "Customer",
       sort: true,
       formatter: (cell, row) => (
@@ -178,7 +198,6 @@ function Order(props) {
       ),
     },
     {
-      // dataField: "rider_name",
       text: "Assigned To",
       sort: true,
       formatter: (cell, row) => (
@@ -200,7 +219,6 @@ function Order(props) {
       sort: true,
     },
     {
-      // dataField: "order_status",
       text: "Order",
       sort: true,
       formatter: (cell, row) => (
@@ -210,7 +228,6 @@ function Order(props) {
       ),
     },
     {
-      //dataField: "he",
       text: "Action",
       sort: true,
       formatter: actionRef,
@@ -243,7 +260,7 @@ function Order(props) {
     // console.log("=======hello", props.order_name_edit_loading)
     if (props.get_all_order_loading == false) {
       //  console.log("I am in get all order loading ")
-      props.getAllOrderAction(0, 25)
+      props.getAllOrderAction(0, 500)
     }
 
     if (props.order_status_edit_loading === "Success") {
@@ -265,6 +282,7 @@ function Order(props) {
     props.order_name_edit_loading,
     props.order_delete_loading,
     props.order_status_edit_loading,
+    props.get_all_order_loading,
   ])
 
   useEffect(() => {

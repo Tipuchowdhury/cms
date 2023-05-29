@@ -505,7 +505,7 @@ const DatatableTables = () => {
       },
     ],
   }
-  document.title = "Data Tables | Foodi - React Admin & Dashboard Template"
+  document.title = "Foodi"
   return (
     <React.Fragment>
       <div className="page-content">

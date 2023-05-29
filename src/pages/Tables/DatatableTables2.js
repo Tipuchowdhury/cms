@@ -129,7 +129,7 @@ const defaultSorted = [
 const { SearchBar } = Search
 
 //meta title
-document.title = "Data Tables | Skote - React Admin & Dashboard Template"
+document.title = "Foodi"
 
 const DatatableTables2 = props => {
   let navigate = useNavigate()

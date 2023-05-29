@@ -222,10 +222,6 @@ export const getAvailableRider = zone_id => {
 export const orderAssignRider = (order_id, rider_id) => {
   var url = `${process.env.REACT_APP_LOCALHOST}/Order/AssaignRider?order_id=${order_id}&rider_id=${rider_id}`
 
-  let data = {
-    rider_id,
-    order_id,
-  }
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
