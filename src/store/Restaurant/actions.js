@@ -1530,6 +1530,7 @@ export const addRestaurantMenuAction = (
 
   var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Post"
 
+  console.log("variations :", variations)
   const variationData =
     isChecked && variations?.length > 0
       ? variations.map(item => {
@@ -1560,6 +1561,8 @@ export const addRestaurantMenuAction = (
           }
         })
       : []
+
+  console.log("variationData :", variationData)
 
   const menuTimingData =
     menuTiming.length > 0
