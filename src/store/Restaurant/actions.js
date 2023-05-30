@@ -279,8 +279,8 @@ export const branchAddAction = (
   zoneInfo,
   lat,
   lng,
-  file,
-  coverFile,
+  // file,
+  // coverFile,
   currentPath,
   selectedCuisine,
   time
@@ -327,8 +327,8 @@ export const branchAddAction = (
     address: zoneInfo.address,
     popularity_sort_value: JSON.parse(zoneInfo.popularity_sort_value),
     price_range: zoneInfo.price_range,
-    image: file,
-    cover_image: coverFile,
+    image: zoneInfo.image,
+    cover_image: zoneInfo.cover_image,
     slug: currentPath,
     zonal_admin: zoneInfo.zonal_admin,
     is_take_pre_order: JSON.parse(zoneInfo.is_take_pre_order),
@@ -349,7 +349,7 @@ export const branchAddAction = (
     delivery_charge: zoneInfo.delivery_time,
   }
 
-  //console.log(dataObject)
+  console.log(dataObject)
   const formData = convertToFormData(dataObject)
 
   formData.append("location.coordinates[0]", Number(lng))
@@ -1172,13 +1172,12 @@ export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
       }
     })
   const val_id = uuidv4()
-  // console.log(data)
 
   let formData = {
     _id: val,
     name: category.name,
     cat_is_multiple: isChecked,
-    cat_max_choice: parseInt(category.cat_max_choice),
+    cat_max_choice: parseInt(category.num_of_choice),
     language_slug: "en",
     add_on_category_desc: category.add_on_category_desc,
     variation_id: val_id,
