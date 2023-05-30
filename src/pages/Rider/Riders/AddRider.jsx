@@ -76,8 +76,8 @@ function AddRider(props) {
       ? location.state.otp_expire_time
       : "2023-05-15T07:19:23.9515226",
 
-    password: location.state ? location.state.password : "",
-    confirm_password: location.state ? location.state.confirm_password : "",
+    password: "",
+    confirm_password: "",
 
     present_address: location.state ? location.state.present_address : "",
     permanent_address: location.state ? location.state.permanent_address : "",
