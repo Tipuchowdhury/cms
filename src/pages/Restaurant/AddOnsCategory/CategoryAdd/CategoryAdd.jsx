@@ -258,11 +258,6 @@ function CategoryAdd(props) {
                               />
                             </div>
 
-                            {/* <div className="mb-3 col-lg-3">
-                                                            <label className="form-label" htmlFor="subject">Category Name</label>
-                                                            <input type="text" className="form-control" id="name" placeholder="Enter branch name" name="categoryName" readOnly value={category.name ?? ""} />
-                                                        </div> */}
-
                             <Col
                               lg={2}
                               className="align-self-center d-grid mt-3"

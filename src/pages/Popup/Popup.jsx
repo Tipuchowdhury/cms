@@ -170,7 +170,11 @@ function Popup(props) {
 
   const handleSubmit = e => {
     e.preventDefault()
-    props.addPopUpAction(addInfo)
+    if (addInfo.start_date >= addInfo.end_date) {
+      toast.error("Start time cannot be grater than or equal end time")
+    } else {
+      props.addPopUpAction(addInfo)
+    }
   }
 
   const handleEditInputs = e => {
@@ -260,7 +264,12 @@ function Popup(props) {
 
   const handleEdit = e => {
     e.preventDefault()
-    props.popUpUpdateAction(editInfo)
+    // props.popUpUpdateAction(editInfo)
+    if (editInfo.start_date >= editInfo.end_date) {
+      toast.error("Start time cannot be grater than or equal end time")
+    } else {
+      props.popUpUpdateAction(editInfo)
+    }
   }
 
   const handleStatusModal = row => {
@@ -656,14 +665,14 @@ function Popup(props) {
               <div className="mb-3">
                 <label htmlFor="end_date" className="col-md-2 col-form-label">
                   {" "}
-                  Start Time{" "}
+                  End Time{" "}
                 </label>
                 <input
                   type="datetime-local"
                   id="end_date"
                   className="form-control"
                   name="end_date"
-                  placeholder="Start Time"
+                  placeholder="End Time"
                   value={addInfo.end_date.slice(0, 16)}
                   onChange={e => handleAddTimeChange(e)}
                   required
@@ -890,14 +899,14 @@ function Popup(props) {
               <div className="mb-3">
                 <label htmlFor="end_date" className="col-md-2 col-form-label">
                   {" "}
-                  Start Time{" "}
+                  End Time{" "}
                 </label>
                 <input
                   type="datetime-local"
                   id="end_date"
                   className="form-control"
                   name="end_date"
-                  placeholder="Start Time"
+                  placeholder="End Time"
                   value={editInfo.end_date.slice(0, 16)}
                   onChange={e => handleEditTimeChange(e)}
                   required
