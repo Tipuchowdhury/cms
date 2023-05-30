@@ -80,9 +80,14 @@ function Category(props) {
   const toggleEditModal = () => setEditModal(!editModal)
   const handleSubmit = e => {
     e.preventDefault()
-    toggle()
+
     const val = uuidv4()
     props.addCategoryAction(categoryName, val, restaurantId, categoryImage)
+
+    toggle()
+    setCategoryName("")
+    setRestaurantId([])
+    setAddImages("")
   }
 
   const handleAddSelect = e => {

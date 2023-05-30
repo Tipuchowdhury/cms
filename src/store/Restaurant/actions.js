@@ -1762,10 +1762,12 @@ export const editRestaurantMenuAction = (
             add_on_categories: item.add_on_categories.map(addon_cats => {
               return {
                 ...addon_cats,
+                variation_id: _id,
                 add_ons: addon_cats.add_ons.map(add_ons => {
                   const _addon_id = uuidv4()
                   return {
                     ...add_ons,
+
                     _id: _addon_id,
                     add_ons_name: add_ons.add_on_name
                       ? add_ons.add_on_name
@@ -1773,7 +1775,7 @@ export const editRestaurantMenuAction = (
                     add_ons_price: add_ons.add_on_price
                       ? add_ons.add_on_price
                       : add_ons.add_ons_price,
-                    max_choice: add_ons.add_on_price ? add_ons.add_on_price : 0,
+                    max_choice: add_ons.max_choice ? add_ons.max_choice : 0,
                     is_multiple: add_ons.is_multiple
                       ? add_ons.is_multiple
                       : false,
@@ -1788,6 +1790,8 @@ export const editRestaurantMenuAction = (
           }
         })
       : []
+
+  console.log(variationData)
 
   // const menuTimingData =
   //   menuTiming.length > 0
