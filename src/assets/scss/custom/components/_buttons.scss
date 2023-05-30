@@ -21,3 +21,7 @@ a {
     color: $gray-200 !important;
   }
 }
+
+.btn-group>.btn-check:checked+.btn{
+  z-index: 0 !important;
+}
