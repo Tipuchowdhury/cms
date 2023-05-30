@@ -966,7 +966,7 @@ export const zoneEditFresh = () => {
 }
 
 export const zoneStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Zone/Put"
+  var url = `${process.env.REACT_APP_LOCALHOST}/Zone/isActive?id=${data.id}&is_active=${data.is_active}`
 
   const formData = data
   return dispatch => {
@@ -1530,6 +1530,7 @@ export const addRestaurantMenuAction = (
 
   var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Post"
 
+  console.log("variations :", variations)
   const variationData =
     isChecked && variations?.length > 0
       ? variations.map(item => {
@@ -1560,6 +1561,8 @@ export const addRestaurantMenuAction = (
           }
         })
       : []
+
+  console.log("variationData :", variationData)
 
   const menuTimingData =
     menuTiming.length > 0

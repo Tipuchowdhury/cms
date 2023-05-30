@@ -125,6 +125,7 @@ const order = (state = initialState, action) => {
     case ASSIGN_RIDER_FRESH:
       state = {
         ...state,
+        get_all_order_loading: false,
         order_assign_rider_loading: action.status,
       }
       break

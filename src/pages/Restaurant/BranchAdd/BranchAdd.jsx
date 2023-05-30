@@ -601,26 +601,6 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Address <span className="text-danger">*</span>
-                  </label>
-                  <div className="col-md-10">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="delivery_charge_1"
-                      placeholder="Enter Address"
-                      name="address"
-                      required
-                      onChange={handleInputs}
-                      value={zoneInfo.address}
-                    />
-                  </div>
-                </Row>
-                <Row className="mb-3">
-                  <label
-                    htmlFor="example-text-input"
-                    className="col-md-2 col-form-label"
-                  >
                     Price Range <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
@@ -1032,6 +1012,26 @@ function BranchAdd(props) {
                       name="pickup_time"
                       value={zoneInfo.pickup_time ?? ""}
                       onChange={handleInputs}
+                    />
+                  </div>
+                </Row>
+                <Row className="mb-3">
+                  <label
+                    htmlFor="example-text-input"
+                    className="col-md-2 col-form-label"
+                  >
+                    Address <span className="text-danger">*</span>
+                  </label>
+                  <div className="col-md-10">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="delivery_charge_1"
+                      placeholder="Enter Address"
+                      name="address"
+                      required
+                      onChange={handleInputs}
+                      value={zoneInfo.address}
                     />
                   </div>
                 </Row>
