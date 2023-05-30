@@ -219,7 +219,7 @@ function Order(props) {
       sort: true,
     },
     {
-      text: "Order",
+      text: "Order Status",
       sort: true,
       formatter: (cell, row) => (
         <div>

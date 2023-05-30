@@ -51,14 +51,16 @@ function BranchAdd(props) {
   const [preOrder, setPreOrder] = useState()
   const [priceRange, setPriceRange] = useState()
 
-  const [defaultProps, setDefaultProps] = useState({
-    lat: 23.8103,
-    lng: 90.4125,
-  })
-
   const map_value_for_edit = location.state?.location?.coordinates?.map(
     item => item
   )
+
+  const [defaultProps, setDefaultProps] = useState({
+    // lat: 23.8103,
+    // lng: 90.4125,
+    lat: location.state ? map_value_for_edit[1] : 23.8103,
+    lng: location.state ? map_value_for_edit[0] : 90.4125,
+  })
 
   // const map_value_for_edit = location.state?.location?.coordinates?.map((defaultProps) => Number(defaultProps.lng) + "," + Number(defaultProps.lat));
 
@@ -187,18 +189,20 @@ function BranchAdd(props) {
     location: undefined,
     image: location.state ? location.state.image : "",
     cover_image: location.state ? location.state.cover_image : "",
-    price_range: location.state ? location.state.price_range : "",
+    price_range: location.state ? location.state.price_range : "৳",
     popularity_sort_value: location.state
       ? location.state.popularity_sort_value
       : 0,
     is_take_pre_order: location.state
       ? location.state.is_take_pre_order.toString()
-      : "",
-    is_veg: location.state ? location.state.is_veg.toString() : "",
-    is_popular: location.state ? location.state.is_popular.toString() : "",
-    is_delivery: location.state ? location.state.is_delivery.toString() : "",
-    is_pickup: location.state ? location.state.is_pickup.toString() : "",
-    is_dine: location.state ? location.state.is_dine.toString() : "",
+      : "false",
+    is_veg: location.state ? location.state.is_veg.toString() : "false",
+    is_popular: location.state ? location.state.is_popular.toString() : "false",
+    is_delivery: location.state
+      ? location.state.is_delivery.toString()
+      : "false",
+    is_pickup: location.state ? location.state.is_pickup.toString() : "false",
+    is_dine: location.state ? location.state.is_dine.toString() : "false",
     commission: location.state ? location.state.commission : undefined,
     minimum_order_value: location.state
       ? location.state.min_order_value
@@ -412,7 +416,7 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Branch Name
+                    Branch Name <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -421,6 +425,7 @@ function BranchAdd(props) {
                       id="name"
                       placeholder="Enter branch name"
                       name="name"
+                      required
                       onChange={handleInputs}
                       value={zoneInfo.name ?? ""}
                     />
@@ -432,14 +437,14 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Restaurant Name
+                    Restaurant Name <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <Input
                       id="exampleSelect"
                       name="restaurant"
                       value={zoneInfo.restaurant}
-                      //required={true}
+                      required
                       onChange={handleInputs}
                       type="select"
                     >
@@ -473,7 +478,7 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Phone Number
+                    Phone Number <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -482,6 +487,7 @@ function BranchAdd(props) {
                       id="city"
                       placeholder="Enter phone number"
                       name="phone_number"
+                      required
                       value={zoneInfo.phone_number}
                       onChange={handleInputs}
                     />
@@ -573,35 +579,16 @@ function BranchAdd(props) {
                   </Row>
                 )}
 
-                {/* <Row className="mb-3">
-                                    <label
-                                        htmlFor="share_link"
-                                        className="col-md-2 col-form-label"
-                                    >
-                                        Link
-                                    </label>
-                                    <div className="col-md-10">
-                                        <input type="text" className="form-control" id="share_link" placeholder="Enter share link" name="share_link" value={zoneInfo.share_link} onChange={handleInputs} />
-                                    </div>
-                                </Row> */}
-
                 <Row className="mb-3">
                   <label
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Cuisine
+                    Cuisine <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <Select
-                      // id="exampleSelect"
-                      // name="cuisine"
-                      // value={zoneInfo.cuisine}
-                      // required={true}
-                      // // onChange={e => setCusine(e.target.value)}
-                      // onChange={handleInputs}
-                      // type="select"
-                      // isMulti={true}
+                      required
                       value={selectedCuisine}
                       onChange={handleSelectCuisine}
                       options={cusineData}
@@ -614,7 +601,7 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Address
+                    Address <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -623,6 +610,7 @@ function BranchAdd(props) {
                       id="delivery_charge_1"
                       placeholder="Enter Address"
                       name="address"
+                      required
                       onChange={handleInputs}
                       value={zoneInfo.address}
                     />
@@ -633,7 +621,7 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Price Range
+                    Price Range <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <div className="btn-group" role="group">
@@ -694,54 +682,12 @@ function BranchAdd(props) {
                   </div>
                 </Row>
 
-                {/* <Row className="mb-3">
-                                    <label
-                                        htmlFor="example-text-input"
-                                        className="col-md-2 col-form-label"
-                                    >
-                                        Popular Sort Value
-                                    </label>
-                                    <div className="col-md-10">
-                                        <div className="btn-group" role="group">
-                                            <input
-                                                type="radio"
-                                                className="btn-check"
-                                                id="popularity_sort_value"
-                                                name="popularity_sort_value" value="1" onChange={handleInputs}
-                                                //checked={zoneInfo.popularity_sort_value === "1"}
-                                                checked={zoneInfo.popularity_sort_value == "1" ? "1" : ""}
-                                            />
-                                            <label
-                                                className="btn btn-outline-secondary"
-                                                htmlFor="popularity_sort_value"
-                                            >
-                                                Yes
-                                            </label>
-
-                                            <input
-                                                type="radio"
-                                                className="btn-check"
-                                                name="popularity_sort_value" value="0" onChange={handleInputs}
-                                                id="popularity_sort_value1"
-
-                                                //checked={zoneInfo.popularity_sort_value === "0"}
-                                                checked={zoneInfo.popularity_sort_value == "0" ? "0" : ""}
-                                            />
-                                            <label
-                                                className="btn btn-outline-secondary"
-                                                htmlFor="popularity_sort_value1"
-                                            >
-                                                No
-                                            </label>
-                                        </div>
-                                    </div>
-                                </Row> */}
                 <Row className="mb-3">
                   <label
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Pre Order
+                    Pre Order <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <div className="btn-group" role="group">
@@ -787,7 +733,7 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Vegetarian
+                    Vegetarian <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <div className="btn-group" role="group">
@@ -832,7 +778,7 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Popular
+                    Popular <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <div className="btn-group" role="group">
@@ -877,7 +823,7 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Delivery
+                    Delivery <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <div className="btn-group" role="group">
@@ -922,7 +868,7 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Pickup
+                    Pickup <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <div className="btn-group" role="group">
@@ -967,7 +913,7 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Dine
+                    Dine <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <div className="btn-group" role="group">
@@ -1012,13 +958,14 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Commmission
+                    Commmission <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
                       type="number"
                       className="form-control"
                       id="city"
+                      required
                       placeholder="Enter commission amount"
                       name="commission"
                       value={zoneInfo.commission ?? ""}
@@ -1032,7 +979,7 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Minimum Order Value
+                    Minimum Order Value <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -1041,6 +988,7 @@ function BranchAdd(props) {
                       id="minimum_order_value"
                       placeholder="Enter minimum order value"
                       name="minimum_order_value"
+                      required
                       value={zoneInfo.minimum_order_value ?? ""}
                       onChange={handleInputs}
                     />
@@ -1051,7 +999,7 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Delivery Time
+                    Delivery Time <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -1060,6 +1008,7 @@ function BranchAdd(props) {
                       id="city"
                       placeholder="Enter Delivery Time"
                       name="delivery_time"
+                      required
                       value={zoneInfo.delivery_time ?? ""}
                       onChange={handleInputs}
                     />
@@ -1071,13 +1020,14 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Pickup Time
+                    Pickup Time <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
                       type="number"
                       className="form-control"
                       id="city"
+                      required
                       placeholder="Enter Delivery Time"
                       name="pickup_time"
                       value={zoneInfo.pickup_time ?? ""}
@@ -1090,7 +1040,7 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Location
+                    Location <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -1098,6 +1048,7 @@ function BranchAdd(props) {
                       className="form-control"
                       id="location"
                       name="location"
+                      required
                       value={state2.location}
                       readOnly={true}
                     />
@@ -1137,9 +1088,6 @@ function BranchAdd(props) {
                   >
                     Restaurant Timings
                   </label>
-                  {/* <div className="col-md-10">
-                                        <input type="text" className="form-control" id="location" name="location" value={state2.location} />
-                                    </div> */}
                 </Row>
                 {/* ==================restaurant time================= */}
 
