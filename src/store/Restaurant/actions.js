@@ -1539,6 +1539,7 @@ export const addRestaurantMenuAction = (
             add_on_categories: item.add_on_categories.map(addon_cats => {
               return {
                 ...addon_cats,
+                variation_id: _id,
                 add_ons: addon_cats.add_ons.map(add_ons => {
                   const _addon_id = uuidv4()
                   return {
@@ -1546,6 +1547,8 @@ export const addRestaurantMenuAction = (
                     _id: _addon_id,
                     add_ons_name: add_ons.add_on_name,
                     add_ons_price: add_ons.add_on_price,
+                    max_choice: 0,
+                    is_multiple: false,
                     addoncat_id: addon_cats.add_on_category_id,
                     variation_and_add_on_category_id: _id,
                   }
