@@ -205,7 +205,7 @@ function AddCoupon(props) {
   const user_data_edit = common_user
     ? common_user?.map((item, key) => {
         return {
-          label: `${item.firstName} ${item.lastName}`,
+          label: `${item.firstName} ${item.lastName} -  ${item.mobile}`,
           value: item._id,
         }
       })
@@ -226,7 +226,7 @@ function AddCoupon(props) {
   let userData = undefined
   if (props.get_all_customer_data?.length > 0) {
     userData = props.get_all_customer_data?.map((item, key) => ({
-      label: `${item.firstName} ${item.lastName}`,
+      label: `${item.firstName} ${item.lastName} -  ${item.mobile}`,
       value: item._id,
     }))
   }
