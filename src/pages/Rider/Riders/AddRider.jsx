@@ -303,10 +303,10 @@ function AddRider(props) {
   const handleSubmitForEdit = e => {
     e.preventDefault()
     let status = 0
-    // if (RiderInfo.password !== RiderInfo.confirm_password) {
-    //   status = 1
-    //   toast.error("Password and Confirm password are not matched")
-    // }
+    if (RiderInfo.password !== RiderInfo.confirm_password) {
+      status = 1
+      toast.error("Password and Confirm password are not matched")
+    }
 
     if (RiderInfo.mobile_number.length != 11) {
       status = 1
@@ -579,7 +579,7 @@ function AddRider(props) {
                         name="password"
                         onChange={handleInputs}
                         value={RiderInfo.password ?? ""}
-                        required
+                        required={location.state?.password ? false : true}
                       />
                     </div>
                   </Row>
@@ -601,7 +601,9 @@ function AddRider(props) {
                         name="confirm_password"
                         onChange={handleInputs}
                         value={RiderInfo.confirm_password ?? ""}
-                        required
+                        required={
+                          location.state?.confirm_password ? false : true
+                        }
                       />
                     </div>
                   </Row>

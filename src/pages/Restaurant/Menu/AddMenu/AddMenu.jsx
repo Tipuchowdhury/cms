@@ -29,6 +29,10 @@ import {
   getAllMenuTimeSlot,
   getCategoryByIdAction,
   getCategoryByIdFresh,
+  getCategoryByBranchIdAction,
+  getCategoryByBranchIdFresh,
+  getTimeSLotByBranchIdAction,
+  getTimeSLotByBranchIdFresh,
   getAllCategoryAction,
 } from "store/actions"
 import Breadcrumbs from "components/Common/Breadcrumb"
@@ -132,20 +136,20 @@ function AddMenu(props) {
   // ===========================start working from here ====================
   const [item, setItem] = useState([])
 
-  const handleChangeTime = (e, ClickedItem) => {
-    // Destructuring
-    const { value, checked } = e.target
-    console.log("checked :", checked)
-    console.log("checked :", ClickedItem)
+  // const handleChangeTime = (e, ClickedItem) => {
+  //   // Destructuring
+  //   const { value, checked } = e.target
+  //   console.log("checked :", checked)
+  //   console.log("checked :", ClickedItem)
 
-    // Case 1 : The user checks the box
-    if (checked) {
-      setItem([...item, ClickedItem])
-    } else {
-      setItem(item.filter(e => e !== ClickedItem))
-    }
-    console.log("item :", item)
-  }
+  //   // Case 1 : The user checks the box
+  //   if (checked) {
+  //     setItem([...item, ClickedItem])
+  //   } else {
+  //     setItem(item.filter(e => e !== ClickedItem))
+  //   }
+  //   console.log("item :", item)
+  // }
 
   console.log(item)
   // ===========================ends here ====================
@@ -206,6 +210,98 @@ function AddMenu(props) {
   }
   const handleAddVariation = () => {
     setAddVariation(!addVariation)
+  }
+
+  const [selectedBranch, setSelectedBranch] = useState()
+
+  // const handleSelectBranch = e => {
+  //   setInfo({ ...info, restaurant: e.value })
+  //   setSelectedBranch(e)
+  // }
+
+  const handleSelectBranch = e => {
+    let restaurantValue = e.value
+
+    setInfo({ ...info, restaurant: restaurantValue, category: "" })
+    // setInfo({ ...info, category: "" })
+    setSelectedBranch(e)
+    setCategoryNew([])
+    setSelectedTimeSlot([])
+    props.getCategoryByBranchIdAction(restaurantValue)
+    props.getTimeSLotByBranchIdAction(restaurantValue)
+  }
+
+  let branchDate = undefined
+  if (props.get_all_branch_data?.length > 0) {
+    branchDate = props.get_all_branch_data?.map((item, key) => ({
+      label: item.name,
+      value: item._id,
+    }))
+  }
+
+  const [categoryNew, setCategoryNew] = useState()
+
+  const handleSelectCategory2 = e => {
+    setInfo({ ...info, category: e.value })
+    setCategoryNew(e)
+  }
+
+  useEffect(() => {
+    if (info.restaurant) {
+      props.getCategoryByBranchIdFresh()
+      props.getCategoryByBranchIdAction(info.restaurant)
+      props.getTimeSLotByBranchIdFresh()
+      props.getTimeSLotByBranchIdAction(info.restaurant)
+    }
+  }, [info.restaurant])
+
+  let menuCategoryData2 = undefined
+  if (props.get_category_by_branch_id_data?.length > 0) {
+    menuCategoryData2 = props.get_category_by_branch_id_data?.map(
+      (item, key) => ({
+        label: item.category_name,
+        value: item._id,
+      })
+    )
+  }
+
+  const slot_data = []
+
+  props?.get_time_slot_by_branch_id_data?.forEach((time_slot, index) => {
+    slot_data.push({
+      _id: time_slot._id,
+      checked: false,
+      name: time_slot.name,
+      start_time: time_slot.start_time,
+      end_time: time_slot.end_time,
+    })
+  })
+
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(
+    slot_data ? slot_data : []
+  )
+
+  useEffect(() => {
+    if (props.get_time_slot_by_branch_id_loading === "Success") {
+      // props.getTimeSLotByBranchIdFresh()
+      setSelectedTimeSlot(slot_data)
+    }
+  }, [props.get_time_slot_by_branch_id_loading])
+
+  // console.log(props?.get_time_slot_by_branch_id_data)
+  // console.log(selectedTimeSlot)
+  console.log(info.restaurant)
+
+  const handleChangeTime = (e, ClickedItem) => {
+    const newState = selectedTimeSlot.map(obj => {
+      // 👇️ if id equals 2, update country property
+      if (obj._id === ClickedItem._id) {
+        return { ...obj, checked: !obj.checked }
+      }
+      return obj
+    })
+
+    setSelectedTimeSlot(newState)
   }
 
   //for variation start
@@ -475,7 +571,14 @@ function AddMenu(props) {
   const handleAddMenu = e => {
     e.preventDefault()
     const val = uuidv4()
-    props.addRestaurantMenuAction(val, info, isChecked, addOns, item)
+    // console.log(info)
+    props.addRestaurantMenuAction(
+      val,
+      info,
+      isChecked,
+      addOns,
+      selectedTimeSlot
+    )
   }
 
   let newAddOnsArray = []
@@ -536,6 +639,16 @@ function AddMenu(props) {
     if (props?.get_category_by_id_data?.preset_add_ons) {
       setAddOnsNew(props?.get_category_by_id_data?.preset_add_ons)
     }
+
+    // if (props.get_category_by_branch_id_loading == false) {
+    //   // console.log("false", info.restaurant)
+    //   props.getCategoryByBranchIdAction(info.restaurant)
+    // }
+
+    // if (props.get_time_slot_by_branch_id_loading == false) {
+    //   // console.log("false", info.restaurant)
+    //   props.getTimeSLotByBranchIdAction(info.restaurant)
+    // }
   }, [
     props.get_all_branch_loading,
     props.get_all_addOns_category_loading,
@@ -544,6 +657,8 @@ function AddMenu(props) {
     props.get_category_by_id_data,
     props.get_category_by_id_loading,
     props.get_all_category_loading,
+    props.get_category_by_branch_id_loading,
+    props.get_time_slot_by_branch_id_loading,
   ])
 
   return (
@@ -584,7 +699,7 @@ function AddMenu(props) {
           <Row>
             <Col className="col-10 mx-auto">
               <form className="mt-4" onSubmit={handleAddMenu}>
-                <Row className="mb-3">
+                {/* <Row className="mb-3">
                   <label
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
@@ -604,6 +719,24 @@ function AddMenu(props) {
                       <option>Choose...</option>
                       {branchData}
                     </Input>
+                  </div>
+                </Row> */}
+
+                <Row className="mb-3">
+                  <label
+                    htmlFor="example-text-input"
+                    className="col-md-2 col-form-label"
+                  >
+                    Restaurant Name
+                  </label>
+                  <div className="col-md-10">
+                    <Select
+                      value={selectedBranch}
+                      onChange={handleSelectBranch}
+                      options={branchDate}
+                      isMulti={false}
+                      required
+                    />
                   </div>
                 </Row>
 
@@ -1156,7 +1289,7 @@ function AddMenu(props) {
                   </div>
                 </Row>
 
-                <Row className="mb-3">
+                {/* <Row className="mb-3">
                   <label
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
@@ -1176,6 +1309,21 @@ function AddMenu(props) {
                       <option>Choose...</option>
                       {menuCategoryData}
                     </Input>
+                  </div>
+                </Row> */}
+
+                <Row className="mb-3">
+                  <label htmlFor="category" className="col-md-2 col-form-label">
+                    Category
+                  </label>
+                  <div className="col-md-10">
+                    <Select
+                      required
+                      value={categoryNew}
+                      onChange={handleSelectCategory2}
+                      options={menuCategoryData2}
+                      isMulti={false}
+                    />
                   </div>
                 </Row>
 
@@ -1230,16 +1378,8 @@ function AddMenu(props) {
                     Menu Availability
                   </label>
                   <div className="col-md-10">
-                    {/* <input type="number" className="form-control" id="sd" placeholder="Enter sd amount" name="sd" onChange={handleInputs} value={info.sd ?? ""} required /> */}
-
-                    {props?.get_all_menu_time_slot_data?.map(item => (
+                    {/* {props?.get_all_menu_time_slot_data?.map(item => (
                       <Row className="mb-3">
-                        {/* <label
-                                                htmlFor="example-text-input"
-                                                className="col-md-2 col-form-label"
-                                            >
-
-                                            </label> */}
                         <div
                           className="col-md-10"
                           style={{
@@ -1298,7 +1438,80 @@ function AddMenu(props) {
                           </div>
                         </div>
                       </Row>
-                    ))}
+                    ))} */}
+
+                    {selectedTimeSlot?.length > 0 && info.restaurant
+                      ? selectedTimeSlot?.map(item => (
+                          <Row className="mb-3">
+                            <div
+                              className="col-md-10"
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <div style={{ marginTop: "30px" }}>
+                                <input
+                                  type="checkbox"
+                                  id="cat_is_multiple"
+                                  name="cat_is_multiple"
+                                  style={{ margin: "0px 15px 50px 0px" }}
+                                  // value="true"
+
+                                  checked={item.checked}
+                                  // checked={checkTimeSelected(item)}
+                                  onChange={e => handleChangeTime(e, item)}
+                                />
+                                <span
+                                  style={{
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {item?.name}
+                                </span>
+                              </div>
+
+                              <div className="mb-3 col-lg-3">
+                                <label
+                                  className="form-label"
+                                  htmlFor="startTime"
+                                >
+                                  Start Time
+                                </label>
+                                <input
+                                  type="time"
+                                  id="startTime"
+                                  className="form-control"
+                                  name="start_time"
+                                  placeholder="Add-ons name"
+                                  value={moment({
+                                    hour: item.start_time?.hour,
+                                    minute: item?.start_time?.minute,
+                                  }).format("HH:mm")}
+                                />
+                              </div>
+
+                              <div className="mb-3 col-lg-3">
+                                <label className="form-label" htmlFor="subject">
+                                  End Time
+                                </label>
+                                <input
+                                  type="time"
+                                  id="subject"
+                                  className="form-control"
+                                  name="end_time"
+                                  placeholder="Price"
+                                  value={moment({
+                                    hour: item.end_time?.hour,
+                                    minute: item?.end_time?.minute,
+                                  }).format("HH:mm")}
+                                />
+                              </div>
+                            </div>
+                          </Row>
+                        ))
+                      : ""}
                   </div>
                 </Row>
 
@@ -1508,6 +1721,12 @@ const mapStateToProps = state => {
 
     get_category_by_id_data,
     get_category_by_id_loading,
+
+    get_category_by_branch_id_data,
+    get_category_by_branch_id_loading,
+
+    get_time_slot_by_branch_id_data,
+    get_time_slot_by_branch_id_loading,
   } = state.Restaurant
 
   const {
@@ -1538,6 +1757,12 @@ const mapStateToProps = state => {
     get_all_category_data,
     get_all_category_error,
     get_all_category_loading,
+
+    get_category_by_branch_id_data,
+    get_category_by_branch_id_loading,
+
+    get_time_slot_by_branch_id_data,
+    get_time_slot_by_branch_id_loading,
   }
 }
 
@@ -1551,6 +1776,10 @@ export default withRouter(
     getAllMenuTimeSlot,
     getCategoryByIdAction,
     getCategoryByIdFresh,
+    getCategoryByBranchIdAction,
+    getCategoryByBranchIdFresh,
+    getTimeSLotByBranchIdAction,
+    getTimeSLotByBranchIdFresh,
     getAllCategoryAction,
   })(AddMenu)
 )

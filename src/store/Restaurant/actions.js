@@ -41,6 +41,8 @@ import {
   ADD_RESTAURANT_MENU_FRESH,
   EDIT_RESTAURANT_MENU,
   EDIT_RESTAURANT_MENU_FRESH,
+  GET_CATEGORY_BY_BRANCH_ID,
+  GET_CATEGORY_BY_BRANCH_ID_FRESH,
   EDIT_ADD_ONS_CATEGORY,
   EDIT_ADD_ONS_CATEGORY_FRESH,
   EDIT_ADD_ON_CATEGORY_STATUS,
@@ -54,6 +56,8 @@ import {
   EDIT_MENU_TIME_SLOT_STATUS_FRESH,
   DELETE_MENU_TIME_SLOT,
   DELETE_MENU_TIME_SLOT_FRESH,
+  GET_TIME_SLOT_BY_BRANCH_ID,
+  GET_TIME_SLOT_BY_BRANCH_ID_FRESH,
   GET_CATEGORY_BY_ID,
   GET_CATEGORY_BY_ID_FRESH,
   ADD_BRANCH_FRESH,
@@ -1563,17 +1567,30 @@ export const addRestaurantMenuAction = (
 
   console.log("variationData :", variationData)
 
-  const menuTimingData =
-    menuTiming.length > 0
-      ? menuTiming.map(item => {
-          const _id = uuidv4()
-          return {
-            _id: _id,
-            menu_item_time_slot_id: item._id,
-            menu_item_id: val,
-          }
-        })
-      : []
+  // const menuTimingData =
+  //   menuTiming.length > 0
+  //     ? menuTiming.map(item => {
+  //         const _id = uuidv4()
+  //         return {
+  //           _id: _id,
+  //           menu_item_time_slot_id: item._id,
+  //           menu_item_id: val,
+  //         }
+  //       })
+  //     : []
+
+  const menuTimingData = menuTiming
+    .filter(data => data.checked != false)
+    .map(item => {
+      if (item.checked == true) {
+        const _id = uuidv4()
+        return {
+          _id: _id,
+          menu_item_time_slot_id: item._id,
+          menu_item_id: val,
+        }
+      }
+    })
 
   let dataObject = {
     _id: val,
@@ -1915,6 +1932,43 @@ export const editAddOnCategoryFresh = () => {
   }
 }
 
+export const getCategoryByBranchIdAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Category/GetByBranchId?id=" + id
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_CATEGORY_BY_BRANCH_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_CATEGORY_BY_BRANCH_ID,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getCategoryByBranchIdFresh = () => {
+  console.log("=======In the fresh ---------")
+  return dispatch => {
+    dispatch({
+      type: GET_CATEGORY_BY_BRANCH_ID_FRESH,
+      status: false,
+      payload: null,
+    })
+  }
+}
+
 export const addMenuTimeSlotAction = (val, timeSlot) => {
   console.log(val, timeSlot)
   var url = process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/Post"
@@ -2135,6 +2189,44 @@ export const menuTimeSlotDeleteFresh = () => {
       type: DELETE_MENU_TIME_SLOT_FRESH,
       status: false,
     })
+}
+
+export const getTimeSLotByBranchIdAction = id => {
+  var url =
+    process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/GetByBranchId?id=" + id
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_TIME_SLOT_BY_BRANCH_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_TIME_SLOT_BY_BRANCH_ID,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getTimeSLotByBranchIdFresh = () => {
+  console.log("=======In the fresh ---------")
+  return dispatch => {
+    dispatch({
+      type: GET_TIME_SLOT_BY_BRANCH_ID_FRESH,
+      status: false,
+      payload: null,
+    })
+  }
 }
 
 export const getCategoryByIdAction = id => {
