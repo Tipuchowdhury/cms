@@ -159,7 +159,7 @@ function Category(props) {
     setCategoryName(row.category_name)
     setRestaurantIdEdit(row.restaurant_id)
     setCategoryImage(row.image)
-    setIsActive(row.is_active)
+    setIsActive(!row.is_active)
 
     toggleStatus()
   }
@@ -171,13 +171,7 @@ function Category(props) {
 
   const handleStatusUpdate = e => {
     e.preventDefault()
-    props.categoryStatusEditAction(
-      categoryName,
-      categoryId,
-      restaurantIdEdit,
-      categoryImage,
-      isActive
-    )
+    props.categoryStatusEditAction({ _id: categoryId, is_active: isActive })
     // toggleDel();
   }
   const actionRef = (cell, row) => (
