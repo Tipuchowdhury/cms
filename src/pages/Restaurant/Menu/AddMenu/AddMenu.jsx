@@ -43,6 +43,7 @@ import moment from "moment"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import axios from "axios"
+import { toast } from "react-toastify"
 
 const LoadingContainer = () => <div>Loading...</div>
 
@@ -570,15 +571,27 @@ function AddMenu(props) {
   // ************************ ends here ********************************
   const handleAddMenu = e => {
     e.preventDefault()
-    const val = uuidv4()
-    // console.log(info)
-    props.addRestaurantMenuAction(
-      val,
-      info,
-      isChecked,
-      addOns,
-      selectedTimeSlot
-    )
+    let status = 0
+    if (info.menu_price < 0) {
+      status = 1
+      toast.error("Menu price can't be negative")
+    }
+    if (info.pickup_menu_price < 0) {
+      status = 1
+      toast.error("Pickup menu price can't be negative")
+    }
+
+    if (status == 0) {
+      const val = uuidv4()
+      // console.log(info)
+      props.addRestaurantMenuAction(
+        val,
+        info,
+        isChecked,
+        addOns,
+        selectedTimeSlot
+      )
+    }
   }
 
   let newAddOnsArray = []

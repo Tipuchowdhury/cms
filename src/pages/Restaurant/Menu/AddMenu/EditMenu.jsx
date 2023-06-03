@@ -732,13 +732,26 @@ function EditMenu(props) {
 
   const handleEditMenu = e => {
     e.preventDefault()
-    props.editRestaurantMenuAction(
-      location.state._id,
-      info,
-      isChecked,
-      addOns,
-      selectedTimeSlot
-    )
+    let status = 0
+    if (info.menu_price < 0) {
+      status = 1
+      toast.error("Menu price can't be negative")
+    }
+    if (info.pickup_menu_price < 0) {
+      status = 1
+      toast.error("Pickup menu price can't be negative")
+    }
+
+    if (status == 0) {
+      // console.log(info)
+      props.editRestaurantMenuAction(
+        location.state._id,
+        info,
+        isChecked,
+        addOns,
+        selectedTimeSlot
+      )
+    }
   }
 
   let newAddOnsArray = []
