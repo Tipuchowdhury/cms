@@ -8,6 +8,7 @@ import {
   GET_ALL_CUSINE,
   ADD_BRANCH,
   GET_ALL_BRANCH,
+  GET_ALL_BRANCH_FRESH,
   EDIT_BRANCH,
   EDIT_BRANCH_FRESH,
   EDIT_BRANCH_STATUS,
@@ -560,13 +561,15 @@ export const branchStatusEditAction = data => {
     is_pickup: JSON.parse(data.is_pickup),
     is_dine: JSON.parse(data.is_dine),
     commission: JSON.parse(data.commission),
-    min_order_value: 1,
+    // min_order_value: 1,
     delivery_time: JSON.parse(data.delivery_time),
     parent_restaurant_id: data.parent_restaurant_id,
     working_hours: data.working_hours,
     cuisines: data.cuisines,
     delivery_charge: data.delivery_charge,
     is_active: data.is_active,
+    min_order_value: data.minimum_order_value,
+    pickup_time: JSON.parse(data.pickup_time),
   }
 
   const formData = convertToFormData(dataObject)
@@ -627,13 +630,15 @@ export const branchPopularEditAction = data => {
     is_pickup: JSON.parse(data.is_pickup),
     is_dine: JSON.parse(data.is_dine),
     commission: JSON.parse(data.commission),
-    min_order_value: 1,
+    // min_order_value: 1,
     delivery_time: JSON.parse(data.delivery_time),
     parent_restaurant_id: data.parent_restaurant_id,
     working_hours: data.working_hours,
     cuisines: data.cuisines,
     delivery_charge: data.delivery_charge,
     is_active: data.is_active,
+    min_order_value: data.minimum_order_value,
+    pickup_time: JSON.parse(data.pickup_time),
   }
 
   const formData = convertToFormData(dataObject)
@@ -689,6 +694,16 @@ export const getAllBranchAction = () => {
           status: "Failed",
         })
       })
+  }
+}
+
+export const getAllBranchFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: GET_ALL_BRANCH_FRESH,
+      payload: null,
+      status: "Success",
+    })
   }
 }
 

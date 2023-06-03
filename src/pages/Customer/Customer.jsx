@@ -250,15 +250,15 @@ function Customer(props) {
         className="btn btn-primary waves-effect waves-light"
         onClick={() => handleEdit(row)}
       >
-        Edit
+        View
       </Button>{" "}
-      <Button
+      {/* <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
         onClick={() => handleDeleteModal(row)}
       >
         Delete
-      </Button>{" "}
+      </Button>{" "} */}
     </div>
   )
 
@@ -412,9 +412,12 @@ function Customer(props) {
                     <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
                       Customers
                     </CardTitle>
-                    {/* <Button style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }} onClick={toggle} >
-                                            Add Customer
-                                        </Button> */}
+                    {/* <Button
+                      style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
+                      onClick={toggle}
+                    >
+                      Add Customer
+                    </Button> */}
                   </div>
 
                   {props.get_all_customer_data ? (
@@ -435,7 +438,7 @@ function Customer(props) {
 
         {/* ============ create modal start=============== */}
         <Modal isOpen={modal} toggle={toggle} centered>
-          <ModalHeader toggle={toggle}>New PopUp Banner</ModalHeader>
+          <ModalHeader toggle={toggle}>Add Customer</ModalHeader>
           <ModalBody>
             <form className="mt-1" onSubmit={handleSubmit}>
               <div className="mb-3">
@@ -559,7 +562,7 @@ function Customer(props) {
 
         {/* ============ edit modal start=============== */}
         <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-          <ModalHeader>Edit PopUp Banner</ModalHeader>
+          <ModalHeader>Customer View</ModalHeader>
           <ModalBody>
             <form className="mt-1" onSubmit={handleEditSubmit}>
               <div className="mb-3">
@@ -626,25 +629,33 @@ function Customer(props) {
                 />
               </div>
 
-              {/* <div className="mb-3">
-                                <label className="form-label" htmlFor="image">Image</label>
-                                <input type="file" className="form-control" id="image" name="image" onChange={handleEditFile} />
-                            </div>
+              <div className="mb-3">
+                <label className="form-label" htmlFor="image">
+                  Image
+                </label>
+                <input
+                  type="file"
+                  className="form-control"
+                  id="image"
+                  name="image"
+                  onChange={handleEditFile}
+                />
+              </div>
 
-                            {editImages?.image && (
-                                <Row className="mb-3">
-                                    <label className="col-md-2">
-                                        <span></span>
-                                    </label>
-                                    <div className="col-md-10">
-                                        <img
-                                            src={editImages.image}
-                                            alt="preview"
-                                            style={{ width: "50%" }}
-                                        />
-                                    </div>
-                                </Row>
-                            )} */}
+              {editImages?.image && (
+                <Row className="mb-3">
+                  <label className="col-md-2">
+                    <span></span>
+                  </label>
+                  <div className="col-md-10">
+                    <img
+                      src={editImages.image}
+                      alt="preview"
+                      style={{ width: "50%" }}
+                    />
+                  </div>
+                </Row>
+              )}
 
               <div className="mb-3">
                 <label className="form-label" htmlFor="subscription_type_id">
@@ -663,8 +674,8 @@ function Customer(props) {
                 style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
               >
                 {/* <Button color="primary" type="submit">
-                                    Submit
-                                </Button>{' '} */}
+                  Submit
+                </Button>{" "} */}
                 <Button color="secondary" onClick={toggleEditModal}>
                   Cancel
                 </Button>

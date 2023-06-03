@@ -398,7 +398,7 @@ function Category(props) {
           </Row>
         </Container>
         <Modal isOpen={modal} toggle={toggle} centered>
-          <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+          <ModalHeader toggle={toggle}>Add New Category</ModalHeader>
           <ModalBody>
             <form className="mt-1" onSubmit={handleSubmit}>
               <div className="mb-3">
@@ -483,7 +483,7 @@ function Category(props) {
 
         {/* ============ edit modal start=============== */}
         <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-          <ModalHeader toggle={toggleEditModal}>Edit category name</ModalHeader>
+          <ModalHeader toggle={toggleEditModal}>Edit Category</ModalHeader>
           <ModalBody>
             <form className="mt-1" onSubmit={handleEditModalSubmit}>
               <div className="mb-3">

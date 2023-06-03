@@ -23,6 +23,7 @@ import { v4 as uuidv4 } from "uuid"
 import {
   addSliderAction,
   getAllBranchAction,
+  getAllBranchFresh,
   addSliderFresh,
   getAllSliderAction,
   getAllSliderFresh,
@@ -148,23 +149,11 @@ function Slider(props) {
 
   const handleSubmit = e => {
     e.preventDefault()
-    props.addSliderAction(addInfo, newSelectedRestaurant)
-  }
-
-  const newRest = nn => {
-    // console.log(nn);
-    // console.log(props?.get_all_branch_data);
-    const common_restaurants = props?.get_all_branch_data?.filter(elem =>
-      nn?.find(({ res_id }) => elem._id === res_id)
-    )
-    // console.log(common_restaurants);
-
-    const restaurant_data_edit = common_restaurants
-      ? common_restaurants.map((item, key) => {
-          return { label: item.name, value: item._id }
-        })
-      : ""
-    setSelectedRestaurant(restaurant_data_edit)
+    if (addInfo.start_date >= addInfo.end_date) {
+      toast.error("Start time can't be grater or equal valid end time")
+    } else {
+      props.addSliderAction(addInfo, newSelectedRestaurant)
+    }
   }
 
   const handleEditSlider = row => {
@@ -182,15 +171,35 @@ function Slider(props) {
       is_active: row.is_active,
     }))
 
-    // setRestaurant(row.restaurants)
     newRest(row.restaurants)
 
     toggleEditModal()
   }
 
+  console.log("branch data 2", props?.get_all_branch_data)
+
+  const newRest = nn => {
+    console.log("branch data", props?.get_all_branch_data)
+
+    const common_restaurants = props?.get_all_branch_data?.filter(elem =>
+      nn?.find(({ res_id }) => elem._id === res_id)
+    )
+
+    const restaurant_data_edit = common_restaurants
+      ? common_restaurants.map((item, key) => {
+          return { label: item.name, value: item._id }
+        })
+      : ""
+    setSelectedRestaurant(restaurant_data_edit)
+  }
+
   const handleEdit = e => {
     e.preventDefault()
-    props.promotionUpdateAction(editInfo, selectedRestaurant)
+    if (editInfo.start_date >= editInfo.end_date) {
+      toast.error("Start time can't be grater or equal valid end time")
+    } else {
+      props.promotionUpdateAction(editInfo, selectedRestaurant)
+    }
   }
 
   const handleStatusModal = row => {
@@ -276,10 +285,11 @@ function Slider(props) {
   ]
 
   useEffect(() => {
-    props.get_all_branch_data
+    // props.get_all_branch_data
 
     if (props.get_all_branch_loading == false) {
       props.getAllBranchAction()
+      //setAllBranch(props.get_all_branch_data)
     }
 
     if (props.get_all_slider_loading == false) {
@@ -408,7 +418,7 @@ function Slider(props) {
             <form className="mt-1" onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className="form-label" htmlFor="name">
-                  Name
+                  Name <span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
@@ -443,9 +453,10 @@ function Slider(props) {
 
               <div className="mb-3">
                 <label className="form-label" htmlFor="restaurants">
-                  Restaurants
+                  Restaurants <span className="text-danger">*</span>
                 </label>
                 <Select
+                  required
                   value={newSelectedRestaurant}
                   onChange={handleNewSelectRestaurant}
                   options={allRestaurant}
@@ -455,8 +466,7 @@ function Slider(props) {
 
               <div className="mb-3">
                 <label htmlFor="start_date" className="col-md-2 col-form-label">
-                  {" "}
-                  Start Time{" "}
+                  Start Time
                 </label>
                 <input
                   type="datetime-local"
@@ -472,8 +482,7 @@ function Slider(props) {
 
               <div className="mb-3">
                 <label htmlFor="end_date" className="col-md-2 col-form-label">
-                  {" "}
-                  End Time{" "}
+                  End Time
                 </label>
                 <input
                   type="datetime-local"
@@ -559,8 +568,7 @@ function Slider(props) {
             <form className="mt-1" onSubmit={handleEdit}>
               <div className="mb-3">
                 <label className="form-label" htmlFor="name">
-                  {" "}
-                  Name
+                  Name <span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
@@ -595,9 +603,10 @@ function Slider(props) {
 
               <div className="mb-3">
                 <label className="form-label" htmlFor="restaurants">
-                  Restaurants
+                  Restaurants <span className="text-danger">*</span>
                 </label>
                 <Select
+                  required
                   value={selectedRestaurant}
                   onChange={handleSelectRestaurant}
                   options={allRestaurant}
@@ -607,8 +616,7 @@ function Slider(props) {
 
               <div className="mb-3">
                 <label htmlFor="start_date" className="col-md-2 col-form-label">
-                  {" "}
-                  Start Time{" "}
+                  Start Time
                 </label>
                 <input
                   type="datetime-local"
@@ -624,8 +632,7 @@ function Slider(props) {
 
               <div className="mb-3">
                 <label htmlFor="end_date" className="col-md-2 col-form-label">
-                  {" "}
-                  End Time{" "}
+                  End Time
                 </label>
                 <input
                   type="datetime-local"
@@ -811,6 +818,7 @@ const mapStateToProps = state => {
 export default withRouter(
   connect(mapStateToProps, {
     getAllBranchAction,
+    getAllBranchFresh,
     addSliderAction,
     addSliderFresh,
     getAllSliderAction,

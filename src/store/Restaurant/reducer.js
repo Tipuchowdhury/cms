@@ -8,6 +8,7 @@ import {
   GET_ALL_CUSINE,
   ADD_BRANCH,
   GET_ALL_BRANCH,
+  GET_ALL_BRANCH_FRESH,
   ADD_ZONE,
   GET_ALL_ZONE,
   EDIT_ZONE,
@@ -299,6 +300,13 @@ const Restaurant = (state = initialState, action) => {
         ...state,
         get_all_branch_data: action.payload,
         get_all_branch_error: null,
+        get_all_branch_loading: action.status,
+      }
+      break
+
+    case GET_ALL_BRANCH_FRESH:
+      state = {
+        ...state,
         get_all_branch_loading: action.status,
       }
       break
