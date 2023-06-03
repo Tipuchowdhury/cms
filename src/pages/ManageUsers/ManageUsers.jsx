@@ -17,7 +17,7 @@ import {
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { toast } from "react-toastify"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect, useSelector } from "react-redux"
 import {
   getAllAdminUsersAction,
@@ -33,8 +33,9 @@ import {
   getServerSidePaginationSearchUserFresh,
 } from "store/register-new/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import DataTable from "react-data-table-component"
+
 
 function ManageUsers(props) {
   const user_update_state = useSelector(
@@ -43,6 +44,7 @@ function ManageUsers(props) {
   // console.log(user_update_state);
   const [modal, setModal] = useState(false)
   const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
+  const navigate = useNavigate()
 
   const [modalDel, setModalDel] = useState(false)
 
@@ -50,22 +52,7 @@ function ManageUsers(props) {
   const toggleDel = () => setModalDel(!modalDel)
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
   const handleEditUser = (row, cell) => {
-    console.log(cell)
-    console.log(row)
-    toggle()
-    setRegisterInfo(prevState => ({
-      first_name: cell.first_name,
-      last_name: cell.last_name,
-      present_address: cell.present_address,
-      permanent_address: cell.permanent_address,
-      mobileNumber: cell.mobile_number,
-      email: cell.email,
-      image: cell.image,
-      id: cell._id,
-      is_active: cell.is_active,
-    }))
-    setRole(row.role_id)
-    setAddImages({ ...addImages, image: row.image })
+    navigate("/edit-user", { state: cell })
   }
   const [registerInfo, setRegisterInfo] = useState({
     first_name: "",
@@ -81,8 +68,8 @@ function ManageUsers(props) {
 
   const [deleteItem, setDeleteItem] = useState()
 
-  const handleDeleteModal = row => {
-    setDeleteItem(row._id)
+  const handleDeleteModal = cell => {
+    setDeleteItem(cell._id)
     toggleDel()
   }
   const handleDelete = () => {
@@ -133,15 +120,15 @@ function ManageUsers(props) {
     }
   }
 
-  const handleStatusModal = row => {
+  const handleStatusModal = cell => {
     //  console.log(row);
-    setStatusItem(row)
+    setStatusItem(cell)
 
     toggleStatus()
   }
 
   const handleStatusUpdate = () => {
-    // console.log(statusItem);
+    console.log(statusItem);
     props.userStatusUpdateAction({
       ...statusItem,
       is_active: !statusItem.is_active,
@@ -171,7 +158,7 @@ function ManageUsers(props) {
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        onClick={() => handleDeleteModal(cell)}
       >
         Delete
       </Button>{" "}
@@ -182,11 +169,11 @@ function ManageUsers(props) {
 
   const statusRef = (cell, row) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
   const textRef = (cell, row) => (
@@ -255,10 +242,10 @@ function ManageUsers(props) {
       props.getAllUsersRolesAction()
     }
 
-    if (props.user_update_loading === "Success") {
-      toast.success("User Updated")
-      props.userUpdateFresh()
-    }
+    // if (props.user_update_loading === "Success") {
+    //   toast.success("User Updated")
+    //   props.userUpdateFresh()
+    // }
 
     if (props.user_status_update_loading === "Success") {
       toast.success("User Status Updated")
@@ -347,7 +334,7 @@ function ManageUsers(props) {
                     data={
                       props.get_server_side_pagination_user_search_data != null
                         ? props.get_server_side_pagination_user_search_data
-                            ?.data
+                          ?.data
                         : props?.get_server_side_pagination_user_data?.data
                     }
                     highlightOnHover
@@ -356,7 +343,7 @@ function ManageUsers(props) {
                     paginationTotalRows={
                       props.get_server_side_pagination_user_search_data != null
                         ? props.get_server_side_pagination_user_search_data
-                            ?.count
+                          ?.count
                         : props.get_server_side_pagination_user_data?.count
                     }
                     paginationPerPage={countPerPage}
@@ -371,156 +358,7 @@ function ManageUsers(props) {
         </Container>
 
         {/* ============ edit modal start=============== */}
-        <Modal isOpen={modal} toggle={toggle}>
-          <ModalHeader toggle={toggle}>Edit User</ModalHeader>
-          <ModalBody>
-            <div>
-              <form className="mt-1" onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="first_name">
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="first_name"
-                    placeholder="Enter username"
-                    name="first_name"
-                    onChange={handleInputs}
-                    value={registerInfo.first_name}
-                  />
-                </div>
 
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="last_name">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="last_name"
-                    placeholder="Enter username"
-                    name="last_name"
-                    onChange={handleInputs}
-                    value={registerInfo.last_name}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="image">
-                    Image
-                  </label>{" "}
-                  <input
-                    type="file"
-                    className="form-control"
-                    id="image"
-                    name="image"
-                    onChange={handleChange}
-                  />
-                </div>
-                {addImages?.image && (
-                  <Row className="mb-3">
-                    <label className="col-md-2">
-                      <span></span>
-                    </label>
-                    <div className="col-md-10">
-                      <img
-                        src={addImages.image}
-                        alt="preview"
-                        style={{ width: "50%" }}
-                      />
-                    </div>
-                  </Row>
-                )}
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="present_address">
-                    Present Address
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="present_address"
-                    placeholder="Enter username"
-                    name="present_address"
-                    onChange={handleInputs}
-                    value={registerInfo.present_address}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="permanent_address">
-                    Permanent Address
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="permanent_address"
-                    placeholder="Enter username"
-                    name="permanent_address"
-                    onChange={handleInputs}
-                    value={registerInfo.permanent_address}
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="mobileNumber">
-                    Mobile Number
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    id="mobileNumber"
-                    placeholder="Enter mobile number"
-                    name="mobileNumber"
-                    onChange={handleInputs}
-                    value={registerInfo.mobileNumber}
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="useremail">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="useremail"
-                    placeholder="Enter email"
-                    name="email"
-                    value={registerInfo.email}
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="Role">
-                    Role
-                  </label>
-
-                  <Input
-                    id="exampleSelect"
-                    name="manager"
-                    value={role}
-                    required={true}
-                    onChange={e => setRole(e.target.value)}
-                    type="select"
-                  >
-                    <option>Choose...</option>
-                    {userData}
-                  </Input>
-                </div>
-
-                <div className="mb-3 row">
-                  <div className="col-12 text-end">
-                    <button
-                      className="btn btn-primary w-md waves-effect waves-light"
-                      type="submit"
-                    >
-                      Update
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </ModalBody>
-        </Modal>
         {/* ============ edit modal ends=============== */}
 
         {/* ============ delete modal starts=============== */}

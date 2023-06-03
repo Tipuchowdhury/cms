@@ -16,7 +16,7 @@ import {
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { toast } from "react-toastify"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -50,7 +50,6 @@ function Restaurant(props) {
 
   const handleDelete = () => {
     // toggleDel();
-    console.log(deleteItem)
     props.restaurantDeleteAction(deleteItem)
   }
 
@@ -60,16 +59,13 @@ function Restaurant(props) {
     e.preventDefault()
     toggle()
     const val = uuidv4()
-    console.log(name)
-    console.log(val)
     props.restaurantAddAction(name, val)
     setName("")
   }
-  const handleEditName = row => {
-    console.log(row)
-    setId(row._id)
-    setRestaurantName(row.name)
-    setIsActive(row.is_active)
+  const handleEditName = cell => {
+    setId(cell._id)
+    setRestaurantName(cell.name)
+    setIsActive(cell.is_active)
     toggleEditModal()
   }
   const handleNameChange = e => {
@@ -79,27 +75,24 @@ function Restaurant(props) {
   const handleEditModalSubmit = e => {
     e.preventDefault()
     toggleEditModal()
-    console.log(restaurantName)
-    console.log(restaurantId)
     props.restaurantNameUpdateAction(restaurantName, restaurantId, isActive)
   }
-  const handleDeleteModal = row => {
-    setDeleteItem(row._id)
+  const handleDeleteModal = cell => {
+    setDeleteItem(cell._id)
     toggleDel()
   }
 
-  const handleStatusModal = row => {
-    console.log(row)
-    setId(row._id)
-    setRestaurantName(row.name)
-    setIsActive(row.is_active)
+  const handleStatusModal = cell => {
+    setId(cell._id)
+    setRestaurantName(cell.name)
+    setIsActive(cell.is_active)
 
     toggleStatus()
   }
 
   const handleStatusUpdate = () => {
     // console.log(statusItem);
-    props.restaurantStatusUpdateAction(restaurantName, restaurantId, isActive)
+    props.restaurantStatusUpdateAction(restaurantId, isActive)
     toggleStatus()
   }
   const actionRef = (cell, row) => (
@@ -107,27 +100,27 @@ function Restaurant(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEditName(row)}
+        onClick={() => handleEditName(cell)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        onClick={() => handleDeleteModal(cell)}
       >
         Delete
       </Button>{" "}
     </div>
   )
 
-  const statusRef = (cell, row) => (
+  const statusRef = (cell) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
 
@@ -170,7 +163,6 @@ function Restaurant(props) {
   }
 
   const handlePerRowsChange = async (newPerPage, page) => {
-    console.log(newPerPage, page)
     setCountPerPage(newPerPage)
   }
 
@@ -194,8 +186,6 @@ function Restaurant(props) {
     countPerPage,
   ])
 
-  console.log(props.get_all_restaurant_data)
-  console.log(props.get_server_side_pagination_restaurant_data)
   return (
     <React.Fragment>
       <div className="page-content">
@@ -247,24 +237,24 @@ function Restaurant(props) {
                     columns={activeData}
                     data={
                       props.get_server_side_pagination_restaurant_search_data !=
-                      null
+                        null
                         ? props
-                            .get_server_side_pagination_restaurant_search_data
-                            ?.data
+                          .get_server_side_pagination_restaurant_search_data
+                          ?.data
                         : props?.get_server_side_pagination_restaurant_data
-                            ?.data
+                          ?.data
                     }
                     highlightOnHover
                     pagination
                     paginationServer
                     paginationTotalRows={
                       props.get_server_side_pagination_restaurant_search_data !=
-                      null
+                        null
                         ? props
-                            .get_server_side_pagination_restaurant_search_data
-                            ?.count
+                          .get_server_side_pagination_restaurant_search_data
+                          ?.count
                         : props.get_server_side_pagination_restaurant_data
-                            ?.count
+                          ?.count
                     }
                     paginationPerPage={countPerPage}
                     paginationComponentOptions={paginationComponentOptions}

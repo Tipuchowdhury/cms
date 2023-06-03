@@ -9,6 +9,9 @@ import {
   VEHICLE_TYPE_DELETE_FRESH,
   EDIT_VEHICLE_TYPE_STATUS,
   EDIT_VEHICLE_TYPE_STATUS_FRESH,
+  SERVER_SIDE_PAGINATION_VEHICLE_TYPE,
+  SERVER_SIDE_PAGINATION_VEHICLE_TYPE_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_VEHICLE_TYPE_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -221,5 +224,72 @@ export const vehicleTypeDeleteFresh = () => {
     dispatch({
       type: VEHICLE_TYPE_DELETE_FRESH,
       status: false,
+    })
+}
+
+export const getServerSidePaginationVehicleTypeAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/VehicleType/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_VEHICLE_TYPE,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_VEHICLE_TYPE,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationVehicleTypeSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/VehicleType/Search?type=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_VEHICLE_TYPE_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_VEHICLE_TYPE_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchVehicleTypeFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_VEHICLE_TYPE_FRESH,
+      status: false,
+      payload: null,
     })
 }

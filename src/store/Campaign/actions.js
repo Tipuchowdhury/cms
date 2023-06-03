@@ -27,13 +27,13 @@ export const addCampaignAction = (id, data, selectedBranch) => {
   const selectedBranchData =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            res_id: item.value,
-            campaign_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          res_id: item.value,
+          campaign_id: id,
+        }
+      })
       : null
   // console.log(selectedBranchData);
   // const formData = {
@@ -131,13 +131,13 @@ export const campaignEditAction = (id, data, selectedBranch) => {
   const selectedBranchData =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            res_id: item.value,
-            campaign_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          res_id: item.value,
+          campaign_id: id,
+        }
+      })
       : null
 
   const dataObject = {
@@ -183,10 +183,19 @@ export const campaignEditFresh = () => {
 }
 
 export const campaignStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Campaign/Put"
-  let dataObject = { ...data }
+  // var url = process.env.REACT_APP_LOCALHOST + "/Campaign/Put"
+  // let dataObject = { ...data }
 
-  const formData = convertToFormData(dataObject)
+  var url = process.env.REACT_APP_LOCALHOST + `/Campaign/isActive?id=${data._id}&is_active=${data.is_active}`
+
+  //const formData = data
+  const formData = {
+    id: data._id,
+    is_active: !data.is_active
+
+  }
+
+  //const formData = convertToFormData(dataObject)
   // console.log(formData);
   return dispatch => {
     const headers = {

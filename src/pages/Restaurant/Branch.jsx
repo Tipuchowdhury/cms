@@ -16,7 +16,7 @@ import {
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { toast } from "react-toastify"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -50,8 +50,8 @@ function Branch(props) {
 
   const toggleDel = () => setModalDel(!modalDel)
 
-  const handleDeleteModal = row => {
-    setDeleteItem(row._id)
+  const handleDeleteModal = cell => {
+    setDeleteItem(cell._id)
     toggleDel()
   }
 
@@ -61,8 +61,8 @@ function Branch(props) {
     props.branchDeleteAction(deleteItem)
   }
 
-  const handleStatusModal = row => {
-    setStatusInfo(row)
+  const handleStatusModal = cell => {
+    setStatusInfo(cell)
 
     toggleStatus()
   }
@@ -88,9 +88,9 @@ function Branch(props) {
   }
 
   const navigate = useNavigate()
-  const handleEditBranch = row => {
-    console.log(row)
-    navigate("/branch-add", { state: row })
+  const handleEditBranch = cell => {
+    console.log(cell)
+    navigate("/branch-edit/" + cell._id, { state: cell })
   }
 
   const actionRef = (cell, row) => (
@@ -98,14 +98,14 @@ function Branch(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEditBranch(row)}
+        onClick={() => handleEditBranch(cell)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        onClick={() => handleDeleteModal(cell)}
       >
         Delete
       </Button>{" "}
@@ -115,13 +115,13 @@ function Branch(props) {
   // const statusRef = (cell, row) => <Badge color="success" style={{ padding: "12px" }}>Activate</Badge>
   // const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
 
-  const statusRef = (cell, row) => (
+  const statusRef = (cell) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
 
@@ -129,9 +129,9 @@ function Branch(props) {
     <Button
       color={row.is_popular ? "info" : "warning"}
       className="btn waves-effect waves-light"
-      onClick={() => handlePopularModal(row)}
+      onClick={() => handlePopularModal(cell)}
     >
-      {row.is_popular ? "Popular" : "Regular"}
+      {cell.is_popular ? "Popular" : "Regular"}
     </Button>
   )
   const textRef = (cell, row) => (
@@ -144,13 +144,6 @@ function Branch(props) {
       name: "Branch Name",
       sortable: true,
       cell: textRef,
-    },
-
-    {
-      selector: row => row.phone_number,
-      name: "Phone",
-      sortable: true,
-      //formatter: actionRef,
     },
     {
       selector: row => row.is_active,
@@ -235,7 +228,7 @@ function Branch(props) {
     countPerPage,
   ])
 
-  // console.log(props.get_all_branch_data);
+  console.log(props.edit_branch_loading);
   return (
     <React.Fragment>
       <div className="page-content">
@@ -290,9 +283,9 @@ function Branch(props) {
                     columns={activeData}
                     data={
                       props.get_server_side_pagination_branch_search_data !=
-                      null
+                        null
                         ? props.get_server_side_pagination_branch_search_data
-                            ?.data
+                          ?.data
                         : props?.get_server_side_pagination_branch_data?.data
                     }
                     highlightOnHover
@@ -300,9 +293,9 @@ function Branch(props) {
                     paginationServer
                     paginationTotalRows={
                       props.get_server_side_pagination_branch_search_data !=
-                      null
+                        null
                         ? props.get_server_side_pagination_branch_search_data
-                            ?.count
+                          ?.count
                         : props.get_server_side_pagination_branch_data?.count
                     }
                     paginationPerPage={countPerPage}
@@ -417,6 +410,7 @@ const mapStateToProps = state => {
 
     get_server_side_pagination_branch_data,
     get_server_side_pagination_branch_search_data,
+    edit_branch_loading
   } = state.Restaurant
 
   return {
@@ -428,6 +422,7 @@ const mapStateToProps = state => {
 
     get_server_side_pagination_branch_data,
     get_server_side_pagination_branch_search_data,
+    edit_branch_loading
   }
 }
 

@@ -63,10 +63,10 @@ function EditZone(props) {
     props?.get_zone_by_id_data
       ? edit_map_data
       : [
-          { lng: 90.44133911132815, lat: 23.810299999999998 },
-          { lng: 90.4334426879883, lat: 23.809985898058592 },
-          { lng: 90.41764984130862, lat: 23.8209790138562 },
-        ]
+        { lng: 90.44133911132815, lat: 23.810299999999998 },
+        { lng: 90.4334426879883, lat: 23.809985898058592 },
+        { lng: 90.41764984130862, lat: 23.8209790138562 },
+      ]
   )
 
   const polygonRef = useRef(null)
@@ -307,8 +307,8 @@ function EditZone(props) {
       const branch_data_edit =
         common_branches?.length > 0
           ? common_branches?.map((item, key) => {
-              return { label: item.name, value: item._id }
-            })
+            return { label: item.name, value: item._id }
+          })
           : ""
 
       setBranch(branchData)
@@ -346,11 +346,7 @@ function EditZone(props) {
       SetGetInfo(false)
     }
   }, [props])
-  //props.get_all_branch_loading, props.get_all_city_loading, props.add_zone_loading, props.edit_zone_loading
-  console.log(props.get_all_branch_data)
-  // console.log(props.get_all_city_data);
-  console.log(props.get_zone_by_id_data)
-  console.log(props.get_zone_by_id_loading)
+
 
   return (
     <>

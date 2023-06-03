@@ -16,7 +16,7 @@ import {
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { toast } from "react-toastify"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -51,7 +51,6 @@ function CategoryAdd(props) {
     location.state ? location.state.preset_add_ons : [addOnsTemplate]
   )
   const handleAddOnsCat = (e, index) => {
-    // console.log(index);
     const updatedValue = addOns.map((row, i) =>
       index === i
         ? Object.assign(row, { [e.target.name]: e.target.value })
@@ -72,7 +71,6 @@ function CategoryAdd(props) {
 
   let name, value
   const handleInputs = e => {
-    // console.log(e);
     name = e.target.name
     value = e.target.value
     setCategory({ ...category, [name]: value })
@@ -87,17 +85,12 @@ function CategoryAdd(props) {
 
   const handleFormSubmit = e => {
     e.preventDefault()
-    // console.log(category);
-    // console.log(isChecked);
     const val = uuidv4()
     props.addOnsCategoryAction(val, category, isChecked, addOns)
   }
 
   const handleEdit = e => {
     e.preventDefault()
-    //console.log(category);
-    // console.log(isChecked);
-    // console.log(addOns);
     props.editAddOnsCategoryAction(
       location.state?._id,
       category,
@@ -105,7 +98,6 @@ function CategoryAdd(props) {
       addOns
     )
   }
-  //console.log(location.state);
   useEffect(() => {
     if (props.add_ons_category_loading == "Success") {
       navigate("/addons-category")
@@ -118,10 +110,6 @@ function CategoryAdd(props) {
     }
   }, [props.add_ons_category_loading, props.edit_addOn_category_loading])
 
-  // console.log(props.get_all_restaurant_data);
-  // console.log(props.add_ons_category_data);
-  // console.log(location.state);
-  // console.log(props.add_ons_category_loading);
 
   return (
     <React.Fragment>

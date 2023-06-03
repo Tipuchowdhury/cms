@@ -118,6 +118,7 @@ import SubscriptionTypes from "pages/SubscriptionTypes/SubscriptionTypes"
 import Restaurant from "pages/Restaurant/Restaurant"
 import Branch from "pages/Restaurant/Branch"
 import BranchAdd from "pages/Restaurant/BranchAdd/BranchAdd"
+import BranchEdit from "pages/Restaurant/BranchAdd/BranchEdit"
 import EmailForRecoverPassword from "pages/AuthenticationInner/Email-for-recover-password"
 import Category from "pages/Category/Category"
 import AddZone from "pages/Zone/AddZone/AddZone"
@@ -127,6 +128,7 @@ import Campaign from "pages/Campaign/Campaign"
 import AddCampaign from "pages/Campaign/AddCampaign"
 import AddOnsCategory from "pages/Restaurant/AddOnsCategory/AddOnsCategory"
 import CategoryAdd from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryAdd"
+import CategoryEdit from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryEdit"
 import Slider from "pages/Slider/Slider"
 import SliderAdd from "pages/Slider/addSlider/SliderAdd"
 import AddMenu from "pages/Restaurant/Menu/AddMenu/AddMenu"
@@ -156,6 +158,8 @@ import Order from "pages/Order/Order"
 import Refund from "pages/Refund/Refund"
 import ZoneUtilization from "pages/ZoneUtilization/ZoneUtilization"
 import RiderList from "pages/ZoneUtilization/RiderList"
+import EditUser from "pages/ManageUsers/EditUser";
+import CustomerEdit from "pages/Customer/CustomerEdit"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -185,8 +189,10 @@ const userRoutes = [
   // Users
   { path: "/register", component: <Register1 /> },
   { path: "/manage-users", component: <ManageUsers /> },
+  { path: "/edit-user", component: <EditUser /> },
 
   { path: "/customers", component: <Customer /> },
+  { path: "/customer-edit", component: <CustomerEdit /> },
 
   { path: "/vehicle-types", component: <VehicleTypes /> },
 
@@ -204,17 +210,22 @@ const userRoutes = [
 
   { path: "/manage-branch", component: <Branch /> },
   { path: "/branch-add", component: <BranchAdd /> },
+  { path: "/branch-edit/:id", component: <BranchEdit /> },
 
   { path: "/category", component: <Category /> },
 
-  { path: "/campaign", component: <Campaign /> },
-  { path: "/add-campaign", component: <AddCampaign /> },
+  // { path: "/campaign", component: <Campaign /> },
+  //{ path: "/add-campaign", component: <AddCampaign /> },
+  { path: "/all-campaign", component: <Campaign /> },
+  { path: "/campaign", component: <AddCampaign /> },
+  { path: "/campaign/:id", component: <AddCampaign /> },
 
   { path: "/menu", component: <Menu /> },
   { path: "/add-menu", component: <AddMenu /> },
 
   { path: "/addons-category", component: <AddOnsCategory /> },
   { path: "/category-addons", component: <CategoryAdd /> },
+  { path: "/category-addons-edit/:id", component: <CategoryEdit /> },
 
   { path: "/time-slot", component: <MenuTimeSlot /> },
   { path: "/add-time-slot", component: <AddTimeSlot /> },

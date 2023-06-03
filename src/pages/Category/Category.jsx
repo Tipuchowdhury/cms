@@ -19,7 +19,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { Link, useNavigate } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -93,12 +93,13 @@ function Category(props) {
     setRestaurantIdEdit(e.target.value)
   }
 
-  const handleEditCategoryName = row => {
-    setCategoryId(row._id)
-    setCategoryName(row.category_name)
-    setRestaurantIdEdit(row.restaurant_id)
-    setEditImages({ ...editImages, image: row.image })
-    setIsActive(row.is_active)
+  const handleEditCategoryName = cell => {
+    console.log(cell);
+    setCategoryId(cell._id)
+    setCategoryName(cell.category_name)
+    setRestaurantIdEdit(cell.restaurant_id)
+    setEditImages({ ...editImages, image: cell.image })
+    setIsActive(cell.is_active)
     toggleEditModal()
   }
   const handleCategoryName = e => {
@@ -144,17 +145,17 @@ function Category(props) {
       isActive
     )
   }
-  const handleDeleteModal = row => {
-    setDeleteItem(row._id)
+  const handleDeleteModal = cell => {
+    setDeleteItem(cell._id)
     toggleDel()
   }
 
-  const handleStatusModal = row => {
-    setCategoryId(row._id)
-    setCategoryName(row.category_name)
-    setRestaurantIdEdit(row.restaurant_id)
-    setCategoryImage(row.image)
-    setIsActive(row.is_active)
+  const handleStatusModal = cell => {
+    setCategoryId(cell._id)
+    setCategoryName(cell.category_name)
+    setRestaurantIdEdit(cell.restaurant_id)
+    setCategoryImage(cell.image)
+    setIsActive(cell.is_active)
 
     toggleStatus()
   }
@@ -167,10 +168,7 @@ function Category(props) {
   const handleStatusUpdate = e => {
     e.preventDefault()
     props.categoryStatusEditAction(
-      categoryName,
       categoryId,
-      restaurantIdEdit,
-      categoryImage,
       isActive
     )
     // toggleDel();
@@ -180,27 +178,27 @@ function Category(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEditCategoryName(row)}
+        onClick={() => handleEditCategoryName(cell)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        onClick={() => handleDeleteModal(cell)}
       >
         Delete
       </Button>{" "}
     </div>
   )
 
-  const statusRef = (cell, row) => (
+  const statusRef = (cell) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
 
@@ -367,9 +365,9 @@ function Category(props) {
                     columns={activeData}
                     data={
                       props.get_server_side_pagination_category_search_data !=
-                      null
+                        null
                         ? props.get_server_side_pagination_category_search_data
-                            ?.data
+                          ?.data
                         : props?.get_server_side_pagination_category_data?.data
                     }
                     highlightOnHover
@@ -377,9 +375,9 @@ function Category(props) {
                     paginationServer
                     paginationTotalRows={
                       props.get_server_side_pagination_category_search_data !=
-                      null
+                        null
                         ? props.get_server_side_pagination_category_search_data
-                            ?.count
+                          ?.count
                         : props.get_server_side_pagination_category_data?.count
                     }
                     paginationPerPage={countPerPage}

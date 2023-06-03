@@ -13,6 +13,7 @@ import {
   SERVER_SIDE_PAGINATION_CUSTOMER,
   SERVER_SIDE_PAGINATION_CUSTOMER_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_CUSTOMER_FRESH,
+  GET_CUSTOMER_BY_ID
 } from "./actionTypes"
 
 const initialState = {
@@ -41,6 +42,10 @@ const initialState = {
 
   get_server_side_pagination_customer_search_data: null,
   get_server_side_pagination_customer_search_loading: false,
+
+  get_customer_by_id_data: null,
+  get_customer_by_id_error: null,
+  get_customer_by_id_loading: false,
 }
 
 const Customer = (state = initialState, action) => {
@@ -145,6 +150,15 @@ const Customer = (state = initialState, action) => {
         ...state,
         get_server_side_pagination_customer_search_data: action.payload,
         get_server_side_pagination_customer_search_loading: action.status,
+      }
+      break;
+
+    case GET_CUSTOMER_BY_ID:
+      state = {
+        ...state,
+        get_customer_by_id_data: action.payload,
+        get_customer_by_id_error: null,
+        get_customer_by_id_loading: action.status,
       }
       break
   }

@@ -20,7 +20,8 @@ import {
   GET_USER_BY_ID_FRESH,
 } from "./actionTypes"
 import axios from "axios"
-import { convertToFormData } from "helpers/functions"
+import { convertToFormData } from "helpers/functions";
+import { toast } from "react-toastify"
 
 // token
 // var authUser = JSON.parse(localStorage.getItem("user"));
@@ -234,12 +235,11 @@ export const getAllAdminUsersAction = () => {
   }
 }
 
-export const userUpdateAction = (registerInfo, file, role) => {
-  // console.log(registerInfo, role);
+export const userUpdateAction = (id, registerInfo, file, role) => {
 
   var url = process.env.REACT_APP_LOCALHOST + "/User/Put"
   const dataObject = {
-    _id: registerInfo.id,
+    _id: id,
     first_name: registerInfo.first_name,
     last_name: registerInfo.last_name,
     image: file,
@@ -267,6 +267,8 @@ export const userUpdateAction = (registerInfo, file, role) => {
           payload: response.data,
           status: "Success",
         })
+
+        toast.success("User Updated Successfully")
       })
       .catch(error => {
         dispatch({
@@ -274,6 +276,7 @@ export const userUpdateAction = (registerInfo, file, role) => {
           payload: error,
           status: "Failed",
         })
+        toast.error("User Update Failed")
       })
   }
 }
@@ -288,9 +291,19 @@ export const userUpdateFresh = () => {
 }
 
 export const userStatusUpdateAction = registerInfo => {
-  var url = process.env.REACT_APP_LOCALHOST + "/User/Put"
-  const dataObject = registerInfo
-  const formData = convertToFormData(dataObject)
+  console.log(registerInfo);
+
+  // var url = process.env.REACT_APP_LOCALHOST + "/User/Put"
+  // const dataObject = registerInfo
+  // const formData = convertToFormData(dataObject)
+  var url = process.env.REACT_APP_LOCALHOST + `/User/isActive?id=${registerInfo._id}&is_active=${registerInfo.is_active}`
+
+  //const formData = data
+  const formData = {
+    id: registerInfo._id,
+    is_active: !registerInfo.is_active
+
+  }
   return dispatch => {
     const headers = {
       "Content-Type": "multipart/form-data",
@@ -427,4 +440,31 @@ export const getServerSidePaginationSearchUserFresh = () => {
       status: false,
       payload: null,
     })
+}
+
+export const getUserByIdAction = id => {
+  //var url = process.env.REACT_APP_LOCALHOST + "/Zone/Get"
+  var url = process.env.REACT_APP_LOCALHOST + `/User/GetById?id=${id}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_USER_BY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_USER_BY_ID,
+          status: "Failed",
+        })
+      })
+  }
 }

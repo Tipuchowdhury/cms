@@ -16,7 +16,7 @@ import {
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { toast } from "react-toastify"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -46,9 +46,9 @@ function AddOnsCategory(props) {
 
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
 
-  const handleStatusModal = row => {
+  const handleStatusModal = cell => {
     //  console.log(row);
-    setStatusItem(row)
+    setStatusItem(cell)
     toggleStatus()
   }
 
@@ -66,7 +66,6 @@ function AddOnsCategory(props) {
   const toggleDel = () => setModalDel(!modalDel)
   const handleDelete = () => {
     // toggleDel();
-    console.log(deleteItem)
     props.addOnCategoryDeleteAction(deleteItem)
   }
 
@@ -76,14 +75,11 @@ function AddOnsCategory(props) {
     e.preventDefault()
     toggle()
     const val = uuidv4()
-    console.log(name)
-    console.log(val)
     props.restaurantAddAction(name, val)
     setName("")
   }
-  const handleEdit = row => {
-    console.log(row)
-    navigate("/category-addons", { state: row })
+  const handleEdit = cell => {
+    navigate("/category-addons-edit/" + cell._id, { state: cell })
   }
 
   const handleNameChange = e => {
@@ -93,8 +89,6 @@ function AddOnsCategory(props) {
   const handleEditModalSubmit = e => {
     e.preventDefault()
     toggleEditModal()
-    console.log(restaurantName)
-    console.log(restaurantId)
     props.restaurantNameUpdateAction(restaurantName, restaurantId)
   }
   const handleDeleteModal = row => {
@@ -106,7 +100,7 @@ function AddOnsCategory(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEdit(row)}
+        onClick={() => handleEdit(cell)}
       >
         Edit
       </Button>{" "}
@@ -122,13 +116,13 @@ function AddOnsCategory(props) {
 
   // const statusRef = (cell, row) => <Badge color="success" style={{ padding: "8px" }}>Activate</Badge>
 
-  const statusRef = (cell, row) => (
+  const statusRef = (cell) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
 
@@ -178,7 +172,6 @@ function AddOnsCategory(props) {
   }
 
   const handlePerRowsChange = async (newPerPage, page) => {
-    console.log(newPerPage, page)
     setCountPerPage(newPerPage)
   }
 
@@ -267,24 +260,24 @@ function AddOnsCategory(props) {
                     columns={activeData}
                     data={
                       props.get_server_side_pagination_addOns_category_search_data !=
-                      null
+                        null
                         ? props
-                            .get_server_side_pagination_addOns_category_search_data
-                            ?.data
+                          .get_server_side_pagination_addOns_category_search_data
+                          ?.data
                         : props?.get_server_side_pagination_addOns_category_data
-                            ?.data
+                          ?.data
                     }
                     highlightOnHover
                     pagination
                     paginationServer
                     paginationTotalRows={
                       props.get_server_side_pagination_addOns_category_search_data !=
-                      null
+                        null
                         ? props
-                            .get_server_side_pagination_addOns_category_search_data
-                            ?.count
+                          .get_server_side_pagination_addOns_category_search_data
+                          ?.count
                         : props.get_server_side_pagination_addOns_category_data
-                            ?.count
+                          ?.count
                     }
                     paginationPerPage={countPerPage}
                     paginationComponentOptions={paginationComponentOptions}

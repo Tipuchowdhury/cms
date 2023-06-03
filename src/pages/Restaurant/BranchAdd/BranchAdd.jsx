@@ -92,9 +92,9 @@ function BranchAdd(props) {
   }
 
   const toggle = () => setModal(!modal)
-  const onMarkerClick = e => {}
+  const onMarkerClick = e => { }
 
-  const onMapClickHandler = e => {}
+  const onMapClickHandler = e => { }
 
   const moveMarker = (props, marker, e) => {
     setDefaultProps({ lat: e.latLng.lat(), lng: e.latLng.lng() })
@@ -143,8 +143,8 @@ function BranchAdd(props) {
     () =>
       common_cuisines
         ? common_cuisines?.map((item, key) => {
-            return { label: item.name, value: item._id }
-          })
+          return { label: item.name, value: item._id }
+        })
         : "",
     [common_cuisines]
   )
@@ -338,17 +338,17 @@ function BranchAdd(props) {
       // naviagte("/manage-branch")
     }
 
-    if (props.edit_branch_loading === "Success") {
-      toast.success("Branch edited Successfully")
-      props.editBranchFresh()
-      naviagte("/manage-branch")
-    }
+    // if (props.edit_branch_loading === "Success") {
+    //   toast.success("Branch edited Successfully")
+    //   props.editBranchFresh()
+    //   naviagte("/manage-branch")
+    // }
 
-    if (props.edit_branch_loading === "Failed") {
-      toast.error("Branch edited Failed")
-      props.editBranchFresh()
-      // naviagte("/manage-branch")
-    }
+    // if (props.edit_branch_loading === "Failed") {
+    //   toast.error("Branch edited Failed")
+    //   props.editBranchFresh()
+    //   // naviagte("/manage-branch")
+    // }
     // if (props.voucher_setting_edit_loading === "Success") {
     //     toast.success("Voucher Setting edited Successfully")
     //     // redirect
@@ -360,7 +360,6 @@ function BranchAdd(props) {
     props.get_all_user_loading,
     props.get_all_cusine_loading,
     props.add_branch_loading,
-    props.edit_branch_loading,
   ])
 
   return (
@@ -1250,7 +1249,6 @@ const mapStateToProps = state => {
     get_all_restaurant_loading,
 
     add_branch_loading,
-    edit_branch_loading,
 
     get_all_cuisine_data,
     get_all_cuisine_loading,
@@ -1264,7 +1262,6 @@ const mapStateToProps = state => {
     get_all_user_data,
     get_all_user_loading,
     add_branch_loading,
-    edit_branch_loading,
 
     get_all_cuisine_data,
     get_all_cuisine_loading,

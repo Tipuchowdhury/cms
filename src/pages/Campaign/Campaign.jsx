@@ -18,7 +18,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { Link, useNavigate } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -71,11 +71,13 @@ function Campaign(props) {
     props.addCampaignAction(name, val)
   }
 
-  const handleEdit = row => {
-    navigate("/add-campaign", { state: row })
+  const handleEdit = cell => {
+    console.log(cell);
+    navigate("/campaign/" + cell._id, { state: cell })
+
   }
-  const handleDeleteModal = row => {
-    setDeleteItem(row._id)
+  const handleDeleteModal = cell => {
+    setDeleteItem(cell._id)
     toggleDel()
   }
   const handleStatusModal = row => {
@@ -92,32 +94,32 @@ function Campaign(props) {
       is_active: !editInfo.is_active,
     })
   }
-  const actionRef = (cell, row) => (
+  const actionRef = (cell) => (
     <div style={{ display: "flex", gap: 10 }}>
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEdit(row)}
+        onClick={() => handleEdit(cell)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        onClick={() => handleDeleteModal(cell)}
       >
         Delete
       </Button>{" "}
     </div>
   )
 
-  const statusRef = (cell, row) => (
+  const statusRef = (cell) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
 
@@ -246,7 +248,7 @@ function Campaign(props) {
                     <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
                       Campaign{" "}
                     </CardTitle>
-                    <Link to="/add-campaign">
+                    <Link to="/campaign">
                       <Button
                         style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
                       >
@@ -281,9 +283,9 @@ function Campaign(props) {
                     columns={activeData}
                     data={
                       props.get_server_side_pagination_campaign_search_data !=
-                      null
+                        null
                         ? props.get_server_side_pagination_campaign_search_data
-                            ?.data
+                          ?.data
                         : props?.get_server_side_pagination_campaign_data?.data
                     }
                     highlightOnHover
@@ -291,9 +293,9 @@ function Campaign(props) {
                     paginationServer
                     paginationTotalRows={
                       props.get_server_side_pagination_campaign_search_data !=
-                      null
+                        null
                         ? props.get_server_side_pagination_campaign_search_data
-                            ?.count
+                          ?.count
                         : props.get_server_side_pagination_campaign_data?.count
                     }
                     paginationPerPage={countPerPage}

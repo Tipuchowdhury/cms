@@ -42,8 +42,7 @@ function Zone(props) {
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
   const toggleDel = () => setModalDel(!modalDel)
 
-  const handleStatusModal = (row, cell) => {
-    console.log(row)
+  const handleStatusModal = (cell) => {
     console.log(cell)
     //setEditInfo(row)
     setEditInfo(cell)
@@ -51,14 +50,13 @@ function Zone(props) {
     toggleStatus()
   }
 
-  const handleDeleteModal = row => {
-    setDeleteItem(row._id)
+  const handleDeleteModal = cell => {
+    setDeleteItem(cell._id)
     toggleDel()
   }
 
   const handleStatusUpdate = () => {
     console.log(editInfo)
-
     props.zoneStatusEditAction({
       ...editInfo,
       is_active: !editInfo.is_active,
@@ -101,7 +99,7 @@ function Zone(props) {
     <Button
       color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row, cell)}
+      onClick={() => handleStatusModal(cell)}
     >
       {cell.is_active ? "Active" : "Deactivate"}
     </Button>
@@ -194,7 +192,7 @@ function Zone(props) {
   // console.log(props.get_server_side_pagination_zone_search_data)
   return (
     <React.Fragment>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <div className="page-content">
         <Container fluid>
           {/* Render Breadcrumbs */}
@@ -246,7 +244,7 @@ function Zone(props) {
                     data={
                       props.get_server_side_pagination_zone_search_data != null
                         ? props.get_server_side_pagination_zone_search_data
-                            ?.data
+                          ?.data
                         : props?.get_server_side_pagination_zone_data?.data
                     }
                     highlightOnHover
@@ -255,7 +253,7 @@ function Zone(props) {
                     paginationTotalRows={
                       props.get_server_side_pagination_zone_search_data != null
                         ? props.get_server_side_pagination_zone_search_data
-                            ?.count
+                          ?.count
                         : props.get_server_side_pagination_zone_data?.count
                     }
                     paginationPerPage={countPerPage}

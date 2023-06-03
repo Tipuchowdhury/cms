@@ -37,8 +37,8 @@ function AddCampaign(props) {
 
   const branch_data_edit = common_branches
     ? common_branches?.map((item, key) => {
-        return { label: item.name, value: item._id }
-      })
+      return { label: item.name, value: item._id }
+    })
     : ""
   const [selectedBranch, setSelectedBranch] = useState(
     branch_data_edit ? branch_data_edit : ""
@@ -140,14 +140,14 @@ function AddCampaign(props) {
     if (props.add_campaign_loading === "Success") {
       // redirect
       props.addCampaignFresh()
-      navigate("/campaign")
+      navigate("/all-campaign")
     }
 
     if (props.campaign_edit_loading === "Success") {
       toast.success("Campaign edited Successfully")
       // redirect
       props.campaignEditFresh()
-      navigate("/campaign")
+      navigate("/all-campaign")
     }
   }, [
     props.get_all_branch_loading,

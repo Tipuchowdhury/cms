@@ -16,8 +16,8 @@ import {
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { toast } from "react-toastify"
 import withRouter from "components/Common/withRouter"
-;` `
-;` `
+  ; ` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
@@ -74,13 +74,13 @@ function Menu(props) {
     </div>
   )
 
-  const statusRef = (cell, row) => (
+  const statusRef = (cell) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
   const textRef = (cell, row) => (
@@ -90,9 +90,9 @@ function Menu(props) {
     <span style={{ fontSize: "16px" }}>{cell.price}</span>
   )
 
-  const handleStatusModal = row => {
+  const handleStatusModal = cell => {
     // console.log(row);
-    setEditInfo(row)
+    setEditInfo(cell)
 
     toggleStatus()
   }
@@ -238,7 +238,7 @@ function Menu(props) {
                     data={
                       props.get_server_side_pagination_menu_search_data != null
                         ? props.get_server_side_pagination_menu_search_data
-                            ?.data
+                          ?.data
                         : props?.get_server_side_pagination_menu_data?.data
                     }
                     highlightOnHover
@@ -247,7 +247,7 @@ function Menu(props) {
                     paginationTotalRows={
                       props.get_server_side_pagination_menu_search_data != null
                         ? props.get_server_side_pagination_menu_search_data
-                            ?.count
+                          ?.count
                         : props.get_server_side_pagination_menu_data?.count
                     }
                     paginationPerPage={countPerPage}

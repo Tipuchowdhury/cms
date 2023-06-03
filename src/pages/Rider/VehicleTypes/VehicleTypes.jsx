@@ -16,7 +16,7 @@ import {
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { toast } from "react-toastify"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -30,11 +30,12 @@ import {
   vehicleTypeStatusEditActionFresh,
   vehicleTypeDeleteAction,
   vehicleTypeDeleteFresh,
+  getServerSidePaginationVehicleTypeAction,
+  getServerSidePaginationVehicleTypeSearchAction,
+  getServerSidePaginationSearchVehicleTypeFresh
 } from "store/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
-import { Link } from "react-router-dom"
-import { useNavigate } from "react-router-dom"
-import Select from "react-select"
+import DataTable from "react-data-table-component"
 
 function VehicleTypes(props) {
   document.title = "Vehicle Types | Foodi"
@@ -71,14 +72,14 @@ function VehicleTypes(props) {
     is_active: true,
   })
 
-  const handleEdit = row => {
+  const handleEdit = cell => {
     setEditInfo(prevState => ({
-      _id: row._id,
-      type: row.type,
-      commission: row.commission,
+      _id: cell._id,
+      type: cell.type,
+      commission: cell.commission,
       maximum_no_of_received_order_at_a_time:
-        row.maximum_no_of_received_order_at_a_time,
-      is_active: row.is_active,
+        cell.maximum_no_of_received_order_at_a_time,
+      is_active: cell.is_active,
     }))
     // setEditImages({ ...editImages, image: row.image })
 
@@ -163,8 +164,8 @@ function VehicleTypes(props) {
     })
   }
 
-  const handleDeleteModal = row => {
-    setDeleteItem(row._id)
+  const handleDeleteModal = cell => {
+    setDeleteItem(cell._id)
     toggleDel()
   }
 
@@ -177,14 +178,14 @@ function VehicleTypes(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEdit(row)}
+        onClick={() => handleEdit(cell)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        onClick={() => handleDeleteModal(cell)}
       >
         Delete
       </Button>{" "}
@@ -200,40 +201,60 @@ function VehicleTypes(props) {
       {row.is_active ? "Active" : "Deactivate"}
     </Button>
   )
+  const textRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.type}</span>
+  )
+
 
   const activeData = [
     {
-      dataField: "type",
-      text: "Vehicle Type",
-      sort: true,
+      selector: row => row.type,
+      name: "Vehicle Type",
+      sortable: true,
+      cell: textRef
     },
 
     {
-      dataField: "",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      selector: row => "",
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
 
     {
-      //dataField: "hello",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      selector: row => "",
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
-  const defaultSorted = [
-    {
-      dataField: "type",
-      order: "desc",
-    },
-  ]
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationVehicleTypeSearchAction(e.target.value)
+    } else {
+      props.getServerSidePaginationSearchVehicleTypeFresh()
+    }
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
 
   useEffect(() => {
     if (props.get_all_vehicle_type_loading == false) {
       // console.log("I am in get all slider loading ")
       props.getAllVehicleTypeAction()
     }
+
+    props.getServerSidePaginationVehicleTypeAction(page, countPerPage)
 
     if (props.add_vehicle_type_loading === "Success") {
       toast.success("Vehicle Type Added Successfully")
@@ -290,7 +311,10 @@ function VehicleTypes(props) {
     props.vehicle_type_edit_loading,
     props.vehicle_type_delete_loading,
     props.edit_vehicle_type_status_loading,
+    page, countPerPage
   ])
+
+  console.log(props.get_server_side_pagination_vehicle_type_data);
 
   return (
     <React.Fragment>
@@ -327,7 +351,7 @@ function VehicleTypes(props) {
                     </Button>
                   </div>
 
-                  {props.get_all_vehicle_type_data ? (
+                  {/* {props.get_all_vehicle_type_data ? (
                     props.get_all_vehicle_type_data.length > 0 ? (
                       <DatatableTablesWorking
                         products={props.get_all_vehicle_type_data}
@@ -336,7 +360,44 @@ function VehicleTypes(props) {
                         key={props.get_all_vehicle_type_data?._id}
                       />
                     ) : null
-                  ) : null}
+                  ) : null} */}
+
+                  <div className="text-end">
+                    <input
+                      type="text"
+                      placeholder="Search Cuisine"
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid gray",
+                      }}
+                      onChange={e => handleFilter(e)}
+                    />
+                  </div>
+                  <DataTable
+                    columns={activeData}
+                    data={
+                      props.get_server_side_pagination_vehicle_type_search_data !=
+                        null
+                        ? props.get_server_side_pagination_vehicle_type_search_data
+                          ?.data
+                        : props?.get_server_side_pagination_vehicle_type_data?.data
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_vehicle_type_search_data !=
+                        null
+                        ? props.get_server_side_pagination_vehicle_type_search_data
+                          ?.count
+                        : props.get_server_side_pagination_vehicle_type_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={page => setPage(page)}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -562,6 +623,9 @@ const mapStateToProps = state => {
     edit_vehicle_type_status_loading,
 
     vehicle_type_delete_loading,
+
+    get_server_side_pagination_vehicle_type_data,
+    get_server_side_pagination_vehicle_type_search_data
   } = state.VehicleType
 
   return {
@@ -579,6 +643,9 @@ const mapStateToProps = state => {
     edit_vehicle_type_status_loading,
 
     vehicle_type_delete_loading,
+
+    get_server_side_pagination_vehicle_type_data,
+    get_server_side_pagination_vehicle_type_search_data
   }
 }
 
@@ -594,5 +661,8 @@ export default withRouter(
     vehicleTypeStatusEditActionFresh,
     vehicleTypeDeleteAction,
     vehicleTypeDeleteFresh,
+    getServerSidePaginationVehicleTypeAction,
+    getServerSidePaginationVehicleTypeSearchAction,
+    getServerSidePaginationSearchVehicleTypeFresh
   })(VehicleTypes)
 )
