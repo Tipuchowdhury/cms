@@ -41,6 +41,7 @@ import Refunds from "./Refund/reducer"
 import ZoneUtilization from "./ZoneUtilization/reducer"
 import RiderList from "./RiderList/reducer"
 import Wallet from "./Wallet/reducer"
+import Quest from "./Quest/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -77,6 +78,7 @@ const rootReducer = combineReducers({
   ZoneUtilization,
   RiderList,
   Wallet,
+  Quest,
 })
 
 export default rootReducer

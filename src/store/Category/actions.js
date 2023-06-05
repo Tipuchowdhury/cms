@@ -162,31 +162,21 @@ export const categoryNameEditFresh = () => {
   }
 }
 
-export const categoryStatusEditAction = (
-  name,
-  id,
-  restaurant,
-  image,
-  is_active
-) => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Category/Put"
-  const dataObject = {
-    _id: id,
-    category_name: name,
-    restaurant_id: restaurant,
-    image: image,
-    is_active: !is_active,
-  }
+export const categoryStatusEditAction = data => {
+  var url = `${process.env.REACT_APP_LOCALHOST}/Category/isActive?id=${data._id}&is_active=${data.is_active}`
 
-  const formData = convertToFormData(dataObject)
   return dispatch => {
     const headers = {
-      // "Content-Type": "application/json",
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     }
     axios
-      .put(url, formData, { headers: headers })
+      .put(url, {
+        headers: headers,
+        // params: {
+        //   is_active: data.is_active,
+        // },
+      })
       .then(response => {
         dispatch({
           type: CATEGORY_STATUS_EDIT,
