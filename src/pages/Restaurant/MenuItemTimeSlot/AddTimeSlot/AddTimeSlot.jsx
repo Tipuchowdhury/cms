@@ -107,6 +107,7 @@ function AddTimeSlot(props) {
   const handleEdit = e => {
     e.preventDefault()
     console.log(timeSlot)
+
     if (timeSlot.end_time <= timeSlot.start_time) {
       toast.error("Start time can not be greater than or equal end time")
     } else {

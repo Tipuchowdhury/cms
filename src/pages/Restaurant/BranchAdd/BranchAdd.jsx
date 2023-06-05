@@ -462,9 +462,9 @@ function BranchAdd(props) {
                   </label>
                   <div className="col-md-10">
                     <input
-                      type="text"
+                      type="email"
                       className="form-control"
-                      id="city"
+                      id="email"
                       placeholder="Enter address"
                       name="email"
                       value={zoneInfo.email}

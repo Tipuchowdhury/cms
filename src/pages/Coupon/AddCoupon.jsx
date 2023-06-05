@@ -31,6 +31,7 @@ import {
 import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
 import { useLocation, useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 function AddCoupon(props) {
   const navigate = useNavigate()
@@ -457,40 +458,128 @@ function AddCoupon(props) {
 
   const handleSubmit = e => {
     e.preventDefault()
-    const uniqueId = uuidv4()
-    // console.log(couponInfo)
-    props.addCouponAction(
-      uniqueId,
-      couponInfo,
-      selectedCouponType,
-      selectedBranch,
-      selectedCategory,
-      selectedCuisine,
-      selectedSubType,
-      selectedUser,
-      selectedZone,
-      selectedMenuItem,
-      gradual
-    )
+    let status = 0
+    if (
+      couponInfo.valid_time_in_a_day_start >= couponInfo.valid_time_in_a_day_end
+    ) {
+      status = 1
+      toast.error("Valid start time can't be grater or equal valid end time")
+    }
+
+    if (couponInfo.start_time >= couponInfo.end_time) {
+      status = 1
+      toast.error("Start time can't be grater or equal end time")
+    }
+
+    if (couponInfo.use_limit < 0) {
+      status = 1
+      toast.error("Use limit can't be negative")
+    }
+
+    if (couponInfo.daily_use_limit < 0) {
+      status = 1
+      toast.error("Daily use limit can't be negative")
+    }
+
+    if (couponInfo.discount_in_amount < 0) {
+      status = 1
+      toast.error("Discount amount can't be negative")
+    }
+
+    if (couponInfo.discount_in_percent < 0) {
+      status = 1
+      toast.error("Discount percent can't be negative")
+    }
+
+    if (couponInfo.minimum_order_amount < 0) {
+      status = 1
+      toast.error("Minimum order amount can't be negative")
+    }
+
+    if (couponInfo.maximum_discount_amount < 0) {
+      status = 1
+      toast.error("Maximum discount amount can't be negative")
+    }
+
+    if (status == 0) {
+      const uniqueId = uuidv4()
+      // console.log(couponInfo)
+      props.addCouponAction(
+        uniqueId,
+        couponInfo,
+        selectedCouponType,
+        selectedBranch,
+        selectedCategory,
+        selectedCuisine,
+        selectedSubType,
+        selectedUser,
+        selectedZone,
+        selectedMenuItem,
+        gradual
+      )
+    }
   }
 
   const handleSubmitForEdit = e => {
     e.preventDefault()
-    // console.log("======================I am in the edit form==================")
+    let status = 0
+    if (
+      couponInfo.valid_time_in_a_day_start >= couponInfo.valid_time_in_a_day_end
+    ) {
+      status = 1
+      toast.error("Valid start time can't be grater or equal valid end time")
+    }
 
-    props.couponEditAction(
-      location.state._id,
-      couponInfo,
-      selectedCouponType,
-      selectedBranch,
-      selectedCategory,
-      selectedCuisine,
-      selectedSubType,
-      selectedUser,
-      selectedZone,
-      selectedMenuItem,
-      gradual
-    )
+    if (couponInfo.start_time >= couponInfo.end_time) {
+      status = 1
+      toast.error("Start time can't be grater or equal end time")
+    }
+
+    if (couponInfo.use_limit < 0) {
+      status = 1
+      toast.error("Use limit can't be negative")
+    }
+
+    if (couponInfo.daily_use_limit < 0) {
+      status = 1
+      toast.error("Daily use limit can't be negative")
+    }
+
+    if (couponInfo.discount_in_amount < 0) {
+      status = 1
+      toast.error("Discount amount can't be negative")
+    }
+
+    if (couponInfo.discount_in_percent < 0) {
+      status = 1
+      toast.error("Discount percent can't be negative")
+    }
+
+    if (couponInfo.minimum_order_amount < 0) {
+      status = 1
+      toast.error("Minimum order amount can't be negative")
+    }
+
+    if (couponInfo.maximum_discount_amount < 0) {
+      status = 1
+      toast.error("Maximum discount amount can't be negative")
+    }
+
+    if (status == 0) {
+      props.couponEditAction(
+        location.state._id,
+        couponInfo,
+        selectedCouponType,
+        selectedBranch,
+        selectedCategory,
+        selectedCuisine,
+        selectedSubType,
+        selectedUser,
+        selectedZone,
+        selectedMenuItem,
+        gradual
+      )
+    }
   }
 
   // console.log(props.add_coupon_loading)
@@ -1011,6 +1100,7 @@ function AddCoupon(props) {
                                 className="form-control"
                                 name="discount_percent"
                                 placeholder="Discount"
+                                min="0"
                                 value={row.discount_percent}
                                 onChange={e => handleGradualChange(e, idx)}
                                 required
