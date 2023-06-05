@@ -33,6 +33,7 @@ import { toast } from "react-toastify"
 import { CKEditor } from "@ckeditor/ckeditor5-react"
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic"
 import PageLoader from "components/CustomLoader/PageLoader"
+import moment from "moment"
 
 function AddQuest(props) {
   const navigate = useNavigate()
@@ -189,15 +190,20 @@ function AddQuest(props) {
       ],
     })
   }
+
   const handleSubmit = e => {
     e.preventDefault()
 
-    if (questInfo.start_date >= questInfo.end_date) {
+    if (
+      !moment(questInfo.start_date, "YYYY-MM-DDTHH:mm:ss").isBefore(
+        moment(questInfo.end_date, "YYYY-MM-DDTHH:mm:ss")
+      )
+    ) {
       toast.error("Start date can not be greater than or equal to end date")
       return
     }
     if (
-      questInfo.has_time_limit &&
+      questInfo.has_time_limit == "true" &&
       questInfo.start_time >= questInfo.end_time
     ) {
       toast.error("Start time can not be greater than or equal to end time")
@@ -208,6 +214,22 @@ function AddQuest(props) {
 
   const handleSubmitForEdit = e => {
     e.preventDefault()
+
+    if (
+      !moment(questInfo.start_date, "YYYY-MM-DDTHH:mm:ss").isBefore(
+        moment(questInfo.end_date, "YYYY-MM-DDTHH:mm:ss")
+      )
+    ) {
+      toast.error("Start date can not be greater than or equal to end date")
+      return
+    }
+    if (
+      questInfo.has_time_limit == "true" &&
+      questInfo.start_time >= questInfo.end_time
+    ) {
+      toast.error("Start time can not be greater than or equal to end time")
+      return
+    }
 
     props.questEditAction(location.state._id, questInfo, selectedZone)
   }
