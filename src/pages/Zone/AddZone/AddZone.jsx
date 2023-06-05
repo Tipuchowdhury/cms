@@ -145,6 +145,7 @@ function AddZone(props) {
   }
 
   console.log(location.state)
+  //console.log(location.state._id);
 
   const [zoneInfo, setZoneInfo] = useState({
     area: location.state ? location.state.name : "",

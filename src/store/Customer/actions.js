@@ -9,15 +9,21 @@ import {
   CUSTOMER_DELETE_FRESH,
   EDIT_CUSTOMER_STATUS,
   EDIT_CUSTOMER_STATUS_FRESH,
+  SERVER_SIDE_PAGINATION_CUSTOMER,
+  SERVER_SIDE_PAGINATION_CUSTOMER_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_CUSTOMER_FRESH,
+  GET_CUSTOMER_BY_ID
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
+import { toast } from "react-toastify"
 
 // token
 var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
 export const addCustomerAction = (id, data, sub_id) => {
+  console.log(id, data, sub_id);
   var url = process.env.REACT_APP_LOCALHOST + "/Customer/Post"
 
   let dataObject = {
@@ -100,20 +106,22 @@ export const getAllCustomerFresh = () => {
   }
 }
 
-export const customerEditAction = (data, sub_id) => {
+export const customerEditAction = (id, data, sub_id) => {
+  console.log(id, data, sub_id);
   var url = process.env.REACT_APP_LOCALHOST + "/Customer/Put"
 
   const dataObject = {
     ...data,
+    _id: id,
     subscription_type_id: sub_id,
   }
 
   const formData = convertToFormData(dataObject)
-  // console.log(formData);
+  console.log(formData);
   return dispatch => {
     const headers = {
-      "Content-Type": "multipart/form-data",
-      //"Content-Type": "application/json",
+      //"Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
 
       "Access-Control-Allow-Origin": "*",
     }
@@ -125,6 +133,7 @@ export const customerEditAction = (data, sub_id) => {
           payload: response.data,
           status: "Success",
         })
+        toast.success("Customer Edited Successfully")
       })
       .catch(error => {
         dispatch({
@@ -132,6 +141,7 @@ export const customerEditAction = (data, sub_id) => {
           payload: error,
           status: "Failed",
         })
+        toast.error("Customer Edit Failed")
       })
   }
 }
@@ -222,4 +232,98 @@ export const customerDeleteFresh = () => {
       type: CUSTOMER_DELETE_FRESH,
       status: false,
     })
+}
+
+export const getServerSidePaginationCustomerAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Customer/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUSTOMER,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUSTOMER,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationCustomerSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Customer/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUSTOMER_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CUSTOMER_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchCustomerFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_CUSTOMER_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getCustomerByIdAction = id => {
+  //var url = process.env.REACT_APP_LOCALHOST + "/Zone/Get"
+  var url = process.env.REACT_APP_LOCALHOST + `/Customer/GetById?id=${id}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_CUSTOMER_BY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_CUSTOMER_BY_ID,
+          status: "Failed",
+        })
+      })
+  }
 }

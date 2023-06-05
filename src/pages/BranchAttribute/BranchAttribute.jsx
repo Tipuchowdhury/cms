@@ -34,6 +34,7 @@ import {
 } from "store/BranchAttribute/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import { toast } from "react-toastify"
+import DataTable from "react-data-table-component"
 
 function BranchAttribute(props) {
   document.title = "Branch Attribute | Foodi"
@@ -178,12 +179,26 @@ function BranchAttribute(props) {
       formatter: actionRef,
     },
   ]
-  const defaultSorted = [
-    {
-      dataField: "name",
-      order: "desc",
-    },
-  ]
+
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationCuisineSearchAction(e.target.value)
+    } else {
+      props.getServerSidePaginationSearchCuisineFresh()
+    }
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
 
   useEffect(() => {
     if (props.get_all_branch_attribute_loading == false) {
@@ -286,10 +301,24 @@ function BranchAttribute(props) {
                       <DatatableTablesWorking
                         products={props.get_all_branch_attribute_data}
                         columnData={activeData}
-                        defaultSorted={defaultSorted}
+                        //defaultSorted={defaultSorted}
                       />
                     ) : null
                   ) : null}
+                  {/* <div className='text-end'><input type='text' placeholder="Search Attribute" style={{ padding: "10px", borderRadius: "8px", border: "1px solid gray" }} onChange={(e) => handleFilter(e)} /></div>
+                  <DataTable
+                    columns={activeData}
+                    //data={props.get_server_side_pagination_cuisine_search_data != null ? props.get_server_side_pagination_cuisine_search_data?.data : props?.get_server_side_pagination_cuisine_data?.data}
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    //paginationTotalRows={props.get_server_side_pagination_cuisine_search_data != null ? props.get_server_side_pagination_cuisine_search_data?.count : props.get_server_side_pagination_cuisine_data?.count}
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+
+                    onChangePage={(page) => setPage(page)}
+                  /> */}
                 </CardBody>
               </Card>
             </Col>

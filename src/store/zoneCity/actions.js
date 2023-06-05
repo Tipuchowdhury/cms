@@ -144,10 +144,11 @@ export const cityNameEditFresh = () => {
 }
 
 export const cityStatusEditAction = (name, id, is_active) => {
-  var url = process.env.REACT_APP_LOCALHOST + "/City/Put"
+  console.log(is_active);
+  var url = process.env.REACT_APP_LOCALHOST + `/City/isActive?id=${id}&is_active=${!is_active}`
   const formData = {
-    _id: id,
-    name: name,
+    id: id,
+    //name: name,
     is_active: !is_active,
   }
   return dispatch => {
@@ -156,6 +157,7 @@ export const cityStatusEditAction = (name, id, is_active) => {
 
       "Access-Control-Allow-Origin": "*",
     }
+    console.log(formData);
     axios
       .put(url, formData, { headers: headers })
       .then(response => {
@@ -223,9 +225,7 @@ export const cityDeleteFresh = () => {
 }
 
 export const getServerSidePaginationAction = (index, limit) => {
-  var url =
-    process.env.REACT_APP_LOCALHOST +
-    `/City/Search?page=${index}&limit=${limit}`
+  var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=${limit}`
   //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
   const formData = {}
   return dispatch => {

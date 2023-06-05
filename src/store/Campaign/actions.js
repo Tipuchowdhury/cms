@@ -9,6 +9,9 @@ import {
   CAMPAIGN_DELETE_FRESH,
   CAMPAIGN_STATUS_EDIT,
   CAMPAIGN_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_CAMPAIGN,
+  SERVER_SIDE_PAGINATION_CAMPAIGN_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_CAMPAIGN_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -24,13 +27,13 @@ export const addCampaignAction = (id, data, selectedBranch) => {
   const selectedBranchData =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            res_id: item.value,
-            campaign_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          res_id: item.value,
+          campaign_id: id,
+        }
+      })
       : null
   // console.log(selectedBranchData);
   // const formData = {
@@ -128,13 +131,13 @@ export const campaignEditAction = (id, data, selectedBranch) => {
   const selectedBranchData =
     selectedBranch?.length > 0
       ? selectedBranch.map(item => {
-          const val = uuidv4()
-          return {
-            _id: val,
-            res_id: item.value,
-            campaign_id: id,
-          }
-        })
+        const val = uuidv4()
+        return {
+          _id: val,
+          res_id: item.value,
+          campaign_id: id,
+        }
+      })
       : null
 
   const dataObject = {
@@ -180,10 +183,19 @@ export const campaignEditFresh = () => {
 }
 
 export const campaignStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Campaign/Put"
-  let dataObject = { ...data }
+  // var url = process.env.REACT_APP_LOCALHOST + "/Campaign/Put"
+  // let dataObject = { ...data }
 
-  const formData = convertToFormData(dataObject)
+  var url = process.env.REACT_APP_LOCALHOST + `/Campaign/isActive?id=${data._id}&is_active=${data.is_active}`
+
+  //const formData = data
+  const formData = {
+    id: data._id,
+    is_active: !data.is_active
+
+  }
+
+  //const formData = convertToFormData(dataObject)
   // console.log(formData);
   return dispatch => {
     const headers = {
@@ -254,5 +266,72 @@ export const campaignDeleteFresh = () => {
     dispatch({
       type: CAMPAIGN_DELETE_FRESH,
       status: false,
+    })
+}
+
+export const getServerSidePaginationCampaignAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Campaign/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CAMPAIGN,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CAMPAIGN,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationCampaignSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Campaign/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CAMPAIGN_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CAMPAIGN_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchCampaignFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_CAMPAIGN_FRESH,
+      status: false,
+      payload: null,
     })
 }

@@ -78,11 +78,10 @@ function City(props) {
     setCityName(e.target.value)
   }
 
-  const handleStatusModal = row => {
-    // console.log(row)
-    setCityId(row._id)
-    setCityName(row.name)
-    setIsActive(row.is_active)
+  const handleStatusModal = cell => {
+    setCityId(cell._id)
+    setCityName(cell.name)
+    setIsActive(cell.is_active)
 
     toggleStatus()
   }
@@ -98,8 +97,8 @@ function City(props) {
     toggleEditModal()
     props.cityNameEditAction(cityname, cityId, isActive)
   }
-  const handleDeleteModal = row => {
-    setDeleteItem(row._id)
+  const handleDeleteModal = cell => {
+    setDeleteItem(cell._id)
     toggleDel()
   }
   const actionRef = (cell, row) => (
@@ -127,7 +126,7 @@ function City(props) {
       className="btn waves-effect waves-light"
       onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
 
@@ -135,23 +134,53 @@ function City(props) {
     <span style={{ fontSize: "16px" }}>{cell.name}</span>
   )
 
+  const searchRef = (
+    <div className="text-end">
+      <input
+        type="text"
+        placeholder="Search City"
+        style={{
+          padding: "10px",
+          borderRadius: "8px",
+          border: "1px solid gray",
+        }}
+        onChange={e => handleFilter(e)}
+      />
+    </div>
+  )
+
   const activeData = [
     {
+      //cell: searchRef,
       selector: row => row.name,
       name: "Name",
+      // name: (<div className="text-end" style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 5 }}>
+      //   Name
+      //   <input
+      //     type="text"
+      //     placeholder="Search City"
+      //     style={{
+      //       padding: "10px",
+      //       borderRadius: "8px",
+      //       border: "1px solid gray",
+      //       marginBottom: "5px"
+      //     }}
+      //     onChange={e => handleFilter(e)}
+      //   />
+
+      // </div>),
+
       sortable: true,
       cell: textRef,
     },
     {
-      dataField: "",
+      selector: row => "",
       name: "Status",
-      sortable: true,
       cell: statusRef,
     },
     {
-      //dataField: "he",
+      selector: row => "",
       name: "Action",
-      sortable: true,
       cell: actionRef,
     },
   ]
@@ -248,13 +277,7 @@ function City(props) {
             title="Zone & City"
             breadcrumbItem="City"
           />
-          {/* <Row className="d-flex flex-row-reverse" style={{ marginBottom: "20px", alignItems: "end" }}>
-                        <Col className="col-12">
-                            <Button color="danger" onClick={toggle}>
-                                Add City
-                            </Button>
-                        </Col>
-                    </Row> */}
+
           <Row>
             <Col className="col-12">
               <Card style={{ border: "none" }}>

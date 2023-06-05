@@ -74,12 +74,24 @@ import {
   SERVER_SIDE_PAGINATION_BRANCH,
   SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
+  SERVER_SIDE_PAGINATION_MENU,
+  SERVER_SIDE_PAGINATION_MENU_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_MENU_FRESH,
+  SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
+  SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH,
+  SERVER_SIDE_PAGINATION_MENU_TIME,
+  SERVER_SIDE_PAGINATION_MENU_TIME_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_MENU_TIME_FRESH,
   GET_ZONE_BY_ID,
   GET_ZONE_BY_ID_FRESH,
   DELETE_RESTAURANT_MENU,
   DELETE_RESTAURANT_MENU_FRESH,
   RESTAURANT_MENU_STATUS_EDIT,
   RESTAURANT_MENU_STATUS_EDIT_FRESH,
+  GET_BRANCH_BY_ID,
+  GET_ADD_ON_CATEGORY_BY_ID,
+  EDIT_BRANCH_FRESH_NEW,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -184,11 +196,18 @@ export const restaurantNameUpdateAction = (name, id, is_active) => {
   }
 }
 
-export const restaurantStatusUpdateAction = (name, id, is_active) => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Restaurant/Put"
+export const restaurantStatusUpdateAction = (id, is_active) => {
+  // var url = process.env.REACT_APP_LOCALHOST + "/Restaurant/Put"
+  // const formData = {
+  //   _id: id,
+  //   is_active: !is_active,
+  // }
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Restaurant/isActive?id=${id}&is_active=${!is_active}`
   const formData = {
-    _id: id,
-    name: name,
+    id: id,
+    //name: name,
     is_active: !is_active,
   }
   return dispatch => {
@@ -387,6 +406,33 @@ export const branchAddAction = (
   }
 }
 
+export const getBranchByIdAction = id => {
+  //var url = process.env.REACT_APP_LOCALHOST + "/Zone/Get"
+  var url = process.env.REACT_APP_LOCALHOST + `/Branch/GetById?id=${id}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_BRANCH_BY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_BRANCH_BY_ID,
+          status: "Failed",
+        })
+      })
+  }
+}
+
 export const branchEditAction = (
   id,
   zoneInfo,
@@ -533,50 +579,50 @@ export const branchEditAction = (
 }
 
 export const branchStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put"
+  //var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put"
 
-  // const dataObject = data
-  // console.log(data);
-  // console.log(data.location.coordinates);
-  const dataObject = {
-    name: data.name,
-    _id: data._id,
-    email: data.email,
-    // location: {
-    //   coordinates: [Number(lng), Number(lat)],
-    //   type: "Point",
-    // },
-    address: data.address,
-    popularity_sort_value: JSON.parse(data.popularity_sort_value),
-    price_range: data.price_range,
-    image: data.image,
-    cover_image: data.cover_image,
-    slug: data.slug,
-    zonal_admin: data.zonal_admin,
-    is_take_pre_order: JSON.parse(data.is_take_pre_order),
-    phone_number: data.phone_number,
-    is_veg: JSON.parse(data.is_veg),
-    is_popular: JSON.parse(data.is_popular),
-    is_delivery: JSON.parse(data.is_delivery),
-    is_pickup: JSON.parse(data.is_pickup),
-    is_dine: JSON.parse(data.is_dine),
-    commission: JSON.parse(data.commission),
-    // min_order_value: 1,
-    delivery_time: JSON.parse(data.delivery_time),
-    parent_restaurant_id: data.parent_restaurant_id,
-    working_hours: data.working_hours,
-    cuisines: data.cuisines,
-    delivery_charge: data.delivery_charge,
-    is_active: data.is_active,
-    min_order_value: data.minimum_order_value,
-    pickup_time: JSON.parse(data.pickup_time),
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Branch/isActive?id=${data._id}&is_active=${data.is_active}`
+
+  const formData = {
+    id: data._id,
+    is_active: !data.is_active,
   }
 
-  const formData = convertToFormData(dataObject)
+  // const dataObject = {
+  //   name: data.name,
+  //   _id: data._id,
+  //   email: data.email,
+  //   address: data.address,
+  //   popularity_sort_value: JSON.parse(data.popularity_sort_value),
+  //   price_range: data.price_range,
+  //   image: data.image,
+  //   cover_image: data.cover_image,
+  //   slug: data.slug,
+  //   zonal_admin: data.zonal_admin,
+  //   is_take_pre_order: JSON.parse(data.is_take_pre_order),
+  //   phone_number: data.phone_number,
+  //   is_veg: JSON.parse(data.is_veg),
+  //   is_popular: JSON.parse(data.is_popular),
+  //   is_delivery: JSON.parse(data.is_delivery),
+  //   is_pickup: JSON.parse(data.is_pickup),
+  //   is_dine: JSON.parse(data.is_dine),
+  //   commission: JSON.parse(data.commission),
+  //   min_order_value: 1,
+  //   delivery_time: JSON.parse(data.delivery_time),
+  //   parent_restaurant_id: data.parent_restaurant_id,
+  //   working_hours: data.working_hours,
+  //   cuisines: data.cuisines,
+  //   delivery_charge: data.delivery_charge,
+  //   is_active: data.is_active,
+  // }
 
-  formData.append("location[coordinates][0]", data.location.coordinates[0])
-  formData.append("location[coordinates][1]", data.location.coordinates[1])
-  formData.append("location[type]", data.location.type)
+  // const formData = convertToFormData(dataObject)
+
+  // formData.append("location[coordinates][0]", data.location.coordinates[0])
+  // formData.append("location[coordinates][1]", data.location.coordinates[1])
+  // formData.append("location[type]", data.location.type)
 
   return dispatch => {
     const headers = {
@@ -856,6 +902,7 @@ export const getAllZoneAction = () => {
       })
   }
 }
+
 export const getZoneByIdAction = id => {
   //var url = process.env.REACT_APP_LOCALHOST + "/Zone/Get"
   var url = process.env.REACT_APP_LOCALHOST + `/Zone/GetById?id=${id}`
@@ -987,7 +1034,11 @@ export const zoneEditFresh = () => {
 export const zoneStatusEditAction = data => {
   var url = `${process.env.REACT_APP_LOCALHOST}/Zone/isActive?id=${data.id}&is_active=${data.is_active}`
 
-  const formData = data
+  //const formData = data
+  const formData = {
+    id: data._id,
+    is_active: !data.is_active,
+  }
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
@@ -1071,10 +1122,12 @@ export const addBranchFresh = () => {
 }
 
 export const editBranchFresh = () => {
+  console.log("=================== fresh fresh ================")
   return dispatch => {
+    console.log("=================== inside fresh ================")
     dispatch({
-      type: EDIT_BRANCH_FRESH,
-      payload: null,
+      type: EDIT_BRANCH_FRESH_NEW,
+      // payload: null,
       status: false,
     })
   }
@@ -1140,7 +1193,7 @@ export const addOnsCategoryAction = (val, category, isChecked, addOns) => {
     cat_max_choice: parseInt(category.num_of_choice),
     language_slug: "en",
     add_on_category_desc: category.add_on_category_desc,
-    variation_id: val_id,
+    //variation_id: val_id,
     is_active: true,
     preset_add_ons: data,
   }
@@ -1232,9 +1285,19 @@ export const editAddOnsCategoryAction = (val, category, isChecked, addOns) => {
 }
 
 export const addOnCategoryStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Put"
+  // var url = process.env.REACT_APP_LOCALHOST + "/AddOnCategory/Put"
 
-  const formData = data
+  // const formData = data
+
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/AddOnCategory/isActive?id=${data._id}&is_active=${data.is_active}`
+
+  //const formData = data
+  const formData = {
+    id: data._id,
+    is_active: !data.is_active,
+  }
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
@@ -1387,18 +1450,29 @@ export const cuisineEditAction = (id, editName, status, file, color) => {
 }
 
 export const cuisineStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Put"
-  // console.log(data);
-  let dataObject = {
-    _id: data._id,
-    name: data.name,
-    is_active: data.is_active,
-    image: data.image,
-    "color.fg": data.color.fg,
-    "color.bg": data.color.bg,
+  console.log(data)
+  // var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Put"
+  // // console.log(data);
+  // let dataObject = {
+  //   _id: data._id,
+  //   name: data.name,
+  //   is_active: data.is_active,
+  //   image: data.image,
+  //   "color.fg": data.color.fg,
+  //   "color.bg": data.color.bg,
+  // }
+
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Cuisine/isActive?id=${data._id}&is_active=${data.is_active}`
+
+  //const formData = data
+  const formData = {
+    id: data._id,
+    is_active: !data.is_active,
   }
   // console.log(dataObject);
-  const formData = convertToFormData(dataObject)
+  //const formData = convertToFormData(dataObject)
   //console.log(formData);
   return dispatch => {
     const headers = {
@@ -1724,11 +1798,21 @@ export const restaurantMenuItemDeleteFresh = () => {
 }
 
 export const restaurantMenuStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Put"
-  let dataObject = { ...data }
+  // var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Put"
+  // let dataObject = { ...data }
 
-  const formData = convertToFormData(dataObject)
+  // const formData = convertToFormData(dataObject)
   // console.log(formData);
+  console.log(data)
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/MenuItem/isActive?id=${data._id}&is_active=${data.is_active}`
+
+  //const formData = data
+  const formData = {
+    id: data._id,
+    is_active: !data.is_active,
+  }
   return dispatch => {
     const headers = {
       // "Content-Type": "application/json",
@@ -2122,13 +2206,23 @@ export const editMenuTimeSlotFresh = () => {
   }
 }
 
-export const editMenuTimeSlotStatusAction = timeSlot => {
+export const editMenuTimeSlotStatusAction = data => {
   // console.log(val, timeSlot)
-  var url = process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/Put"
+  // var url = process.env.REACT_APP_LOCALHOST + "/MenuItemTimeSlot/Put"
 
-  let formData = timeSlot
+  // let formData = timeSlot
 
   // console.log(formData)
+
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/MenuItemTimeSlot/isActive?id=${data._id}&is_active=${data.is_active}`
+
+  //const formData = data
+  const formData = {
+    id: data._id,
+    is_active: !data.is_active,
+  }
 
   return dispatch => {
     const headers = {
@@ -2550,4 +2644,166 @@ export const getServerSidePaginationSearchBranchFresh = () => {
       status: false,
       payload: null,
     })
+}
+
+export const getServerSidePaginationMenuAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/MenuItem/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_MENU,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_MENU,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationMenuSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/MenuItem/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_MENU_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_MENU_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchMenuFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_MENU_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getServerSidePaginationAddOnsCategoryAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/AddOnCategory/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationAddOnsCategorySearchAction = name => {
+  console.log(name)
+  var url =
+    process.env.REACT_APP_LOCALHOST + `/AddOnCategory/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchAddOnsCategoryFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getAddOnsCategoryByIdAction = id => {
+  //var url = process.env.REACT_APP_LOCALHOST + "/Zone/Get"
+  var url = process.env.REACT_APP_LOCALHOST + `/AddOnCategory/GetById?id=${id}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_ADD_ON_CATEGORY_BY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_ADD_ON_CATEGORY_BY_ID,
+          status: "Failed",
+        })
+      })
+  }
 }

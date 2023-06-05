@@ -44,10 +44,10 @@ function EditZone(props) {
   const [allEditData, setAllData] = useState()
   const navigate = useNavigate()
   const location = useLocation()
-  // const [defaultProps, setDefaultProps] = useState({
-  //   lat: 23.8103,
-  //   lng: 90.4125,
-  // })
+  const [defaultProps, setDefaultProps] = useState({
+    lat: 23.8103,
+    lng: 90.4125,
+  })
   // console.log(location.state);
 
   const edit_map_data =
@@ -57,25 +57,16 @@ function EditZone(props) {
       lng: x[0],
       lat: x[1],
     }))
-
-  console.log(edit_map_data)
-
-  const defaultProps = edit_map_data ? edit_map_data : ""
-
-  console.log(defaultProps)
-
-  // useEffect(() => {
-  //   setDefaultProps(edit_map_data[0])
-  // }, [edit_map_data])
+  // console.log(edit_map_data);
 
   const [path, setPath] = useState(
     props?.get_zone_by_id_data
       ? edit_map_data
       : [
-          { lng: 90.44133911132815, lat: 23.810299999999998 },
-          { lng: 90.4334426879883, lat: 23.809985898058592 },
-          { lng: 90.41764984130862, lat: 23.8209790138562 },
-        ]
+        { lng: 90.44133911132815, lat: 23.810299999999998 },
+        { lng: 90.4334426879883, lat: 23.809985898058592 },
+        { lng: 90.41764984130862, lat: 23.8209790138562 },
+      ]
   )
 
   const polygonRef = useRef(null)
@@ -178,10 +169,10 @@ function EditZone(props) {
 
   const handleSubmit = e => {
     e.preventDefault()
-    // console.log(zoneInfo)
-    // console.log(path)
-    // console.log(deliveryCharge)
-    // console.log(selectedBranch)
+    console.log(zoneInfo)
+    console.log(path)
+    console.log(deliveryCharge)
+    console.log(selectedBranch)
     const uniqueId = uuidv4()
     props.zoneAddAction(
       uniqueId,
@@ -210,21 +201,12 @@ function EditZone(props) {
     )
   }
 
-  const edit_zone_delivery_charge_unsort =
+  const edit_zone_delivery_charge =
     props?.get_zone_by_id_data?.zone_delivery_charges?.map(item => ({
       distanceStart: item.distance_start_in_kilometer,
       distanceEnd: item.distance_end_in_kilometer,
       deliveryCharge: item.delivery_charge,
     }))
-
-  const edit_zone_delivery_charge = edit_zone_delivery_charge_unsort
-    ? [...edit_zone_delivery_charge_unsort].sort(
-        (a, b) => a.distanceStart - b.distanceStart
-      )
-    : ""
-
-  //console.log(edit_zone_delivery_charge_unsort)
-  // console.log(edit_zone_delivery_charge)
 
   // console.log(edit_zone_delivery_charge);
   // Delivery charge functionality
@@ -309,7 +291,7 @@ function EditZone(props) {
         is_active: props?.get_zone_by_id_data?.is_active,
       })
 
-      // console.log(props?.get_zone_by_id_data)
+      console.log(props?.get_zone_by_id_data)
       let branchData = props?.get_zone_by_id_data?.branches?.map(
         (item, key) => ({
           label: "Test",
@@ -320,13 +302,13 @@ function EditZone(props) {
       const common_branches = props?.get_all_branch_data?.filter(elem =>
         branchData?.find(({ value }) => elem._id === value)
       )
-      // console.log(common_branches)
+      console.log(common_branches)
 
       const branch_data_edit =
         common_branches?.length > 0
           ? common_branches?.map((item, key) => {
-              return { label: item.name, value: item._id }
-            })
+            return { label: item.name, value: item._id }
+          })
           : ""
 
       setBranch(branchData)
@@ -341,24 +323,14 @@ function EditZone(props) {
         }))
 
       setPath(edit_map_data)
-      //setDefaultProps(edit_map_data[0])
 
       //delivery charge
-      const edit_zone_delivery_charge_unsort =
+      const edit_zone_delivery_charge =
         props?.get_zone_by_id_data?.zone_delivery_charges?.map(item => ({
           distanceStart: item.distance_start_in_kilometer,
           distanceEnd: item.distance_end_in_kilometer,
           deliveryCharge: item.delivery_charge,
         }))
-
-      const edit_zone_delivery_charge = edit_zone_delivery_charge_unsort
-        ? [...edit_zone_delivery_charge_unsort].sort(
-            (a, b) => a.distanceStart - b.distanceStart
-          )
-        : ""
-
-      // console.log(edit_zone_delivery_charge_unsort)
-      //console.log(edit_zone_delivery_charge)
 
       // const [deliveryCharge, setDeliveryCHarge] = useState(props?.get_zone_by_id_data ? edit_zone_delivery_charge : [deliveryChargeTemplate]);
 
@@ -374,22 +346,8 @@ function EditZone(props) {
       SetGetInfo(false)
     }
   }, [props])
-  //props.get_all_branch_loading, props.get_all_city_loading, props.add_zone_loading, props.edit_zone_loading
-  // console.log(props.get_all_branch_data)
-  // console.log(props.get_all_city_data);
-  // console.log(props.get_zone_by_id_data)
-  // console.log(props.get_zone_by_id_loading)
-  // console.log(path[0])
-  // const [defaultProps, setDefaultProps] = useState({
-  //   lat: 23.8103,
-  //   lng: 90.4125,
-  // })
 
-  // {
-  //   path?
-  // }
-  // setDefaultProps
-  // console.log(defaultProps)
+
   return (
     <>
       <React.Fragment>
@@ -525,40 +483,37 @@ function EditZone(props) {
                       />
                     </div>
                   </Row>
-                  {defaultProps ? (
-                    <Card>
-                      <CardBody>
-                        <div
-                          id="gmaps-markers"
-                          className="gmaps"
-                          style={{ position: "relative" }}
+
+                  <Card>
+                    <CardBody>
+                      <div
+                        id="gmaps-markers"
+                        className="gmaps"
+                        style={{ position: "relative" }}
+                      >
+                        <Map
+                          style={{ width: "100%", height: "100%" }}
+                          google={props.google}
+                          initialCenter={defaultProps}
+                          zoom={12}
+                          onClick={e => onMapClickHandler(e)}
                         >
-                          <Map
-                            style={{ width: "100%", height: "100%" }}
-                            google={props.google}
-                            initialCenter={defaultProps[0]}
-                            zoom={12}
-                            onClick={e => onMapClickHandler(e)}
-                          >
-                            <Polygon
-                              // Make the Polygon editable / draggable
-                              editable
-                              draggable
-                              path={path}
-                              // Event used when manipulating and adding points
-                              onMouseUp={onEdit}
-                              // Event used when dragging the whole Polygon
-                              onDragEnd={onEdit}
-                              onLoad={onLoad}
-                              onUnmount={onUnmount}
-                            />
-                          </Map>
-                        </div>
-                      </CardBody>
-                    </Card>
-                  ) : (
-                    <></>
-                  )}
+                          <Polygon
+                            // Make the Polygon editable / draggable
+                            editable
+                            draggable
+                            path={path}
+                            // Event used when manipulating and adding points
+                            onMouseUp={onEdit}
+                            // Event used when dragging the whole Polygon
+                            onDragEnd={onEdit}
+                            onLoad={onLoad}
+                            onUnmount={onUnmount}
+                          />
+                        </Map>
+                      </div>
+                    </CardBody>
+                  </Card>
 
                   {/* <div className="mb-3">
                                         <label className="form-label" htmlFor="location">Zone Delevery Charges</label>

@@ -42,19 +42,21 @@ function Zone(props) {
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
   const toggleDel = () => setModalDel(!modalDel)
 
-  const handleStatusModal = row => {
-    setEditInfo(row)
+  const handleStatusModal = (cell) => {
+    console.log(cell)
+    //setEditInfo(row)
+    setEditInfo(cell)
 
     toggleStatus()
   }
 
-  const handleDeleteModal = row => {
-    setDeleteItem(row._id)
+  const handleDeleteModal = cell => {
+    setDeleteItem(cell._id)
     toggleDel()
   }
 
   const handleStatusUpdate = () => {
-    //console.log(editInfo)
+    console.log(editInfo)
     props.zoneStatusEditAction({
       id: editInfo._id,
       is_active: !editInfo.is_active,
@@ -62,8 +64,8 @@ function Zone(props) {
   }
   const navigate = useNavigate()
   const handleEdit = (row, cell) => {
-    // console.log(row)
-    // console.log(cell)
+    console.log(row)
+    console.log(cell)
 
     //props.getZoneByIdAction(cell._id)
     navigate("/edit-zone", { state: cell })
@@ -79,7 +81,7 @@ function Zone(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEdit(row, cell)}
+        onClick={() => handleEdit(row, cell, cell)}
       >
         Edit
       </Button>{" "}
@@ -143,7 +145,7 @@ function Zone(props) {
   }
 
   const handlePerRowsChange = async (newPerPage, page) => {
-    // console.log(newPerPage, page)
+    console.log(newPerPage, page)
     setCountPerPage(newPerPage)
   }
 
@@ -190,7 +192,7 @@ function Zone(props) {
   // console.log(props.get_server_side_pagination_zone_search_data)
   return (
     <React.Fragment>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <div className="page-content">
         <Container fluid>
           {/* Render Breadcrumbs */}
@@ -242,7 +244,7 @@ function Zone(props) {
                     data={
                       props.get_server_side_pagination_zone_search_data != null
                         ? props.get_server_side_pagination_zone_search_data
-                            ?.data
+                          ?.data
                         : props?.get_server_side_pagination_zone_data?.data
                     }
                     highlightOnHover
@@ -251,7 +253,7 @@ function Zone(props) {
                     paginationTotalRows={
                       props.get_server_side_pagination_zone_search_data != null
                         ? props.get_server_side_pagination_zone_search_data
-                            ?.count
+                          ?.count
                         : props.get_server_side_pagination_zone_data?.count
                     }
                     paginationPerPage={countPerPage}

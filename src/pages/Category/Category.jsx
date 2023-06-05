@@ -98,12 +98,13 @@ function Category(props) {
     setRestaurantIdEdit(e.target.value)
   }
 
-  const handleEditCategoryName = row => {
-    setCategoryId(row._id)
-    setCategoryName(row.category_name)
-    setRestaurantIdEdit(row.restaurant_id)
-    setEditImages({ ...editImages, image: row.image })
-    setIsActive(row.is_active)
+  const handleEditCategoryName = cell => {
+    console.log(cell)
+    setCategoryId(cell._id)
+    setCategoryName(cell.category_name)
+    setRestaurantIdEdit(cell.restaurant_id)
+    setEditImages({ ...editImages, image: cell.image })
+    setIsActive(cell.is_active)
     toggleEditModal()
   }
   const handleCategoryName = e => {
@@ -149,17 +150,17 @@ function Category(props) {
       isActive
     )
   }
-  const handleDeleteModal = row => {
-    setDeleteItem(row._id)
+  const handleDeleteModal = cell => {
+    setDeleteItem(cell._id)
     toggleDel()
   }
 
-  const handleStatusModal = row => {
-    setCategoryId(row._id)
-    setCategoryName(row.category_name)
-    setRestaurantIdEdit(row.restaurant_id)
-    setCategoryImage(row.image)
-    setIsActive(!row.is_active)
+  const handleStatusModal = cell => {
+    setCategoryId(cell._id)
+    setCategoryName(cell.category_name)
+    setRestaurantIdEdit(cell.restaurant_id)
+    setCategoryImage(cell.image)
+    setIsActive(cell.is_active)
 
     toggleStatus()
   }
@@ -171,7 +172,7 @@ function Category(props) {
 
   const handleStatusUpdate = e => {
     e.preventDefault()
-    props.categoryStatusEditAction({ _id: categoryId, is_active: isActive })
+    props.categoryStatusEditAction(categoryId, isActive)
     // toggleDel();
   }
   const actionRef = (cell, row) => (
@@ -193,7 +194,7 @@ function Category(props) {
     </div>
   )
 
-  const statusRef = (cell, row) => (
+  const statusRef = cell => (
     <Button
       color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"

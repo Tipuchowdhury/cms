@@ -344,17 +344,17 @@ function BranchAdd(props) {
       // naviagte("/manage-branch")
     }
 
-    if (props.edit_branch_loading === "Success") {
-      // toast.success("Branch edited Successfully")
-      props.editBranchFresh()
-      naviagte("/manage-branch")
-    }
+    // if (props.edit_branch_loading === "Success") {
+    //   toast.success("Branch edited Successfully")
+    //   props.editBranchFresh()
+    //   naviagte("/manage-branch")
+    // }
 
-    if (props.edit_branch_loading === "Failed") {
-      // toast.error("Branch edited Failed")
-      props.editBranchFresh()
-      // naviagte("/manage-branch")
-    }
+    // if (props.edit_branch_loading === "Failed") {
+    //   toast.error("Branch edited Failed")
+    //   props.editBranchFresh()
+    //   // naviagte("/manage-branch")
+    // }
     // if (props.voucher_setting_edit_loading === "Success") {
     //     toast.success("Voucher Setting edited Successfully")
     //     // redirect
@@ -366,7 +366,6 @@ function BranchAdd(props) {
     props.get_all_user_loading,
     props.get_all_cusine_loading,
     props.add_branch_loading,
-    props.edit_branch_loading,
   ])
 
   return (
@@ -1200,7 +1199,6 @@ const mapStateToProps = state => {
     get_all_restaurant_loading,
 
     add_branch_loading,
-    edit_branch_loading,
 
     get_all_cuisine_data,
     get_all_cuisine_loading,
@@ -1214,7 +1212,6 @@ const mapStateToProps = state => {
     get_all_user_data,
     get_all_user_loading,
     add_branch_loading,
-    edit_branch_loading,
 
     get_all_cuisine_data,
     get_all_cuisine_loading,

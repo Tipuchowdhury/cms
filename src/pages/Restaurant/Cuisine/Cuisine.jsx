@@ -16,7 +16,7 @@ import {
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { toast } from "react-toastify"
 import withRouter from "components/Common/withRouter"
-;` `
+  ; ` `
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
@@ -73,17 +73,17 @@ function Cuisine(props) {
   const [deleteItem, setDeleteItem] = useState()
   const toggleDel = () => setModalDel(!modalDel)
 
-  const handleDeleteModal = row => {
-    setDeleteItem(row._id)
+  const handleDeleteModal = cell => {
+    setDeleteItem(cell._id)
     toggleDel()
   }
   const handleDelete = () => {
     props.cuisineDeleteAction(deleteItem)
   }
 
-  const handleStatusModal = row => {
+  const handleStatusModal = cell => {
     // console.log(row);
-    setEditInfo(row)
+    setEditInfo(cell)
 
     toggleStatus()
   }
@@ -97,13 +97,14 @@ function Cuisine(props) {
     toggleStatus()
   }
 
-  const handleEditName = row => {
-    console.log(row)
-    setId(row._id)
-    setEditName(row.name)
-    setStatus(row.is_active)
-    setEditImages({ ...editImages, image: row.image })
-    setEditColor({ ...editColor, fg: row.color.fg, bg: row.color.bg })
+  const handleEditName = cell => {
+    //let color = (JSON.parse(cell.color))
+    console.log(cell);
+    setId(cell._id)
+    setEditName(cell.name)
+    setStatus(cell.is_active)
+    setEditImages({ ...editImages, image: cell.image })
+    setEditColor({ ...editColor, fg: cell.color.fg, bg: cell.color.bg })
     toggleEditModal()
   }
   // console.log(addImages);
@@ -126,7 +127,7 @@ function Cuisine(props) {
     </div>
   )
 
-  const statusRef = (cell, row) => (
+  const statusRef = (cell) => (
     <Button
       color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
@@ -203,7 +204,6 @@ function Cuisine(props) {
   const handleSubmit = e => {
     e.preventDefault()
     //console.log(name);
-    console.log(color)
     const id = uuidv4()
     props.addCuisineAction(id, name, file, color)
     toggle()
@@ -237,7 +237,6 @@ function Cuisine(props) {
   }
 
   const handlePerRowsChange = async (newPerPage, page) => {
-    console.log(newPerPage, page)
     setCountPerPage(newPerPage)
   }
 
@@ -261,9 +260,7 @@ function Cuisine(props) {
     countPerPage,
   ])
 
-  console.log(props.get_all_cuisine_data)
-  console.log(props.get_all_cuisine_loading)
-  console.log(props.get_server_side_pagination_cuisine_data)
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -316,9 +313,9 @@ function Cuisine(props) {
                     columns={activeData}
                     data={
                       props.get_server_side_pagination_cuisine_search_data !=
-                      null
+                        null
                         ? props.get_server_side_pagination_cuisine_search_data
-                            ?.data
+                          ?.data
                         : props?.get_server_side_pagination_cuisine_data?.data
                     }
                     highlightOnHover
@@ -326,9 +323,9 @@ function Cuisine(props) {
                     paginationServer
                     paginationTotalRows={
                       props.get_server_side_pagination_cuisine_search_data !=
-                      null
+                        null
                         ? props.get_server_side_pagination_cuisine_search_data
-                            ?.count
+                          ?.count
                         : props.get_server_side_pagination_cuisine_data?.count
                     }
                     paginationPerPage={countPerPage}
@@ -462,7 +459,7 @@ function Cuisine(props) {
 
         {/* ============ edit modal start=============== */}
         <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-          <ModalHeader toggle={toggleEditModal}>Edit cuisine name</ModalHeader>
+          <ModalHeader toggle={toggleEditModal}>Edit Cuisine</ModalHeader>
           <ModalBody>
             <form className="mt-1" onSubmit={handleEditModal}>
               <div className="mb-3">

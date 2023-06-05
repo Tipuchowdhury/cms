@@ -38,6 +38,7 @@ import {
 } from "store/Order/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import { orderStatusNames, orderStatuses } from "common/data/order"
+import DataTable from "react-data-table-component"
 import moment from "moment"
 
 function Order(props) {
@@ -239,6 +240,25 @@ function Order(props) {
       order: "desc",
     },
   ]
+
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationCuisineSearchAction(e.target.value)
+    } else {
+      props.getServerSidePaginationSearchCuisineFresh()
+    }
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    setCountPerPage(newPerPage)
+  }
 
   useEffect(() => {
     if (riderModalInfo.zone_id) props.getAvailableRider(riderModalInfo.zone_id)

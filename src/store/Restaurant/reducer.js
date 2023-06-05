@@ -74,12 +74,24 @@ import {
   SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
   DELETE_MENU_TIME_SLOT,
   DELETE_MENU_TIME_SLOT_FRESH,
+  SERVER_SIDE_PAGINATION_MENU,
+  SERVER_SIDE_PAGINATION_MENU_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_MENU_FRESH,
+  SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
+  SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH,
+  SERVER_SIDE_PAGINATION_MENU_TIME,
+  SERVER_SIDE_PAGINATION_MENU_TIME_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_MENU_TIME_FRESH,
   GET_ZONE_BY_ID,
   GET_ZONE_BY_ID_FRESH,
   DELETE_RESTAURANT_MENU,
   DELETE_RESTAURANT_MENU_FRESH,
   RESTAURANT_MENU_STATUS_EDIT,
   RESTAURANT_MENU_STATUS_EDIT_FRESH,
+  GET_ADD_ON_CATEGORY_BY_ID,
+  GET_BRANCH_BY_ID,
+  EDIT_BRANCH_FRESH_NEW
 } from "./actionTypes"
 
 const initialState = {
@@ -222,10 +234,44 @@ const initialState = {
 
   get_server_side_pagination_branch_search_data: null,
   get_server_side_pagination_branch_search_loading: false,
+
+  // server side pagination menu
+  get_server_side_pagination_menu_data: null,
+  get_server_side_pagination_menu_error: null,
+  get_server_side_pagination_menu_loading: false,
+
+  get_server_side_pagination_menu_search_data: null,
+  get_server_side_pagination_menu_search_loading: false,
+
+  // server side pagination addOns category
+  get_server_side_pagination_addOns_category_data: null,
+  get_server_side_pagination_addOns_category_error: null,
+  get_server_side_pagination_addOns_category_loading: false,
+
+  get_server_side_pagination_addOns_category_search_data: null,
+  get_server_side_pagination_addOns_category_search_loading: false,
+
+  // server side pagination menu-timeSlot
+  get_server_side_pagination_menu_time_data: null,
+  get_server_side_pagination_menu_time_error: null,
+  get_server_side_pagination_menu_time_loading: false,
+
+  get_server_side_pagination_menu_time_search_data: null,
+  get_server_side_pagination_menu_time_search_loading: false,
+
   get_zone_by_id_data: null,
   get_zone_by_id_error: null,
   get_zone_by_id_loading: false,
+
+  get_branch_by_id_data: null,
+  get_branch_by_id_error: null,
+  get_branch_by_id_loading: false,
+
+  get_add_ons_by_id_data: null,
+  get_add_ons_by_id_error: null,
+  get_add_ons_by_id_loading: false,
 }
+
 
 const Restaurant = (state = initialState, action) => {
   switch (action.type) {
@@ -236,7 +282,7 @@ const Restaurant = (state = initialState, action) => {
         get_all_restaurant_error: null,
         get_all_restaurant_loading: action.status,
       }
-      break
+      break;
 
     case ADD_RESTAURANT:
       state = {
@@ -246,7 +292,7 @@ const Restaurant = (state = initialState, action) => {
         add_restaurant_loading: action.status,
         get_all_restaurant_loading: false,
       }
-      break
+      break;
 
     case RESTAURANT_NAME_UPDATE:
       state = {
@@ -254,7 +300,7 @@ const Restaurant = (state = initialState, action) => {
         restaurant_name_update_loading: action.status,
         get_all_restaurant_loading: false,
       }
-      break
+      break;
 
     case RESTAURANT_STATUS_UPDATE:
       state = {
@@ -262,20 +308,23 @@ const Restaurant = (state = initialState, action) => {
         restaurant_status_update_loading: action.status,
         get_all_restaurant_loading: false,
       }
-      break
+      break;
+
     case DELETE_RESTAURANT:
       state = {
         ...state,
         restaurant_delete_loading: action.status,
         get_all_restaurant_loading: false,
       }
-      break
+      break;
+
     case DELETE_RESTAURANT_FRESH:
       state = {
         ...state,
         restaurant_delete_loading: action.status,
         get_all_restaurant_loading: false,
       }
+      break;
 
     case GET_ALL_CUSINE:
       state = {
@@ -284,7 +333,7 @@ const Restaurant = (state = initialState, action) => {
         get_all_cusine_error: null,
         get_all_cusine_loading: action.status,
       }
-      break
+      break;
     case ADD_BRANCH:
       state = {
         ...state,
@@ -293,7 +342,7 @@ const Restaurant = (state = initialState, action) => {
         add_branch_loading: action.status,
         get_all_branch_loading: false,
       }
-      break
+      break;
 
     case GET_ALL_BRANCH:
       state = {
@@ -302,7 +351,7 @@ const Restaurant = (state = initialState, action) => {
         get_all_branch_error: null,
         get_all_branch_loading: action.status,
       }
-      break
+      break;
 
     case GET_ALL_BRANCH_FRESH:
       state = {
@@ -317,13 +366,14 @@ const Restaurant = (state = initialState, action) => {
         branch_delete_loading: action.status,
         get_all_branch_loading: false,
       }
-      break
+      break;
     case DELETE_BRANCH_FRESH:
       state = {
         ...state,
         branch_delete_loading: action.status,
         get_all_branch_loading: false,
       }
+      break;
 
     case ADD_ZONE:
       state = {
@@ -334,7 +384,7 @@ const Restaurant = (state = initialState, action) => {
         //get_all_zone_loading: false
         get_server_side_pagination_zone_loading: false,
       }
-      break
+      break;
 
     case GET_ALL_ZONE:
       state = {
@@ -343,7 +393,7 @@ const Restaurant = (state = initialState, action) => {
         get_all_zone_error: null,
         get_all_zone_loading: action.status,
       }
-      break
+      break;
 
     case EDIT_ZONE:
       state = {
@@ -351,7 +401,7 @@ const Restaurant = (state = initialState, action) => {
         edit_zone_loading: action.status,
         get_all_zone_loading: false,
       }
-      break
+      break;
 
     case EDIT_ZONE_STATUS:
       state = {
@@ -359,28 +409,28 @@ const Restaurant = (state = initialState, action) => {
         edit_zone_status_loading: action.status,
         get_all_zone_loading: false,
       }
-      break
+      break;
 
     case ADD_ZONE_FRESH:
       state = {
         ...state,
         add_zone_loading: action.status,
       }
-      break
+      break;
 
     case EDIT_ZONE_FRESH:
       state = {
         ...state,
         edit_zone_loading: action.status,
       }
-      break
+      break;
 
     case EDIT_ZONE_STATUS_FRESH:
       state = {
         ...state,
         edit_zone_status_loading: action.status,
       }
-      break
+      break;
 
     case DELETE_ZONE:
       state = {
@@ -388,33 +438,48 @@ const Restaurant = (state = initialState, action) => {
         zone_delete_loading: action.status,
         get_all_zone_loading: false,
       }
-      break
+      break;
     case DELETE_ZONE_FRESH:
       state = {
         ...state,
         zone_delete_loading: action.status,
         get_all_zone_loading: false,
       }
+      break;
 
     case ADD_BRANCH_FRESH:
       state = {
         ...state,
         add_branch_loading: action.status,
       }
-      break
+      break;
+
+    case EDIT_BRANCH_FRESH_NEW:
+      console.log(action.status);
+      state = {
+        ...state,
+        edit_branch_loading: action.status,
+
+      }
+      break;
+
     case EDIT_BRANCH:
+      console.log(action.status);
       state = {
         ...state,
         edit_branch_loading: action.status,
         get_all_branch_loading: false,
       }
-      break
+      break;
+
     case EDIT_BRANCH_FRESH:
+      console.log(action.status);
       state = {
         ...state,
-        edit_branch_loading: action.status,
+        edit_branch_loading: false,
+
       }
-      break
+      break;
 
     case EDIT_BRANCH_STATUS:
       state = {
@@ -422,13 +487,14 @@ const Restaurant = (state = initialState, action) => {
         edit_branch_status_loading: action.status,
         get_all_branch_loading: false,
       }
-      break
+      break;
+
     case EDIT_BRANCH_STATUS_FRESH:
       state = {
         ...state,
         edit_branch_status_loading: action.status,
       }
-      break
+      break;
 
     case EDIT_BRANCH_POPULAR:
       state = {
@@ -436,13 +502,14 @@ const Restaurant = (state = initialState, action) => {
         edit_branch_popular_loading: action.status,
         get_all_branch_loading: false,
       }
-      break
+      break;
+
     case EDIT_BRANCH_POPULAR_FRESH:
       state = {
         ...state,
         edit_branch_popular_loading: action.status,
       }
-      break
+      break;
 
     case ADD_ONS_CATEGORY:
       state = {
@@ -452,14 +519,14 @@ const Restaurant = (state = initialState, action) => {
         add_ons_category_loading: action.status,
         get_all_addOns_category_loading: false,
       }
-      break
+      break;
 
     case ADD_ONS_CATEGORY_FRESH:
       state = {
         ...state,
         add_ons_category_loading: action.status,
       }
-      break
+      break;
 
     case ADD_CUISINE:
       state = {
@@ -469,7 +536,7 @@ const Restaurant = (state = initialState, action) => {
         add_cuisine_loading: action.status,
         get_all_cuisine_loading: false,
       }
-      break
+      break;
 
     case GET_CUISINE:
       state = {
@@ -478,7 +545,7 @@ const Restaurant = (state = initialState, action) => {
         get_all_cuisine_error: action.error,
         get_all_cuisine_loading: action.status,
       }
-      break
+      break;
 
     case EDIT_CUISINE:
       state = {
@@ -486,7 +553,7 @@ const Restaurant = (state = initialState, action) => {
         edit_cuisine_loading: action.status,
         get_all_cuisine_loading: false,
       }
-      break
+      break;
 
     case EDIT_CUISINE_STATUS:
       state = {
@@ -494,7 +561,7 @@ const Restaurant = (state = initialState, action) => {
         edit_status_cuisine_loading: action.status,
         get_all_cuisine_loading: false,
       }
-      break
+      break;
 
     case DELETE_CUISINE:
       state = {
@@ -502,7 +569,7 @@ const Restaurant = (state = initialState, action) => {
         cuisine_delete_loading: action.status,
         get_all_cuisine_loading: false,
       }
-      break
+      break;
 
     case DELETE_CUISINE_FRESH:
       state = {
@@ -511,7 +578,7 @@ const Restaurant = (state = initialState, action) => {
         get_all_cuisine_loading: false,
       }
 
-      break
+      break;
 
     case GET_ADD_ONS_CATEGORY:
       state = {
@@ -520,7 +587,7 @@ const Restaurant = (state = initialState, action) => {
         get_all_addOns_category_error: null,
         get_all_addOns_category_loading: action.status,
       }
-      break
+      break;
 
     case DELETE_ADD_ON_CATEGORY:
       state = {
@@ -528,7 +595,7 @@ const Restaurant = (state = initialState, action) => {
         add_on_category_delete_loading: action.status,
         get_all_addOns_category_loading: false,
       }
-      break
+      break;
 
     case DELETE_ADD_ON_CATEGORY_FRESH:
       state = {
@@ -536,6 +603,7 @@ const Restaurant = (state = initialState, action) => {
         add_on_category_delete_loading: action.status,
         get_all_addOns_category_loading: false,
       }
+      break;
 
     case EDIT_ADD_ON_CATEGORY_STATUS:
       state = {
@@ -543,13 +611,13 @@ const Restaurant = (state = initialState, action) => {
         edit_add_on_category_status_loading: action.status,
         get_all_addOns_category_loading: false,
       }
-      break
+      break;
     case EDIT_ADD_ON_CATEGORY_STATUS_FRESH:
       state = {
         ...state,
         edit_add_on_category_status_loading: action.status,
       }
-      break
+      break;
 
     case ADD_RESTAURANT_MENU:
       state = {
@@ -559,13 +627,13 @@ const Restaurant = (state = initialState, action) => {
         add_restaurant_menu_loading: action.status,
         get_all_menu_loading: false,
       }
-      break
+      break;
     case ADD_RESTAURANT_MENU_FRESH:
       state = {
         ...state,
         add_restaurant_menu_loading: action.status,
       }
-      break
+      break;
     case GET_RESTAURANT_MENU:
       state = {
         ...state,
@@ -573,7 +641,7 @@ const Restaurant = (state = initialState, action) => {
         get_all_menu_error: action.error,
         get_all_menu_loading: action.status,
       }
-      break
+      break;
 
     case DELETE_RESTAURANT_MENU:
       state = {
@@ -581,7 +649,7 @@ const Restaurant = (state = initialState, action) => {
         restaurant_menu_delete_loading: action.status,
         get_all_menu_loading: false,
       }
-      break
+      break;
     case DELETE_RESTAURANT_MENU_FRESH:
       state = {
         ...state,
@@ -589,6 +657,7 @@ const Restaurant = (state = initialState, action) => {
         get_all_menu_loading: false,
       }
 
+      break;
     case RESTAURANT_MENU_STATUS_EDIT:
       state = {
         ...state,
@@ -596,7 +665,7 @@ const Restaurant = (state = initialState, action) => {
         restaurant_menu_status_edit_loading: action.status,
         get_all_campaign_loading: false,
       }
-      break
+      break;
 
     case RESTAURANT_MENU_STATUS_EDIT_FRESH:
       state = {
@@ -641,7 +710,7 @@ const Restaurant = (state = initialState, action) => {
         get_category_by_branch_id_data: action.payload,
         get_category_by_branch_id_loading: action.status,
       }
-      break
+      break;
 
     case EDIT_ADD_ONS_CATEGORY:
       state = {
@@ -650,14 +719,14 @@ const Restaurant = (state = initialState, action) => {
         //get_all_branch_loading: false,
         get_all_addOns_category_loading: false,
       }
-      break
+      break;
 
     case EDIT_ADD_ONS_CATEGORY_FRESH:
       state = {
         ...state,
         edit_addOn_category_loading: action.status,
       }
-      break
+      break;
 
     case ADD_MENU_TIME_SLOT:
       state = {
@@ -668,7 +737,7 @@ const Restaurant = (state = initialState, action) => {
         get_all_menu_time_slot_loading: false,
       }
 
-      break
+      break;
 
     case GET_ALL_MENU_TIME_SLOT:
       state = {
@@ -677,14 +746,14 @@ const Restaurant = (state = initialState, action) => {
         get_all_menu_time_slot_error: action.error,
         get_all_menu_time_slot_loading: action.status,
       }
-      break
+      break;
 
     case ADD_MENU_TIME_SLOT_FRESH:
       state = {
         ...state,
         add_menu_time_slot_loading: action.status,
       }
-      break
+      break;
 
     case EDIT_MENU_TIME_SLOT:
       state = {
@@ -692,14 +761,14 @@ const Restaurant = (state = initialState, action) => {
         edit_menu_time_slot_loading: action.status,
         get_all_menu_time_slot_loading: false,
       }
-      break
+      break;
 
     case EDIT_MENU_TIME_SLOT_FRESH:
       state = {
         ...state,
         edit_menu_time_slot_loading: action.status,
       }
-      break
+      break;
 
     case EDIT_MENU_TIME_SLOT_STATUS:
       state = {
@@ -707,14 +776,14 @@ const Restaurant = (state = initialState, action) => {
         edit_menu_time_slot_status_loading: action.status,
         get_all_menu_time_slot_loading: false,
       }
-      break
+      break;
 
     case EDIT_MENU_TIME_SLOT_STATUS_FRESH:
       state = {
         ...state,
         edit_menu_time_slot_status_loading: action.status,
       }
-      break
+      break;
 
     case DELETE_MENU_TIME_SLOT:
       state = {
@@ -722,7 +791,7 @@ const Restaurant = (state = initialState, action) => {
         menu_time_slot_delete_loading: action.status,
         get_all_menu_time_slot_loading: false,
       }
-      break
+      break;
 
     case DELETE_MENU_TIME_SLOT_FRESH:
       state = {
@@ -731,7 +800,7 @@ const Restaurant = (state = initialState, action) => {
         get_all_menu_time_slot_loading: false,
       }
 
-      break
+      break;
 
     case GET_TIME_SLOT_BY_BRANCH_ID:
       state = {
@@ -757,7 +826,7 @@ const Restaurant = (state = initialState, action) => {
         get_category_by_id_error: action.error,
         get_category_by_id_loading: action.status,
       }
-      break
+      break;
 
     case GET_CATEGORY_BY_ID_FRESH:
       state = {
@@ -765,7 +834,7 @@ const Restaurant = (state = initialState, action) => {
         get_category_by_id_data: action.payload,
         get_category_by_id_loading: action.status,
       }
-      break
+      break;
 
     case SERVER_SIDE_PAGINATION_ZONE:
       state = {
@@ -774,7 +843,7 @@ const Restaurant = (state = initialState, action) => {
         get_server_side_pagination_zone_error: null,
         get_server_side_pagination_zone_loading: action.status,
       }
-      break
+      break;
 
     case SERVER_SIDE_PAGINATION_ZONE_SEARCH:
       state = {
@@ -782,7 +851,7 @@ const Restaurant = (state = initialState, action) => {
         get_server_side_pagination_zone_search_data: action.payload,
         get_server_side_pagination_zone_search_loading: action.status,
       }
-      break
+      break;
 
     case SERVER_SIDE_PAGINATION_SEARCH_ZONE_FRESH:
       state = {
@@ -790,7 +859,7 @@ const Restaurant = (state = initialState, action) => {
         get_server_side_pagination_zone_search_data: action.payload,
         get_server_side_pagination_zone_search_loading: action.status,
       }
-      break
+      break;
 
     case SERVER_SIDE_PAGINATION_CUISINE:
       state = {
@@ -799,7 +868,7 @@ const Restaurant = (state = initialState, action) => {
         get_server_side_pagination_cuisine_error: null,
         get_server_side_pagination_cuisine_loading: action.status,
       }
-      break
+      break;
 
     case SERVER_SIDE_PAGINATION_CUISINE_SEARCH:
       state = {
@@ -807,7 +876,7 @@ const Restaurant = (state = initialState, action) => {
         get_server_side_pagination_cuisine_search_data: action.payload,
         get_server_side_pagination_cuisine_search_loading: action.status,
       }
-      break
+      break;
 
     case SERVER_SIDE_PAGINATION_SEARCH_CUISINE_FRESH:
       state = {
@@ -815,7 +884,7 @@ const Restaurant = (state = initialState, action) => {
         get_server_side_pagination_cuisine_search_data: action.payload,
         get_server_side_pagination_cuisine_search_loading: action.status,
       }
-      break
+      break;
 
     case SERVER_SIDE_PAGINATION_RESTAURANT:
       state = {
@@ -824,7 +893,7 @@ const Restaurant = (state = initialState, action) => {
         get_server_side_pagination_restaurant_error: null,
         get_server_side_pagination_restaurant_loading: action.status,
       }
-      break
+      break;
 
     case SERVER_SIDE_PAGINATION_RESTAURANT_SEARCH:
       state = {
@@ -832,7 +901,7 @@ const Restaurant = (state = initialState, action) => {
         get_server_side_pagination_restaurant_search_data: action.payload,
         get_server_side_pagination_restaurant_search_loading: action.status,
       }
-      break
+      break;
 
     case SERVER_SIDE_PAGINATION_SEARCH_RESTAURANT_FRESH:
       state = {
@@ -840,7 +909,7 @@ const Restaurant = (state = initialState, action) => {
         get_server_side_pagination_restaurant_search_data: action.payload,
         get_server_side_pagination_restaurant_search_loading: action.status,
       }
-      break
+      break;
 
     case SERVER_SIDE_PAGINATION_BRANCH:
       state = {
@@ -849,7 +918,7 @@ const Restaurant = (state = initialState, action) => {
         get_server_side_pagination_branch_error: null,
         get_server_side_pagination_branch_loading: action.status,
       }
-      break
+      break;
 
     case SERVER_SIDE_PAGINATION_BRANCH_SEARCH:
       state = {
@@ -857,7 +926,7 @@ const Restaurant = (state = initialState, action) => {
         get_server_side_pagination_branch_search_data: action.payload,
         get_server_side_pagination_branch_search_loading: action.status,
       }
-      break
+      break;
 
     case SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH:
       state = {
@@ -865,7 +934,84 @@ const Restaurant = (state = initialState, action) => {
         get_server_side_pagination_branch_search_data: action.payload,
         get_server_side_pagination_branch_search_loading: action.status,
       }
-      break
+      break;
+
+    case SERVER_SIDE_PAGINATION_MENU:
+      state = {
+        ...state,
+        get_server_side_pagination_menu_data: action.payload,
+        get_server_side_pagination_menu_error: null,
+        get_server_side_pagination_menu_loading: action.status,
+      }
+      break;
+
+    case SERVER_SIDE_PAGINATION_MENU_SEARCH:
+      state = {
+        ...state,
+        get_server_side_pagination_menu_search_data: action.payload,
+        get_server_side_pagination_menu_search_loading: action.status,
+      }
+      break;
+
+    case SERVER_SIDE_PAGINATION_SEARCH_MENU_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_menu_search_data: action.payload,
+        get_server_side_pagination_menu_search_loading: action.status,
+      }
+      break;
+
+    case SERVER_SIDE_PAGINATION_ADDONS_CATEGORY:
+      state = {
+        ...state,
+        get_server_side_pagination_addOns_category_data: action.payload,
+        get_server_side_pagination_addOns_category_error: null,
+        get_server_side_pagination_addOns_category_loading: action.status,
+      }
+      break;
+
+    case SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH:
+      state = {
+        ...state,
+        get_server_side_pagination_addOns_category_search_data: action.payload,
+        get_server_side_pagination_addOns_category_search_loading:
+          action.status,
+      }
+      break;
+
+    case SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_addOns_category_search_data: action.payload,
+        get_server_side_pagination_addOns_category_search_loading:
+          action.status,
+      }
+      break;
+
+    case SERVER_SIDE_PAGINATION_MENU_TIME:
+      state = {
+        ...state,
+        get_server_side_pagination_menu_time_data: action.payload,
+        get_server_side_pagination_menu_time_error: null,
+        get_server_side_pagination_menu_time_loading: action.status,
+      }
+      break;
+
+    case SERVER_SIDE_PAGINATION_MENU_TIME_SEARCH:
+      state = {
+        ...state,
+        get_server_side_pagination_menu_time_search_data: action.payload,
+        get_server_side_pagination_menu_time_search_loading: action.status,
+      }
+      break;
+
+    case SERVER_SIDE_PAGINATION_SEARCH_MENU_TIME_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_menu_time_search_data: action.payload,
+        get_server_side_pagination_menu_time_search_loading: action.status,
+      }
+      break;
 
     case GET_ZONE_BY_ID:
       state = {
@@ -874,7 +1020,23 @@ const Restaurant = (state = initialState, action) => {
         get_zone_by_id_error: null,
         get_zone_by_id_loading: action.status,
       }
-      break
+      break;
+
+    case GET_ZONE_BY_ID_FRESH:
+      state = {
+        ...state,
+        get_zone_by_id_loading: action.status,
+      }
+      break;
+
+    case GET_ZONE_BY_ID:
+      state = {
+        ...state,
+        get_zone_by_id_data: action.payload,
+        get_zone_by_id_error: null,
+        get_zone_by_id_loading: action.status,
+      }
+      break;
 
     case GET_ZONE_BY_ID_FRESH:
       state = {
@@ -882,6 +1044,25 @@ const Restaurant = (state = initialState, action) => {
         get_zone_by_id_data: null,
         get_zone_by_id_loading: action.status,
       }
+      break;
+
+    case GET_BRANCH_BY_ID:
+      state = {
+        ...state,
+        get_branch_by_id_data: action.payload,
+        get_branch_by_id_error: null,
+        get_branch_by_id_loading: action.status,
+      }
+      break;
+
+    case GET_ADD_ON_CATEGORY_BY_ID:
+      state = {
+        ...state,
+        get_add_ons_by_id_data: action.payload,
+        get_add_ons_by_id_error: null,
+        get_add_ons_by_id_loading: action.status,
+      }
+      break;
   }
   return state
 }
