@@ -35,6 +35,7 @@ import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
 import { useLocation, useNavigate } from "react-router-dom"
 import CustomLoader from "components/CustomLoader/CustomLoader"
+import PageLoader from "components/CustomLoader/PageLoader"
 
 const LoadingContainer = () => <div>Loading...</div>
 
@@ -397,19 +398,7 @@ function EditZone(props) {
   // console.log(path.length)
   // console.log(Math.ceil(path.length / 2))
   if (getInfo) {
-    return (
-      <React.Fragment>
-        <div className="page-content">
-          <Container fluid>
-            <Row>
-              <Col className="col-12 text-center mt-3">
-                <CustomLoader />
-              </Col>
-            </Row>
-          </Container>
-        </div>
-      </React.Fragment>
-    )
+    return <PageLoader />
   }
 
   return (

@@ -253,6 +253,7 @@ function CategoryAdd(props) {
                                 className="form-control"
                                 name="add_on_price"
                                 placeholder="Price"
+                                min="0"
                                 value={row.add_on_price}
                                 onChange={e => handleAddOnsCat(e, idx)}
                               />

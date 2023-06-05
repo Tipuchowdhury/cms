@@ -159,7 +159,7 @@ function Category(props) {
     setCategoryName(row.category_name)
     setRestaurantIdEdit(row.restaurant_id)
     setCategoryImage(row.image)
-    setIsActive(row.is_active)
+    setIsActive(!row.is_active)
 
     toggleStatus()
   }
@@ -171,13 +171,7 @@ function Category(props) {
 
   const handleStatusUpdate = e => {
     e.preventDefault()
-    props.categoryStatusEditAction(
-      categoryName,
-      categoryId,
-      restaurantIdEdit,
-      categoryImage,
-      isActive
-    )
+    props.categoryStatusEditAction({ _id: categoryId, is_active: isActive })
     // toggleDel();
   }
   const actionRef = (cell, row) => (
@@ -398,7 +392,7 @@ function Category(props) {
           </Row>
         </Container>
         <Modal isOpen={modal} toggle={toggle} centered>
-          <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+          <ModalHeader toggle={toggle}>Add New Category</ModalHeader>
           <ModalBody>
             <form className="mt-1" onSubmit={handleSubmit}>
               <div className="mb-3">
@@ -483,7 +477,7 @@ function Category(props) {
 
         {/* ============ edit modal start=============== */}
         <Modal isOpen={editModal} toggle={toggleEditModal} centered={true}>
-          <ModalHeader toggle={toggleEditModal}>Edit category name</ModalHeader>
+          <ModalHeader toggle={toggleEditModal}>Edit Category</ModalHeader>
           <ModalBody>
             <form className="mt-1" onSubmit={handleEditModalSubmit}>
               <div className="mb-3">

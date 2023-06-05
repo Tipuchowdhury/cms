@@ -157,6 +157,8 @@ import Order from "pages/Order/Order"
 import Refund from "pages/Refund/Refund"
 import ZoneUtilization from "pages/ZoneUtilization/ZoneUtilization"
 import RiderList from "pages/ZoneUtilization/RiderList"
+import Quest from "pages/Quest/Quest"
+import AddQuest from "pages/Quest/AddQuest"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -262,6 +264,11 @@ const userRoutes = [
   // Notification
   { path: "/notification", component: <Notification /> },
   { path: "/add-notification", component: <AddNotification /> },
+
+  // Quests
+  { path: "/quests", component: <Quest /> },
+  { path: "/add-quest", component: <AddQuest /> },
+  { path: "/edit-quest", component: <AddQuest /> },
 
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },

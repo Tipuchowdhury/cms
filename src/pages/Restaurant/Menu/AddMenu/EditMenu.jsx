@@ -29,6 +29,10 @@ import {
   getAllMenuTimeSlot,
   getCategoryByIdAction,
   getCategoryByIdFresh,
+  getCategoryByBranchIdAction,
+  getCategoryByBranchIdFresh,
+  getTimeSLotByBranchIdAction,
+  getTimeSLotByBranchIdFresh,
   getAllCategoryAction,
   editRestaurantMenuAction,
   editRestaurantMenuFresh,
@@ -84,11 +88,6 @@ function EditMenu(props) {
 
   const closeModal = () => {
     setModal(!modal)
-    //props.getCategoryByIdFresh();
-    // dispatch(getCategoryByIdFresh({
-    //     get_category_by_id_data: null,
-    //     get_category_by_id_loading: false
-    // }))
   }
   const toggle = () => {
     setModal(!modal)
@@ -139,67 +138,45 @@ function EditMenu(props) {
   // ===========================start working from here ====================
   const [item, setItem] = useState([])
 
+  // const handleChangeTime = (e, ClickedItem) => {
+  //   const newState = newData2.map(obj => {
+  //     // 👇️ if id equals 2, update country property
+  //     if (obj._id === ClickedItem._id) {
+  //       return { ...obj, checked: !obj.checked }
+  //     }
+
+  //     // 👇️ otherwise return the object as is
+  //     return obj
+  //   })
+
+  //   setNewData2(newState)
+  // }
+
   const handleChangeTime = (e, ClickedItem) => {
-    // Destructuring
-    // const { value, checked } = e.target
-    // console.log(ClickedItem)
-    // console.log(e.target.checked)
-
-    // Case 1 : The user checks the box
-    // if (checked) {
-    //   setItem([...item, ClickedItem])
-    // } else {
-    //   setItem(item.filter(e => e !== ClickedItem))
-    // }
-    // console.log("item :", item)
-
-    const newState = newData2.map(obj => {
+    const newState = selectedTimeSlot.map(obj => {
       // 👇️ if id equals 2, update country property
       if (obj._id === ClickedItem._id) {
         return { ...obj, checked: !obj.checked }
       }
-
-      // 👇️ otherwise return the object as is
       return obj
     })
 
-    setNewData2(newState)
+    setSelectedTimeSlot(newState)
   }
   // ===========================ends here ====================
 
   // get all branch
 
-  let branchData = undefined
-  if (props.get_all_branch_data?.length > 0) {
-    branchData = props.get_all_branch_data?.map((item, key) => (
-      <option key={item._id} value={item._id}>
-        {item.name}
-      </option>
-    ))
-  }
-
-  let allTimeSlots = []
-  // if (props.get_all_menu_time_slot_data?.length > 0) {
-  //   allTimeSlots = props.get_all_menu_time_slot_data?.map((item, key) => ({
-  //     _id: item._id,
-  //     checked: false,
-  //     name: item.name,
-  //     start_time: item.start_time,
-  //     end_time: item.end_time,
-  //   }))
+  // let branchData = undefined
+  // if (props.get_all_branch_data?.length > 0) {
+  //   branchData = props.get_all_branch_data?.map((item, key) => (
+  //     <option key={item._id} value={item._id}>
+  //       {item.name}
+  //     </option>
+  //   ))
   // }
 
-  //  const common_subscription_type =
-  //    props?.get_all_subscription_type_data?.filter(elem =>
-  //      location?.state?.subscription_types?.find(
-  //        ({ subscription_type_id }) => elem._id === subscription_type_id
-  //      )
-  //    )
-  // const data = allTimeSlots?.map(elem =>
-  //   location?.state?.menu_available_times?.map(
-  //     ({ menu_item_time_slot_id }) => elem._id === menu_item_time_slot_id
-  //   )
-  // )
+  let allTimeSlots = []
 
   const [timeSlots, setTimeSlots] = useState(allTimeSlots)
 
@@ -217,25 +194,8 @@ function EditMenu(props) {
 
       setDataUpdated(true)
     }
-
-    // setTimeout(() => {
-    //   timeSlots?.length > 0
-    //     ? timeSlots?.map((elem, index) => {
-    //         location?.state?.menu_available_times?.map(item => {
-    //           if (elem._id === item.menu_item_time_slot_id) {
-    //             let new_time_slots = timeSlots
-    //             new_time_slots[index] = { ...elem, checked: true }
-    //             setTimeSlots(new_time_slots)
-    //           }
-    //         })
-    //       })
-    //     : ""
-
-    //   console.log("hahah", timeSlots)
-    // }, 2000)
   }, [props.get_all_menu_time_slot_loading])
 
-  // console.log(timeSlots)
   const [newData2, setNewData2] = useState()
 
   useEffect(() => {
@@ -253,21 +213,6 @@ function EditMenu(props) {
     setNewData2(timeSlots)
   }, [timeSlots])
 
-  // console.log(newData2)
-
-  // const data =
-  //   timeSlots?.length > 0
-  //     ? timeSlots?.map(elem => {
-  //         location?.state?.menu_available_times?.map(item => {
-  //           if (elem._id === item.menu_item_time_slot_id) {
-  //             setTimeSlots({ ...item, checked: !item.checked })
-  //           }
-  //         })
-  //       })
-  //     : ""
-
-  // get all category
-
   let categoryData = undefined
   if (props.get_all_addOns_category_data?.length > 0) {
     categoryData = props.get_all_addOns_category_data?.map((item, key) => (
@@ -277,14 +222,14 @@ function EditMenu(props) {
     ))
   }
 
-  let menuCategoryData = undefined
-  if (props.get_all_category_data?.length > 0) {
-    menuCategoryData = props.get_all_category_data?.map((item, key) => (
-      <option key={item._id} value={item._id}>
-        {item.category_name}
-      </option>
-    ))
-  }
+  // let menuCategoryData = undefined
+  // if (props.get_all_category_data?.length > 0) {
+  //   menuCategoryData = props.get_all_category_data?.map((item, key) => (
+  //     <option key={item._id} value={item._id}>
+  //       {item.category_name}
+  //     </option>
+  //   ))
+  // }
 
   const [images, setImages] = useState({
     image: location.state ? location.state.image : "",
@@ -322,37 +267,12 @@ function EditMenu(props) {
     variation_group_name: "",
     variation_group_desc: "",
     add_on: false,
-    // add_on_categories: [
-    //   {
-    //     _id: "",
-    //     add_on_category_id: "",
-    //     variation_id: "",
-    //     add_on_category_name: "",
-    //     cat_is_multiple: false,
-    //     cat_max_choice: 0,
-    //     language_slug: "",
-    //     add_on_category_desc: "",
-    //     add_ons: [
-    //       {
-    //         _id: "",
-    //         add_ons_name: "",
-    //         max_choice: 0,
-    //         is_multiple: false,
-    //         add_ons_price: 0,
-    //         addoncat_id: "",
-    //         variation_and_add_on_category_id: "",
-    //       },
-    //     ],
-    //   },
-    // ],
     add_on_categories: [],
   }
 
   const [addOns, setAddOns] = useState(
     location.state ? location.state.variations : [addOnsTemplate]
   )
-
-  // console.log(addOns)
 
   const handleAddOnsCat = (e, index) => {
     const updatedValue = addOns.map((row, i) =>
@@ -361,11 +281,8 @@ function EditMenu(props) {
         : row
     )
     setAddOns(updatedValue)
-    // console.log("setAddOns :", addOns)
   }
   function handleAddRowNested() {
-    // console.log(addOns)
-    // console.log(addOnsTemplate)
     setAddOns([...addOns, addOnsTemplate])
   }
   const handleRowDelete = index => {
@@ -393,22 +310,10 @@ function EditMenu(props) {
   const [num_of_choice_new, setNumber] = useState()
   const [isCheckAddOns, setIsCheckAddOns] = useState(false)
   let addAddOnName, addAddOnValue
-  // const handleInputsAddOns = (e, idx) => {
-  //
-  //     addAddOnName = e.target.name;
-  //     addAddOnValue = e.target.value;
-  //
-  //     setAddAddOns({ ...addAddOns, [addAddOnName]: addAddOnValue })
-  //     props.getCategoryByIdAction(addAddOnValue)
-
-  // }
 
   const [valueByID, setValue] = useState()
   const checkHandlerAddOns = categoryIndex => {
-    //console.log(addNewCategory)
     const newCat = [...addNewCategory]
-    //console.log(newCat)
-    //console.log(newCat[categoryIndex])
     newCat[categoryIndex] = {
       ...newCat[categoryIndex],
       cat_is_multiple: !newCat[categoryIndex].cat_is_multiple,
@@ -418,10 +323,8 @@ function EditMenu(props) {
   }
 
   const setCatMaxChoice = (value, categoryIndex) => {
-    //console.log(addNewCategory)
     const newCat = [...addNewCategory]
-    //console.log(newCat)
-    //console.log(newCat[categoryIndex])
+
     newCat[categoryIndex] = {
       ...newCat[categoryIndex],
       cat_max_choice: value,
@@ -430,28 +333,188 @@ function EditMenu(props) {
     setAddNewCategory(newCat)
   }
 
-  const checkTimeSelected = time_slot => {
-    // console.log(time_slot)
-    // const selectedTimeSlot = location.state
-    //   ? location.state.menu_available_times
-    //   : []
-    // let return_check = 0
-    // const found = selectedTimeSlot.map(obj => {
-    //   if (obj.menu_item_time_slot_id === time_slot_id._id) {
-    //     return_check = 1
-    //   }
-    // })
-    // return return_check
-    // const newState = timeSlots.map(obj => {
-    //   // 👇️ if id equals 2, update country property
-    //   if (obj._id === time_slot._id) {
-    //     return { ...obj, checked: !obj.checked }
-    //   }
-    //   // 👇️ otherwise return the object as is
-    //   return obj
-    // })
-    // setTimeSlots(newState)
+  //select multiple branch
+  const common_branches = props?.get_all_branch_data?.filter(
+    elem => elem._id === location.state.restaurant_id
+  )
+
+  const branch_data_edit = common_branches
+    ? common_branches?.map((item, key) => {
+        return { label: item.name, value: item._id }
+      })
+    : ""
+  const [selectedBranch, setSelectedBranch] = useState(
+    branch_data_edit ? branch_data_edit[0] : ""
+  )
+
+  useEffect(() => {
+    if (props.get_all_branch_loading === "Success")
+      setSelectedBranch(branch_data_edit)
+  }, [props.get_all_branch_loading])
+
+  const handleSelectBranch = e => {
+    let restaurantValue = e.value
+
+    // setInfo({ ...info, restaurant: restaurantValue })
+    setInfo({ ...info, restaurant: restaurantValue, category: "" })
+    setSelectedBranch(e)
+    setCategoryNew([])
+    setSelectedTimeSlot([])
+    props.getCategoryByBranchIdAction(restaurantValue)
+    props.getTimeSLotByBranchIdAction(restaurantValue)
   }
+
+  let branchDate = undefined
+  if (props.get_all_branch_data?.length > 0) {
+    branchDate = props.get_all_branch_data?.map((item, key) => ({
+      label: item.name,
+      value: item._id,
+    }))
+  }
+
+  const [timeSlotNew, setTimeSlotNew] = useState([])
+
+  // const common_categories = props.get_all_category_data?.filter(
+  //   elem => elem._id === location?.state?.category_id
+  // )
+
+  const common_categories_2 = props.get_category_by_branch_id_data?.filter(
+    elem => elem._id === location?.state?.category_id
+  )
+
+  // const category_data_edit = common_categories
+  //   ? common_categories?.map((item, key) => {
+  //       return { label: item.category_name, value: item._id }
+  //     })
+  //   : ""
+
+  const category_data_edit_2 = common_categories_2
+    ? common_categories_2?.map((item, key) => {
+        return { label: item.category_name, value: item._id }
+      })
+    : ""
+
+  // const [selectedCategory, setSelectedCategory] = useState(
+  //   category_data_edit ? category_data_edit : ""
+  // )
+
+  const [categoryNew, setCategoryNew] = useState(
+    category_data_edit_2 ? category_data_edit_2 : ""
+  )
+
+  // const handleSelectCategory = e => {
+  //   setInfo({ ...info, category: e.value })
+  //   setSelectedCategory(e)
+  // }
+
+  const handleSelectCategory2 = e => {
+    setInfo({ ...info, category: e.value })
+    setCategoryNew(e)
+  }
+
+  // useEffect(() => {
+  //   if (props.get_all_category_loading === "Success")
+  //     setSelectedCategory(category_data_edit)
+  // }, [props.get_all_category_loading])
+
+  useEffect(() => {
+    if (props.get_category_by_branch_id_loading === "Success") {
+      setCategoryNew(category_data_edit_2)
+    }
+  }, [props.get_category_by_branch_id_loading])
+
+  useEffect(() => {
+    props.getCategoryByBranchIdFresh()
+    props.getTimeSLotByBranchIdFresh()
+    props.getCategoryByBranchIdAction(info.restaurant)
+    props.getTimeSLotByBranchIdAction(info.restaurant)
+  }, [info.restaurant])
+
+  // console.log(selectedCategory)
+
+  // let menuCategoryData = undefined
+  // if (props.get_all_category_data?.length > 0) {
+  //   menuCategoryData = props.get_all_category_data?.map((item, key) => ({
+  //     label: item.category_name,
+  //     value: item._id,
+  //   }))
+  // }
+
+  let menuCategoryData2 = undefined
+  if (props.get_category_by_branch_id_data?.length > 0) {
+    menuCategoryData2 = props.get_category_by_branch_id_data?.map(
+      (item, key) => ({
+        label: item.category_name,
+        value: item._id,
+      })
+    )
+  }
+
+  // const common_time_slots = props?.common_time_slots?.filter(
+  //   elem => elem._id === location.state.restaurant_id
+  // )
+
+  // const common_time_slots = props?.get_all_menu_time_slot_data?.filter(elem =>
+  //   location?.state?.menu_available_times?.find(
+  //     ({ menu_item_time_slot_id }) => elem._id === menu_item_time_slot_id
+  //   )
+  // )
+
+  const slot_data = []
+
+  props?.get_time_slot_by_branch_id_data?.forEach((time_slot, index) => {
+    let status = 0
+    location?.state?.menu_available_times?.forEach((time_slot_2, key) => {
+      if (time_slot._id === time_slot_2.menu_item_time_slot_id) {
+        status = 1
+      }
+    })
+    if (status == 1) {
+      slot_data.push({
+        _id: time_slot._id,
+        checked: true,
+        name: time_slot.name,
+        start_time: time_slot.start_time,
+        end_time: time_slot.end_time,
+      })
+    } else {
+      slot_data.push({
+        _id: time_slot._id,
+        checked: false,
+        name: time_slot.name,
+        start_time: time_slot.start_time,
+        end_time: time_slot.end_time,
+      })
+    }
+
+    status = 0
+  })
+
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(
+    slot_data ? slot_data : []
+  )
+
+  useEffect(() => {
+    if (props.get_time_slot_by_branch_id_loading === "Success")
+      setSelectedTimeSlot(slot_data)
+  }, [props.get_time_slot_by_branch_id_loading])
+
+  // let allSlots = undefined
+  // if (props.get_time_slot_by_branch_id_data?.length > 0) {
+  //   allSlots = props.get_time_slot_by_branch_id_data?.map((item, key) => ({
+  //     _id: item._id,
+  //     name: item.name,
+  //     checked: false,
+  //     start_time: item.start_time,
+  //     end_time: item.end_time,
+  //   }))
+  // }
+
+  // console.log(selectedTimeSlot)
+  // console.log(allSlots)
+  // console.log(info.restaurant)
+
+  const checkTimeSelected = time_slot => {}
 
   const handleCatMaxChoice = (e, categoryIndex) => {
     const newCat = [...addNewCategory]
@@ -466,6 +529,10 @@ function EditMenu(props) {
   const [addOnsNew, setAddOnsNew] = useState([
     props?.get_category_by_id_data?.preset_add_ons,
   ])
+
+  // console.log(categoryNew)
+  // console.log(timeSlotNew)
+  // console.log(menuCategoryData)
 
   const handleAddOnsCatNew = (e, categoryIndex, addonIndex) => {
     const newCat = [...addNewCategory]
@@ -482,15 +549,13 @@ function EditMenu(props) {
   }
 
   const handleRowDeleteNew = (cat_idx, index) => {
-    // console.log(index)
-    // console.log(addNewCategory)
     let newAddOnCategory = [...addNewCategory]
     const filteredTime = newAddOnCategory[cat_idx].add_ons.filter(
       (val, i) => i !== index
     )
 
     newAddOnCategory[cat_idx].add_ons = filteredTime
-    //console.log("aa", newAddOnCategory)
+
     setAddNewCategory(newAddOnCategory)
   }
   const [id, setID] = useState()
@@ -507,15 +572,13 @@ function EditMenu(props) {
   const [addOnUnderCategory, setAddOnUnderCategory] = useState([])
   const [addBtnStatus, setAddBtnStatus] = useState(false)
   const handleAddOnsUndeCategory = (e, index) => {
-    // console.log("index :", index)
     setAddBtnStatus(true)
     const updatedValue = addOnUnderCategory.map((row, i) => {
-      // console.log("row :", row)
       index === i
         ? Object.assign(row, { [e.target.name]: e.target.value })
         : row
     })
-    // console.log("updatedValue :", updatedValue)
+
     setAddOnUnderCategory(updatedValue)
   }
 
@@ -561,8 +624,6 @@ function EditMenu(props) {
   const handleSelectedAddOnsCategory = add_on_categories => {
     setSelectedAddonsCategory(add_on_categories)
   }
-
-  // console.log(selectedAddonsCategory)
 
   const handleInputsAddOns = (e, idx) => {
     addAddOnName = e.target.name
@@ -622,6 +683,16 @@ function EditMenu(props) {
       })
   }
 
+  // const handleInputsRestaurant = e => {
+  //   let restaurantName = e.target.name
+  //   let restaurantValue = e.target.value
+
+  //   setInfo({ ...info, [restaurantName]: restaurantValue })
+  //   setSelectedCategory([])
+  //   props.getCategoryByBranchIdAction(restaurantValue)
+  //   props.getTimeSLotByBranchIdAction(restaurantValue)
+  // }
+
   function handleAddCategoryRow() {
     //props.getCategoryByIdFresh();
     setAddNewCategory([...addNewCategory, finalTemplate])
@@ -661,13 +732,26 @@ function EditMenu(props) {
 
   const handleEditMenu = e => {
     e.preventDefault()
-    props.editRestaurantMenuAction(
-      location.state._id,
-      info,
-      isChecked,
-      addOns,
-      newData2
-    )
+    let status = 0
+    if (info.menu_price < 0) {
+      status = 1
+      toast.error("Menu price can't be negative")
+    }
+    if (info.pickup_menu_price < 0) {
+      status = 1
+      toast.error("Pickup menu price can't be negative")
+    }
+
+    if (status == 0) {
+      // console.log(info)
+      props.editRestaurantMenuAction(
+        location.state._id,
+        info,
+        isChecked,
+        addOns,
+        selectedTimeSlot
+      )
+    }
   }
 
   let newAddOnsArray = []
@@ -734,15 +818,29 @@ function EditMenu(props) {
     if (props?.get_category_by_id_data?.preset_add_ons) {
       setAddOnsNew(props?.get_category_by_id_data?.preset_add_ons)
     }
+
+    if (props.get_category_by_branch_id_loading == false) {
+      // console.log("false", info.restaurant)
+      props.getCategoryByBranchIdAction(info.restaurant)
+    }
+
+    if (props.get_time_slot_by_branch_id_loading == false) {
+      // console.log("false", info.restaurant)
+      props.getTimeSLotByBranchIdAction(info.restaurant)
+    }
   }, [
     props.get_all_branch_loading,
     props.get_all_addOns_category_loading,
     props.add_restaurant_menu_loading,
     props.get_all_menu_time_slot_loading,
     props.get_category_by_id_data,
+    // props.get_time_slot_by_branch_id_data,
+    // props.get_category_by_branch_id_data,
     props.get_category_by_id_loading,
     props.get_all_category_loading,
     props.edit_restaurant_menu_loading,
+    props.get_category_by_branch_id_loading,
+    props.get_time_slot_by_branch_id_loading,
   ])
 
   return (
@@ -786,7 +884,7 @@ function EditMenu(props) {
                 className="mt-4"
                 onSubmit={location.state ? handleEditMenu : handleAddMenu}
               >
-                <Row className="mb-3">
+                {/* <Row className="mb-3">
                   <label
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
@@ -799,13 +897,32 @@ function EditMenu(props) {
                       name="restaurant"
                       value={info.restaurant}
                       //required={true}
-                      onChange={handleInputs}
+                      // onChange={handleInputs}
+                      onChange={e => handleInputsRestaurant(e)}
                       type="select"
                       required
                     >
                       <option value="">Choose...</option>
                       {branchData}
                     </Input>
+                  </div>
+                </Row> */}
+
+                <Row className="mb-3">
+                  <label
+                    htmlFor="example-text-input"
+                    className="col-md-2 col-form-label"
+                  >
+                    Restaurant Name
+                  </label>
+                  <div className="col-md-10">
+                    <Select
+                      value={selectedBranch}
+                      onChange={handleSelectBranch}
+                      options={branchDate}
+                      isMulti={false}
+                      required
+                    />
                   </div>
                 </Row>
 
@@ -1358,7 +1475,7 @@ function EditMenu(props) {
                   </div>
                 </Row>
 
-                <Row className="mb-3">
+                {/* <Row className="mb-3">
                   <label
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
@@ -1378,6 +1495,21 @@ function EditMenu(props) {
                       <option>Choose...</option>
                       {menuCategoryData}
                     </Input>
+                  </div>
+                </Row> */}
+
+                <Row className="mb-3">
+                  <label htmlFor="category" className="col-md-2 col-form-label">
+                    Category
+                  </label>
+                  <div className="col-md-10">
+                    <Select
+                      required
+                      value={categoryNew}
+                      onChange={handleSelectCategory2}
+                      options={menuCategoryData2}
+                      isMulti={false}
+                    />
                   </div>
                 </Row>
 
@@ -1432,9 +1564,81 @@ function EditMenu(props) {
                     Menu Availability
                   </label>
                   <div className="col-md-10">
-                    {/* <input type="number" className="form-control" id="sd" placeholder="Enter sd amount" name="sd" onChange={handleInputs} value={info.sd ?? ""} required /> */}
-                    {newData2?.length > 0 && dataUpdated
+                    {/* {newData2?.length > 0 && dataUpdated
                       ? newData2?.map(item => (
+                          <Row className="mb-3">
+                            <div
+                              className="col-md-10"
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <div style={{ marginTop: "30px" }}>
+                                <input
+                                  type="checkbox"
+                                  id="cat_is_multiple"
+                                  name="cat_is_multiple"
+                                  style={{ margin: "0px 15px 50px 0px" }}
+                                  // value="true"
+
+                                  checked={item.checked}
+                                  // checked={checkTimeSelected(item)}
+                                  onChange={e => handleChangeTime(e, item)}
+                                />
+                                <span
+                                  style={{
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {item?.name}
+                                </span>
+                              </div>
+
+                              <div className="mb-3 col-lg-3">
+                                <label
+                                  className="form-label"
+                                  htmlFor="startTime"
+                                >
+                                  Start Time
+                                </label>
+                                <input
+                                  type="time"
+                                  id="startTime"
+                                  className="form-control"
+                                  name="start_time"
+                                  placeholder="Add-ons name"
+                                  value={moment({
+                                    hour: item.start_time?.hour,
+                                    minute: item?.start_time?.minute,
+                                  }).format("HH:mm")}
+                                />
+                              </div>
+
+                              <div className="mb-3 col-lg-3">
+                                <label className="form-label" htmlFor="subject">
+                                  End Time
+                                </label>
+                                <input
+                                  type="time"
+                                  id="subject"
+                                  className="form-control"
+                                  name="end_time"
+                                  placeholder="Price"
+                                  value={moment({
+                                    hour: item.end_time?.hour,
+                                    minute: item?.end_time?.minute,
+                                  }).format("HH:mm")}
+                                />
+                              </div>
+                            </div>
+                          </Row>
+                        ))
+                      : ""} */}
+
+                    {selectedTimeSlot?.length > 0
+                      ? selectedTimeSlot?.map(item => (
                           <Row className="mb-3">
                             <div
                               className="col-md-10"
@@ -1531,8 +1735,6 @@ function EditMenu(props) {
               // id === idx ?
 
               <React.Fragment key={idx}>
-                {console.log("A", addNewCategory)}
-                {/* {console.log("itemCat1 :", itemCat)} */}
                 <div>
                   <div className="mb-3">
                     <label className="form-label" htmlFor="username">
@@ -1565,8 +1767,6 @@ function EditMenu(props) {
                     {/* {addOnsNew?.map((row, idx) => ( */}
                     {itemCat?.add_ons?.map((row, addon_index) => (
                       <React.Fragment key={addon_index}>
-                        {/* {console.log("addon_index :", addon_index)}
-                        {console.log("itemCat :", itemCat)} */}
                         <div
                           data-repeater-list="group-a"
                           id={"addr" + addon_index}
@@ -1714,6 +1914,13 @@ const mapStateToProps = state => {
 
     get_category_by_id_data,
     get_category_by_id_loading,
+
+    get_category_by_branch_id_data,
+    get_category_by_branch_id_loading,
+
+    get_time_slot_by_branch_id_data,
+    get_time_slot_by_branch_id_loading,
+
     edit_restaurant_menu_loading,
   } = state.Restaurant
 
@@ -1742,6 +1949,12 @@ const mapStateToProps = state => {
     get_category_by_id_data,
     get_category_by_id_loading,
 
+    get_category_by_branch_id_data,
+    get_category_by_branch_id_loading,
+
+    get_time_slot_by_branch_id_data,
+    get_time_slot_by_branch_id_loading,
+
     get_all_category_data,
     get_all_category_error,
     get_all_category_loading,
@@ -1760,8 +1973,12 @@ export default withRouter(
     getAllMenuTimeSlot,
     getCategoryByIdAction,
     getCategoryByIdFresh,
+    getCategoryByBranchIdAction,
+    getCategoryByBranchIdFresh,
     getAllCategoryAction,
     editRestaurantMenuAction,
     editRestaurantMenuFresh,
+    getTimeSLotByBranchIdAction,
+    getTimeSLotByBranchIdFresh,
   })(EditMenu)
 )

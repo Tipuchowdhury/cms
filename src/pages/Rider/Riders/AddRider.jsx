@@ -26,6 +26,7 @@ import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
 import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
+import moment from "moment"
 
 function AddRider(props) {
   const navigate = useNavigate()
@@ -61,6 +62,18 @@ function AddRider(props) {
     house_nameplate: location.state ? location.state.house_nameplate : "",
   })
 
+  const [drivingLicenseImage, setDrivingLicenseImage] = useState({
+    driving_license_image: location.state
+      ? location.state.driving_license_image
+      : "",
+  })
+
+  const [vehicleRegistrationImage, setVehicleRegistrationImage] = useState({
+    vehicle_registration_image: location.state
+      ? location.state.vehicle_registration_image
+      : "",
+  })
+
   const [RiderInfo, setRiderInfo] = useState({
     first_name: location.state ? location.state.first_name : "",
     last_name: location.state ? location.state.last_name : "",
@@ -70,6 +83,16 @@ function AddRider(props) {
     imei: location.state ? location.state.imei : "",
     bkash_no: location.state ? location.state.bkash_no : "",
     nagad_no: location.state ? location.state.nagad_no : "",
+    nid_no: location.state ? location.state.nid_no : "",
+    driving_license_id: location.state ? location.state.driving_license_id : "",
+    vehicle_registration_id: location.state
+      ? location.state.vehicle_registration_id
+      : "",
+    birth_date: location.state ? location.state.birth_date : "",
+    joining_date: location.state ? location.state.joining_date : "",
+    active_contract_date: location.state
+      ? location.state.active_contract_date
+      : "",
 
     otp: location.state ? location.state.otp : 0,
     otp_expire_time: location.state
@@ -96,20 +119,90 @@ function AddRider(props) {
     electricity_bill: location.state ? location.state.electricity_bill : "",
     house_nameplate: location.state ? location.state.house_nameplate : "",
 
+    driving_license_image: location.state
+      ? location.state.driving_license_image
+      : "",
+    vehicle_registration_image: location.state
+      ? location.state.vehicle_registration_image
+      : "",
+
     is_active: location.state ? location.state.is_active : true,
     is_new: location.state ? location.state.is_new : true,
     is_verified: location.state ? location.state.is_verified : true,
     is_approve: location.state ? location.state.is_approve : false,
   })
 
-  let cities = []
-  if (props.get_all_city_data?.length > 0) {
-    cities = props.get_all_city_data
-  }
-
   let vehicleTypes = []
   if (props.get_all_vehicle_type_data?.length > 0) {
     vehicleTypes = props.get_all_vehicle_type_data
+  }
+
+  const common_vehicles = props?.get_all_vehicle_type_data?.filter(
+    elem => elem._id === location.state?.vehicle_type_id
+  )
+
+  const vehicle_data_edit = common_vehicles
+    ? common_vehicles?.map((item, key) => {
+        return {
+          label: item.type,
+          value: item._id,
+        }
+      })
+    : ""
+  const [selectedVehicle, setSelectedVehicle] = useState(
+    vehicle_data_edit ? vehicle_data_edit : ""
+  )
+
+  useEffect(() => {
+    if (props.get_all_vehicle_type_loading === "Success")
+      setSelectedVehicle(vehicle_data_edit)
+  }, [props.get_all_vehicle_type_loading])
+
+  const handleSelectVehicle = e => {
+    setRiderInfo({ ...RiderInfo, vehicle_type_id: e.value })
+    setSelectedVehicle(e)
+  }
+
+  let vehicleData = undefined
+  if (props.get_all_vehicle_type_data?.length > 0) {
+    vehicleData = props.get_all_vehicle_type_data?.map((item, key) => ({
+      label: item.type,
+      value: item._id,
+    }))
+  }
+
+  const common_cities = props?.get_all_city_data?.filter(
+    elem => elem._id === location.state?.city_id
+  )
+
+  const city_data_edit = common_cities
+    ? common_cities?.map((item, key) => {
+        return {
+          label: item.name,
+          value: item._id,
+        }
+      })
+    : ""
+  const [selectedCity, setSelectedCity] = useState(
+    city_data_edit ? city_data_edit : ""
+  )
+
+  useEffect(() => {
+    if (props.get_all_city_loading === "Success")
+      setSelectedCity(city_data_edit)
+  }, [props.get_all_city_loading])
+
+  const handleSelectCity = e => {
+    setRiderInfo({ ...RiderInfo, city_id: e.value })
+    setSelectedCity(e)
+  }
+
+  let cityData = undefined
+  if (props.get_all_city_data?.length > 0) {
+    cityData = props.get_all_city_data?.map((item, key) => ({
+      label: item.name,
+      value: item._id,
+    }))
   }
 
   const common_zones = props?.get_all_zone_data?.filter(elem =>
@@ -126,6 +219,11 @@ function AddRider(props) {
   const [selectedZone, setSelectedZone] = useState(
     zone_data_edit ? zone_data_edit : ""
   )
+
+  useEffect(() => {
+    if (props.get_all_zone_loading === "Success")
+      setSelectedZone(zone_data_edit)
+  }, [props.get_all_zone_loading])
 
   const handleSelectZone = e => {
     setSelectedZone(e)
@@ -263,6 +361,35 @@ function AddRider(props) {
     reader8.readAsDataURL(value)
   }
 
+  const handleDrivingLicenseImage = e => {
+    name = e.target.name
+    value = e.target.files[0]
+    setRiderInfo({ ...RiderInfo, [name]: value })
+    const reader9 = new FileReader()
+
+    reader9.onload = () => {
+      setDrivingLicenseImage({ ...drivingLicenseImage, [name]: reader9.result })
+    }
+
+    reader9.readAsDataURL(value)
+  }
+
+  const handleVehicleRegistrationImage = e => {
+    name = e.target.name
+    value = e.target.files[0]
+    setRiderInfo({ ...RiderInfo, [name]: value })
+    const reader10 = new FileReader()
+
+    reader10.onload = () => {
+      setVehicleRegistrationImage({
+        ...vehicleRegistrationImage,
+        [name]: reader10.result,
+      })
+    }
+
+    reader10.readAsDataURL(value)
+  }
+
   const handleCheckBox = e => {
     name = e.target.name
     checked = e.target.checked
@@ -294,6 +421,26 @@ function AddRider(props) {
       toast.error("Mobile number should be numeric digit")
     }
 
+    if (RiderInfo.bkash_no != "" && RiderInfo.bkash_no.length != 11) {
+      status = 1
+      toast.error("Bkash number should be 11 digit")
+    }
+
+    if (RiderInfo.bkash_no != "" && isNaN(RiderInfo.bkash_no)) {
+      status = 1
+      toast.error("Bkash number should be numeric digit")
+    }
+
+    if (RiderInfo.nagad_no != "" && RiderInfo.nagad_no.length != 11) {
+      status = 1
+      toast.error("Nagad number should be 11 digit")
+    }
+
+    if (RiderInfo.nagad_no != "" && isNaN(RiderInfo.nagad_no)) {
+      status = 1
+      toast.error("Nagad number should be numeric digit")
+    }
+
     if (status == 0) {
       const uniqueId = uuidv4()
       props.addRiderAction(uniqueId, RiderInfo, selectedZone)
@@ -303,10 +450,10 @@ function AddRider(props) {
   const handleSubmitForEdit = e => {
     e.preventDefault()
     let status = 0
-    // if (RiderInfo.password !== RiderInfo.confirm_password) {
-    //   status = 1
-    //   toast.error("Password and Confirm password are not matched")
-    // }
+    if (RiderInfo.password !== RiderInfo.confirm_password) {
+      status = 1
+      toast.error("Password and Confirm password are not matched")
+    }
 
     if (RiderInfo.mobile_number.length != 11) {
       status = 1
@@ -316,6 +463,26 @@ function AddRider(props) {
     if (isNaN(RiderInfo.mobile_number)) {
       status = 1
       toast.error("Mobile number should be numeric digit")
+    }
+
+    if (RiderInfo.bkash_no != "" && RiderInfo.bkash_no.length != 11) {
+      status = 1
+      toast.error("Bkash number should be 11 digit")
+    }
+
+    if (RiderInfo.bkash_no != "" && isNaN(RiderInfo.bkash_no)) {
+      status = 1
+      toast.error("Bkash number should be numeric digit")
+    }
+
+    if (RiderInfo.nagad_no != "" && RiderInfo.nagad_no.length != 11) {
+      status = 1
+      toast.error("Nagad number should be 11 digit")
+    }
+
+    if (RiderInfo.nagad_no != "" && isNaN(RiderInfo.nagad_no)) {
+      status = 1
+      toast.error("Nagad number should be numeric digit")
     }
 
     if (status == 0) {
@@ -401,8 +568,7 @@ function AddRider(props) {
                       htmlFor="first_name"
                       className="col-md-2 col-form-label"
                     >
-                      {" "}
-                      First Name
+                      First Name <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <input
@@ -417,14 +583,12 @@ function AddRider(props) {
                       />
                     </div>
                   </Row>
-
                   <Row className="mb-3">
                     <label
                       htmlFor="last_name"
                       className="col-md-2 col-form-label"
                     >
-                      {" "}
-                      Last Name
+                      Last Name <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <input
@@ -439,14 +603,12 @@ function AddRider(props) {
                       />
                     </div>
                   </Row>
-
                   <Row className="mb-3">
                     <label
                       htmlFor="mobile_number"
                       className="col-md-2 col-form-label"
                     >
-                      {" "}
-                      Mobile Number
+                      Mobile Number <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <input
@@ -461,7 +623,6 @@ function AddRider(props) {
                       />
                     </div>
                   </Row>
-
                   <Row className="mb-3">
                     <label htmlFor="email" className="col-md-2 col-form-label">
                       {" "}
@@ -469,7 +630,7 @@ function AddRider(props) {
                     </label>
                     <div className="col-md-10">
                       <input
-                        type="text"
+                        type="email"
                         className="form-control"
                         id="email"
                         placeholder="Enter email"
@@ -479,6 +640,139 @@ function AddRider(props) {
                       />
                     </div>
                   </Row>
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="birth_date"
+                      className="col-md-2 col-form-label"
+                    >
+                      Birth Date <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        required
+                        type="date"
+                        className="form-control"
+                        id="birth_date"
+                        placeholder="Enter Birth Date"
+                        name="birth_date"
+                        onChange={handleInputs}
+                        value={moment(RiderInfo.birth_date ?? "").format(
+                          "YYYY-MM-DD"
+                        )}
+                      />
+                    </div>
+                  </Row>
+                  <Row className="mb-3">
+                    <label htmlFor="image" className="col-md-2 col-form-label">
+                      Image
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="file"
+                        className="form-control"
+                        id="image"
+                        name="image"
+                        onChange={handleFiles}
+                      />
+                    </div>
+                  </Row>
+                  {images?.image && (
+                    <Row className="mb-3">
+                      <label className="col-md-2">
+                        <span></span>
+                      </label>
+                      <div className="col-md-10">
+                        <img
+                          src={images.image}
+                          alt="preview"
+                          style={{ width: "50%" }}
+                        />
+                      </div>
+                    </Row>
+                  )}
+                  <Row className="mb-3">
+                    <label htmlFor="nid_no" className="col-md-2 col-form-label">
+                      {" "}
+                      NID No <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        required
+                        type="text"
+                        className="form-control"
+                        id="nid_no"
+                        placeholder="Enter NID No"
+                        name="nid_no"
+                        onChange={handleInputs}
+                        value={RiderInfo.nid_no ?? ""}
+                      />
+                    </div>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="nid_front"
+                      className="col-md-2 col-form-label"
+                    >
+                      NID Front <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="file"
+                        className="form-control"
+                        id="nid_front"
+                        name="nid_front"
+                        onChange={handleNidFront}
+                        required={location.state?.nid_front ? false : true}
+                      />
+                    </div>
+                  </Row>
+                  {nidFront?.nid_front && (
+                    <Row className="mb-3">
+                      <label className="col-md-2">
+                        <span></span>
+                      </label>
+                      <div className="col-md-10">
+                        <img
+                          src={nidFront.nid_front}
+                          alt="preview"
+                          style={{ width: "50%" }}
+                        />
+                      </div>
+                    </Row>
+                  )}
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="nid_back"
+                      className="col-md-2 col-form-label"
+                    >
+                      NID Back <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="file"
+                        className="form-control"
+                        id="nid_back"
+                        name="nid_back"
+                        onChange={handleNidBack}
+                        required={location.state?.nid_back ? false : true}
+                      />
+                    </div>
+                  </Row>
+                  {nidBack?.nid_back && (
+                    <Row className="mb-3">
+                      <label className="col-md-2">
+                        <span></span>
+                      </label>
+                      <div className="col-md-10">
+                        <img
+                          src={nidBack.nid_back}
+                          alt="preview"
+                          style={{ width: "50%" }}
+                        />
+                      </div>
+                    </Row>
+                  )}
 
                   <Row className="mb-3">
                     <label htmlFor="mac" className="col-md-2 col-form-label">
@@ -494,11 +788,9 @@ function AddRider(props) {
                         name="mac"
                         onChange={handleInputs}
                         value={RiderInfo.mac ?? ""}
-                        required
                       />
                     </div>
                   </Row>
-
                   <Row className="mb-3">
                     <label htmlFor="imei" className="col-md-2 col-form-label">
                       {" "}
@@ -513,11 +805,9 @@ function AddRider(props) {
                         name="imei"
                         onChange={handleInputs}
                         value={RiderInfo.imei ?? ""}
-                        required
                       />
                     </div>
                   </Row>
-
                   <Row className="mb-3">
                     <label
                       htmlFor="bkash_no"
@@ -535,11 +825,9 @@ function AddRider(props) {
                         name="bkash_no"
                         onChange={handleInputs}
                         value={RiderInfo.bkash_no ?? ""}
-                        required
                       />
                     </div>
                   </Row>
-
                   <Row className="mb-3">
                     <label
                       htmlFor="nagad_no"
@@ -557,18 +845,171 @@ function AddRider(props) {
                         name="nagad_no"
                         onChange={handleInputs}
                         value={RiderInfo.nagad_no ?? ""}
-                        required
                       />
                     </div>
                   </Row>
 
                   <Row className="mb-3">
                     <label
+                      htmlFor="driving_license_id"
+                      className="col-md-2 col-form-label"
+                    >
+                      Driving License ID
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="driving_license_id"
+                        placeholder="Enter Driving License ID"
+                        name="driving_license_id"
+                        onChange={handleInputs}
+                        value={RiderInfo.driving_license_id ?? ""}
+                      />
+                    </div>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="driving_license_image"
+                      className="col-md-2 col-form-label"
+                    >
+                      Driving License Image
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="file"
+                        className="form-control"
+                        id="driving_license_image"
+                        name="driving_license_image"
+                        onChange={handleDrivingLicenseImage}
+                      />
+                    </div>
+                  </Row>
+                  {drivingLicenseImage?.driving_license_image && (
+                    <Row className="mb-3">
+                      <label className="col-md-2">
+                        <span></span>
+                      </label>
+                      <div className="col-md-10">
+                        <img
+                          src={drivingLicenseImage.driving_license_image}
+                          alt="preview"
+                          style={{ width: "50%" }}
+                        />
+                      </div>
+                    </Row>
+                  )}
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="vehicle_registration_id"
+                      className="col-md-2 col-form-label"
+                    >
+                      {" "}
+                      Vehicle Registration ID
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="vehicle_registration_id"
+                        placeholder="Enter Vehicle Registration ID"
+                        name="vehicle_registration_id"
+                        onChange={handleInputs}
+                        value={RiderInfo.vehicle_registration_id ?? ""}
+                      />
+                    </div>
+                  </Row>
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="vehicle_registration_image"
+                      className="col-md-2 col-form-label"
+                    >
+                      Vehicle Registration Image
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="file"
+                        className="form-control"
+                        id="vehicle_registration_image"
+                        name="vehicle_registration_image"
+                        onChange={handleVehicleRegistrationImage}
+                      />
+                    </div>
+                  </Row>
+                  {vehicleRegistrationImage?.vehicle_registration_image && (
+                    <Row className="mb-3">
+                      <label className="col-md-2">
+                        <span></span>
+                      </label>
+                      <div className="col-md-10">
+                        <img
+                          src={
+                            vehicleRegistrationImage.vehicle_registration_image
+                          }
+                          alt="preview"
+                          style={{ width: "50%" }}
+                        />
+                      </div>
+                    </Row>
+                  )}
+
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="joining_date"
+                      className="col-md-2 col-form-label"
+                    >
+                      Joining Date
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="date"
+                        className="form-control"
+                        id="joining_date"
+                        placeholder="Enter Joining Date"
+                        name="joining_date"
+                        onChange={handleInputs}
+                        value={moment(RiderInfo.joining_date ?? "").format(
+                          "YYYY-MM-DD"
+                        )}
+                      />
+                    </div>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="active_contract_date"
+                      className="col-md-2 col-form-label"
+                    >
+                      Active Contract Date
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="date"
+                        className="form-control"
+                        id="active_contract_date"
+                        placeholder="Enter Active Contract Date"
+                        name="active_contract_date"
+                        onChange={handleInputs}
+                        value={moment(
+                          RiderInfo.active_contract_date ?? ""
+                        ).format("YYYY-MM-DD")}
+                      />
+                    </div>
+                  </Row>
+                  {/*  active_contract_date */}
+                  <Row className="mb-3">
+                    <label
                       htmlFor="password"
                       className="col-md-2 col-form-label"
                     >
                       {" "}
-                      Password
+                      Password{" "}
+                      {location.state ? (
+                        ""
+                      ) : (
+                        <span className="text-danger">*</span>
+                      )}
                     </label>
                     <div className="col-md-10">
                       <input
@@ -579,18 +1020,21 @@ function AddRider(props) {
                         name="password"
                         onChange={handleInputs}
                         value={RiderInfo.password ?? ""}
-                        required
+                        required={location.state ? false : true}
                       />
                     </div>
                   </Row>
-
                   <Row className="mb-3">
                     <label
                       htmlFor="confirm_password"
                       className="col-md-2 col-form-label"
                     >
-                      {" "}
-                      Confirm Password
+                      Confirm Password{" "}
+                      {location.state ? (
+                        ""
+                      ) : (
+                        <span className="text-danger">*</span>
+                      )}
                     </label>
                     <div className="col-md-10">
                       <input
@@ -601,18 +1045,16 @@ function AddRider(props) {
                         name="confirm_password"
                         onChange={handleInputs}
                         value={RiderInfo.confirm_password ?? ""}
-                        required
+                        required={location.state ? false : true}
                       />
                     </div>
                   </Row>
-
                   <Row className="mb-3">
                     <label
                       htmlFor="present_address"
                       className="col-md-2 col-form-label"
                     >
-                      {" "}
-                      Present Address
+                      Present Address <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <textarea
@@ -626,7 +1068,6 @@ function AddRider(props) {
                       ></textarea>
                     </div>
                   </Row>
-
                   <Row className="mb-3">
                     <label
                       htmlFor="permanent_address"
@@ -643,77 +1084,53 @@ function AddRider(props) {
                         name="permanent_address"
                         onChange={handleInputs}
                         value={RiderInfo.permanent_address ?? ""}
-                        required
                       ></textarea>
                     </div>
                   </Row>
-
                   <Row className="mb-3">
                     <label
                       htmlFor="vehicle_type_id"
                       className="col-md-2 col-form-label"
                     >
-                      {" "}
-                      Vehicle Type{" "}
+                      Vehicle Type <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
-                      <Input
-                        id="vehicle_type_id"
-                        name="vehicle_type_id"
-                        className="form-control"
-                        placeholder="select vehicle type"
-                        value={RiderInfo.vehicle_type_id}
-                        onChange={handleInputs}
-                        type="select"
-                      >
-                        <option>Choose...</option>
-                        {vehicleTypes.map(vehicleType => (
-                          <option key={vehicleType._id} value={vehicleType._id}>
-                            {vehicleType.type}
-                          </option>
-                        ))}
-                      </Input>
+                      <Select
+                        required
+                        value={selectedVehicle}
+                        onChange={handleSelectVehicle}
+                        options={vehicleData}
+                        isMulti={false}
+                      />
                     </div>
                   </Row>
-
                   <Row className="mb-3">
                     <label
                       htmlFor="city_id"
                       className="col-md-2 col-form-label"
                     >
-                      {" "}
-                      City{" "}
+                      City <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
-                      <Input
-                        id="city_id"
-                        name="city_id"
-                        className="form-control"
-                        placeholder="select city"
-                        value={RiderInfo.city_id}
-                        onChange={handleInputs}
-                        type="select"
-                      >
-                        <option>Choose...</option>
-                        {cities.map(city => (
-                          <option key={city._id} value={city._id}>
-                            {city.name}
-                          </option>
-                        ))}
-                      </Input>
+                      <Select
+                        required
+                        value={selectedCity}
+                        onChange={handleSelectCity}
+                        options={cityData}
+                        isMulti={false}
+                      />
                     </div>
                   </Row>
-
                   <Row className="mb-3">
                     <label
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      {" "}
-                      Zone{" "}
+                      Zone <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <Select
+                        required
                         value={selectedZone}
                         onChange={handleSelectZone}
                         options={zoneData}
@@ -722,100 +1139,29 @@ function AddRider(props) {
                     </div>
                   </Row>
 
-                  <Row className="mb-3">
-                    <label htmlFor="image" className="col-md-2 col-form-label">
-                      Image
-                    </label>
-                    <div className="col-md-10">
-                      <input
-                        type="file"
-                        className="form-control"
-                        id="image"
-                        name="image"
-                        onChange={handleFiles}
-                      />
-                    </div>
-                  </Row>
-
-                  {images?.image && (
+                  {location.state ? (
                     <Row className="mb-3">
-                      <label className="col-md-2">
-                        <span></span>
+                      <label
+                        htmlFor="referrer_url"
+                        className="col-md-2 col-form-label"
+                      >
+                        Referrer URL
                       </label>
                       <div className="col-md-10">
-                        <img
-                          src={images.image}
-                          alt="preview"
-                          style={{ width: "50%" }}
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="referrer_url"
+                          placeholder="Referrer URL"
+                          name="referrer_url"
+                          disabled
+                          // onChange={handleInputs}
+                          value={location.state?.referrer_url}
                         />
                       </div>
                     </Row>
-                  )}
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="nid_front"
-                      className="col-md-2 col-form-label"
-                    >
-                      NID Front
-                    </label>
-                    <div className="col-md-10">
-                      <input
-                        type="file"
-                        className="form-control"
-                        id="nid_front"
-                        name="nid_front"
-                        onChange={handleNidFront}
-                      />
-                    </div>
-                  </Row>
-
-                  {nidFront?.nid_front && (
-                    <Row className="mb-3">
-                      <label className="col-md-2">
-                        <span></span>
-                      </label>
-                      <div className="col-md-10">
-                        <img
-                          src={nidFront.nid_front}
-                          alt="preview"
-                          style={{ width: "50%" }}
-                        />
-                      </div>
-                    </Row>
-                  )}
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="nid_back"
-                      className="col-md-2 col-form-label"
-                    >
-                      NID Back
-                    </label>
-                    <div className="col-md-10">
-                      <input
-                        type="file"
-                        className="form-control"
-                        id="nid_back"
-                        name="nid_back"
-                        onChange={handleNidBack}
-                      />
-                    </div>
-                  </Row>
-
-                  {nidBack?.nid_back && (
-                    <Row className="mb-3">
-                      <label className="col-md-2">
-                        <span></span>
-                      </label>
-                      <div className="col-md-10">
-                        <img
-                          src={nidBack.nid_back}
-                          alt="preview"
-                          style={{ width: "50%" }}
-                        />
-                      </div>
-                    </Row>
+                  ) : (
+                    ""
                   )}
 
                   <Row className="mb-3">
@@ -823,7 +1169,7 @@ function AddRider(props) {
                       htmlFor="referer_nid_front"
                       className="col-md-2 col-form-label"
                     >
-                      Refer NID Front
+                      Referrer NID Front
                     </label>
                     <div className="col-md-10">
                       <input
@@ -835,7 +1181,6 @@ function AddRider(props) {
                       />
                     </div>
                   </Row>
-
                   {referNidFront?.referer_nid_front && (
                     <Row className="mb-3">
                       <label className="col-md-2">
@@ -850,13 +1195,12 @@ function AddRider(props) {
                       </div>
                     </Row>
                   )}
-
                   <Row className="mb-3">
                     <label
                       htmlFor="referer_nid_back"
                       className="col-md-2 col-form-label"
                     >
-                      Refer NID Back
+                      Referrer NID Back
                     </label>
                     <div className="col-md-10">
                       <input
@@ -868,7 +1212,6 @@ function AddRider(props) {
                       />
                     </div>
                   </Row>
-
                   {referNidBack?.referer_nid_back && (
                     <Row className="mb-3">
                       <label className="col-md-2">
@@ -883,7 +1226,6 @@ function AddRider(props) {
                       </div>
                     </Row>
                   )}
-
                   <Row className="mb-3">
                     <label
                       htmlFor="guardian_nid_front"
@@ -901,7 +1243,6 @@ function AddRider(props) {
                       />
                     </div>
                   </Row>
-
                   {guardianNidFront?.guardian_nid_front && (
                     <Row className="mb-3">
                       <label className="col-md-2">
@@ -916,7 +1257,6 @@ function AddRider(props) {
                       </div>
                     </Row>
                   )}
-
                   <Row className="mb-3">
                     <label
                       htmlFor="guardian_nid_back"
@@ -934,7 +1274,6 @@ function AddRider(props) {
                       />
                     </div>
                   </Row>
-
                   {guardianNidBack?.guardian_nid_back && (
                     <Row className="mb-3">
                       <label className="col-md-2">
@@ -949,7 +1288,6 @@ function AddRider(props) {
                       </div>
                     </Row>
                   )}
-
                   <Row className="mb-3">
                     <label
                       htmlFor="electricity_bill"
@@ -967,7 +1305,6 @@ function AddRider(props) {
                       />
                     </div>
                   </Row>
-
                   {electricityBill?.electricity_bill && (
                     <Row className="mb-3">
                       <label className="col-md-2">
@@ -982,7 +1319,6 @@ function AddRider(props) {
                       </div>
                     </Row>
                   )}
-
                   <Row className="mb-3">
                     <label
                       htmlFor="house_nameplate"
@@ -1000,7 +1336,6 @@ function AddRider(props) {
                       />
                     </div>
                   </Row>
-
                   {houseNameplate?.house_nameplate && (
                     <Row className="mb-3">
                       <label className="col-md-2">

@@ -8,6 +8,7 @@ import {
   GET_ALL_CUSINE,
   ADD_BRANCH,
   GET_ALL_BRANCH,
+  GET_ALL_BRANCH_FRESH,
   ADD_ZONE,
   GET_ALL_ZONE,
   EDIT_ZONE,
@@ -42,6 +43,8 @@ import {
   ADD_RESTAURANT_MENU_FRESH,
   EDIT_RESTAURANT_MENU,
   EDIT_RESTAURANT_MENU_FRESH,
+  GET_CATEGORY_BY_BRANCH_ID,
+  GET_CATEGORY_BY_BRANCH_ID_FRESH,
   EDIT_ADD_ONS_CATEGORY,
   EDIT_ADD_ONS_CATEGORY_FRESH,
   EDIT_ADD_ON_CATEGORY_STATUS,
@@ -53,6 +56,8 @@ import {
   EDIT_MENU_TIME_SLOT_FRESH,
   EDIT_MENU_TIME_SLOT_STATUS,
   EDIT_MENU_TIME_SLOT_STATUS_FRESH,
+  GET_TIME_SLOT_BY_BRANCH_ID,
+  GET_TIME_SLOT_BY_BRANCH_ID_FRESH,
   GET_CATEGORY_BY_ID,
   GET_CATEGORY_BY_ID_FRESH,
   SERVER_SIDE_PAGINATION_ZONE,
@@ -174,9 +179,17 @@ const initialState = {
 
   menu_time_slot_delete_loading: false,
 
+  get_time_slot_by_branch_id_data: null,
+  get_time_slot_by_branch_id_error: null,
+  get_time_slot_by_branch_id_loading: false,
+
   get_category_by_id_data: null,
   get_category_by_id_error: null,
   get_category_by_id_loading: false,
+
+  get_category_by_branch_id_data: null,
+  get_category_by_branch_id_error: null,
+  get_category_by_branch_id_loading: false,
 
   // server side pagination ZONE
   get_server_side_pagination_zone_data: null,
@@ -287,6 +300,13 @@ const Restaurant = (state = initialState, action) => {
         ...state,
         get_all_branch_data: action.payload,
         get_all_branch_error: null,
+        get_all_branch_loading: action.status,
+      }
+      break
+
+    case GET_ALL_BRANCH_FRESH:
+      state = {
+        ...state,
         get_all_branch_loading: action.status,
       }
       break
@@ -603,6 +623,26 @@ const Restaurant = (state = initialState, action) => {
         edit_restaurant_menu_loading: action.status,
       }
       break
+
+    case GET_CATEGORY_BY_BRANCH_ID:
+      state = {
+        ...state,
+
+        get_category_by_branch_id_data: action.payload,
+        get_category_by_branch_id_error: action.error,
+        get_category_by_branch_id_loading: action.status,
+      }
+      break
+
+    case GET_CATEGORY_BY_BRANCH_ID_FRESH:
+      state = {
+        ...state,
+
+        get_category_by_branch_id_data: action.payload,
+        get_category_by_branch_id_loading: action.status,
+      }
+      break
+
     case EDIT_ADD_ONS_CATEGORY:
       state = {
         ...state,
@@ -691,6 +731,23 @@ const Restaurant = (state = initialState, action) => {
         get_all_menu_time_slot_loading: false,
       }
 
+      break
+
+    case GET_TIME_SLOT_BY_BRANCH_ID:
+      state = {
+        ...state,
+        get_time_slot_by_branch_id_data: action.payload,
+        get_time_slot_by_branch_id_error: action.error,
+        get_time_slot_by_branch_id_loading: action.status,
+      }
+      break
+
+    case GET_TIME_SLOT_BY_BRANCH_ID_FRESH:
+      state = {
+        ...state,
+        get_time_slot_by_branch_id_data: action.payload,
+        get_time_slot_by_branch_id_loading: action.status,
+      }
       break
 
     case GET_CATEGORY_BY_ID:
