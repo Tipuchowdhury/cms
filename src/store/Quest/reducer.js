@@ -11,6 +11,7 @@ import {
   QUEST_STATUS_EDIT,
   QUEST_STATUS_EDIT_FRESH,
   SERVER_SIDE_PAGINATION_QUEST,
+  SERVER_SIDE_PAGINATION_QUEST_FRESH,
   SERVER_SIDE_PAGINATION_QUEST_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_QUEST_FRESH,
   GET_QUEST_BY_ID_FRESH,
@@ -136,6 +137,14 @@ const quest = (state = initialState, action) => {
         ...state,
         get_server_side_pagination_quest_data: action.payload,
         get_server_side_pagination_quest_error: null,
+        get_server_side_pagination_quest_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_QUEST_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_quest_data: action.payload,
         get_server_side_pagination_quest_loading: action.status,
       }
       break

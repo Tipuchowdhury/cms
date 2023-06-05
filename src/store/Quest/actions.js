@@ -14,16 +14,21 @@ import {
   SERVER_SIDE_PAGINATION_SEARCH_QUEST_FRESH,
   GET_QUEST_BY_ID,
   GET_QUEST_BY_ID_FRESH,
+  SERVER_SIDE_PAGINATION_QUEST_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
 import { v4 as uuidv4 } from "uuid"
 import { convertToFormData } from "helpers/functions"
 
-export const getServerSidePaginationQuestAction = (index, limit) => {
+export const getServerSidePaginationQuestAction = (index, limit, filters) => {
+  console.log("filters :", filters)
+  filters = filters ? new URLSearchParams(filters).toString() : ""
+  console.log("filters :", filters)
+
   var url =
     process.env.REACT_APP_LOCALHOST +
-    `/Quest/Search?page=${index}&limit=${limit}`
+    `/Quest/Search?page=${index}&limit=${limit}${filters ? "&" + filters : ""}`
   //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
   const formData = {}
   return dispatch => {
@@ -48,6 +53,15 @@ export const getServerSidePaginationQuestAction = (index, limit) => {
         })
       })
   }
+}
+
+export const getServerSidePaginationQuestFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_QUEST_FRESH,
+      status: false,
+      payload: null,
+    })
 }
 
 export const getServerSidePaginationQuestSearchAction = name => {
@@ -240,6 +254,7 @@ export const questEditAction = (id, data, selectedZone) => {
       : null
 
   const dataObject = {
+    _id: id,
     ...data,
     zones: selectedZoneData,
   }
@@ -280,19 +295,20 @@ export const questEditFresh = () => {
 }
 
 export const questStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Quest/Put"
-  let dataObject = { ...data }
+  var url = `${process.env.REACT_APP_LOCALHOST}/Quest/isActive?id=${data._id}&is_active=${data.is_active}`
 
-  const formData = convertToFormData(dataObject)
-  // console.log(formData);
   return dispatch => {
     const headers = {
-      // "Content-Type": "application/json",
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     }
     axios
-      .put(url, formData, { headers: headers })
+      .put(url, {
+        headers: headers,
+        // params: {
+        //   is_active: data.is_active,
+        // },
+      })
       .then(response => {
         dispatch({
           type: QUEST_STATUS_EDIT,

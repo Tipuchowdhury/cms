@@ -25,7 +25,8 @@ import {
   questDeleteFresh,
   getServerSidePaginationQuestAction,
   getServerSidePaginationQuestSearchAction,
-  getServerSidePaginationSearchQuestFresh,
+  getServerSidePaginationQuestFresh,
+  getQuestByIdFresh,
 } from "store/actions"
 import withRouter from "components/Common/withRouter"
 import { connect } from "react-redux"
@@ -54,18 +55,15 @@ function Quest(props) {
   }
 
   const handleStatusUpdate = () => {
-    //console.log(editInfo)
     props.questStatusEditAction({
-      id: editInfo._id,
+      _id: editInfo._id,
       is_active: !editInfo.is_active,
     })
   }
   const navigate = useNavigate()
   const handleEdit = (row, cell) => {
-    // console.log(row)
-    // console.log(cell)
+    props.getQuestByIdFresh()
 
-    //props.getQuestByIdAction(cell._id)
     navigate("/edit-quest", { state: cell })
   }
 
@@ -153,13 +151,36 @@ function Quest(props) {
   // server side pagination
   const [page, setPage] = useState(1)
   const [countPerPage, setCountPerPage] = useState(10)
+  const [pageFilters, setPageFilters] = useState({})
   const handleFilter = e => {
-    if (e.target.value?.length > 0) {
-      props.getServerSidePaginationQuestSearchAction(e.target.value)
-    } else {
-      props.getServerSidePaginationSearchQuestFresh()
-    }
+    let name = e.target.name
+    let value = e.target.value
+    setPageFilters({ ...pageFilters, [name]: value })
   }
+
+  useEffect(() => {
+    props.getServerSidePaginationQuestAction(page, countPerPage, pageFilters)
+  }, [
+    page,
+    countPerPage,
+    pageFilters,
+    props.get_server_side_pagination_quest_loading,
+  ])
+
+  useEffect(() => {
+    if (props.quest_status_edit_loading === "Success") {
+      toast.success("Quest Status Updated")
+      toggleStatus()
+      props.getServerSidePaginationQuestFresh()
+      props.questStatusEditActionFresh()
+    }
+
+    if (props.quest_status_edit_loading === "Failed") {
+      toast.error("Something went wrong")
+      props.getServerSidePaginationQuestFresh()
+      props.questStatusEditActionFresh()
+    }
+  }, [props.quest_status_edit_loading])
 
   const paginationComponentOptions = {
     selectAllRowsItem: true,
@@ -172,7 +193,7 @@ function Quest(props) {
   }
 
   useEffect(() => {
-    props.getServerSidePaginationQuestAction(page, countPerPage)
+    // props.getServerSidePaginationQuestAction(page, countPerPage)
 
     if (props.quest_delete_loading == "Success") {
       toast.success("Quest Deleted Successfully")
@@ -186,9 +207,9 @@ function Quest(props) {
     }
   }, [
     props.quest_delete_loading,
-    props.get_server_side_pagination_quest_loading,
-    page,
-    countPerPage,
+    // props.get_server_side_pagination_quest_loading,
+    // page,
+    // countPerPage,
   ])
 
   // console.log(props.get_all_quest_data)
@@ -223,6 +244,9 @@ function Quest(props) {
                     <Link to="/add-quest">
                       <Button
                         style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
+                        onClick={() => {
+                          props.getQuestByIdFresh()
+                        }}
                       >
                         Add Quest
                       </Button>
@@ -231,6 +255,7 @@ function Quest(props) {
                   <div className="text-end">
                     <input
                       type="text"
+                      name="quest_name"
                       placeholder="Search Quest"
                       style={{
                         padding: "10px",
@@ -242,20 +267,12 @@ function Quest(props) {
                   </div>
                   <DataTable
                     columns={activeData}
-                    data={
-                      props.get_server_side_pagination_quest_search_data != null
-                        ? props.get_server_side_pagination_quest_search_data
-                            ?.data
-                        : props?.get_server_side_pagination_quest_data?.data
-                    }
+                    data={props?.get_server_side_pagination_quest_data?.data}
                     highlightOnHover
                     pagination
                     paginationServer
                     paginationTotalRows={
-                      props.get_server_side_pagination_quest_search_data != null
-                        ? props.get_server_side_pagination_quest_search_data
-                            ?.count
-                        : props.get_server_side_pagination_quest_data?.count
+                      props.get_server_side_pagination_quest_data?.count
                     }
                     paginationPerPage={countPerPage}
                     paginationComponentOptions={paginationComponentOptions}
@@ -341,13 +358,13 @@ const mapStateToProps = state => {
     quest_delete_loading,
     get_server_side_pagination_quest_data,
     get_server_side_pagination_quest_loading,
-    get_server_side_pagination_quest_search_data,
+    quest_status_edit_loading,
   } = state.Quest
   return {
     quest_delete_loading,
     get_server_side_pagination_quest_data,
     get_server_side_pagination_quest_loading,
-    get_server_side_pagination_quest_search_data,
+    quest_status_edit_loading,
   }
 }
 
@@ -360,6 +377,7 @@ export default withRouter(
     questDeleteFresh,
     getServerSidePaginationQuestAction,
     getServerSidePaginationQuestSearchAction,
-    getServerSidePaginationSearchQuestFresh,
+    getServerSidePaginationQuestFresh,
+    getQuestByIdFresh,
   })(Quest)
 )

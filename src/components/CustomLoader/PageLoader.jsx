@@ -7,7 +7,7 @@ function PageLoader({ color = "warning" }) {
     <div className="page-content">
       <Container fluid>
         <Row>
-          <Col className="col-12 text-center mt-3">
+          <Col className="col-12 text-center mt-5">
             <CustomLoader color={color} />
           </Col>
         </Row>

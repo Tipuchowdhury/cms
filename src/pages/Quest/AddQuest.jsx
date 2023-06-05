@@ -32,14 +32,13 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { CKEditor } from "@ckeditor/ckeditor5-react"
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic"
-import CustomLoader from "components/CustomLoader/CustomLoader"
 import PageLoader from "components/CustomLoader/PageLoader"
 
 function AddQuest(props) {
   const navigate = useNavigate()
   const location = useLocation()
   // console.log("lof", location?.state?.restaurants)
-
+  const [loading, setLoading] = useState(true)
   //select multiple zone
   const common_zones = props?.get_all_zone_data?.filter(elem =>
     location?.state?.restaurants?.find(({ res_id }) => elem._id === res_id)
@@ -50,9 +49,7 @@ function AddQuest(props) {
         return { label: item.name, value: item._id }
       })
     : ""
-  const [selectedZone, setSelectedZone] = useState(
-    zone_data_edit ? zone_data_edit : ""
-  )
+  const [selectedZone, setSelectedZone] = useState("")
   const handleSelectZone = e => {
     setSelectedZone(e)
   }
@@ -105,11 +102,9 @@ function AddQuest(props) {
 
   useEffect(() => {
     console.log("props.get_quest_by_id_loading", props.get_quest_by_id_loading)
-    if (
-      props.get_quest_by_id_loading == "Success" &&
-      props?.get_all_zone_data
-    ) {
+    if (props.get_quest_by_id_loading == "Success") {
       const questData = props.get_quest_by_id_data
+      console.log("questData :", questData)
       setQuestInfo({
         name: questData.name,
         acceptable_acceptance_rate: questData.acceptable_acceptance_rate,
@@ -134,6 +129,8 @@ function AddQuest(props) {
         : ""
 
       setSelectedZone(zone_data_edit)
+
+      setLoading(false)
     }
   }, [props.get_quest_by_id_loading, props?.get_all_zone_data])
 
@@ -240,7 +237,7 @@ function AddQuest(props) {
     props.quest_edit_loading,
   ])
 
-  if (location?.state && !props.get_quest_by_id_loading == "Success") {
+  if (location?.state && loading) {
     return <PageLoader />
   }
 
@@ -649,6 +646,7 @@ function AddQuest(props) {
                                   id="sl"
                                   className="form-control"
                                   name="sl"
+                                  min={1}
                                   placeholder="Serial"
                                   value={row.sl}
                                   onChange={e => handleGoalChange(e, idx)}
@@ -673,6 +671,7 @@ function AddQuest(props) {
                                   id="required_number_of_order"
                                   className="form-control"
                                   name="required_number_of_order"
+                                  min={1}
                                   placeholder="Required Order Number"
                                   value={row.required_number_of_order}
                                   onChange={e => handleGoalChange(e, idx)}
@@ -684,6 +683,7 @@ function AddQuest(props) {
                                   id="per_order_value"
                                   className="form-control"
                                   name="per_order_value"
+                                  min={1}
                                   placeholder="Per Order Value"
                                   value={row.per_order_value}
                                   onChange={e => handleGoalChange(e, idx)}
