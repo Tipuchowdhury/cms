@@ -20,7 +20,7 @@ import {
   GET_USER_BY_ID_FRESH,
 } from "./actionTypes"
 import axios from "axios"
-import { convertToFormData } from "helpers/functions";
+import { convertToFormData } from "helpers/functions"
 import { toast } from "react-toastify"
 
 // token
@@ -236,7 +236,6 @@ export const getAllAdminUsersAction = () => {
 }
 
 export const userUpdateAction = (id, registerInfo, file, role) => {
-
   var url = process.env.REACT_APP_LOCALHOST + "/User/Put"
   const dataObject = {
     _id: id,
@@ -291,22 +290,24 @@ export const userUpdateFresh = () => {
 }
 
 export const userStatusUpdateAction = registerInfo => {
-  console.log(registerInfo);
+  console.log(registerInfo)
 
   // var url = process.env.REACT_APP_LOCALHOST + "/User/Put"
   // const dataObject = registerInfo
   // const formData = convertToFormData(dataObject)
-  var url = process.env.REACT_APP_LOCALHOST + `/User/isActive?id=${registerInfo._id}&is_active=${registerInfo.is_active}`
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/User/isActive?id=${registerInfo._id}&is_active=${registerInfo.is_active}`
 
   //const formData = data
   const formData = {
     id: registerInfo._id,
-    is_active: !registerInfo.is_active
-
+    is_active: !registerInfo.is_active,
   }
   return dispatch => {
     const headers = {
-      "Content-Type": "multipart/form-data",
+      // "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
 
       "Access-Control-Allow-Origin": "*",
     }

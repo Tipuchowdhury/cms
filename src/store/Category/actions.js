@@ -162,9 +162,25 @@ export const categoryNameEditFresh = () => {
   }
 }
 
-export const categoryStatusEditAction = data => {
-  var url = `${process.env.REACT_APP_LOCALHOST}/Category/isActive?id=${data._id}&is_active=${data.is_active}`
+export const categoryStatusEditAction = (id, is_active) => {
+  // var url = process.env.REACT_APP_LOCALHOST + "/Category/Put"
+  // const dataObject = {
+  //   _id: id,
+  //   category_name: name,
+  //   restaurant_id: restaurant,
+  //   image: image,
+  //   is_active: !is_active,
+  // }
 
+  // const formData = convertToFormData(dataObject)
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Category/isActive?id=${id}&is_active=${!is_active}`
+  const formData = {
+    id: id,
+    //name: name,
+    is_active: !is_active,
+  }
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",

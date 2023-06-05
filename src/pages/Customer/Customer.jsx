@@ -235,9 +235,9 @@ function Customer(props) {
   }
 
   const handleStatusUpdate = () => {
-    // console.log(editInfo);
+    console.log(editInfo)
     props.customerStatusEditAction({
-      ...editInfo,
+      _id: editInfo._id,
       is_active: !editInfo.is_active,
     })
   }
@@ -272,9 +272,9 @@ function Customer(props) {
 
   const statusRef = (cell, row) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
       {cell.is_active ? "Active" : "Deactivate"}
     </Button>

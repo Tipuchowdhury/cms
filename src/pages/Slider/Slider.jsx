@@ -160,22 +160,6 @@ function Slider(props) {
     }
   }
 
-  const newRest = nn => {
-    console.log(nn)
-    console.log(props?.get_all_branch_data)
-    const common_restaurants = props?.get_all_branch_data?.filter(elem =>
-      nn?.find(({ res_id }) => elem._id === res_id)
-    )
-    console.log(common_restaurants)
-
-    const restaurant_data_edit = common_restaurants
-      ? common_restaurants.map((item, key) => {
-          return { label: item.name, value: item._id }
-        })
-      : ""
-    setSelectedRestaurant(restaurant_data_edit)
-  }
-
   const handleEditSlider = row => {
     console.log(row)
 

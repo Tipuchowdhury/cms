@@ -12,7 +12,7 @@ import {
   SERVER_SIDE_PAGINATION_CUSTOMER,
   SERVER_SIDE_PAGINATION_CUSTOMER_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_CUSTOMER_FRESH,
-  GET_CUSTOMER_BY_ID
+  GET_CUSTOMER_BY_ID,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -23,7 +23,7 @@ var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
 export const addCustomerAction = (id, data, sub_id) => {
-  console.log(id, data, sub_id);
+  console.log(id, data, sub_id)
   var url = process.env.REACT_APP_LOCALHOST + "/Customer/Post"
 
   let dataObject = {
@@ -107,7 +107,7 @@ export const getAllCustomerFresh = () => {
 }
 
 export const customerEditAction = (id, data, sub_id) => {
-  console.log(id, data, sub_id);
+  console.log(id, data, sub_id)
   var url = process.env.REACT_APP_LOCALHOST + "/Customer/Put"
 
   const dataObject = {
@@ -117,7 +117,7 @@ export const customerEditAction = (id, data, sub_id) => {
   }
 
   const formData = convertToFormData(dataObject)
-  console.log(formData);
+  console.log(formData)
   return dispatch => {
     const headers = {
       //"Content-Type": "multipart/form-data",
@@ -157,20 +157,19 @@ export const customerEditFresh = () => {
 }
 
 export const customerStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Customer/Put"
+  var url = `${process.env.REACT_APP_LOCALHOST}/Customer/isActive?id=${data._id}&is_active=${data.is_active}`
 
   const dataObject = data
 
-  const formData = convertToFormData(dataObject)
   return dispatch => {
     const headers = {
-      "Content-Type": "multipart/form-data",
-      //"Content-Type": "application/json",
+      // "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
 
       "Access-Control-Allow-Origin": "*",
     }
     axios
-      .put(url, formData, { headers: headers })
+      .put(url, dataObject, { headers: headers })
       .then(response => {
         dispatch({
           type: EDIT_CUSTOMER_STATUS,
