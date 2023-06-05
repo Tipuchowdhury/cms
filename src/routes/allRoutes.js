@@ -157,6 +157,7 @@ import Order from "pages/Order/Order"
 import Refund from "pages/Refund/Refund"
 import ZoneUtilization from "pages/ZoneUtilization/ZoneUtilization"
 import RiderList from "pages/ZoneUtilization/RiderList"
+import Wallet from "pages/Wallet/Wallet"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -254,6 +255,9 @@ const userRoutes = [
 
   // Refund
   { path: "/refund", component: <Refund /> },
+
+  // Refund
+  { path: "/wallet", component: <Wallet /> },
 
   // Zone Utilization
   { path: "/zone-utilization", component: <ZoneUtilization /> },

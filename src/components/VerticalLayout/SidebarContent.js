@@ -333,6 +333,13 @@ const SidebarContent = props => {
                 <span>{props.t("Refund")}</span>
               </Link>
             </li>
+            <li>
+              <Link to="/wallet" className="waves-effect">
+                <i className="ti-wallet"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
+                <span>{props.t("Wallet")}</span>
+              </Link>
+            </li>
 
             <li>
               <Link to="/#" className="has-arrow waves-effect">

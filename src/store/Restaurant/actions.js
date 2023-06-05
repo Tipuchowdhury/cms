@@ -1793,6 +1793,7 @@ export const editRestaurantMenuAction = (
   const variationData =
     isChecked && variations?.length > 0
       ? variations.map(item => {
+          // const _id = uuidv4()
           const _id = uuidv4()
           return {
             ...item,
@@ -1817,7 +1818,7 @@ export const editRestaurantMenuAction = (
                       ? add_ons.is_multiple
                       : false,
                     addoncat_id: addon_cats.add_on_category_id,
-                    variation_and_add_on_category_id: _id,
+                    variation_and_add_on_category_id: addon_cats._id,
                   }
                 }),
               }
@@ -1897,6 +1898,8 @@ export const editRestaurantMenuAction = (
     slug: "test",
     is_active: true,
   }
+
+  console.log(dataObject)
 
   const formData = convertToFormData(dataObject)
 
