@@ -9,6 +9,10 @@ import {
   WALLET_DELETE_FRESH,
   WALLET_STATUS_EDIT,
   WALLET_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_WALLET,
+  SERVER_SIDE_PAGINATION_WALLET_FRESH,
+  SERVER_SIDE_PAGINATION_WALLET_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_WALLET_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { v4 as uuidv4 } from "uuid"
@@ -102,6 +106,91 @@ const zone_data = [
 
 // token
 var token = JSON.parse(localStorage.getItem("jwt"))
+
+export const getServerSidePaginationWalletAction = (index, limit, filters) => {
+  console.log("filters :", filters)
+  filters = filters ? new URLSearchParams(filters).toString() : ""
+  console.log("filters :", filters)
+
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Wallet/Search?page=${index}&limit=${limit}${filters ? "&" + filters : ""}`
+  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_WALLET,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_WALLET,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationWalletFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_WALLET_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getServerSidePaginationWalletSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Wallet/Search?zone_name=${name}`
+  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=1&limit=2`;
+  console.log(url)
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_WALLET_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_WALLET_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchWalletFresh = () => {
+  console.log(
+    "======= hello from getServerSidePaginationSearchWalletFresh ========="
+  )
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_WALLET_FRESH,
+      status: false,
+      payload: null,
+    })
+}
 
 export const addWalletAction = (addData, routes) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Wallet/Post"

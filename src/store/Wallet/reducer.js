@@ -9,6 +9,10 @@ import {
   WALLET_DELETE_FRESH,
   WALLET_STATUS_EDIT,
   WALLET_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_WALLET,
+  SERVER_SIDE_PAGINATION_WALLET_FRESH,
+  SERVER_SIDE_PAGINATION_WALLET_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_WALLET_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -30,6 +34,14 @@ const initialState = {
   wallet_status_edit_loading: false,
 
   wallet_delete_loading: false,
+
+  // server side pagination WALLET
+  get_server_side_pagination_wallet_data: null,
+  get_server_side_pagination_wallet_error: null,
+  get_server_side_pagination_wallet_loading: false,
+
+  get_server_side_pagination_wallet_search_data: null,
+  get_server_side_pagination_wallet_search_loading: false,
 }
 
 const Wallet = (state = initialState, action) => {
@@ -112,6 +124,39 @@ const Wallet = (state = initialState, action) => {
         wallet_delete_loading: action.status,
         get_all_wallet_loading: false,
       }
+      break
+    case SERVER_SIDE_PAGINATION_WALLET:
+      state = {
+        ...state,
+        get_server_side_pagination_wallet_data: action.payload,
+        get_server_side_pagination_wallet_error: null,
+        get_server_side_pagination_wallet_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_WALLET_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_wallet_data: action.payload,
+        get_server_side_pagination_wallet_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_WALLET_SEARCH:
+      state = {
+        ...state,
+        get_server_side_pagination_wallet_search_data: action.payload,
+        get_server_side_pagination_wallet_search_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_SEARCH_WALLET_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_wallet_search_data: action.payload,
+        get_server_side_pagination_wallet_search_loading: action.status,
+      }
+      break
   }
   return state
 }

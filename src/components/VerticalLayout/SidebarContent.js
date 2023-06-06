@@ -243,15 +243,15 @@ const SidebarContent = props => {
                   <Link to="/category">{props.t("Manage Menu Category")} </Link>
                 </li>
                 <li>
-                  <Link to="/menu">{props.t("Manage Restaurant Menu")} </Link>
-                </li>
-                <li>
                   <Link to="/addons-category">
                     {props.t("Add-ons Category")}{" "}
                   </Link>
                 </li>
                 <li>
                   <Link to="/time-slot">{props.t("Menu Time Slot")} </Link>
+                </li>
+                <li>
+                  <Link to="/menu">{props.t("Manage Restaurant Menu")} </Link>
                 </li>
               </ul>
             </li>

@@ -252,7 +252,7 @@ function Quest(props) {
                       </Button>
                     </Link>
                   </div>
-                  <div className="text-end">
+                  {/* <div className="text-end">
                     <input
                       type="text"
                       name="quest_name"
@@ -264,7 +264,7 @@ function Quest(props) {
                       }}
                       onChange={e => handleFilter(e)}
                     />
-                  </div>
+                  </div> */}
                   <DataTable
                     columns={activeData}
                     data={props?.get_server_side_pagination_quest_data?.data}

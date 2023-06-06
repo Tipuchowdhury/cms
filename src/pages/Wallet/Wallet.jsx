@@ -33,9 +33,14 @@ import {
   walletDeleteFresh,
   walletStatusUpdateAction,
   walletStatusUpdateFresh,
+  getServerSidePaginationWalletAction,
+  getServerSidePaginationWalletSearchAction,
+  getServerSidePaginationWalletFresh,
 } from "store/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
+import DataTable from "react-data-table-component"
 import { toast } from "react-toastify"
+import CustomLoader from "components/CustomLoader/CustomLoader"
 
 function Wallet(props) {
   document.title = "Wallet | Foodi"
@@ -125,6 +130,9 @@ function Wallet(props) {
     setSelectedPaymentMethod([])
     toggleAdjustmentModal()
   }
+  const handleRiderWalletDetail = row => {
+    navigate("/rider-wallet-details")
+  }
 
   let name, value, checked
 
@@ -156,8 +164,66 @@ function Wallet(props) {
     toggleAdjustmentModal()
   }
 
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const [pageFilters, setPageFilters] = useState({})
+  const handleFilter = e => {
+    let name = e.target.name
+    let value = e.target.value
+    setPageFilters({ ...pageFilters, [name]: value })
+  }
+
+  useEffect(() => {
+    props.getServerSidePaginationWalletAction(page, countPerPage, pageFilters)
+  }, [
+    page,
+    countPerPage,
+    pageFilters,
+    props.get_server_side_pagination_wallet_loading,
+  ])
+
+  useEffect(() => {
+    if (props.wallet_status_edit_loading === "Success") {
+      toast.success("Wallet Status Updated")
+      toggleStatus()
+      props.getServerSidePaginationWalletFresh()
+      props.walletStatusUpdateAction()
+    }
+
+    if (props.wallet_status_edit_loading === "Failed") {
+      toast.error("Something went wrong")
+      props.getServerSidePaginationWalletFresh()
+      props.walletStatusUpdateAction()
+    }
+  }, [props.wallet_status_edit_loading])
+
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    // console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
+
   // console.log(props.get_all_wallet_data)
 
+  const riderName = (cell, row) => (
+    <Link to="/rider-wallet-details">
+      <span
+        style={{
+          color: "#3333cc",
+          fontWeight: "bold",
+          textDecoration: "underline",
+          textDecorationStyle: "dotted",
+        }}
+      >
+        {row.rider_name}
+      </span>
+    </Link>
+  )
   const actionRef = (cell, row) => (
     <div>
       <Button
@@ -203,10 +269,16 @@ function Wallet(props) {
   )
 
   const activeData = [
+    // {
+    //   dataField: "rider_name",
+    //   text: "Rider name",
+    //   sort: true,
+    // },
     {
       dataField: "rider_name",
       text: "Rider name",
       sort: true,
+      formatter: riderName,
     },
     {
       dataField: "date",
@@ -326,6 +398,85 @@ function Wallet(props) {
                     </Button> */}
                   </div>
 
+                  {/* <div className="text-end">
+                    <input
+                      type="text"
+                      name="quest_name"
+                      placeholder="Search Quest"
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid gray",
+                      }}
+                      onChange={e => handleFilter(e)}
+                    />
+                  </div> */}
+
+                  <form className="mt-1">
+                    <Row>
+                      <div className="mb-3 col-12 col-sm-6 col-md-3">
+                        <label className="form-label" htmlFor="name">
+                          Rider Name
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="name"
+                          placeholder="Serach by rider name"
+                          required
+                          name="name"
+                          onChange={e => handleFilter(e)}
+                          // value={editInfo.amount}
+                        />
+                      </div>
+                      <div className="mb-3 col-12 col-sm-6 col-md-3">
+                        <label className="form-label" htmlFor="from">
+                          From
+                        </label>
+                        <input
+                          type="date"
+                          className="form-control"
+                          id="from"
+                          placeholder="Serach by rider name"
+                          required
+                          name="from"
+                          onChange={e => handleFilter(e)}
+                          // value={editInfo.amount}
+                        />
+                      </div>
+                      <div className="mb-3 col-12 col-sm-6 col-md-3">
+                        <label className="form-label" htmlFor="to">
+                          To
+                        </label>
+                        <input
+                          type="date"
+                          className="form-control"
+                          id="to"
+                          placeholder="Serach by rider name"
+                          required
+                          name="to"
+                          onChange={e => handleFilter(e)}
+                          // value={editInfo.amount}
+                        />
+                      </div>
+                      <div className="mb-3 col-12 col-sm-6 col-md-3">
+                        <label className="form-label" htmlFor="name">
+                          Rider Name
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="name"
+                          placeholder="Serach by rider name"
+                          required
+                          name="name"
+                          onChange={e => handleFilter(e)}
+                          // value={editInfo.amount}
+                        />
+                      </div>
+                    </Row>
+                  </form>
+
                   {props.get_all_wallet_data ? (
                     props.get_all_wallet_data?.length > 0 ? (
                       <DatatableTablesWorking
@@ -335,6 +486,25 @@ function Wallet(props) {
                       />
                     ) : null
                   ) : null}
+
+                  {/* <DataTable
+                    columns={activeData}
+                    data={props?.get_server_side_pagination_wallet_data?.data}
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_wallet_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={page => setPage(page)}
+                    progressPending={
+                      !props?.get_server_side_pagination_wallet_data
+                    }
+                    progressComponent={<CustomLoader />}
+                  /> */}
                 </CardBody>
               </Card>
             </Col>
@@ -631,6 +801,9 @@ const mapStateToProps = state => {
     wallet_status_edit_loading,
 
     wallet_delete_loading,
+
+    get_server_side_pagination_wallet_data,
+    get_server_side_pagination_wallet_loading,
   } = state.Wallet
 
   return {
@@ -649,6 +822,9 @@ const mapStateToProps = state => {
     wallet_status_edit_loading,
 
     wallet_delete_loading,
+
+    get_server_side_pagination_wallet_data,
+    get_server_side_pagination_wallet_loading,
   }
 }
 
@@ -664,5 +840,8 @@ export default withRouter(
     walletDeleteFresh,
     walletStatusUpdateAction,
     walletStatusUpdateFresh,
+    getServerSidePaginationWalletAction,
+    getServerSidePaginationWalletSearchAction,
+    getServerSidePaginationWalletFresh,
   })(Wallet)
 )

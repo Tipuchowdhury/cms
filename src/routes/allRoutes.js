@@ -160,6 +160,7 @@ import RiderList from "pages/ZoneUtilization/RiderList"
 import Quest from "pages/Quest/Quest"
 import AddQuest from "pages/Quest/AddQuest"
 import Wallet from "pages/Wallet/Wallet"
+import RiderWalletDetail from "pages/Wallet/RiderWalletDetail"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -260,6 +261,7 @@ const userRoutes = [
 
   // Refund
   { path: "/wallet", component: <Wallet /> },
+  { path: "/rider-wallet-details", component: <RiderWalletDetail /> },
 
   // Zone Utilization
   { path: "/zone-utilization", component: <ZoneUtilization /> },

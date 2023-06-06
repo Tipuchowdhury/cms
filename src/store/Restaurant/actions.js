@@ -1796,8 +1796,10 @@ export const editRestaurantMenuAction = (
           return {
             ...item,
             add_on_categories: item.add_on_categories.map(addon_cats => {
+              const _addon_cats_id = uuidv4()
               return {
                 ...addon_cats,
+                _id: _addon_cats_id,
                 variation_id: _id,
                 add_ons: addon_cats.add_ons.map(add_ons => {
                   const _addon_id = uuidv4()
@@ -1816,7 +1818,7 @@ export const editRestaurantMenuAction = (
                       ? add_ons.is_multiple
                       : false,
                     addoncat_id: addon_cats.add_on_category_id,
-                    variation_and_add_on_category_id: addon_cats._id,
+                    variation_and_add_on_category_id: _addon_cats_id,
                   }
                 }),
               }
@@ -1904,6 +1906,7 @@ export const editRestaurantMenuAction = (
   return dispatch => {
     const headers = {
       "Content-Type": "multipart/form-data",
+      // "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     }
 
