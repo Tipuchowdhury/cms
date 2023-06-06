@@ -118,6 +118,7 @@ function AddRider(props) {
     guardian_nid_back: location.state ? location.state.guardian_nid_back : "",
     electricity_bill: location.state ? location.state.electricity_bill : "",
     house_nameplate: location.state ? location.state.house_nameplate : "",
+    device_id: location.state ? location.state.device_id : "",
 
     driving_license_image: location.state
       ? location.state.driving_license_image
@@ -421,26 +422,25 @@ function AddRider(props) {
       toast.error("Mobile number should be numeric digit")
     }
 
-    if (RiderInfo.bkash_no != "" && RiderInfo.bkash_no.length != 11) {
+    if (RiderInfo.bkash_no && RiderInfo.bkash_no.length != 11) {
       status = 1
       toast.error("Bkash number should be 11 digit")
     }
 
-    if (RiderInfo.bkash_no != "" && isNaN(RiderInfo.bkash_no)) {
+    if (RiderInfo.bkash_no && isNaN(RiderInfo.bkash_no)) {
       status = 1
       toast.error("Bkash number should be numeric digit")
     }
 
-    if (RiderInfo.nagad_no != "" && RiderInfo.nagad_no.length != 11) {
+    if (RiderInfo.nagad_no && RiderInfo.nagad_no.length != 11) {
       status = 1
       toast.error("Nagad number should be 11 digit")
     }
 
-    if (RiderInfo.nagad_no != "" && isNaN(RiderInfo.nagad_no)) {
+    if (RiderInfo.nagad_no && isNaN(RiderInfo.nagad_no)) {
       status = 1
       toast.error("Nagad number should be numeric digit")
     }
-
     if (status == 0) {
       const uniqueId = uuidv4()
       props.addRiderAction(uniqueId, RiderInfo, selectedZone)
@@ -465,22 +465,22 @@ function AddRider(props) {
       toast.error("Mobile number should be numeric digit")
     }
 
-    if (RiderInfo.bkash_no != "" && RiderInfo.bkash_no.length != 11) {
+    if (RiderInfo.bkash_no && RiderInfo.bkash_no.length != 11) {
       status = 1
       toast.error("Bkash number should be 11 digit")
     }
 
-    if (RiderInfo.bkash_no != "" && isNaN(RiderInfo.bkash_no)) {
+    if (RiderInfo.bkash_no && isNaN(RiderInfo.bkash_no)) {
       status = 1
       toast.error("Bkash number should be numeric digit")
     }
 
-    if (RiderInfo.nagad_no != "" && RiderInfo.nagad_no.length != 11) {
+    if (RiderInfo.nagad_no && RiderInfo.nagad_no.length != 11) {
       status = 1
       toast.error("Nagad number should be 11 digit")
     }
 
-    if (RiderInfo.nagad_no != "" && isNaN(RiderInfo.nagad_no)) {
+    if (RiderInfo.nagad_no && isNaN(RiderInfo.nagad_no)) {
       status = 1
       toast.error("Nagad number should be numeric digit")
     }
