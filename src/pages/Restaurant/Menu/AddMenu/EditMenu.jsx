@@ -1027,6 +1027,7 @@ function EditMenu(props) {
                       name="recipe_time"
                       onChange={handleInputs}
                       value={info.recipe_time ?? ""}
+                      min="0"
                       required
                     />
                   </div>
@@ -1529,6 +1530,7 @@ function EditMenu(props) {
                       name="vat"
                       onChange={handleInputs}
                       value={info.vat ?? ""}
+                      min="0"
                       required
                     />
                   </div>
@@ -1550,6 +1552,7 @@ function EditMenu(props) {
                       name="sd"
                       onChange={handleInputs}
                       value={info.sd ?? ""}
+                      min="0"
                       required
                     />
                   </div>

@@ -76,6 +76,8 @@ import {
   SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
   GET_ZONE_BY_ID,
   GET_ZONE_BY_ID_FRESH,
+  GET_ZONE_BY_CITY_ID,
+  GET_ZONE_BY_CITY_ID_FRESH,
   DELETE_RESTAURANT_MENU,
   DELETE_RESTAURANT_MENU_FRESH,
   RESTAURANT_MENU_STATUS_EDIT,
@@ -568,7 +570,7 @@ export const branchStatusEditAction = data => {
     cuisines: data.cuisines,
     delivery_charge: data.delivery_charge,
     is_active: data.is_active,
-    min_order_value: data.minimum_order_value,
+    min_order_value: data.min_order_value,
     pickup_time: JSON.parse(data.pickup_time),
   }
 
@@ -637,7 +639,7 @@ export const branchPopularEditAction = data => {
     cuisines: data.cuisines,
     delivery_charge: data.delivery_charge,
     is_active: data.is_active,
-    min_order_value: data.minimum_order_value,
+    min_order_value: data.min_order_value,
     pickup_time: JSON.parse(data.pickup_time),
   }
 
@@ -890,6 +892,43 @@ export const getZoneByIdActionFresh = () => {
       type: GET_ZONE_BY_ID_FRESH,
       status: false,
     })
+}
+
+export const getZoneByCityIdAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Zone/GetByCityId?city_id=" + id
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_ZONE_BY_CITY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_ZONE_BY_CITY_ID,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getZoneByCityIdFresh = () => {
+  console.log("=======In the fresh ---------")
+  return dispatch => {
+    dispatch({
+      type: GET_ZONE_BY_CITY_ID_FRESH,
+      status: false,
+      payload: null,
+    })
+  }
 }
 
 export const zoneEditAction = (
