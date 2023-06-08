@@ -706,24 +706,6 @@ function AddCoupon(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      Type <span className="text-danger">*</span>
-                    </label>
-                    <div className="col-md-10">
-                      <Select
-                        value={selectedCouponType}
-                        onChange={handleSelectCouponType}
-                        options={couponTypes}
-                        isMulti={false}
-                        required
-                      />
-                    </div>
-                  </Row>
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
                       Description
                     </label>
                     <div className="col-md-10">
@@ -766,7 +748,26 @@ function AddCoupon(props) {
                     </Row>
                   )}
 
-                  {selectedCouponType?.value == "branch_wise" ? (
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="example-text-input"
+                      className="col-md-2 col-form-label"
+                    >
+                      Type <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-10">
+                      <Select
+                        value={selectedCouponType}
+                        onChange={handleSelectCouponType}
+                        options={couponTypes}
+                        isMulti={false}
+                        required
+                      />
+                    </div>
+                  </Row>
+
+                  {selectedCouponType?.value == "branch_wise" ||
+                  selectedCouponType?.value == "menu_item_wise" ? (
                     <Row className="mb-3">
                       <label
                         htmlFor="example-text-input"

@@ -161,7 +161,7 @@ import Quest from "pages/Quest/Quest"
 import AddQuest from "pages/Quest/AddQuest"
 
 const userRoutes = [
-  { path: "/dashboard", component: <Dashboard /> },
+  // { path: "/dashboard", component: <Dashboard /> },
 
   // calendar
   { path: "/calendar", component: <Calendar /> },
