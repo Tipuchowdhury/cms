@@ -27,6 +27,8 @@ import {
   getAllRestaurantMenuItemAction,
   getAllZoneAction,
   getAllCustomerAction,
+  getMenuItemByBrandIdAction,
+  getCategoryByBrandIdAction,
 } from "store/actions"
 import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
@@ -150,14 +152,6 @@ function AddCoupon(props) {
 
   const handleSelectCategory = e => {
     setSelectedCategory(e)
-  }
-
-  let categoryData = undefined
-  if (props.get_all_category_data?.length > 0) {
-    categoryData = props.get_all_category_data?.map((item, key) => ({
-      label: item.category_name,
-      value: item._id,
-    }))
   }
 
   // console.log(props.get_all_category_data)
@@ -292,14 +286,6 @@ function AddCoupon(props) {
 
   const handleSelectMenu = e => {
     setSelectedMenuItem(e)
-  }
-
-  let menuData = undefined
-  if (props.get_all_menu_data?.length > 0) {
-    menuData = props.get_all_menu_data?.map((item, key) => ({
-      label: item.menu_name,
-      value: item._id,
-    }))
   }
 
   //select multiple subscription_type
@@ -588,14 +574,6 @@ function AddCoupon(props) {
       props.getAllBranchAction()
     }
 
-    if (props.get_all_menu_loading == false) {
-      props.getAllRestaurantMenuItemAction()
-    }
-
-    if (props.get_all_category_loading == false) {
-      props.getAllCategoryAction()
-    }
-
     if (props.get_all_cuisine_loading == false) {
       props.getAllCuisneAction()
     }
@@ -634,9 +612,61 @@ function AddCoupon(props) {
     props.get_all_category_loading,
     props.get_all_customer_loading,
     props.get_all_subscription_type_loading,
-    props.get_all_category_loading,
-    props.get_all_menu_loading,
   ])
+
+  useEffect(() => {
+    if (
+      selectedCouponType?.value == "menu_item_wise" &&
+      selectedBranch?.length > 0
+    ) {
+      props.getMenuItemByBrandIdAction({
+        branch_id: selectedBranch.map(data => data.value),
+      })
+    }
+  }, [selectedBranch])
+
+  const [menuData, setMenuData] = useState([])
+
+  useEffect(() => {
+    if (props.get_menu_by_branch_id_data) {
+      setMenuData(
+        props.get_menu_by_branch_id_data?.map((item, key) => ({
+          label: item.menu_name,
+          value: item._id,
+        }))
+      )
+    } else {
+      setMenuData([])
+      setSelectedMenuItem([])
+    }
+  }, [props.get_menu_by_branch_id_data])
+
+  useEffect(() => {
+    console.log("selectedBranch :", selectedBranch[0]?.value)
+    if (
+      selectedCouponType?.value == "category_wise" &&
+      selectedBranch?.length > 0
+    ) {
+      props.getCategoryByBrandIdAction({
+        branch_id: selectedBranch.map(data => data.value),
+      })
+    }
+  }, [selectedBranch])
+
+  const [categoryData, setCategoryData] = useState([])
+  useEffect(() => {
+    if (props.get_category_by_branch_id_data) {
+      setCategoryData(
+        props.get_category_by_branch_id_data?.map((item, key) => ({
+          label: item.category_name,
+          value: item._id,
+        }))
+      )
+    } else {
+      setCategoryData([])
+      setSelectedCategory([])
+    }
+  }, [props.get_category_by_branch_id_data])
 
   // console.log(props.get_all_branch_data)
 
@@ -767,6 +797,7 @@ function AddCoupon(props) {
                   </Row>
 
                   {selectedCouponType?.value == "branch_wise" ||
+                  selectedCouponType?.value == "category_wise" ||
                   selectedCouponType?.value == "menu_item_wise" ? (
                     <Row className="mb-3">
                       <label
@@ -1416,11 +1447,17 @@ const mapStateToProps = state => {
     get_all_zone_loading,
     get_all_menu_data,
     get_all_menu_loading,
+    get_menu_by_branch_id_data,
+    get_menu_by_branch_id_error,
+    get_menu_by_branch_id_loading,
   } = state.Restaurant
   const {
     get_all_category_data,
     get_all_category_error,
     get_all_category_loading,
+    get_category_by_branch_id_data,
+    get_category_by_branch_id_error,
+    get_category_by_branch_id_loading,
   } = state.Category
 
   const {
@@ -1458,6 +1495,12 @@ const mapStateToProps = state => {
     get_all_subscription_type_data,
     get_all_subscription_type_error,
     get_all_subscription_type_loading,
+    get_menu_by_branch_id_data,
+    get_menu_by_branch_id_error,
+    get_menu_by_branch_id_loading,
+    get_category_by_branch_id_data,
+    get_category_by_branch_id_error,
+    get_category_by_branch_id_loading,
   }
 }
 
@@ -1475,5 +1518,8 @@ export default withRouter(
     getAllCustomerAction,
     getAllRestaurantAction,
     getAllZoneAction,
+    getAllCustomerAction,
+    getMenuItemByBrandIdAction,
+    getCategoryByBrandIdAction,
   })(AddCoupon)
 )
