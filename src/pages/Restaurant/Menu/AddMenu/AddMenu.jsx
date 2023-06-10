@@ -857,6 +857,7 @@ function AddMenu(props) {
                       name="recipe_time"
                       onChange={handleInputs}
                       value={info.recipe_time ?? ""}
+                      min="0"
                       required
                     />
                   </div>
@@ -1358,6 +1359,7 @@ function AddMenu(props) {
                       placeholder="Enter vat"
                       name="vat"
                       onChange={handleInputs}
+                      min="0"
                       value={info.vat ?? ""}
                       required
                     />
@@ -1376,6 +1378,7 @@ function AddMenu(props) {
                       type="number"
                       className="form-control"
                       id="sd"
+                      min="0"
                       placeholder="Enter sd"
                       name="sd"
                       onChange={handleInputs}

@@ -76,10 +76,13 @@ import {
   DELETE_MENU_TIME_SLOT_FRESH,
   GET_ZONE_BY_ID,
   GET_ZONE_BY_ID_FRESH,
+  GET_ZONE_BY_CITY_ID,
+  GET_ZONE_BY_CITY_ID_FRESH,
   DELETE_RESTAURANT_MENU,
   DELETE_RESTAURANT_MENU_FRESH,
   RESTAURANT_MENU_STATUS_EDIT,
   RESTAURANT_MENU_STATUS_EDIT_FRESH,
+  GET_RESTAURANT_MENU_BY_BRANCH_ID,
 } from "./actionTypes"
 
 const initialState = {
@@ -163,6 +166,10 @@ const initialState = {
   get_all_menu_error: null,
   get_all_menu_loading: false,
 
+  get_menu_by_branch_id_data: null,
+  get_menu_by_branch_id_error: null,
+  get_menu_by_branch_id_loading: false,
+
   edit_addOn_category_loading: false,
 
   add_menu_time_slot_data: null,
@@ -225,6 +232,10 @@ const initialState = {
   get_zone_by_id_data: null,
   get_zone_by_id_error: null,
   get_zone_by_id_loading: false,
+
+  get_zone_by_city_id_data: null,
+  get_zone_by_city_id_error: null,
+  get_zone_by_city_id_loading: false,
 }
 
 const Restaurant = (state = initialState, action) => {
@@ -575,6 +586,15 @@ const Restaurant = (state = initialState, action) => {
       }
       break
 
+    case GET_RESTAURANT_MENU_BY_BRANCH_ID:
+      state = {
+        ...state,
+        get_menu_by_branch_id_data: action.payload,
+        get_menu_by_branch_id_error: action.error,
+        get_menu_by_branch_id_loading: action.status,
+      }
+      break
+
     case DELETE_RESTAURANT_MENU:
       state = {
         ...state,
@@ -882,6 +902,25 @@ const Restaurant = (state = initialState, action) => {
         get_zone_by_id_data: null,
         get_zone_by_id_loading: action.status,
       }
+      break
+    case GET_ZONE_BY_CITY_ID:
+      state = {
+        ...state,
+
+        get_zone_by_city_id_data: action.payload,
+        get_zone_by_city_id_error: action.error,
+        get_zone_by_city_id_loading: action.status,
+      }
+      break
+
+    case GET_ZONE_BY_CITY_ID_FRESH:
+      state = {
+        ...state,
+
+        get_zone_by_city_id_data: action.payload,
+        get_zone_by_city_id_loading: action.status,
+      }
+      break
   }
   return state
 }
