@@ -1130,6 +1130,7 @@ function BranchAdd(props) {
                             name="startTime"
                             placeholder="Start Time"
                             value={row.startTime}
+                            // max={row.endTime}
                             onChange={e => handleTimeChange(e, idx)}
                           />
                         </div>
@@ -1145,6 +1146,7 @@ function BranchAdd(props) {
                             name="endTime"
                             placeholder="End Time"
                             value={row.endTime}
+                            min={row.startTime}
                             onChange={e => handleTimeChange(e, idx)}
                           />
                         </div>

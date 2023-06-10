@@ -21,6 +21,8 @@ import {
   addRiderFresh,
   riderEditAction,
   riderEditFresh,
+  getZoneByCityIdAction,
+  getZoneByCityIdFresh,
 } from "store/actions"
 import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
@@ -33,6 +35,8 @@ function AddRider(props) {
   const location = useLocation()
 
   document.title = location.state ? "Edit Rider | Foodi" : "Add Rider | Foodi"
+
+  const [submitDisabled, setSubmitDisabled] = useState(false)
 
   const [images, setImages] = useState({
     image: location.state ? location.state.image : "",
@@ -118,6 +122,7 @@ function AddRider(props) {
     guardian_nid_back: location.state ? location.state.guardian_nid_back : "",
     electricity_bill: location.state ? location.state.electricity_bill : "",
     house_nameplate: location.state ? location.state.house_nameplate : "",
+    device_id: location.state ? location.state.device_id : "",
 
     driving_license_image: location.state
       ? location.state.driving_license_image
@@ -193,8 +198,11 @@ function AddRider(props) {
   }, [props.get_all_city_loading])
 
   const handleSelectCity = e => {
+    // console.log(e.value)
     setRiderInfo({ ...RiderInfo, city_id: e.value })
     setSelectedCity(e)
+    setSelectedZone([])
+    props.getZoneByCityIdAction(e.value)
   }
 
   let cityData = undefined
@@ -205,7 +213,7 @@ function AddRider(props) {
     }))
   }
 
-  const common_zones = props?.get_all_zone_data?.filter(elem =>
+  const common_zones = props?.get_zone_by_city_id_data?.filter(elem =>
     location?.state?.zones?.find(({ zone_id }) => elem._id === zone_id)
   )
 
@@ -220,18 +228,36 @@ function AddRider(props) {
     zone_data_edit ? zone_data_edit : ""
   )
 
+  // useEffect(() => {
+  //   if (props.get_all_zone_loading === "Success")
+  //     setSelectedZone(zone_data_edit)
+  // }, [props.get_all_zone_loading])
+
   useEffect(() => {
-    if (props.get_all_zone_loading === "Success")
+    props.getZoneByCityIdFresh()
+    props.getZoneByCityIdAction(RiderInfo.city_id)
+  }, [RiderInfo.city_id])
+
+  useEffect(() => {
+    if (props.get_zone_by_city_id_loading === "Success")
       setSelectedZone(zone_data_edit)
-  }, [props.get_all_zone_loading])
+  }, [props.get_zone_by_city_id_loading])
 
   const handleSelectZone = e => {
     setSelectedZone(e)
   }
 
+  // let zoneData = undefined
+  // if (props.get_all_zone_data?.length > 0) {
+  //   zoneData = props.get_all_zone_data?.map((item, key) => ({
+  //     label: item.name,
+  //     value: item._id,
+  //   }))
+  // }
+
   let zoneData = undefined
-  if (props.get_all_zone_data?.length > 0) {
-    zoneData = props.get_all_zone_data?.map((item, key) => ({
+  if (props.get_zone_by_city_id_data?.length > 0) {
+    zoneData = props.get_zone_by_city_id_data?.map((item, key) => ({
       label: item.name,
       value: item._id,
     }))
@@ -404,43 +430,50 @@ function AddRider(props) {
   // }
 
   const handleSubmit = e => {
+    setSubmitDisabled(true)
     e.preventDefault()
     let status = 0
     if (RiderInfo.password !== RiderInfo.confirm_password) {
       status = 1
+      setSubmitDisabled(false)
       toast.error("Password and Confirm password are not matched")
     }
 
     if (RiderInfo.mobile_number.length != 11) {
       status = 1
+      setSubmitDisabled(false)
       toast.error("Mobile number should be 11 digit")
     }
 
     if (isNaN(RiderInfo.mobile_number)) {
       status = 1
+      setSubmitDisabled(false)
       toast.error("Mobile number should be numeric digit")
     }
 
-    if (RiderInfo.bkash_no != "" && RiderInfo.bkash_no.length != 11) {
+    if (RiderInfo.bkash_no && RiderInfo.bkash_no.length != 11) {
       status = 1
+      setSubmitDisabled(false)
       toast.error("Bkash number should be 11 digit")
     }
 
-    if (RiderInfo.bkash_no != "" && isNaN(RiderInfo.bkash_no)) {
+    if (RiderInfo.bkash_no && isNaN(RiderInfo.bkash_no)) {
       status = 1
+      setSubmitDisabled(false)
       toast.error("Bkash number should be numeric digit")
     }
 
-    if (RiderInfo.nagad_no != "" && RiderInfo.nagad_no.length != 11) {
+    if (RiderInfo.nagad_no && RiderInfo.nagad_no.length != 11) {
       status = 1
+      setSubmitDisabled(false)
       toast.error("Nagad number should be 11 digit")
     }
 
-    if (RiderInfo.nagad_no != "" && isNaN(RiderInfo.nagad_no)) {
+    if (RiderInfo.nagad_no && isNaN(RiderInfo.nagad_no)) {
       status = 1
+      setSubmitDisabled(false)
       toast.error("Nagad number should be numeric digit")
     }
-
     if (status == 0) {
       const uniqueId = uuidv4()
       props.addRiderAction(uniqueId, RiderInfo, selectedZone)
@@ -448,40 +481,48 @@ function AddRider(props) {
   }
 
   const handleSubmitForEdit = e => {
+    setSubmitDisabled(true)
     e.preventDefault()
     let status = 0
     if (RiderInfo.password !== RiderInfo.confirm_password) {
       status = 1
+      setSubmitDisabled(false)
       toast.error("Password and Confirm password are not matched")
     }
 
     if (RiderInfo.mobile_number.length != 11) {
       status = 1
+      setSubmitDisabled(false)
       toast.error("Mobile number should be 11 digit")
     }
 
     if (isNaN(RiderInfo.mobile_number)) {
       status = 1
+      setSubmitDisabled(false)
       toast.error("Mobile number should be numeric digit")
     }
 
-    if (RiderInfo.bkash_no != "" && RiderInfo.bkash_no.length != 11) {
+    if (RiderInfo.bkash_no && RiderInfo.bkash_no.length != 11) {
       status = 1
+      setSubmitDisabled(false)
       toast.error("Bkash number should be 11 digit")
     }
 
-    if (RiderInfo.bkash_no != "" && isNaN(RiderInfo.bkash_no)) {
+    if (RiderInfo.bkash_no && isNaN(RiderInfo.bkash_no)) {
       status = 1
+      setSubmitDisabled(false)
       toast.error("Bkash number should be numeric digit")
     }
 
-    if (RiderInfo.nagad_no != "" && RiderInfo.nagad_no.length != 11) {
+    if (RiderInfo.nagad_no && RiderInfo.nagad_no.length != 11) {
       status = 1
+      setSubmitDisabled(false)
       toast.error("Nagad number should be 11 digit")
     }
 
-    if (RiderInfo.nagad_no != "" && isNaN(RiderInfo.nagad_no)) {
+    if (RiderInfo.nagad_no && isNaN(RiderInfo.nagad_no)) {
       status = 1
+      setSubmitDisabled(false)
       toast.error("Nagad number should be numeric digit")
     }
 
@@ -497,6 +538,10 @@ function AddRider(props) {
     if (props.get_all_zone_loading == false) {
       props.getAllZoneAction()
     }
+
+    if (props.get_zone_by_city_id_loading == false) {
+      props.getZoneByCityIdAction(RiderInfo.city_id)
+    }
     if (props.get_all_vehicle_type_loading == false) {
       props.getAllVehicleTypeAction()
     }
@@ -504,6 +549,7 @@ function AddRider(props) {
     if (props.add_rider_loading === "Success") {
       // redirect
       props.addRiderFresh()
+      setSubmitDisabled(false)
       navigate("/riders")
     }
 
@@ -511,6 +557,7 @@ function AddRider(props) {
       toast.success("Rider edited Successfully")
       // redirect
       props.riderEditFresh()
+      setSubmitDisabled(false)
       navigate("/riders")
     }
   }, [
@@ -518,6 +565,7 @@ function AddRider(props) {
     props.rider_edit_loading,
     props.get_all_city_loading,
     props.get_all_zone_loading,
+    props.get_zone_by_city_id_loading,
     props.get_all_vehicle_type_loading,
   ])
 
@@ -1356,6 +1404,7 @@ function AddRider(props) {
                       <button
                         className="btn btn-primary w-md waves-effect waves-light"
                         type="submit"
+                        disabled={submitDisabled}
                       >
                         {location.state ? "Edit Rider" : "Add Rider"}
                       </button>
@@ -1374,7 +1423,12 @@ function AddRider(props) {
 const mapStateToProps = state => {
   const { get_all_city_loading, get_all_city_data } = state.zoneCity
 
-  const { get_all_zone_loading, get_all_zone_data } = state.Restaurant
+  const {
+    get_all_zone_loading,
+    get_all_zone_data,
+    get_zone_by_city_id_data,
+    get_zone_by_city_id_loading,
+  } = state.Restaurant
 
   const { get_all_vehicle_type_loading, get_all_vehicle_type_data } =
     state.VehicleType
@@ -1385,6 +1439,8 @@ const mapStateToProps = state => {
     get_all_city_loading,
     get_all_city_data,
     get_all_zone_loading,
+    get_zone_by_city_id_data,
+    get_zone_by_city_id_loading,
     get_all_zone_data,
     get_all_vehicle_type_loading,
     get_all_vehicle_type_data,
@@ -1400,5 +1456,7 @@ export default withRouter(
     addRiderFresh,
     riderEditAction,
     riderEditFresh,
+    getZoneByCityIdAction,
+    getZoneByCityIdFresh,
   })(AddRider)
 )

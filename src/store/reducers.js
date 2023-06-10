@@ -40,7 +40,9 @@ import Order from "./Order/reducer"
 import Refunds from "./Refund/reducer"
 import ZoneUtilization from "./ZoneUtilization/reducer"
 import RiderList from "./RiderList/reducer"
+import Wallet from "./Wallet/reducer"
 import Quest from "./Quest/reducer"
+import RiderWalletDetail from "./RiderWalletDetail/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -76,7 +78,9 @@ const rootReducer = combineReducers({
   Refunds,
   ZoneUtilization,
   RiderList,
+  Wallet,
   Quest,
+  RiderWalletDetail,
 })
 
 export default rootReducer

@@ -163,6 +163,8 @@ import Quest from "pages/Quest/Quest"
 import AddQuest from "pages/Quest/AddQuest"
 import EditUser from "pages/ManageUsers/EditUser"
 import CustomerEdit from "pages/Customer/CustomerEdit"
+import Wallet from "pages/Wallet/Wallet"
+import RiderWalletDetail from "pages/Wallet/RiderWalletDetail"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -267,6 +269,10 @@ const userRoutes = [
 
   // Refund
   { path: "/refund", component: <Refund /> },
+
+  // Refund
+  { path: "/wallet", component: <Wallet /> },
+  { path: "/rider-wallet-details", component: <RiderWalletDetail /> },
 
   // Zone Utilization
   { path: "/zone-utilization", component: <ZoneUtilization /> },
