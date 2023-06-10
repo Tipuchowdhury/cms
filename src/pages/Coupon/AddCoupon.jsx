@@ -130,25 +130,18 @@ function AddCoupon(props) {
   }
 
   //select multiple category
-  const common_categories = props?.get_all_category_data?.filter(elem =>
-    location?.state?.categories?.find(
-      ({ category_id }) => elem._id === category_id
-    )
-  )
+  // const common_categories = props?.get_all_category_data?.filter(elem =>
+  //   location?.state?.categories?.find(
+  //     ({ category_id }) => elem._id === category_id
+  //   )
+  // )
 
-  const category_data_edit = common_categories
-    ? common_categories?.map((item, key) => {
-        return { label: item.category_name, value: item._id }
-      })
-    : ""
-  const [selectedCategory, setSelectedCategory] = useState(
-    category_data_edit ? category_data_edit : ""
-  )
-
-  useEffect(() => {
-    if (props.get_all_category_loading === "Success")
-      setSelectedCategory(category_data_edit)
-  }, [props.get_all_category_loading])
+  // const category_data_edit = common_categories
+  //   ? common_categories?.map((item, key) => {
+  //       return { label: item.category_name, value: item._id }
+  //     })
+  //   : ""
+  const [selectedCategory, setSelectedCategory] = useState("")
 
   const handleSelectCategory = e => {
     setSelectedCategory(e)
@@ -260,24 +253,22 @@ function AddCoupon(props) {
     }))
   }
 
-  const common_menu = props?.get_all_menu_data?.filter(elem =>
-    location?.state?.menu_items?.find(
-      ({ menu_item_id }) => elem._id === menu_item_id
-    )
-  )
+  // const common_menu = props?.get_all_menu_data?.filter(elem =>
+  //   location?.state?.menu_items?.find(
+  //     ({ menu_item_id }) => elem._id === menu_item_id
+  //   )
+  // )
 
-  const menu_data_edit = common_menu
-    ? common_menu?.map((item, key) => {
-        return {
-          label: item.menu_name,
-          value: item._id,
-        }
-      })
-    : ""
+  // const menu_data_edit = common_menu
+  //   ? common_menu?.map((item, key) => {
+  //       return {
+  //         label: item.menu_name,
+  //         value: item._id,
+  //       }
+  //     })
+  //   : ""
 
-  const [selectedMenuItem, setSelectedMenuItem] = useState(
-    menu_data_edit ? menu_data_edit : ""
-  )
+  const [selectedMenuItem, setSelectedMenuItem] = useState("")
 
   useEffect(() => {
     if (props.get_all_menu_loading === "Success")
@@ -635,6 +626,26 @@ function AddCoupon(props) {
           value: item._id,
         }))
       )
+
+      if (location?.state) {
+        console.log("menuData :", menuData)
+        const common_menu = props.get_menu_by_branch_id_data?.filter(elem =>
+          location?.state?.menu_items?.find(
+            ({ menu_item_id }) => elem._id === menu_item_id
+          )
+        )
+
+        const menu_data_edit = common_menu
+          ? common_menu?.map((item, key) => {
+              return {
+                label: item.menu_name,
+                value: item._id,
+              }
+            })
+          : ""
+
+        setSelectedMenuItem(menu_data_edit)
+      }
     } else {
       setMenuData([])
       setSelectedMenuItem([])
@@ -662,6 +673,21 @@ function AddCoupon(props) {
           value: item._id,
         }))
       )
+
+      const common_categories = props?.get_category_by_branch_id_data?.filter(
+        elem =>
+          location?.state?.categories?.find(
+            ({ category_id }) => elem._id === category_id
+          )
+      )
+
+      const category_data_edit = common_categories
+        ? common_categories?.map((item, key) => {
+            return { label: item.category_name, value: item._id }
+          })
+        : ""
+
+      setSelectedCategory(category_data_edit)
     } else {
       setCategoryData([])
       setSelectedCategory([])
