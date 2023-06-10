@@ -288,35 +288,59 @@ function BranchAdd(props) {
   }
   const handleSubmit = e => {
     e.preventDefault()
-    const val = uuidv4()
-    const currentPath = window.location.pathname
-    props.branchAddAction(
-      val,
-      zoneInfo,
-      state2.lat,
-      state2.lng,
-      // file,
-      // coverFile,
-      currentPath,
-      selectedCuisine,
-      time
-    )
+    let status = 0
+    if (zoneInfo.phone_number.length != 11) {
+      status = 1
+      toast.error("Phone Number should be 11 digit")
+    }
+    if (isNaN(zoneInfo.phone_number)) {
+      status = 1
+      toast.error("Phone Number should be numeric character")
+    }
+
+    if (status == 0) {
+      const val = uuidv4()
+      const currentPath = window.location.pathname
+      props.branchAddAction(
+        val,
+        zoneInfo,
+        state2.lat,
+        state2.lng,
+        // file,
+        // coverFile,
+        currentPath,
+        selectedCuisine,
+        time
+      )
+    }
   }
 
   const handleEditBranch = e => {
     e.preventDefault()
-    const currentPath = window.location.pathname
-    props.branchEditAction(
-      location.state?._id,
-      zoneInfo,
-      state2.lat,
-      state2.lng,
-      // file,
-      // coverFile,
-      currentPath,
-      selectedCuisine,
-      time
-    )
+    let status = 0
+    if (zoneInfo.phone_number.length != 11) {
+      status = 1
+      toast.error("Phone Number should be 11 digit")
+    }
+    if (isNaN(zoneInfo.phone_number)) {
+      status = 1
+      toast.error("Phone Number should be numeric character")
+    }
+
+    if (status == 0) {
+      const currentPath = window.location.pathname
+      props.branchEditAction(
+        location.state?._id,
+        zoneInfo,
+        state2.lat,
+        state2.lng,
+        // file,
+        // coverFile,
+        currentPath,
+        selectedCuisine,
+        time
+      )
+    }
   }
 
   useEffect(() => {
@@ -946,6 +970,7 @@ function BranchAdd(props) {
                       className="form-control"
                       id="city"
                       required
+                      min="0"
                       placeholder="Enter commission amount"
                       name="commission"
                       value={zoneInfo.commission ?? ""}
@@ -969,6 +994,7 @@ function BranchAdd(props) {
                       placeholder="Enter minimum order value"
                       name="minimum_order_value"
                       required
+                      min="0"
                       value={zoneInfo.minimum_order_value ?? ""}
                       onChange={handleInputs}
                     />
@@ -989,6 +1015,7 @@ function BranchAdd(props) {
                       placeholder="Enter Delivery Time"
                       name="delivery_time"
                       required
+                      min="0"
                       value={zoneInfo.delivery_time ?? ""}
                       onChange={handleInputs}
                     />
@@ -1008,6 +1035,7 @@ function BranchAdd(props) {
                       className="form-control"
                       id="city"
                       required
+                      min="0"
                       placeholder="Enter Delivery Time"
                       name="pickup_time"
                       value={zoneInfo.pickup_time ?? ""}
