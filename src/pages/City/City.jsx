@@ -202,6 +202,7 @@ function City(props) {
 
     if (props.add_city_loading === "Success") {
       toast.success("City Addedd Successfully")
+      setName("")
       props.addCityFresh()
       setSubmitDisabled(false)
     }
@@ -214,6 +215,7 @@ function City(props) {
 
     if (props.city_name_edit_loading === "Success") {
       toast.success("City Name Updated")
+
       props.cityNameEditFresh()
     }
 

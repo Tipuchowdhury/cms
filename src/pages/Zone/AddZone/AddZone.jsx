@@ -317,10 +317,11 @@ function AddZone(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      Area Name
+                      Area Name <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <input
+                        required
                         type="text"
                         className="form-control"
                         id="area"
@@ -337,10 +338,11 @@ function AddZone(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      City
+                      City <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <Input
+                        required
                         id="exampleSelect"
                         name="city"
                         value={zoneInfo.city}
@@ -359,10 +361,11 @@ function AddZone(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      Radius (Km)
+                      Radius (Km) <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <input
+                        required
                         type="text"
                         className="form-control"
                         id="radius"
@@ -379,10 +382,11 @@ function AddZone(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      Branches
+                      Branches <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <Select
+                        required
                         value={selectedBranch}
                         onChange={handleSelectBranch}
                         options={branchDate}
@@ -395,10 +399,11 @@ function AddZone(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      Location
+                      Location <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <textarea
+                        required
                         className="form-control"
                         id="location"
                         name="location"
@@ -463,9 +468,11 @@ function AddZone(props) {
                         <div data-repeater-item className="row">
                           <div className="mb-3 col-lg-3">
                             <label className="form-label" htmlFor="startTime">
-                              Distance Start(km)
+                              Distance Start(km){" "}
+                              <span className="text-danger">*</span>
                             </label>
                             <input
+                              required
                               type="number"
                               id="startTime"
                               className="form-control"
@@ -478,9 +485,11 @@ function AddZone(props) {
 
                           <div className="mb-3 col-lg-3">
                             <label className="form-label" htmlFor="subject">
-                              Distance End(km)
+                              Distance End(km){" "}
+                              <span className="text-danger">*</span>
                             </label>
                             <input
+                              required
                               type="number"
                               id="subject"
                               className="form-control"
@@ -493,11 +502,14 @@ function AddZone(props) {
 
                           <div className="mb-3 col-lg-3">
                             <label className="form-label" htmlFor="startTime">
-                              Delivery Charge
+                              Delivery Charge{" "}
+                              <span className="text-danger">*</span>
                             </label>
                             <input
+                              required
                               type="number"
                               id="startTime"
+                              min="0"
                               className="form-control"
                               name="deliveryCharge"
                               placeholder="Delivery charge"

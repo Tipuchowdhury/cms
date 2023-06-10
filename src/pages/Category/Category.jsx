@@ -159,7 +159,7 @@ function Category(props) {
     setCategoryName(row.category_name)
     setRestaurantIdEdit(row.restaurant_id)
     setCategoryImage(row.image)
-    setIsActive(!row.is_active)
+    setIsActive(row.is_active)
 
     toggleStatus()
   }
@@ -171,7 +171,7 @@ function Category(props) {
 
   const handleStatusUpdate = e => {
     e.preventDefault()
-    props.categoryStatusEditAction({ _id: categoryId, is_active: isActive })
+    props.categoryStatusEditAction({ _id: categoryId, is_active: !isActive })
     // toggleDel();
   }
   const actionRef = (cell, row) => (
@@ -605,7 +605,7 @@ function Category(props) {
             Are you sure?
           </ModalHeader>
           <ModalBody>
-            Do you really want to update status these records?{" "}
+            Do you want to {isActive ? "deactivate" : "activate"} this record?{" "}
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={toggleStatus}>
