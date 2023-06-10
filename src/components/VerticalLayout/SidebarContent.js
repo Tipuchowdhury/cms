@@ -243,15 +243,15 @@ const SidebarContent = props => {
                   <Link to="/category">{props.t("Manage Menu Category")} </Link>
                 </li>
                 <li>
-                  <Link to="/menu">{props.t("Manage Restaurant Menu")} </Link>
-                </li>
-                <li>
                   <Link to="/addons-category">
                     {props.t("Add-ons Category")}{" "}
                   </Link>
                 </li>
                 <li>
                   <Link to="/time-slot">{props.t("Menu Time Slot")} </Link>
+                </li>
+                <li>
+                  <Link to="/menu">{props.t("Manage Restaurant Menu")} </Link>
                 </li>
               </ul>
             </li>
@@ -339,6 +339,13 @@ const SidebarContent = props => {
                 <i className="ti-money"></i>
                 {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("Refund")}</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/wallet" className="waves-effect">
+                <i className="ti-wallet"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
+                <span>{props.t("Wallet")}</span>
               </Link>
             </li>
 

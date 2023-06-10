@@ -40,6 +40,7 @@ import DataTable from "react-data-table-component"
 import CustomLoader from "components/CustomLoader/CustomLoader"
 
 function City(props) {
+  const [submitDisabled, setSubmitDisabled] = useState(false)
   const [name, setName] = useState("")
   const [modal, setModal] = useState(false)
   const [cityId, setCityId] = useState()
@@ -60,9 +61,13 @@ function City(props) {
     props.cityDeleteAction(deleteItem)
   }
 
-  const toggle = () => setModal(!modal)
+  const toggle = () => {
+    //setSubmitDisabled(false)
+    setModal(!modal)
+  }
   const toggleEditModal = () => setEditModal(!editModal)
   const handleSubmit = e => {
+    setSubmitDisabled(true)
     e.preventDefault()
     toggle()
     const val = uuidv4()
@@ -198,11 +203,13 @@ function City(props) {
     if (props.add_city_loading === "Success") {
       toast.success("City Addedd Successfully")
       props.addCityFresh()
+      setSubmitDisabled(false)
     }
 
     if (props.add_city_loading === "Failed") {
       toast.error("Something went wrong")
       props.addCityFresh()
+      setSubmitDisabled(false)
     }
 
     if (props.city_name_edit_loading === "Success") {
@@ -349,7 +356,7 @@ function City(props) {
                 <Button color="secondary" onClick={toggle}>
                   Cancel
                 </Button>{" "}
-                <Button color="primary" type="submit">
+                <Button disabled={submitDisabled} color="primary" type="submit">
                   Submit
                 </Button>
               </div>
@@ -436,7 +443,7 @@ function City(props) {
             Are you sure?
           </ModalHeader>
           <ModalBody>
-            Do you really want to update status these records?{" "}
+            Do you want to {isActive ? "deactivate" : "activate"} this record?{" "}
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={toggleStatus}>

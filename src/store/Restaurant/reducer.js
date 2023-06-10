@@ -76,6 +76,8 @@ import {
   DELETE_MENU_TIME_SLOT_FRESH,
   GET_ZONE_BY_ID,
   GET_ZONE_BY_ID_FRESH,
+  GET_ZONE_BY_CITY_ID,
+  GET_ZONE_BY_CITY_ID_FRESH,
   DELETE_RESTAURANT_MENU,
   DELETE_RESTAURANT_MENU_FRESH,
   RESTAURANT_MENU_STATUS_EDIT,
@@ -230,6 +232,10 @@ const initialState = {
   get_zone_by_id_data: null,
   get_zone_by_id_error: null,
   get_zone_by_id_loading: false,
+
+  get_zone_by_city_id_data: null,
+  get_zone_by_city_id_error: null,
+  get_zone_by_city_id_loading: false,
 }
 
 const Restaurant = (state = initialState, action) => {
@@ -896,6 +902,25 @@ const Restaurant = (state = initialState, action) => {
         get_zone_by_id_data: null,
         get_zone_by_id_loading: action.status,
       }
+      break
+    case GET_ZONE_BY_CITY_ID:
+      state = {
+        ...state,
+
+        get_zone_by_city_id_data: action.payload,
+        get_zone_by_city_id_error: action.error,
+        get_zone_by_city_id_loading: action.status,
+      }
+      break
+
+    case GET_ZONE_BY_CITY_ID_FRESH:
+      state = {
+        ...state,
+
+        get_zone_by_city_id_data: action.payload,
+        get_zone_by_city_id_loading: action.status,
+      }
+      break
   }
   return state
 }
