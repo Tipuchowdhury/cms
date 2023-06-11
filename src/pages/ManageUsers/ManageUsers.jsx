@@ -28,9 +28,13 @@ import {
   userStatusUpdateFresh,
   userDeleteAction,
   userDeleteFresh,
+  getServerSidePaginationUserAction,
+  getServerSidePaginationUserSearchAction,
+  getServerSidePaginationSearchUserFresh,
 } from "store/register-new/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import DataTable from "react-data-table-component"
 
 function ManageUsers(props) {
   const user_update_state = useSelector(
@@ -39,28 +43,15 @@ function ManageUsers(props) {
   // console.log(user_update_state);
   const [modal, setModal] = useState(false)
   const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
+  const navigate = useNavigate()
 
   const [modalDel, setModalDel] = useState(false)
 
   const toggle = () => setModal(!modal)
   const toggleDel = () => setModalDel(!modalDel)
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
-  const handleEditUser = row => {
-    console.log(row)
-    toggle()
-    setRegisterInfo(prevState => ({
-      first_name: row.first_name,
-      last_name: row.last_name,
-      present_address: row.present_address,
-      permanent_address: row.permanent_address,
-      mobileNumber: row.mobile_number,
-      email: row.email,
-      image: row.image,
-      id: row._id,
-      is_active: row.is_active,
-    }))
-    setRole(row.role_id)
-    setAddImages({ ...addImages, image: row.image })
+  const handleEditUser = (row, cell) => {
+    navigate("/edit-user", { state: cell })
   }
   const [registerInfo, setRegisterInfo] = useState({
     first_name: "",
@@ -76,8 +67,8 @@ function ManageUsers(props) {
 
   const [deleteItem, setDeleteItem] = useState()
 
-  const handleDeleteModal = row => {
-    setDeleteItem(row._id)
+  const handleDeleteModal = cell => {
+    setDeleteItem(cell._id)
     toggleDel()
   }
   const handleDelete = () => {
@@ -128,15 +119,15 @@ function ManageUsers(props) {
     }
   }
 
-  const handleStatusModal = row => {
+  const handleStatusModal = cell => {
     //  console.log(row);
-    setStatusItem(row)
+    setStatusItem(cell)
 
     toggleStatus()
   }
 
   const handleStatusUpdate = () => {
-    // console.log(statusItem);
+    console.log(statusItem)
     props.userStatusUpdateAction({
       ...statusItem,
       is_active: !statusItem.is_active,
@@ -159,14 +150,14 @@ function ManageUsers(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEditUser(row)}
+        onClick={() => handleEditUser(row, cell)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        onClick={() => handleDeleteModal(cell)}
       >
         Delete
       </Button>{" "}
@@ -177,68 +168,83 @@ function ManageUsers(props) {
 
   const statusRef = (cell, row) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
-
+  const textRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.name}</span>
+  )
+  const phoneRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.mobile_number}</span>
+  )
   const activeData = [
     {
-      dataField: "first_name",
-      text: "User",
-      sort: true,
+      selector: row => row.name,
+      name: "User",
+      sortable: true,
+      cell: textRef,
     },
     {
-      dataField: "mobile_number",
-      text: "Mobile Number",
-      sort: true,
-      //formatter: statusRef
-    },
-    // {
-    //     dataField: "role_name",
-    //     text: "User Type",
-    //     sort: true,
-    //     //formatter: actionRef,
-    // },
-
-    {
-      dataField: "Status",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      selector: row => row.mobile_number,
+      name: "Mobile Number",
+      sortable: true,
+      cell: phoneRef,
     },
 
     {
-      dataField: "",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      selector: row => row.Status,
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
-  ]
-  const defaultSorted = [
+
     {
-      dataField: "name",
-      order: "desc",
+      selector: row => "",
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
-  // console.log(props.get_all_user_data);
-  // console.log(props.get_all_user_roles_data,);
+
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationUserSearchAction(e.target.value)
+    } else {
+      props.getServerSidePaginationSearchUserFresh()
+    }
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
+
   useEffect(() => {
     if (props.get_all_user_loading === false) {
       props.getAllAdminUsersAction()
     }
 
+    props.getServerSidePaginationUserAction(page, countPerPage)
+
     if (props.get_all_user_roles_loading === false) {
       props.getAllUsersRolesAction()
     }
 
-    if (props.user_update_loading === "Success") {
-      toast.success("User Updated")
-      props.userUpdateFresh()
-    }
+    // if (props.user_update_loading === "Success") {
+    //   toast.success("User Updated")
+    //   props.userUpdateFresh()
+    // }
 
     if (props.user_status_update_loading === "Success") {
       toast.success("User Status Updated")
@@ -265,6 +271,8 @@ function ManageUsers(props) {
     props.user_update_loading,
     props.user_status_update_loading,
     props.user_delete_loading,
+    page,
+    countPerPage,
   ])
 
   return (
@@ -305,211 +313,51 @@ function ManageUsers(props) {
                     </Link>
                   </div>
 
-                  {props.get_all_user_data ? (
-                    props.get_all_user_data.length > 0 ? (
-                      <DatatableTablesWorking
-                        products={props.get_all_user_data}
-                        columnData={activeData}
-                        defaultSorted={defaultSorted}
-                      />
-                    ) : null
-                  ) : null}
+                  {/* {props.get_all_user_data ? props.get_all_user_data.length > 0 ? <DatatableTablesWorking products={props.get_all_user_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} /> : null : null} */}
+
+                  <div className="text-end">
+                    <input
+                      type="text"
+                      placeholder="Search User"
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid gray",
+                      }}
+                      onChange={e => handleFilter(e)}
+                    />
+                  </div>
+                  <DataTable
+                    columns={activeData}
+                    data={
+                      props.get_server_side_pagination_user_search_data != null
+                        ? props.get_server_side_pagination_user_search_data
+                            ?.data
+                        : props?.get_server_side_pagination_user_data?.data
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_user_search_data != null
+                        ? props.get_server_side_pagination_user_search_data
+                            ?.count
+                        : props.get_server_side_pagination_user_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={page => setPage(page)}
+                  />
                 </CardBody>
               </Card>
             </Col>
           </Row>
         </Container>
-        {/* <Modal isOpen={modal} toggle={toggle} centered>
-            <ModalHeader toggle={toggle}>Modal title</ModalHeader>
-            <ModalBody>
-                <form className="mt-1" onSubmit={handleSubmit}>
-
-                    <div className="mb-3">
-                        <label className="form-label" htmlFor="username">City Name</label>
-                        <input type="text" className="form-control" id="username" placeholder="Enter city name" required value={name} onChange={(e) => setName(e.target.value)} />
-                    </div>
-                    <div style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}>
-                        <Button color="secondary" onClick={toggle}>
-                            Cancel
-                        </Button>{' '}
-                        <Button color="primary" type='submit'>
-                            Submit
-                        </Button>
-
-                    </div>
-
-                </form>
-            </ModalBody>
-        </Modal> */}
 
         {/* ============ edit modal start=============== */}
-        <Modal isOpen={modal} toggle={toggle}>
-          <ModalHeader toggle={toggle}>Edit User</ModalHeader>
-          <ModalBody>
-            <div>
-              <form className="mt-1" onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="first_name">
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="first_name"
-                    placeholder="Enter username"
-                    name="first_name"
-                    onChange={handleInputs}
-                    value={registerInfo.first_name}
-                  />
-                </div>
 
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="last_name">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="last_name"
-                    placeholder="Enter username"
-                    name="last_name"
-                    onChange={handleInputs}
-                    value={registerInfo.last_name}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="image">
-                    Image
-                  </label>{" "}
-                  <input
-                    type="file"
-                    className="form-control"
-                    id="image"
-                    name="image"
-                    onChange={handleChange}
-                  />
-                </div>
-                {addImages?.image && (
-                  <Row className="mb-3">
-                    <label className="col-md-2">
-                      <span></span>
-                    </label>
-                    <div className="col-md-10">
-                      <img
-                        src={addImages.image}
-                        alt="preview"
-                        style={{ width: "50%" }}
-                      />
-                    </div>
-                  </Row>
-                )}
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="present_address">
-                    Present Address
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="present_address"
-                    placeholder="Enter username"
-                    name="present_address"
-                    onChange={handleInputs}
-                    value={registerInfo.present_address}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="permanent_address">
-                    Permanent Address
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="permanent_address"
-                    placeholder="Enter username"
-                    name="permanent_address"
-                    onChange={handleInputs}
-                    value={registerInfo.permanent_address}
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="mobileNumber">
-                    Mobile Number
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    id="mobileNumber"
-                    placeholder="Enter mobile number"
-                    name="mobileNumber"
-                    onChange={handleInputs}
-                    value={registerInfo.mobileNumber}
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="useremail">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="useremail"
-                    placeholder="Enter email"
-                    name="email"
-                    value={registerInfo.email}
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="Role">
-                    Role
-                  </label>
-                  {/* <Input type="select" name="role" id="exampleSelect" onChange={(e) => getRole(e)}>
-                          <option value="Admin">Admin</option>
-                          <option value="User">User</option>
-                          <option value="Super User">Super User</option>
-                          <option value="Zonal Admin">Zonal Admin</option>
-                          <option value="Central Admin">Central Admin</option>
-
-                        </Input> */}
-                  <Input
-                    id="exampleSelect"
-                    name="manager"
-                    value={role}
-                    required={true}
-                    onChange={e => setRole(e.target.value)}
-                    type="select"
-                  >
-                    <option>Choose...</option>
-                    {userData}
-                  </Input>
-                </div>
-
-                {/* <div className="mb-3">
-                                    <label className="form-label" htmlFor="userpassword">Password</label>
-                                    <input type="password" className="form-control" id="userpassword" placeholder="Enter password" name="password" onChange={handleInputs} required />
-                                </div>
-
-                                <div className="mb-3">
-                                    <label className="form-label" htmlFor="userpassword">Confirm Password</label>
-                                    <input type="password" className="form-control" id="userconfirmpassword" placeholder="Enter password" name="confirmPassword" onChange={handleInputs} required />
-                                </div> */}
-
-                <div className="mb-3 row">
-                  <div className="col-12 text-end">
-                    <button
-                      className="btn btn-primary w-md waves-effect waves-light"
-                      type="submit"
-                    >
-                      Update
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </ModalBody>
-        </Modal>
         {/* ============ edit modal ends=============== */}
 
         {/* ============ delete modal starts=============== */}
@@ -592,6 +440,9 @@ const mapStateToProps = state => {
     user_status_update_loading,
 
     user_delete_loading,
+
+    get_server_side_pagination_user_data,
+    get_server_side_pagination_user_search_data,
   } = state.registerNew
 
   return {
@@ -610,6 +461,9 @@ const mapStateToProps = state => {
     user_status_update_loading,
 
     user_delete_loading,
+
+    get_server_side_pagination_user_data,
+    get_server_side_pagination_user_search_data,
   }
 }
 
@@ -623,5 +477,8 @@ export default withRouter(
     userStatusUpdateFresh,
     userDeleteAction,
     userDeleteFresh,
+    getServerSidePaginationUserAction,
+    getServerSidePaginationUserSearchAction,
+    getServerSidePaginationSearchUserFresh,
   })(ManageUsers)
 )
