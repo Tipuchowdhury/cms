@@ -82,6 +82,10 @@ import {
   DELETE_RESTAURANT_MENU_FRESH,
   RESTAURANT_MENU_STATUS_EDIT,
   RESTAURANT_MENU_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
+  SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH,
+  GET_ADD_ON_CATEGORY_BY_ID,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -2595,4 +2599,99 @@ export const getServerSidePaginationSearchBranchFresh = () => {
       status: false,
       payload: null,
     })
+}
+
+export const getServerSidePaginationAddOnsCategoryAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/AddOnCategory/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationAddOnsCategorySearchAction = name => {
+  console.log(name)
+  var url =
+    process.env.REACT_APP_LOCALHOST + `/AddOnCategory/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchAddOnsCategoryFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getAddOnsCategoryByIdAction = id => {
+  //var url = process.env.REACT_APP_LOCALHOST + "/Zone/Get"
+  var url = process.env.REACT_APP_LOCALHOST + `/AddOnCategory/GetById?id=${id}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_ADD_ON_CATEGORY_BY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_ADD_ON_CATEGORY_BY_ID,
+          status: "Failed",
+        })
+      })
+  }
 }

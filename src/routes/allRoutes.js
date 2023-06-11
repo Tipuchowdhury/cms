@@ -163,6 +163,7 @@ import Wallet from "pages/Wallet/Wallet"
 import RiderWalletDetail from "pages/Wallet/RiderWalletDetail"
 import EditUser from "pages/ManageUsers/EditUser"
 import CustomerEdit from "pages/Customer/CustomerEdit"
+import CategoryEdit from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryEdit"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -225,6 +226,7 @@ const userRoutes = [
 
   { path: "/addons-category", component: <AddOnsCategory /> },
   { path: "/category-addons", component: <CategoryAdd /> },
+  { path: "/category-addons-edit/:id", component: <CategoryEdit /> },
 
   { path: "/time-slot", component: <MenuTimeSlot /> },
   { path: "/add-time-slot", component: <AddTimeSlot /> },
