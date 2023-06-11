@@ -162,6 +162,7 @@ import AddQuest from "pages/Quest/AddQuest"
 import Wallet from "pages/Wallet/Wallet"
 import RiderWalletDetail from "pages/Wallet/RiderWalletDetail"
 import EditUser from "pages/ManageUsers/EditUser"
+import CustomerEdit from "pages/Customer/CustomerEdit"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -194,6 +195,7 @@ const userRoutes = [
   { path: "/edit-user", component: <EditUser /> },
 
   { path: "/customers", component: <Customer /> },
+  { path: "/customer-edit", component: <CustomerEdit /> },
 
   { path: "/vehicle-types", component: <VehicleTypes /> },
 

@@ -31,15 +31,21 @@ import {
   customerStatusEditActionFresh,
   customerDeleteAction,
   customerDeleteFresh,
+  getServerSidePaginationCustomerAction,
+  serverSidePaginationCustomerFresh,
+  getServerSidePaginationCustomerSearchAction,
+  getServerSidePaginationSearchCustomerFresh,
 } from "store/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import Select from "react-select"
+import DataTable from "react-data-table-component"
+import CustomLoader from "components/CustomLoader/CustomLoader"
 
 function Customer(props) {
   document.title = "Customer | Foodi"
-
+  const navigate = useNavigate()
   const [modal, setModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
   const [modalDel, setModalDel] = useState(false)
@@ -83,26 +89,29 @@ function Customer(props) {
     is_active: true,
   })
 
-  const handleEdit = row => {
-    setEditInfo(prevState => ({
-      _id: row._id,
-      firstName: row.firstName,
-      lastName: row.lastName,
-      email: row.email,
-      mobile: row.mobile,
-      image: row.image,
-      is_active: row.is_active,
-    }))
-    setEditImages({ ...editImages, image: row.image })
+  const handleEdit = (row, cell) => {
+    console.log(cell)
+    navigate("/customer-edit", { state: cell })
 
-    const new_array = [
-      {
-        sub_id: row.subscription_type_id,
-      },
-    ]
-    editSubscriptionType(new_array)
+    // setEditInfo(prevState => ({
+    //     _id: row._id,
+    //     firstName: row.firstName,
+    //     lastName: row.lastName,
+    //     email: row.email,
+    //     mobile: row.mobile,
+    //     image: row.image,
+    //     is_active: row.is_active,
+    // }))
+    // setEditImages({ ...editImages, image: row.image })
 
-    toggleEditModal()
+    // const new_array = [
+    //     {
+    //         sub_id: row.subscription_type_id,
+    //     },
+    // ]
+    // editSubscriptionType(new_array)
+
+    // toggleEditModal()
   }
 
   const editSubscriptionType = subscription_type => {
@@ -228,18 +237,19 @@ function Customer(props) {
   }
 
   const handleStatusUpdate = () => {
-    // console.log(editInfo);
+    console.log(editInfo)
     props.customerStatusEditAction({
-      ...editInfo,
+      _id: editInfo._id,
       is_active: !editInfo.is_active,
     })
   }
 
-  const handleDeleteModal = row => {
-    setDeleteItem(row._id)
+  const handleDeleteModal = cell => {
+    setDeleteItem(cell._id)
     toggleDel()
   }
   const handleDelete = () => {
+    console.log(deleteItem)
     props.customerDeleteAction(deleteItem)
   }
 
@@ -248,76 +258,97 @@ function Customer(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEdit(row)}
+        onClick={() => handleEdit(row, cell)}
       >
         View
       </Button>{" "}
       {/* <Button
-        color="danger"
-        className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
-      >
-        Delete
-      </Button>{" "} */}
+                color="danger"
+                className="btn btn-danger waves-effect waves-light"
+                onClick={() => handleDeleteModal(cell)}
+            >
+                Delete
+            </Button>{" "} */}
     </div>
   )
 
   const statusRef = (cell, row) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
 
+  const textRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.name}</span>
+  )
+  const phoneRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.mobile}</span>
+  )
   const activeData = [
     {
-      dataField: "firstName",
-      text: "First Name",
-      sort: true,
+      //dataField: "firstName",
+      selector: row => row.firstName,
+      name: "Name",
+      sortable: true,
+      cell: textRef,
     },
+
     {
-      dataField: "lastName",
-      text: "Last Name",
-      sort: true,
-    },
-    {
-      dataField: "email",
-      text: "Email",
-      sort: true,
-    },
-    {
-      dataField: "mobile",
-      text: "Mobile",
-      sort: true,
+      selector: row => row.mobile,
+      name: "Mobile",
+      sortable: true,
+      cell: phoneRef,
     },
     {
       dataField: "",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      selector: row => "",
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
 
     {
       //dataField: "hello",
       text: "Action",
       sort: true,
-      formatter: actionRef,
+      cell: actionRef,
     },
   ]
-  const defaultSorted = [
-    {
-      dataField: "firstName",
-      order: "desc",
-    },
-  ]
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationCustomerSearchAction(e.target.value)
+    } else {
+      props.getServerSidePaginationSearchCustomerFresh()
+    }
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
 
   useEffect(() => {
     if (props.get_all_subscription_type_loading == false) {
       props.getAllSubscriptionTypeAction()
     }
+
+    if (props.get_server_side_pagination_customer_loading == false) {
+      props.getServerSidePaginationCustomerAction(page, countPerPage)
+      props.serverSidePaginationCustomerFresh()
+    }
+
+    props.getServerSidePaginationCustomerAction(page, countPerPage)
 
     if (props.get_all_customer_loading == false) {
       props.getAllCustomerAction()
@@ -383,6 +414,9 @@ function Customer(props) {
     props.customer_edit_loading,
     props.customer_delete_loading,
     props.edit_cutomer_status_loading,
+    props.get_server_side_pagination_customer_loading,
+    page,
+    countPerPage,
   ])
 
   return (
@@ -420,16 +454,77 @@ function Customer(props) {
                     </Button> */}
                   </div>
 
-                  {props.get_all_customer_data ? (
-                    props.get_all_customer_data.length > 0 ? (
-                      <DatatableTablesWorking
-                        products={props.get_all_customer_data}
-                        columnData={activeData}
-                        defaultSorted={defaultSorted}
-                        key={props.get_all_customer_data?._id}
-                      />
-                    ) : null
-                  ) : null}
+                  <div className="text-end">
+                    <input
+                      type="text"
+                      placeholder="Search Customer"
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid gray",
+                      }}
+                      onChange={e => handleFilter(e)}
+                    />
+                  </div>
+                  {/* <DataTable
+                    columns={activeData}
+                    data={
+                      props.get_server_side_pagination_customer_search_data !=
+                      null
+                        ? props.get_server_side_pagination_customer_search_data
+                            ?.data
+                        : props?.get_server_side_pagination_customer_data?.data
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_customer_search_data !=
+                      null
+                        ? props.get_server_side_pagination_customer_search_data
+                            ?.count
+                        : props.get_server_side_pagination_customer_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={page => setPage(page)}
+                  /> */}
+
+                  <DataTable
+                    //title="Employees"
+                    columns={activeData}
+                    data={
+                      props.get_server_side_pagination_customer_search_data !=
+                      null
+                        ? props.get_server_side_pagination_customer_search_data
+                            ?.data
+                        : props?.get_server_side_pagination_customer_data?.data
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_customer_search_data !=
+                      null
+                        ? props.get_server_side_pagination_customer_search_data
+                            ?.count
+                        : props.get_server_side_pagination_customer_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    // paginationComponentOptions={{
+                    //     noRowsPerPage: true,
+                    //     //noRowsPerPage: false,
+
+                    // }}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    progressPending={
+                      !props.get_server_side_pagination_customer_loading
+                    }
+                    progressComponent={<CustomLoader />}
+                    onChangePage={page => setPage(page)}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -513,6 +608,7 @@ function Customer(props) {
                   type="file"
                   className="form-control"
                   id="image"
+                  required
                   name="image"
                   onChange={handleAddFile}
                 />
@@ -766,6 +862,11 @@ const mapStateToProps = state => {
     edit_cutomer_status_loading,
 
     customer_delete_loading,
+
+    get_server_side_pagination_customer_data,
+    get_server_side_pagination_customer_loading,
+    get_server_side_pagination_customer_search_data,
+    get_server_side_pagination_customer_search_loading,
   } = state.Customer
 
   return {
@@ -786,6 +887,11 @@ const mapStateToProps = state => {
     edit_cutomer_status_loading,
 
     customer_delete_loading,
+
+    get_server_side_pagination_customer_data,
+    get_server_side_pagination_customer_loading,
+    get_server_side_pagination_customer_search_data,
+    get_server_side_pagination_customer_search_loading,
   }
 }
 
@@ -802,5 +908,9 @@ export default withRouter(
     customerStatusEditActionFresh,
     customerDeleteAction,
     customerDeleteFresh,
+    getServerSidePaginationCustomerAction,
+    serverSidePaginationCustomerFresh,
+    getServerSidePaginationCustomerSearchAction,
+    getServerSidePaginationSearchCustomerFresh,
   })(Customer)
 )
