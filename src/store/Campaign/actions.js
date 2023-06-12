@@ -9,6 +9,11 @@ import {
   CAMPAIGN_DELETE_FRESH,
   CAMPAIGN_STATUS_EDIT,
   CAMPAIGN_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_CAMPAIGN,
+  SERVER_SIDE_PAGINATION_CAMPAIGN_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_CAMPAIGN_FRESH,
+  GET_CAMPAIGN_BY_ID,
+  GET_CAMPAIGN_BY_ID_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -180,10 +185,20 @@ export const campaignEditFresh = () => {
 }
 
 export const campaignStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Campaign/Put"
-  let dataObject = { ...data }
+  // var url = process.env.REACT_APP_LOCALHOST + "/Campaign/Put"
+  // let dataObject = { ...data }
 
-  const formData = convertToFormData(dataObject)
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Campaign/isActive?id=${data._id}&is_active=${data.is_active}`
+
+  //const formData = data
+  const formData = {
+    id: data._id,
+    is_active: !data.is_active,
+  }
+
+  //const formData = convertToFormData(dataObject)
   // console.log(formData);
   return dispatch => {
     const headers = {
@@ -253,6 +268,108 @@ export const campaignDeleteFresh = () => {
   return dispatch =>
     dispatch({
       type: CAMPAIGN_DELETE_FRESH,
+      status: false,
+    })
+}
+
+export const getServerSidePaginationCampaignAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Campaign/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CAMPAIGN,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CAMPAIGN,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationCampaignSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Campaign/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CAMPAIGN_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_CAMPAIGN_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchCampaignFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_CAMPAIGN_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getCampaignByIdAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + `/Campaign/GetById?id=${id}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_CAMPAIGN_BY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_CAMPAIGN_BY_ID,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getCampaignByIdActionFresh = () => {
+  console.log("=========hererererer=======")
+  return dispatch =>
+    dispatch({
+      type: GET_CAMPAIGN_BY_ID_FRESH,
       status: false,
     })
 }

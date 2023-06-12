@@ -125,6 +125,7 @@ import EditZone from "pages/Zone/AddZone/EditZone2"
 import Menu from "pages/Restaurant/Menu/Menu"
 import Campaign from "pages/Campaign/Campaign"
 import AddCampaign from "pages/Campaign/AddCampaign"
+import EditCampaign from "pages/Campaign/EditCampaign"
 import AddOnsCategory from "pages/Restaurant/AddOnsCategory/AddOnsCategory"
 import CategoryAdd from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryAdd"
 import Slider from "pages/Slider/Slider"
@@ -217,8 +218,9 @@ const userRoutes = [
 
   { path: "/category", component: <Category /> },
 
-  { path: "/campaign", component: <Campaign /> },
-  { path: "/add-campaign", component: <AddCampaign /> },
+  { path: "/all-campaign", component: <Campaign /> },
+  { path: "/campaign", component: <AddCampaign /> },
+  { path: "/edit-campaign", component: <EditCampaign /> },
 
   { path: "/menu", component: <Menu /> },
   { path: "/add-menu", component: <AddMenu /> },
