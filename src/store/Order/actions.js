@@ -12,11 +12,13 @@ import {
   GET_AVAILABLE_RIDER,
   ASSIGN_RIDER,
   ASSIGN_RIDER_FRESH,
+  SERVER_SIDE_PAGINATION_ORDER,
+  SERVER_SIDE_PAGINATION_ORDER_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
 import { v4 as uuidv4 } from "uuid"
-import { convertToFormData } from "helpers/functions"
+import { convertToFormData, convertToQueryParams } from "helpers/functions"
 
 // token
 var token = JSON.parse(localStorage.getItem("jwt"))
@@ -254,4 +256,47 @@ export const assignRiderFresh = () => {
       status: false,
     })
   }
+}
+
+export const getServerSidePaginationOrderAction = (index, limit, filters) => {
+  console.log("filters :", filters)
+  filters = convertToQueryParams(filters)
+  console.log("filters :", filters)
+
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Order/Search?page=${index}&limit=${limit}${filters ? "&" + filters : ""}`
+  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ORDER,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_ORDER,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationOrderFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_ORDER_FRESH,
+      status: false,
+      payload: null,
+    })
 }
