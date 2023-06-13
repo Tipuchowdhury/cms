@@ -9,6 +9,11 @@ import {
   NOTIFICATION_DELETE_FRESH,
   NOTIFICATION_STATUS_EDIT,
   NOTIFICATION_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_NOTIFICATION,
+  SERVER_SIDE_PAGINATION_NOTIFICATION_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_NOTIFICATION_FRESH,
+  GET_NOTIFICATION_BY_ID,
+  GET_NOTIFICATION_BY_ID_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -174,7 +179,8 @@ export const notificationEditFresh = () => {
 }
 
 export const notificationStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Notification/Put"
+  // var url = process.env.REACT_APP_LOCALHOST + "/Notification/Put"
+  var url = `${process.env.REACT_APP_LOCALHOST}/Notification/isActive?id=${data._id}&is_active=${data.is_active}`
   const formData = data
   console.log(formData)
   return dispatch => {
@@ -245,6 +251,110 @@ export const notificationDeleteFresh = () => {
   return dispatch =>
     dispatch({
       type: NOTIFICATION_DELETE_FRESH,
+      status: false,
+    })
+}
+
+export const getServerSidePaginationNotificationAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Notification/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_NOTIFICATION,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_NOTIFICATION,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationNotificationSearchAction = name => {
+  console.log(name)
+  var url =
+    process.env.REACT_APP_LOCALHOST + `/Notification/Search?title=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_NOTIFICATION_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_NOTIFICATION_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchNotificationFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_NOTIFICATION_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getNotificationByIdAction = id => {
+  //var url = process.env.REACT_APP_LOCALHOST + "/Zone/Get"
+  var url = process.env.REACT_APP_LOCALHOST + `/Notification/GetById?id=${id}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_NOTIFICATION_BY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_NOTIFICATION_BY_ID,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getNotificationByIdActionFresh = () => {
+  console.log("=========hererererer=======")
+  return dispatch =>
+    dispatch({
+      type: GET_NOTIFICATION_BY_ID_FRESH,
       status: false,
     })
 }

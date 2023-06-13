@@ -6,10 +6,14 @@ import {
   NOTIFICATION_EDIT,
   NOTIFICATION_EDIT_FRESH,
   GET_NOTIFICATION_BY_ID,
+  GET_NOTIFICATION_BY_ID_FRESH,
   NOTIFICATION_DELETE,
   NOTIFICATION_DELETE_FRESH,
   NOTIFICATION_STATUS_EDIT,
   NOTIFICATION_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_NOTIFICATION,
+  SERVER_SIDE_PAGINATION_NOTIFICATION_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_NOTIFICATION_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -31,6 +35,18 @@ const initialState = {
   notification_status_edit_loading: false,
 
   notification_delete_loading: false,
+
+  // server side pagination notification
+  get_server_side_pagination_notification_data: null,
+  get_server_side_pagination_notification_error: null,
+  get_server_side_pagination_notification_loading: false,
+
+  get_server_side_pagination_notification_search_data: null,
+  get_server_side_pagination_notification_search_loading: false,
+
+  get_notification_by_id_data: null,
+  get_notification_by_id_error: null,
+  get_notification_by_id_loading: false,
 }
 
 const notification = (state = initialState, action) => {
@@ -113,6 +129,48 @@ const notification = (state = initialState, action) => {
         notification_delete_loading: action.status,
         get_all_notification_loading: false,
       }
+      break
+
+    case SERVER_SIDE_PAGINATION_NOTIFICATION:
+      state = {
+        ...state,
+        get_server_side_pagination_notification_data: action.payload,
+        get_server_side_pagination_notification_error: null,
+        get_server_side_pagination_notification_loading: action.status,
+      }
+      break
+    case SERVER_SIDE_PAGINATION_NOTIFICATION_SEARCH:
+      state = {
+        ...state,
+        get_server_side_pagination_notification_search_data: action.payload,
+        get_server_side_pagination_notification_search_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_SEARCH_NOTIFICATION_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_notification_search_data: action.payload,
+        get_server_side_pagination_notification_search_loading: action.status,
+      }
+      break
+
+    case GET_NOTIFICATION_BY_ID:
+      state = {
+        ...state,
+        get_notification_by_id_data: action.payload,
+        get_notification_by_id_error: null,
+        get_notification_by_id_loading: action.status,
+      }
+      break
+
+    case GET_NOTIFICATION_BY_ID_FRESH:
+      state = {
+        ...state,
+        get_notification_by_id_data: null,
+        get_notification_by_id_loading: action.status,
+      }
+      break
   }
   return state
 }

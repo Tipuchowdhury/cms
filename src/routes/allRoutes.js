@@ -144,6 +144,7 @@ import AddVoucherSetting from "pages/CRM/VoucherSetting/AddVoucherSetting"
 import Popup from "pages/Popup/Popup"
 import Notification from "pages/Notification/Notification"
 import AddNotification from "pages/Notification/AddNotification"
+import EditNotification from "pages/Notification/EditNotification"
 import Review from "pages/Review/Review"
 import Customer from "pages/Customer/Customer"
 import SystemOnOffReason from "pages/Setting/SystemOnOffReason/SystemOnOffReason"
@@ -278,6 +279,7 @@ const userRoutes = [
   // Notification
   { path: "/notification", component: <Notification /> },
   { path: "/add-notification", component: <AddNotification /> },
+  { path: "/edit-notification", component: <EditNotification /> },
 
   // Quests
   { path: "/quests", component: <Quest /> },

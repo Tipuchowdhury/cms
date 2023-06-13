@@ -32,8 +32,13 @@ import {
   notificationEditFresh,
   notificationStatusEditAction,
   notificationStatusEditFresh,
+  getServerSidePaginationNotificationAction,
+  getServerSidePaginationNotificationSearchAction,
+  getServerSidePaginationSearchNotificationFresh,
 } from "store/Notification/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
+import DataTable from "react-data-table-component"
+import CustomLoader from "components/CustomLoader/CustomLoader"
 
 function Notification(props) {
   const [name, setName] = useState("")
@@ -68,7 +73,7 @@ function Notification(props) {
   }
 
   const handleEdit = row => {
-    navigate("/add-notification", { state: row })
+    navigate("/edit-notification", { state: row })
   }
   const handleDeleteModal = row => {
     setDeleteItem(row._id)
@@ -93,14 +98,14 @@ function Notification(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEdit(row)}
+        onClick={() => handleEdit(cell)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        onClick={() => handleDeleteModal(cell)}
       >
         Delete
       </Button>{" "}
@@ -109,11 +114,11 @@ function Notification(props) {
 
   const statusRef = (cell, row) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
 
@@ -124,29 +129,42 @@ function Notification(props) {
 
   const activeData = [
     {
-      dataField: "title",
-      text: "Title",
-      sort: true,
+      selector: row => row.title,
+      name: "Title",
+      sortable: true,
     },
     {
-      dataField: "is_active",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      selector: row => row.is_active,
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
     {
-      //dataField: "he",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      selector: row => "",
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
-  const defaultSorted = [
-    {
-      dataField: "name",
-      order: "desc",
-    },
-  ]
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationNotificationSearchAction(e.target.value)
+    } else {
+      props.getServerSidePaginationSearchNotificationFresh()
+    }
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
 
   useEffect(() => {
     // console.log("=======hello", props.notification_name_edit_loading)
@@ -154,6 +172,8 @@ function Notification(props) {
       //  console.log("I am in get all notification loading ")
       props.getAllNotificationAction()
     }
+
+    props.getServerSidePaginationNotificationAction(page, countPerPage)
 
     if (props.add_notification_loading === "Success") {
       toast.success("Notification Added Successfully")
@@ -181,6 +201,8 @@ function Notification(props) {
     props.notification_name_edit_loading,
     props.notification_delete_loading,
     props.notification_status_edit_loading,
+    page,
+    countPerPage,
   ])
 
   return (
@@ -226,7 +248,7 @@ function Notification(props) {
                     </Link>
                   </div>
 
-                  {props.get_all_notification_data ? (
+                  {/* {props.get_all_notification_data ? (
                     props.get_all_notification_data.length > 0 ? (
                       <DatatableTablesWorking
                         products={props.get_all_notification_data}
@@ -234,7 +256,51 @@ function Notification(props) {
                         defaultSorted={defaultSorted}
                       />
                     ) : null
-                  ) : null}
+                  ) : null} */}
+                  <div className="text-end">
+                    <input
+                      type="text"
+                      placeholder="Search Notification"
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid gray",
+                      }}
+                      onChange={e => handleFilter(e)}
+                    />
+                  </div>
+                  <DataTable
+                    columns={activeData}
+                    data={
+                      props.get_server_side_pagination_notification_search_data !=
+                      null
+                        ? props
+                            .get_server_side_pagination_notification_search_data
+                            ?.data
+                        : props?.get_server_side_pagination_notification_data
+                            ?.data
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_notification_search_data !=
+                      null
+                        ? props
+                            .get_server_side_pagination_notification_search_data
+                            ?.count
+                        : props.get_server_side_pagination_notification_data
+                            ?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    progressPending={
+                      !props.get_server_side_pagination_notification_loading
+                    }
+                    progressComponent={<CustomLoader />}
+                    onChangePage={page => setPage(page)}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -347,6 +413,10 @@ const mapStateToProps = state => {
     notification_edit_loading,
     notification_status_edit_data,
     notification_status_edit_loading,
+
+    get_server_side_pagination_notification_data,
+    get_server_side_pagination_notification_loading,
+    get_server_side_pagination_notification_search_data,
   } = state.Notification
 
   return {
@@ -361,6 +431,10 @@ const mapStateToProps = state => {
     notification_delete_loading,
     notification_status_edit_data,
     notification_status_edit_loading,
+
+    get_server_side_pagination_notification_data,
+    get_server_side_pagination_notification_loading,
+    get_server_side_pagination_notification_search_data,
   }
 }
 
@@ -375,5 +449,8 @@ export default withRouter(
     notificationStatusEditAction,
     notificationEditFresh,
     notificationStatusEditFresh,
+    getServerSidePaginationNotificationAction,
+    getServerSidePaginationNotificationSearchAction,
+    getServerSidePaginationSearchNotificationFresh,
   })(Notification)
 )
