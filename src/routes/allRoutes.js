@@ -142,6 +142,7 @@ import BranchAttribute from "pages/BranchAttribute/BranchAttribute"
 import VoucherSetting from "pages/CRM/VoucherSetting/VoucherSetting"
 import AddVoucherSetting from "pages/CRM/VoucherSetting/AddVoucherSetting"
 import Popup from "pages/Popup/Popup"
+import EditPopup from "pages/Popup/EditPopup"
 import Notification from "pages/Notification/Notification"
 import AddNotification from "pages/Notification/AddNotification"
 import EditNotification from "pages/Notification/EditNotification"
@@ -249,6 +250,7 @@ const userRoutes = [
 
   // Popup
   { path: "/popup-banner", component: <Popup /> },
+  { path: "/edit-popup-banner", component: <EditPopup /> },
 
   // Review
   { path: "/review", component: <Review /> },
