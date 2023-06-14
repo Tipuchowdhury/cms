@@ -424,3 +424,12 @@ label {
 .css-4ljt47-MenuList {
   background-color: $input-bg !important;
 }
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: spin 2s linear infinite;
+}

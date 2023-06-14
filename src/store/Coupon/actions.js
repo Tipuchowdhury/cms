@@ -9,6 +9,12 @@ import {
   COUPON_DELETE_FRESH,
   COUPON_STATUS_EDIT,
   COUPON_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_COUPON,
+  SERVER_SIDE_PAGINATION_COUPON_FRESH,
+  SERVER_SIDE_PAGINATION_COUPON_SEARCH,
+  SERVER_SIDE_PAGINATION_COUPON_SEARCH_FRESH,
+  GET_COUPON_BY_ID,
+  GET_COUPON_BY_ID_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -439,9 +445,15 @@ export const couponEditFresh = () => {
 }
 
 export const couponStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Coupon/Put"
-  const dataObject = data
-  const formData = convertToFormData(dataObject)
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Coupon/isActive?id=${data._id}&is_active=${data.is_active}`
+
+  //const formData = data
+  const formData = {
+    _id: data._id,
+    is_active: data.is_active,
+  }
   // console.log(formData)
   return dispatch => {
     const headers = {
@@ -511,6 +523,114 @@ export const couponDeleteFresh = () => {
   return dispatch =>
     dispatch({
       type: COUPON_DELETE_FRESH,
+      status: false,
+    })
+}
+
+export const getServerSidePaginationCouponAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Coupon/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_COUPON,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_COUPON,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const serverSidePaginationCouponFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_COUPON_FRESH,
+      status: false,
+    })
+}
+
+export const getServerSidePaginationSearchCouponAction = name => {
+  var url = process.env.REACT_APP_LOCALHOST + `/Coupon/Search?name=${name}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_COUPON_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_COUPON_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchCouponFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_COUPON_SEARCH_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getCouponByIdAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + `/Coupon/GetById?id=${id}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_COUPON_BY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_COUPON_BY_ID,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getCouponByIdActionFresh = () => {
+  console.log("=========hererererer=======")
+  return dispatch =>
+    dispatch({
+      type: GET_COUPON_BY_ID_FRESH,
       status: false,
     })
 }

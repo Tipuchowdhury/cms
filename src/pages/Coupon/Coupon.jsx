@@ -32,8 +32,14 @@ import {
   couponEditFresh,
   couponStatusEditAction,
   couponStatusEditFresh,
+  getServerSidePaginationCouponAction,
+  serverSidePaginationCouponFresh,
+  getServerSidePaginationSearchCouponAction,
+  getServerSidePaginationSearchCouponFresh,
 } from "store/Coupon/actions"
+import DataTable from "react-data-table-component"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
+import CustomLoader from "components/CustomLoader/CustomLoader"
 
 function Coupon(props) {
   const [name, setName] = useState("")
@@ -68,7 +74,8 @@ function Coupon(props) {
   }
 
   const handleEdit = row => {
-    navigate("/add-coupon", { state: row })
+    console.log(row)
+    navigate("/edit-coupon", { state: row })
   }
   const handleDeleteModal = row => {
     setDeleteItem(row._id)
@@ -93,14 +100,14 @@ function Coupon(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEdit(row)}
+        onClick={() => handleEdit(cell)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        onClick={() => handleDeleteModal(cell)}
       >
         Delete
       </Button>{" "}
@@ -109,11 +116,11 @@ function Coupon(props) {
 
   const statusRef = (cell, row) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
 
@@ -121,35 +128,61 @@ function Coupon(props) {
   // console.log(props.get_all_coupon_data)
   // console.log(props.coupon_name_edit_loading)
   // console.log(props.get_all_coupon_loading)
-
+  const textRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.name}</span>
+  )
   const activeData = [
     {
-      dataField: "name",
-      text: "Name",
-      sort: true,
+      selector: row => row.name,
+      name: "Name",
+      sortable: true,
+      cell: textRef,
+    },
+
+    {
+      selector: row => row.discount_in_amount,
+      name: "Amount",
+      sortable: true,
     },
     {
-      dataField: "discount_in_amount",
-      text: "Amount",
-      sort: true,
+      selector: row => row.discount_in_percent,
+      name: "Amount (%)",
+      sortable: true,
     },
     {
-      dataField: "discount_in_percent",
-      text: "Amount (%)",
-      sort: true,
-    },
-    {
-      dataField: "is_active",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      dataField: "",
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
     {
       //dataField: "he",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
+    // {
+    //   dataField: "discount_in_amount",
+    //   text: "Amount",
+    //   sort: true,
+    // },
+    // {
+    //   dataField: "discount_in_percent",
+    //   text: "Amount (%)",
+    //   sort: true,
+    // },
+    // {
+    //   dataField: "is_active",
+    //   text: "Status",
+    //   sort: true,
+    //   formatter: statusRef,
+    // },
+    // {
+    //   //dataField: "he",
+    //   text: "Action",
+    //   sort: true,
+    //   formatter: actionRef,
+    // },
   ]
   const defaultSorted = [
     {
@@ -158,11 +191,37 @@ function Coupon(props) {
     },
   ]
 
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationSearchCouponAction(e.target.value)
+    } else {
+      props.getServerSidePaginationSearchCouponFresh()
+    }
+  }
+
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
+
   useEffect(() => {
     // console.log("=======hello", props.coupon_name_edit_loading)
     if (props.get_all_coupon_loading == false) {
       //  console.log("I am in get all coupon loading ")
       props.getAllCouponAction()
+    }
+
+    if (props.get_server_side_pagination_coupon_loading == false) {
+      props.getServerSidePaginationCouponAction(page, countPerPage)
+      props.serverSidePaginationCouponFresh()
     }
 
     if (props.add_coupon_loading === "Success") {
@@ -186,11 +245,16 @@ function Coupon(props) {
       toast.success("Coupon Deleted")
       props.couponDeleteFresh()
     }
+
+    props.getServerSidePaginationCouponAction(page, countPerPage)
   }, [
     props.add_coupon_loading,
     props.coupon_name_edit_loading,
     props.coupon_delete_loading,
     props.coupon_status_edit_loading,
+    props.get_server_side_pagination_coupon_loading,
+    page,
+    countPerPage,
   ])
 
   return (
@@ -236,15 +300,53 @@ function Coupon(props) {
                     </Link>
                   </div>
 
-                  {props.get_all_coupon_data ? (
-                    props.get_all_coupon_data.length > 0 ? (
-                      <DatatableTablesWorking
-                        products={props.get_all_coupon_data}
-                        columnData={activeData}
-                        defaultSorted={defaultSorted}
-                      />
-                    ) : null
-                  ) : null}
+                  <div className="text-end">
+                    <input
+                      type="text"
+                      placeholder="Search Coupon"
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid gray",
+                      }}
+                      onChange={e => handleFilter(e)}
+                    />
+                  </div>
+
+                  <DataTable
+                    //title="Employees"
+                    columns={activeData}
+                    data={
+                      props.get_server_side_pagination_coupon_search_data !=
+                      null
+                        ? props.get_server_side_pagination_coupon_search_data
+                            ?.data
+                        : props?.get_server_side_pagination_coupon_data?.data
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_coupon_search_data !=
+                      null
+                        ? props.get_server_side_pagination_coupon_search_data
+                            ?.count
+                        : props.get_server_side_pagination_coupon_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    // paginationComponentOptions={{
+                    //     noRowsPerPage: true,
+                    //     //noRowsPerPage: false,
+
+                    // }}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    progressPending={
+                      !props.get_server_side_pagination_coupon_loading
+                    }
+                    progressComponent={<CustomLoader />}
+                    onChangePage={page => setPage(page)}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -357,6 +459,12 @@ const mapStateToProps = state => {
     coupon_edit_loading,
     coupon_status_edit_data,
     coupon_status_edit_loading,
+
+    get_server_side_pagination_coupon_data,
+    get_server_side_pagination_coupon_loading,
+
+    get_server_side_pagination_coupon_search_data,
+    get_server_side_pagination_coupon_search_loading,
   } = state.Coupon
 
   return {
@@ -371,6 +479,12 @@ const mapStateToProps = state => {
     coupon_delete_loading,
     coupon_status_edit_data,
     coupon_status_edit_loading,
+
+    get_server_side_pagination_coupon_data,
+    get_server_side_pagination_coupon_loading,
+
+    get_server_side_pagination_coupon_search_data,
+    get_server_side_pagination_coupon_search_loading,
   }
 }
 
@@ -385,5 +499,9 @@ export default withRouter(
     couponStatusEditAction,
     couponEditFresh,
     couponStatusEditFresh,
+    getServerSidePaginationCouponAction,
+    serverSidePaginationCouponFresh,
+    getServerSidePaginationSearchCouponAction,
+    getServerSidePaginationSearchCouponFresh,
   })(Coupon)
 )

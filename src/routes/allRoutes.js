@@ -125,24 +125,29 @@ import EditZone from "pages/Zone/AddZone/EditZone2"
 import Menu from "pages/Restaurant/Menu/Menu"
 import Campaign from "pages/Campaign/Campaign"
 import AddCampaign from "pages/Campaign/AddCampaign"
+import EditCampaign from "pages/Campaign/EditCampaign"
 import AddOnsCategory from "pages/Restaurant/AddOnsCategory/AddOnsCategory"
 import CategoryAdd from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryAdd"
 import Slider from "pages/Slider/Slider"
 import SliderAdd from "pages/Slider/addSlider/SliderAdd"
+import EditSlider from "pages/Slider/addSlider/EditSlider"
 import AddMenu from "pages/Restaurant/Menu/AddMenu/AddMenu"
 import EditMenu from "pages/Restaurant/Menu/AddMenu/EditMenu"
 import Cuisine from "pages/Restaurant/Cuisine/Cuisine"
 import RewardPoint from "pages/CRM/RewardPoints/RewardPoint"
 import Coupon from "pages/Coupon/Coupon"
 import AddCoupon from "pages/Coupon/AddCoupon"
+import EditCoupon from "pages/Coupon/EditCoupon"
 import MenuTimeSlot from "pages/Restaurant/MenuItemTimeSlot/MenuTimeSlot"
 import AddTimeSlot from "pages/Restaurant/MenuItemTimeSlot/AddTimeSlot/AddTimeSlot"
 import BranchAttribute from "pages/BranchAttribute/BranchAttribute"
 import VoucherSetting from "pages/CRM/VoucherSetting/VoucherSetting"
 import AddVoucherSetting from "pages/CRM/VoucherSetting/AddVoucherSetting"
 import Popup from "pages/Popup/Popup"
+import EditPopup from "pages/Popup/EditPopup"
 import Notification from "pages/Notification/Notification"
 import AddNotification from "pages/Notification/AddNotification"
+import EditNotification from "pages/Notification/EditNotification"
 import Review from "pages/Review/Review"
 import Customer from "pages/Customer/Customer"
 import SystemOnOffReason from "pages/Setting/SystemOnOffReason/SystemOnOffReason"
@@ -161,6 +166,10 @@ import Quest from "pages/Quest/Quest"
 import AddQuest from "pages/Quest/AddQuest"
 import Wallet from "pages/Wallet/Wallet"
 import RiderWalletDetail from "pages/Wallet/RiderWalletDetail"
+import Invoice from "pages/Order/Invoice"
+import EditUser from "pages/ManageUsers/EditUser"
+import CustomerEdit from "pages/Customer/CustomerEdit"
+import CategoryEdit from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryEdit"
 
 const userRoutes = [
   // { path: "/dashboard", component: <Dashboard /> },
@@ -190,8 +199,10 @@ const userRoutes = [
   // Users
   { path: "/register", component: <Register1 /> },
   { path: "/manage-users", component: <ManageUsers /> },
+  { path: "/edit-user", component: <EditUser /> },
 
   { path: "/customers", component: <Customer /> },
+  { path: "/customer-edit", component: <CustomerEdit /> },
 
   { path: "/vehicle-types", component: <VehicleTypes /> },
 
@@ -212,8 +223,9 @@ const userRoutes = [
 
   { path: "/category", component: <Category /> },
 
-  { path: "/campaign", component: <Campaign /> },
-  { path: "/add-campaign", component: <AddCampaign /> },
+  { path: "/all-campaign", component: <Campaign /> },
+  { path: "/campaign", component: <AddCampaign /> },
+  { path: "/edit-campaign", component: <EditCampaign /> },
 
   { path: "/menu", component: <Menu /> },
   { path: "/add-menu", component: <AddMenu /> },
@@ -221,6 +233,7 @@ const userRoutes = [
 
   { path: "/addons-category", component: <AddOnsCategory /> },
   { path: "/category-addons", component: <CategoryAdd /> },
+  { path: "/category-addons-edit/:id", component: <CategoryEdit /> },
 
   { path: "/time-slot", component: <MenuTimeSlot /> },
   { path: "/add-time-slot", component: <AddTimeSlot /> },
@@ -228,6 +241,7 @@ const userRoutes = [
   // Sliders or Promotions
   { path: "/slider", component: <Slider /> },
   { path: "/add-slider", component: <SliderAdd /> },
+  { path: "/edit-slider", component: <EditSlider /> },
 
   // CRM
   { path: "/reward-point-settings", component: <RewardPoint /> },
@@ -237,9 +251,11 @@ const userRoutes = [
   // Coupon
   { path: "/coupon", component: <Coupon /> },
   { path: "/add-coupon", component: <AddCoupon /> },
+  { path: "/edit-coupon", component: <EditCoupon /> },
 
   // Popup
   { path: "/popup-banner", component: <Popup /> },
+  { path: "/edit-popup-banner", component: <EditPopup /> },
 
   // Review
   { path: "/review", component: <Review /> },
@@ -255,6 +271,7 @@ const userRoutes = [
 
   // Orders
   { path: "/dispatch", component: <Order /> },
+  { path: "/invoice/:orderID", component: <Invoice /> },
 
   // Refund
   { path: "/refund", component: <Refund /> },
@@ -270,6 +287,7 @@ const userRoutes = [
   // Notification
   { path: "/notification", component: <Notification /> },
   { path: "/add-notification", component: <AddNotification /> },
+  { path: "/edit-notification", component: <EditNotification /> },
 
   // Quests
   { path: "/quests", component: <Quest /> },

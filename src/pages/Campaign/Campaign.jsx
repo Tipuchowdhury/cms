@@ -32,8 +32,13 @@ import {
   campaignEditFresh,
   campaignStatusEditAction,
   campaignStatusEditFresh,
+  getServerSidePaginationCampaignAction,
+  getServerSidePaginationCampaignSearchAction,
+  getServerSidePaginationSearchCampaignFresh,
 } from "store/Campaign/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
+import DataTable from "react-data-table-component"
+import CustomLoader from "components/CustomLoader/CustomLoader"
 
 function Campaign(props) {
   const [name, setName] = useState("")
@@ -67,11 +72,13 @@ function Campaign(props) {
     props.addCampaignAction(name, val)
   }
 
-  const handleEdit = row => {
-    navigate("/add-campaign", { state: row })
+  const handleEdit = cell => {
+    console.log(cell)
+    //navigate("/campaign/" + cell._id, { state: cell })
+    navigate("/edit-campaign", { state: cell })
   }
-  const handleDeleteModal = row => {
-    setDeleteItem(row._id)
+  const handleDeleteModal = cell => {
+    setDeleteItem(cell._id)
     toggleDel()
   }
   const handleStatusModal = row => {
@@ -88,57 +95,58 @@ function Campaign(props) {
       is_active: !editInfo.is_active,
     })
   }
-  const actionRef = (cell, row) => (
+  const actionRef = cell => (
     <div style={{ display: "flex", gap: 10 }}>
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEdit(row)}
+        onClick={() => handleEdit(cell)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        onClick={() => handleDeleteModal(cell)}
       >
         Delete
       </Button>{" "}
     </div>
   )
 
-  const statusRef = (cell, row) => (
+  const statusRef = cell => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
 
-  // console.log(props.add_campaign_loading)
-  // console.log(props.get_all_campaign_data)
-  // console.log(props.campaign_name_edit_loading)
-  // console.log(props.get_all_campaign_loading)
+  const textRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.name}</span>
+  )
 
   const activeData = [
     {
-      dataField: "name",
-      text: "Name",
-      sort: true,
+      selector: row => row.name,
+      name: "Name",
+      sortable: true,
+      cell: textRef,
     },
     {
-      dataField: "is_active",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      selector: row => row.is_active,
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
     {
       //dataField: "he",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      selector: row => "",
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
   const defaultSorted = [
@@ -148,12 +156,34 @@ function Campaign(props) {
     },
   ]
 
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationCampaignSearchAction(e.target.value)
+    } else {
+      props.getServerSidePaginationSearchCampaignFresh()
+    }
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
+
   useEffect(() => {
     // console.log("=======hello", props.campaign_name_edit_loading)
     if (props.get_all_campaign_loading == false) {
       //  console.log("I am in get all campaign loading ")
       props.getAllCampaignAction()
     }
+
+    props.getServerSidePaginationCampaignAction(page, countPerPage)
 
     if (props.add_campaign_loading === "Success") {
       toast.success("Campaign Added Successfully")
@@ -181,6 +211,8 @@ function Campaign(props) {
     props.campaign_name_edit_loading,
     props.campaign_delete_loading,
     props.campaign_status_edit_loading,
+    page,
+    countPerPage,
   ])
 
   return (
@@ -217,7 +249,7 @@ function Campaign(props) {
                     <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
                       Campaign{" "}
                     </CardTitle>
-                    <Link to="/add-campaign">
+                    <Link to="/campaign">
                       <Button
                         style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
                       >
@@ -226,7 +258,7 @@ function Campaign(props) {
                     </Link>
                   </div>
 
-                  {props.get_all_campaign_data ? (
+                  {/* {props.get_all_campaign_data ? (
                     props.get_all_campaign_data.length > 0 ? (
                       <DatatableTablesWorking
                         products={props.get_all_campaign_data}
@@ -234,7 +266,48 @@ function Campaign(props) {
                         defaultSorted={defaultSorted}
                       />
                     ) : null
-                  ) : null}
+                  ) : null} */}
+
+                  <div className="text-end">
+                    <input
+                      type="text"
+                      placeholder="Search Campaign"
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid gray",
+                      }}
+                      onChange={e => handleFilter(e)}
+                    />
+                  </div>
+                  <DataTable
+                    columns={activeData}
+                    data={
+                      props.get_server_side_pagination_campaign_search_data !=
+                      null
+                        ? props.get_server_side_pagination_campaign_search_data
+                            ?.data
+                        : props?.get_server_side_pagination_campaign_data?.data
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_campaign_search_data !=
+                      null
+                        ? props.get_server_side_pagination_campaign_search_data
+                            ?.count
+                        : props.get_server_side_pagination_campaign_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    progressPending={
+                      !props.get_server_side_pagination_campaign_loading
+                    }
+                    progressComponent={<CustomLoader />}
+                    onChangePage={page => setPage(page)}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -347,6 +420,11 @@ const mapStateToProps = state => {
     campaign_edit_loading,
     campaign_status_edit_data,
     campaign_status_edit_loading,
+
+    get_server_side_pagination_campaign_data,
+    get_server_side_pagination_campaign_search_data,
+
+    get_server_side_pagination_campaign_loading,
   } = state.Campaign
 
   return {
@@ -361,6 +439,11 @@ const mapStateToProps = state => {
     campaign_delete_loading,
     campaign_status_edit_data,
     campaign_status_edit_loading,
+
+    get_server_side_pagination_campaign_data,
+    get_server_side_pagination_campaign_search_data,
+
+    get_server_side_pagination_campaign_loading,
   }
 }
 
@@ -375,5 +458,8 @@ export default withRouter(
     campaignStatusEditAction,
     campaignEditFresh,
     campaignStatusEditFresh,
+    getServerSidePaginationCampaignAction,
+    getServerSidePaginationCampaignSearchAction,
+    getServerSidePaginationSearchCampaignFresh,
   })(Campaign)
 )

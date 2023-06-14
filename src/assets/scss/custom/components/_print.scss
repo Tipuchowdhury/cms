@@ -23,4 +23,14 @@
   .card {
     border: 0;
   }
+
+  .invoice-section {
+    background-color: #064d71 !important;
+    color: white;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .logo {
+    line-height: 70px;
+  }
 }

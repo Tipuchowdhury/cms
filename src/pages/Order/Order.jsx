@@ -21,8 +21,6 @@ import { Link, useNavigate } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
 ;` `
 import { connect } from "react-redux"
-import { v4 as uuidv4 } from "uuid"
-import Select from "react-select"
 import {
   getAllOrderAction,
   getAllOrderFresh,
@@ -35,10 +33,13 @@ import {
   getAvailableRider,
   orderAssignRider,
   assignRiderFresh,
+  getServerSidePaginationOrderAction,
+  getServerSidePaginationOrderFresh,
 } from "store/Order/actions"
-import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
-import { orderStatusNames, orderStatuses } from "common/data/order"
+import DataTable from "react-data-table-component"
+import { orderStatusNames, orderStatuses, orderTypes } from "common/data/order"
 import moment from "moment"
+import CustomLoader from "components/CustomLoader/CustomLoader"
 
 function Order(props) {
   const [riderModalInfo, setRiderModalInfo] = useState("")
@@ -54,6 +55,19 @@ function Order(props) {
   const [changeStatusModal, setChangeStatusModal] = useState(false)
   const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
   const [selectedRider, setSelectedRider] = useState("")
+
+  useEffect(() => {
+    if (window.screen.width <= 992) {
+      document.body.classList.add("sidebar-enable")
+    } else {
+      document.body.classList.add("vertical-collpsed")
+      document.body.classList.add("sidebar-enable")
+    }
+  }, [])
+
+  const toggleOrderInvoice = order_id => {
+    window, open(`/invoice/${order_id}`, "_blank")
+  }
 
   const handleSelectRider = e => {
     setSelectedRider(e.target.value)
@@ -97,140 +111,324 @@ function Order(props) {
     props.orderStatusEditAction(editInfo)
     toggleChangeStatusModal()
   }
-  const actionRef = (cell, row) => (
-    <div>
+  const actionRef = (cell, row) =>
+    // Filter Button
+    cell.isFilter ? (
       <Button
-        disabled={!(row.order_status == orderStatuses.placed)}
         color="primary"
-        className="btn btn-sm btn-dark waves-effect waves-light mb-1"
-        onClick={() => handleStatusModal(row._id, orderStatuses.accepted)}
+        className="btn btn-sm btn-primary waves-effect waves-light"
+        onClick={handleParamChange}
       >
-        <span className="fa fa-check"></span> Accept
-      </Button>{" "}
-      <br />
-      <Button
-        disabled={!(row.order_status == orderStatuses.placed)}
-        color="danger"
-        className="btn btn-sm waves-effect waves-light mb-1"
-        onClick={() => handleStatusModal(row._id, orderStatuses.cancel)}
-      >
-        <span className="fa fa-times"></span> Cancel
-      </Button>{" "}
-      <br></br>
-      <Button
-        className="btn btn-sm btn-warning waves-effect waves-light mb-1"
-        onClick={() => {
-          setSelectedRider(row.rider_id)
-          setRiderModalInfo({ zone_id: row.zone_id, order_id: row._id })
-          toggle()
-        }}
-      >
-        <span className="fas fa-biking"></span>
-        {row.rider_id ? " Assign Rider" : " Reassign Rider"}
-      </Button>{" "}
-      <br></br>
-      <Button
-        className="btn btn-sm btn-dark waves-effect waves-light"
-        onClick={() => {
-          setEditInfo({ _id: row._id, status: row.order_status })
-          toggleChangeStatusModal()
-        }}
-      >
-        <span className="fas fa-edit"></span>
-        Change Order Status
-      </Button>{" "}
-    </div>
-  )
+        <span className="fa fa-search"></span> Filter
+      </Button>
+    ) : (
+      // Filter Button end
+      <div>
+        {cell.order_status == orderStatuses.placed ? (
+          <>
+            <Button
+              disabled={!(cell.order_status == orderStatuses.placed)}
+              color="primary"
+              className="btn btn-sm btn-dark waves-effect waves-light mb-1"
+              style={{ marginRight: "2px" }}
+              onClick={() =>
+                handleStatusModal(cell._id, orderStatuses.accepted)
+              }
+            >
+              <span className="fa fa-check"></span> Accept
+            </Button>
+          </>
+        ) : (
+          ""
+        )}
+        {cell.order_status == orderStatuses.placed ? (
+          <>
+            <Button
+              disabled={!(cell.order_status == orderStatuses.placed)}
+              color="danger"
+              className="btn btn-sm waves-effect waves-light mb-1"
+              onClick={() => handleStatusModal(cell._id, orderStatuses.cancel)}
+            >
+              <span className="fa fa-times"></span> Cancel
+            </Button>
+          </>
+        ) : (
+          ""
+        )}
+        <Button
+          className="btn btn-sm btn-warning waves-effect waves-light mb-1"
+          onClick={() => {
+            setSelectedRider(cell.rider_id)
+            setRiderModalInfo({
+              zone_id: cell.zone_id,
+              order_id: cell._id,
+            })
+            toggle()
+          }}
+        >
+          <span className="fas fa-biking"></span>
+          {cell.rider_id ? " Assign Rider" : " Reassign Rider"}
+        </Button>
+        <br></br>
+        <Button
+          className="btn btn-sm btn-dark waves-effect waves-light mb-1"
+          onClick={() => {
+            setEditInfo({ _id: cell._id, status: cell.order_status })
+            toggleChangeStatusModal()
+          }}
+        >
+          <span className="fas fa-edit"></span> Change Order Status
+        </Button>
+        <br></br>
+        <Button
+          className="btn btn-sm btn-dark waves-effect waves-light mb-1"
+          onClick={() => {
+            toggleOrderInvoice(cell._id)
+          }}
+        >
+          <span className="fas fa-file-invoice"></span> Invoice
+        </Button>{" "}
+      </div>
+    )
 
   const statusRef = (cell, row) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
+  const textRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.name}</span>
+  )
 
+  const columnFilerInputName = {
+    _id: {
+      name: "id",
+      placeholder: "Order ID",
+    },
+    order_date: {
+      name: "order_date",
+      placeholder: "YYYY-MM-DD",
+    },
+    order_type: {
+      name: "order_type",
+      placeholder: "Order Type",
+    },
+    zone_name: {
+      name: "zone_name",
+      placeholder: "Zone Name",
+    },
+    branch_name: {
+      name: "branch_name",
+      placeholder: "Branch Name",
+    },
+    customer_name: {
+      name: "customer_name",
+      placeholder: "Customer Mobile",
+    },
+    rider_number: {
+      name: "rider_number",
+      placeholder: "Rider Mobile",
+    },
+    payment_method: {
+      name: "payment_method",
+      placeholder: "Payment Method",
+    },
+    order_total: {
+      name: "order_total",
+      placeholder: "Total Amount",
+    },
+    order_status: {
+      name: "order_status",
+    },
+  }
+
+  const columnFilterGeneral = (cell, row, field) => {
+    return cell.isFilter ? (
+      <input
+        className="form-control"
+        name={columnFilerInputName[field]?.name}
+        placeholder={columnFilerInputName[field]?.placeholder}
+        value={pageFilters[columnFilerInputName[field]?.name]}
+        onChange={handleFilter}
+      />
+    ) : (
+      <div>{cell[field]}</div>
+    )
+  }
+
+  const columnFilterOrderStatus = (cell, row) => {
+    return cell.isFilter ? (
+      <Input
+        type="select"
+        className="form-control input-sm"
+        name="order_status"
+        value={pageFilters?.order_status}
+        onChange={handleFilter}
+      >
+        <option value="">Choose...</option>
+        {Object.keys(orderStatusNames).map(key => (
+          <option value={key} key={key}>
+            {orderStatusNames[key]}
+          </option>
+        ))}
+      </Input>
+    ) : (
+      <div>
+        <span>{orderStatusNames[cell?.order_status]}</span>
+      </div>
+    )
+  }
+
+  const columnFilterOrderTypes = (cell, row) => {
+    return cell.isFilter ? (
+      <Input
+        type="select"
+        className="form-control input-sm"
+        name="order_type"
+        value={pageFilters?.order_type}
+        onChange={handleFilter}
+      >
+        <option value="">Choose...</option>
+        {Object.keys(orderTypes).map(key => (
+          <option value={key} key={key}>
+            {orderTypes[key]}
+          </option>
+        ))}
+      </Input>
+    ) : (
+      <div>
+        <span>{orderTypes[cell?.order_type]}</span>
+      </div>
+    )
+  }
   const activeData = [
     {
-      dataField: "_id",
-      text: "Order#",
-      sort: true,
+      name: "Order#",
+      sortable: true,
+      cell: (cell, row) => columnFilterGeneral(cell, row, "_id"),
     },
     {
-      text: "Order Time",
-      sort: true,
-      formatter: (cell, row) => (
-        <div>
-          <span>{moment(row.order_date).format("DD-MM-YYYY")}</span>
-          <br />
-          <span>{moment(row.order_date).format("hh:MM:SS A")}</span>
-        </div>
-      ),
+      name: "Order Time",
+      sortable: true,
+      cell: (cell, row) =>
+        cell.isFilter ? (
+          <input
+            type="date"
+            className="form-control"
+            name="order_date"
+            value={pageFilters?.order_date}
+            onChange={handleFilter}
+          />
+        ) : (
+          <div>
+            <span>{moment(cell?.order_date).format("MMMM D, YYYY")}</span>
+            <br />
+            <span>{moment(cell?.order_date).format("hh:MM:SS A")}</span>
+          </div>
+        ),
     },
     {
-      dataField: "order_type",
-      text: "Order Type",
-      sort: true,
+      selector: row => row.order_type,
+      name: "Order Type",
+      sortable: true,
+      cell: (cell, row) => columnFilterOrderTypes(cell, row),
     },
     {
-      dataField: "zone_name",
-      text: "Zone",
-      sort: true,
+      selector: row => row.zone_name,
+      name: "Zone",
+      sortable: true,
+      cell: (cell, row) => columnFilterGeneral(cell, row, "zone_name"),
     },
     {
-      dataField: "branch_name",
-      text: "Branch",
-      sort: true,
+      selector: row => row.branch_name,
+      name: "Branch",
+      sortable: true,
+      cell: (cell, row) =>
+        cell.isFilter ? (
+          <input
+            className="form-control"
+            name="branch_name"
+            placeholder="Branch Name"
+            value={pageFilters?.branch_name}
+            onChange={handleFilter}
+          />
+        ) : (
+          <div>
+            <span>{cell?.branch_name}</span>
+            <br />
+            <span>{cell?.branch_mobile_number}</span>
+          </div>
+        ),
     },
     {
-      text: "Customer",
-      sort: true,
-      formatter: (cell, row) => (
-        <div>
-          <span>{row.customer_name}</span>
-          <br />
-          <span>{row.customer_number}</span>
-          <br />
-          <span>{row.customer_address}</span>
-        </div>
-      ),
+      selector: row => row.customer_name,
+      name: "Customer",
+      sortable: true,
+      cell: (cell, row) =>
+        cell.isFilter ? (
+          <input
+            className="form-control"
+            name="customer_number"
+            placeholder="Customer Mobile"
+            value={pageFilters?.customer_number}
+            onChange={handleFilter}
+          />
+        ) : (
+          <div>
+            <span>{cell?.customer_name}</span>
+            <br />
+            <span>{cell?.customer_number}</span>
+            <br />
+            <span>{cell?.customer_address}</span>
+          </div>
+        ),
     },
     {
-      text: "Assigned To",
-      sort: true,
-      formatter: (cell, row) => (
-        <div>
-          <span>{row.rider_name}</span>
-          <br />
-          <span>{row.rider_number}</span>
-        </div>
-      ),
+      // selector: row => row.customer_name,
+      name: "Assigned To",
+      sortable: true,
+      cell: (cell, row) =>
+        cell.isFilter ? (
+          <input
+            className="form-control"
+            name="rider_number"
+            placeholder="Rider Mobile"
+            value={pageFilters?.rider_number}
+            onChange={handleFilter}
+          />
+        ) : (
+          <div>
+            <span>{cell?.rider_name}</span>
+            <br />
+            <span>{cell?.rider_number}</span>
+          </div>
+        ),
     },
     {
-      dataField: "payment_method",
-      text: "Pay Method",
-      sort: true,
+      selector: row => row.payment_method,
+      name: "Pay Method",
+      sortable: true,
+      cell: (cell, row) => columnFilterGeneral(cell, row, "payment_method"),
     },
     {
-      dataField: "order_total",
-      text: "Total Amount",
-      sort: true,
+      selector: row => row.order_total,
+      name: "Total Amount",
+      sortable: true,
+      cell: (cell, row) => columnFilterGeneral(cell, row, "order_total"),
     },
     {
-      text: "Order Status",
-      sort: true,
-      formatter: (cell, row) => (
-        <div>
-          <span>{orderStatusNames[row.order_status]}</span>
-        </div>
-      ),
+      name: "Order Status",
+      sortable: true,
+      cell: columnFilterOrderStatus,
     },
     {
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
   const defaultSorted = [
@@ -256,13 +454,56 @@ function Order(props) {
     }
   }, [props.get_available_rider_data])
 
-  useEffect(() => {
-    // console.log("=======hello", props.order_name_edit_loading)
-    if (props.get_all_order_loading == false) {
-      //  console.log("I am in get all order loading ")
-      props.getAllOrderAction(0, 500)
-    }
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(20)
+  const [pageFilters, setPageFilters] = useState({
+    id: "",
+    order_date: "",
+    order_type: "",
+    zone_name: "",
+    branch_name: "",
+    customer_name: "",
+    rider_number: "",
+    payment_method: "",
+    order_total: "",
+    order_status: "",
+  })
+  const [paramChange, setParamChange] = useState(false)
 
+  const handleParamChange = () => {
+    props.getServerSidePaginationOrderFresh()
+    setParamChange(!paramChange)
+  }
+
+  const handleFilter = e => {
+    console.log("e :", e)
+    let name = e.target.name
+    let value = e.target.value
+    setPageFilters({ ...pageFilters, [name]: value })
+  }
+
+  useEffect(() => {
+    props.getServerSidePaginationOrderAction(page, countPerPage, pageFilters)
+  }, [
+    page,
+    countPerPage,
+    paramChange,
+    props.order_assign_rider_loading,
+    props.order_status_edit_loading,
+    // props.get_server_side_pagination_order_loading,
+  ])
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    // console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
+
+  useEffect(() => {
     if (props.order_status_edit_loading === "Success") {
       toast.success("Status Updated")
       props.orderStatusEditFresh()
@@ -297,19 +538,50 @@ function Order(props) {
     }
   }, [props.order_assign_rider_loading])
 
+  const customStyles = {
+    table: {
+      style: {
+        border: "1px solid gray",
+        borderLeft: "0px",
+      },
+    },
+    headCells: {
+      style: {
+        padding: "5px",
+        borderLeft: "1px solid gray",
+      },
+    },
+    cells: {
+      style: {
+        padding: "5px",
+        borderLeft: "1px solid gray",
+      },
+    },
+  }
+
+  const conditionalRowStyles = [
+    {
+      when: row => row.order_status === orderStatuses.placed,
+      style: {
+        backgroundColor: "#ddee11",
+        color: "black",
+      },
+    },
+    {
+      when: row => row.order_status === orderStatuses.delivered,
+      style: {
+        backgroundColor: "#4ada99",
+        color: "white",
+      },
+    },
+  ]
+
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
           {/* Render Breadcrumbs */}
           <Breadcrumbs maintitle="Foodi" title="Order" breadcrumbItem="Order" />
-          {/* <Row className="d-flex flex-row-reverse" style={{ marginBottom: "20px", alignItems: "end" }}>
-                        <Col className="col-12">
-                            <Button color="danger" onClick={toggle}>
-                                Add Order
-                            </Button>
-                        </Col>
-                    </Row> */}
           <Row>
             <Col className="col-12">
               <Card style={{ border: "none" }}>
@@ -327,24 +599,58 @@ function Order(props) {
                     <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
                       Order{" "}
                     </CardTitle>
-                    {/* <Link to="/add-order">
-                      <Button
-                        style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
-                      >
-                        Add Order
-                      </Button>
-                    </Link> */}
+                    <Button
+                      className="btn btn-sm btn-warning"
+                      style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
+                      onClick={handleParamChange}
+                    >
+                      <i
+                        class={`fa fa-refresh ${
+                          props.get_server_side_pagination_order_loading !=
+                          "Success"
+                            ? "spin"
+                            : ""
+                        }`}
+                        aria-hidden="true"
+                      ></i>{" "}
+                      Refresh
+                    </Button>
                   </div>
 
-                  {props.get_all_order_data ? (
-                    props.get_all_order_data.data?.length > 0 ? (
-                      <DatatableTablesWorking
-                        products={props.get_all_order_data.data}
-                        columnData={activeData}
-                        defaultSorted={defaultSorted}
-                      />
-                    ) : null
-                  ) : null}
+                  <div className="text-end"></div>
+                  <DataTable
+                    columns={activeData}
+                    data={
+                      props?.get_server_side_pagination_order_data?.data
+                        ? [
+                            { isFilter: true },
+                            ...props?.get_server_side_pagination_order_data
+                              ?.data,
+                          ]
+                        : ""
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    customStyles={customStyles}
+                    paginationTotalRows={
+                      props.get_server_side_pagination_order_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={page => {
+                      props.getServerSidePaginationOrderFresh()
+                      setPage(page)
+                    }}
+                    progressPending={
+                      !props.get_server_side_pagination_order_data
+                    }
+                    progressComponent={<CustomLoader />}
+                    striped
+                    stripedColor="#000"
+                    conditionalRowStyles={conditionalRowStyles}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -482,6 +788,9 @@ const mapStateToProps = state => {
     order_assign_rider_data,
     order_assign_rider_error,
     order_assign_rider_loading,
+    get_server_side_pagination_order_data,
+    get_server_side_pagination_order_error,
+    get_server_side_pagination_order_loading,
   } = state.Order
 
   return {
@@ -498,6 +807,9 @@ const mapStateToProps = state => {
     order_assign_rider_data,
     order_assign_rider_error,
     order_assign_rider_loading,
+    get_server_side_pagination_order_data,
+    get_server_side_pagination_order_error,
+    get_server_side_pagination_order_loading,
   }
 }
 
@@ -513,5 +825,7 @@ export default withRouter(
     getAvailableRider,
     orderAssignRider,
     assignRiderFresh,
+    getServerSidePaginationOrderAction,
+    getServerSidePaginationOrderFresh,
   })(Order)
 )

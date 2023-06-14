@@ -19,20 +19,30 @@ import {
   addCampaignFresh,
   campaignEditAction,
   campaignEditFresh,
+  getCampaignByIdAction,
+  getCampaignByIdActionFresh,
 } from "store/actions"
 import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
 import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
+import PageLoader from "components/CustomLoader/PageLoader"
 
-function AddCampaign(props) {
+function EditCampaign(props) {
   const navigate = useNavigate()
   const location = useLocation()
-  console.log("lof", location?.state?.restaurants)
+
+  useEffect(() => {
+    props.getCampaignByIdActionFresh()
+  }, [])
+
+  const [getInfo, SetGetInfo] = useState(true)
 
   //select multiple branch
   const common_branches = props?.get_all_branch_data?.filter(elem =>
-    location?.state?.restaurants?.find(({ res_id }) => elem._id === res_id)
+    props?.get_campaign_by_id_data?.restaurants?.find(
+      ({ res_id }) => elem._id === res_id
+    )
   )
 
   const branch_data_edit = common_branches
@@ -61,24 +71,49 @@ function AddCampaign(props) {
   }
 
   const [images, setImages] = useState({
-    image: location.state ? location.state.image : "",
+    image:
+      props?.get_campaign_by_id_data != undefined
+        ? props?.get_campaign_by_id_data.image
+        : "",
   })
 
-  // console.log(location.state)
   const [campaignInfo, setCampaignInfo] = useState({
-    name: location.state ? location.state.name : "",
-    image: location.state ? location.state.image : "",
-    description: location.state ? location.state.description : "",
-    is_delivery: location.state ? location.state.is_delivery : false,
-    is_pickup: location.state ? location.state.is_pickup : false,
-    is_dine: location.state ? location.state.is_dine : false,
-    is_active: location.state ? location.state.is_active : true,
-    start_date: location.state
-      ? location.state.start_date
-      : new Date().toISOString(),
-    end_date: location.state
-      ? location.state.end_date
-      : new Date().toISOString(),
+    name:
+      props?.get_campaign_by_id_data != undefined
+        ? props?.get_campaign_by_id_data.name
+        : "",
+    image:
+      props?.get_campaign_by_id_data != undefined
+        ? props?.get_campaign_by_id_data.image
+        : "",
+    description:
+      props?.get_campaign_by_id_data != undefined
+        ? props?.get_campaign_by_id_data.description
+        : "",
+    is_delivery:
+      props?.get_campaign_by_id_data != undefined
+        ? props?.get_campaign_by_id_data.is_delivery
+        : false,
+    is_pickup:
+      props?.get_campaign_by_id_data != undefined
+        ? props?.get_campaign_by_id_data.is_pickup
+        : false,
+    is_dine:
+      props?.get_campaign_by_id_data != undefined
+        ? props?.get_campaign_by_id_data.is_dine
+        : false,
+    is_active:
+      props?.get_campaign_by_id_data != undefined
+        ? props?.get_campaign_by_id_data.is_active
+        : true,
+    start_date:
+      props?.get_campaign_by_id_data != undefined
+        ? props?.get_campaign_by_id_data.start_date
+        : new Date().toISOString(),
+    end_date:
+      props?.get_campaign_by_id_data != undefined
+        ? props?.get_campaign_by_id_data.end_date
+        : new Date().toISOString(),
   })
   // console.log("tt", new Date().toISOString())
   const handleTimeChange = e => {
@@ -132,13 +167,76 @@ function AddCampaign(props) {
     e.preventDefault()
     console.log("======================I am in the edit form==================")
 
-    props.campaignEditAction(location.state._id, campaignInfo, selectedBranch)
+    props.campaignEditAction(
+      props?.get_campaign_by_id_data._id,
+      campaignInfo,
+      selectedBranch
+    )
   }
 
   // console.log(props.add_campaign_loading)
   useEffect(() => {
     if (props.get_all_branch_loading == false) {
       props.getAllBranchAction()
+    }
+
+    if (props.get_campaign_by_id_data != undefined) {
+      setCampaignInfo({
+        ...campaignInfo,
+        name: props?.get_campaign_by_id_data.name,
+        image: props?.get_campaign_by_id_data.image,
+        description: props?.get_campaign_by_id_data.description,
+        is_delivery: props?.get_campaign_by_id_data.is_delivery,
+        is_pickup: props?.get_campaign_by_id_data.is_pickup,
+        is_dine: props?.get_campaign_by_id_data.is_dine,
+        is_active: props?.get_campaign_by_id_data.is_active,
+        start_date: props?.get_campaign_by_id_data.start_date,
+        end_date: props?.get_campaign_by_id_data.end_date,
+      })
+
+      setImages({ ...images, image: props?.get_campaign_by_id_data.image })
+
+      const common_branches = props?.get_all_branch_data?.filter(elem =>
+        props?.get_campaign_by_id_data?.restaurants?.find(
+          ({ res_id }) => elem._id === res_id
+        )
+      )
+
+      const branch_data_edit = common_branches
+        ? common_branches?.map((item, key) => {
+            return { label: item.name, value: item._id }
+          })
+        : ""
+
+      setSelectedBranch(branch_data_edit)
+
+      // let branchData = props?.get_zone_by_id_data?.branches?.map(
+      //   (item, key) => ({
+      //     label: "Test",
+      //     value: item.branch_id,
+      //   })
+      // )
+
+      // const common_branches = props?.get_all_branch_data?.filter(elem =>
+      //   branchData?.find(({ value }) => elem._id === value)
+      // )
+      // // console.log(common_branches)
+
+      // const branch_data_edit =
+      //   common_branches?.length > 0
+      //     ? common_branches?.map((item, key) => {
+      //         return { label: item.name, value: item._id }
+      //       })
+      //     : ""
+
+      // setBranch(branchData)
+      // //setSelectedBranch(branchData)
+      // setSelectedBranch(branch_data_edit)
+    }
+
+    if (getInfo) {
+      props.getCampaignByIdAction(location?.state?._id)
+      SetGetInfo(false)
     }
 
     // console.log("add_campaign_loading :", props.add_campaign_loading)
@@ -154,13 +252,11 @@ function AddCampaign(props) {
       props.campaignEditFresh()
       navigate("/all-campaign")
     }
-  }, [
-    props.get_all_branch_loading,
-    props.add_campaign_loading,
-    props.campaign_edit_loading,
-  ])
+  }, [props])
 
-  console.log(props.get_all_branch_data)
+  if (getInfo) {
+    return <PageLoader />
+  }
 
   return (
     <>
@@ -170,7 +266,7 @@ function AddCampaign(props) {
             <Breadcrumbs
               maintitle="Foodi"
               title="Campaign"
-              breadcrumbItem={location.state ? "Edit Campaign" : "Add Campaign"}
+              breadcrumbItem="Edit Campaign"
             />
 
             <Row>
@@ -188,9 +284,7 @@ function AddCampaign(props) {
                       }}
                     >
                       <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
-                        {location.state
-                          ? "Edit Campaign"
-                          : "Add a New Campaign"}
+                        Edit Campaign
                       </CardTitle>
                     </div>
                   </CardBody>
@@ -202,7 +296,7 @@ function AddCampaign(props) {
                 <form
                   className="mt-4"
                   action="#"
-                  onSubmit={location.state ? handleSubmitForEdit : handleSubmit}
+                  onSubmit={handleSubmitForEdit}
                 >
                   <Row className="mb-3">
                     <label
@@ -251,7 +345,7 @@ function AddCampaign(props) {
                     >
                       Image
                     </label>
-                    {location.state?.image ? (
+                    {props?.get_campaign_by_id_data?.image ? (
                       <div className="col-md-10">
                         <input
                           type="file"
@@ -408,7 +502,7 @@ function AddCampaign(props) {
                         className="btn btn-primary w-md waves-effect waves-light"
                         type="submit"
                       >
-                        {location.state ? "Edit Campaign" : "Add Campaign"}
+                        Edit Campaign
                       </button>
                     </div>
                   </div>
@@ -425,12 +519,19 @@ function AddCampaign(props) {
 const mapStateToProps = state => {
   const { get_all_branch_loading, get_all_branch_data } = state.Restaurant
 
-  const { add_campaign_loading, campaign_edit_loading } = state.Campaign
+  const {
+    add_campaign_loading,
+    campaign_edit_loading,
+    get_campaign_by_id_data,
+    get_campaign_by_id_loading,
+  } = state.Campaign
   return {
     get_all_branch_loading,
     get_all_branch_data,
     add_campaign_loading,
     campaign_edit_loading,
+    get_campaign_by_id_data,
+    get_campaign_by_id_loading,
   }
 }
 
@@ -441,5 +542,7 @@ export default withRouter(
     addCampaignFresh,
     campaignEditAction,
     campaignEditFresh,
-  })(AddCampaign)
+    getCampaignByIdAction,
+    getCampaignByIdActionFresh,
+  })(EditCampaign)
 )

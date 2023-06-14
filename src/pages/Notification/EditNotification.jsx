@@ -26,15 +26,23 @@ import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
 import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
+import PageLoader from "components/CustomLoader/PageLoader"
 
-function AddNotification(props) {
+function EditNotification(props) {
   const navigate = useNavigate()
   const location = useLocation()
+
+  useEffect(() => {
+    props.getNotificationByIdActionFresh()
+  }, [])
+
+  const [getInfo, SetGetInfo] = useState(true)
+
   // console.log("lof", location?.state?.restaurants)
 
   //select multiple user
   const common_users = props?.get_all_customer_data?.filter(elem =>
-    location?.state?.customers?.find(
+    props.get_notification_by_id_data?.customers?.find(
       ({ customer_id }) => elem._id === customer_id
     )
   )
@@ -65,17 +73,33 @@ function AddNotification(props) {
   }
 
   const [images, setImages] = useState({
-    image: location.state ? location.state.image : "",
+    image:
+      props?.get_notification_by_id_data != undefined
+        ? props?.get_notification_by_id_data?.image
+        : "",
   })
 
-  // console.log(location.state)
   const [notificationInfo, setNotificationInfo] = useState({
-    title: location.state ? location.state.title : "",
-    image: location.state ? location.state.image : "",
-    description: location.state ? location.state.description : "",
-    is_active: location.state ? location.state.is_active : true,
+    title:
+      props?.get_notification_by_id_data != undefined
+        ? props?.get_notification_by_id_data?.title
+        : "",
+    image:
+      props?.get_notification_by_id_data != undefined
+        ? props?.get_notification_by_id_data?.image
+        : "",
+    description:
+      props?.get_notification_by_id_data != undefined
+        ? props?.get_notification_by_id_data?.description
+        : "",
+    is_active:
+      props?.get_notification_by_id_data != undefined
+        ? props?.get_notification_by_id_data?.is_active
+        : "",
   })
-  console.log("tt", new Date().toISOString())
+
+  // const [notificationInfo, setNotificationInfo] = useState({})
+  // const [images, setImages] = useState({})
 
   let name, value
   const handleInputs = e => {
@@ -98,13 +122,6 @@ function AddNotification(props) {
     reader.readAsDataURL(value)
   }
 
-  const handleSubmit = e => {
-    e.preventDefault()
-    const uniqueId = uuidv4()
-    // console.log(notificationInfo);
-    props.addNotificationAction(uniqueId, notificationInfo, selectedUser)
-  }
-
   const handleSubmitForEdit = e => {
     e.preventDefault()
     console.log("======================I am in the edit form==================")
@@ -116,13 +133,46 @@ function AddNotification(props) {
     )
   }
 
-  console.log(props.add_notification_loading)
   useEffect(() => {
     if (props.get_all_customer_loading == false) {
       props.getAllCustomerAction()
     }
 
-    console.log("add_notification_loading :", props.add_notification_loading)
+    if (props.get_notification_by_id_data != undefined) {
+      setNotificationInfo({
+        ...notificationInfo,
+        title: props.get_notification_by_id_data.title,
+        image: props.get_notification_by_id_data.image,
+        description: props.get_notification_by_id_data.description,
+        is_active: props.get_notification_by_id_data.is_active,
+      })
+
+      setImages({ ...images, image: props.get_notification_by_id_data.image })
+
+      const common_users = props?.get_all_customer_data?.filter(elem =>
+        props.get_notification_by_id_data?.customers?.find(
+          ({ customer_id }) => elem._id === customer_id
+        )
+      )
+
+      const user_data_edit = common_users
+        ? common_users?.map((item, key) => {
+            return {
+              label: `${item.firstName} ${item.lastName}`,
+              device_id: `${item.device_id ?? ""}`,
+              value: item._id,
+            }
+          })
+        : ""
+
+      setSelectedUser(user_data_edit)
+    }
+
+    if (getInfo) {
+      props.getNotificationByIdAction(location?.state?._id)
+      SetGetInfo(false)
+    }
+
     if (props.add_notification_loading === "Success") {
       // redirect
       props.addNotificationFresh()
@@ -135,13 +185,11 @@ function AddNotification(props) {
       props.notificationEditFresh()
       navigate("/notification")
     }
-  }, [
-    props.get_all_customer_loading,
-    props.add_notification_loading,
-    props.notification_edit_loading,
-  ])
+  }, [props])
 
-  console.log(props.get_all_customer_data)
+  if (getInfo) {
+    return <PageLoader />
+  }
 
   return (
     <>
@@ -151,9 +199,7 @@ function AddNotification(props) {
             <Breadcrumbs
               maintitle="Foodi"
               title="Notification"
-              breadcrumbItem={
-                location.state ? "Edit Notification" : "Add Notification"
-              }
+              breadcrumbItem="Edit Notification"
             />
 
             <Row>
@@ -171,9 +217,7 @@ function AddNotification(props) {
                       }}
                     >
                       <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
-                        {location.state
-                          ? "Edit Notification"
-                          : "Add a New Notification"}
+                        Edit Notification
                       </CardTitle>
                     </div>
                   </CardBody>
@@ -185,7 +229,7 @@ function AddNotification(props) {
                 <form
                   className="mt-4"
                   action="#"
-                  onSubmit={location.state ? handleSubmitForEdit : handleSubmit}
+                  onSubmit={handleSubmitForEdit}
                 >
                   <Row className="mb-3">
                     <label
@@ -327,5 +371,5 @@ export default withRouter(
     notificationEditFresh,
     getNotificationByIdAction,
     getNotificationByIdActionFresh,
-  })(AddNotification)
+  })(EditNotification)
 )

@@ -40,11 +40,10 @@ import PageLoader from "components/CustomLoader/PageLoader"
 const LoadingContainer = () => <div>Loading...</div>
 
 function EditZone(props) {
-  // props.getZoneByIdActionFresh()
   useEffect(() => {
     props.getZoneByIdActionFresh()
   }, [])
-  console.log(props.get_zone_by_id_data)
+
   const [branch, setBranch] = useState([])
   const [getInfo, SetGetInfo] = useState(true)
   const [allEditData, setAllData] = useState()
@@ -64,15 +63,7 @@ function EditZone(props) {
       lat: x[1],
     }))
 
-  console.log(edit_map_data)
-
   const defaultProps = edit_map_data ? edit_map_data : ""
-
-  console.log(defaultProps)
-
-  // useEffect(() => {
-  //   setDefaultProps(edit_map_data[0])
-  // }, [edit_map_data])
 
   const [path, setPath] = useState(
     props?.get_zone_by_id_data
@@ -265,21 +256,6 @@ function EditZone(props) {
   function handleAddRowNested() {
     setDeliveryCHarge([...deliveryCharge, deliveryChargeTemplate])
   }
-  // console.log(props.add_zone_loading);
-  // console.log(deliveryCharge);
-
-  // ============test code ========
-  // const rootData = () => {
-  //     if (location?.state?._id) {
-  //         props.getZoneByIdAction(location?.state?._id);
-  //     }
-
-  // };
-  // //getInfo, SetGetInfo
-  // if (getInfo) {
-  //     rootData();
-  //     SetGetInfo(false);
-  // }
 
   useEffect(() => {
     if (props.get_all_branch_loading == false) {
@@ -300,12 +276,6 @@ function EditZone(props) {
       props.zoneEditFresh()
     }
 
-    // if (getInfo) {
-    //     props.getZoneByIdAction(location?.state?._id);
-    //     props.getZoneByIdActionFresh();
-    //     SetGetInfo(false)
-    // }
-
     if (props.get_zone_by_id_data != undefined) {
       setZoneInfo({
         ...zoneInfo,
@@ -315,7 +285,6 @@ function EditZone(props) {
         is_active: props?.get_zone_by_id_data?.is_active,
       })
 
-      // console.log(props?.get_zone_by_id_data)
       let branchData = props?.get_zone_by_id_data?.branches?.map(
         (item, key) => ({
           label: "Test",
@@ -347,7 +316,6 @@ function EditZone(props) {
         }))
 
       setPath(edit_map_data)
-      //setDefaultProps(edit_map_data[0])
 
       //delivery charge
       const edit_zone_delivery_charge_unsort =
@@ -366,8 +334,6 @@ function EditZone(props) {
       // console.log(edit_zone_delivery_charge_unsort)
       //console.log(edit_zone_delivery_charge)
 
-      // const [deliveryCharge, setDeliveryCHarge] = useState(props?.get_zone_by_id_data ? edit_zone_delivery_charge : [deliveryChargeTemplate]);
-
       setDeliveryCHarge(
         edit_zone_delivery_charge
           ? edit_zone_delivery_charge
@@ -383,8 +349,7 @@ function EditZone(props) {
   //props.get_all_branch_loading, props.get_all_city_loading, props.add_zone_loading, props.edit_zone_loading
   // console.log(props.get_all_branch_data)
   // console.log(props.get_all_city_data);
-  // console.log(props.get_zone_by_id_data)
-  // console.log(props.get_zone_by_id_loading)
+
   // console.log(path[0])
   // const [defaultProps, setDefaultProps] = useState({
   //   lat: 23.8103,

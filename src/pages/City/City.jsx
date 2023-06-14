@@ -132,7 +132,7 @@ function City(props) {
       className="btn waves-effect waves-light"
       onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
 

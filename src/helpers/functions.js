@@ -44,4 +44,14 @@ function convertToFormData(dataObject, parentKey = "") {
   return formData
 }
 
-export { convertToFormData }
+function convertToQueryParams(object) {
+  return object
+    ? new URLSearchParams(
+        Object.fromEntries(
+          Object.entries(object).filter(([key, value]) => value !== "")
+        )
+      ).toString()
+    : ""
+}
+
+export { convertToFormData, convertToQueryParams }

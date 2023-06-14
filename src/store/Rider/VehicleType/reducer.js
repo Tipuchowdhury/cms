@@ -10,6 +10,9 @@ import {
   VEHICLE_TYPE_DELETE_FRESH,
   EDIT_VEHICLE_TYPE_STATUS,
   EDIT_VEHICLE_TYPE_STATUS_FRESH,
+  SERVER_SIDE_PAGINATION_VEHICLE_TYPE,
+  SERVER_SIDE_PAGINATION_VEHICLE_TYPE_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_VEHICLE_TYPE_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -30,6 +33,14 @@ const initialState = {
   edit_vehicle_type_status_loading: false,
 
   vehicle_type_delete_loading: false,
+
+  // server side pagination vehicle type
+  get_server_side_pagination_vehicle_type_data: null,
+  get_server_side_pagination_vehicle_type_error: null,
+  get_server_side_pagination_vehicle_type_loading: false,
+
+  get_server_side_pagination_vehicle_type_search_data: null,
+  get_server_side_pagination_vehicle_type_search_loading: false,
 }
 
 const VehicleType = (state = initialState, action) => {
@@ -110,6 +121,32 @@ const VehicleType = (state = initialState, action) => {
         vehicle_type_delete_loading: action.status,
         get_all_vehicle_type_loading: false,
       }
+      break
+
+    case SERVER_SIDE_PAGINATION_VEHICLE_TYPE:
+      state = {
+        ...state,
+        get_server_side_pagination_vehicle_type_data: action.payload,
+        get_server_side_pagination_vehicle_type_error: null,
+        get_server_side_pagination_vehicle_type_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_VEHICLE_TYPE_SEARCH:
+      state = {
+        ...state,
+        get_server_side_pagination_vehicle_type_search_data: action.payload,
+        get_server_side_pagination_vehicle_type_search_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_SEARCH_VEHICLE_TYPE_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_vehicle_type_search_data: action.payload,
+        get_server_side_pagination_vehicle_type_search_loading: action.status,
+      }
+      break
   }
   return state
 }
