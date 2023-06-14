@@ -137,6 +137,7 @@ import Cuisine from "pages/Restaurant/Cuisine/Cuisine"
 import RewardPoint from "pages/CRM/RewardPoints/RewardPoint"
 import Coupon from "pages/Coupon/Coupon"
 import AddCoupon from "pages/Coupon/AddCoupon"
+import EditCoupon from "pages/Coupon/EditCoupon"
 import MenuTimeSlot from "pages/Restaurant/MenuItemTimeSlot/MenuTimeSlot"
 import AddTimeSlot from "pages/Restaurant/MenuItemTimeSlot/AddTimeSlot/AddTimeSlot"
 import BranchAttribute from "pages/BranchAttribute/BranchAttribute"
@@ -249,6 +250,7 @@ const userRoutes = [
   // Coupon
   { path: "/coupon", component: <Coupon /> },
   { path: "/add-coupon", component: <AddCoupon /> },
+  { path: "/edit-coupon", component: <EditCoupon /> },
 
   // Popup
   { path: "/popup-banner", component: <Popup /> },
