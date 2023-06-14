@@ -65,6 +65,10 @@ function Order(props) {
     }
   }, [])
 
+  const toggleOrderInvoice = order_id => {
+    window, open(`/invoice/${order_id}`, "_blank")
+  }
+
   const handleSelectRider = e => {
     setSelectedRider(e.target.value)
   }
@@ -164,17 +168,25 @@ function Order(props) {
         >
           <span className="fas fa-biking"></span>
           {cell.rider_id ? " Assign Rider" : " Reassign Rider"}
-        </Button>{" "}
+        </Button>
         <br></br>
         <Button
-          className="btn btn-sm btn-dark waves-effect waves-light"
+          className="btn btn-sm btn-dark waves-effect waves-light mb-1"
           onClick={() => {
             setEditInfo({ _id: cell._id, status: cell.order_status })
             toggleChangeStatusModal()
           }}
         >
-          <span className="fas fa-edit"></span>
-          Change Order Status
+          <span className="fas fa-edit"></span> Change Order Status
+        </Button>
+        <br></br>
+        <Button
+          className="btn btn-sm btn-dark waves-effect waves-light mb-1"
+          onClick={() => {
+            toggleOrderInvoice(cell._id)
+          }}
+        >
+          <span className="fas fa-file-invoice"></span> Invoice
         </Button>{" "}
       </div>
     )

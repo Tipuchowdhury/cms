@@ -161,6 +161,7 @@ import Quest from "pages/Quest/Quest"
 import AddQuest from "pages/Quest/AddQuest"
 import Wallet from "pages/Wallet/Wallet"
 import RiderWalletDetail from "pages/Wallet/RiderWalletDetail"
+import Invoice from "pages/Order/Invoice"
 
 const userRoutes = [
   // { path: "/dashboard", component: <Dashboard /> },
@@ -255,6 +256,7 @@ const userRoutes = [
 
   // Orders
   { path: "/dispatch", component: <Order /> },
+  { path: "/invoice/:orderID", component: <Invoice /> },
 
   // Refund
   { path: "/refund", component: <Refund /> },
