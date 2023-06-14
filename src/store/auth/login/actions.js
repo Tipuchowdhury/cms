@@ -38,9 +38,9 @@ export const userLogin = user => {
         localStorage.setItem("foodi-jwt", JSON.stringify(response.data.jwt))
         localStorage.setItem(
           "permissions",
-          JSON.stringify(response.data.permissions.result)
+          JSON.stringify(response.data.permissions)
         )
-        console.log(response)
+        //console.log(response)
         dispatch({
           type: USER_LOGIN,
           payload: response,

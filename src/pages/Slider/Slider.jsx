@@ -33,14 +33,19 @@ import {
   promotionStatusUpdateFresh,
   promotionDeleteAction,
   promotionDeleteFresh,
+  getServerSidePaginationPromotionAction,
+  getServerSidePaginationPromotionSearchAction,
+  getServerSidePaginationSearchPromotionFresh,
 } from "store/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import Select from "react-select"
+import DataTable from "react-data-table-component"
 
 function Slider(props) {
   document.title = "Promotion | Foodi"
+  const navigate = useNavigate()
 
   const [modal, setModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
@@ -157,23 +162,25 @@ function Slider(props) {
   }
 
   const handleEditSlider = row => {
-    // console.log(row);
+    // console.log(row)
 
-    setEditInfo(prevState => ({
-      _id: row._id,
-      name: row.name,
-      start_date: row.start_date,
-      end_date: row.end_date,
-      type: row.type,
-      is_delivery: row.is_delivery,
-      is_pickup: row.is_pickup,
-      is_dine: row.is_dine,
-      is_active: row.is_active,
-    }))
+    // setEditInfo(prevState => ({
+    //   _id: row._id,
+    //   name: row.name,
+    //   start_date: row.start_date,
+    //   end_date: row.end_date,
+    //   type: row.type,
+    //   is_delivery: row.is_delivery,
+    //   is_pickup: row.is_pickup,
+    //   is_dine: row.is_dine,
+    //   is_active: row.is_active,
+    // }))
 
-    newRest(row.restaurants)
+    // newRest(row.restaurants)
 
-    toggleEditModal()
+    // toggleEditModal()
+
+    navigate("/edit-slider", { state: row })
   }
 
   console.log("branch data 2", props?.get_all_branch_data)
@@ -231,14 +238,14 @@ function Slider(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEditSlider(row)}
+        onClick={() => handleEditSlider(cell)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        onClick={() => handleDeleteModal(cell)}
       >
         Delete
       </Button>{" "}
@@ -247,50 +254,68 @@ function Slider(props) {
 
   const statusRef = (cell, row) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
 
   // console.log(props.get_all_slider_data);
+  const textRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.name}</span>
+  )
 
   const activeData = [
     {
-      dataField: "name",
-      text: "Promotion Name",
-      sort: true,
+      selector: row => row.name,
+      name: "Promotion Name",
+      sortable: true,
+      cell: textRef,
     },
     {
-      dataField: "",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      selector: row => "",
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
 
     {
-      //dataField: "hello",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      selector: row => "",
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
-  const defaultSorted = [
-    {
-      dataField: "name",
-      order: "desc",
-    },
-  ]
+
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationPromotionSearchAction(e.target.value)
+    } else {
+      props.getServerSidePaginationSearchPromotionFresh()
+    }
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
 
   useEffect(() => {
-    // props.get_all_branch_data
-
     if (props.get_all_branch_loading == false) {
       props.getAllBranchAction()
       //setAllBranch(props.get_all_branch_data)
     }
+
+    props.getServerSidePaginationPromotionAction(page, countPerPage)
 
     if (props.get_all_slider_loading == false) {
       // console.log("I am in get all slider loading ")
@@ -357,6 +382,8 @@ function Slider(props) {
     props.slider_edit_loading,
     props.slider_delete_loading,
     props.slider_status_edit_loading,
+    page,
+    countPerPage,
   ])
 
   // console.log(props.get_all_slider_data);
@@ -395,16 +422,44 @@ function Slider(props) {
                       Add Promotion
                     </Button>
                   </div>
-                  {props.get_all_slider_data ? (
-                    props.get_all_slider_data.length > 0 ? (
-                      <DatatableTablesWorking
-                        products={props.get_all_slider_data}
-                        columnData={activeData}
-                        defaultSorted={defaultSorted}
-                        key={props.get_all_slider_data?._id}
-                      />
-                    ) : null
-                  ) : null}
+                  {/* {props.get_all_slider_data ? props.get_all_slider_data.length > 0 ? <DatatableTablesWorking products={props.get_all_slider_data}
+                                        columnData={activeData} defaultSorted={defaultSorted} key={props.get_all_slider_data?._id} /> : null : null} */}
+                  <div className="text-end">
+                    <input
+                      type="text"
+                      placeholder="Search Promotion"
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid gray",
+                      }}
+                      onChange={e => handleFilter(e)}
+                    />
+                  </div>
+                  <DataTable
+                    columns={activeData}
+                    data={
+                      props.get_server_side_pagination_promotion_search_data !=
+                      null
+                        ? props.get_server_side_pagination_promotion_search_data
+                            ?.data
+                        : props?.get_server_side_pagination_promotion_data?.data
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_promotion_search_data !=
+                      null
+                        ? props.get_server_side_pagination_promotion_search_data
+                            ?.count
+                        : props.get_server_side_pagination_promotion_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={page => setPage(page)}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -792,6 +847,9 @@ const mapStateToProps = state => {
     slider_status_edit_loading,
 
     slider_delete_loading,
+
+    get_server_side_pagination_promotion_data,
+    get_server_side_pagination_promotion_search_data,
   } = state.Sliders
 
   return {
@@ -813,6 +871,8 @@ const mapStateToProps = state => {
     slider_status_edit_loading,
 
     slider_delete_loading,
+    get_server_side_pagination_promotion_data,
+    get_server_side_pagination_promotion_search_data,
   }
 }
 
@@ -830,5 +890,8 @@ export default withRouter(
     promotionStatusUpdateFresh,
     promotionDeleteAction,
     promotionDeleteFresh,
+    getServerSidePaginationPromotionAction,
+    getServerSidePaginationPromotionSearchAction,
+    getServerSidePaginationSearchPromotionFresh,
   })(Slider)
 )

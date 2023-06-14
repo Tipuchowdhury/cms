@@ -83,6 +83,10 @@ import {
   RESTAURANT_MENU_STATUS_EDIT,
   RESTAURANT_MENU_STATUS_EDIT_FRESH,
   GET_RESTAURANT_MENU_BY_BRANCH_ID,
+  SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
+  SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH,
+  GET_ADD_ON_CATEGORY_BY_ID,
 } from "./actionTypes"
 
 const initialState = {
@@ -229,6 +233,15 @@ const initialState = {
 
   get_server_side_pagination_branch_search_data: null,
   get_server_side_pagination_branch_search_loading: false,
+
+  // server side pagination addOns category
+  get_server_side_pagination_addOns_category_data: null,
+  get_server_side_pagination_addOns_category_error: null,
+  get_server_side_pagination_addOns_category_loading: false,
+
+  get_server_side_pagination_addOns_category_search_data: null,
+  get_server_side_pagination_addOns_category_search_loading: false,
+
   get_zone_by_id_data: null,
   get_zone_by_id_error: null,
   get_zone_by_id_loading: false,
@@ -236,6 +249,10 @@ const initialState = {
   get_zone_by_city_id_data: null,
   get_zone_by_city_id_error: null,
   get_zone_by_city_id_loading: false,
+
+  get_add_ons_by_id_data: null,
+  get_add_ons_by_id_error: null,
+  get_add_ons_by_id_loading: false,
 }
 
 const Restaurant = (state = initialState, action) => {
@@ -919,6 +936,40 @@ const Restaurant = (state = initialState, action) => {
 
         get_zone_by_city_id_data: action.payload,
         get_zone_by_city_id_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_ADDONS_CATEGORY:
+      state = {
+        ...state,
+        get_server_side_pagination_addOns_category_data: action.payload,
+        get_server_side_pagination_addOns_category_error: null,
+        get_server_side_pagination_addOns_category_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH:
+      state = {
+        ...state,
+        get_server_side_pagination_addOns_category_search_data: action.payload,
+        get_server_side_pagination_addOns_category_search_loading:
+          action.status,
+      }
+      break
+    case SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_addOns_category_search_data: action.payload,
+        get_server_side_pagination_addOns_category_search_loading:
+          action.status,
+      }
+      break
+    case GET_ADD_ON_CATEGORY_BY_ID:
+      state = {
+        ...state,
+        get_add_ons_by_id_data: action.payload,
+        get_add_ons_by_id_error: null,
+        get_add_ons_by_id_loading: action.status,
       }
       break
   }

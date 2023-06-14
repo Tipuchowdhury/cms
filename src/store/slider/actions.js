@@ -9,6 +9,11 @@ import {
   SLIDER_DELETE_FRESH,
   SLIDER_STATUS_EDIT,
   SLIDER_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_PROMOTION,
+  SERVER_SIDE_PAGINATION_PROMOTION_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_PROMOTION_FRESH,
+  GET_SLIDER_BY_ID,
+  GET_SLIDER_BY_ID_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -190,7 +195,8 @@ export const promotionUpdateFresh = () => {
 }
 
 export const promotionStatusUpdateAction = editData => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Promotion/Put"
+  // var url = process.env.REACT_APP_LOCALHOST + "/Promotion/Put"
+  var url = `${process.env.REACT_APP_LOCALHOST}/Promotion/isActive?id=${editData._id}&is_active=${editData.is_active}`
   const objectData = editData
   const formData = convertToFormData(objectData)
   return dispatch => {
@@ -259,6 +265,107 @@ export const promotionDeleteFresh = () => {
   return dispatch =>
     dispatch({
       type: SLIDER_DELETE_FRESH,
+      status: false,
+    })
+}
+
+export const getServerSidePaginationPromotionAction = (index, limit) => {
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Promotion/Search?page=${index}&limit=${limit}`
+
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_PROMOTION,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_PROMOTION,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationPromotionSearchAction = name => {
+  console.log(name)
+  var url = process.env.REACT_APP_LOCALHOST + `/Promotion/Search?name=${name}`
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_PROMOTION_SEARCH,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_PROMOTION_SEARCH,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationSearchPromotionFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_SEARCH_PROMOTION_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getPromotionByIdAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + `/Promotion/GetById?id=${id}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_SLIDER_BY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_SLIDER_BY_ID,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getPromotionByIdActionFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: GET_SLIDER_BY_ID_FRESH,
       status: false,
     })
 }

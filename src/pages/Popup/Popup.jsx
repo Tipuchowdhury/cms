@@ -33,14 +33,19 @@ import {
   popUpStatusUpdateFresh,
   popUpDeleteAction,
   popUpDeleteFresh,
+  getServerSidePaginationPopupAction,
+  getServerSidePaginationPopupSearchAction,
+  getServerSidePaginationSearchPopupFresh,
 } from "store/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import Select from "react-select"
+import DataTable from "react-data-table-component"
 
 function Popup(props) {
   document.title = "PopUp Banner | Foodi"
+  const navigate = useNavigate()
 
   const [modal, setModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
@@ -221,26 +226,27 @@ function Popup(props) {
   }
 
   const handleEditSlider = row => {
-    setEditInfo(prevState => ({
-      _id: row._id,
-      title: row.title,
-      description: row.description,
-      is_redirect: row.is_redirect,
-      redirection_type: row.redirection_type,
-      restaurant_id: row.restaurant_id,
-      start_date: row.start_date,
-      end_date: row.end_date,
-      campaign_id: row.campaign_id,
-      cancellable: row.cancellable,
-      image: row.image,
-      is_active: row.is_active,
-    }))
+    // setEditInfo(prevState => ({
+    //   _id: row._id,
+    //   title: row.title,
+    //   description: row.description,
+    //   is_redirect: row.is_redirect,
+    //   redirection_type: row.redirection_type,
+    //   restaurant_id: row.restaurant_id,
+    //   start_date: row.start_date,
+    //   end_date: row.end_date,
+    //   campaign_id: row.campaign_id,
+    //   cancellable: row.cancellable,
+    //   image: row.image,
+    //   is_active: row.is_active,
+    // }))
 
-    setType(row.is_redirect, row.redirection_type)
+    // setType(row.is_redirect, row.redirection_type)
 
-    setEditImages({ ...editImages, image: row.image })
+    // setEditImages({ ...editImages, image: row.image })
 
-    toggleEditModal()
+    // toggleEditModal()
+    navigate("/edit-popup-banner", { state: row })
   }
 
   const setType = (is_redirect_data, redirection_type_data) => {
@@ -259,8 +265,6 @@ function Popup(props) {
 
     setSelectedRedirectionTypeEdit(redirection_type_data)
   }
-
-  // console.log(redirectEdit, selectedRedirectionTypeEdit)
 
   const handleEdit = e => {
     e.preventDefault()
@@ -298,14 +302,14 @@ function Popup(props) {
       <Button
         color="primary"
         className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEditSlider(row)}
+        onClick={() => handleEditSlider(cell)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
         className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        onClick={() => handleDeleteModal(cell)}
       >
         Delete
       </Button>{" "}
@@ -314,40 +318,58 @@ function Popup(props) {
 
   const statusRef = (cell, row) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
+      color={cell.is_active ? "success" : "secondary"}
       className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
+  )
+  const textRef = (cell, row) => (
+    <span style={{ fontSize: "16px" }}>{cell.title}</span>
   )
 
   const activeData = [
     {
-      dataField: "title",
-      text: "Title",
-      sort: true,
+      selector: row => row.title,
+      name: "Title",
+      sortable: true,
+      cell: textRef,
     },
     {
-      dataField: "",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      selector: row => "",
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
 
     {
       //dataField: "hello",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      selector: row => "",
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
-  const defaultSorted = [
-    {
-      dataField: "title",
-      order: "desc",
-    },
-  ]
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const handleFilter = e => {
+    if (e.target.value?.length > 0) {
+      props.getServerSidePaginationPopupSearchAction(e.target.value)
+    } else {
+      props.getServerSidePaginationSearchPopupFresh()
+    }
+  }
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
 
   useEffect(() => {
     if (props.get_all_branch_loading == false) {
@@ -360,6 +382,8 @@ function Popup(props) {
     if (props.get_all_popup_loading == false) {
       props.getAllPopUpAction()
     }
+
+    props.getServerSidePaginationPopupAction(page, countPerPage)
 
     if (props.add_popup_loading === "Success") {
       toast.success("PopUp Banner Added Successfully")
@@ -422,6 +446,8 @@ function Popup(props) {
     props.popup_edit_loading,
     props.popup_delete_loading,
     props.popup_status_edit_loading,
+    page,
+    countPerPage,
     props.get_all_campaign_data,
     props.get_all_branch_loading,
   ])
@@ -461,16 +487,40 @@ function Popup(props) {
                     </Button>
                   </div>
 
-                  {props.get_all_popup_data ? (
-                    props.get_all_popup_data.length > 0 ? (
-                      <DatatableTablesWorking
-                        products={props.get_all_popup_data}
-                        columnData={activeData}
-                        defaultSorted={defaultSorted}
-                        key={props.get_all_popup_data?._id}
-                      />
-                    ) : null
-                  ) : null}
+                  <div className="text-end">
+                    <input
+                      type="text"
+                      placeholder="Search Popup"
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid gray",
+                      }}
+                      onChange={e => handleFilter(e)}
+                    />
+                  </div>
+                  <DataTable
+                    columns={activeData}
+                    data={
+                      props.get_server_side_pagination_popup_search_data != null
+                        ? props.get_server_side_pagination_popup_search_data
+                            ?.data
+                        : props?.get_server_side_pagination_popup_data?.data
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_popup_search_data != null
+                        ? props.get_server_side_pagination_popup_search_data
+                            ?.count
+                        : props.get_server_side_pagination_popup_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={page => setPage(page)}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -988,7 +1038,8 @@ function Popup(props) {
             Are you sure?
           </ModalHeader>
           <ModalBody>
-            Do you really want to update status these records?{" "}
+            Do you want to {editInfo.is_active ? "deactivate" : "activate"} this
+            record?{" "}
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={toggleStatus}>
@@ -1024,6 +1075,9 @@ const mapStateToProps = state => {
     popup_status_edit_loading,
 
     popup_delete_loading,
+
+    get_server_side_pagination_popup_data,
+    get_server_side_pagination_popup_search_data,
   } = state.Popup
 
   return {
@@ -1042,6 +1096,9 @@ const mapStateToProps = state => {
     popup_status_edit_loading,
 
     popup_delete_loading,
+
+    get_server_side_pagination_popup_data,
+    get_server_side_pagination_popup_search_data,
 
     get_all_branch_loading,
     get_all_branch_data,
@@ -1063,6 +1120,9 @@ export default withRouter(
     popUpStatusUpdateFresh,
     popUpDeleteAction,
     popUpDeleteFresh,
+    getServerSidePaginationPopupAction,
+    getServerSidePaginationPopupSearchAction,
+    getServerSidePaginationSearchPopupFresh,
     getAllBranchAction,
     getAllCampaignAction,
   })(Popup)

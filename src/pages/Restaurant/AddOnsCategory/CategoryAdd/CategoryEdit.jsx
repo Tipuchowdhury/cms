@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react"
 import {
-  Badge,
   Button,
   Card,
   CardBody,
   CardTitle,
   Col,
   Container,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
   Row,
 } from "reactstrap"
 import Breadcrumbs from "components/Common/Breadcrumb"
@@ -20,23 +15,29 @@ import withRouter from "components/Common/withRouter"
 import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
-  addOnsCategoryAction,
-  addOnCategoryAddFresh,
   editAddOnsCategoryAction,
   editAddOnCategoryFresh,
+  getAddOnsCategoryByIdAction,
 } from "store/actions"
-import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import { useLocation, useNavigate } from "react-router-dom"
 
-function CategoryAdd(props) {
+function CategoryEdit(props) {
   const location = useLocation()
   const navigate = useNavigate()
+  const [getInfo, SetGetInfo] = useState(true)
   const [category, setCategory] = useState({
-    name: location.state ? location.state.name : "",
-    add_on_category_desc: location.state
-      ? location.state.add_on_category_desc
-      : "",
-    num_of_choice: location.state ? location.state.cat_max_choice : "",
+    name:
+      props?.get_add_ons_by_id_data != undefined
+        ? props?.get_add_ons_by_id_data?.name
+        : "",
+    add_on_category_desc:
+      props?.get_add_ons_by_id_data != undefined
+        ? props?.get_add_ons_by_id_data?.add_on_category_desc
+        : "",
+    num_of_choice:
+      props?.get_add_ons_by_id_data != undefined
+        ? props?.get_add_ons_by_id_data?.cat_max_choice
+        : "",
   })
   const [checked, setChecked] = useState(false)
   const [isChecked, setIsChecked] = useState(
@@ -48,7 +49,10 @@ function CategoryAdd(props) {
     categoryName: category?.name,
   }
   const [addOns, setAddOns] = useState(
-    location.state ? location.state.preset_add_ons : [addOnsTemplate]
+    props?.get_add_ons_by_id_data
+      ? props?.get_add_ons_by_id_data.preset_add_ons
+      : [addOnsTemplate]
+    //location.state ? location.state.preset_add_ons : [addOnsTemplate]
   )
   const handleAddOnsCat = (e, index) => {
     const updatedValue = addOns.map((row, i) =>
@@ -83,12 +87,6 @@ function CategoryAdd(props) {
     setChecked(!checked)
   }
 
-  const handleFormSubmit = e => {
-    e.preventDefault()
-    const val = uuidv4()
-    props.addOnsCategoryAction(val, category, isChecked, addOns)
-  }
-
   const handleEdit = e => {
     e.preventDefault()
     props.editAddOnsCategoryAction(
@@ -99,16 +97,35 @@ function CategoryAdd(props) {
     )
   }
   useEffect(() => {
-    if (props.add_ons_category_loading == "Success") {
-      navigate("/addons-category")
-      props.addOnCategoryAddFresh()
-    }
-
     if (props.edit_addOn_category_loading == "Success") {
       navigate("/addons-category")
       props.editAddOnCategoryFresh()
     }
-  }, [props.add_ons_category_loading, props.edit_addOn_category_loading])
+
+    if (props.get_add_ons_by_id_data != undefined) {
+      setCategory({
+        ...category,
+        name: props?.get_add_ons_by_id_data?.name,
+        add_on_category_desc: props.get_add_ons_by_id_data.add_on_category_desc,
+        num_of_choice: props.get_add_ons_by_id_data.cat_max_choice,
+      })
+
+      const preset_add_ons = props?.get_add_ons_by_id_data?.preset_add_ons?.map(
+        item => ({
+          add_on_name: item.add_on_name,
+          add_on_price: item.add_on_price,
+          categoryName: item.add_on_category_name,
+        })
+      )
+
+      setAddOns(preset_add_ons)
+    }
+
+    if (getInfo) {
+      props.getAddOnsCategoryByIdAction(location?.state?._id)
+      SetGetInfo(false)
+    }
+  }, [props])
 
   return (
     <React.Fragment>
@@ -118,9 +135,7 @@ function CategoryAdd(props) {
           <Breadcrumbs
             maintitle="Foodi"
             title="Add-ons Category"
-            breadcrumbItem={
-              location.state ? "Edit Add-ons Category" : "Add Add-ons Category"
-            }
+            breadcrumbItem="Edit Add-ons Category"
           />
           <Row>
             <Col className="col-12">
@@ -137,9 +152,7 @@ function CategoryAdd(props) {
                     }}
                   >
                     <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
-                      {location.state
-                        ? "Edit Add-ons Category"
-                        : "Add-ons Category"}{" "}
+                      Edit Add-ons Category{" "}
                     </CardTitle>
                   </div>
                 </CardBody>
@@ -148,10 +161,7 @@ function CategoryAdd(props) {
           </Row>
           <Row>
             <Col className="col-10 mx-auto">
-              <form
-                className="mt-0"
-                onSubmit={location.state ? handleEdit : handleFormSubmit}
-              >
+              <form className="mt-0" onSubmit={handleEdit}>
                 <Row className="mb-3">
                   <label
                     htmlFor="example-text-input"
@@ -238,10 +248,10 @@ function CategoryAdd(props) {
                               <input
                                 type="number"
                                 id="subject"
+                                min="0"
                                 className="form-control"
                                 name="add_on_price"
                                 placeholder="Price"
-                                min="0"
                                 value={row.add_on_price}
                                 onChange={e => handleAddOnsCat(e, idx)}
                               />
@@ -275,14 +285,14 @@ function CategoryAdd(props) {
                     {isChecked ? (
                       <div className="mt-4 col-lg-3">
                         <label className="form-label" htmlFor="subject">
-                          Maximum required number of choice(s){" "}
+                          Maximum required number of choice(s)
                           <span className="text-danger">*</span>
                         </label>
                         <input
                           required
+                          min="0"
                           type="number"
                           id="subject"
-                          min="0"
                           className="form-control"
                           placeholder="Enter number"
                           name="num_of_choice"
@@ -324,6 +334,7 @@ const mapStateToProps = state => {
     add_ons_category_loading,
 
     edit_addOn_category_loading,
+    get_add_ons_by_id_data,
   } = state.Restaurant
 
   return {
@@ -332,14 +343,14 @@ const mapStateToProps = state => {
     add_ons_category_loading,
 
     edit_addOn_category_loading,
+    get_add_ons_by_id_data,
   }
 }
 
 export default withRouter(
   connect(mapStateToProps, {
-    addOnsCategoryAction,
-    addOnCategoryAddFresh,
     editAddOnsCategoryAction,
     editAddOnCategoryFresh,
-  })(CategoryAdd)
+    getAddOnsCategoryByIdAction,
+  })(CategoryEdit)
 )
