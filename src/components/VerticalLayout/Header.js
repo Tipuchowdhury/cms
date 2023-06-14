@@ -191,7 +191,7 @@ const Header = props => {
             <NotificationDropdown />
             <ProfileMenu />
 
-            <div
+            {/* <div
               onClick={() => {
                 props.showRightSidebarAction(!props.showRightSidebar)
               }}
@@ -203,7 +203,7 @@ const Header = props => {
               >
                 <i className="mdi mdi-cog-outline"></i>
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </header>

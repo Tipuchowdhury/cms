@@ -56,6 +56,15 @@ function Order(props) {
   const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
   const [selectedRider, setSelectedRider] = useState("")
 
+  useEffect(() => {
+    if (window.screen.width <= 992) {
+      document.body.classList.add("sidebar-enable")
+    } else {
+      document.body.classList.add("vertical-collpsed")
+      document.body.classList.add("sidebar-enable")
+    }
+  }, [])
+
   const handleSelectRider = e => {
     setSelectedRider(e.target.value)
   }
@@ -521,6 +530,7 @@ function Order(props) {
     table: {
       style: {
         border: "1px solid gray",
+        borderLeft: "0px",
       },
     },
     headCells: {
@@ -617,7 +627,10 @@ function Order(props) {
                     paginationPerPage={countPerPage}
                     paginationComponentOptions={paginationComponentOptions}
                     onChangeRowsPerPage={handlePerRowsChange}
-                    onChangePage={page => setPage(page)}
+                    onChangePage={page => {
+                      props.getServerSidePaginationOrderFresh()
+                      setPage(page)
+                    }}
                     progressPending={
                       !props.get_server_side_pagination_order_data
                     }
