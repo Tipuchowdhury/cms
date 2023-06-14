@@ -190,11 +190,18 @@ export const restaurantNameUpdateAction = (name, id, is_active) => {
   }
 }
 
-export const restaurantStatusUpdateAction = (name, id, is_active) => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Restaurant/Put"
+export const restaurantStatusUpdateAction = (id, is_active) => {
+  // var url = process.env.REACT_APP_LOCALHOST + "/Restaurant/Put"
+  // const formData = {
+  //   _id: id,
+  //   is_active: !is_active,
+  // }
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Restaurant/isActive?id=${id}&is_active=${!is_active}`
   const formData = {
-    _id: id,
-    name: name,
+    id: id,
+    //name: name,
     is_active: !is_active,
   }
   return dispatch => {
