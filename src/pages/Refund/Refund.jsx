@@ -13,6 +13,7 @@ import {
   Container,
   FormGroup,
   Label,
+  Input,
   Modal,
   ModalBody,
   ModalFooter,
@@ -31,9 +32,15 @@ import {
   refundDeleteFresh,
   refundStatusUpdateAction,
   refundStatusUpdateFresh,
+  getServerSidePaginationRefundAction,
+  getServerSidePaginationRefundFresh,
 } from "store/actions"
+import DataTable from "react-data-table-component"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import { toast } from "react-toastify"
+import CustomLoader from "components/CustomLoader/CustomLoader"
+import moment from "moment"
+import Select from "react-select"
 
 function Refund(props) {
   document.title = "Refunds | Foodi"
@@ -48,19 +55,53 @@ function Refund(props) {
   const toggleDel = () => setModalDel(!modalDel)
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
 
+  let allPermission = [
+    {
+      label: "Cash",
+      value: "cash",
+    },
+    {
+      label: "SSL",
+      value: "ssl",
+    },
+    {
+      label: "Bkash",
+      value: "bkash",
+    },
+    {
+      label: "Nagad",
+      value: "nagad",
+    },
+    {
+      label: "Upay",
+      value: "upay",
+    },
+  ]
+
+  const [selectedPermission, setSelectedPermission] = useState([])
+
+  // const handleSelectPermission = e => {
+  //   // console.log(e)
+  //   setSelectedPermission(e)
+  // }
+
   const [editInfo, setEditInfo] = useState({
-    _id: "",
+    order_id: "",
     refund_amount: 0.0,
     refund_reason: "",
-    refund_status: false,
+    is_active: false,
   })
 
   const handleEditRefund = row => {
     //console.log(row);
 
+    let amount =
+      row.refund_status == false ? row.order_total : row.refund_amount
+
     setEditInfo(prevState => ({
-      _id: row._id,
-      refund_amount: row.order_total,
+      order_id: row.order_id,
+      order_total: row.order_total,
+      refund_amount: amount,
       refund_reason: row.refund_reason,
       refund_status: row.refund_status,
     }))
@@ -79,86 +120,100 @@ function Refund(props) {
 
   const handleEdit = e => {
     e.preventDefault()
-    props.refundUpdateAction(editInfo, pathEdit)
+    props.addRefundAction(editInfo)
 
     //toggleEditModal();
   }
-
-  console.log(props.get_all_refund_data)
 
   const actionRef = (cell, row) => (
     <Button
       color="primary"
       className="btn btn-sm btn-primary waves-effect waves-light"
-      onClick={() => handleEditRefund(row)}
+      onClick={() => handleEditRefund(cell)}
     >
       Refund
     </Button>
   )
 
   const statusRef = (cell, row) => (
-    <Badge color={row.refund_status == true ? "success" : "secondary"}>
-      {row.refund_status == true ? "Refunded" : "Not Refunded"}
+    <Badge color={cell.refund_status == true ? "success" : "secondary"}>
+      {cell.refund_status == true ? "Refunded" : "Not Refunded"}
     </Badge>
   )
 
   const activeData = [
     {
-      dataField: "order_id",
-      text: "Order ID",
-      sort: true,
+      selector: row => row.order_id,
+      name: "Order ID",
+      sortable: true,
     },
     {
-      dataField: "customer_name",
-      text: "Customer Name",
-      sort: true,
+      // dataField: "customer_name",
+      selector: row => row.customer_name,
+      name: "Customer Name",
+      sortable: true,
     },
     {
-      dataField: "customer_mobile",
-      text: "Customer Mobile",
-      sort: true,
+      // dataField: "customer_mobile",
+      selector: row => row.customer_mobile,
+      name: "Customer Mobile",
+      sortable: true,
     },
     {
-      dataField: "order_total",
-      text: "Order Total",
-      sort: true,
+      // dataField: "order_total",
+      selector: row => row.order_total,
+      name: "Order Total",
+      sortable: true,
     },
     {
-      dataField: "payment_method",
-      text: "Payment Method",
-      sort: true,
+      // dataField: "payment_method",
+      selector: row => row.payment_method,
+      name: "Payment Method",
+      sortable: true,
     },
     {
-      dataField: "transaction_id",
-      text: "Transaction ID",
-      sort: true,
+      // dataField: "transaction_id",
+      selector: row => row.transaction_id,
+      name: "Transaction ID",
+      sortable: true,
+    },
+    // {
+    //   // dataField: "payment_id",
+    //   selector: row => row.payment_id,
+    //   name: "Payment ID",
+    //   sortable: true,
+    // },
+    {
+      // dataField: "date",
+      // selector: row => row.date,
+      name: "Date",
+      sortable: true,
+      cell: (cell, row) => (
+        <div>
+          <span>{moment(cell.date).format("DD-MM-YYYY")}</span>
+          <br />
+          <span>{moment(cell.date).format("hh:MM:SS A")}</span>
+        </div>
+      ),
     },
     {
-      dataField: "payment_id",
-      text: "Payment ID",
-      sort: true,
+      // dataField: "refund_amount",
+      selector: row => row.refund_amount,
+      name: "Refund Amount",
+      sortable: true,
     },
     {
-      dataField: "date",
-      text: "Date",
-      sort: true,
-    },
-    {
-      dataField: "refund_amount",
-      text: "Refund Amount",
-      sort: true,
-    },
-    {
-      dataField: "",
-      text: "Refund Status",
-      sort: true,
-      formatter: statusRef,
+      // dataField: "",
+      selector: "",
+      name: "Refund Status",
+      sortable: true,
+      cell: statusRef,
     },
     {
       //dataField: "he",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
   const defaultSorted = [
@@ -168,26 +223,61 @@ function Refund(props) {
     },
   ]
 
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const [pageFilters, setPageFilters] = useState({})
+  const handleFilter = e => {
+    setSelectedPermission(e.target.value)
+    let name = e.target.name
+    let value = e.target.value
+    setPageFilters({ ...pageFilters, [name]: value })
+  }
+
+  useEffect(() => {
+    props.getServerSidePaginationRefundAction(page, countPerPage, pageFilters)
+
+    if (props.get_server_side_pagination_refund_loading == false) {
+      //console.log("I am in get all permis type loading ")
+      props.getServerSidePaginationRefundAction(page, countPerPage, pageFilters)
+    }
+  }, [
+    page,
+    countPerPage,
+    pageFilters,
+    props.get_server_side_pagination_refund_loading,
+  ])
+
   useEffect(() => {
     if (props.get_all_refund_loading == false) {
       //console.log("I am in get all permis type loading ")
       props.getAllRefundAction()
     }
 
-    if (props.refund_edit_loading === "Success") {
-      toast.success("Refund Updated")
+    if (props.add_refund_loading === "Success") {
+      toast.success("Successfuly Refund")
       toggleEditModal()
-      props.refundUpdateFresh()
+      props.addRefundFresh()
     }
 
-    if (props.refund_edit_loading === "Failed") {
+    if (props.add_refund_loading === "Failed") {
       toast.error("Something went wrong")
       // toggleEditModal();
-      props.refundUpdateFresh()
+      props.addRefundFresh()
     }
-  }, [props.refund_edit_loading])
+  }, [props.add_refund_loading])
 
-  // console.log(props.get_all_refund_data);
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    // console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
+
+  console.log(props.get_server_side_pagination_refund_data)
   return (
     <React.Fragment>
       <div className="page-content">
@@ -223,7 +313,7 @@ function Refund(props) {
                     </Button> */}
                   </div>
 
-                  {props.get_all_refund_data ? (
+                  {/* {props.get_all_refund_data ? (
                     props.get_all_refund_data.length > 0 ? (
                       <DatatableTablesWorking
                         products={props.get_all_refund_data}
@@ -231,7 +321,57 @@ function Refund(props) {
                         defaultSorted={defaultSorted}
                       />
                     ) : null
-                  ) : null}
+                  ) : null} */}
+
+                  <Row className="justify-content-end mb-3">
+                    <Col className="col-3">
+                      <Input
+                        id="payment_method"
+                        name="payment_method"
+                        className="form-control"
+                        placeholder="Select Payment Method"
+                        value={selectedPermission}
+                        onChange={handleFilter}
+                        type="select"
+                      >
+                        <option value="">All Payment Method</option>
+                        {allPermission.map(method => (
+                          <option key={method.value} value={method.value}>
+                            {method.label}
+                          </option>
+                        ))}
+                      </Input>
+                    </Col>
+                  </Row>
+
+                  <div className="text-end">
+                    {/* <Select
+                      name="payment_method"
+                      value={selectedPermission}
+                      onChange={handleFilter}
+                      options={allPermission}
+                      isMulti={false}
+                    /> */}
+                  </div>
+
+                  <DataTable
+                    columns={activeData}
+                    data={props?.get_server_side_pagination_refund_data?.data}
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_refund_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={page => setPage(page)}
+                    progressPending={
+                      !props?.get_server_side_pagination_refund_data
+                    }
+                    progressComponent={<CustomLoader />}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -248,14 +388,18 @@ function Refund(props) {
                   Refund Amount
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
                   id="refund_amount"
                   placeholder="Enter refund amount"
                   required
                   name="refund_amount"
                   onChange={handleEditInputs}
-                  value={editInfo.refund_amount}
+                  value={
+                    editInfo.refund_status == false
+                      ? editInfo.order_total
+                      : editInfo.refund_amount
+                  }
                 />
               </div>
 
@@ -314,6 +458,9 @@ const mapStateToProps = state => {
     refund_status_edit_loading,
 
     refund_delete_loading,
+
+    get_server_side_pagination_refund_data,
+    get_server_side_pagination_refund_loading,
   } = state.Refunds
 
   return {
@@ -332,6 +479,8 @@ const mapStateToProps = state => {
     refund_status_edit_loading,
 
     refund_delete_loading,
+    get_server_side_pagination_refund_data,
+    get_server_side_pagination_refund_loading,
   }
 }
 
@@ -347,5 +496,7 @@ export default withRouter(
     refundDeleteFresh,
     refundStatusUpdateAction,
     refundStatusUpdateFresh,
+    getServerSidePaginationRefundAction,
+    getServerSidePaginationRefundFresh,
   })(Refund)
 )
