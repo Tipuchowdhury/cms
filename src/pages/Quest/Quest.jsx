@@ -24,7 +24,6 @@ import {
   questDeleteAction,
   questDeleteFresh,
   getServerSidePaginationQuestAction,
-  getServerSidePaginationQuestSearchAction,
   getServerSidePaginationQuestFresh,
   getQuestByIdFresh,
 } from "store/actions"
@@ -116,7 +115,7 @@ function Quest(props) {
       sortable: true,
       cell: (cell, row) => (
         <div>
-          <span>{moment(cell.start_date).format("DD-MM-YYYY")}</span>
+          <span>{moment(cell.start_date).format("MMMM D, YYYY")}</span>
           <br />
           <span>{moment(cell.start_date).format("hh:MM:SS A")}</span>
         </div>
@@ -252,7 +251,7 @@ function Quest(props) {
                       </Button>
                     </Link>
                   </div>
-                  {/* <div className="text-end">
+                  <div className="text-end">
                     <input
                       type="text"
                       name="quest_name"
@@ -264,7 +263,7 @@ function Quest(props) {
                       }}
                       onChange={e => handleFilter(e)}
                     />
-                  </div> */}
+                  </div>
                   <DataTable
                     columns={activeData}
                     data={props?.get_server_side_pagination_quest_data?.data}
@@ -376,7 +375,7 @@ export default withRouter(
     questDeleteAction,
     questDeleteFresh,
     getServerSidePaginationQuestAction,
-    getServerSidePaginationQuestSearchAction,
+
     getServerSidePaginationQuestFresh,
     getQuestByIdFresh,
   })(Quest)

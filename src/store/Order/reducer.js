@@ -13,6 +13,10 @@ import {
   GET_AVAILABLE_RIDER,
   ASSIGN_RIDER,
   ASSIGN_RIDER_FRESH,
+  SERVER_SIDE_PAGINATION_ORDER,
+  SERVER_SIDE_PAGINATION_ORDER_FRESH,
+  GET_ORDER_INVOICE,
+  GET_ORDER_INVOICE_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -38,6 +42,15 @@ const initialState = {
   order_assign_rider_data: null,
   order_assign_rider_error: null,
   order_assign_rider_loading: false,
+
+  get_server_side_pagination_order_data: null,
+  get_server_side_pagination_order_error: null,
+  get_server_side_pagination_order_loading: false,
+
+  // order invoice
+  get_order_invoice_data: null,
+  get_order_invoice_error: null,
+  get_order_invoice_loading: false,
 }
 
 const order = (state = initialState, action) => {
@@ -127,6 +140,40 @@ const order = (state = initialState, action) => {
         ...state,
         get_all_order_loading: false,
         order_assign_rider_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_ORDER:
+      state = {
+        ...state,
+        get_server_side_pagination_order_data: action.payload,
+        get_server_side_pagination_order_error: null,
+        get_server_side_pagination_order_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_ORDER_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_order_data: action.payload,
+        get_server_side_pagination_order_loading: action.status,
+      }
+      break
+
+    case GET_ORDER_INVOICE:
+      state = {
+        ...state,
+        get_order_invoice_data: action.payload,
+        get_order_invoice_error: null,
+        get_order_invoice_loading: action.status,
+      }
+      break
+
+    case GET_ORDER_INVOICE_FRESH:
+      state = {
+        ...state,
+        get_order_invoice_data: action.payload,
+        get_order_invoice_loading: action.status,
       }
       break
   }

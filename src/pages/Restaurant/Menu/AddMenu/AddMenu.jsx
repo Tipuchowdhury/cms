@@ -386,7 +386,10 @@ function AddMenu(props) {
     //console.log(newCat[categoryIndex])
     newCat[categoryIndex] = {
       ...newCat[categoryIndex],
-      cat_is_multiple: !newCat[categoryIndex].cat_is_multiple,
+      cat_is_multiple: !(newCat[categoryIndex]?.cat_is_multiple == true ||
+      "true"
+        ? true
+        : false),
     }
 
     setAddNewCategory(newCat)

@@ -27,6 +27,8 @@ import {
   getAllRestaurantMenuItemAction,
   getAllZoneAction,
   getAllCustomerAction,
+  getMenuItemByBrandIdAction,
+  getCategoryByBrandIdAction,
 } from "store/actions"
 import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
@@ -128,36 +130,21 @@ function AddCoupon(props) {
   }
 
   //select multiple category
-  const common_categories = props?.get_all_category_data?.filter(elem =>
-    location?.state?.categories?.find(
-      ({ category_id }) => elem._id === category_id
-    )
-  )
+  // const common_categories = props?.get_all_category_data?.filter(elem =>
+  //   location?.state?.categories?.find(
+  //     ({ category_id }) => elem._id === category_id
+  //   )
+  // )
 
-  const category_data_edit = common_categories
-    ? common_categories?.map((item, key) => {
-        return { label: item.category_name, value: item._id }
-      })
-    : ""
-  const [selectedCategory, setSelectedCategory] = useState(
-    category_data_edit ? category_data_edit : ""
-  )
-
-  useEffect(() => {
-    if (props.get_all_category_loading === "Success")
-      setSelectedCategory(category_data_edit)
-  }, [props.get_all_category_loading])
+  // const category_data_edit = common_categories
+  //   ? common_categories?.map((item, key) => {
+  //       return { label: item.category_name, value: item._id }
+  //     })
+  //   : ""
+  const [selectedCategory, setSelectedCategory] = useState("")
 
   const handleSelectCategory = e => {
     setSelectedCategory(e)
-  }
-
-  let categoryData = undefined
-  if (props.get_all_category_data?.length > 0) {
-    categoryData = props.get_all_category_data?.map((item, key) => ({
-      label: item.category_name,
-      value: item._id,
-    }))
   }
 
   // console.log(props.get_all_category_data)
@@ -266,24 +253,22 @@ function AddCoupon(props) {
     }))
   }
 
-  const common_menu = props?.get_all_menu_data?.filter(elem =>
-    location?.state?.menu_items?.find(
-      ({ menu_item_id }) => elem._id === menu_item_id
-    )
-  )
+  // const common_menu = props?.get_all_menu_data?.filter(elem =>
+  //   location?.state?.menu_items?.find(
+  //     ({ menu_item_id }) => elem._id === menu_item_id
+  //   )
+  // )
 
-  const menu_data_edit = common_menu
-    ? common_menu?.map((item, key) => {
-        return {
-          label: item.menu_name,
-          value: item._id,
-        }
-      })
-    : ""
+  // const menu_data_edit = common_menu
+  //   ? common_menu?.map((item, key) => {
+  //       return {
+  //         label: item.menu_name,
+  //         value: item._id,
+  //       }
+  //     })
+  //   : ""
 
-  const [selectedMenuItem, setSelectedMenuItem] = useState(
-    menu_data_edit ? menu_data_edit : ""
-  )
+  const [selectedMenuItem, setSelectedMenuItem] = useState("")
 
   useEffect(() => {
     if (props.get_all_menu_loading === "Success")
@@ -292,14 +277,6 @@ function AddCoupon(props) {
 
   const handleSelectMenu = e => {
     setSelectedMenuItem(e)
-  }
-
-  let menuData = undefined
-  if (props.get_all_menu_data?.length > 0) {
-    menuData = props.get_all_menu_data?.map((item, key) => ({
-      label: item.menu_name,
-      value: item._id,
-    }))
   }
 
   //select multiple subscription_type
@@ -588,14 +565,6 @@ function AddCoupon(props) {
       props.getAllBranchAction()
     }
 
-    if (props.get_all_menu_loading == false) {
-      props.getAllRestaurantMenuItemAction()
-    }
-
-    if (props.get_all_category_loading == false) {
-      props.getAllCategoryAction()
-    }
-
     if (props.get_all_cuisine_loading == false) {
       props.getAllCuisneAction()
     }
@@ -634,9 +603,96 @@ function AddCoupon(props) {
     props.get_all_category_loading,
     props.get_all_customer_loading,
     props.get_all_subscription_type_loading,
-    props.get_all_category_loading,
-    props.get_all_menu_loading,
   ])
+
+  useEffect(() => {
+    if (
+      selectedCouponType?.value == "menu_item_wise" &&
+      selectedBranch?.length > 0
+    ) {
+      props.getMenuItemByBrandIdAction({
+        branch_id: selectedBranch.map(data => data.value),
+      })
+    }
+  }, [selectedBranch])
+
+  const [menuData, setMenuData] = useState([])
+
+  useEffect(() => {
+    if (props.get_menu_by_branch_id_data) {
+      setMenuData(
+        props.get_menu_by_branch_id_data?.map((item, key) => ({
+          label: item.menu_name,
+          value: item._id,
+        }))
+      )
+
+      if (location?.state) {
+        console.log("menuData :", menuData)
+        const common_menu = props.get_menu_by_branch_id_data?.filter(elem =>
+          location?.state?.menu_items?.find(
+            ({ menu_item_id }) => elem._id === menu_item_id
+          )
+        )
+
+        const menu_data_edit = common_menu
+          ? common_menu?.map((item, key) => {
+              return {
+                label: item.menu_name,
+                value: item._id,
+              }
+            })
+          : ""
+
+        setSelectedMenuItem(menu_data_edit)
+      }
+    } else {
+      setMenuData([])
+      setSelectedMenuItem([])
+    }
+  }, [props.get_menu_by_branch_id_data])
+
+  useEffect(() => {
+    console.log("selectedBranch :", selectedBranch[0]?.value)
+    if (
+      selectedCouponType?.value == "category_wise" &&
+      selectedBranch?.length > 0
+    ) {
+      props.getCategoryByBrandIdAction({
+        branch_id: selectedBranch.map(data => data.value),
+      })
+    }
+  }, [selectedBranch])
+
+  const [categoryData, setCategoryData] = useState([])
+  useEffect(() => {
+    if (props.get_category_by_branch_id_data) {
+      setCategoryData(
+        props.get_category_by_branch_id_data?.map((item, key) => ({
+          label: item.category_name,
+          value: item._id,
+        }))
+      )
+
+      const common_categories = props?.get_category_by_branch_id_data?.filter(
+        elem =>
+          location?.state?.categories?.find(
+            ({ category_id }) => elem._id === category_id
+          )
+      )
+
+      const category_data_edit = common_categories
+        ? common_categories?.map((item, key) => {
+            return { label: item.category_name, value: item._id }
+          })
+        : ""
+
+      setSelectedCategory(category_data_edit)
+    } else {
+      setCategoryData([])
+      setSelectedCategory([])
+    }
+  }, [props.get_category_by_branch_id_data])
 
   // console.log(props.get_all_branch_data)
 
@@ -706,24 +762,6 @@ function AddCoupon(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      Type <span className="text-danger">*</span>
-                    </label>
-                    <div className="col-md-10">
-                      <Select
-                        value={selectedCouponType}
-                        onChange={handleSelectCouponType}
-                        options={couponTypes}
-                        isMulti={false}
-                        required
-                      />
-                    </div>
-                  </Row>
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
                       Description
                     </label>
                     <div className="col-md-10">
@@ -766,7 +804,27 @@ function AddCoupon(props) {
                     </Row>
                   )}
 
-                  {selectedCouponType?.value == "branch_wise" ? (
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="example-text-input"
+                      className="col-md-2 col-form-label"
+                    >
+                      Type <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-10">
+                      <Select
+                        value={selectedCouponType}
+                        onChange={handleSelectCouponType}
+                        options={couponTypes}
+                        isMulti={false}
+                        required
+                      />
+                    </div>
+                  </Row>
+
+                  {selectedCouponType?.value == "branch_wise" ||
+                  selectedCouponType?.value == "category_wise" ||
+                  selectedCouponType?.value == "menu_item_wise" ? (
                     <Row className="mb-3">
                       <label
                         htmlFor="example-text-input"
@@ -1415,11 +1473,17 @@ const mapStateToProps = state => {
     get_all_zone_loading,
     get_all_menu_data,
     get_all_menu_loading,
+    get_menu_by_branch_id_data,
+    get_menu_by_branch_id_error,
+    get_menu_by_branch_id_loading,
   } = state.Restaurant
   const {
     get_all_category_data,
     get_all_category_error,
     get_all_category_loading,
+    get_category_by_branch_id_data,
+    get_category_by_branch_id_error,
+    get_category_by_branch_id_loading,
   } = state.Category
 
   const {
@@ -1457,6 +1521,12 @@ const mapStateToProps = state => {
     get_all_subscription_type_data,
     get_all_subscription_type_error,
     get_all_subscription_type_loading,
+    get_menu_by_branch_id_data,
+    get_menu_by_branch_id_error,
+    get_menu_by_branch_id_loading,
+    get_category_by_branch_id_data,
+    get_category_by_branch_id_error,
+    get_category_by_branch_id_loading,
   }
 }
 
@@ -1474,5 +1544,8 @@ export default withRouter(
     getAllCustomerAction,
     getAllRestaurantAction,
     getAllZoneAction,
+    getAllCustomerAction,
+    getMenuItemByBrandIdAction,
+    getCategoryByBrandIdAction,
   })(AddCoupon)
 )

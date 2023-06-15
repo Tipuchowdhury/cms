@@ -82,6 +82,7 @@ import {
   DELETE_RESTAURANT_MENU_FRESH,
   RESTAURANT_MENU_STATUS_EDIT,
   RESTAURANT_MENU_STATUS_EDIT_FRESH,
+  GET_RESTAURANT_MENU_BY_BRANCH_ID,
   SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
   SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH,
@@ -168,6 +169,10 @@ const initialState = {
   get_all_menu_data: null,
   get_all_menu_error: null,
   get_all_menu_loading: false,
+
+  get_menu_by_branch_id_data: null,
+  get_menu_by_branch_id_error: null,
+  get_menu_by_branch_id_loading: false,
 
   edit_addOn_category_loading: false,
 
@@ -595,6 +600,15 @@ const Restaurant = (state = initialState, action) => {
         get_all_menu_data: action.payload,
         get_all_menu_error: action.error,
         get_all_menu_loading: action.status,
+      }
+      break
+
+    case GET_RESTAURANT_MENU_BY_BRANCH_ID:
+      state = {
+        ...state,
+        get_menu_by_branch_id_data: action.payload,
+        get_menu_by_branch_id_error: action.error,
+        get_menu_by_branch_id_loading: action.status,
       }
       break
 

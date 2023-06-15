@@ -13,6 +13,7 @@ import {
   SERVER_SIDE_PAGINATION_CATEGORY,
   SERVER_SIDE_PAGINATION_CATEGORY_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_CATEGORY_FRESH,
+  GET_CATEGORY_BY_BRANCH_ID,
 } from "./actionTypes"
 
 const initialState = {
@@ -42,6 +43,10 @@ const initialState = {
 
   get_server_side_pagination_category_search_data: null,
   get_server_side_pagination_category_search_loading: false,
+
+  get_category_by_branch_id_data: null,
+  get_category_by_branch_id_error: null,
+  get_category_by_branch_id_loading: false,
 }
 
 const category = (state = initialState, action) => {
@@ -147,6 +152,15 @@ const category = (state = initialState, action) => {
         ...state,
         get_server_side_pagination_category_search_data: action.payload,
         get_server_side_pagination_category_search_loading: action.status,
+      }
+      break
+
+    case GET_CATEGORY_BY_BRANCH_ID:
+      state = {
+        ...state,
+        get_category_by_branch_id_data: action.payload,
+        get_category_by_branch_id_error: action.error,
+        get_category_by_branch_id_loading: action.status,
       }
       break
   }

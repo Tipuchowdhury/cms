@@ -82,6 +82,7 @@ import {
   DELETE_RESTAURANT_MENU_FRESH,
   RESTAURANT_MENU_STATUS_EDIT,
   RESTAURANT_MENU_STATUS_EDIT_FRESH,
+  GET_RESTAURANT_MENU_BY_BRANCH_ID,
   SERVER_SIDE_PAGINATION_ADDONS_CATEGORY,
   SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH,
@@ -1730,6 +1731,40 @@ export const getAllRestaurantMenuItemAction = () => {
       .catch(error => {
         dispatch({
           type: GET_RESTAURANT_MENU,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getMenuItemByBrandIdAction = data => {
+  if (!data.branch_id) return
+  let branch_ids = ""
+  data.branch_id.forEach((value, index) => {
+    branch_ids += "branch_ids=" + value
+    if (index != data.branch_id.length - 1) {
+      branch_ids += "&"
+    }
+  })
+  var url = `${process.env.REACT_APP_LOCALHOST}/MenuItem/GetByBranchId?${branch_ids}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_RESTAURANT_MENU_BY_BRANCH_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_RESTAURANT_MENU_BY_BRANCH_ID,
           status: "Failed",
         })
       })

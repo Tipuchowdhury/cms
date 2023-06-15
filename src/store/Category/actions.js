@@ -13,6 +13,7 @@ import {
   SERVER_SIDE_PAGINATION_CATEGORY,
   SERVER_SIDE_PAGINATION_CATEGORY_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_CATEGORY_FRESH,
+  GET_CATEGORY_BY_BRANCH_ID,
 } from "./actionTypes"
 import axios from "axios"
 
@@ -306,4 +307,38 @@ export const getServerSidePaginationSearchCategoryFresh = () => {
       status: false,
       payload: null,
     })
+}
+
+export const getCategoryByBrandIdAction = data => {
+  if (!data.branch_id) return
+  let branch_ids = ""
+  data.branch_id.forEach((value, index) => {
+    branch_ids += "branch_ids=" + value
+    if (index != data.branch_id.length - 1) {
+      branch_ids += "&"
+    }
+  })
+  var url = `${process.env.REACT_APP_LOCALHOST}/Category/GetByBranchId?${branch_ids}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_CATEGORY_BY_BRANCH_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_CATEGORY_BY_BRANCH_ID,
+          status: "Failed",
+        })
+      })
+  }
 }

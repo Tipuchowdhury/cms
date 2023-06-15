@@ -18,8 +18,6 @@ import {
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
-import { v4 as uuidv4 } from "uuid"
-import { convertToFormData } from "helpers/functions"
 
 export const getServerSidePaginationQuestAction = (index, limit, filters) => {
   console.log("filters :", filters)
@@ -59,48 +57,6 @@ export const getServerSidePaginationQuestFresh = () => {
   return dispatch =>
     dispatch({
       type: SERVER_SIDE_PAGINATION_QUEST_FRESH,
-      status: false,
-      payload: null,
-    })
-}
-
-export const getServerSidePaginationQuestSearchAction = name => {
-  console.log(name)
-  var url = process.env.REACT_APP_LOCALHOST + `/Quest/Search?zone_name=${name}`
-  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=1&limit=2`;
-  console.log(url)
-
-  return dispatch => {
-    const headers = {
-      "Content-Type": "application/json",
-
-      "Access-Control-Allow-Origin": "*",
-    }
-    axios
-      .get(url, { headers: headers })
-      .then(response => {
-        dispatch({
-          type: SERVER_SIDE_PAGINATION_QUEST_SEARCH,
-          payload: response.data,
-          status: "Success",
-        })
-      })
-      .catch(error => {
-        dispatch({
-          type: SERVER_SIDE_PAGINATION_QUEST_SEARCH,
-          status: "Failed",
-        })
-      })
-  }
-}
-
-export const getServerSidePaginationSearchQuestFresh = () => {
-  console.log(
-    "======= hello from getServerSidePaginationSearchQuestFresh ========="
-  )
-  return dispatch =>
-    dispatch({
-      type: SERVER_SIDE_PAGINATION_SEARCH_QUEST_FRESH,
       status: false,
       payload: null,
     })

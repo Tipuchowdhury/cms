@@ -166,12 +166,13 @@ import Quest from "pages/Quest/Quest"
 import AddQuest from "pages/Quest/AddQuest"
 import Wallet from "pages/Wallet/Wallet"
 import RiderWalletDetail from "pages/Wallet/RiderWalletDetail"
+import Invoice from "pages/Order/Invoice"
 import EditUser from "pages/ManageUsers/EditUser"
 import CustomerEdit from "pages/Customer/CustomerEdit"
 import CategoryEdit from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryEdit"
 
 const userRoutes = [
-  { path: "/dashboard", component: <Dashboard /> },
+  // { path: "/dashboard", component: <Dashboard /> },
 
   // calendar
   { path: "/calendar", component: <Calendar /> },
@@ -270,6 +271,7 @@ const userRoutes = [
 
   // Orders
   { path: "/dispatch", component: <Order /> },
+  { path: "/invoice/:orderID", component: <Invoice /> },
 
   // Refund
   { path: "/refund", component: <Refund /> },

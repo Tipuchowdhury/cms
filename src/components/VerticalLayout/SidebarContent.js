@@ -147,20 +147,19 @@ const SidebarContent = props => {
           <ul className="metismenu list-unstyled" id="side-menu">
             <li className="menu-title">{props.t("Main")} </li>
             <li>
-              <Link to="/dashboard" className="waves-effect">
+              <Link to="/" className="waves-effect">
                 <i className="ti-home"></i>
                 {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("Dashboard")}</span>
               </Link>
             </li>
 
-            <li>
+            {/* <li>
               <Link to="/zone-utilization" className="waves-effect">
                 <i className="ti-desktop"></i>
-                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("Zone Utilization")}</span>
               </Link>
-            </li>
+            </li> */}
 
             <li>
               <Link to="/dispatch" className="waves-effect">
@@ -333,14 +332,13 @@ const SidebarContent = props => {
                 <span>{props.t("Review & Ratings")}</span>
               </Link>
             </li>
-
+            {/*
             <li>
               <Link to="/refund" className="waves-effect">
                 <i className="ti-money"></i>
-                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("Refund")}</span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link to="/wallet" className="waves-effect">
                 <i className="ti-wallet"></i>
