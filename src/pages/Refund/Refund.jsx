@@ -185,7 +185,7 @@ function Refund(props) {
     // },
     {
       // dataField: "date",
-      // selector: row => row.date,
+      selector: row => row.date,
       name: "Date",
       sortable: true,
       cell: (cell, row) => (
@@ -204,7 +204,7 @@ function Refund(props) {
     },
     {
       // dataField: "",
-      selector: "",
+      selector: row => row.refund_status,
       name: "Refund Status",
       sortable: true,
       cell: statusRef,
@@ -212,7 +212,7 @@ function Refund(props) {
     {
       //dataField: "he",
       name: "Action",
-      sortable: true,
+      // sortable: true,
       cell: actionRef,
     },
   ]
@@ -323,8 +323,53 @@ function Refund(props) {
                     ) : null
                   ) : null} */}
 
-                  <Row className="justify-content-end mb-3">
-                    <Col className="col-3">
+                  <Row className="mb-3">
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label className="form-label" htmlFor="order_id">
+                        Order ID
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="order_id"
+                        placeholder="Enter Order ID"
+                        name="order_id"
+                        onChange={handleFilter}
+                        value={pageFilters.order_id}
+                      />
+                    </Col>
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label className="form-label" htmlFor="customer_mobile">
+                        Customer Mobile
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="customer_mobile"
+                        placeholder="Enter Customer Mobile"
+                        name="customer_mobile"
+                        onChange={handleFilter}
+                        value={pageFilters.customer_mobile}
+                      />
+                    </Col>
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label className="form-label" htmlFor="transaction_id">
+                        Transaction ID
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="transaction_id"
+                        placeholder="Enter Transaction ID"
+                        name="transaction_id"
+                        onChange={handleFilter}
+                        value={pageFilters.transaction_id}
+                      />
+                    </Col>
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label className="form-label" htmlFor="payment_method">
+                        Payment Method
+                      </label>
                       <Input
                         id="payment_method"
                         name="payment_method"
@@ -341,6 +386,20 @@ function Refund(props) {
                           </option>
                         ))}
                       </Input>
+                    </Col>
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label className="form-label" htmlFor="order_date">
+                        Order Date
+                      </label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        id="order_date"
+                        placeholder="Enter Order Date"
+                        name="order_date"
+                        onChange={handleFilter}
+                        value={pageFilters.order_date}
+                      />
                     </Col>
                   </Row>
 
