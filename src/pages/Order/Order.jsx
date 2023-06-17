@@ -66,7 +66,7 @@ function Order(props) {
   }, [])
 
   const toggleOrderInvoice = order_id => {
-    window, open(`/invoice/${order_id}`, "_blank")
+    window.open(`/invoice/${order_id}`, "_blank")
   }
 
   const handleSelectRider = e => {
