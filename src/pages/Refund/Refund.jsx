@@ -277,7 +277,6 @@ function Refund(props) {
     setCountPerPage(newPerPage)
   }
 
-  console.log(props.get_server_side_pagination_refund_data)
   return (
     <React.Fragment>
       <div className="page-content">

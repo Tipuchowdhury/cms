@@ -33,7 +33,7 @@ const initialState = {
 
   refund_delete_loading: false,
 
-  // server side pagination QUEST
+  // server side pagination refund
   get_server_side_pagination_refund_data: null,
   get_server_side_pagination_refund_error: null,
   get_server_side_pagination_refund_loading: false,

@@ -156,6 +156,7 @@ import SystemOption from "pages/Setting/SystemOption/SystemOption"
 import VehicleTypes from "pages/Rider/VehicleTypes/VehicleTypes"
 import Riders from "pages/Rider/Riders/Riders"
 import AddRider from "pages/Rider/Riders/AddRider"
+import EditRider from "pages/Rider/Riders/EditRider"
 import Permissions from "pages/roles_and_permissions/Permissions/Permissions"
 import Roles from "pages/roles_and_permissions/Roles/Roles"
 import Order from "pages/Order/Order"
@@ -208,6 +209,7 @@ const userRoutes = [
 
   { path: "/riders", component: <Riders /> },
   { path: "/add-rider", component: <AddRider /> },
+  { path: "/edit-rider", component: <EditRider /> },
 
   { path: "/subscription-types", component: <SubscriptionTypes /> },
 
