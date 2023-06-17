@@ -100,14 +100,15 @@ function EditMenu(props) {
 
     add_on_categories?.forEach((add_on_category, index) => {
       add_on_category.add_ons?.forEach((add_on, index) => {
+        let price = add_on.add_ons_price
+          ? add_on.add_ons_price
+          : add_on.add_on_price
         add_ons_array.push({
           _id: add_on._id,
           add_on_name: add_on.add_ons_name
             ? add_on.add_ons_name
             : add_on.add_on_name,
-          add_on_price: add_on.add_ons_price
-            ? add_on.add_ons_price
-            : add_on.add_on_price,
+          add_on_price: price ? price : 0,
           addoncat_id: add_on.addoncat_id,
           is_multiple: add_on.is_multiple,
           max_choice: add_on.max_choice,
@@ -464,30 +465,31 @@ function EditMenu(props) {
 
   props?.get_time_slot_by_branch_id_data?.forEach((time_slot, index) => {
     let status = 0
-    location?.state?.menu_available_times?.forEach((time_slot_2, key) => {
-      if (time_slot._id === time_slot_2.menu_item_time_slot_id) {
-        status = 1
+    if (time_slot.is_active == true) {
+      location?.state?.menu_available_times?.forEach((time_slot_2, key) => {
+        if (time_slot._id === time_slot_2.menu_item_time_slot_id) {
+          status = 1
+        }
+      })
+      if (status == 1) {
+        slot_data.push({
+          _id: time_slot._id,
+          checked: true,
+          name: time_slot.name,
+          start_time: time_slot.start_time,
+          end_time: time_slot.end_time,
+        })
+      } else {
+        slot_data.push({
+          _id: time_slot._id,
+          checked: false,
+          name: time_slot.name,
+          start_time: time_slot.start_time,
+          end_time: time_slot.end_time,
+        })
       }
-    })
-    if (status == 1) {
-      slot_data.push({
-        _id: time_slot._id,
-        checked: true,
-        name: time_slot.name,
-        start_time: time_slot.start_time,
-        end_time: time_slot.end_time,
-      })
-    } else {
-      slot_data.push({
-        _id: time_slot._id,
-        checked: false,
-        name: time_slot.name,
-        start_time: time_slot.start_time,
-        end_time: time_slot.end_time,
-      })
+      status = 0
     }
-
-    status = 0
   })
 
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(
@@ -884,36 +886,12 @@ function EditMenu(props) {
                 className="mt-4"
                 onSubmit={location.state ? handleEditMenu : handleAddMenu}
               >
-                {/* <Row className="mb-3">
-                  <label
-                    htmlFor="example-text-input"
-                    className="col-md-2 col-form-label"
-                  >
-                    Restaurant Name
-                  </label>
-                  <div className="col-md-10">
-                    <Input
-                      id="exampleSelect"
-                      name="restaurant"
-                      value={info.restaurant}
-                      //required={true}
-                      // onChange={handleInputs}
-                      onChange={e => handleInputsRestaurant(e)}
-                      type="select"
-                      required
-                    >
-                      <option value="">Choose...</option>
-                      {branchData}
-                    </Input>
-                  </div>
-                </Row> */}
-
                 <Row className="mb-3">
                   <label
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Restaurant Name
+                    Restaurant Name <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <Select
@@ -931,7 +909,7 @@ function EditMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Menu Name
+                    Menu Name <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -963,7 +941,6 @@ function EditMenu(props) {
                       name="menu_description"
                       onChange={handleInputs}
                       value={info.menu_description ?? ""}
-                      required
                     />
                   </div>
                 </Row>
@@ -973,7 +950,7 @@ function EditMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Menu Price
+                    Menu Price <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -995,7 +972,7 @@ function EditMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Pickup Menu Price
+                    Pickup Menu Price <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -1016,7 +993,7 @@ function EditMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Preparation Time
+                    Preparation Time <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -1049,7 +1026,6 @@ function EditMenu(props) {
                       name="Variation_group_name"
                       onChange={handleInputs}
                       value={info.Variation_group_name ?? ""}
-                      required
                     />
                   </div>
                 </Row>
@@ -1070,7 +1046,6 @@ function EditMenu(props) {
                       name="Variation_grp_desc"
                       onChange={handleInputs}
                       value={info.Variation_grp_desc ?? ""}
-                      required
                     />
                   </div>
                 </Row>
@@ -1182,6 +1157,7 @@ function EditMenu(props) {
                                   <input
                                     type="number"
                                     id="subject"
+                                    min="0"
                                     className="form-control"
                                     name="variation_price"
                                     placeholder="Price"
@@ -1300,7 +1276,7 @@ function EditMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Popular
+                    Popular <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <div className="btn-group" role="group">
@@ -1345,7 +1321,7 @@ function EditMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Delivery
+                    Delivery <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <div className="btn-group" role="group">
@@ -1390,7 +1366,7 @@ function EditMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Pickup
+                    Pickup <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <div className="btn-group" role="group">
@@ -1435,7 +1411,7 @@ function EditMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Dine
+                    Dine <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <div className="btn-group" role="group">
@@ -1476,32 +1452,9 @@ function EditMenu(props) {
                   </div>
                 </Row>
 
-                {/* <Row className="mb-3">
-                  <label
-                    htmlFor="example-text-input"
-                    className="col-md-2 col-form-label"
-                  >
-                    Category
-                  </label>
-                  <div className="col-md-10">
-                    <Input
-                      id="exampleSelect"
-                      name="category"
-                      value={info.category}
-                      //required={true}
-                      onChange={handleInputs}
-                      type="select"
-                      required
-                    >
-                      <option>Choose...</option>
-                      {menuCategoryData}
-                    </Input>
-                  </div>
-                </Row> */}
-
                 <Row className="mb-3">
                   <label htmlFor="category" className="col-md-2 col-form-label">
-                    Category
+                    Category <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <Select
@@ -1519,7 +1472,7 @@ function EditMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Vat(%)
+                    Vat(%) <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -1541,7 +1494,7 @@ function EditMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    SD(%)
+                    SD(%) <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -1564,82 +1517,9 @@ function EditMenu(props) {
                     className="col-md-2 col-form-label"
                     style={{ marginTop: "22px" }}
                   >
-                    Menu Availability
+                    Menu Availability <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
-                    {/* {newData2?.length > 0 && dataUpdated
-                      ? newData2?.map(item => (
-                          <Row className="mb-3">
-                            <div
-                              className="col-md-10"
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <div style={{ marginTop: "30px" }}>
-                                <input
-                                  type="checkbox"
-                                  id="cat_is_multiple"
-                                  name="cat_is_multiple"
-                                  style={{ margin: "0px 15px 50px 0px" }}
-                                  // value="true"
-
-                                  checked={item.checked}
-                                  // checked={checkTimeSelected(item)}
-                                  onChange={e => handleChangeTime(e, item)}
-                                />
-                                <span
-                                  style={{
-                                    fontSize: "16px",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  {item?.name}
-                                </span>
-                              </div>
-
-                              <div className="mb-3 col-lg-3">
-                                <label
-                                  className="form-label"
-                                  htmlFor="startTime"
-                                >
-                                  Start Time
-                                </label>
-                                <input
-                                  type="time"
-                                  id="startTime"
-                                  className="form-control"
-                                  name="start_time"
-                                  placeholder="Add-ons name"
-                                  value={moment({
-                                    hour: item.start_time?.hour,
-                                    minute: item?.start_time?.minute,
-                                  }).format("HH:mm")}
-                                />
-                              </div>
-
-                              <div className="mb-3 col-lg-3">
-                                <label className="form-label" htmlFor="subject">
-                                  End Time
-                                </label>
-                                <input
-                                  type="time"
-                                  id="subject"
-                                  className="form-control"
-                                  name="end_time"
-                                  placeholder="Price"
-                                  value={moment({
-                                    hour: item.end_time?.hour,
-                                    minute: item?.end_time?.minute,
-                                  }).format("HH:mm")}
-                                />
-                              </div>
-                            </div>
-                          </Row>
-                        ))
-                      : ""} */}
-
                     {selectedTimeSlot?.length > 0
                       ? selectedTimeSlot?.map(item => (
                           <Row className="mb-3">
@@ -1747,7 +1627,6 @@ function EditMenu(props) {
                       id="exampleSelect"
                       name="add_on_category_name"
                       value={itemCat.add_on_category_id}
-                      required={true}
                       onChange={e => handleInputsAddOns(e, idx)}
                       type="select"
                     >

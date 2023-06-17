@@ -41,7 +41,7 @@ const Recoverpw = props => {
       console.log("=====token uploded successfully====")
       toast.success("Token Uploaded")
       props.uploadTokenForRegistrationFresh()
-      navigate("/dashboard")
+      navigate("/")
     }
   }, [props.upload_token_loading])
   return (

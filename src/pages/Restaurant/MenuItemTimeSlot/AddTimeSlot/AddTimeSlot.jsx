@@ -182,7 +182,7 @@ function AddTimeSlot(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Slot Name
+                    Slot Name <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -192,6 +192,7 @@ function AddTimeSlot(props) {
                       placeholder="Enter slot name"
                       name="name"
                       onChange={handleInputs}
+                      required
                       value={timeSlot.name ?? ""}
                     />
                   </div>
@@ -202,7 +203,7 @@ function AddTimeSlot(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Branch
+                    Branch <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <Input
@@ -284,9 +285,10 @@ function AddTimeSlot(props) {
                         <div data-repeater-item className="row">
                           <div className="mb-3 col-lg-3">
                             <label className="form-label" htmlFor="startTime">
-                              Start Time
+                              Start Time <span className="text-danger">*</span>
                             </label>
                             <input
+                              required
                               type="time"
                               id="startTime"
                               className="form-control"
@@ -299,9 +301,10 @@ function AddTimeSlot(props) {
 
                           <div className="mb-3 col-lg-3">
                             <label className="form-label" htmlFor="subject">
-                              End Time
+                              End Time <span className="text-danger">*</span>
                             </label>
                             <input
+                              required
                               type="time"
                               id="subject"
                               className="form-control"
