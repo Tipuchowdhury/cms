@@ -465,30 +465,31 @@ function EditMenu(props) {
 
   props?.get_time_slot_by_branch_id_data?.forEach((time_slot, index) => {
     let status = 0
-    location?.state?.menu_available_times?.forEach((time_slot_2, key) => {
-      if (time_slot._id === time_slot_2.menu_item_time_slot_id) {
-        status = 1
+    if (time_slot.is_active == true) {
+      location?.state?.menu_available_times?.forEach((time_slot_2, key) => {
+        if (time_slot._id === time_slot_2.menu_item_time_slot_id) {
+          status = 1
+        }
+      })
+      if (status == 1) {
+        slot_data.push({
+          _id: time_slot._id,
+          checked: true,
+          name: time_slot.name,
+          start_time: time_slot.start_time,
+          end_time: time_slot.end_time,
+        })
+      } else {
+        slot_data.push({
+          _id: time_slot._id,
+          checked: false,
+          name: time_slot.name,
+          start_time: time_slot.start_time,
+          end_time: time_slot.end_time,
+        })
       }
-    })
-    if (status == 1) {
-      slot_data.push({
-        _id: time_slot._id,
-        checked: true,
-        name: time_slot.name,
-        start_time: time_slot.start_time,
-        end_time: time_slot.end_time,
-      })
-    } else {
-      slot_data.push({
-        _id: time_slot._id,
-        checked: false,
-        name: time_slot.name,
-        start_time: time_slot.start_time,
-        end_time: time_slot.end_time,
-      })
+      status = 0
     }
-
-    status = 0
   })
 
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(

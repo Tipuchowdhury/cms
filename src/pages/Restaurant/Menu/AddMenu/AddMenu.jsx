@@ -269,13 +269,15 @@ function AddMenu(props) {
   const slot_data = []
 
   props?.get_time_slot_by_branch_id_data?.forEach((time_slot, index) => {
-    slot_data.push({
-      _id: time_slot._id,
-      checked: false,
-      name: time_slot.name,
-      start_time: time_slot.start_time,
-      end_time: time_slot.end_time,
-    })
+    if (time_slot.is_active == true) {
+      slot_data.push({
+        _id: time_slot._id,
+        checked: false,
+        name: time_slot.name,
+        start_time: time_slot.start_time,
+        end_time: time_slot.end_time,
+      })
+    }
   })
 
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(
