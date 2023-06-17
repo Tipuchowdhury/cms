@@ -1005,7 +1005,7 @@ function BranchAdd(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Commmission <span className="text-danger">*</span>
+                    Commission <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
