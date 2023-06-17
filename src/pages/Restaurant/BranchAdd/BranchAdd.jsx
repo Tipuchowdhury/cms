@@ -28,6 +28,7 @@ import {
   branchEditAction,
   editBranchFresh,
   getAllCuisneAction,
+  getAllBranchAttributeAction,
 } from "store/actions"
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { boolean } from "yup"
@@ -175,6 +176,41 @@ function BranchAdd(props) {
     setselectedGroup(selectedGroup)
   }
 
+  //select multiple branch attribute
+  const common_attributes = props?.get_all_branch_attribute_data?.filter(elem =>
+    location?.state?.attributes?.find(
+      ({ branch_attribute_id }) => elem._id === branch_attribute_id
+    )
+  )
+
+  const branch_attributes_edit = common_attributes
+    ? common_attributes?.map((item, key) => {
+        return { label: item.name, value: item._id }
+      })
+    : ""
+  const [selectedBranchAttribute, setSelectedBranchAttribute] = useState(
+    branch_attributes_edit ? branch_attributes_edit : ""
+  )
+
+  useEffect(() => {
+    if (props.get_all_branch_attribute_loading === "Success")
+      setSelectedBranchAttribute(branch_attributes_edit)
+  }, [props.get_all_branch_attribute_loading])
+
+  const handleSelectBranchAttribute = e => {
+    setSelectedBranchAttribute(e)
+  }
+
+  let branchAttributeData = undefined
+  if (props.get_all_branch_attribute_data?.length > 0) {
+    branchAttributeData = props.get_all_branch_attribute_data?.map(
+      (item, key) => ({
+        label: item.name,
+        value: item._id,
+      })
+    )
+  }
+
   //console.log(location.state);
 
   const [zoneInfo, setZoneInfo] = useState({
@@ -310,7 +346,8 @@ function BranchAdd(props) {
         // coverFile,
         currentPath,
         selectedCuisine,
-        time
+        time,
+        selectedBranchAttribute
       )
     }
   }
@@ -338,12 +375,17 @@ function BranchAdd(props) {
         // coverFile,
         currentPath,
         selectedCuisine,
-        time
+        time,
+        selectedBranchAttribute
       )
     }
   }
 
   useEffect(() => {
+    if (props.get_all_branch_attribute_loading == false) {
+      //console.log("I am in get all subscription type loading ")
+      props.getAllBranchAttributeAction()
+    }
     if (props.get_all_restaurant_loading == false) {
       props.getAllRestaurantAction()
     }
@@ -391,6 +433,7 @@ function BranchAdd(props) {
     props.get_all_cusine_loading,
     props.add_branch_loading,
     props.edit_branch_loading,
+    props.get_all_branch_attribute_loading,
   ])
 
   return (
@@ -1065,6 +1108,23 @@ function BranchAdd(props) {
                 </Row>
                 <Row className="mb-3">
                   <label
+                    htmlFor="branch-attribute"
+                    className="col-md-2 col-form-label"
+                  >
+                    Branch Attribute
+                  </label>
+                  <div className="col-md-10">
+                    <Select
+                      value={selectedBranchAttribute}
+                      onChange={handleSelectBranchAttribute}
+                      options={branchAttributeData}
+                      isMulti={true}
+                    />
+                  </div>
+                </Row>
+
+                <Row className="mb-3">
+                  <label
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
@@ -1237,7 +1297,12 @@ const mapStateToProps = state => {
   } = state.Restaurant
 
   const { get_all_user_data, get_all_user_loading } = state.registerNew
+  const { get_all_branch_attribute_data, get_all_branch_attribute_loading } =
+    state.BranchAttribute
   return {
+    get_all_branch_attribute_data,
+    get_all_branch_attribute_loading,
+
     get_all_restaurant_data,
     get_all_restaurant_loading,
 
@@ -1260,9 +1325,10 @@ export default withRouter(
     branchEditAction,
     editBranchFresh,
     getAllCuisneAction,
+    getAllBranchAttributeAction,
   })(
     GoogleApiWrapper({
-      apiKey: "AIzaSyDJkREeL-PpO7Z45k-MsD5sJD_m1mzNGEk",
+      apiKey: "AIzaSyDKIxr2AXZPA1k8EyJz52suWseQCFxfoMU",
       LoadingContainer: LoadingContainer,
       v: "3",
     })(BranchAdd)
