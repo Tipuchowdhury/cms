@@ -453,11 +453,7 @@ function Refund(props) {
                   required
                   name="refund_amount"
                   onChange={handleEditInputs}
-                  value={
-                    editInfo.refund_status == false
-                      ? editInfo.order_total
-                      : editInfo.refund_amount
-                  }
+                  value={editInfo.refund_amount}
                 />
               </div>
 

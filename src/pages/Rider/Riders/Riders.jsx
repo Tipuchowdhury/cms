@@ -343,6 +343,37 @@ function Riders(props) {
                     ) : null
                   ) : null} */}
 
+                  <Row className="mb-3 justify-content-center">
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label className="form-label" htmlFor="name">
+                        First name
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="name"
+                        placeholder="Enter First Name"
+                        name="name"
+                        onChange={handleFilter}
+                        value={pageFilters.name}
+                      />
+                    </Col>
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label className="form-label" htmlFor="mobile">
+                        Mobile No
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="mobile"
+                        placeholder="Enter Mobile No"
+                        name="mobile"
+                        onChange={handleFilter}
+                        value={pageFilters.mobile}
+                      />
+                    </Col>
+                  </Row>
+
                   <DataTable
                     columns={activeData}
                     data={props?.get_server_side_pagination_rider_data?.data}
