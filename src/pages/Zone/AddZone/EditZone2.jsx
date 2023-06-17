@@ -36,6 +36,7 @@ import { v4 as uuidv4 } from "uuid"
 import { useLocation, useNavigate } from "react-router-dom"
 import CustomLoader from "components/CustomLoader/CustomLoader"
 import PageLoader from "components/CustomLoader/PageLoader"
+import { toast } from "react-toastify"
 
 const LoadingContainer = () => <div>Loading...</div>
 
@@ -191,20 +192,18 @@ function EditZone(props) {
 
   const handleSubmitForEdit = e => {
     e.preventDefault()
-    // console.log("======================I am in the edit form==================");
-    // console.log(zoneInfo);
-    // console.log(path);
-    // console.log(deliveryCharge);
-    // console.log(selectedBranch);
-    const uniqueId = uuidv4()
-
-    props.zoneEditAction(
-      props?.get_zone_by_id_data?._id,
-      zoneInfo,
-      path,
-      deliveryCharge,
-      selectedBranch
-    )
+    //console.log(zoneInfo)
+    if (zoneInfo.city == "") {
+      toast.error("Please select a city")
+    } else {
+      props.zoneEditAction(
+        props?.get_zone_by_id_data?._id,
+        zoneInfo,
+        path,
+        deliveryCharge,
+        selectedBranch
+      )
+    }
   }
 
   const edit_zone_delivery_charge_unsort =
@@ -444,7 +443,7 @@ function EditZone(props) {
                         onChange={handleInputs}
                         type="select"
                       >
-                        <option>Choose City</option>
+                        <option value="">Choose City</option>
                         {cityData}
                       </Input>
                     </div>

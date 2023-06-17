@@ -750,7 +750,8 @@ function SubscriptionTypes(props) {
             Are you sure?
           </ModalHeader>
           <ModalBody>
-            Do you really want to update status these records?{" "}
+            Do you want to {editInfo.isActive ? "deactivate" : "activate"} this
+            record?{" "}
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={toggleStatus}>

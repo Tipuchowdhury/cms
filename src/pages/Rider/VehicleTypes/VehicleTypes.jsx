@@ -415,7 +415,7 @@ function VehicleTypes(props) {
             <form className="mt-1" onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className="form-label" htmlFor="type">
-                  Vehicle Type
+                  Vehicle Type <span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
@@ -434,11 +434,11 @@ function VehicleTypes(props) {
                   Commission
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
                   id="commission"
                   placeholder="Enter Commission"
-                  required
+                  min="0"
                   name="commission"
                   value={addInfo.commission}
                   onChange={handleAddInputs}
@@ -453,11 +453,11 @@ function VehicleTypes(props) {
                   Minium no of received order at a time
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
                   id="maximum_no_of_received_order_at_a_time"
                   placeholder="Enter minium no of received order at a time"
-                  required
+                  min="0"
                   name="maximum_no_of_received_order_at_a_time"
                   value={addInfo.maximum_no_of_received_order_at_a_time}
                   onChange={handleAddInputs}
@@ -486,7 +486,7 @@ function VehicleTypes(props) {
             <form className="mt-1" onSubmit={handleEditSubmit}>
               <div className="mb-3">
                 <label className="form-label" htmlFor="type">
-                  Vehicle Type
+                  Vehicle Type <span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
@@ -505,11 +505,11 @@ function VehicleTypes(props) {
                   Commission
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
                   id="commission"
                   placeholder="Enter Commission"
-                  required
+                  min="0"
                   name="commission"
                   value={editInfo.commission}
                   onChange={handleEditInputs}
@@ -524,11 +524,11 @@ function VehicleTypes(props) {
                   Minium no of received order at a time
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
                   id="maximum_no_of_received_order_at_a_time"
                   placeholder="Enter minium no of received order at a time"
-                  required
+                  min="0"
                   name="maximum_no_of_received_order_at_a_time"
                   value={editInfo.maximum_no_of_received_order_at_a_time}
                   onChange={handleEditInputs}

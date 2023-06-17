@@ -91,10 +91,11 @@ const Register = props => {
       props.userRegistrationNew(registerInfo, file, role)
       //props.dataForTesting();
     } else {
-      setPasswordStatus(true)
-      setTimeout(() => {
-        setPasswordStatus(false)
-      }, "3000")
+      toast.error("Password and confirm password are not matched")
+      // setPasswordStatus(true)
+      // setTimeout(() => {
+      //   setPasswordStatus(false)
+      // }, "3000")
     }
     setRole()
   }
@@ -179,10 +180,11 @@ const Register = props => {
                 htmlFor="example-text-input"
                 className="col-md-2 col-form-label"
               >
-                First Name
+                First Name <span className="text-danger">*</span>
               </label>
               <div className="col-md-10">
                 <input
+                  required
                   type="text"
                   className="form-control"
                   id="first_name"
@@ -304,10 +306,11 @@ const Register = props => {
                 htmlFor="example-text-input"
                 className="col-md-2 col-form-label"
               >
-                Email
+                Email <span className="text-danger">*</span>
               </label>
               <div className="col-md-10">
                 <input
+                  required
                   type="email"
                   className="form-control"
                   id="useremail"
@@ -323,7 +326,7 @@ const Register = props => {
                 htmlFor="example-text-input"
                 className="col-md-2 col-form-label"
               >
-                Role
+                Role <span className="text-danger">*</span>
               </label>
               <div className="col-md-10">
                 <Input
@@ -345,7 +348,7 @@ const Register = props => {
                 htmlFor="example-text-input"
                 className="col-md-2 col-form-label"
               >
-                Password
+                Password <span className="text-danger">*</span>
               </label>
               <div className="col-md-10">
                 <input
@@ -365,7 +368,7 @@ const Register = props => {
                 htmlFor="example-text-input"
                 className="col-md-2 col-form-label"
               >
-                Confirm Password
+                Confirm Password <span className="text-danger">*</span>
               </label>
               <div className="col-md-10">
                 <input
