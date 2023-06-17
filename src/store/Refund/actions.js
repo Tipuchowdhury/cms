@@ -9,6 +9,8 @@ import {
   REFUND_DELETE_FRESH,
   REFUND_STATUS_EDIT,
   REFUND_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_REFUND,
+  SERVER_SIDE_PAGINATION_REFUND_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { v4 as uuidv4 } from "uuid"
@@ -159,34 +161,23 @@ const refund_data = [
 // token
 var token = JSON.parse(localStorage.getItem("jwt"))
 
-export const addRefundAction = (addData, routes) => {
+export const addRefundAction = addData => {
   var url = process.env.REACT_APP_LOCALHOST + "/Refund/Post"
 
   // console.log(routes);
 
   const val = uuidv4()
 
-  const data =
-    routes?.length > 0
-      ? routes.map(item => {
-          const route_id = uuidv4()
-          return {
-            _id: route_id,
-            path: item.path,
-            refund_id: val,
-            is_active: true,
-          }
-        })
-      : null
-
   // console.log(data);
 
   const formData = {
     _id: val,
-    ...addData,
-    routes: data,
+    order_id: addData.order_id,
+    refunded_amount: addData.refund_amount,
+    refund_reason: addData.refund_reason,
+    is_active: !addData.refund_status,
   }
-  // console.log(formData);
+  console.log(formData)
   return dispatch => {
     // console.log("-in the dispatch----")
 
@@ -384,5 +375,47 @@ export const refundDeleteFresh = () => {
     dispatch({
       type: REFUND_DELETE_FRESH,
       status: false,
+    })
+}
+
+export const getServerSidePaginationRefundAction = (index, limit, filters) => {
+  // console.log("filters :", filters)
+  filters = filters ? new URLSearchParams(filters).toString() : ""
+
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Refund/Search?page=${index}&limit=${limit}${filters ? "&" + filters : ""}`
+  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_REFUND,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_REFUND,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationRefundFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_REFUND_FRESH,
+      status: false,
+      payload: null,
     })
 }

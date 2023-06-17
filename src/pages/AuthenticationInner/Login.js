@@ -37,7 +37,7 @@ const Login = props => {
       toast.success("Login Successful")
       props.userLoginFresh()
       //localStorage.setItem("user", token);
-      navigate("/dashboard")
+      navigate("/")
     }
   }, [props.login_loading])
   return (

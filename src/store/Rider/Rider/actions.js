@@ -11,6 +11,10 @@ import {
   RIDER_STATUS_EDIT_FRESH,
   RIDER_APPROVED_EDIT,
   RIDER_APPROVED_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_RIDER,
+  SERVER_SIDE_PAGINATION_RIDER_FRESH,
+  GET_RIDER_BY_ID,
+  GET_RIDER_BY_ID_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -179,8 +183,12 @@ export const riderEditFresh = () => {
 }
 
 export const riderStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Rider/Put"
-  const dataObject = data
+  var url = `${process.env.REACT_APP_LOCALHOST}/Rider/isActive?id=${data._id}&is_active=${data.is_active}`
+
+  const dataObject = {
+    _id: data._id,
+    is_active: data.is_active,
+  }
   // console.log(formData)
   const formData = convertToFormData(dataObject)
   return dispatch => {
@@ -219,9 +227,12 @@ export const riderStatusEditFresh = () => {
 }
 
 export const riderApprovedEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Rider/Put"
-  const dataObject = data
-  console.log(dataObject)
+  var url = `${process.env.REACT_APP_LOCALHOST}/Rider/IsApprove?id=${data._id}&is_approve=${data.is_approve}`
+
+  const dataObject = {
+    _id: data._id,
+    is_approve: data.is_approve,
+  }
   const formData = convertToFormData(dataObject)
   return dispatch => {
     const headers = {
@@ -291,6 +302,83 @@ export const riderDeleteFresh = () => {
   return dispatch =>
     dispatch({
       type: RIDER_DELETE_FRESH,
+      status: false,
+    })
+}
+
+export const getServerSidePaginationRiderAction = (index, limit, filters) => {
+  // console.log("filters :", filters)
+  filters = filters ? new URLSearchParams(filters).toString() : ""
+
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/Rider/Search?page=${index}&limit=${limit}${filters ? "&" + filters : ""}`
+  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_RIDER,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_RIDER,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationRiderFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_RIDER_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getRiderByIdAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + `/Rider/GetById?id=${id}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_RIDER_BY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_RIDER_BY_ID,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getRiderByIdActionFresh = () => {
+  console.log("=========hererererer=======")
+  return dispatch =>
+    dispatch({
+      type: GET_RIDER_BY_ID_FRESH,
       status: false,
     })
 }

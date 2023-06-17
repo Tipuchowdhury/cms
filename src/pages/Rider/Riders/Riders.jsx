@@ -34,8 +34,13 @@ import {
   riderStatusEditFresh,
   riderApprovedEditAction,
   riderApprovedEditFresh,
+  getServerSidePaginationRiderAction,
+  getServerSidePaginationRiderFresh,
+  getRiderByIdActionFresh,
 } from "store/actions"
+import DataTable from "react-data-table-component"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
+import CustomLoader from "components/CustomLoader/CustomLoader"
 
 function Riders(props) {
   document.title = "Riders | Foodi"
@@ -74,7 +79,7 @@ function Riders(props) {
   }
 
   const handleEdit = row => {
-    navigate("/add-rider", { state: row })
+    navigate("/edit-rider", { state: row })
   }
   const handleDeleteModal = row => {
     setDeleteItem(row._id)
@@ -114,15 +119,15 @@ function Riders(props) {
     <div style={{ display: "flex", gap: 10 }}>
       <Button
         color="primary"
-        className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEdit(row)}
+        className="btn btn-sm btn-primary waves-effect waves-light"
+        onClick={() => handleEdit(cell)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
-        className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        className="btn btn-sm btn-danger waves-effect waves-light"
+        onClick={() => handleDeleteModal(cell)}
       >
         Delete
       </Button>{" "}
@@ -131,52 +136,63 @@ function Riders(props) {
 
   const statusRef = (cell, row) => (
     <Button
-      color={row.is_active ? "success" : "secondary"}
-      className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      color={cell.is_active ? "success" : "secondary"}
+      className="btn btn-sm waves-effect waves-light"
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.is_active ? "Active" : "Deactivate"}
+      {cell.is_active ? "Active" : "Deactivate"}
     </Button>
   )
 
   const approvedRef = (cell, row) => (
     <Button
-      color={row.is_approve ? "info" : "warning"}
-      className="btn waves-effect waves-light"
-      onClick={() => handleApprovedModal(row)}
+      color={cell.is_approve ? "info" : "warning"}
+      className="btn btn-sm waves-effect waves-light"
+      onClick={() => handleApprovedModal(cell)}
     >
-      {row.is_approve ? "Approved" : "Disapprove "}
+      {cell.is_approve ? "Approved" : "Disapprove "}
     </Button>
   )
 
   const activeData = [
     {
-      dataField: "first_name",
-      text: "Name",
-      sort: true,
+      // dataField: "first_name",
+      selector: row => row.first_name,
+      name: "First Name",
+      sortable: true,
+    },
+
+    {
+      // dataField: "first_name",
+      selector: row => row.last_name,
+      name: "Last Name",
+      sortable: true,
     },
     {
-      dataField: "mobile_number",
-      text: "Mobile Number",
-      sort: true,
+      // dataField: "mobile_number",
+      selector: row => row.mobile_number,
+      name: "Mobile Number",
+      sortable: true,
     },
     {
-      dataField: "is_active",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      // dataField: "is_active",
+      selector: row => row.is_active,
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
     {
-      dataField: "is_approve",
-      text: "Aprroved",
-      sort: true,
-      formatter: approvedRef,
+      // dataField: "is_approve",
+      selector: row => row.is_approve,
+      name: "Aprroved",
+      sortable: true,
+      cell: approvedRef,
     },
     {
       //dataField: "he",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      name: "Action",
+      // sort: true,
+      cell: actionRef,
     },
   ]
   const defaultSorted = [
@@ -185,6 +201,34 @@ function Riders(props) {
       order: "desc",
     },
   ]
+
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const [pageFilters, setPageFilters] = useState({})
+  const handleFilter = e => {
+    let name = e.target.name
+    let value = e.target.value
+    setPageFilters({ ...pageFilters, [name]: value })
+  }
+
+  useEffect(() => {
+    props.getServerSidePaginationRiderAction(page, countPerPage, pageFilters)
+
+    if (props.get_server_side_pagination_rider_loading == false) {
+      //console.log("I am in get all permis type loading ")
+      props.getServerSidePaginationRiderAction(page, countPerPage, pageFilters)
+    }
+    if (props.get_server_side_pagination_rider_loading == "Success") {
+      //console.log("I am in get all permis type loading ")
+      props.getRiderByIdActionFresh()
+    }
+  }, [
+    page,
+    countPerPage,
+    pageFilters,
+    props.get_server_side_pagination_rider_loading,
+  ])
 
   useEffect(() => {
     if (props.get_all_rider_loading == false) {
@@ -242,6 +286,16 @@ function Riders(props) {
     props.rider_approved_edit_loading,
   ])
 
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    // console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -279,7 +333,7 @@ function Riders(props) {
                     </Link>
                   </div>
 
-                  {props.get_all_rider_data ? (
+                  {/* {props.get_all_rider_data ? (
                     props.get_all_rider_data.length > 0 ? (
                       <DatatableTablesWorking
                         products={props.get_all_rider_data}
@@ -287,7 +341,57 @@ function Riders(props) {
                         defaultSorted={defaultSorted}
                       />
                     ) : null
-                  ) : null}
+                  ) : null} */}
+
+                  <Row className="mb-3 justify-content-center">
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label className="form-label" htmlFor="name">
+                        First name
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="name"
+                        placeholder="Enter First Name"
+                        name="name"
+                        onChange={handleFilter}
+                        value={pageFilters.name}
+                      />
+                    </Col>
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label className="form-label" htmlFor="mobile">
+                        Mobile No
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="mobile"
+                        placeholder="Enter Mobile No"
+                        name="mobile"
+                        onChange={handleFilter}
+                        value={pageFilters.mobile}
+                      />
+                    </Col>
+                  </Row>
+
+                  <DataTable
+                    columns={activeData}
+                    data={props?.get_server_side_pagination_rider_data?.data}
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_rider_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={page => setPage(page)}
+                    progressPending={
+                      !props?.get_server_side_pagination_rider_data
+                    }
+                    progressComponent={<CustomLoader />}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -400,6 +504,9 @@ const mapStateToProps = state => {
     rider_status_edit_loading,
     rider_approved_edit_data,
     rider_approved_edit_loading,
+
+    get_server_side_pagination_rider_data,
+    get_server_side_pagination_rider_loading,
   } = state.Rider
 
   return {
@@ -420,6 +527,9 @@ const mapStateToProps = state => {
 
     rider_approved_edit_data,
     rider_approved_edit_loading,
+
+    get_server_side_pagination_rider_data,
+    get_server_side_pagination_rider_loading,
   }
 }
 
@@ -436,5 +546,8 @@ export default withRouter(
     riderStatusEditFresh,
     riderApprovedEditAction,
     riderApprovedEditFresh,
+    getServerSidePaginationRiderAction,
+    getServerSidePaginationRiderFresh,
+    getRiderByIdActionFresh,
   })(Riders)
 )

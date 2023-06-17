@@ -596,7 +596,7 @@ export default withRouter(
     getZoneByIdAction,
   })(
     GoogleApiWrapper({
-      apiKey: "AIzaSyDJkREeL-PpO7Z45k-MsD5sJD_m1mzNGEk",
+      apiKey: "AIzaSyDKIxr2AXZPA1k8EyJz52suWseQCFxfoMU",
       LoadingContainer: LoadingContainer,
       v: "3",
     })(AddZone)

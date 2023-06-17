@@ -302,7 +302,8 @@ export const branchAddAction = (
   // coverFile,
   currentPath,
   selectedCuisine,
-  time
+  time,
+  selectedBranchAttribute
 ) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Branch/Post"
 
@@ -314,6 +315,19 @@ export const branchAddAction = (
             _id: val,
             cuisine_id: item.value,
             branch_id: id,
+          }
+        })
+      : null
+
+  const branchAttributedata =
+    selectedBranchAttribute?.length > 0
+      ? selectedBranchAttribute.map(item => {
+          const val = uuidv4()
+          return {
+            _id: val,
+
+            branch_id: id,
+            branch_attribute_id: item.value,
           }
         })
       : null
@@ -360,6 +374,7 @@ export const branchAddAction = (
     parent_restaurant_id: zoneInfo.restaurant,
     working_hours: all_working_hours,
     cuisines: data,
+    attributes: branchAttributedata,
     share_link: zoneInfo.link,
     pickup_time: JSON.parse(zoneInfo.pickup_time),
     is_delivery: JSON.parse(zoneInfo.is_delivery),
@@ -410,7 +425,8 @@ export const branchEditAction = (
   // coverFile,
   currentPath,
   selectedCuisine,
-  time
+  time,
+  selectedBranchAttribute
 ) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put"
   // console.log(id)
@@ -431,6 +447,18 @@ export const branchEditAction = (
             _id: val,
             cuisine_id: item.value,
             branch_id: id,
+          }
+        })
+      : null
+
+  const branchAttributedata =
+    selectedBranchAttribute?.length > 0
+      ? selectedBranchAttribute.map(item => {
+          const val2 = uuidv4()
+          return {
+            _id: val2,
+            branch_id: id,
+            branch_attribute_id: item.value,
           }
         })
       : null
@@ -479,6 +507,7 @@ export const branchEditAction = (
     parent_restaurant_id: zoneInfo.restaurant,
     working_hours: all_working_hours,
     cuisines: data,
+    attributes: branchAttributedata,
     share_link: zoneInfo.link,
     pickup_time: JSON.parse(zoneInfo.pickup_time),
     delivery_charge: zoneInfo.delivery_time,
