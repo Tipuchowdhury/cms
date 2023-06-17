@@ -111,6 +111,13 @@ function Order(props) {
     props.orderStatusEditAction(editInfo)
     toggleChangeStatusModal()
   }
+
+  const handleFilterKeyPress = event => {
+    if (event.key === "Enter") {
+      handleParamChange()
+    }
+  }
+
   const actionRef = (cell, row) =>
     // Filter Button
     cell.isFilter ? (
@@ -254,6 +261,7 @@ function Order(props) {
         placeholder={columnFilerInputName[field]?.placeholder}
         value={pageFilters[columnFilerInputName[field]?.name]}
         onChange={handleFilter}
+        onKeyDown={handleFilterKeyPress}
       />
     ) : (
       <div>{cell[field]}</div>
@@ -355,6 +363,7 @@ function Order(props) {
             placeholder="Branch Name"
             value={pageFilters?.branch_name}
             onChange={handleFilter}
+            onKeyDown={handleFilterKeyPress}
           />
         ) : (
           <div>
@@ -376,6 +385,7 @@ function Order(props) {
             placeholder="Customer Mobile"
             value={pageFilters?.customer_number}
             onChange={handleFilter}
+            onKeyDown={handleFilterKeyPress}
           />
         ) : (
           <div>
@@ -399,6 +409,7 @@ function Order(props) {
             placeholder="Rider Mobile"
             value={pageFilters?.rider_number}
             onChange={handleFilter}
+            onKeyDown={handleFilterKeyPress}
           />
         ) : (
           <div>
