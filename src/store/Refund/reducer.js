@@ -9,6 +9,8 @@ import {
   REFUND_DELETE_FRESH,
   REFUND_STATUS_EDIT,
   REFUND_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_REFUND,
+  SERVER_SIDE_PAGINATION_REFUND_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -30,6 +32,11 @@ const initialState = {
   refund_status_edit_loading: false,
 
   refund_delete_loading: false,
+
+  // server side pagination refund
+  get_server_side_pagination_refund_data: null,
+  get_server_side_pagination_refund_error: null,
+  get_server_side_pagination_refund_loading: false,
 }
 
 const Refunds = (state = initialState, action) => {
@@ -41,6 +48,7 @@ const Refunds = (state = initialState, action) => {
         add_refund_error: null,
         add_refund_loading: action.status,
         get_all_refund_loading: false,
+        get_server_side_pagination_refund_loading: false,
       }
       break
 
@@ -112,6 +120,23 @@ const Refunds = (state = initialState, action) => {
         refund_delete_loading: action.status,
         get_all_refund_loading: false,
       }
+      break
+    case SERVER_SIDE_PAGINATION_REFUND:
+      state = {
+        ...state,
+        get_server_side_pagination_refund_data: action.payload,
+        get_server_side_pagination_refund_error: null,
+        get_server_side_pagination_refund_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_REFUND_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_refund_data: action.payload,
+        get_server_side_pagination_refund_loading: action.status,
+      }
+      break
   }
   return state
 }

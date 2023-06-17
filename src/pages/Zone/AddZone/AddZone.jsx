@@ -33,6 +33,7 @@ import {
 import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
 import { useLocation, useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 const LoadingContainer = () => <div>Loading...</div>
 
@@ -167,18 +168,18 @@ function AddZone(props) {
 
   const handleSubmit = e => {
     e.preventDefault()
-    console.log(zoneInfo)
-    console.log(path)
-    console.log(deliveryCharge)
-    console.log(selectedBranch)
-    const uniqueId = uuidv4()
-    props.zoneAddAction(
-      uniqueId,
-      zoneInfo,
-      path,
-      deliveryCharge,
-      selectedBranch
-    )
+    if (zoneInfo.city === "") {
+      toast.error("Please select a city")
+    } else {
+      const uniqueId = uuidv4()
+      props.zoneAddAction(
+        uniqueId,
+        zoneInfo,
+        path,
+        deliveryCharge,
+        selectedBranch
+      )
+    }
   }
 
   const handleSubmitForEdit = e => {
@@ -350,7 +351,7 @@ function AddZone(props) {
                         onChange={handleInputs}
                         type="select"
                       >
-                        <option>Choose City</option>
+                        <option value="">Choose City</option>
                         {cityData}
                       </Input>
                     </div>
@@ -596,7 +597,7 @@ export default withRouter(
     getZoneByIdAction,
   })(
     GoogleApiWrapper({
-      apiKey: "AIzaSyDJkREeL-PpO7Z45k-MsD5sJD_m1mzNGEk",
+      apiKey: "AIzaSyDKIxr2AXZPA1k8EyJz52suWseQCFxfoMU",
       LoadingContainer: LoadingContainer,
       v: "3",
     })(AddZone)

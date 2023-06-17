@@ -10,6 +10,7 @@ import {
   Input,
 } from "reactstrap"
 import { connect } from "react-redux"
+
 import withRouter from "components/Common/withRouter"
 import Select from "react-select"
 import Breadcrumbs from "components/Common/Breadcrumb"
@@ -270,10 +271,10 @@ function AddCoupon(props) {
 
   const [selectedMenuItem, setSelectedMenuItem] = useState("")
 
-  useEffect(() => {
-    if (props.get_all_menu_loading === "Success")
-      setSelectedMenuItem(menu_data_edit)
-  }, [props.get_all_menu_loading])
+  // useEffect(() => {
+  //   if (props.get_all_menu_loading === "Success")
+  //     setSelectedMenuItem(menu_data_edit)
+  // }, [props.get_all_menu_loading])
 
   const handleSelectMenu = e => {
     setSelectedMenuItem(e)

@@ -302,7 +302,8 @@ export const branchAddAction = (
   // coverFile,
   currentPath,
   selectedCuisine,
-  time
+  time,
+  selectedBranchAttribute
 ) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Branch/Post"
 
@@ -314,6 +315,19 @@ export const branchAddAction = (
             _id: val,
             cuisine_id: item.value,
             branch_id: id,
+          }
+        })
+      : null
+
+  const branchAttributedata =
+    selectedBranchAttribute?.length > 0
+      ? selectedBranchAttribute.map(item => {
+          const val = uuidv4()
+          return {
+            _id: val,
+
+            branch_id: id,
+            branch_attribute_id: item.value,
           }
         })
       : null
@@ -360,6 +374,7 @@ export const branchAddAction = (
     parent_restaurant_id: zoneInfo.restaurant,
     working_hours: all_working_hours,
     cuisines: data,
+    attributes: branchAttributedata,
     share_link: zoneInfo.link,
     pickup_time: JSON.parse(zoneInfo.pickup_time),
     is_delivery: JSON.parse(zoneInfo.is_delivery),
@@ -410,7 +425,8 @@ export const branchEditAction = (
   // coverFile,
   currentPath,
   selectedCuisine,
-  time
+  time,
+  selectedBranchAttribute
 ) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put"
   // console.log(id)
@@ -431,6 +447,18 @@ export const branchEditAction = (
             _id: val,
             cuisine_id: item.value,
             branch_id: id,
+          }
+        })
+      : null
+
+  const branchAttributedata =
+    selectedBranchAttribute?.length > 0
+      ? selectedBranchAttribute.map(item => {
+          const val2 = uuidv4()
+          return {
+            _id: val2,
+            branch_id: id,
+            branch_attribute_id: item.value,
           }
         })
       : null
@@ -479,6 +507,7 @@ export const branchEditAction = (
     parent_restaurant_id: zoneInfo.restaurant,
     working_hours: all_working_hours,
     cuisines: data,
+    attributes: branchAttributedata,
     share_link: zoneInfo.link,
     pickup_time: JSON.parse(zoneInfo.pickup_time),
     delivery_charge: zoneInfo.delivery_time,
@@ -1604,25 +1633,27 @@ export const addRestaurantMenuAction = (
           const _id = uuidv4()
           return {
             ...item,
-            add_on_categories: item.add_on_categories.map(addon_cats => {
-              return {
-                ...addon_cats,
-                variation_id: _id,
-                add_ons: addon_cats.add_ons.map(add_ons => {
-                  const _addon_id = uuidv4()
-                  return {
-                    ...add_ons,
-                    _id: _addon_id,
-                    add_ons_name: add_ons.add_on_name,
-                    add_ons_price: add_ons.add_on_price,
-                    max_choice: 0,
-                    is_multiple: false,
-                    addoncat_id: addon_cats.add_on_category_id,
-                    variation_and_add_on_category_id: _id,
-                  }
-                }),
-              }
-            }),
+            add_on_categories: item.add_on_categories
+              .filter(data => data.add_on_category_name != "")
+              .map(addon_cats => {
+                return {
+                  ...addon_cats,
+                  variation_id: _id,
+                  add_ons: addon_cats.add_ons.map(add_ons => {
+                    const _addon_id = uuidv4()
+                    return {
+                      ...add_ons,
+                      _id: _addon_id,
+                      add_ons_name: add_ons.add_on_name,
+                      add_ons_price: add_ons.add_on_price,
+                      max_choice: 0,
+                      is_multiple: false,
+                      addoncat_id: addon_cats.add_on_category_id,
+                      variation_and_add_on_category_id: _id,
+                    }
+                  }),
+                }
+              }),
             _id: _id,
             menu_id: val,
           }
@@ -1685,29 +1716,33 @@ export const addRestaurantMenuAction = (
   const formData = convertToFormData(dataObject)
 
   return dispatch => {
-    const headers = {
-      "Content-Type": "multipart/form-data",
-      "Access-Control-Allow-Origin": "*",
-    }
+    if (menuTimingData.length > 0) {
+      const headers = {
+        "Content-Type": "multipart/form-data",
+        "Access-Control-Allow-Origin": "*",
+      }
 
-    axios
-      .post(url, formData, { headers: headers })
-      .then(response => {
-        dispatch({
-          type: "ADD_RESTAURANT_MENU",
-          payload: response.data,
-          status: "Success",
+      axios
+        .post(url, formData, { headers: headers })
+        .then(response => {
+          dispatch({
+            type: "ADD_RESTAURANT_MENU",
+            payload: response.data,
+            status: "Success",
+          })
+          toast.success("Menu Added Successfully")
         })
-        toast.success("Menu Added Successfully")
-      })
-      .catch(error => {
-        dispatch({
-          type: "ADD_RESTAURANT_MENU",
-          payload: error,
-          status: "Failed",
+        .catch(error => {
+          dispatch({
+            type: "ADD_RESTAURANT_MENU",
+            payload: error,
+            status: "Failed",
+          })
+          toast.error("Menu Add Failed")
         })
-        toast.error("Menu Add Failed")
-      })
+    } else {
+      toast.error("Please select a menu availability time slot")
+    }
   }
 }
 
@@ -1880,34 +1915,36 @@ export const editRestaurantMenuAction = (
           const _id = uuidv4()
           return {
             ...item,
-            add_on_categories: item.add_on_categories.map(addon_cats => {
-              const _addon_cats_id = uuidv4()
-              return {
-                ...addon_cats,
-                _id: _addon_cats_id,
-                variation_id: _id,
-                add_ons: addon_cats.add_ons.map(add_ons => {
-                  const _addon_id = uuidv4()
-                  return {
-                    ...add_ons,
+            add_on_categories: item.add_on_categories
+              .filter(data => data.add_on_category_name != "")
+              .map(addon_cats => {
+                const _addon_cats_id = uuidv4()
+                return {
+                  ...addon_cats,
+                  _id: _addon_cats_id,
+                  variation_id: _id,
+                  add_ons: addon_cats.add_ons.map(add_ons => {
+                    const _addon_id = uuidv4()
+                    return {
+                      ...add_ons,
 
-                    _id: _addon_id,
-                    add_ons_name: add_ons.add_on_name
-                      ? add_ons.add_on_name
-                      : add_ons.add_ons_name,
-                    add_ons_price: add_ons.add_on_price
-                      ? add_ons.add_on_price
-                      : add_ons.add_ons_price,
-                    max_choice: add_ons.max_choice ? add_ons.max_choice : 0,
-                    is_multiple: add_ons.is_multiple
-                      ? add_ons.is_multiple
-                      : false,
-                    addoncat_id: addon_cats.add_on_category_id,
-                    variation_and_add_on_category_id: _addon_cats_id,
-                  }
-                }),
-              }
-            }),
+                      _id: _addon_id,
+                      add_ons_name: add_ons.add_on_name
+                        ? add_ons.add_on_name
+                        : add_ons.add_ons_name,
+                      add_ons_price: add_ons.add_on_price
+                        ? add_ons.add_on_price
+                        : add_ons.add_ons_price,
+                      max_choice: add_ons.max_choice ? add_ons.max_choice : 0,
+                      is_multiple: add_ons.is_multiple
+                        ? add_ons.is_multiple
+                        : false,
+                      addoncat_id: addon_cats.add_on_category_id,
+                      variation_and_add_on_category_id: _addon_cats_id,
+                    }
+                  }),
+                }
+              }),
             _id: _id,
             menu_id: val,
           }
@@ -1989,30 +2026,34 @@ export const editRestaurantMenuAction = (
   const formData = convertToFormData(dataObject)
 
   return dispatch => {
-    const headers = {
-      "Content-Type": "multipart/form-data",
-      // "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    }
+    if (menuTimingData.length > 0) {
+      const headers = {
+        "Content-Type": "multipart/form-data",
+        // "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      }
 
-    axios
-      .put(url, formData, { headers: headers })
-      .then(response => {
-        dispatch({
-          type: "EDIT_RESTAURANT_MENU",
-          payload: response.data,
-          status: "Success",
+      axios
+        .put(url, formData, { headers: headers })
+        .then(response => {
+          dispatch({
+            type: "EDIT_RESTAURANT_MENU",
+            payload: response.data,
+            status: "Success",
+          })
+          toast.success("Menu Edited Successfully")
         })
-        toast.success("Menu Edited Successfully")
-      })
-      .catch(error => {
-        dispatch({
-          type: "EDIT_RESTAURANT_MENU",
-          error: error,
-          status: "Failed",
+        .catch(error => {
+          dispatch({
+            type: "EDIT_RESTAURANT_MENU",
+            error: error,
+            status: "Failed",
+          })
+          toast.error("Menu Edit Failed")
         })
-        toast.error("Menu Edit Failed")
-      })
+    } else {
+      toast.error("Please select a menu availability time slot")
+    }
   }
 }
 

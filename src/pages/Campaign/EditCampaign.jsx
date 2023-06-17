@@ -27,6 +27,7 @@ import { v4 as uuidv4 } from "uuid"
 import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import PageLoader from "components/CustomLoader/PageLoader"
+import moment from "moment"
 
 function EditCampaign(props) {
   const navigate = useNavigate()
@@ -165,13 +166,19 @@ function EditCampaign(props) {
 
   const handleSubmitForEdit = e => {
     e.preventDefault()
-    console.log("======================I am in the edit form==================")
-
-    props.campaignEditAction(
-      props?.get_campaign_by_id_data._id,
-      campaignInfo,
-      selectedBranch
-    )
+    if (
+      !moment(campaignInfo.start_date, "YYYY-MM-DDTHH:mm:ss").isBefore(
+        moment(campaignInfo.end_date, "YYYY-MM-DDTHH:mm:ss")
+      )
+    ) {
+      toast.error("Start time can't be grater than or equal to end time")
+    } else {
+      props.campaignEditAction(
+        props?.get_campaign_by_id_data._id,
+        campaignInfo,
+        selectedBranch
+      )
+    }
   }
 
   // console.log(props.add_campaign_loading)
@@ -303,7 +310,7 @@ function EditCampaign(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      Name
+                      Name <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <input
@@ -324,7 +331,7 @@ function EditCampaign(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      Description
+                      Description <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <textarea
@@ -343,30 +350,18 @@ function EditCampaign(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      Image
+                      Image <span className="text-danger">*</span>
                     </label>
-                    {props?.get_campaign_by_id_data?.image ? (
-                      <div className="col-md-10">
-                        <input
-                          type="file"
-                          className="form-control"
-                          name="image"
-                          id="image"
-                          onChange={handleFiles}
-                        />
-                      </div>
-                    ) : (
-                      <div className="col-md-10">
-                        <input
-                          type="file"
-                          className="form-control"
-                          name="image"
-                          id="image"
-                          onChange={handleFiles}
-                          required
-                        />
-                      </div>
-                    )}
+
+                    <div className="col-md-10">
+                      <input
+                        type="file"
+                        className="form-control"
+                        name="image"
+                        id="image"
+                        onChange={handleFiles}
+                      />
+                    </div>
                   </Row>
 
                   {images?.image && (
@@ -388,7 +383,7 @@ function EditCampaign(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      Branches
+                      Branches <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <Select
@@ -459,7 +454,7 @@ function EditCampaign(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      Start Time
+                      Start Time <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <input
@@ -480,7 +475,7 @@ function EditCampaign(props) {
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      End Time
+                      End Time <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <input

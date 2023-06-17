@@ -187,9 +187,10 @@ function EditUser(props) {
                 <form className="mt-1" onSubmit={handleSubmit}>
                   <div className="mb-3">
                     <label className="form-label" htmlFor="first_name">
-                      First Name
+                      First Name <span className="text-danger">*</span>
                     </label>
                     <input
+                      required
                       type="text"
                       className="form-control"
                       id="first_name"
@@ -286,9 +287,10 @@ function EditUser(props) {
 
                   <div className="mb-3">
                     <label className="form-label" htmlFor="useremail">
-                      Email
+                      Email <span className="text-danger">*</span>
                     </label>
                     <input
+                      required
                       type="email"
                       className="form-control"
                       id="useremail"
@@ -300,7 +302,7 @@ function EditUser(props) {
 
                   <div className="mb-3">
                     <label className="form-label" htmlFor="Role">
-                      Role
+                      Role <span className="text-danger">*</span>
                     </label>
 
                     <Input

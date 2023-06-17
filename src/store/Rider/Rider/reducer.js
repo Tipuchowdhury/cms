@@ -5,13 +5,16 @@ import {
   GET_ALL_RIDER_FRESH,
   RIDER_EDIT,
   RIDER_EDIT_FRESH,
-  GET_RIDER_BY_ID,
   RIDER_DELETE,
   RIDER_DELETE_FRESH,
   RIDER_STATUS_EDIT,
   RIDER_STATUS_EDIT_FRESH,
   RIDER_APPROVED_EDIT,
   RIDER_APPROVED_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_RIDER,
+  SERVER_SIDE_PAGINATION_RIDER_FRESH,
+  GET_RIDER_BY_ID,
+  GET_RIDER_BY_ID_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -36,6 +39,15 @@ const initialState = {
   rider_approved_edit_loading: false,
 
   rider_delete_loading: false,
+
+  // server side pagination rider
+  get_server_side_pagination_rider_data: null,
+  get_server_side_pagination_rider_error: null,
+  get_server_side_pagination_rider_loading: false,
+
+  get_rider_by_id_data: null,
+  get_rider_by_id_error: null,
+  get_rider_by_id_loading: false,
 }
 
 const Rider = (state = initialState, action) => {
@@ -95,6 +107,7 @@ const Rider = (state = initialState, action) => {
         rider_status_edit_data: action.payload,
         rider_status_edit_loading: action.status,
         get_all_rider_loading: false,
+        get_server_side_pagination_rider_loading: false,
       }
       break
 
@@ -111,6 +124,7 @@ const Rider = (state = initialState, action) => {
         rider_approved_edit_data: action.payload,
         rider_approved_edit_loading: action.status,
         get_all_rider_loading: false,
+        get_server_side_pagination_rider_loading: false,
       }
       break
 
@@ -126,6 +140,7 @@ const Rider = (state = initialState, action) => {
         ...state,
         rider_delete_loading: action.status,
         get_all_rider_loading: false,
+        get_server_side_pagination_rider_loading: false,
       }
       break
     case RIDER_DELETE_FRESH:
@@ -133,7 +148,42 @@ const Rider = (state = initialState, action) => {
         ...state,
         rider_delete_loading: action.status,
         get_all_rider_loading: false,
+        get_server_side_pagination_rider_loading: false,
       }
+      break
+    case SERVER_SIDE_PAGINATION_RIDER:
+      state = {
+        ...state,
+        get_server_side_pagination_rider_data: action.payload,
+        get_server_side_pagination_rider_error: null,
+        get_server_side_pagination_rider_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_RIDER_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_rider_data: action.payload,
+        get_server_side_pagination_rider_loading: action.status,
+      }
+      break
+
+    case GET_RIDER_BY_ID:
+      state = {
+        ...state,
+        get_rider_by_id_data: action.payload,
+        get_rider_by_id_error: null,
+        get_rider_by_id_loading: action.status,
+      }
+      break
+
+    case GET_RIDER_BY_ID_FRESH:
+      state = {
+        ...state,
+        get_rider_by_id_data: null,
+        get_rider_by_id_loading: action.status,
+      }
+      break
   }
   return state
 }

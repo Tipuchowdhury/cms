@@ -107,17 +107,6 @@ function ManageUsers(props) {
     value = e.target.value
     setRegisterInfo({ ...registerInfo, [name]: value })
   }
-  const handleSubmit = e => {
-    e.preventDefault()
-    toggle()
-    console.log(registerInfo)
-    // console.log(role);
-    if (role) {
-      props.userUpdateAction(registerInfo, file, role)
-    } else {
-      toast.warning("Please select role")
-    }
-  }
 
   const handleStatusModal = cell => {
     //  console.log(row);
@@ -127,7 +116,6 @@ function ManageUsers(props) {
   }
 
   const handleStatusUpdate = () => {
-    console.log(statusItem)
     props.userStatusUpdateAction({
       ...statusItem,
       is_active: !statusItem.is_active,
@@ -404,7 +392,8 @@ function ManageUsers(props) {
             Are you sure?
           </ModalHeader>
           <ModalBody>
-            Do you really want to update status these records?{" "}
+            Do you want to {statusItem.is_active ? "deactivate" : "activate"}{" "}
+            this record?{" "}
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={toggleStatus}>

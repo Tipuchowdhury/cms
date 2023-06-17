@@ -269,13 +269,15 @@ function AddMenu(props) {
   const slot_data = []
 
   props?.get_time_slot_by_branch_id_data?.forEach((time_slot, index) => {
-    slot_data.push({
-      _id: time_slot._id,
-      checked: false,
-      name: time_slot.name,
-      start_time: time_slot.start_time,
-      end_time: time_slot.end_time,
-    })
+    if (time_slot.is_active == true) {
+      slot_data.push({
+        _id: time_slot._id,
+        checked: false,
+        name: time_slot.name,
+        start_time: time_slot.start_time,
+        end_time: time_slot.end_time,
+      })
+    }
   })
 
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(
@@ -584,6 +586,13 @@ function AddMenu(props) {
       toast.error("Pickup menu price can't be negative")
     }
 
+    // if (!selectedTimeSlot) {
+    //   status = 1
+    //   toast.error("Please select a menu availability time slot")
+    // }
+
+    console.log(selectedTimeSlot)
+
     if (status == 0) {
       const val = uuidv4()
       // console.log(info)
@@ -715,35 +724,12 @@ function AddMenu(props) {
           <Row>
             <Col className="col-10 mx-auto">
               <form className="mt-4" onSubmit={handleAddMenu}>
-                {/* <Row className="mb-3">
-                  <label
-                    htmlFor="example-text-input"
-                    className="col-md-2 col-form-label"
-                  >
-                    Restaurant Name
-                  </label>
-                  <div className="col-md-10">
-                    <Input
-                      id="exampleSelect"
-                      name="restaurant"
-                      value={info.restaurant}
-                      //required={true}
-                      onChange={handleInputs}
-                      type="select"
-                      required
-                    >
-                      <option>Choose...</option>
-                      {branchData}
-                    </Input>
-                  </div>
-                </Row> */}
-
                 <Row className="mb-3">
                   <label
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Restaurant Name
+                    Restaurant Name <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <Select
@@ -761,7 +747,7 @@ function AddMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Menu Name
+                    Menu Name <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -793,7 +779,6 @@ function AddMenu(props) {
                       name="menu_description"
                       onChange={handleInputs}
                       value={info.menu_description ?? ""}
-                      required
                     />
                   </div>
                 </Row>
@@ -803,7 +788,7 @@ function AddMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Menu Price
+                    Menu Price <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -825,18 +810,18 @@ function AddMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Pickup Menu Price
+                    Pickup Menu Price <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
                       type="number"
+                      required
                       className="form-control"
                       id="name"
                       placeholder="Enter pickup price"
                       name="pickup_menu_price"
                       onChange={handleInputs}
                       value={info.pickup_menu_price ?? ""}
-                      required
                     />
                   </div>
                 </Row>
@@ -846,7 +831,7 @@ function AddMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Preparation Time
+                    Preparation Time <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -879,7 +864,6 @@ function AddMenu(props) {
                       name="Variation_group_name"
                       onChange={handleInputs}
                       value={info.Variation_group_name ?? ""}
-                      required
                     />
                   </div>
                 </Row>
@@ -900,7 +884,6 @@ function AddMenu(props) {
                       name="Variation_grp_desc"
                       onChange={handleInputs}
                       value={info.Variation_grp_desc ?? ""}
-                      required
                     />
                   </div>
                 </Row>
@@ -1012,6 +995,7 @@ function AddMenu(props) {
                                   <input
                                     type="number"
                                     id="subject"
+                                    min="0"
                                     className="form-control"
                                     name="variation_price"
                                     placeholder="Price"
@@ -1130,7 +1114,7 @@ function AddMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Popular
+                    Popular <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <div className="btn-group" role="group">
@@ -1175,7 +1159,7 @@ function AddMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Delivery
+                    Delivery <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <div className="btn-group" role="group">
@@ -1220,7 +1204,7 @@ function AddMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Pickup
+                    Pickup <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <div className="btn-group" role="group">
@@ -1265,7 +1249,7 @@ function AddMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Dine
+                    Dine <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <div className="btn-group" role="group">
@@ -1306,32 +1290,9 @@ function AddMenu(props) {
                   </div>
                 </Row>
 
-                {/* <Row className="mb-3">
-                  <label
-                    htmlFor="example-text-input"
-                    className="col-md-2 col-form-label"
-                  >
-                    Category
-                  </label>
-                  <div className="col-md-10">
-                    <Input
-                      id="exampleSelect"
-                      name="category"
-                      value={info.category}
-                      //required={true}
-                      onChange={handleInputs}
-                      type="select"
-                      required
-                    >
-                      <option>Choose...</option>
-                      {menuCategoryData}
-                    </Input>
-                  </div>
-                </Row> */}
-
                 <Row className="mb-3">
                   <label htmlFor="category" className="col-md-2 col-form-label">
-                    Category
+                    Category <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <Select
@@ -1349,7 +1310,7 @@ function AddMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    Vat(%)
+                    Vat(%) <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -1371,7 +1332,7 @@ function AddMenu(props) {
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
                   >
-                    SD(%)
+                    SD(%) <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
                     <input
@@ -1394,7 +1355,7 @@ function AddMenu(props) {
                     className="col-md-2 col-form-label"
                     style={{ marginTop: "22px" }}
                   >
-                    Menu Availability
+                    Menu Availability <sapn className="text-danger">*</sapn>
                   </label>
                   <div className="col-md-10">
                     {/* {props?.get_all_menu_time_slot_data?.map(item => (
@@ -1567,11 +1528,10 @@ function AddMenu(props) {
                       id="exampleSelect"
                       name="add_on_category_name"
                       value={itemCat.add_on_category_id}
-                      required={true}
                       onChange={e => handleInputsAddOns(e, idx)}
                       type="select"
                     >
-                      <option>Choose...</option>
+                      <option value="">Choose...</option>
                       {categoryData}
                     </Input>
                   </div>
