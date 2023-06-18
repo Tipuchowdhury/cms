@@ -7,6 +7,7 @@ import {
   CardTitle,
   Col,
   Container,
+  Input,
   Modal,
   ModalBody,
   ModalFooter,
@@ -18,19 +19,21 @@ import { toast } from "react-toastify"
 import withRouter from "components/Common/withRouter"
 ;` `
 import { connect } from "react-redux"
-import { v4 as uuidv4 } from "uuid"
 import {
-  getAllBranchAction,
   branchStatusEditAction,
   editBranchStatusFresh,
   branchPopularEditAction,
   editBranchPopularFresh,
   branchDeleteAction,
   branchDeleteFresh,
+  getServerSidePaginationBranchAction,
+  getServerSidePaginationBranchFresh,
+  getBranchByIdFresh,
 } from "store/actions"
-import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
+import DataTable from "react-data-table-component"
+import CustomLoader from "components/CustomLoader/CustomLoader"
 
 function Branch(props) {
   const [statusInfo, setStatusInfo] = useState(false)
@@ -83,103 +86,204 @@ function Branch(props) {
     })
   }
 
+  const handleFilterKeyPress = event => {
+    if (event.key === "Enter") {
+      handleParamChange()
+    }
+  }
+
   const navigate = useNavigate()
   const handleEditBranch = row => {
     console.log(row)
     navigate("/branch-add", { state: row })
   }
 
-  const actionRef = (cell, row) => (
-    <div style={{ display: "flex", gap: 10 }}>
+  const actionRef = (cell, row) =>
+    cell.isFilter ? (
       <Button
         color="primary"
-        className="btn btn-primary waves-effect waves-light"
-        onClick={() => handleEditBranch(row)}
+        className="btn btn-sm btn-primary waves-effect waves-light"
+        onClick={handleParamChange}
       >
-        Edit
-      </Button>{" "}
+        <span className="fa fa-search"></span> Filter
+      </Button>
+    ) : (
+      <div style={{ display: "flex", gap: 10 }}>
+        <Button
+          color="primary"
+          className="btn btn-sm btn-primary waves-effect waves-light"
+          onClick={() => {
+            props.getBranchByIdFresh()
+            handleEditBranch(cell)
+          }}
+        >
+          Edit
+        </Button>{" "}
+        <Button
+          color="danger"
+          className="btn btn-sm btn-danger waves-effect waves-light"
+          onClick={() => handleDeleteModal(cell)}
+        >
+          Delete
+        </Button>{" "}
+      </div>
+    )
+
+  const statusRef = (cell, row) => {
+    return cell.isFilter ? (
+      <Input
+        type="select"
+        className="form-control input-sm"
+        name="is_active"
+        value={pageFilters?.is_active}
+        onChange={handleFilter}
+      >
+        <option value="">Choose...</option>
+        <option value="true">Active</option>
+        <option value="false">InActive</option>
+      </Input>
+    ) : (
       <Button
-        color="danger"
-        className="btn btn-danger waves-effect waves-light"
-        onClick={() => handleDeleteModal(row)}
+        color={cell.is_active ? "success" : "secondary"}
+        className="btn  btn-sm waves-effect waves-light"
+        onClick={() => handleStatusModal(cell)}
       >
-        Delete
-      </Button>{" "}
-    </div>
-  )
+        {cell.is_active ? "Active" : "Deactivate"}
+      </Button>
+    )
+  }
 
-  // const statusRef = (cell, row) => <Badge color="success" style={{ padding: "12px" }}>Activate</Badge>
-  // const statusRef = (cell, row) => <Badge color={row.is_active ? "success" : "secondary"} style={{ padding: "12px" }}>{row.is_active ? "Active" : "Deactivate"}</Badge>
+  const popularRef = (cell, row) => {
+    return cell.isFilter ? (
+      <></>
+    ) : (
+      // <Input
+      //   type="select"
+      //   className="form-control input-sm"
+      //   name="is_popular"
+      //   value={pageFilters?.is_popular}
+      //   onChange={handleFilter}
+      // >
+      //   <option value="">Choose...</option>
+      //   <option value="true">Popular</option>
+      //   <option value="false">Normal</option>
+      // </Input>
+      <Button
+        color={cell.is_popular ? "info" : "warning"}
+        className="btn btn-sm waves-effect waves-light"
+        onClick={() => handlePopularModal(cell)}
+      >
+        {cell.is_popular ? "Popular" : "Regular"}
+      </Button>
+    )
+  }
 
-  const statusRef = (cell, row) => (
-    <Button
-      color={row.is_active ? "success" : "secondary"}
-      className="btn waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
-    >
-      {row.is_active ? "Active" : "Deactivate"}
-    </Button>
-  )
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(20)
+  const [pageFilters, setPageFilters] = useState({
+    name: "",
+    restaurant_name: "",
+    is_active: "",
+    is_popular: "",
+  })
+  const [paramChange, setParamChange] = useState(false)
 
-  const popularRef = (cell, row) => (
-    <Button
-      color={row.is_popular ? "info" : "warning"}
-      className="btn waves-effect waves-light"
-      onClick={() => handlePopularModal(row)}
-    >
-      {row.is_popular ? "Popular" : "Regular"}
-    </Button>
-  )
+  const handleParamChange = () => {
+    props.getServerSidePaginationBranchFresh()
+    setParamChange(!paramChange)
+  }
 
+  const handleFilter = e => {
+    console.log("e :", e)
+    let name = e.target.name
+    let value = e.target.value
+    setPageFilters({ ...pageFilters, [name]: value })
+  }
+
+  useEffect(() => {
+    props.getServerSidePaginationBranchAction(page, countPerPage, pageFilters)
+  }, [
+    page,
+    countPerPage,
+    paramChange,
+    props.edit_branch_status_loading,
+    props.edit_branch_popular_loading,
+    // props.get_server_side_pagination_order_loading,
+  ])
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    // console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
+
+  const columnFilerInputName = {
+    name: {
+      name: "name",
+      placeholder: "Branch Name",
+    },
+    restaurant_name: {
+      name: "restaurant_name",
+      placeholder: "Restaurant Name",
+    },
+  }
+
+  const columnFilterGeneral = (cell, row, field) => {
+    return cell.isFilter ? (
+      <input
+        className="form-control"
+        name={columnFilerInputName[field]?.name}
+        placeholder={columnFilerInputName[field]?.placeholder}
+        value={pageFilters[columnFilerInputName[field]?.name]}
+        onChange={handleFilter}
+        onKeyDown={handleFilterKeyPress}
+      />
+    ) : (
+      <div>{cell[field]}</div>
+    )
+  }
   const activeData = [
     {
-      dataField: "name",
-      text: "Branch Name",
-      sort: true,
+      name: "Branch Name",
+      sortable: true,
+      cell: (cell, row) => columnFilterGeneral(cell, row, "name"),
     },
-    // {
-    //     //dataField: "",
-    //     text: "Restaurant Name",
-    //     sort: true,
-    //     //formatter: statusRef
-    // },
+
     {
-      dataField: "phone_number",
-      text: "Phone",
-      sort: true,
-      //formatter: actionRef,
+      name: "Restaurant",
+      sortable: true,
+      cell: (cell, row) => columnFilterGeneral(cell, row, "restaurant_name"),
     },
     {
-      dataField: "is_active",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
     },
     {
-      dataField: "is_popular",
-      text: "Popular/Regular",
-      sort: true,
-      formatter: popularRef,
+      name: "Popular/Regular",
+      sortable: true,
+      cell: popularRef,
     },
     {
       //dataField: "hello",
-      text: "Action",
-      sort: true,
-      formatter: actionRef,
+      name: "Action",
+      sortable: true,
+      cell: actionRef,
     },
   ]
+
   const defaultSorted = [
     {
       dataField: "name",
-      order: "desc",
+      branch: "desc",
     },
   ]
 
   useEffect(() => {
-    if (props.get_all_branch_loading == false) {
-      props.getAllBranchAction()
-    }
-
     if (props.edit_branch_status_loading === "Success") {
       toast.success("Branch Status Updated Successfully")
       toggleStatus()
@@ -208,13 +312,31 @@ function Branch(props) {
       props.branchDeleteFresh()
     }
   }, [
-    props.get_all_branch_loading,
     props.edit_branch_status_loading,
     props.edit_branch_popular_loading,
     props.branch_delete_loading,
   ])
 
-  console.log(props.get_all_branch_data)
+  const customStyles = {
+    // table: {
+    //   style: {
+    //     border: "1px solid gray",
+    //     borderLeft: "0px",
+    //   },
+    // },
+    // headCells: {
+    //   style: {
+    //     padding: "5px",
+    //     borderLeft: "1px solid gray",
+    //   },
+    // },
+    // cells: {
+    //   style: {
+    //     padding: "5px",
+    //     borderLeft: "1px solid gray",
+    //   },
+    // },
+  }
   return (
     <React.Fragment>
       <div className="page-content">
@@ -227,16 +349,16 @@ function Branch(props) {
           />
           <Row>
             <Col className="col-12">
-              <Card style={{ border: "none" }}>
+              <Card style={{ bbranch: "none" }}>
                 <CardBody>
                   <div
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
-                      marginBottom: "40px",
+                      marginBottom: "20px",
                       marginTop: "20px",
                       backgroundColor: "#1E417D",
-                      padding: "15px",
+                      padding: "10px",
                     }}
                   >
                     <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
@@ -245,21 +367,46 @@ function Branch(props) {
                     <Link to="/branch-add">
                       <Button
                         style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
+                        className="btn btn-sm"
+                        onClick={() => {
+                          props.getBranchByIdFresh()
+                        }}
                       >
                         Add Branch
                       </Button>
                     </Link>
                   </div>
-                  {props.get_all_branch_data ? (
-                    props.get_all_branch_data.length > 0 ? (
-                      <DatatableTablesWorking
-                        products={props.get_all_branch_data}
-                        columnData={activeData}
-                        defaultSorted={defaultSorted}
-                        key={props.get_all_branch_data?._id}
-                      />
-                    ) : null
-                  ) : null}
+                  <DataTable
+                    columns={activeData}
+                    data={
+                      props?.get_server_side_pagination_branch_data?.data
+                        ? [
+                            { isFilter: true },
+                            ...props?.get_server_side_pagination_branch_data
+                              ?.data,
+                          ]
+                        : ""
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_branch_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={page => {
+                      props.getServerSidePaginationOrderFresh()
+                      setPage(page)
+                    }}
+                    progressPending={
+                      !props.get_server_side_pagination_branch_data
+                    }
+                    progressComponent={<CustomLoader />}
+                    striped
+                    stripedColor="#000"
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -359,30 +506,37 @@ function Branch(props) {
 
 const mapStateToProps = state => {
   const {
-    get_all_branch_loading,
-    get_all_branch_data,
     edit_branch_status_loading,
     edit_branch_popular_loading,
     branch_delete_loading,
   } = state.Restaurant
 
+  const {
+    get_server_side_pagination_branch_data,
+    get_server_side_pagination_branch_error,
+    get_server_side_pagination_branch_loading,
+  } = state.Branch
+
   return {
-    get_all_branch_loading,
-    get_all_branch_data,
     edit_branch_status_loading,
     edit_branch_popular_loading,
     branch_delete_loading,
+    get_server_side_pagination_branch_data,
+    get_server_side_pagination_branch_error,
+    get_server_side_pagination_branch_loading,
   }
 }
 
 export default withRouter(
   connect(mapStateToProps, {
-    getAllBranchAction,
     branchStatusEditAction,
     editBranchStatusFresh,
     branchPopularEditAction,
     editBranchPopularFresh,
     branchDeleteAction,
     branchDeleteFresh,
+    getServerSidePaginationBranchAction,
+    getServerSidePaginationBranchFresh,
+    getBranchByIdFresh,
   })(Branch)
 )

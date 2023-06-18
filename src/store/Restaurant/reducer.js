@@ -69,9 +69,6 @@ import {
   SERVER_SIDE_PAGINATION_RESTAURANT,
   SERVER_SIDE_PAGINATION_RESTAURANT_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_RESTAURANT_FRESH,
-  SERVER_SIDE_PAGINATION_BRANCH,
-  SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
-  SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
   DELETE_MENU_TIME_SLOT,
   DELETE_MENU_TIME_SLOT_FRESH,
   GET_ZONE_BY_ID,
@@ -225,11 +222,6 @@ const initialState = {
 
   get_server_side_pagination_restaurant_search_data: null,
   get_server_side_pagination_restaurant_search_loading: false,
-
-  // server side pagination branch
-  get_server_side_pagination_branch_data: null,
-  get_server_side_pagination_branch_error: null,
-  get_server_side_pagination_branch_loading: false,
 
   get_server_side_pagination_branch_search_data: null,
   get_server_side_pagination_branch_search_loading: false,
@@ -876,31 +868,6 @@ const Restaurant = (state = initialState, action) => {
         ...state,
         get_server_side_pagination_restaurant_search_data: action.payload,
         get_server_side_pagination_restaurant_search_loading: action.status,
-      }
-      break
-
-    case SERVER_SIDE_PAGINATION_BRANCH:
-      state = {
-        ...state,
-        get_server_side_pagination_branch_data: action.payload,
-        get_server_side_pagination_branch_error: null,
-        get_server_side_pagination_branch_loading: action.status,
-      }
-      break
-
-    case SERVER_SIDE_PAGINATION_BRANCH_SEARCH:
-      state = {
-        ...state,
-        get_server_side_pagination_branch_search_data: action.payload,
-        get_server_side_pagination_branch_search_loading: action.status,
-      }
-      break
-
-    case SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH:
-      state = {
-        ...state,
-        get_server_side_pagination_branch_search_data: action.payload,
-        get_server_side_pagination_branch_search_loading: action.status,
       }
       break
 

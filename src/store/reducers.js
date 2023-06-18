@@ -43,6 +43,7 @@ import RiderList from "./RiderList/reducer"
 import Wallet from "./Wallet/reducer"
 import Quest from "./Quest/reducer"
 import RiderWalletDetail from "./RiderWalletDetail/reducer"
+import Branch from "./Branch/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -81,6 +82,7 @@ const rootReducer = combineReducers({
   Wallet,
   Quest,
   RiderWalletDetail,
+  Branch,
 })
 
 export default rootReducer
