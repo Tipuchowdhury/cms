@@ -87,6 +87,10 @@ import {
   SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH,
   GET_ADD_ON_CATEGORY_BY_ID,
+  GET_MENU_ITEM_BY_ID,
+  GET_MENU_ITEM_BY_ID_FRESH,
+  SERVER_SIDE_PAGINATION_MENU_ITEM_FRESH,
+  SERVER_SIDE_PAGINATION_MENU_ITEM,
 } from "./actionTypes"
 
 const initialState = {
@@ -202,6 +206,10 @@ const initialState = {
   get_category_by_branch_id_error: null,
   get_category_by_branch_id_loading: false,
 
+  get_menu_item_by_id_data: null,
+  get_menu_item_by_id_error: null,
+  get_menu_item_by_id_loading: false,
+
   // server side pagination ZONE
   get_server_side_pagination_zone_data: null,
   get_server_side_pagination_zone_error: null,
@@ -241,6 +249,11 @@ const initialState = {
 
   get_server_side_pagination_addOns_category_search_data: null,
   get_server_side_pagination_addOns_category_search_loading: false,
+
+  // server side pagination menu item
+  get_server_side_pagination_menu_item_data: null,
+  get_server_side_pagination_menu_item_error: null,
+  get_server_side_pagination_menu_item_loading: false,
 
   get_zone_by_id_data: null,
   get_zone_by_id_error: null,
@@ -586,6 +599,7 @@ const Restaurant = (state = initialState, action) => {
         add_restaurant_menu_error: null,
         add_restaurant_menu_loading: action.status,
         get_all_menu_loading: false,
+        get_server_side_pagination_menu_item_loading: false,
       }
       break
     case ADD_RESTAURANT_MENU_FRESH:
@@ -617,6 +631,7 @@ const Restaurant = (state = initialState, action) => {
         ...state,
         restaurant_menu_delete_loading: action.status,
         get_all_menu_loading: false,
+        get_server_side_pagination_menu_item_loading: false,
       }
       break
     case DELETE_RESTAURANT_MENU_FRESH:
@@ -632,6 +647,7 @@ const Restaurant = (state = initialState, action) => {
         restaurant_menu_status_edit_data: action.payload,
         restaurant_menu_status_edit_loading: action.status,
         get_all_campaign_loading: false,
+        get_server_side_pagination_menu_item_loading: false,
       }
       break
 
@@ -649,6 +665,7 @@ const Restaurant = (state = initialState, action) => {
 
         edit_restaurant_menu_loading: action.status,
         get_all_menu_loading: false,
+        get_server_side_pagination_menu_item_loading: false,
 
         // edit_branch_popular_loading: action.status,
         // get_all_branch_loading: false,
@@ -970,6 +987,40 @@ const Restaurant = (state = initialState, action) => {
         get_add_ons_by_id_data: action.payload,
         get_add_ons_by_id_error: null,
         get_add_ons_by_id_loading: action.status,
+      }
+      break
+
+    case GET_MENU_ITEM_BY_ID:
+      state = {
+        ...state,
+        get_menu_item_by_id_data: action.payload,
+        get_menu_item_by_id_error: action.error,
+        get_menu_item_by_id_loading: action.status,
+      }
+      break
+
+    case GET_MENU_ITEM_BY_ID_FRESH:
+      state = {
+        ...state,
+        get_menu_item_by_id_data: action.payload,
+        get_menu_item_by_id_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_MENU_ITEM:
+      state = {
+        ...state,
+        get_server_side_pagination_menu_item_data: action.payload,
+        get_server_side_pagination_menu_item_error: null,
+        get_server_side_pagination_menu_item_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_MENU_ITEM_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_menu_item_data: action.payload,
+        get_server_side_pagination_menu_item_loading: action.status,
       }
       break
   }

@@ -87,6 +87,10 @@ import {
   SERVER_SIDE_PAGINATION_ADDONS_CATEGORY_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_ADDONS_CATEGORY_FRESH,
   GET_ADD_ON_CATEGORY_BY_ID,
+  GET_MENU_ITEM_BY_ID,
+  GET_MENU_ITEM_BY_ID_FRESH,
+  SERVER_SIDE_PAGINATION_MENU_ITEM,
+  SERVER_SIDE_PAGINATION_MENU_ITEM_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -1844,10 +1848,9 @@ export const restaurantMenuItemDeleteFresh = () => {
 }
 
 export const restaurantMenuStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Put"
-  let dataObject = { ...data }
+  var url = `${process.env.REACT_APP_LOCALHOST}/MenuItem/isActive?id=${data._id}&is_active=${data.is_active}`
 
-  const formData = convertToFormData(dataObject)
+  const formData = {}
   // console.log(formData);
   return dispatch => {
     const headers = {
@@ -2777,4 +2780,87 @@ export const getAddOnsCategoryByIdAction = id => {
         })
       })
   }
+}
+
+export const getMenuItemByIdAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + `/MenuItem/GetById?id=${id}`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_MENU_ITEM_BY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_MENU_ITEM_BY_ID,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getMenuItemByIdActionFresh = () => {
+  console.log("=========hererererer=======")
+  return dispatch =>
+    dispatch({
+      type: GET_MENU_ITEM_BY_ID_FRESH,
+      status: false,
+    })
+}
+
+export const getServerSidePaginationMenuItemAction = (
+  index,
+  limit,
+  filters
+) => {
+  // console.log("filters :", filters)
+  filters = filters ? new URLSearchParams(filters).toString() : ""
+
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/MenuItem/Search?page=${index}&limit=${limit}${
+      filters ? "&" + filters : ""
+    }`
+  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_MENU_ITEM,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_MENU_ITEM,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationMenuItemFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_MENU_ITEM_FRESH,
+      status: false,
+      payload: null,
+    })
 }
