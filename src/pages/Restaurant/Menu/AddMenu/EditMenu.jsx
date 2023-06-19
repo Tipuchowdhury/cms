@@ -36,6 +36,8 @@ import {
   getAllCategoryAction,
   editRestaurantMenuAction,
   editRestaurantMenuFresh,
+  getMenuItemByIdAction,
+  getMenuItemByIdActionFresh,
 } from "store/actions"
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { boolean } from "yup"
@@ -45,6 +47,7 @@ import moment from "moment"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import axios from "axios"
+import PageLoader from "components/CustomLoader/PageLoader"
 
 const LoadingContainer = () => <div>Loading...</div>
 
@@ -53,34 +56,82 @@ function EditMenu(props) {
   const location = useLocation()
   const dispatch = useDispatch()
   const [dataUpdated, setDataUpdated] = useState(false)
-  // console.log(location.state)
+
+  // useEffect(() => {
+  //   props.getMenuItemByIdAction()
+  // }, [])
+
+  const [getInfo, SetGetInfo] = useState(true)
+
   const [info, setInfo] = useState({
-    name: location.state ? location.state.menu_name : "",
-    menu_description: location.state ? location.state.description : "",
-    restaurant: location.state ? location.state.restaurant_id : "",
-    category: location.state ? location.state.category_id : "",
-    Variation_group_name: location.state
-      ? location.state.variation_group_name
-      : "",
-    Variation_grp_desc: location.state
-      ? location.state.variation_group_name
-      : "",
-    is_popular: location.state ? location.state.is_popular.toString() : "true",
-    is_delivery: location.state
-      ? location.state.is_delivery.toString()
-      : "true",
-    is_pickup: location.state ? location.state.is_pickup.toString() : "true",
-    is_dine: location.state ? location.state.is_dine.toString() : "true",
-    menu_price: location.state ? location.state.menu_price : "",
-    recipe_time: location.state ? location.state.recipe_time : "",
-    pickup_menu_price: location.state ? location.state.pickup_menu_price : "",
-    vat: location.state ? location.state.vat : "",
-    sd: location.state ? location.state.sd : "",
+    name:
+      props?.get_menu_item_by_id_data != undefined
+        ? props?.get_menu_item_by_id_data.menu_name
+        : "",
+    menu_description:
+      props?.get_menu_item_by_id_data != undefined
+        ? props?.get_menu_item_by_id_data.description
+        : "",
+    restaurant:
+      props?.get_menu_item_by_id_data != undefined
+        ? props?.get_menu_item_by_id_data.restaurant_id
+        : "",
+    category:
+      props?.get_menu_item_by_id_data != undefined
+        ? props?.get_menu_item_by_id_data.category_id
+        : "",
+    Variation_group_name:
+      props?.get_menu_item_by_id_data != undefined
+        ? props?.get_menu_item_by_id_data.variation_group_name
+        : "",
+    Variation_grp_desc:
+      props?.get_menu_item_by_id_data != undefined
+        ? props?.get_menu_item_by_id_data.variation_group_desc
+        : "",
+    is_popular:
+      props?.get_menu_item_by_id_data != undefined
+        ? props?.get_menu_item_by_id_data?.is_popular.toString()
+        : "true",
+    is_delivery:
+      props?.get_menu_item_by_id_data != undefined
+        ? props?.get_menu_item_by_id_data.is_delivery.toString()
+        : "true",
+    is_pickup:
+      props?.get_menu_item_by_id_data != undefined
+        ? props?.get_menu_item_by_id_data.is_pickup.toString()
+        : "true",
+    is_dine:
+      props?.get_menu_item_by_id_data != undefined
+        ? props?.get_menu_item_by_id_data.is_dine.toString()
+        : "true",
+    menu_price:
+      props?.get_menu_item_by_id_data != undefined
+        ? props?.get_menu_item_by_id_data.menu_price
+        : "",
+    recipe_time:
+      props?.get_menu_item_by_id_data != undefined
+        ? props?.get_menu_item_by_id_data.recipe_time
+        : "",
+    pickup_menu_price:
+      props?.get_menu_item_by_id_data != undefined
+        ? props?.get_menu_item_by_id_data.pickup_menu_price
+        : "",
+    vat:
+      props?.get_menu_item_by_id_data != undefined
+        ? props?.get_menu_item_by_id_data.vat
+        : "",
+    sd:
+      props?.get_menu_item_by_id_data != undefined
+        ? props?.get_menu_item_by_id_data.sd
+        : "",
   })
 
-  const [file, setFile] = useState()
   const [isChecked, setIsChecked] = useState(
-    location.state ? (location.state.has_variation == 1 ? true : false) : false
+    props?.get_menu_item_by_id_data
+      ? props?.get_menu_item_by_id_data?.has_variation == 1
+        ? true
+        : false
+      : false
   )
   const [addVariation, setAddVariation] = useState(false)
   const [modal, setModal] = useState(false)
@@ -137,21 +188,6 @@ function EditMenu(props) {
 
   // console.log(addNewCategory)
   // ===========================start working from here ====================
-  const [item, setItem] = useState([])
-
-  // const handleChangeTime = (e, ClickedItem) => {
-  //   const newState = newData2.map(obj => {
-  //     // 👇️ if id equals 2, update country property
-  //     if (obj._id === ClickedItem._id) {
-  //       return { ...obj, checked: !obj.checked }
-  //     }
-
-  //     // 👇️ otherwise return the object as is
-  //     return obj
-  //   })
-
-  //   setNewData2(newState)
-  // }
 
   const handleChangeTime = (e, ClickedItem) => {
     const newState = selectedTimeSlot.map(obj => {
@@ -165,17 +201,6 @@ function EditMenu(props) {
     setSelectedTimeSlot(newState)
   }
   // ===========================ends here ====================
-
-  // get all branch
-
-  // let branchData = undefined
-  // if (props.get_all_branch_data?.length > 0) {
-  //   branchData = props.get_all_branch_data?.map((item, key) => (
-  //     <option key={item._id} value={item._id}>
-  //       {item.name}
-  //     </option>
-  //   ))
-  // }
 
   let allTimeSlots = []
 
@@ -202,7 +227,7 @@ function EditMenu(props) {
   useEffect(() => {
     timeSlots?.length > 0
       ? timeSlots?.map((elem, index) => {
-          location?.state?.menu_available_times?.map(item => {
+          props?.get_menu_item_by_id_data?.menu_available_times?.map(item => {
             if (elem._id === item.menu_item_time_slot_id) {
               let new_time_slots = timeSlots
               new_time_slots[index] = { ...elem, checked: true }
@@ -223,17 +248,10 @@ function EditMenu(props) {
     ))
   }
 
-  // let menuCategoryData = undefined
-  // if (props.get_all_category_data?.length > 0) {
-  //   menuCategoryData = props.get_all_category_data?.map((item, key) => (
-  //     <option key={item._id} value={item._id}>
-  //       {item.category_name}
-  //     </option>
-  //   ))
-  // }
-
   const [images, setImages] = useState({
-    image: location.state ? location.state.image : "",
+    image: props?.get_menu_item_by_id_data
+      ? props?.get_menu_item_by_id_data.image
+      : "",
   })
 
   const handleFiles = e => {
@@ -249,9 +267,6 @@ function EditMenu(props) {
     reader.readAsDataURL(value)
   }
 
-  function handleChange(event) {
-    setFile(event.target.files[0])
-  }
   const checkHandler = () => {
     setIsChecked(!isChecked)
   }
@@ -272,7 +287,9 @@ function EditMenu(props) {
   }
 
   const [addOns, setAddOns] = useState(
-    location.state ? location.state.variations : [addOnsTemplate]
+    props?.get_menu_item_by_id_data
+      ? props?.get_menu_item_by_id_data?.variations
+      : [addOnsTemplate]
   )
 
   const handleAddOnsCat = (e, index) => {
@@ -305,14 +322,8 @@ function EditMenu(props) {
 
   // *********************** start from here ****************************
 
-  const [addAddOns, setAddAddOns] = useState({
-    category: "",
-  })
-  const [num_of_choice_new, setNumber] = useState()
-  const [isCheckAddOns, setIsCheckAddOns] = useState(false)
   let addAddOnName, addAddOnValue
 
-  const [valueByID, setValue] = useState()
   const checkHandlerAddOns = categoryIndex => {
     const newCat = [...addNewCategory]
     newCat[categoryIndex] = {
@@ -336,7 +347,7 @@ function EditMenu(props) {
 
   //select multiple branch
   const common_branches = props?.get_all_branch_data?.filter(
-    elem => elem._id === location.state.restaurant_id
+    elem => elem._id === props?.get_menu_item_by_id_data?.restaurant_id
   )
 
   const branch_data_edit = common_branches
@@ -373,21 +384,9 @@ function EditMenu(props) {
     }))
   }
 
-  const [timeSlotNew, setTimeSlotNew] = useState([])
-
-  // const common_categories = props.get_all_category_data?.filter(
-  //   elem => elem._id === location?.state?.category_id
-  // )
-
   const common_categories_2 = props.get_category_by_branch_id_data?.filter(
-    elem => elem._id === location?.state?.category_id
+    elem => elem._id === props?.get_menu_item_by_id_data?.category_id
   )
-
-  // const category_data_edit = common_categories
-  //   ? common_categories?.map((item, key) => {
-  //       return { label: item.category_name, value: item._id }
-  //     })
-  //   : ""
 
   const category_data_edit_2 = common_categories_2
     ? common_categories_2?.map((item, key) => {
@@ -395,28 +394,14 @@ function EditMenu(props) {
       })
     : ""
 
-  // const [selectedCategory, setSelectedCategory] = useState(
-  //   category_data_edit ? category_data_edit : ""
-  // )
-
   const [categoryNew, setCategoryNew] = useState(
     category_data_edit_2 ? category_data_edit_2 : ""
   )
-
-  // const handleSelectCategory = e => {
-  //   setInfo({ ...info, category: e.value })
-  //   setSelectedCategory(e)
-  // }
 
   const handleSelectCategory2 = e => {
     setInfo({ ...info, category: e.value })
     setCategoryNew(e)
   }
-
-  // useEffect(() => {
-  //   if (props.get_all_category_loading === "Success")
-  //     setSelectedCategory(category_data_edit)
-  // }, [props.get_all_category_loading])
 
   useEffect(() => {
     if (props.get_category_by_branch_id_loading === "Success") {
@@ -431,16 +416,6 @@ function EditMenu(props) {
     props.getTimeSLotByBranchIdAction(info.restaurant)
   }, [info.restaurant])
 
-  // console.log(selectedCategory)
-
-  // let menuCategoryData = undefined
-  // if (props.get_all_category_data?.length > 0) {
-  //   menuCategoryData = props.get_all_category_data?.map((item, key) => ({
-  //     label: item.category_name,
-  //     value: item._id,
-  //   }))
-  // }
-
   let menuCategoryData2 = undefined
   if (props.get_category_by_branch_id_data?.length > 0) {
     menuCategoryData2 = props.get_category_by_branch_id_data?.map(
@@ -451,26 +426,18 @@ function EditMenu(props) {
     )
   }
 
-  // const common_time_slots = props?.common_time_slots?.filter(
-  //   elem => elem._id === location.state.restaurant_id
-  // )
-
-  // const common_time_slots = props?.get_all_menu_time_slot_data?.filter(elem =>
-  //   location?.state?.menu_available_times?.find(
-  //     ({ menu_item_time_slot_id }) => elem._id === menu_item_time_slot_id
-  //   )
-  // )
-
   const slot_data = []
 
   props?.get_time_slot_by_branch_id_data?.forEach((time_slot, index) => {
     let status = 0
     if (time_slot.is_active == true) {
-      location?.state?.menu_available_times?.forEach((time_slot_2, key) => {
-        if (time_slot._id === time_slot_2.menu_item_time_slot_id) {
-          status = 1
+      props?.get_menu_item_by_id_data?.menu_available_times?.forEach(
+        (time_slot_2, key) => {
+          if (time_slot._id === time_slot_2.menu_item_time_slot_id) {
+            status = 1
+          }
         }
-      })
+      )
       if (status == 1) {
         slot_data.push({
           _id: time_slot._id,
@@ -501,40 +468,9 @@ function EditMenu(props) {
       setSelectedTimeSlot(slot_data)
   }, [props.get_time_slot_by_branch_id_loading])
 
-  // let allSlots = undefined
-  // if (props.get_time_slot_by_branch_id_data?.length > 0) {
-  //   allSlots = props.get_time_slot_by_branch_id_data?.map((item, key) => ({
-  //     _id: item._id,
-  //     name: item.name,
-  //     checked: false,
-  //     start_time: item.start_time,
-  //     end_time: item.end_time,
-  //   }))
-  // }
-
-  // console.log(selectedTimeSlot)
-  // console.log(allSlots)
-  // console.log(info.restaurant)
-
-  const checkTimeSelected = time_slot => {}
-
-  const handleCatMaxChoice = (e, categoryIndex) => {
-    const newCat = [...addNewCategory]
-    newCat[categoryIndex] = {
-      ...newCat[categoryIndex],
-      cat_max_choice: e.target.value,
-    }
-
-    setAddNewCategory(newCat)
-  }
-
   const [addOnsNew, setAddOnsNew] = useState([
     props?.get_category_by_id_data?.preset_add_ons,
   ])
-
-  // console.log(categoryNew)
-  // console.log(timeSlotNew)
-  // console.log(menuCategoryData)
 
   const handleAddOnsCatNew = (e, categoryIndex, addonIndex) => {
     const newCat = [...addNewCategory]
@@ -572,24 +508,7 @@ function EditMenu(props) {
    */
   const addOnsTemplateNew_test = { add_on_name: "", add_on_price: "" }
   const [addOnUnderCategory, setAddOnUnderCategory] = useState([])
-  const [addBtnStatus, setAddBtnStatus] = useState(false)
-  const handleAddOnsUndeCategory = (e, index) => {
-    setAddBtnStatus(true)
-    const updatedValue = addOnUnderCategory.map((row, i) => {
-      index === i
-        ? Object.assign(row, { [e.target.name]: e.target.value })
-        : row
-    })
 
-    setAddOnUnderCategory(updatedValue)
-  }
-
-  const handleRowDeleteUnderCategory = index => {
-    const filteredTime = [...addOnUnderCategory]
-
-    filteredTime.splice(index, 1)
-    setAddOnUnderCategory(filteredTime)
-  }
   function handleAddRowNestedNew(add_on_category_id, categoryIndex) {
     const addOnsTemplateNew = {
       add_on_category_id: add_on_category_id,
@@ -610,8 +529,7 @@ function EditMenu(props) {
    final template - for add menu addon
    *
    */
-  const [apiValue, setApiVal] = useState()
-  //const finalTemplate = { category_Name: "", category_personal_addOn: addOnsNew, additionalAddOn: addOnUnderCategory }
+
   const finalTemplate = {
     add_on_category_id: "",
     add_on_category_name: "",
@@ -621,10 +539,6 @@ function EditMenu(props) {
     add_on_category_desc: "",
     add_ons: [],
     // additionalAddOn: [],
-  }
-  const [selectedAddonsCategory, setSelectedAddonsCategory] = useState([])
-  const handleSelectedAddOnsCategory = add_on_categories => {
-    setSelectedAddonsCategory(add_on_categories)
   }
 
   const handleInputsAddOns = (e, idx) => {
@@ -685,52 +599,12 @@ function EditMenu(props) {
       })
   }
 
-  // const handleInputsRestaurant = e => {
-  //   let restaurantName = e.target.name
-  //   let restaurantValue = e.target.value
-
-  //   setInfo({ ...info, [restaurantName]: restaurantValue })
-  //   setSelectedCategory([])
-  //   props.getCategoryByBranchIdAction(restaurantValue)
-  //   props.getTimeSLotByBranchIdAction(restaurantValue)
-  // }
-
   function handleAddCategoryRow() {
     //props.getCategoryByIdFresh();
     setAddNewCategory([...addNewCategory, finalTemplate])
-
-    // const updatedValue = addNewCategory.map((row, i) => idx === i ? Object.assign(row, { additionalAddOn: addOnUnderCategory }) : row);
-    // setAddNewCategory(updatedValue)
-  }
-  //
-  const addOnsTemplateNew1 = { add_on_name: "", add_on_price: "" }
-  const [addOnUnderCategory1, setAddOnUnderCategory1] = useState([])
-  const handleAddOnsUndeCategory1 = (e, index) => {
-    setAddBtnStatus(true)
-    const updatedValue = addNewCategory.map((row, i) =>
-      index === i
-        ? Object.assign(row, { additionalAddOn: e.target.value })
-        : row
-    )
-    setAddNewCategory(updatedValue)
-  }
-  function handleAddRowNestedNew1() {
-    //setAddOnUnderCategory1([...addOnUnderCategory1, addOnsTemplateNew1]);
-    //setAddNewCategory({ ...addNewCategory, additionalAddOn: addOnsTemplateNew1 });
-    const updatedValue = addNewCategory.map((row, i) =>
-      index === i
-        ? Object.assign(row, { additionalAddOn: addOnsTemplateNew1 })
-        : row
-    )
-    setAddNewCategory(updatedValue)
   }
 
   // ************************ ends here ********************************
-  const handleAddMenu = e => {
-    e.preventDefault()
-    const val = uuidv4()
-    props.addRestaurantMenuAction(val, info, isChecked, addOns, item)
-  }
 
   const handleEditMenu = e => {
     e.preventDefault()
@@ -756,7 +630,6 @@ function EditMenu(props) {
     }
   }
 
-  let newAddOnsArray = []
   const handleAddOnsForm = (e, idx) => {
     //console.log(addNewCategory)
     e.preventDefault()
@@ -774,21 +647,113 @@ function EditMenu(props) {
     setAddNewCategory([finalTemplate])
     // console.log("addNewCategory", addNewCategory)
     setAddOnUnderCategory([addOnsTemplateNew_test])
-    // console.log("addOnUnderCategory", addOnUnderCategory)
 
     closeModal()
-    // setAddNewCategory("");
-    // setAddOnUnderCategory("");
-    //===== test end========
-    // addOns.splice(id, 0, { additionalVariation: [addNewCategory, addOnUnderCategory] })
-    //
   }
 
   useEffect(() => {
-    // if (props.get_all_restaurant_loading == false) {
-    //     props.getAllRestaurantAction();
-    // }
+    if (props.get_menu_item_by_id_data != undefined) {
+      setInfo({
+        ...info,
+        name: props?.get_menu_item_by_id_data.menu_name,
+        menu_description: props?.get_menu_item_by_id_data.description,
+        restaurant: props?.get_menu_item_by_id_data.restaurant_id,
+        category: props?.get_menu_item_by_id_data.category_id,
+        Variation_group_name:
+          props?.get_menu_item_by_id_data.variation_group_name,
+        Variation_grp_desc:
+          props?.get_menu_item_by_id_data.variation_group_desc,
+        is_popular: props?.get_menu_item_by_id_data.is_popular.toString(),
+        is_delivery: props?.get_menu_item_by_id_data.is_delivery.toString(),
+        is_pickup: props?.get_menu_item_by_id_data.is_pickup.toString(),
+        is_dine: props?.get_menu_item_by_id_data.is_dine.toString(),
+        menu_price: props?.get_menu_item_by_id_data.menu_price,
+        recipe_time: props?.get_menu_item_by_id_data.recipe_time,
+        pickup_menu_price: props?.get_menu_item_by_id_data.pickup_menu_price,
+        vat: props?.get_menu_item_by_id_data.vat,
+        sd: props?.get_menu_item_by_id_data.sd,
+      })
 
+      //select multiple branch
+      const common_branches = props?.get_all_branch_data?.filter(
+        elem => elem._id === props?.get_menu_item_by_id_data.restaurant_id
+      )
+
+      const branch_data_edit = common_branches
+        ? common_branches?.map((item, key) => {
+            return { label: item.name, value: item._id }
+          })
+        : ""
+
+      setSelectedBranch(branch_data_edit)
+
+      const common_categories_2 = props.get_category_by_branch_id_data?.filter(
+        elem => elem._id === props?.get_menu_item_by_id_data?.category_id
+      )
+
+      const category_data_edit_2 = common_categories_2
+        ? common_categories_2?.map((item, key) => {
+            return { label: item.category_name, value: item._id }
+          })
+        : ""
+
+      setCategoryNew(category_data_edit_2)
+
+      const slot_data = []
+
+      props?.get_time_slot_by_branch_id_data?.forEach((time_slot, index) => {
+        let status = 0
+        if (time_slot.is_active == true) {
+          props?.get_menu_item_by_id_data?.menu_available_times?.forEach(
+            (time_slot_2, key) => {
+              if (time_slot._id === time_slot_2.menu_item_time_slot_id) {
+                status = 1
+              }
+            }
+          )
+          if (status == 1) {
+            slot_data.push({
+              _id: time_slot._id,
+              checked: true,
+              name: time_slot.name,
+              start_time: time_slot.start_time,
+              end_time: time_slot.end_time,
+            })
+          } else {
+            slot_data.push({
+              _id: time_slot._id,
+              checked: false,
+              name: time_slot.name,
+              start_time: time_slot.start_time,
+              end_time: time_slot.end_time,
+            })
+          }
+          status = 0
+        }
+      })
+
+      setSelectedTimeSlot(slot_data)
+      setIsChecked(
+        props?.get_menu_item_by_id_data
+          ? props?.get_menu_item_by_id_data?.has_variation == 1
+            ? true
+            : false
+          : false
+      )
+
+      setAddOns(props?.get_menu_item_by_id_data?.variations)
+
+      //  const [addOns, setAddOns] = useState(
+      //    props?.get_menu_item_by_id_data
+      //      ? props?.get_menu_item_by_id_data?.variations
+      //      : [addOnsTemplate]
+      //  )
+
+      setImages({ ...images, image: props?.get_menu_item_by_id_data.image })
+    }
+  }, [props.get_menu_item_by_id_data])
+
+  useEffect(() => {
     if (props.get_all_branch_loading == false) {
       props.getAllBranchAction()
     }
@@ -807,6 +772,11 @@ function EditMenu(props) {
 
     if (props.get_all_category_loading == false) {
       props.getAllCategoryAction()
+    }
+
+    if (getInfo) {
+      props.getMenuItemByIdAction(location?.state?._id)
+      SetGetInfo(false)
     }
 
     if (props.edit_restaurant_menu_loading === "Success") {
@@ -845,6 +815,10 @@ function EditMenu(props) {
     props.get_time_slot_by_branch_id_loading,
   ])
 
+  if (props.get_menu_item_by_id_data == null) {
+    return <PageLoader />
+  }
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -871,7 +845,7 @@ function EditMenu(props) {
                     }}
                   >
                     <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
-                      {location.state ? "Edit Menu" : "Add a New Menu"}{" "}
+                      Edit Menu
                     </CardTitle>
                   </div>
                   {/* {props.get_all_restaurant_data ? props.get_all_restaurant_data.length > 0 ? <DatatableTablesWorking products={props.get_all_restaurant_data}
@@ -882,10 +856,7 @@ function EditMenu(props) {
           </Row>
           <Row>
             <Col className="col-10 mx-auto">
-              <form
-                className="mt-4"
-                onSubmit={location.state ? handleEditMenu : handleAddMenu}
-              >
+              <form className="mt-4" onSubmit={handleEditMenu}>
                 <Row className="mb-3">
                   <label
                     htmlFor="example-text-input"
@@ -1100,22 +1071,6 @@ function EditMenu(props) {
                     />
                   </div>
                 </Row>
-                {/* {isChecked ?
-
-                                    <Row className="mb-3">
-                                        <label
-                                            htmlFor="example-text-input"
-                                            className="col-md-2 col-form-label"
-                                        >
-
-                                        </label>
-                                        <div className="col-md-10">
-                                            <input type="checkbox" id="cat_is_multiple" name="cat_is_multiple" checked={addVariation} onChange={handleAddVariation} value="true" style={{ margin: "15px 5px 20px 0px" }} />Add Variation
-                                        </div>
-                                    </Row>
-
-
-                                    : ""} */}
 
                 {isChecked ? (
                   <>
@@ -1234,16 +1189,10 @@ function EditMenu(props) {
                                           row.add_on_categories ?? ""
                                         ),
                                           handleID(idx)
-                                        //   handleSelectedAddOnsCategory(
-                                        //     row.add_on_categories ?? ""
-                                        //   )
                                       }
                                     }}
                                   />
                                 </div>
-                                {/* <Col lg={2} className="align-self-center d-grid mt-3">
-                                                                <input data-repeater-delete type="button" className="btn btn-primary" value="Add Ad ons" onClick={() => (handleRowDelete(idx))} />
-                                                            </Col> */}
                               </div>
                             </div>
                           </React.Fragment>
@@ -1601,7 +1550,7 @@ function EditMenu(props) {
                       className="btn btn-primary w-md waves-effect waves-light"
                       type="submit"
                     >
-                      {location.state ? "Edit Menu" : "Add Menu"}
+                      Edit Menu
                     </button>
                   </div>
                 </div>
@@ -1646,7 +1595,6 @@ function EditMenu(props) {
                       style={{ margin: "15px 5px 20px 0px" }}
                     />
                     Multiple Selection
-                    {/* {addOnsNew?.map((row, idx) => ( */}
                     {itemCat?.add_ons?.map((row, addon_index) => (
                       <React.Fragment key={addon_index}>
                         <div
@@ -1804,6 +1752,9 @@ const mapStateToProps = state => {
     get_time_slot_by_branch_id_loading,
 
     edit_restaurant_menu_loading,
+
+    get_menu_item_by_id_data,
+    get_menu_item_by_id_loading,
   } = state.Restaurant
 
   const {
@@ -1842,6 +1793,9 @@ const mapStateToProps = state => {
     get_all_category_loading,
 
     edit_restaurant_menu_loading,
+
+    get_menu_item_by_id_data,
+    get_menu_item_by_id_loading,
   }
 }
 
@@ -1862,5 +1816,7 @@ export default withRouter(
     editRestaurantMenuFresh,
     getTimeSLotByBranchIdAction,
     getTimeSLotByBranchIdFresh,
+    getMenuItemByIdAction,
+    getMenuItemByIdActionFresh,
   })(EditMenu)
 )
