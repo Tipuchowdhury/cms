@@ -86,7 +86,7 @@ function BranchAdd(props) {
   }
 
   const [images, setImages] = useState({
-    image: location.state ? location.state.image : "",
+    image: "",
   })
   const [coverImages, setCoverImages] = useState({
     cover_image: location.state ? location.state.cover_image : "",
@@ -387,6 +387,16 @@ function BranchAdd(props) {
         email: branchData.email,
         share_link: "",
       })
+
+      // set image start
+      setImages({
+        image: branchData.image,
+      })
+
+      setCoverImages({
+        cover_image: branchData.cover_image,
+      })
+      // set image end
 
       // Attribute set start
       const common_attributes = props?.get_all_branch_attribute_data?.filter(
