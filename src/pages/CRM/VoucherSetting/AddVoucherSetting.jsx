@@ -46,12 +46,46 @@ function AddVoucherSetting(props) {
       : 0,
     validity_time: location.state ? location.state.validity_time : 0,
     notes: location.state ? location.state.notes : "",
+    type: location.state ? location.state.type : "",
     description: location.state ? location.state.description : "",
     is_delivery: location.state ? location.state.is_delivery : false,
     is_pickup: location.state ? location.state.is_pickup : false,
     is_dine: location.state ? location.state.is_dine : false,
     is_active: location.state ? location.state.is_active : true,
   })
+
+  const [couponTypes, setCouponTypes] = useState([
+    {
+      label: "Coupon",
+      value: "in_app",
+    },
+    {
+      label: "Voucher",
+      value: "out_app",
+    },
+  ])
+
+  const common_coupon_types = couponTypes?.filter(
+    elem => elem.value === location?.state?.type
+  )
+  // console.log("common_coupon_types :", common_coupon_types)
+
+  const coupon_data_edit = common_coupon_types
+    ? common_coupon_types?.map((item, key) => {
+        return { label: item.label, value: item.value }
+      })
+    : ""
+
+  // console.log(coupon_data_edit)
+
+  const [selectedCouponType, setSelectedCouponType] = useState(
+    coupon_data_edit ? coupon_data_edit[0] : ""
+  )
+
+  const handleSelectCouponType = e => {
+    setVoucherSettingInfo({ ...voucherSettingInfo, type: e.value })
+    setSelectedCouponType(e)
+  }
 
   const common_branches = props?.get_all_branch_data?.filter(elem =>
     location?.state?.restaurants?.find(({ res_id }) => elem._id === res_id)
@@ -68,7 +102,6 @@ function AddVoucherSetting(props) {
     branch_data_edit ? branch_data_edit : ""
   )
   const handleSelectBranch = e => {
-    // console.log(e)
     setSelectedBranch(e)
   }
 
@@ -194,7 +227,7 @@ function AddVoucherSetting(props) {
                   <Row className="mb-3">
                     <label htmlFor="name" className="col-md-2 col-form-label">
                       {" "}
-                      Name
+                      Name <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <input
@@ -212,7 +245,7 @@ function AddVoucherSetting(props) {
 
                   <Row className="mb-3">
                     <label htmlFor="image" className="col-md-2 col-form-label">
-                      Image
+                      Image <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <input
@@ -221,6 +254,7 @@ function AddVoucherSetting(props) {
                         id="image"
                         name="image"
                         onChange={handleFiles}
+                        required={location.state ? false : true}
                       />
                     </div>
                   </Row>
@@ -260,25 +294,49 @@ function AddVoucherSetting(props) {
 
                   <Row className="mb-3">
                     <label
-                      htmlFor="voucher_amount"
+                      htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
                     >
-                      {" "}
-                      Voucher Amount
+                      Type <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="voucher_amount"
-                        placeholder="Enter voucher amount"
-                        name="voucher_amount"
-                        onChange={handleInputs}
-                        value={voucherSettingInfo.voucher_amount ?? ""}
+                      <Select
+                        value={selectedCouponType}
+                        onChange={handleSelectCouponType}
+                        options={couponTypes}
+                        isMulti={false}
                         required
                       />
                     </div>
                   </Row>
+
+                  {selectedCouponType?.value == "in_app" ? (
+                    <Row className="mb-3">
+                      <label
+                        htmlFor="voucher_amount"
+                        className="col-md-2 col-form-label"
+                      >
+                        {" "}
+                        Voucher Amount in TK{" "}
+                        <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-10">
+                        <input
+                          type="number"
+                          min="0"
+                          className="form-control"
+                          id="voucher_amount"
+                          placeholder="Enter voucher amount"
+                          name="voucher_amount"
+                          onChange={handleInputs}
+                          value={voucherSettingInfo.voucher_amount ?? ""}
+                          required
+                        />
+                      </div>
+                    </Row>
+                  ) : (
+                    ""
+                  )}
 
                   <Row className="mb-3">
                     <label
@@ -286,11 +344,13 @@ function AddVoucherSetting(props) {
                       className="col-md-2 col-form-label"
                     >
                       {" "}
-                      Voucher Cost in Point
+                      Voucher Cost in Point{" "}
+                      <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <input
-                        type="text"
+                        type="number"
+                        min="0"
                         className="form-control"
                         id="voucher_cost_in_point"
                         placeholder="Enter voucher cost in point"
@@ -308,11 +368,12 @@ function AddVoucherSetting(props) {
                       className="col-md-2 col-form-label"
                     >
                       {" "}
-                      Validity Time
+                      Expire Time in days <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
                       <input
                         type="number"
+                        min="0"
                         className="form-control"
                         id="validity_time"
                         placeholder="Enter validity time"
@@ -338,7 +399,6 @@ function AddVoucherSetting(props) {
                         name="notes"
                         onChange={handleInputs}
                         value={voucherSettingInfo.notes ?? ""}
-                        required
                       />
                     </div>
                   </Row>
@@ -359,7 +419,6 @@ function AddVoucherSetting(props) {
                         name="description"
                         onChange={handleInputs}
                         value={voucherSettingInfo.description ?? ""}
-                        required
                       ></textarea>
                     </div>
                   </Row>
