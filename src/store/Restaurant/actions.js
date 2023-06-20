@@ -71,9 +71,6 @@ import {
   SERVER_SIDE_PAGINATION_RESTAURANT,
   SERVER_SIDE_PAGINATION_RESTAURANT_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_RESTAURANT_FRESH,
-  SERVER_SIDE_PAGINATION_BRANCH,
-  SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
-  SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
   GET_ZONE_BY_ID,
   GET_ZONE_BY_ID_FRESH,
   GET_ZONE_BY_CITY_ID,
@@ -580,50 +577,7 @@ export const branchEditAction = (
 }
 
 export const branchStatusEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put"
-
-  // const dataObject = data
-  // console.log(data);
-  // console.log(data.location.coordinates);
-  const dataObject = {
-    name: data.name,
-    _id: data._id,
-    email: data.email,
-    // location: {
-    //   coordinates: [Number(lng), Number(lat)],
-    //   type: "Point",
-    // },
-    address: data.address,
-    popularity_sort_value: JSON.parse(data.popularity_sort_value),
-    price_range: data.price_range,
-    image: data.image,
-    cover_image: data.cover_image,
-    slug: data.slug,
-    zonal_admin: data.zonal_admin,
-    is_take_pre_order: JSON.parse(data.is_take_pre_order),
-    phone_number: data.phone_number,
-    is_veg: JSON.parse(data.is_veg),
-    is_popular: JSON.parse(data.is_popular),
-    is_delivery: JSON.parse(data.is_delivery),
-    is_pickup: JSON.parse(data.is_pickup),
-    is_dine: JSON.parse(data.is_dine),
-    commission: JSON.parse(data.commission),
-    // min_order_value: 1,
-    delivery_time: JSON.parse(data.delivery_time),
-    parent_restaurant_id: data.parent_restaurant_id,
-    working_hours: data.working_hours,
-    cuisines: data.cuisines,
-    delivery_charge: data.delivery_charge,
-    is_active: data.is_active,
-    min_order_value: data.min_order_value,
-    pickup_time: JSON.parse(data.pickup_time),
-  }
-
-  const formData = convertToFormData(dataObject)
-
-  formData.append("location[coordinates][0]", data.location.coordinates[0])
-  formData.append("location[coordinates][1]", data.location.coordinates[1])
-  formData.append("location[type]", data.location.type)
+  var url = process.env.REACT_APP_LOCALHOST + "/Branch/IsActive"
 
   return dispatch => {
     const headers = {
@@ -632,7 +586,17 @@ export const branchStatusEditAction = data => {
     }
 
     axios
-      .put(url, formData, { headers: headers })
+      .put(
+        url,
+        {},
+        {
+          headers: headers,
+          params: {
+            id: data._id,
+            is_active: data.is_active,
+          },
+        }
+      )
       .then(response => {
         dispatch({
           type: EDIT_BRANCH_STATUS,
@@ -651,48 +615,7 @@ export const branchStatusEditAction = data => {
 }
 
 export const branchPopularEditAction = data => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Branch/Put"
-
-  // const dataObject = data
-  const dataObject = {
-    name: data.name,
-    _id: data._id,
-    email: data.email,
-    // location: {
-    //   coordinates: [Number(lng), Number(lat)],
-    //   type: "Point",
-    // },
-    address: data.address,
-    popularity_sort_value: JSON.parse(data.popularity_sort_value),
-    price_range: data.price_range,
-    image: data.image,
-    cover_image: data.cover_image,
-    slug: data.slug,
-    zonal_admin: data.zonal_admin,
-    is_take_pre_order: JSON.parse(data.is_take_pre_order),
-    phone_number: data.phone_number,
-    is_veg: JSON.parse(data.is_veg),
-    is_popular: JSON.parse(data.is_popular),
-    is_delivery: JSON.parse(data.is_delivery),
-    is_pickup: JSON.parse(data.is_pickup),
-    is_dine: JSON.parse(data.is_dine),
-    commission: JSON.parse(data.commission),
-    // min_order_value: 1,
-    delivery_time: JSON.parse(data.delivery_time),
-    parent_restaurant_id: data.parent_restaurant_id,
-    working_hours: data.working_hours,
-    cuisines: data.cuisines,
-    delivery_charge: data.delivery_charge,
-    is_active: data.is_active,
-    min_order_value: data.min_order_value,
-    pickup_time: JSON.parse(data.pickup_time),
-  }
-
-  const formData = convertToFormData(dataObject)
-
-  formData.append("location[coordinates][0]", data.location.coordinates[0])
-  formData.append("location[coordinates][1]", data.location.coordinates[1])
-  formData.append("location[type]", data.location.type)
+  var url = process.env.REACT_APP_LOCALHOST + "/Branch/IsPopular"
 
   return dispatch => {
     const headers = {
@@ -701,7 +624,17 @@ export const branchPopularEditAction = data => {
     }
 
     axios
-      .put(url, formData, { headers: headers })
+      .put(
+        url,
+        {},
+        {
+          headers: headers,
+          params: {
+            id: data._id,
+            is_popular: data.is_popular,
+          },
+        }
+      )
       .then(response => {
         dispatch({
           type: EDIT_BRANCH_POPULAR,
@@ -2615,73 +2548,6 @@ export const getServerSidePaginationSearchRestaurantFresh = () => {
   return dispatch =>
     dispatch({
       type: SERVER_SIDE_PAGINATION_SEARCH_RESTAURANT_FRESH,
-      status: false,
-      payload: null,
-    })
-}
-
-export const getServerSidePaginationBranchAction = (index, limit) => {
-  var url =
-    process.env.REACT_APP_LOCALHOST +
-    `/Branch/Search?page=${index}&limit=${limit}`
-
-  const formData = {}
-  return dispatch => {
-    const headers = {
-      "Content-Type": "application/json",
-
-      "Access-Control-Allow-Origin": "*",
-    }
-    axios
-      .get(url, { headers: headers })
-      .then(response => {
-        dispatch({
-          type: SERVER_SIDE_PAGINATION_BRANCH,
-          payload: response.data,
-          status: "Success",
-        })
-      })
-      .catch(error => {
-        dispatch({
-          type: SERVER_SIDE_PAGINATION_BRANCH,
-          status: "Failed",
-        })
-      })
-  }
-}
-
-export const getServerSidePaginationBranchSearchAction = name => {
-  console.log(name)
-  var url = process.env.REACT_APP_LOCALHOST + `/Branch/Search?name=${name}`
-
-  return dispatch => {
-    const headers = {
-      "Content-Type": "application/json",
-
-      "Access-Control-Allow-Origin": "*",
-    }
-    axios
-      .get(url, { headers: headers })
-      .then(response => {
-        dispatch({
-          type: SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
-          payload: response.data,
-          status: "Success",
-        })
-      })
-      .catch(error => {
-        dispatch({
-          type: SERVER_SIDE_PAGINATION_BRANCH_SEARCH,
-          status: "Failed",
-        })
-      })
-  }
-}
-
-export const getServerSidePaginationSearchBranchFresh = () => {
-  return dispatch =>
-    dispatch({
-      type: SERVER_SIDE_PAGINATION_SEARCH_BRANCH_FRESH,
       status: false,
       payload: null,
     })

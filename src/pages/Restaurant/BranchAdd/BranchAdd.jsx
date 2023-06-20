@@ -29,6 +29,7 @@ import {
   editBranchFresh,
   getAllCuisneAction,
   getAllBranchAttributeAction,
+  getBranchByIdAction,
 } from "store/actions"
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { boolean } from "yup"
@@ -38,6 +39,7 @@ import moment from "moment"
 import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { useMemo } from "react"
+import PageLoader from "components/CustomLoader/PageLoader"
 
 const LoadingContainer = () => <div>Loading...</div>
 
@@ -46,49 +48,23 @@ function BranchAdd(props) {
   const naviagte = useNavigate()
 
   const [modal, setModal] = useState(false)
-  const [file, setFile] = useState()
-  const [coverFile, setCoverFile] = useState()
-  const [popularVal, setPopularVal] = useState()
-  const [preOrder, setPreOrder] = useState()
-  const [priceRange, setPriceRange] = useState()
+  const [loading, setLoading] = useState(true)
 
-  const map_value_for_edit = location.state?.location?.coordinates?.map(
-    item => item
-  )
-
-  const [defaultProps, setDefaultProps] = useState({
+  const [initialLatLong, setInitialLatLong] = useState({
     // lat: 23.8103,
     // lng: 90.4125,
-    lat: location.state ? map_value_for_edit[1] : 23.8103,
-    lng: location.state ? map_value_for_edit[0] : 90.4125,
+    lat: 23.8103,
+    lng: 90.4125,
   })
 
-  // const map_value_for_edit = location.state?.location?.coordinates?.map((defaultProps) => Number(defaultProps.lng) + "," + Number(defaultProps.lat));
-
-  const [state2, setState2] = useState({
-    location: location.state
-      ? `${map_value_for_edit[1]},${map_value_for_edit[0]}`
-      : `${defaultProps.lat},${defaultProps.lng}`,
-    lat: location.state ? map_value_for_edit[1] : 23.8103,
-    lng: location.state ? map_value_for_edit[0] : 90.4125,
+  const [locationData, setLocationData] = useState({
+    location: `${initialLatLong.lat},${initialLatLong.lng}`,
+    lat: 23.8103,
+    lng: 90.4125,
   })
-  const [selectedGroup, setselectedGroup] = useState(null)
-  const restaurant_time_for_edit = location.state?.working_hours?.map(item => ({
-    day: item.day,
-    startTime: moment({
-      hour: item.open_hour,
-      minute: item.open_minute,
-    }).format("HH:mm"),
-    endTime: moment({
-      hour: item.close_hour,
-      minute: item.close_minute,
-    }).format("HH:mm"),
-  }))
 
   const timeTemplate = { day: "", startTime: "", endTime: "" }
-  const [time, setTime] = useState(
-    location.state ? restaurant_time_for_edit : [timeTemplate]
-  )
+  const [time, setTime] = useState([timeTemplate])
 
   function handleAddRowNested() {
     setTime([...time, timeTemplate])
@@ -100,9 +76,9 @@ function BranchAdd(props) {
   const onMapClickHandler = e => {}
 
   const moveMarker = (props, marker, e) => {
-    setDefaultProps({ lat: e.latLng.lat(), lng: e.latLng.lng() })
-    setState2({
-      ...state2,
+    setInitialLatLong({ lat: e.latLng.lat(), lng: e.latLng.lng() })
+    setLocationData({
+      ...locationData,
       location: [e.latLng.lat(), e.latLng.lng()],
       lat: e.latLng.lat(),
       lng: e.latLng.lng(),
@@ -110,7 +86,7 @@ function BranchAdd(props) {
   }
 
   const [images, setImages] = useState({
-    image: location.state ? location.state.image : "",
+    image: "",
   })
   const [coverImages, setCoverImages] = useState({
     cover_image: location.state ? location.state.cover_image : "",
@@ -135,31 +111,7 @@ function BranchAdd(props) {
     ))
   }
 
-  //-- cuisine value for edit
-  const common_cuisines = props?.get_all_cuisine_data?.filter(elem => {
-    return location?.state?.cuisines?.find(
-      ({ cuisine_id }) => elem._id === cuisine_id
-    )
-  })
-
-  const cuisine_data_edit = useMemo(
-    () =>
-      common_cuisines
-        ? common_cuisines?.map((item, key) => {
-            return { label: item.name, value: item._id }
-          })
-        : "",
-    [common_cuisines]
-  )
-
-  const [selectedCuisine, setSelectedCuisine] = useState(
-    cuisine_data_edit ? cuisine_data_edit : ""
-  )
-
-  useEffect(() => {
-    if (props.get_all_cuisine_loading === "Success")
-      setSelectedCuisine(cuisine_data_edit)
-  }, [props.get_all_cuisine_loading])
+  const [selectedCuisine, setSelectedCuisine] = useState("")
 
   console.log(selectedCuisine)
   const handleSelectCuisine = e => {
@@ -172,30 +124,8 @@ function BranchAdd(props) {
       value: item._id,
     }))
   }
-  function handleSelectGroup(selectedGroup) {
-    setselectedGroup(selectedGroup)
-  }
 
-  //select multiple branch attribute
-  const common_attributes = props?.get_all_branch_attribute_data?.filter(elem =>
-    location?.state?.attributes?.find(
-      ({ branch_attribute_id }) => elem._id === branch_attribute_id
-    )
-  )
-
-  const branch_attributes_edit = common_attributes
-    ? common_attributes?.map((item, key) => {
-        return { label: item.name, value: item._id }
-      })
-    : ""
-  const [selectedBranchAttribute, setSelectedBranchAttribute] = useState(
-    branch_attributes_edit ? branch_attributes_edit : ""
-  )
-
-  useEffect(() => {
-    if (props.get_all_branch_attribute_loading === "Success")
-      setSelectedBranchAttribute(branch_attributes_edit)
-  }, [props.get_all_branch_attribute_loading])
+  const [selectedBranchAttribute, setSelectedBranchAttribute] = useState("")
 
   const handleSelectBranchAttribute = e => {
     setSelectedBranchAttribute(e)
@@ -214,38 +144,28 @@ function BranchAdd(props) {
   //console.log(location.state);
 
   const [zoneInfo, setZoneInfo] = useState({
-    name: location.state ? location.state.name : undefined,
-    restaurant: location.state
-      ? location.state.parent_restaurant_id
-      : undefined,
-    phone_number: location.state ? location.state.phone_number : "",
-    zonal_admin: location.state ? location.state.zonal_admin : "",
-    address: location.state ? location.state.address : "",
+    name: undefined,
+    restaurant: undefined,
+    phone_number: "",
+    zonal_admin: "",
+    address: "",
     cuisine: "",
     location: undefined,
-    image: location.state ? location.state.image : "",
-    cover_image: location.state ? location.state.cover_image : "",
-    price_range: location.state ? location.state.price_range : "৳",
-    popularity_sort_value: location.state
-      ? location.state.popularity_sort_value
-      : 0,
-    is_take_pre_order: location.state
-      ? location.state.is_take_pre_order.toString()
-      : "false",
-    is_veg: location.state ? location.state.is_veg.toString() : "false",
-    is_popular: location.state ? location.state.is_popular.toString() : "false",
-    is_delivery: location.state
-      ? location.state.is_delivery.toString()
-      : "false",
-    is_pickup: location.state ? location.state.is_pickup.toString() : "false",
-    is_dine: location.state ? location.state.is_dine.toString() : "false",
-    commission: location.state ? location.state.commission : undefined,
-    minimum_order_value: location.state
-      ? location.state.min_order_value
-      : undefined,
-    delivery_time: location.state ? location.state.delivery_time : undefined,
-    pickup_time: location.state ? location.state.pickup_time : undefined,
-    email: location.state ? location.state.email : "",
+    image: "",
+    cover_image: "",
+    price_range: "৳",
+    popularity_sort_value: 0,
+    is_take_pre_order: "false",
+    is_veg: "false",
+    is_popular: "false",
+    is_delivery: "false",
+    is_pickup: "false",
+    is_dine: "false",
+    commission: undefined,
+    minimum_order_value: undefined,
+    delivery_time: undefined,
+    pickup_time: undefined,
+    email: "",
     share_link: "",
   })
 
@@ -311,8 +231,6 @@ function BranchAdd(props) {
       }
     }
     return false
-    // const data = time.filter((item) => (newTime.day == item.day) && ((newTime.startTime > item.startTime && newTime.startTime < item.endTime)
-    //     || (item.startTime > item.endTime && (newTime.startTime > item.startTime || newTime.startTime < item.endTime))) ? setTime(time) && setChecker(true) : setTime(time) && setChecker(false))
   }
 
   const handleRowDelete = index => {
@@ -340,8 +258,8 @@ function BranchAdd(props) {
       props.branchAddAction(
         val,
         zoneInfo,
-        state2.lat,
-        state2.lng,
+        locationData.lat,
+        locationData.lng,
         // file,
         // coverFile,
         currentPath,
@@ -369,8 +287,8 @@ function BranchAdd(props) {
       props.branchEditAction(
         location.state?._id,
         zoneInfo,
-        state2.lat,
-        state2.lng,
+        locationData.lat,
+        locationData.lng,
         // file,
         // coverFile,
         currentPath,
@@ -421,12 +339,6 @@ function BranchAdd(props) {
       props.editBranchFresh()
       // naviagte("/manage-branch")
     }
-    // if (props.voucher_setting_edit_loading === "Success") {
-    //     toast.success("Voucher Setting edited Successfully")
-    //     // redirect
-    //     props.voucherSettingEditFresh()
-    //     navigate("/voucher_settings")
-    // }
   }, [
     props.get_all_restaurant_loading,
     props.get_all_user_loading,
@@ -435,6 +347,145 @@ function BranchAdd(props) {
     props.edit_branch_loading,
     props.get_all_branch_attribute_loading,
   ])
+
+  useEffect(() => {
+    console.log(
+      "props.get_branch_by_id_loading",
+      props.get_branch_by_id_loading
+    )
+    if (
+      props.get_branch_by_id_loading == "Success" &&
+      props.get_all_branch_attribute_loading == "Success" &&
+      props.get_all_restaurant_loading == "Success" &&
+      props.get_all_user_loading == "Success" &&
+      props.get_all_cuisine_loading == "Success"
+    ) {
+      const branchData = props.get_branch_by_id_data
+      console.log("branchData :", branchData)
+      setZoneInfo({
+        name: branchData.name,
+        restaurant: branchData.parent_restaurant_id,
+        phone_number: branchData.phone_number,
+        zonal_admin: branchData.zonal_admin,
+        address: branchData.address,
+        cuisine: "",
+        location: undefined,
+        image: branchData.image,
+        cover_image: branchData.cover_image,
+        price_range: branchData.price_range,
+        popularity_sort_value: branchData.popularity_sort_value,
+        is_take_pre_order: branchData.is_take_pre_order.toString(),
+        is_veg: branchData.is_veg.toString(),
+        is_popular: branchData.is_popular.toString(),
+        is_delivery: branchData.is_delivery.toString(),
+        is_pickup: branchData.is_pickup.toString(),
+        is_dine: branchData.is_dine.toString(),
+        commission: branchData.commission,
+        minimum_order_value: branchData.min_order_value,
+        delivery_time: branchData.delivery_time,
+        pickup_time: branchData.pickup_time,
+        email: branchData.email,
+        share_link: "",
+      })
+
+      // set image start
+      setImages({
+        image: branchData.image,
+      })
+
+      setCoverImages({
+        cover_image: branchData.cover_image,
+      })
+      // set image end
+
+      // Attribute set start
+      const common_attributes = props?.get_all_branch_attribute_data?.filter(
+        elem =>
+          branchData?.attributes?.find(
+            ({ branch_attribute_id }) => elem._id === branch_attribute_id
+          )
+      )
+
+      setSelectedBranchAttribute(
+        common_attributes
+          ? common_attributes?.map((item, key) => {
+              return { label: item.name, value: item._id }
+            })
+          : ""
+      )
+
+      // Attribute set end
+
+      // Cuisine set start
+      const common_cuisines = props?.get_all_cuisine_data?.filter(elem => {
+        return branchData?.cuisines?.find(
+          ({ cuisine_id }) => elem._id === cuisine_id
+        )
+      })
+
+      setSelectedCuisine(
+        common_cuisines
+          ? common_cuisines?.map((item, key) => {
+              return { label: item.name, value: item._id }
+            })
+          : ""
+      )
+      // Cuisine set end
+
+      // location set start
+      let coordinates = branchData?.location?.coordinates
+      console.log("coordinates :", coordinates)
+
+      setInitialLatLong({
+        lat: coordinates[1],
+        lng: coordinates[0],
+      })
+
+      setLocationData({
+        location: `${coordinates[1]},${coordinates[0]}`,
+
+        lat: coordinates[1],
+        lng: coordinates[0],
+      })
+      // location set end
+
+      // timing set start
+
+      setTime(
+        branchData?.working_hours?.map(item => ({
+          day: item.day,
+          startTime: moment({
+            hour: item.open_hour,
+            minute: item.open_minute,
+          }).format("HH:mm"),
+          endTime: moment({
+            hour: item.close_hour,
+            minute: item.close_minute,
+          }).format("HH:mm"),
+        }))
+      )
+      // timing set end
+
+      setLoading(false)
+    }
+  }, [
+    props.get_branch_by_id_loading,
+    props.get_all_branch_attribute_loading,
+    props.get_all_restaurant_loading,
+    props.get_all_user_loading,
+    props.get_all_cuisine_loading,
+  ])
+
+  useEffect(() => {
+    console.log("location?.state :", location?.state)
+    if (location?.state) {
+      props.getBranchByIdAction(location.state._id)
+    }
+  }, [location?.state])
+
+  if (location?.state && loading) {
+    return <PageLoader />
+  }
 
   return (
     <React.Fragment>
@@ -1137,7 +1188,7 @@ function BranchAdd(props) {
                       id="location"
                       name="location"
                       required
-                      value={state2.location}
+                      value={locationData.location}
                       readOnly={true}
                     />
                   </div>
@@ -1153,12 +1204,12 @@ function BranchAdd(props) {
                       <Map
                         style={{ width: "100%", height: "100%" }}
                         google={props.google}
-                        initialCenter={defaultProps}
+                        initialCenter={initialLatLong}
                         zoom={12}
                         onClick={e => onMapClickHandler(e)}
                       >
                         <Marker
-                          position={defaultProps}
+                          position={initialLatLong}
                           draggable={true}
                           onDragend={moveMarker}
                           onClick={e => {
@@ -1296,6 +1347,12 @@ const mapStateToProps = state => {
     get_all_cuisine_loading,
   } = state.Restaurant
 
+  const {
+    get_branch_by_id_data,
+    get_branch_by_id_error,
+    get_branch_by_id_loading,
+  } = state.Branch
+
   const { get_all_user_data, get_all_user_loading } = state.registerNew
   const { get_all_branch_attribute_data, get_all_branch_attribute_loading } =
     state.BranchAttribute
@@ -1313,6 +1370,10 @@ const mapStateToProps = state => {
 
     get_all_cuisine_data,
     get_all_cuisine_loading,
+
+    get_branch_by_id_data,
+    get_branch_by_id_error,
+    get_branch_by_id_loading,
   }
 }
 
@@ -1326,6 +1387,7 @@ export default withRouter(
     editBranchFresh,
     getAllCuisneAction,
     getAllBranchAttributeAction,
+    getBranchByIdAction,
   })(
     GoogleApiWrapper({
       apiKey: "AIzaSyDKIxr2AXZPA1k8EyJz52suWseQCFxfoMU",
