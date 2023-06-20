@@ -289,6 +289,11 @@ const SidebarContent = props => {
               </Link>
               <ul className="sub-menu" aria-expanded="false">
                 <li>
+                  <Link to="/reward-label">
+                    {props.t("Reward Label Settings")}{" "}
+                  </Link>
+                </li>
+                <li>
                   <Link to="/reward-point-settings">
                     {props.t("Reward Point Settings")}{" "}
                   </Link>

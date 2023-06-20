@@ -174,6 +174,7 @@ import CategoryEdit from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryEd
 import DineInGallery from "pages/DineInGallery/DineInGallery"
 import DineInGalleryAdd from "pages/DineInGallery/DineInGalleryAdd"
 import DineInGalleryEdit from "pages/DineInGallery/DineInGalleryEdit"
+import RewardLabel from "pages/RewardLevel/RewardLabel"
 
 const userRoutes = [
   // { path: "/dashboard", component: <Dashboard /> },
@@ -303,6 +304,9 @@ const userRoutes = [
   { path: "/dine-in-gallery", component: <DineInGallery /> },
   { path: "/add-dine-in-gallery", component: <DineInGalleryAdd /> },
   { path: "/edit-dine-in-gallery", component: <DineInGalleryEdit /> },
+
+  // Reward Label
+  { path: "/reward-label", component: <RewardLabel /> },
 
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },
