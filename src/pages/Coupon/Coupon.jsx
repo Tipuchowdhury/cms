@@ -36,6 +36,7 @@ import {
   serverSidePaginationCouponFresh,
   getServerSidePaginationSearchCouponAction,
   getServerSidePaginationSearchCouponFresh,
+  getCouponByIdActionFresh,
 } from "store/Coupon/actions"
 import DataTable from "react-data-table-component"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
@@ -222,6 +223,10 @@ function Coupon(props) {
     if (props.get_server_side_pagination_coupon_loading == false) {
       props.getServerSidePaginationCouponAction(page, countPerPage)
       props.serverSidePaginationCouponFresh()
+    }
+    if (props.get_server_side_pagination_coupon_loading == "Success") {
+      //console.log("I am in get all permis type loading ")
+      props.getCouponByIdActionFresh()
     }
 
     if (props.add_coupon_loading === "Success") {
@@ -503,5 +508,6 @@ export default withRouter(
     serverSidePaginationCouponFresh,
     getServerSidePaginationSearchCouponAction,
     getServerSidePaginationSearchCouponFresh,
+    getCouponByIdActionFresh,
   })(Coupon)
 )

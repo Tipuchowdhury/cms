@@ -394,6 +394,19 @@ function EditCoupon(props) {
       props?.get_coupon_by_id_data != undefined
         ? props?.get_coupon_by_id_data.is_percent.toString()
         : "true",
+
+    is_delivery:
+      props?.get_coupon_by_id_data != undefined
+        ? props?.get_coupon_by_id_data.is_delivery
+        : false,
+    is_pickup:
+      props?.get_coupon_by_id_data != undefined
+        ? props?.get_coupon_by_id_data.is_pickup
+        : false,
+    is_dine:
+      props?.get_coupon_by_id_data != undefined
+        ? props?.get_coupon_by_id_data.is_dine
+        : false,
     is_active:
       props?.get_coupon_by_id_data != undefined
         ? props?.get_coupon_by_id_data.is_active
@@ -493,7 +506,7 @@ function EditCoupon(props) {
     )
     setGradual(updatedValue)
   }
-  let name, value
+  let name, value, checked
   const handleInputs = e => {
     // console.log(e.target.name, e.target.value)
     name = e.target.name
@@ -502,6 +515,13 @@ function EditCoupon(props) {
     name === "name" ? (value = e.target.value.toUpperCase()) : ""
 
     setCouponInfo({ ...couponInfo, [name]: value })
+  }
+
+  const handleCheckBox = e => {
+    // console.log(e);
+    name = e.target.name
+    checked = e.target.checked
+    setCouponInfo({ ...couponInfo, [name]: checked })
   }
 
   const handleSubmitForEdit = e => {
@@ -612,6 +632,9 @@ function EditCoupon(props) {
         daily_use_limit: props.get_coupon_by_id_data.daily_use_limit,
         is_percent: props.get_coupon_by_id_data.is_percent.toString(),
         is_active: props.get_coupon_by_id_data.is_active,
+        is_delivery: props.get_coupon_by_id_data.is_delivery,
+        is_pickup: props.get_coupon_by_id_data.is_pickup,
+        is_dine: props.get_coupon_by_id_data.is_dine,
         discount_in_amount: props.get_coupon_by_id_data.discount_in_amount,
         discount_in_percent: props.get_coupon_by_id_data.discount_in_percent,
         minimum_order_amount: props.get_coupon_by_id_data.minimum_order_amount,
@@ -777,7 +800,7 @@ function EditCoupon(props) {
     }
   }, [props])
 
-  if (getInfo) {
+  if (props.get_coupon_by_id_data == null) {
     return <PageLoader />
   }
 
@@ -1426,6 +1449,59 @@ function EditCoupon(props) {
                   ) : (
                     ""
                   )}
+
+                  <Row className="mb-3">
+                    <div className="col-sm-4">
+                      <div className="form-check">
+                        <label
+                          className="form-check-label"
+                          htmlFor="is_delivery"
+                        >
+                          Delivery
+                        </label>
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id="is_delivery"
+                          checked={couponInfo.is_delivery}
+                          name="is_delivery"
+                          onChange={handleCheckBox}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-sm-4">
+                      <div className="form-check">
+                        <label className="form-check-label" htmlFor="is_pickup">
+                          Pickup
+                        </label>
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id="is_pickup"
+                          checked={couponInfo.is_pickup}
+                          name="is_pickup"
+                          onChange={handleCheckBox}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-sm-4">
+                      <div className="form-check">
+                        <label className="form-check-label" htmlFor="is_dine">
+                          Dine
+                        </label>
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id="is_dine"
+                          checked={couponInfo.is_dine}
+                          name="is_dine"
+                          onChange={handleCheckBox}
+                        />
+                      </div>
+                    </div>
+                  </Row>
 
                   <Row className="mb-3">
                     <label
