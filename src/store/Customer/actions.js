@@ -234,10 +234,23 @@ export const customerDeleteFresh = () => {
     })
 }
 
-export const getServerSidePaginationCustomerAction = (index, limit) => {
+export const getServerSidePaginationCustomerAction = (
+  index,
+  limit,
+  filters
+) => {
+  // var url =
+  //   process.env.REACT_APP_LOCALHOST +
+  //   `/Customer/Search?page=${index}&limit=${limit}`
+
+  // console.log("filters :", filters)
+  filters = filters ? new URLSearchParams(filters).toString() : ""
+
   var url =
     process.env.REACT_APP_LOCALHOST +
-    `/Customer/Search?page=${index}&limit=${limit}`
+    `/Customer/Search?page=${index}&limit=${limit}${
+      filters ? "&" + filters : ""
+    }`
 
   const formData = {}
   return dispatch => {
