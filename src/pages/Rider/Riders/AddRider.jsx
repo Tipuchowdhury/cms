@@ -34,9 +34,10 @@ function AddRider(props) {
   const navigate = useNavigate()
   const location = useLocation()
 
-  document.title = location.state ? "Edit Rider | Foodi" : "Add Rider | Foodi"
+  document.title = "Add Rider | Foodi"
 
   const [submitDisabled, setSubmitDisabled] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const [images, setImages] = useState({
     image: location.state ? location.state.image : "",
@@ -199,6 +200,7 @@ function AddRider(props) {
 
   const handleSelectCity = e => {
     // console.log(e.value)
+    setIsLoading(true)
     setRiderInfo({ ...RiderInfo, city_id: e.value })
     setSelectedCity(e)
     setSelectedZone([])
@@ -239,8 +241,10 @@ function AddRider(props) {
   }, [RiderInfo.city_id])
 
   useEffect(() => {
-    if (props.get_zone_by_city_id_loading === "Success")
+    if (props.get_zone_by_city_id_loading === "Success") {
       setSelectedZone(zone_data_edit)
+      setIsLoading(false)
+    }
   }, [props.get_zone_by_city_id_loading])
 
   const handleSelectZone = e => {
@@ -1179,6 +1183,7 @@ function AddRider(props) {
                     <div className="col-md-10">
                       <Select
                         required
+                        isLoading={isLoading}
                         value={selectedZone}
                         onChange={handleSelectZone}
                         options={zoneData}
