@@ -303,6 +303,11 @@ const SidebarContent = props => {
                     {props.t("Voucher Settings")}{" "}
                   </Link>
                 </li>
+                <li>
+                  <Link to="/voucher-request">
+                    {props.t("Voucher Request")}{" "}
+                  </Link>
+                </li>
               </ul>
             </li>
 
@@ -345,13 +350,13 @@ const SidebarContent = props => {
                 <span>{props.t("Review & Ratings")}</span>
               </Link>
             </li>
-            {/*
+
             <li>
               <Link to="/refund" className="waves-effect">
                 <i className="ti-money"></i>
                 <span>{props.t("Refund")}</span>
               </Link>
-            </li> */}
+            </li>
             <li>
               <Link to="/wallet" className="waves-effect">
                 <i className="ti-wallet"></i>

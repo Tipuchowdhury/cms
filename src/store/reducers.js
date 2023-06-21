@@ -46,6 +46,7 @@ import RiderWalletDetail from "./RiderWalletDetail/reducer"
 import Branch from "./Branch/reducer"
 import dineInCard from "./DineInGallery/reducer"
 import RewardLabel from "./RewardLabel/reducer"
+import VoucherRequest from "./VoucherRequest/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -87,6 +88,7 @@ const rootReducer = combineReducers({
   Branch,
   dineInCard,
   RewardLabel,
+  VoucherRequest,
 })
 
 export default rootReducer
