@@ -1287,13 +1287,14 @@ export const addOnCategoryStatusEditActionFresh = () => {
   }
 }
 
-export const addCuisineAction = (id, name, file, color) => {
+export const addCuisineAction = (id, name, file, color, addChecked) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Post"
   console.log(id, name)
   console.log(file)
 
   let dataObject = {
     _id: id,
+    ...addChecked,
     name: name,
     image: file,
     "color.fg": color.fg,
@@ -1356,7 +1357,14 @@ export const getAllCuisneAction = () => {
   }
 }
 
-export const cuisineEditAction = (id, editName, status, file, color) => {
+export const cuisineEditAction = (
+  id,
+  editName,
+  status,
+  file,
+  color,
+  editChecked
+) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Cuisine/Put"
   // const formData = {
   //   _id: id,
@@ -1367,6 +1375,7 @@ export const cuisineEditAction = (id, editName, status, file, color) => {
 
   let dataObject = {
     _id: id,
+    ...editChecked,
     name: editName,
     is_active: status,
     image: file,

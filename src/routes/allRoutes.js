@@ -175,6 +175,7 @@ import DineInGallery from "pages/DineInGallery/DineInGallery"
 import DineInGalleryAdd from "pages/DineInGallery/DineInGalleryAdd"
 import DineInGalleryEdit from "pages/DineInGallery/DineInGalleryEdit"
 import RewardLabel from "pages/RewardLevel/RewardLabel"
+import VoucherRequest from "pages/VoucherRequest/VoucherRequest"
 
 const userRoutes = [
   // { path: "/dashboard", component: <Dashboard /> },
@@ -307,6 +308,7 @@ const userRoutes = [
 
   // Reward Label
   { path: "/reward-label", component: <RewardLabel /> },
+  { path: "/voucher-request", component: <VoucherRequest /> },
 
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },

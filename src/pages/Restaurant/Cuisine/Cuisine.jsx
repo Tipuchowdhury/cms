@@ -61,6 +61,34 @@ function Cuisine(props) {
     image: "",
   })
 
+  const [addChecked, setAddChecked] = useState({
+    is_delivery: false,
+    is_pickup: false,
+    is_dine: false,
+  })
+
+  const [editChecked, setEditChecked] = useState({
+    is_delivery: false,
+    is_pickup: false,
+    is_dine: false,
+  })
+
+  let name2, checked
+
+  const handleCheckBox = e => {
+    // console.log(e);
+    name2 = e.target.name
+    checked = e.target.checked
+    setAddChecked({ ...addChecked, [name2]: checked })
+  }
+
+  const handleEditCheckBox = e => {
+    // console.log(e);
+    name2 = e.target.name
+    checked = e.target.checked
+    setEditChecked({ ...editChecked, [name2]: checked })
+  }
+
   const toggleEditModal = () => {
     setEditModal(!editModal)
   }
@@ -104,6 +132,12 @@ function Cuisine(props) {
     setStatus(row.is_active)
     setEditImages({ ...editImages, image: row.image })
     setEditColor({ ...editColor, fg: row.color.fg, bg: row.color.bg })
+    setEditChecked({
+      ...editChecked,
+      is_dine: row.is_dine ? row.is_dine : false,
+      is_pickup: row.is_pickup ? row.is_pickup : false,
+      is_delivery: row.is_delivery ? row.is_delivery : false,
+    })
     toggleEditModal()
   }
   // console.log(addImages);
@@ -205,18 +239,24 @@ function Cuisine(props) {
     //console.log(name);
     console.log(color)
     const id = uuidv4()
-    props.addCuisineAction(id, name, file, color)
+    props.addCuisineAction(id, name, file, color, addChecked)
     toggle()
     setName("")
     setFile("")
     setColor({ ...color, fg: "#ffffff", bg: "#ffffff" })
     setAddImages({ ...addImages, image: "" })
+    setAddChecked({
+      ...addChecked,
+      is_dine: false,
+      is_pickup: false,
+      is_delivery: false,
+    })
   }
 
   const handleEditModal = e => {
     e.preventDefault(e)
     // console.log(editName);
-    props.cuisineEditAction(id, editName, status, file, editColor)
+    props.cuisineEditAction(id, editName, status, file, editColor, editChecked)
     toggleEditModal()
     setEditName("")
   }
@@ -359,6 +399,55 @@ function Cuisine(props) {
                   onChange={e => setName(e.target.value)}
                 />
               </div>
+              <Row className="mb-3">
+                <div className="col-sm-4">
+                  <div className="form-check">
+                    <label className="form-check-label" htmlFor="is_delivery">
+                      Delivery
+                    </label>
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="is_delivery"
+                      checked={addChecked.is_delivery}
+                      name="is_delivery"
+                      onChange={handleCheckBox}
+                    />
+                  </div>
+                </div>
+
+                <div className="col-sm-4">
+                  <div className="form-check">
+                    <label className="form-check-label" htmlFor="is_pickup">
+                      Pickup
+                    </label>
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="is_pickup"
+                      checked={addChecked.is_pickup}
+                      name="is_pickup"
+                      onChange={handleCheckBox}
+                    />
+                  </div>
+                </div>
+
+                <div className="col-sm-4">
+                  <div className="form-check">
+                    <label className="form-check-label" htmlFor="is_dine">
+                      Dine
+                    </label>
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="is_dine"
+                      checked={addChecked.is_dine}
+                      name="is_dine"
+                      onChange={handleCheckBox}
+                    />
+                  </div>
+                </div>
+              </Row>
               <Row>
                 <div className="col-sm-6 mb-3">
                   <label className="form-label" htmlFor="fg">
@@ -479,6 +568,55 @@ function Cuisine(props) {
                   onChange={e => setEditName(e.target.value)}
                 />
               </div>
+              <Row className="mb-3">
+                <div className="col-sm-4">
+                  <div className="form-check">
+                    <label className="form-check-label" htmlFor="is_delivery">
+                      Delivery
+                    </label>
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="is_delivery"
+                      checked={editChecked.is_delivery}
+                      name="is_delivery"
+                      onChange={handleEditCheckBox}
+                    />
+                  </div>
+                </div>
+
+                <div className="col-sm-4">
+                  <div className="form-check">
+                    <label className="form-check-label" htmlFor="is_pickup">
+                      Pickup
+                    </label>
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="is_pickup"
+                      checked={editChecked.is_pickup}
+                      name="is_pickup"
+                      onChange={handleEditCheckBox}
+                    />
+                  </div>
+                </div>
+
+                <div className="col-sm-4">
+                  <div className="form-check">
+                    <label className="form-check-label" htmlFor="is_dine">
+                      Dine
+                    </label>
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="is_dine"
+                      checked={editChecked.is_dine}
+                      name="is_dine"
+                      onChange={handleEditCheckBox}
+                    />
+                  </div>
+                </div>
+              </Row>
               <Row>
                 <div className="col-sm-6 mb-3">
                   <label className="form-label" htmlFor="fg">

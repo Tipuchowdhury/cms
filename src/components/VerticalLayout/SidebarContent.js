@@ -303,6 +303,11 @@ const SidebarContent = props => {
                     {props.t("Voucher Settings")}{" "}
                   </Link>
                 </li>
+                <li>
+                  <Link to="/voucher-request">
+                    {props.t("Voucher Request")}{" "}
+                  </Link>
+                </li>
               </ul>
             </li>
 
