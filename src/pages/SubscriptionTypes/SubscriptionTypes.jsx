@@ -51,27 +51,11 @@ function SubscriptionTypes(props) {
   const [addInfo, setAddInfo] = useState({
     subscriptionTypeId: "",
     subscriptionTypeName: "",
-    freeDeliveryAmountLimit: 0,
-    freeDeliveryOrderLimit: 0,
-    pickupDiscountAmountLimit: 0,
-    pickupDiscountOrderLimit: 0,
-    deliveryFree: false,
-    unlimitedFreeDelivery: false,
-    pickupDiscount: false,
-    unlimitedPickupDiscount: false,
   })
 
   const [editInfo, setEditInfo] = useState({
     subscriptionTypeId: "",
     subscriptionTypeName: "",
-    freeDeliveryAmountLimit: 0,
-    freeDeliveryOrderLimit: 0,
-    pickupDiscountAmountLimit: 0,
-    pickupDiscountOrderLimit: 0,
-    deliveryFree: false,
-    unlimitedFreeDelivery: false,
-    pickupDiscount: false,
-    unlimitedPickupDiscount: false,
     isActive: true,
   })
 
@@ -88,6 +72,12 @@ function SubscriptionTypes(props) {
     name = e.target.name
     value = e.target.value
     setAddInfo({ ...addInfo, [name]: value })
+  }
+
+  const handleEditInputs = e => {
+    // console.log(e);
+    name = e.target.name
+    value = e.target.value
     setEditInfo({ ...editInfo, [name]: value })
   }
 
@@ -112,14 +102,6 @@ function SubscriptionTypes(props) {
     setEditInfo(prevState => ({
       subscriptionTypeId: row._id,
       subscriptionTypeName: row.name,
-      freeDeliveryAmountLimit: row.free_delivary_amount_limit,
-      freeDeliveryOrderLimit: row.free_delivary_order_limit,
-      pickupDiscountAmountLimit: row.pick_up_discount_amount_limit,
-      pickupDiscountOrderLimit: row.pick_up_discount_order_limit,
-      deliveryFree: row.is_delivary_free,
-      unlimitedFreeDelivery: row.is_unlimited_free_delivary,
-      pickupDiscount: row.is_has_pick_up_discount,
-      unlimitedPickupDiscount: row.is_unlimited_pick_up_discount,
       isActive: row.is_active,
     }))
 
@@ -147,14 +129,6 @@ function SubscriptionTypes(props) {
     setEditInfo(prevState => ({
       subscriptionTypeId: row._id,
       subscriptionTypeName: row.name,
-      freeDeliveryAmountLimit: row.free_delivary_amount_limit,
-      freeDeliveryOrderLimit: row.free_delivary_order_limit,
-      pickupDiscountAmountLimit: row.pick_up_discount_amount_limit,
-      pickupDiscountOrderLimit: row.pick_up_discount_order_limit,
-      deliveryFree: row.is_delivary_free,
-      unlimitedFreeDelivery: row.is_unlimited_free_delivary,
-      pickupDiscount: row.is_has_pick_up_discount,
-      unlimitedPickupDiscount: row.is_unlimited_pick_up_discount,
       isActive: row.is_active,
     }))
 
@@ -351,7 +325,7 @@ function SubscriptionTypes(props) {
             <form className="mt-1" onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className="form-label" htmlFor="subscriptionTypeName">
-                  Subscription Type Name
+                  Subscription Type Name <span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
@@ -363,151 +337,6 @@ function SubscriptionTypes(props) {
                   value={addInfo.subscriptionTypeName}
                   onChange={handleInputs}
                 />
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label" htmlFor="freeDeliveryAmountLimit">
-                  Free Delivery Amount Limit
-                </label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="freeDeliveryAmountLimit"
-                  placeholder="Enter free delivery amount limit"
-                  required
-                  name="freeDeliveryAmountLimit"
-                  value={addInfo.freeDeliveryAmountLimit}
-                  onChange={handleInputs}
-                />
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label" htmlFor="freeDeliveryOrderLimit">
-                  Free Delivery Order Limit
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="freeDeliveryOrderLimit"
-                  placeholder="Enter Free Delivery Order Limit"
-                  required
-                  value={addInfo.freeDeliveryOrderLimit}
-                  name="freeDeliveryOrderLimit"
-                  onChange={handleInputs}
-                />
-              </div>
-
-              <div className="mb-3">
-                <label
-                  className="form-label"
-                  htmlFor="pickupDiscountAmountLimit"
-                >
-                  Pickup Discount Amount Limit
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="pickupDiscountAmountLimit"
-                  placeholder="Enter pickup discount amount limit"
-                  value={addInfo.pickupDiscountAmountLimit}
-                  required
-                  name="pickupDiscountAmountLimit"
-                  onChange={handleInputs}
-                />
-              </div>
-
-              <div className="mb-3">
-                <label
-                  className="form-label"
-                  htmlFor="pickupDiscountOrderLimit"
-                >
-                  Pickup Discount Order Limit
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="pickupDiscountOrderLimit"
-                  placeholder="Enter pickup discount order limit"
-                  required
-                  value={addInfo.pickupDiscountOrderLimit}
-                  name="pickupDiscountOrderLimit"
-                  onChange={handleInputs}
-                />
-              </div>
-
-              <div className="mb-3 row">
-                <div className="col-sm-6">
-                  <div className="form-check">
-                    <label className="form-check-label" htmlFor="deliveryFree">
-                      Delivery Free
-                    </label>
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id="deliveryFree"
-                      checked={addInfo.deliveryFree}
-                      name="deliveryFree"
-                      onChange={handleCheckBox}
-                    />
-                  </div>
-                </div>
-
-                <div className="col-sm-6">
-                  <div className="form-check">
-                    <label
-                      className="form-check-label"
-                      htmlFor="unlimitedFreeDelivery"
-                    >
-                      Unlimited Free Delivery
-                    </label>
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id="unlimitedFreeDelivery"
-                      checked={addInfo.unlimitedFreeDelivery}
-                      name="unlimitedFreeDelivery"
-                      onChange={handleCheckBox}
-                    />
-                  </div>
-                </div>
-
-                <div className="col-sm-6">
-                  <div className="form-check">
-                    <label
-                      className="form-check-label"
-                      htmlFor="pickupDiscount"
-                    >
-                      Pickup Discount
-                    </label>
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id="pickupDiscount"
-                      checked={addInfo.pickupDiscount}
-                      name="pickupDiscount"
-                      onChange={handleCheckBox}
-                    />
-                  </div>
-                </div>
-
-                <div className="col-sm-6">
-                  <div className="form-check">
-                    <label
-                      className="form-check-label"
-                      htmlFor="unlimitedPickupDiscount"
-                    >
-                      Unlimited Pickup Discount
-                    </label>
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id="unlimitedPickupDiscount"
-                      checked={addInfo.unlimitedPickupDiscount}
-                      name="unlimitedPickupDiscount"
-                      onChange={handleCheckBox}
-                    />
-                  </div>
-                </div>
               </div>
 
               <div
@@ -532,7 +361,7 @@ function SubscriptionTypes(props) {
             <form className="mt-1" onSubmit={handleEdit}>
               <div className="mb-3">
                 <label className="form-label" htmlFor="subscriptionTypeName">
-                  Subscription Type Name
+                  Subscription Type Name <span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
@@ -541,154 +370,9 @@ function SubscriptionTypes(props) {
                   placeholder="Enter subscription type name"
                   required
                   name="subscriptionTypeName"
-                  onChange={handleInputs}
+                  onChange={handleEditInputs}
                   value={editInfo.subscriptionTypeName}
                 />
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label" htmlFor="freeDeliveryAmountLimit">
-                  Free Delivery Amount Limit
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="freeDeliveryAmountLimit"
-                  placeholder="Enter free delivery amount limit"
-                  required
-                  name="freeDeliveryAmountLimit"
-                  onChange={handleInputs}
-                  value={editInfo.freeDeliveryAmountLimit}
-                />
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label" htmlFor="freeDeliveryOrderLimit">
-                  Free Delivery Order Limit
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="freeDeliveryOrderLimit"
-                  placeholder="Enter Free Delivery Order Limit"
-                  required
-                  name="freeDeliveryOrderLimit"
-                  onChange={handleInputs}
-                  value={editInfo.freeDeliveryOrderLimit}
-                />
-              </div>
-
-              <div className="mb-3">
-                <label
-                  className="form-label"
-                  htmlFor="pickupDiscountAmountLimit"
-                >
-                  Pickup Discount Amount Limit
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="pickupDiscountAmountLimit"
-                  placeholder="Enter pickup discount amount limit"
-                  required
-                  name="pickupDiscountAmountLimit"
-                  onChange={handleInputs}
-                  value={editInfo.pickupDiscountAmountLimit}
-                />
-              </div>
-
-              <div className="mb-3">
-                <label
-                  className="form-label"
-                  htmlFor="pickupDiscountOrderLimit"
-                >
-                  Pickup Discount Order Limit
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="pickupDiscountOrderLimit"
-                  placeholder="Enter pickup discount order limit"
-                  required
-                  name="pickupDiscountOrderLimit"
-                  onChange={handleInputs}
-                  value={editInfo.pickupDiscountOrderLimit}
-                />
-              </div>
-
-              <div className="mb-3 row">
-                <div className="col-sm-6">
-                  <div className="form-check">
-                    <label className="form-check-label" htmlFor="deliveryFree">
-                      Delivery Free
-                    </label>
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id="deliveryFree"
-                      checked={editInfo.deliveryFree}
-                      name="deliveryFree"
-                      onChange={handleCheckBox}
-                    />
-                  </div>
-                </div>
-
-                <div className="col-sm-6">
-                  <div className="form-check">
-                    <label
-                      className="form-check-label"
-                      htmlFor="unlimitedFreeDelivery"
-                    >
-                      Unlimited Free Delivery
-                    </label>
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id="unlimitedFreeDelivery"
-                      checked={editInfo.unlimitedFreeDelivery}
-                      name="unlimitedFreeDelivery"
-                      onChange={handleCheckBox}
-                    />
-                  </div>
-                </div>
-
-                <div className="col-sm-6">
-                  <div className="form-check">
-                    <label
-                      className="form-check-label"
-                      htmlFor="pickupDiscount"
-                    >
-                      Pickup Discount
-                    </label>
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id="pickupDiscount"
-                      checked={editInfo.pickupDiscount}
-                      name="pickupDiscount"
-                      onChange={handleCheckBox}
-                    />
-                  </div>
-                </div>
-
-                <div className="col-sm-6">
-                  <div className="form-check">
-                    <label
-                      className="form-check-label"
-                      htmlFor="unlimitedPickupDiscount"
-                    >
-                      Unlimited Pickup Discount
-                    </label>
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id="unlimitedPickupDiscount"
-                      checked={editInfo.unlimitedPickupDiscount}
-                      name="unlimitedPickupDiscount"
-                      onChange={handleCheckBox}
-                    />
-                  </div>
-                </div>
               </div>
 
               <div

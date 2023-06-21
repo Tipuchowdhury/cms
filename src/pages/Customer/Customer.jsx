@@ -318,16 +318,17 @@ function Customer(props) {
       cell: actionRef,
     },
   ]
+
   // server side pagination
   const [page, setPage] = useState(1)
   const [countPerPage, setCountPerPage] = useState(10)
+  const [pageFilters, setPageFilters] = useState({})
   const handleFilter = e => {
-    if (e.target.value?.length > 0) {
-      props.getServerSidePaginationCustomerSearchAction(e.target.value)
-    } else {
-      props.getServerSidePaginationSearchCustomerFresh()
-    }
+    let name = e.target.name
+    let value = e.target.value
+    setPageFilters({ ...pageFilters, [name]: value })
   }
+
   const paginationComponentOptions = {
     selectAllRowsItem: true,
     //selectAllRowsItemText: "ALL"
@@ -343,12 +344,23 @@ function Customer(props) {
       props.getAllSubscriptionTypeAction()
     }
 
-    if (props.get_server_side_pagination_customer_loading == false) {
-      props.getServerSidePaginationCustomerAction(page, countPerPage)
-      props.serverSidePaginationCustomerFresh()
-    }
+    // if (props.get_server_side_pagination_customer_loading == false) {
+    //   props.getServerSidePaginationCustomerAction(page, countPerPage)
+    //   props.serverSidePaginationCustomerFresh()
+    // }
 
-    props.getServerSidePaginationCustomerAction(page, countPerPage)
+    // props.getServerSidePaginationCustomerAction(page, countPerPage)
+
+    props.getServerSidePaginationCustomerAction(page, countPerPage, pageFilters)
+
+    if (props.get_server_side_pagination_customer_loading == false) {
+      //console.log("I am in get all permis type loading ")
+      props.getServerSidePaginationCustomerAction(
+        page,
+        countPerPage,
+        pageFilters
+      )
+    }
 
     if (props.get_all_customer_loading == false) {
       props.getAllCustomerAction()
@@ -417,6 +429,7 @@ function Customer(props) {
     props.get_server_side_pagination_customer_loading,
     page,
     countPerPage,
+    pageFilters,
   ])
 
   return (
@@ -454,18 +467,36 @@ function Customer(props) {
                     </Button> */}
                   </div>
 
-                  <div className="text-end">
-                    <input
-                      type="text"
-                      placeholder="Search Customer"
-                      style={{
-                        padding: "10px",
-                        borderRadius: "8px",
-                        border: "1px solid gray",
-                      }}
-                      onChange={e => handleFilter(e)}
-                    />
-                  </div>
+                  <Row className="mb-3 justify-content-center">
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label className="form-label" htmlFor="name">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="name"
+                        placeholder="Enter Name"
+                        name="name"
+                        onChange={handleFilter}
+                        value={pageFilters.name}
+                      />
+                    </Col>
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label className="form-label" htmlFor="mobile">
+                        Mobile No
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="mobile"
+                        placeholder="Enter Mobile No"
+                        name="mobile"
+                        onChange={handleFilter}
+                        value={pageFilters.mobile}
+                      />
+                    </Col>
+                  </Row>
                   {/* <DataTable
                     columns={activeData}
                     data={

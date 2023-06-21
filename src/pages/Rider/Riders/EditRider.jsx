@@ -38,6 +38,8 @@ function EditRider(props) {
   const location = useLocation()
   document.title = "Edit Rider | Foodi"
 
+  const [isLoading, setIsLoading] = useState(true)
+
   useEffect(() => {
     props.getRiderByIdActionFresh()
   }, [])
@@ -329,6 +331,7 @@ function EditRider(props) {
 
   const handleSelectCity = e => {
     // console.log(e.value)
+    setIsLoading(true)
     setRiderInfo({ ...RiderInfo, city_id: e.value })
     setSelectedCity(e)
     setSelectedZone([])
@@ -366,8 +369,10 @@ function EditRider(props) {
   }, [RiderInfo.city_id])
 
   useEffect(() => {
-    if (props.get_zone_by_city_id_loading === "Success")
+    if (props.get_zone_by_city_id_loading === "Success") {
       setSelectedZone(zone_data_edit)
+      setIsLoading(false)
+    }
   }, [props.get_zone_by_city_id_loading])
 
   const handleSelectZone = e => {
@@ -722,6 +727,7 @@ function EditRider(props) {
         : ""
 
       setSelectedZone(zone_data_edit)
+      setIsLoading(false)
     }
   }, [props.get_rider_by_id_data])
 
@@ -1369,6 +1375,7 @@ function EditRider(props) {
                     </label>
                     <div className="col-md-10">
                       <Select
+                        isLoading={isLoading}
                         required
                         value={selectedZone}
                         onChange={handleSelectZone}

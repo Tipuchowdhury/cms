@@ -171,6 +171,10 @@ import Invoice from "pages/Order/Invoice"
 import EditUser from "pages/ManageUsers/EditUser"
 import CustomerEdit from "pages/Customer/CustomerEdit"
 import CategoryEdit from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryEdit"
+import DineInGallery from "pages/DineInGallery/DineInGallery"
+import DineInGalleryAdd from "pages/DineInGallery/DineInGalleryAdd"
+import DineInGalleryEdit from "pages/DineInGallery/DineInGalleryEdit"
+import RewardLabel from "pages/RewardLevel/RewardLabel"
 
 const userRoutes = [
   // { path: "/dashboard", component: <Dashboard /> },
@@ -295,6 +299,14 @@ const userRoutes = [
   { path: "/quests", component: <Quest /> },
   { path: "/add-quest", component: <AddQuest /> },
   { path: "/edit-quest", component: <AddQuest /> },
+
+  // Dine in gallery
+  { path: "/dine-in-gallery", component: <DineInGallery /> },
+  { path: "/add-dine-in-gallery", component: <DineInGalleryAdd /> },
+  { path: "/edit-dine-in-gallery", component: <DineInGalleryEdit /> },
+
+  // Reward Label
+  { path: "/reward-label", component: <RewardLabel /> },
 
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },
