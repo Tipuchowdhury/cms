@@ -48,6 +48,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import axios from "axios"
 import PageLoader from "components/CustomLoader/PageLoader"
+import CustomLoader from "components/CustomLoader/CustomLoader"
 
 const LoadingContainer = () => <div>Loading...</div>
 
@@ -56,6 +57,9 @@ function EditMenu(props) {
   const location = useLocation()
   const dispatch = useDispatch()
   const [dataUpdated, setDataUpdated] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [timeSlotLoading, setTimeSlotLoading] = useState(true)
+  console.log(isLoading)
 
   // useEffect(() => {
   //   props.getMenuItemByIdAction()
@@ -365,6 +369,8 @@ function EditMenu(props) {
   }, [props.get_all_branch_loading])
 
   const handleSelectBranch = e => {
+    setIsLoading(true)
+    setTimeSlotLoading(true)
     let restaurantValue = e.value
 
     // setInfo({ ...info, restaurant: restaurantValue })
@@ -406,6 +412,7 @@ function EditMenu(props) {
   useEffect(() => {
     if (props.get_category_by_branch_id_loading === "Success") {
       setCategoryNew(category_data_edit_2)
+      setIsLoading(false)
     }
   }, [props.get_category_by_branch_id_loading])
 
@@ -464,8 +471,10 @@ function EditMenu(props) {
   )
 
   useEffect(() => {
-    if (props.get_time_slot_by_branch_id_loading === "Success")
+    if (props.get_time_slot_by_branch_id_loading === "Success") {
       setSelectedTimeSlot(slot_data)
+      setTimeSlotLoading(false)
+    }
   }, [props.get_time_slot_by_branch_id_loading])
 
   const [addOnsNew, setAddOnsNew] = useState([
@@ -698,6 +707,7 @@ function EditMenu(props) {
         : ""
 
       setCategoryNew(category_data_edit_2)
+      setIsLoading(false)
 
       const slot_data = []
 
@@ -733,6 +743,7 @@ function EditMenu(props) {
       })
 
       setSelectedTimeSlot(slot_data)
+      setTimeSlotLoading(false)
       setIsChecked(
         props?.get_menu_item_by_id_data
           ? props?.get_menu_item_by_id_data?.has_variation == 1
@@ -806,8 +817,6 @@ function EditMenu(props) {
     props.add_restaurant_menu_loading,
     props.get_all_menu_time_slot_loading,
     props.get_category_by_id_data,
-    // props.get_time_slot_by_branch_id_data,
-    // props.get_category_by_branch_id_data,
     props.get_category_by_id_loading,
     props.get_all_category_loading,
     props.edit_restaurant_menu_loading,
@@ -1408,6 +1417,7 @@ function EditMenu(props) {
                   <div className="col-md-10">
                     <Select
                       required
+                      isLoading={isLoading}
                       value={categoryNew}
                       onChange={handleSelectCategory2}
                       options={menuCategoryData2}
@@ -1469,78 +1479,97 @@ function EditMenu(props) {
                     Menu Availability <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
-                    {selectedTimeSlot?.length > 0
-                      ? selectedTimeSlot?.map(item => (
+                    {timeSlotLoading ? (
+                      <Row className="mb-3">
+                        <div className="text-center mt-4">
+                          <CustomLoader />
+                        </div>
+                      </Row>
+                    ) : (
+                      <>
+                        {selectedTimeSlot?.length > 0 ? (
+                          selectedTimeSlot?.map(item => (
+                            <Row className="mb-3">
+                              <div
+                                className="col-md-10"
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                }}
+                              >
+                                <div style={{ marginTop: "30px" }}>
+                                  <input
+                                    type="checkbox"
+                                    id="cat_is_multiple"
+                                    name="cat_is_multiple"
+                                    style={{ margin: "0px 15px 50px 0px" }}
+                                    // value="true"
+
+                                    checked={item.checked}
+                                    // checked={checkTimeSelected(item)}
+                                    onChange={e => handleChangeTime(e, item)}
+                                  />
+                                  <span
+                                    style={{
+                                      fontSize: "16px",
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    {item?.name}
+                                  </span>
+                                </div>
+
+                                <div className="mb-3 col-lg-3">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="startTime"
+                                  >
+                                    Start Time
+                                  </label>
+                                  <input
+                                    type="time"
+                                    id="startTime"
+                                    className="form-control"
+                                    name="start_time"
+                                    placeholder="Add-ons name"
+                                    value={moment({
+                                      hour: item.start_time?.hour,
+                                      minute: item?.start_time?.minute,
+                                    }).format("HH:mm")}
+                                  />
+                                </div>
+
+                                <div className="mb-3 col-lg-3">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="subject"
+                                  >
+                                    End Time
+                                  </label>
+                                  <input
+                                    type="time"
+                                    id="subject"
+                                    className="form-control"
+                                    name="end_time"
+                                    placeholder="Price"
+                                    value={moment({
+                                      hour: item.end_time?.hour,
+                                      minute: item?.end_time?.minute,
+                                    }).format("HH:mm")}
+                                  />
+                                </div>
+                              </div>
+                            </Row>
+                          ))
+                        ) : (
                           <Row className="mb-3">
-                            <div
-                              className="col-md-10"
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <div style={{ marginTop: "30px" }}>
-                                <input
-                                  type="checkbox"
-                                  id="cat_is_multiple"
-                                  name="cat_is_multiple"
-                                  style={{ margin: "0px 15px 50px 0px" }}
-                                  // value="true"
-
-                                  checked={item.checked}
-                                  // checked={checkTimeSelected(item)}
-                                  onChange={e => handleChangeTime(e, item)}
-                                />
-                                <span
-                                  style={{
-                                    fontSize: "16px",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  {item?.name}
-                                </span>
-                              </div>
-
-                              <div className="mb-3 col-lg-3">
-                                <label
-                                  className="form-label"
-                                  htmlFor="startTime"
-                                >
-                                  Start Time
-                                </label>
-                                <input
-                                  type="time"
-                                  id="startTime"
-                                  className="form-control"
-                                  name="start_time"
-                                  placeholder="Add-ons name"
-                                  value={moment({
-                                    hour: item.start_time?.hour,
-                                    minute: item?.start_time?.minute,
-                                  }).format("HH:mm")}
-                                />
-                              </div>
-
-                              <div className="mb-3 col-lg-3">
-                                <label className="form-label" htmlFor="subject">
-                                  End Time
-                                </label>
-                                <input
-                                  type="time"
-                                  id="subject"
-                                  className="form-control"
-                                  name="end_time"
-                                  placeholder="Price"
-                                  value={moment({
-                                    hour: item.end_time?.hour,
-                                    minute: item?.end_time?.minute,
-                                  }).format("HH:mm")}
-                                />
-                              </div>
-                            </div>
+                            <p className="text-center mt-4">
+                              No Time Slot Found
+                            </p>
                           </Row>
-                        ))
-                      : ""}
+                        )}
+                      </>
+                    )}
                   </div>
                 </Row>
 

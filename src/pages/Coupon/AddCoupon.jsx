@@ -335,6 +335,9 @@ function AddCoupon(props) {
     daily_use_limit: location.state ? location.state.daily_use_limit : 0,
     is_percent: location.state ? location.state.is_percent.toString() : "true",
     is_active: location.state ? location.state.is_active : true,
+    is_delivery: location.state ? location.state.is_delivery : false,
+    is_pickup: location.state ? location.state.is_pickup : false,
+    is_dine: location.state ? location.state.is_dine : false,
     discount_in_amount: location.state ? location.state.discount_in_amount : 0,
     discount_in_percent: location.state
       ? location.state.discount_in_percent
@@ -416,7 +419,7 @@ function AddCoupon(props) {
     )
     setGradual(updatedValue)
   }
-  let name, value
+  let name, value, checked
   const handleInputs = e => {
     // console.log(e.target.name, e.target.value)
     name = e.target.name
@@ -430,6 +433,13 @@ function AddCoupon(props) {
     //   setDisabledDiscountAmount(false)
     // }
     setCouponInfo({ ...couponInfo, [name]: value })
+  }
+
+  const handleCheckBox = e => {
+    // console.log(e);
+    name = e.target.name
+    checked = e.target.checked
+    setCouponInfo({ ...couponInfo, [name]: checked })
   }
 
   // console.log(disabledDiscountAmount)
@@ -1347,6 +1357,59 @@ function AddCoupon(props) {
                   ) : (
                     ""
                   )}
+
+                  <Row className="mb-3">
+                    <div className="col-sm-4">
+                      <div className="form-check">
+                        <label
+                          className="form-check-label"
+                          htmlFor="is_delivery"
+                        >
+                          Delivery
+                        </label>
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id="is_delivery"
+                          checked={couponInfo.is_delivery}
+                          name="is_delivery"
+                          onChange={handleCheckBox}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-sm-4">
+                      <div className="form-check">
+                        <label className="form-check-label" htmlFor="is_pickup">
+                          Pickup
+                        </label>
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id="is_pickup"
+                          checked={couponInfo.is_pickup}
+                          name="is_pickup"
+                          onChange={handleCheckBox}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-sm-4">
+                      <div className="form-check">
+                        <label className="form-check-label" htmlFor="is_dine">
+                          Dine
+                        </label>
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id="is_dine"
+                          checked={couponInfo.is_dine}
+                          name="is_dine"
+                          onChange={handleCheckBox}
+                        />
+                      </div>
+                    </div>
+                  </Row>
 
                   <Row className="mb-3">
                     <label

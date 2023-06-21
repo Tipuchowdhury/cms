@@ -289,6 +289,11 @@ const SidebarContent = props => {
               </Link>
               <ul className="sub-menu" aria-expanded="false">
                 <li>
+                  <Link to="/reward-label">
+                    {props.t("Reward Label Settings")}{" "}
+                  </Link>
+                </li>
+                <li>
                   <Link to="/reward-point-settings">
                     {props.t("Reward Point Settings")}{" "}
                   </Link>
@@ -322,6 +327,14 @@ const SidebarContent = props => {
                 <i className="ti-image"></i>
                 {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
                 <span>{props.t("PopUp Banner ")}</span>
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/dine-in-gallery" className="waves-effect">
+                <i className="ti-gallery"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">1</span> */}
+                <span>{props.t("Dine In Gallery")}</span>
               </Link>
             </li>
 

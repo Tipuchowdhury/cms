@@ -1,77 +1,86 @@
 import {
-  ADD_CUSTOMER,
-  ADD_CUSTOMER_FRESH,
-  GET_ALL_CUSTOMER,
-  GET_ALL_CUSTOMER_FRESH,
-  CUSTOMER_NAME_EDIT,
-  CUSTOMER_NAME_EDIT_FRESH,
-  CUSTOMER_DELETE,
-  CUSTOMER_DELETE_FRESH,
-  EDIT_CUSTOMER_STATUS,
-  EDIT_CUSTOMER_STATUS_FRESH,
-  SERVER_SIDE_PAGINATION_CUSTOMER,
-  SERVER_SIDE_PAGINATION_CUSTOMER_FRESH,
-  SERVER_SIDE_PAGINATION_CUSTOMER_SEARCH,
-  SERVER_SIDE_PAGINATION_SEARCH_CUSTOMER_FRESH,
-  GET_CUSTOMER_BY_ID,
+  ADD_DINE_IN_CARD,
+  ADD_DINE_IN_CARD_FRESH,
+  GET_ALL_DINE_IN_CARD,
+  GET_ALL_DINE_IN_CARD_FRESH,
+  DINE_IN_CARD_EDIT,
+  DINE_IN_CARD_EDIT_FRESH,
+  DINE_IN_CARD_DELETE,
+  DINE_IN_CARD_DELETE_FRESH,
+  DINE_IN_CARD_STATUS_EDIT,
+  DINE_IN_CARD_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_DINE_IN_CARD,
+  SERVER_SIDE_PAGINATION_DINE_IN_CARD_SEARCH,
+  SERVER_SIDE_PAGINATION_SEARCH_DINE_IN_CARD_FRESH,
+  GET_DINE_IN_CARD_BY_ID,
+  GET_DINE_IN_CARD_BY_ID_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
 import { toast } from "react-toastify"
+import { v4 as uuidv4 } from "uuid"
 
 // token
 var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
-export const addCustomerAction = (id, data, sub_id) => {
-  console.log(id, data, sub_id)
-  var url = process.env.REACT_APP_LOCALHOST + "/Customer/Post"
+export const addDineInCardAction = (id, data, pictures) => {
+  console.log(id, data, pictures)
+  var url = process.env.REACT_APP_LOCALHOST + "/DineInCard/Post"
 
-  let dataObject = {
+  const dataObject = {
     _id: id,
     ...data,
-    subscription_type_id: sub_id,
   }
-
   const formData = convertToFormData(dataObject)
 
+  let i = 0
+  pictures?.forEach(index => {
+    formData.append("images", pictures[i])
+    i++
+  })
+
   return dispatch => {
+    console.log("-in the dispatch----")
+
     const headers = {
       "Content-Type": "multipart/form-data",
-      //"Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     }
 
     axios
       .post(url, formData, { headers: headers })
       .then(response => {
+        console.log("response :", response)
         dispatch({
-          type: ADD_CUSTOMER,
+          type: "ADD_DINE_IN_CARD",
           payload: response.data,
           status: "Success",
         })
+        // toast.success("Dine In Card Added Successfully")
       })
 
       .catch(error => {
         dispatch({
-          type: ADD_CUSTOMER,
+          type: "ADD_DINE_IN_CARD",
           payload: error,
           status: "Failed",
         })
+        // toast.error("Failed to add")
       })
   }
 }
 
-export const addCustomerFresh = () => {
+export const addDineInCardFresh = () => {
   return dispatch =>
     dispatch({
-      type: ADD_CUSTOMER_FRESH,
+      type: ADD_DINE_IN_CARD_FRESH,
       status: false,
     })
 }
 
-export const getAllCustomerAction = () => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Customer/Get"
+export const getAllDineInCardAction = () => {
+  var url = process.env.REACT_APP_LOCALHOST + "/DineInCard/Get"
   const formData = {}
   return dispatch => {
     const headers = {
@@ -83,46 +92,53 @@ export const getAllCustomerAction = () => {
       .get(url, { headers: headers })
       .then(response => {
         dispatch({
-          type: GET_ALL_CUSTOMER,
+          type: GET_ALL_DINE_IN_CARD,
           payload: response.data,
           status: "Success",
         })
       })
       .catch(error => {
         dispatch({
-          type: GET_ALL_CUSTOMER,
+          type: GET_ALL_DINE_IN_CARD,
           status: "Failed",
         })
       })
   }
 }
 
-export const getAllCustomerFresh = () => {
+export const getAllDineInCardFresh = () => {
   return dispatch => {
     dispatch({
-      type: GET_ALL_CUSTOMER_FRESH,
+      type: "GET_ALL_DINE_IN_CARD_FRESH",
       payload: null,
       status: "Success",
     })
   }
 }
 
-export const customerEditAction = (id, data, sub_id) => {
-  console.log(id, data, sub_id)
-  var url = process.env.REACT_APP_LOCALHOST + "/Customer/Put"
+export const dineInCardEditAction = (data, pictures, previous_image) => {
+  var url = process.env.REACT_APP_LOCALHOST + "/DineInCard/Put"
+
+  console.log(data, pictures, previous_image)
 
   const dataObject = {
     ...data,
-    _id: id,
-    subscription_type_id: sub_id,
   }
-
   const formData = convertToFormData(dataObject)
-  console.log(formData)
+
+  let j = 0
+  pictures?.forEach(index => {
+    formData.append("images", pictures[j])
+    j++
+  })
+  let i = 0
+  previous_image?.forEach(index => {
+    formData.append("old_images", previous_image[i])
+    i++
+  })
   return dispatch => {
     const headers = {
-      //"Content-Type": "multipart/form-data",
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
 
       "Access-Control-Allow-Origin": "*",
     }
@@ -130,76 +146,78 @@ export const customerEditAction = (id, data, sub_id) => {
       .put(url, formData, { headers: headers })
       .then(response => {
         dispatch({
-          type: CUSTOMER_NAME_EDIT,
+          type: DINE_IN_CARD_EDIT,
           payload: response.data,
           status: "Success",
         })
-        toast.success("Customer Edited Successfully")
       })
       .catch(error => {
         dispatch({
-          type: CUSTOMER_NAME_EDIT,
+          type: DINE_IN_CARD_EDIT,
           payload: error,
           status: "Failed",
         })
-        toast.error("Customer Edit Failed")
       })
   }
 }
 
-export const customerEditFresh = () => {
+export const dineInCardEditFresh = () => {
   return dispatch => {
     dispatch({
-      type: CUSTOMER_NAME_EDIT_FRESH,
+      type: DINE_IN_CARD_EDIT_FRESH,
       payload: null,
       status: false,
     })
   }
 }
 
-export const customerStatusEditAction = data => {
-  var url = `${process.env.REACT_APP_LOCALHOST}/Customer/isActive?id=${data._id}&is_active=${data.is_active}`
+export const dineInCardStatusEditAction = data => {
+  //var url = process.env.REACT_APP_LOCALHOST + "/DineInCard/Put"
+  var url = `${process.env.REACT_APP_LOCALHOST}/DineInCard/isActive?id=${data._id}&is_active=${data.is_active}`
+  const dataObject = {
+    _id: data._id,
+    is_active: data.is_active,
+  }
 
-  const dataObject = data
+  const formData = convertToFormData(dataObject)
 
   return dispatch => {
     const headers = {
-      // "Content-Type": "multipart/form-data",
-      "Content-Type": "application/json",
-
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
     axios
-      .put(url, dataObject, { headers: headers })
+      .put(url, formData, { headers: headers })
       .then(response => {
         dispatch({
-          type: EDIT_CUSTOMER_STATUS,
+          type: DINE_IN_CARD_STATUS_EDIT,
+          payload: response.data,
           status: "Success",
         })
-        // toast.success("Updated Successfully");
       })
       .catch(error => {
         dispatch({
-          type: EDIT_CUSTOMER_STATUS,
+          type: DINE_IN_CARD_STATUS_EDIT,
+          payload: error,
           status: "Failed",
         })
-        // toast.error("Something went wrong!!");
       })
   }
 }
 
-export const customerStatusEditActionFresh = () => {
+export const dineInCardStatusEditFresh = () => {
   return dispatch => {
     dispatch({
-      type: EDIT_CUSTOMER_STATUS_FRESH,
+      type: DINE_IN_CARD_STATUS_EDIT_FRESH,
       payload: null,
       status: false,
     })
   }
 }
 
-export const customerDeleteAction = id => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Customer/Delete"
+export const dineInCardDeleteAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/DineInCard/Delete"
+  console.log(id)
 
   return dispatch => {
     const headers = {
@@ -211,14 +229,14 @@ export const customerDeleteAction = id => {
       .delete(url, { params: { id: id } }, { headers: headers })
       .then(response => {
         dispatch({
-          type: CUSTOMER_DELETE,
+          type: "DINE_IN_CARD_DELETE",
           payload: response.data,
           status: "Success",
         })
       })
       .catch(error => {
         dispatch({
-          type: CUSTOMER_DELETE,
+          type: "DINE_IN_CARD_DELETE",
           payload: error,
           status: "Failed",
         })
@@ -226,31 +244,18 @@ export const customerDeleteAction = id => {
   }
 }
 
-export const customerDeleteFresh = () => {
+export const dineInCardDeleteFresh = () => {
   return dispatch =>
     dispatch({
-      type: CUSTOMER_DELETE_FRESH,
+      type: DINE_IN_CARD_DELETE_FRESH,
       status: false,
     })
 }
 
-export const getServerSidePaginationCustomerAction = (
-  index,
-  limit,
-  filters
-) => {
-  // var url =
-  //   process.env.REACT_APP_LOCALHOST +
-  //   `/Customer/Search?page=${index}&limit=${limit}`
-
-  // console.log("filters :", filters)
-  filters = filters ? new URLSearchParams(filters).toString() : ""
-
+export const getServerSidePaginationDineInCardAction = (index, limit) => {
   var url =
     process.env.REACT_APP_LOCALHOST +
-    `/Customer/Search?page=${index}&limit=${limit}${
-      filters ? "&" + filters : ""
-    }`
+    `/DineInCard/Search?page=${index}&limit=${limit}`
 
   const formData = {}
   return dispatch => {
@@ -263,32 +268,23 @@ export const getServerSidePaginationCustomerAction = (
       .get(url, { headers: headers })
       .then(response => {
         dispatch({
-          type: SERVER_SIDE_PAGINATION_CUSTOMER,
+          type: SERVER_SIDE_PAGINATION_DINE_IN_CARD,
           payload: response.data,
           status: "Success",
         })
       })
       .catch(error => {
         dispatch({
-          type: SERVER_SIDE_PAGINATION_CUSTOMER,
+          type: SERVER_SIDE_PAGINATION_DINE_IN_CARD,
           status: "Failed",
         })
       })
   }
 }
 
-export const serverSidePaginationCustomerFresh = () => {
-  console.log("======= hello from fresh =========")
-  return dispatch =>
-    dispatch({
-      type: SERVER_SIDE_PAGINATION_CUSTOMER_FRESH,
-      status: false,
-    })
-}
-
-export const getServerSidePaginationCustomerSearchAction = name => {
+export const getServerSidePaginationDineInCardSearchAction = name => {
   console.log(name)
-  var url = process.env.REACT_APP_LOCALHOST + `/Customer/Search?name=${name}`
+  var url = process.env.REACT_APP_LOCALHOST + `/DineInCard/Search?title=${name}`
 
   return dispatch => {
     const headers = {
@@ -300,32 +296,32 @@ export const getServerSidePaginationCustomerSearchAction = name => {
       .get(url, { headers: headers })
       .then(response => {
         dispatch({
-          type: SERVER_SIDE_PAGINATION_CUSTOMER_SEARCH,
+          type: SERVER_SIDE_PAGINATION_DINE_IN_CARD_SEARCH,
           payload: response.data,
           status: "Success",
         })
       })
       .catch(error => {
         dispatch({
-          type: SERVER_SIDE_PAGINATION_CUSTOMER_SEARCH,
+          type: SERVER_SIDE_PAGINATION_DINE_IN_CARD_SEARCH,
           status: "Failed",
         })
       })
   }
 }
 
-export const getServerSidePaginationSearchCustomerFresh = () => {
+export const getServerSidePaginationSearchDineInCardFresh = () => {
   return dispatch =>
     dispatch({
-      type: SERVER_SIDE_PAGINATION_SEARCH_CUSTOMER_FRESH,
+      type: SERVER_SIDE_PAGINATION_SEARCH_DINE_IN_CARD_FRESH,
       status: false,
       payload: null,
     })
 }
 
-export const getCustomerByIdAction = id => {
+export const getDineInCardByIdAction = id => {
   //var url = process.env.REACT_APP_LOCALHOST + "/Zone/Get"
-  var url = process.env.REACT_APP_LOCALHOST + `/Customer/GetById?id=${id}`
+  var url = process.env.REACT_APP_LOCALHOST + `/DineInCard/GetById?id=${id}`
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
@@ -336,16 +332,25 @@ export const getCustomerByIdAction = id => {
       .get(url, { headers: headers })
       .then(response => {
         dispatch({
-          type: GET_CUSTOMER_BY_ID,
+          type: GET_DINE_IN_CARD_BY_ID,
           payload: response.data,
           status: "Success",
         })
       })
       .catch(error => {
         dispatch({
-          type: GET_CUSTOMER_BY_ID,
+          type: GET_DINE_IN_CARD_BY_ID,
           status: "Failed",
         })
       })
   }
+}
+
+export const getDineInCardByIdActionFresh = () => {
+  console.log("=========hererererer=======")
+  return dispatch =>
+    dispatch({
+      type: GET_DINE_IN_CARD_BY_ID_FRESH,
+      status: false,
+    })
 }

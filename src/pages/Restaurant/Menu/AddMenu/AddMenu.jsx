@@ -44,6 +44,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import axios from "axios"
 import { toast } from "react-toastify"
+import CustomLoader from "components/CustomLoader/CustomLoader"
 
 const LoadingContainer = () => <div>Loading...</div>
 
@@ -51,6 +52,8 @@ function AddMenu(props) {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(false)
+  const [timeSLotLoading, setTimeSLotLoading] = useState(false)
   const [info, setInfo] = useState({
     name: location.state ? location.state.menu_name : "",
     menu_description: location.state ? location.state.description : "",
@@ -221,6 +224,8 @@ function AddMenu(props) {
   // }
 
   const handleSelectBranch = e => {
+    setIsLoading(true)
+    setTimeSLotLoading(true)
     let restaurantValue = e.value
 
     setInfo({ ...info, restaurant: restaurantValue, category: "" })
@@ -256,6 +261,13 @@ function AddMenu(props) {
     }
   }, [info.restaurant])
 
+  useEffect(() => {
+    if (props.get_category_by_branch_id_loading === "Success") {
+      setCategoryNew([])
+      setIsLoading(false)
+    }
+  }, [props.get_category_by_branch_id_loading])
+
   let menuCategoryData2 = undefined
   if (props.get_category_by_branch_id_data?.length > 0) {
     menuCategoryData2 = props.get_category_by_branch_id_data?.map(
@@ -288,11 +300,10 @@ function AddMenu(props) {
     if (props.get_time_slot_by_branch_id_loading === "Success") {
       // props.getTimeSLotByBranchIdFresh()
       setSelectedTimeSlot(slot_data)
+      setTimeSLotLoading(false)
     }
   }, [props.get_time_slot_by_branch_id_loading])
 
-  // console.log(props?.get_time_slot_by_branch_id_data)
-  // console.log(selectedTimeSlot)
   console.log(info.restaurant)
 
   const handleChangeTime = (e, ClickedItem) => {
@@ -665,15 +676,15 @@ function AddMenu(props) {
       setAddOnsNew(props?.get_category_by_id_data?.preset_add_ons)
     }
 
-    // if (props.get_category_by_branch_id_loading == false) {
-    //   // console.log("false", info.restaurant)
-    //   props.getCategoryByBranchIdAction(info.restaurant)
-    // }
+    if (props.get_category_by_branch_id_loading == false) {
+      // console.log("false", info.restaurant)
+      props.getCategoryByBranchIdAction(info.restaurant)
+    }
 
-    // if (props.get_time_slot_by_branch_id_loading == false) {
-    //   // console.log("false", info.restaurant)
-    //   props.getTimeSLotByBranchIdAction(info.restaurant)
-    // }
+    if (props.get_time_slot_by_branch_id_loading == false) {
+      // console.log("false", info.restaurant)
+      props.getTimeSLotByBranchIdAction(info.restaurant)
+    }
   }, [
     props.get_all_branch_loading,
     props.get_all_addOns_category_loading,
@@ -1296,6 +1307,7 @@ function AddMenu(props) {
                   </label>
                   <div className="col-md-10">
                     <Select
+                      isLoading={isLoading}
                       required
                       value={categoryNew}
                       onChange={handleSelectCategory2}
@@ -1420,78 +1432,97 @@ function AddMenu(props) {
                       </Row>
                     ))} */}
 
-                    {selectedTimeSlot?.length > 0 && info.restaurant
-                      ? selectedTimeSlot?.map(item => (
+                    {timeSLotLoading ? (
+                      <Row className="mb-3">
+                        <div className="text-center mt-4">
+                          <CustomLoader />
+                        </div>
+                      </Row>
+                    ) : (
+                      <>
+                        {selectedTimeSlot?.length > 0 ? (
+                          selectedTimeSlot?.map(item => (
+                            <Row className="mb-3">
+                              <div
+                                className="col-md-10"
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                }}
+                              >
+                                <div style={{ marginTop: "30px" }}>
+                                  <input
+                                    type="checkbox"
+                                    id="cat_is_multiple"
+                                    name="cat_is_multiple"
+                                    style={{ margin: "0px 15px 50px 0px" }}
+                                    // value="true"
+
+                                    checked={item.checked}
+                                    // checked={checkTimeSelected(item)}
+                                    onChange={e => handleChangeTime(e, item)}
+                                  />
+                                  <span
+                                    style={{
+                                      fontSize: "16px",
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    {item?.name}
+                                  </span>
+                                </div>
+
+                                <div className="mb-3 col-lg-3">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="startTime"
+                                  >
+                                    Start Time
+                                  </label>
+                                  <input
+                                    type="time"
+                                    id="startTime"
+                                    className="form-control"
+                                    name="start_time"
+                                    placeholder="Add-ons name"
+                                    value={moment({
+                                      hour: item.start_time?.hour,
+                                      minute: item?.start_time?.minute,
+                                    }).format("HH:mm")}
+                                  />
+                                </div>
+
+                                <div className="mb-3 col-lg-3">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="subject"
+                                  >
+                                    End Time
+                                  </label>
+                                  <input
+                                    type="time"
+                                    id="subject"
+                                    className="form-control"
+                                    name="end_time"
+                                    placeholder="Price"
+                                    value={moment({
+                                      hour: item.end_time?.hour,
+                                      minute: item?.end_time?.minute,
+                                    }).format("HH:mm")}
+                                  />
+                                </div>
+                              </div>
+                            </Row>
+                          ))
+                        ) : (
                           <Row className="mb-3">
-                            <div
-                              className="col-md-10"
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <div style={{ marginTop: "30px" }}>
-                                <input
-                                  type="checkbox"
-                                  id="cat_is_multiple"
-                                  name="cat_is_multiple"
-                                  style={{ margin: "0px 15px 50px 0px" }}
-                                  // value="true"
-
-                                  checked={item.checked}
-                                  // checked={checkTimeSelected(item)}
-                                  onChange={e => handleChangeTime(e, item)}
-                                />
-                                <span
-                                  style={{
-                                    fontSize: "16px",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  {item?.name}
-                                </span>
-                              </div>
-
-                              <div className="mb-3 col-lg-3">
-                                <label
-                                  className="form-label"
-                                  htmlFor="startTime"
-                                >
-                                  Start Time
-                                </label>
-                                <input
-                                  type="time"
-                                  id="startTime"
-                                  className="form-control"
-                                  name="start_time"
-                                  placeholder="Add-ons name"
-                                  value={moment({
-                                    hour: item.start_time?.hour,
-                                    minute: item?.start_time?.minute,
-                                  }).format("HH:mm")}
-                                />
-                              </div>
-
-                              <div className="mb-3 col-lg-3">
-                                <label className="form-label" htmlFor="subject">
-                                  End Time
-                                </label>
-                                <input
-                                  type="time"
-                                  id="subject"
-                                  className="form-control"
-                                  name="end_time"
-                                  placeholder="Price"
-                                  value={moment({
-                                    hour: item.end_time?.hour,
-                                    minute: item?.end_time?.minute,
-                                  }).format("HH:mm")}
-                                />
-                              </div>
-                            </div>
+                            <p className="text-center mt-4">
+                              No Time Slot Found
+                            </p>
                           </Row>
-                        ))
-                      : ""}
+                        )}
+                      </>
+                    )}
                   </div>
                 </Row>
 
@@ -1669,14 +1700,6 @@ function AddMenu(props) {
             </div>
           </form>
         </ModalBody>
-        {/* <ModalFooter>
-                    <Button color="primary" type='submit'>
-                        Do Something
-                    </Button>{' '}
-                    <Button color="secondary" onClick={closeModal}>
-                        Cancel
-                    </Button>
-                </ModalFooter> */}
       </Modal>
     </React.Fragment>
   )
