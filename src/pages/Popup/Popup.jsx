@@ -672,6 +672,7 @@ function Popup(props) {
                 </label>
                 <input
                   type="file"
+                  accept=".jpg, .jpeg, .bmp, .png, .webp"
                   className="form-control"
                   id="image"
                   required
@@ -907,6 +908,7 @@ function Popup(props) {
                 </label>
                 <input
                   type="file"
+                  accept=".jpg, .jpeg, .bmp, .png, .webp"
                   className="form-control"
                   id="image"
                   name="image"

@@ -217,7 +217,7 @@ function DineInGalleryEdit(props) {
       withIcon: false,
       withLabel: false,
       label: "Max file size 5mb for each. Accepted file type jpg, jpeg, png",
-      imgExtension: [".jpg", ".png", ".jpeg"],
+      imgExtension: [".jpg", ".png", ".jpeg", ".webp", ".bmp"],
       defaultImages: [],
       buttonStyles: {
         display: "none",
@@ -233,7 +233,7 @@ function DineInGalleryEdit(props) {
       withIcon: true,
       withLabel: true,
       label: "Max file size 5mb for each. Accepted file type jpg, jpeg, png",
-      imgExtension: [".jpg", ".png", ".jpeg"],
+      imgExtension: [".jpg", ".png", ".jpeg", ".webp", ".bmp"],
       defaultImages: [],
       buttonStyles: {},
     },
@@ -344,6 +344,7 @@ function DineInGalleryEdit(props) {
                   <div className="col-md-10">
                     <input
                       type="file"
+                      accept=".jpg, .jpeg, .bmp, .png, .webp"
                       className="form-control"
                       id="thumbnail_image"
                       placeholder="Enter category description"

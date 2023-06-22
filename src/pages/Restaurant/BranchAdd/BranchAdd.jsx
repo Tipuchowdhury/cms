@@ -641,6 +641,7 @@ function BranchAdd(props) {
                   <div className="col-md-10">
                     <input
                       type="file"
+                      accept=".jpg, .jpeg, .bmp, .png, .webp"
                       name="image"
                       className="form-control"
                       id="image"
@@ -674,6 +675,7 @@ function BranchAdd(props) {
                   <div className="col-md-10">
                     <input
                       type="file"
+                      accept=".jpg, .jpeg, .bmp, .png, .webp"
                       className="form-control"
                       name="cover_image"
                       id="cover_image"

@@ -915,6 +915,7 @@ function EditRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="image"
                         name="image"
@@ -965,6 +966,7 @@ function EditRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="nid_front"
                         name="nid_front"
@@ -999,6 +1001,7 @@ function EditRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="nid_back"
                         name="nid_back"
@@ -1129,6 +1132,7 @@ function EditRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="driving_license_image"
                         name="driving_license_image"
@@ -1180,6 +1184,7 @@ function EditRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="vehicle_registration_image"
                         name="vehicle_registration_image"
@@ -1425,6 +1430,7 @@ function EditRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="referer_nid_front"
                         name="referer_nid_front"
@@ -1456,6 +1462,7 @@ function EditRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="referer_nid_back"
                         name="referer_nid_back"
@@ -1487,6 +1494,7 @@ function EditRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="guardian_nid_front"
                         name="guardian_nid_front"
@@ -1518,6 +1526,7 @@ function EditRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="guardian_nid_back"
                         name="guardian_nid_back"
@@ -1549,6 +1558,7 @@ function EditRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="electricity_bill"
                         name="electricity_bill"
@@ -1580,6 +1590,7 @@ function EditRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="house_nameplate"
                         name="house_nameplate"
