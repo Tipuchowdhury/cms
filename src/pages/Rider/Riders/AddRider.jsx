@@ -557,6 +557,12 @@ function AddRider(props) {
       navigate("/riders")
     }
 
+    if (props.add_rider_loading == "Failed") {
+      // redirect
+      props.addRiderFresh()
+      setSubmitDisabled(false)
+    }
+
     if (props.rider_edit_loading === "Success") {
       toast.success("Rider edited Successfully")
       // redirect

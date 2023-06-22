@@ -758,6 +758,11 @@ function EditRider(props) {
       setSubmitDisabled(false)
       navigate("/riders")
     }
+
+    if (props.rider_edit_loading == "Failed") {
+      props.riderEditFresh()
+      setSubmitDisabled(false)
+    }
   }, [props])
 
   if (props.get_rider_by_id_data == null) {
