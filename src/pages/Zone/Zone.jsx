@@ -24,6 +24,7 @@ import {
   zoneDeleteAction,
   zoneDeleteFresh,
   getServerSidePaginationZoneAction,
+  getServerSidePaginationZoneFresh,
   getServerSidePaginationZoneSearchAction,
   getServerSidePaginationSearchZoneFresh,
   getZoneByIdAction,
@@ -32,6 +33,7 @@ import withRouter from "components/Common/withRouter"
 import { connect } from "react-redux"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import DataTable from "react-data-table-component"
+import CustomLoader from "components/CustomLoader/CustomLoader"
 
 function Zone(props) {
   const [modalDel, setModalDel] = useState(false)
@@ -78,14 +80,14 @@ function Zone(props) {
     <div style={{ display: "flex", gap: 10 }}>
       <Button
         color="primary"
-        className="btn btn-primary waves-effect waves-light"
+        className="btn btn-sm waves-effect waves-light"
         onClick={() => handleEdit(row, cell)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
-        className="btn btn-danger waves-effect waves-light"
+        className="btn btn-sm waves-effect waves-light"
         onClick={() => handleDeleteModal(cell)}
       >
         Delete
@@ -96,7 +98,7 @@ function Zone(props) {
   const statusRef = (cell, row) => (
     <Button
       color={cell.is_active ? "success" : "secondary"}
-      className="btn waves-effect waves-light"
+      className="btn btn-sm waves-effect waves-light"
       onClick={() => handleStatusModal(cell)}
     >
       {cell.is_active ? "Active" : "Deactivate"}
@@ -126,15 +128,22 @@ function Zone(props) {
     },
   ]
 
+  const customStyles = {
+    headCells: {
+      style: {
+        fontSize: "18px",
+      },
+    },
+  }
+
   // server side pagination
   const [page, setPage] = useState(1)
   const [countPerPage, setCountPerPage] = useState(10)
+  const [pageFilters, setPageFilters] = useState({})
   const handleFilter = e => {
-    if (e.target.value?.length > 0) {
-      props.getServerSidePaginationZoneSearchAction(e.target.value)
-    } else {
-      props.getServerSidePaginationSearchZoneFresh()
-    }
+    let name = e.target.name
+    let value = e.target.value
+    setPageFilters({ ...pageFilters, [name]: value })
   }
 
   const paginationComponentOptions = {
@@ -152,7 +161,12 @@ function Zone(props) {
       props.getAllZoneAction()
     }
 
-    props.getServerSidePaginationZoneAction(page, countPerPage)
+    props.getServerSidePaginationZoneAction(page, countPerPage, pageFilters)
+
+    if (props.get_server_side_pagination_zone_loading == false) {
+      //console.log("I am in get all permis type loading ")
+      props.getServerSidePaginationZoneAction(page, countPerPage, pageFilters)
+    }
 
     if (props.edit_zone_status_loading == "Success") {
       toast.success("Zone Status Updated Successfully")
@@ -182,12 +196,9 @@ function Zone(props) {
     props.get_server_side_pagination_zone_loading,
     page,
     countPerPage,
+    pageFilters,
   ])
 
-  // console.log(props.get_all_zone_data)
-  // console.log(page)
-  // console.log(props.get_server_side_pagination_zone_data)
-  // console.log(props.get_server_side_pagination_zone_search_data)
   return (
     <React.Fragment>
       <ToastContainer />
@@ -229,6 +240,8 @@ function Zone(props) {
                     <input
                       type="text"
                       placeholder="Search Zone"
+                      name="zone_name"
+                      value={pageFilters.zone_name}
                       style={{
                         padding: "10px",
                         borderRadius: "8px",
@@ -239,23 +252,26 @@ function Zone(props) {
                   </div>
                   <DataTable
                     columns={activeData}
+                    customStyles={customStyles}
                     data={
-                      props.get_server_side_pagination_zone_search_data != null
-                        ? props.get_server_side_pagination_zone_search_data
-                            ?.data
+                      props.get_server_side_pagination_zone_data != null
+                        ? props.get_server_side_pagination_zone_data?.data
                         : props?.get_server_side_pagination_zone_data?.data
                     }
                     highlightOnHover
                     pagination
                     paginationServer
                     paginationTotalRows={
-                      props.get_server_side_pagination_zone_search_data != null
-                        ? props.get_server_side_pagination_zone_search_data
-                            ?.count
+                      props.get_server_side_pagination_zone_data != null
+                        ? props.get_server_side_pagination_zone_data?.count
                         : props.get_server_side_pagination_zone_data?.count
                     }
                     paginationPerPage={countPerPage}
                     paginationComponentOptions={paginationComponentOptions}
+                    progressPending={
+                      !props.get_server_side_pagination_zone_loading
+                    }
+                    progressComponent={<CustomLoader />}
                     onChangeRowsPerPage={handlePerRowsChange}
                     onChangePage={page => setPage(page)}
                   />
@@ -360,6 +376,7 @@ export default withRouter(
     zoneDeleteAction,
     zoneDeleteFresh,
     getServerSidePaginationZoneAction,
+    getServerSidePaginationZoneFresh,
     getServerSidePaginationZoneSearchAction,
     getServerSidePaginationSearchZoneFresh,
     getZoneByIdAction,

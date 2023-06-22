@@ -63,6 +63,7 @@ import {
   GET_CATEGORY_BY_ID_FRESH,
   ADD_BRANCH_FRESH,
   SERVER_SIDE_PAGINATION_ZONE,
+  SERVER_SIDE_PAGINATION_ZONE_FRESH,
   SERVER_SIDE_PAGINATION_ZONE_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_ZONE_FRESH,
   SERVER_SIDE_PAGINATION_CUISINE,
@@ -2356,11 +2357,16 @@ export const getCategoryByIdFresh = () => {
   }
 }
 
-export const getServerSidePaginationZoneAction = (index, limit) => {
+export const getServerSidePaginationZoneAction = (index, limit, filters) => {
+  // var url =
+  //   process.env.REACT_APP_LOCALHOST +
+  //   `/Zone/Search?page=${index}&limit=${limit}`
+  filters = filters ? new URLSearchParams(filters).toString() : ""
+
   var url =
     process.env.REACT_APP_LOCALHOST +
-    `/Zone/Search?page=${index}&limit=${limit}`
-  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
+    `/Zone/Search?page=${index}&limit=${limit}${filters ? "&" + filters : ""}`
+
   const formData = {}
   return dispatch => {
     const headers = {
@@ -2384,6 +2390,15 @@ export const getServerSidePaginationZoneAction = (index, limit) => {
         })
       })
   }
+}
+
+export const getServerSidePaginationZoneFresh = () => {
+  console.log("======= hello from fresh =========")
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_ZONE_FRESH,
+      status: false,
+    })
 }
 
 export const getServerSidePaginationZoneSearchAction = name => {

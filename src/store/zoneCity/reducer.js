@@ -103,6 +103,7 @@ const zoneCity = (state = initialState, action) => {
         city_status_edit_data: action.payload,
         city_status_edit_loading: action.status,
         get_all_city_loading: false,
+        get_server_side_pagination_loading: false,
       }
       break
 
@@ -118,6 +119,7 @@ const zoneCity = (state = initialState, action) => {
         ...state,
         city_delete_loading: action.status,
         get_all_city_loading: false,
+        get_server_side_pagination_loading: false,
       }
       break
     case CITY_DELETE_FRESH:

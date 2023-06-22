@@ -16,23 +16,28 @@ import { v4 as uuidv4 } from "uuid"
 // token
 var token = JSON.parse(localStorage.getItem("jwt"))
 
-export const addSubscriptionTypeAction = addData => {
+export const addSubscriptionTypeAction = (id, addData, details) => {
   var url = process.env.REACT_APP_LOCALHOST + "/SubscriptionType/Post"
 
-  const val = uuidv4()
+  // let i = 0,
+  //   detailsData = []
+  // details?.forEach(index => {
+  //   detailsData.push(details[i].details)
+  //   i++
+  // })
+
+  const detailsData = details
+    .filter(detail => detail.details != "")
+    .map(item => {
+      return item.details
+    })
+
   const formData = {
-    _id: val,
-    name: addData.subscriptionTypeName,
-    is_delivary_free: addData.deliveryFree,
-    is_unlimited_free_delivary: addData.unlimitedFreeDelivery,
-    free_delivary_amount_limit: addData.freeDeliveryAmountLimit,
-    free_delivary_order_limit: addData.freeDeliveryOrderLimit,
-    is_has_pick_up_discount: addData.pickupDiscount,
-    is_unlimited_pick_up_discount: addData.unlimitedPickupDiscount,
-    pick_up_discount_amount_limit: addData.pickupDiscountAmountLimit,
-    pick_up_discount_order_limit: addData.pickupDiscountOrderLimit,
+    _id: id,
+    ...addData,
+    details: detailsData,
   }
-  // console.log(formData);
+  console.log(formData)
   return dispatch => {
     // console.log("-in the dispatch----")
 
@@ -106,23 +111,28 @@ export const getAllSubscriptionTypeFresh = () => {
   }
 }
 
-export const subscriptionTypeUpdateAction = editData => {
+export const subscriptionTypeUpdateAction = (editData, details) => {
   // console.log(editData);
 
   var url = process.env.REACT_APP_LOCALHOST + "/SubscriptionType/Put"
+  // let i = 0,
+  //   detailsData = []
+  // details?.forEach(index => {
+  //   detailsData.push(details[i].details)
+  //   i++
+  // })
+
+  const detailsData = details
+    .filter(detail => detail.details != "")
+    .map(item => {
+      return item.details
+    })
+
   const formData = {
-    _id: editData.subscriptionTypeId,
-    name: editData.subscriptionTypeName,
-    is_delivary_free: editData.deliveryFree,
-    is_unlimited_free_delivary: editData.unlimitedFreeDelivery,
-    free_delivary_amount_limit: editData.freeDeliveryAmountLimit,
-    free_delivary_order_limit: editData.freeDeliveryOrderLimit,
-    is_has_pick_up_discount: editData.pickupDiscount,
-    is_unlimited_pick_up_discount: editData.unlimitedPickupDiscount,
-    pick_up_discount_amount_limit: editData.pickupDiscountAmountLimit,
-    pick_up_discount_order_limit: editData.pickupDiscountOrderLimit,
-    is_active: editData.isActive,
+    ...editData,
+    details: detailsData,
   }
+  console.log(formData)
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
