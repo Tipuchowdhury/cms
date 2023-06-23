@@ -115,12 +115,6 @@ export const subscriptionTypeUpdateAction = (editData, details) => {
   // console.log(editData);
 
   var url = process.env.REACT_APP_LOCALHOST + "/SubscriptionType/Put"
-  // let i = 0,
-  //   detailsData = []
-  // details?.forEach(index => {
-  //   detailsData.push(details[i].details)
-  //   i++
-  // })
 
   const detailsData = details
     .filter(detail => detail.details != "")
@@ -169,20 +163,18 @@ export const subscriptionTypeUpdateFresh = () => {
 
 export const subscriptionTypeStatusUpdateAction = editData => {
   var url = process.env.REACT_APP_LOCALHOST + "/SubscriptionType/Put"
-  const formData = {
-    _id: editData.subscriptionTypeId,
-    name: editData.subscriptionTypeName,
-    is_delivary_free: editData.deliveryFree,
-    is_unlimited_free_delivary: editData.unlimitedFreeDelivery,
-    free_delivary_amount_limit: editData.freeDeliveryAmountLimit,
-    free_delivary_order_limit: editData.freeDeliveryOrderLimit,
-    is_has_pick_up_discount: editData.pickupDiscount,
-    is_unlimited_pick_up_discount: editData.unlimitedPickupDiscount,
-    pick_up_discount_amount_limit: editData.pickupDiscountAmountLimit,
-    pick_up_discount_order_limit: editData.pickupDiscountOrderLimit,
-    is_active: !editData.isActive,
-  }
 
+  let detailsData = []
+  editData.details.forEach(element => {
+    detailsData.push(element)
+  })
+  // console.log(detailsData)
+
+  const formData = {
+    ...editData,
+    details: detailsData,
+  }
+  console.log(formData)
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",

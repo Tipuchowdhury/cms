@@ -93,6 +93,11 @@ function EditZone(props) {
     }
   }, [setPath])
 
+  var bounds = new props.google.maps.LatLngBounds()
+  for (var i = 0; i < path.length; i++) {
+    bounds.extend(path[i])
+  }
+
   // Bind refs to current Polygon and listeners
   const onLoad = useCallback(
     polygon => {
@@ -316,6 +321,11 @@ function EditZone(props) {
 
       setPath(edit_map_data)
 
+      var bounds = new props.google.maps.LatLngBounds()
+      for (var i = 0; i < path.length; i++) {
+        bounds.extend(path[i])
+      }
+
       //delivery charge
       const edit_zone_delivery_charge_unsort =
         props?.get_zone_by_id_data?.zone_delivery_charges?.map(item => ({
@@ -345,22 +355,7 @@ function EditZone(props) {
       SetGetInfo(false)
     }
   }, [props])
-  //props.get_all_branch_loading, props.get_all_city_loading, props.add_zone_loading, props.edit_zone_loading
-  // console.log(props.get_all_branch_data)
-  // console.log(props.get_all_city_data);
 
-  // console.log(path[0])
-  // const [defaultProps, setDefaultProps] = useState({
-  //   lat: 23.8103,
-  //   lng: 90.4125,
-  // })
-
-  // {
-  //   path?
-  // }
-  // setDefaultProps
-  // console.log(path.length)
-  // console.log(Math.ceil(path.length / 2))
   if (getInfo) {
     return <PageLoader />
   }
@@ -517,7 +512,8 @@ function EditZone(props) {
                             style={{ width: "100%", height: "100%" }}
                             google={props.google}
                             initialCenter={defaultProps[0]}
-                            zoom={12}
+                            bounds={bounds}
+                            // zoom={12}
                             onClick={e => onMapClickHandler(e)}
                           >
                             <Polygon

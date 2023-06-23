@@ -50,8 +50,8 @@ function SubscriptionTypes(props) {
 
   const [addInfo, setAddInfo] = useState({
     name: "",
-    subscription_fee: 0,
-    subscribe_for_in_days: 0,
+    subscription_fee: "",
+    subscribe_for_in_days: "",
     is_premium: false,
     is_active: true,
   })
@@ -59,8 +59,8 @@ function SubscriptionTypes(props) {
   const [editInfo, setEditInfo] = useState({
     _id: "",
     name: "",
-    subscription_fee: 0,
-    subscribe_for_in_days: 0,
+    subscription_fee: "",
+    subscribe_for_in_days: "",
     is_premium: false,
     is_active: true,
   })
@@ -73,7 +73,7 @@ function SubscriptionTypes(props) {
   const detailsForEdit = nn => {
     const selectedDetails = nn
       ? nn.map((item, key) => {
-          return { details: item.details }
+          return { details: item }
         })
       : []
 
@@ -168,14 +168,12 @@ function SubscriptionTypes(props) {
     // console.log(row);
 
     setEditInfo(prevState => ({
-      _id: row._id ? row._id : "",
-      name: row.name ? row.name : "",
-      subscription_fee: row.subscription_fee ? row.subscription_fee : 0,
-      subscribe_for_in_days: row.subscribe_for_in_days
-        ? row.subscribe_for_in_days
-        : 0,
-      is_premium: row.is_premium ? row.is_premium : false,
-      is_active: row.is_active ? row.is_active : true,
+      _id: row._id,
+      name: row.name,
+      subscription_fee: row.subscription_fee,
+      subscribe_for_in_days: row.subscribe_for_in_days,
+      is_premium: row.is_premium,
+      is_active: row.is_active,
     }))
 
     detailsForEdit(row.details)
@@ -208,7 +206,11 @@ function SubscriptionTypes(props) {
 
   const handleStatusUpdate = () => {
     // console.log(statusItem);
-    props.subscriptionTypeStatusUpdateAction(statusItem)
+    props.subscriptionTypeStatusUpdateAction({
+      ...statusItem,
+      is_active: !statusItem.is_active,
+    })
+
     // toggleDel();
   }
 
@@ -281,8 +283,8 @@ function SubscriptionTypes(props) {
       setAddInfo({
         ...addInfo,
         name: "",
-        subscription_fee: 0,
-        subscribe_for_in_days: 0,
+        subscription_fee: "",
+        subscribe_for_in_days: "",
         is_premium: false,
         is_active: true,
       })
@@ -554,7 +556,7 @@ function SubscriptionTypes(props) {
                   required
                   name="subscription_fee"
                   value={editInfo.subscription_fee}
-                  onChange={handleInputs}
+                  onChange={handleEditInputs}
                 />
               </div>
               <div className="mb-3">
@@ -570,7 +572,7 @@ function SubscriptionTypes(props) {
                   required
                   name="subscribe_for_in_days"
                   value={editInfo.subscribe_for_in_days}
-                  onChange={handleInputs}
+                  onChange={handleEditInputs}
                 />
               </div>
 
@@ -700,8 +702,8 @@ function SubscriptionTypes(props) {
             Are you sure?
           </ModalHeader>
           <ModalBody>
-            Do you want to {editInfo.isActive ? "deactivate" : "activate"} this
-            record?{" "}
+            Do you want to {statusItem.is_active ? "deactivate" : "activate"}{" "}
+            this record?{" "}
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={toggleStatus}>
