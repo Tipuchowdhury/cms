@@ -34,7 +34,6 @@ import {
   walletStatusUpdateAction,
   walletStatusUpdateFresh,
   getServerSidePaginationWalletAction,
-  getServerSidePaginationWalletSearchAction,
   getServerSidePaginationWalletFresh,
 } from "store/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
@@ -176,6 +175,10 @@ function Wallet(props) {
 
   useEffect(() => {
     props.getServerSidePaginationWalletAction(page, countPerPage, pageFilters)
+    if (props.get_server_side_pagination_wallet_loading == false) {
+      //console.log("I am in get all permis type loading ")
+      props.getServerSidePaginationWalletAction(page, countPerPage, pageFilters)
+    }
   }, [
     page,
     countPerPage,
@@ -208,7 +211,7 @@ function Wallet(props) {
     setCountPerPage(newPerPage)
   }
 
-  // console.log(props.get_all_wallet_data)
+  console.log(props.get_server_side_pagination_wallet_data)
 
   const riderName = (cell, row) => (
     <Link to="/rider-wallet-details">
@@ -220,7 +223,7 @@ function Wallet(props) {
           textDecorationStyle: "dotted",
         }}
       >
-        {row.rider_name}
+        {cell.rider_name}
       </span>
     </Link>
   )
@@ -229,7 +232,7 @@ function Wallet(props) {
       <Button
         color="info"
         className="btn btn-sm mb-2"
-        onClick={() => handleCashIn(row)}
+        onClick={() => handleCashIn(cell)}
       >
         Cash In
       </Button>{" "}
@@ -237,7 +240,7 @@ function Wallet(props) {
       <Button
         color="success"
         className="btn btn-sm mb-2"
-        onClick={() => handleCashOut(row)}
+        onClick={() => handleCashOut(cell)}
       >
         Cash Out
       </Button>{" "}
@@ -245,7 +248,7 @@ function Wallet(props) {
       <Button
         color="primary"
         className="btn btn-sm "
-        onClick={() => handleAdjustment(row)}
+        onClick={() => handleAdjustment(cell)}
       >
         Adjustment
       </Button>
@@ -253,20 +256,91 @@ function Wallet(props) {
   )
 
   const collectedAmount = (cell, row) => (
-    <p>{parseFloat(row.collected_amount).toFixed(2)} TK</p>
+    <p>{parseFloat(cell.collected_amount).toFixed(2)} TK</p>
   )
   const cashInAmount = (cell, row) => (
-    <p>{parseFloat(row.cash_in).toFixed(2)} TK</p>
+    <p>{parseFloat(cell.cash_in).toFixed(2)} TK</p>
   )
   const cashOutAmount = (cell, row) => (
-    <p>{parseFloat(row.cash_out).toFixed(2)} TK</p>
+    <p>{parseFloat(cell.cash_out).toFixed(2)} TK</p>
   )
   const adjustmentAmount = (cell, row) => (
-    <p>{parseFloat(row.adjustment).toFixed(2)} TK</p>
+    <p>{parseFloat(cell.adjustment).toFixed(2)} TK</p>
   )
   const currentWalletAmount = (cell, row) => (
-    <p>BDT {parseFloat(row.current_wallet_amount).toFixed(2)}</p>
+    <p>BDT {parseFloat(cell.current_wallet_amount).toFixed(2)}</p>
   )
+
+  // const activeData = [
+  //   // {
+  //   //   dataField: "rider_name",
+  //   //   text: "Rider name",
+  //   //   sort: true,
+  //   // },
+  //   {
+  //
+  //     dataField: "rider_name",
+  //     text: "Rider name",
+  //     sort: true,
+  //     formatter: riderName,
+  //   },
+  //   {
+  //     dataField: "date",
+  //     text: "Date",
+  //     sort: true,
+  //   },
+  //   {
+  //     dataField: "vehicle_type_name",
+  //     text: "Rider Type",
+  //     sort: true,
+  //   },
+  //   {
+  //     dataField: "total_order",
+  //     text: "Total Order",
+  //     sort: true,
+  //   },
+  //   {
+  //     dataField: "collected_amount",
+  //     text: "Collected amount",
+  //     sort: true,
+  //     formatter: collectedAmount,
+  //   },
+  //   {
+  //     dataField: "cash_in",
+  //     text: "Cash In",
+  //     sort: true,
+  //     formatter: cashInAmount,
+  //   },
+  //   {
+  //     dataField: "cash_out",
+  //     text: "Cash Out",
+  //     sort: true,
+  //     formatter: cashOutAmount,
+  //   },
+  //   {
+  //     dataField: "adjustment",
+  //     text: "Adjustment",
+  //     sort: true,
+  //     formatter: adjustmentAmount,
+  //   },
+  //   {
+  //     dataField: "current_wallet_amount",
+  //     text: "Current Wallet amount",
+  //     sort: true,
+  //     formatter: currentWalletAmount,
+  //   },
+  //   // {
+  //   //   dataField: "",
+  //   //   text: "Wallet Status",
+  //   //   sort: true,
+  //   //   formatter: statusRef,
+  //   // },
+  //   {
+  //     text: "Action",
+  //     sort: true,
+  //     formatter: actionRef,
+  //   },
+  // ]
 
   const activeData = [
     // {
@@ -275,66 +349,67 @@ function Wallet(props) {
     //   sort: true,
     // },
     {
-      dataField: "rider_name",
-      text: "Rider name",
-      sort: true,
-      formatter: riderName,
+      selector: row => row.rider_name,
+      name: "Rider name",
+      sortable: true,
+      cell: riderName,
     },
     {
-      dataField: "date",
-      text: "Date",
-      sort: true,
+      selector: row => row.date,
+      name: "Date",
+      sortable: true,
     },
     {
-      dataField: "vehicle_type_name",
-      text: "Rider Type",
-      sort: true,
+      selector: row => row.rider_type,
+
+      name: "Rider Type",
+      sortable: true,
     },
     {
-      dataField: "total_order",
-      text: "Total Order",
-      sort: true,
+      selector: row => row.order_count,
+
+      name: "Total Order",
+      sortable: true,
     },
     {
-      dataField: "collected_amount",
-      text: "Collected amount",
-      sort: true,
-      formatter: collectedAmount,
+      selector: row => row.collected_amount,
+
+      name: "Collected amount",
+      sortable: true,
+      cell: collectedAmount,
     },
     {
-      dataField: "cash_in",
-      text: "Cash In",
-      sort: true,
-      formatter: cashInAmount,
+      selector: row => row.cash_in,
+
+      name: "Cash In",
+      sortable: true,
+      cell: cashInAmount,
     },
     {
-      dataField: "cash_out",
-      text: "Cash Out",
-      sort: true,
-      formatter: cashOutAmount,
+      selector: row => row.cash_out,
+
+      name: "Cash Out",
+      sortable: true,
+      cell: cashOutAmount,
     },
     {
-      dataField: "adjustment",
-      text: "Adjustment",
-      sort: true,
-      formatter: adjustmentAmount,
+      selector: row => row.adjustment,
+
+      name: "Adjustment",
+      sortable: true,
+      cell: adjustmentAmount,
     },
     {
-      dataField: "current_wallet_amount",
-      text: "Current Wallet amount",
-      sort: true,
-      formatter: currentWalletAmount,
+      selector: row => row.current_wallet_amount,
+
+      name: "Current Wallet amount",
+      sortable: true,
+      cell: currentWalletAmount,
     },
-    // {
-    //   dataField: "",
-    //   text: "Wallet Status",
-    //   sort: true,
-    //   formatter: statusRef,
-    // },
+
     {
       text: "Action",
-      sort: true,
-      formatter: actionRef,
+      cell: actionRef,
     },
   ]
   const defaultSorted = [
@@ -362,6 +437,8 @@ function Wallet(props) {
       props.walletUpdateFresh()
     }
   }, [props.wallet_edit_loading])
+
+  // console.log(props.get_server_side_pagination_wallet_data)
 
   return (
     <React.Fragment>
@@ -415,18 +492,17 @@ function Wallet(props) {
                   <form className="mt-1">
                     <Row>
                       <div className="mb-3 col-12 col-sm-6 col-md-3">
-                        <label className="form-label" htmlFor="name">
+                        <label className="form-label" htmlFor="rider_name">
                           Rider Name
                         </label>
                         <input
                           type="text"
                           className="form-control"
-                          id="name"
+                          id="rider_name"
                           placeholder="Serach by rider name"
-                          required
-                          name="name"
+                          name="rider_name"
                           onChange={e => handleFilter(e)}
-                          // value={editInfo.amount}
+                          value={pageFilters.rider_name}
                         />
                       </div>
                       <div className="mb-3 col-12 col-sm-6 col-md-3">
@@ -437,11 +513,9 @@ function Wallet(props) {
                           type="date"
                           className="form-control"
                           id="from"
-                          placeholder="Serach by rider name"
-                          required
                           name="from"
                           onChange={e => handleFilter(e)}
-                          // value={editInfo.amount}
+                          value={pageFilters.rider_name}
                         />
                       </div>
                       <div className="mb-3 col-12 col-sm-6 col-md-3">
@@ -452,32 +526,29 @@ function Wallet(props) {
                           type="date"
                           className="form-control"
                           id="to"
-                          placeholder="Serach by rider name"
-                          required
                           name="to"
                           onChange={e => handleFilter(e)}
-                          // value={editInfo.amount}
+                          value={pageFilters.to}
                         />
                       </div>
                       <div className="mb-3 col-12 col-sm-6 col-md-3">
-                        <label className="form-label" htmlFor="name">
-                          Rider Name
+                        <label className="form-label" htmlFor="zone_name">
+                          Zone Name
                         </label>
                         <input
                           type="text"
                           className="form-control"
-                          id="name"
-                          placeholder="Serach by rider name"
-                          required
-                          name="name"
+                          id="zone_name"
+                          placeholder="Serach by zone name"
+                          name="zone_name"
                           onChange={e => handleFilter(e)}
-                          // value={editInfo.amount}
+                          value={pageFilters.zone_name}
                         />
                       </div>
                     </Row>
                   </form>
 
-                  {props.get_all_wallet_data ? (
+                  {/* {props.get_all_wallet_data ? (
                     props.get_all_wallet_data?.length > 0 ? (
                       <DatatableTablesWorking
                         products={props.get_all_wallet_data}
@@ -485,16 +556,16 @@ function Wallet(props) {
                         defaultSorted={defaultSorted}
                       />
                     ) : null
-                  ) : null}
+                  ) : null} */}
 
-                  {/* <DataTable
+                  <DataTable
                     columns={activeData}
                     data={props?.get_server_side_pagination_wallet_data?.data}
                     highlightOnHover
                     pagination
                     paginationServer
                     paginationTotalRows={
-                      props.get_server_side_pagination_wallet_data?.count
+                      props?.get_server_side_pagination_wallet_data?.count
                     }
                     paginationPerPage={countPerPage}
                     paginationComponentOptions={paginationComponentOptions}
@@ -504,7 +575,7 @@ function Wallet(props) {
                       !props?.get_server_side_pagination_wallet_data
                     }
                     progressComponent={<CustomLoader />}
-                  /> */}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -841,7 +912,6 @@ export default withRouter(
     walletStatusUpdateAction,
     walletStatusUpdateFresh,
     getServerSidePaginationWalletAction,
-    getServerSidePaginationWalletSearchAction,
     getServerSidePaginationWalletFresh,
   })(Wallet)
 )

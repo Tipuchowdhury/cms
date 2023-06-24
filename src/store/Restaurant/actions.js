@@ -2024,7 +2024,8 @@ export const editAddOnCategoryFresh = () => {
 }
 
 export const getCategoryByBranchIdAction = id => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Category/GetByBranchId?id=" + id
+  var url =
+    process.env.REACT_APP_LOCALHOST + "/Category/GetByBranchId?branch_ids=" + id
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
