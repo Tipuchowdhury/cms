@@ -61,6 +61,7 @@ import {
   GET_CATEGORY_BY_ID,
   GET_CATEGORY_BY_ID_FRESH,
   SERVER_SIDE_PAGINATION_ZONE,
+  SERVER_SIDE_PAGINATION_ZONE_FRESH,
   SERVER_SIDE_PAGINATION_ZONE_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_ZONE_FRESH,
   SERVER_SIDE_PAGINATION_CUISINE,
@@ -391,6 +392,7 @@ const Restaurant = (state = initialState, action) => {
         ...state,
         edit_zone_status_loading: action.status,
         get_all_zone_loading: false,
+        get_server_side_pagination_zone_loading: false,
       }
       break
 
@@ -420,6 +422,7 @@ const Restaurant = (state = initialState, action) => {
         ...state,
         zone_delete_loading: action.status,
         get_all_zone_loading: false,
+        get_server_side_pagination_zone_loading: false,
       }
       break
     case DELETE_ZONE_FRESH:
@@ -818,6 +821,13 @@ const Restaurant = (state = initialState, action) => {
         ...state,
         get_server_side_pagination_zone_data: action.payload,
         get_server_side_pagination_zone_error: null,
+        get_server_side_pagination_zone_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_ZONE_FRESH:
+      state = {
+        ...state,
         get_server_side_pagination_zone_loading: action.status,
       }
       break

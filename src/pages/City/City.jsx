@@ -108,17 +108,17 @@ function City(props) {
     toggleDel()
   }
   const actionRef = (cell, row) => (
-    <div style={{ display: "flex", gap: 10 }}>
+    <div style={{ display: "flex", gap: 5 }}>
       <Button
         color="primary"
-        className="btn btn-primary waves-effect waves-light"
+        className="btn btn-sm waves-effect waves-light"
         onClick={() => handleEditCityName(cell, row)}
       >
         Edit
       </Button>{" "}
       <Button
         color="danger"
-        className="btn btn-danger waves-effect waves-light"
+        className="btn btn-sm waves-effect waves-light"
         onClick={() => handleDeleteModal(cell)}
       >
         Delete
@@ -129,7 +129,7 @@ function City(props) {
   const statusRef = (cell, row) => (
     <Button
       color={cell.is_active ? "success" : "secondary"}
-      className="btn waves-effect waves-light"
+      className="btn btn-sm waves-effect waves-light"
       onClick={() => handleStatusModal(cell)}
     >
       {cell.is_active ? "Active" : "Deactivate"}
@@ -148,7 +148,7 @@ function City(props) {
       cell: textRef,
     },
     {
-      dataField: "",
+      selector: row => row.is_active,
       name: "Status",
       sortable: true,
       cell: statusRef,
@@ -156,7 +156,7 @@ function City(props) {
     {
       //dataField: "he",
       name: "Action",
-      sortable: true,
+      // sortable: true,
       cell: actionRef,
     },
   ]
@@ -167,15 +167,22 @@ function City(props) {
     },
   ]
 
+  const customStyles = {
+    headCells: {
+      style: {
+        fontSize: "18px",
+      },
+    },
+  }
+
   // server side pagination
   const [page, setPage] = useState(1)
   const [countPerPage, setCountPerPage] = useState(10)
+  const [pageFilters, setPageFilters] = useState({})
   const handleFilter = e => {
-    if (e.target.value?.length > 0) {
-      props.getServerSidePaginationSearchAction(e.target.value)
-    } else {
-      props.getServerSidePaginationSearchFresh()
-    }
+    let name = e.target.name
+    let value = e.target.value
+    setPageFilters({ ...pageFilters, [name]: value })
   }
 
   const paginationComponentOptions = {
@@ -189,15 +196,22 @@ function City(props) {
   }
 
   console.log(props.get_server_side_pagination_data)
-  console.log(props.get_server_side_pagination_search_data)
+
   useEffect(() => {
     if (props.get_all_city_loading == false) {
       props.getAllCityAction()
     }
 
+    // if (props.get_server_side_pagination_loading == false) {
+    //   props.getServerSidePaginationAction(page, countPerPage)
+    //   props.serverSidePaginationFresh()
+    // }
+
+    props.getServerSidePaginationAction(page, countPerPage, pageFilters)
+
     if (props.get_server_side_pagination_loading == false) {
-      props.getServerSidePaginationAction(page, countPerPage)
-      props.serverSidePaginationFresh()
+      //console.log("I am in get all permis type loading ")
+      props.getServerSidePaginationAction(page, countPerPage, pageFilters)
     }
 
     if (props.add_city_loading === "Success") {
@@ -236,7 +250,7 @@ function City(props) {
       props.cityDeleteFresh()
     }
 
-    props.getServerSidePaginationAction(page, countPerPage)
+    // props.getServerSidePaginationAction(page, countPerPage)
   }, [
     props.add_city_loading,
     props.city_name_edit_loading,
@@ -245,6 +259,7 @@ function City(props) {
     props.get_server_side_pagination_loading,
     page,
     countPerPage,
+    pageFilters,
   ])
 
   return (
@@ -293,6 +308,8 @@ function City(props) {
                     <input
                       type="text"
                       placeholder="Search City"
+                      name="city_name"
+                      value={pageFilters.city_name}
                       style={{
                         padding: "10px",
                         borderRadius: "8px",
@@ -304,17 +321,18 @@ function City(props) {
                   <DataTable
                     //title="Employees"
                     columns={activeData}
+                    customStyles={customStyles}
                     data={
-                      props.get_server_side_pagination_search_data != null
-                        ? props.get_server_side_pagination_search_data?.data
+                      props.get_server_side_pagination_data != null
+                        ? props.get_server_side_pagination_data?.data
                         : props?.get_server_side_pagination_data?.data
                     }
                     highlightOnHover
                     pagination
                     paginationServer
                     paginationTotalRows={
-                      props.get_server_side_pagination_search_data != null
-                        ? props.get_server_side_pagination_search_data?.count
+                      props.get_server_side_pagination_data != null
+                        ? props.get_server_side_pagination_data?.count
                         : props.get_server_side_pagination_data?.count
                     }
                     paginationPerPage={countPerPage}

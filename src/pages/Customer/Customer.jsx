@@ -637,6 +637,7 @@ function Customer(props) {
                 </label>
                 <input
                   type="file"
+                  accept=".jpg, .jpeg, .bmp, .png, .webp"
                   className="form-control"
                   id="image"
                   required
@@ -762,6 +763,7 @@ function Customer(props) {
                 </label>
                 <input
                   type="file"
+                  accept=".jpg, .jpeg, .bmp, .png, .webp"
                   className="form-control"
                   id="image"
                   name="image"

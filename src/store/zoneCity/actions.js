@@ -222,11 +222,17 @@ export const cityDeleteFresh = () => {
     })
 }
 
-export const getServerSidePaginationAction = (index, limit) => {
+export const getServerSidePaginationAction = (index, limit, filters) => {
+  // var url =
+  //   process.env.REACT_APP_LOCALHOST +
+  //   `/City/Search?page=${index}&limit=${limit}`
+
+  filters = filters ? new URLSearchParams(filters).toString() : ""
+
   var url =
     process.env.REACT_APP_LOCALHOST +
-    `/City/Search?page=${index}&limit=${limit}`
-  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
+    `/City/Search?page=${index}&limit=${limit}${filters ? "&" + filters : ""}`
+
   const formData = {}
   return dispatch => {
     const headers = {

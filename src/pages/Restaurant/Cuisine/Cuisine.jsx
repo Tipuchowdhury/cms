@@ -485,6 +485,7 @@ function Cuisine(props) {
                 </label>
                 <input
                   type="file"
+                  accept=".jpg, .jpeg, .bmp, .png, .webp"
                   className="form-control"
                   name="image"
                   id="image"
@@ -654,6 +655,7 @@ function Cuisine(props) {
                 </label>
                 <input
                   type="file"
+                  accept=".jpg, .jpeg, .bmp, .png, .webp"
                   className="form-control"
                   name="image"
                   id="image"

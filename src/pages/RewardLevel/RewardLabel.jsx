@@ -33,8 +33,20 @@ function RewardLabel(props) {
 
   const [labelName, setLabelName] = useState("")
   const [thresholdValue, setthresholdValue] = useState("0")
+  const [editInfo, setEditInfo] = useState({})
   const [modal, setModal] = useState(false)
   const toggle = () => setModal(!modal)
+
+  const [modalApprovedUpdate, setModalApprovedUpdate] = useState(false)
+
+  const toggleApproved = () => setModalApprovedUpdate(!modalApprovedUpdate)
+
+  const handleApprovedModal = row => {
+    // console.log(row);
+    setEditInfo(row)
+
+    toggleApproved()
+  }
 
   let name, value
   const handleAddInputs = e => {
@@ -51,9 +63,9 @@ function RewardLabel(props) {
     setOptions(updatedList)
   }
 
-  const handleEdit = data => {
-    // e.preventDefault();
-    props.rewardLabelUpdateAction(data)
+  const handleEdit = e => {
+    e.preventDefault()
+    props.rewardLabelUpdateAction(editInfo)
   }
 
   const handleSubmit = e => {
@@ -91,7 +103,7 @@ function RewardLabel(props) {
 
     if (props.reward_label_edit_loading === "Success") {
       toast.success("Label Point Updated")
-      //toggleEditModal();
+      toggleApproved()
       props.rewardLabelUpdateFresh()
     }
 
@@ -171,7 +183,7 @@ function RewardLabel(props) {
                                 <Button
                                   color="primary"
                                   className="btn btn-sm waves-effect waves-light"
-                                  onClick={() => handleEdit(option)}
+                                  onClick={() => handleApprovedModal(option)}
                                 >
                                   Edit
                                 </Button>
@@ -188,56 +200,8 @@ function RewardLabel(props) {
           </Row>
         </Container>
 
-        {/* <Modal isOpen={modal} toggle={toggle} centered>
-          <ModalHeader toggle={toggle}>Add Reward Label</ModalHeader>
-          <ModalBody>
-            <form className="mt-1" onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className="form-label" htmlFor="name">
-                  Label Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="name"
-                  placeholder="Enter label name"
-                  required
-                  value={labelName}
-                  onChange={e => setLabelName(e.target.value)}
-                />
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label" htmlFor="threshold_value">
-                  Point
-                </label>
-                <input
-                  type="number"
-                  className="form-control"
-                  name="threshold_value"
-                  id="threshold_value"
-                  placeholder="Enter Point"
-                  value={thresholdValue}
-                  onChange={e => setthresholdValue(e.target.value)}
-                />
-              </div>
-
-              <div
-                style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
-              >
-                <Button color="secondary" onClick={toggle}>
-                  Cancel
-                </Button>{" "}
-                <Button color="primary" type="submit">
-                  Add
-                </Button>
-              </div>
-            </form>
-          </ModalBody>
-        </Modal> */}
-
         <Modal isOpen={modal} toggle={toggle} centered>
-          <ModalHeader toggle={toggle}>Add City</ModalHeader>
+          <ModalHeader toggle={toggle}>Add Label</ModalHeader>
           <ModalBody>
             <form className="mt-1" onSubmit={handleSubmit}>
               <div className="mb-3">
@@ -257,7 +221,7 @@ function RewardLabel(props) {
 
               <div className="mb-3">
                 <label className="form-label" htmlFor="threshold_value">
-                  Point <span className="text-danger">*</span>
+                  Upper Limit Point<span className="text-danger">*</span>
                 </label>
                 <input
                   type="number"
@@ -265,7 +229,7 @@ function RewardLabel(props) {
                   className="form-control"
                   name="threshold_value"
                   id="threshold_value"
-                  placeholder="Enter Point"
+                  placeholder="Enter upper limit point"
                   value={thresholdValue}
                   onChange={e => setthresholdValue(e.target.value)}
                 />
@@ -283,6 +247,34 @@ function RewardLabel(props) {
             </form>
           </ModalBody>
         </Modal>
+
+        {/* ============ status update modal starts=============== */}
+        <Modal isOpen={modalApprovedUpdate} toggle={toggleApproved} centered>
+          <ModalHeader
+            className="text-center"
+            style={{ textAlign: "center", margin: "0 auto" }}
+          >
+            <div className="icon-box">
+              <i
+                className="fa fa-exclamation-circle"
+                style={{ color: "#DCA218", fontSize: "40px" }}
+              ></i>
+            </div>
+            Are you sure?
+          </ModalHeader>
+          <ModalBody>
+            Do you want to update upper limit of {editInfo.name}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={toggleApproved}>
+              Cancel
+            </Button>{" "}
+            <Button color="primary" onClick={handleEdit}>
+              Update
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/* ============ status update modal ends=============== */}
       </div>
     </React.Fragment>
   )

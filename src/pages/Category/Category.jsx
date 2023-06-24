@@ -440,6 +440,7 @@ function Category(props) {
                 </label>
                 <input
                   type="file"
+                  accept=".jpg, .jpeg, .bmp, .png, .webp"
                   className="form-control"
                   name="image"
                   id="image"
@@ -525,6 +526,7 @@ function Category(props) {
                 </label>
                 <input
                   type="file"
+                  accept=".jpg, .jpeg, .bmp, .png, .webp"
                   className="form-control"
                   name="image"
                   id="image"

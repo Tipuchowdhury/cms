@@ -178,6 +178,31 @@ export const addCouponAction = (
     restaurants: [],
   }
 
+  // name: data.name,
+  // image: data.image,
+  // description: data.description,
+  // coupon_type_id: data.coupon_type_id,
+  // coupon_type_name: data.coupon_type_name,
+  // is_gradual: data.is_gradual,
+  // use_limit: data.use_limit,
+  // is_auto_apply: true,
+  // daily_use_limit: data.daily_use_limit,
+  // is_percent: data.is_percent,
+  // is_active: data.is_active,
+  // is_free_delivery: data.is_free_delivery,
+  // is_delivery: data.is_delivery,
+  // is_pickup: data.is_pickup,
+  // is_dine: data.is_dine,
+  // discount_in_amount: data.discount_in_amount,
+  // discount_in_percent: data.discount_in_percent,
+  // minimum_order_amount: data.minimum_order_amount,
+  // maximum_discount_amount: data.maximum_discount_amount,
+  // total_coupon: data.total_coupon,
+  // valid_time_in_a_day_start: data.valid_time_in_a_day_start,
+  // valid_time_in_a_day_end: data.valid_time_in_a_day_end,
+  // start_time: data.start_time,
+  // end_time: data.end_time,
+
   const formData = convertToFormData(dataObject)
   return dispatch => {
     console.log("-in the dispatch----")

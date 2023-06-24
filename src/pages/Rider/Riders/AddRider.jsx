@@ -557,6 +557,12 @@ function AddRider(props) {
       navigate("/riders")
     }
 
+    if (props.add_rider_loading == "Failed") {
+      // redirect
+      props.addRiderFresh()
+      setSubmitDisabled(false)
+    }
+
     if (props.rider_edit_loading === "Success") {
       toast.success("Rider edited Successfully")
       // redirect
@@ -721,6 +727,7 @@ function AddRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="image"
                         name="image"
@@ -771,6 +778,7 @@ function AddRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="nid_front"
                         name="nid_front"
@@ -803,6 +811,7 @@ function AddRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="nid_back"
                         name="nid_back"
@@ -931,6 +940,7 @@ function AddRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="driving_license_image"
                         name="driving_license_image"
@@ -982,6 +992,7 @@ function AddRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="vehicle_registration_image"
                         name="vehicle_registration_image"
@@ -1227,6 +1238,7 @@ function AddRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="referer_nid_front"
                         name="referer_nid_front"
@@ -1258,6 +1270,7 @@ function AddRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="referer_nid_back"
                         name="referer_nid_back"
@@ -1289,6 +1302,7 @@ function AddRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="guardian_nid_front"
                         name="guardian_nid_front"
@@ -1320,6 +1334,7 @@ function AddRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="guardian_nid_back"
                         name="guardian_nid_back"
@@ -1351,6 +1366,7 @@ function AddRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="electricity_bill"
                         name="electricity_bill"
@@ -1382,6 +1398,7 @@ function AddRider(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="house_nameplate"
                         name="house_nameplate"
