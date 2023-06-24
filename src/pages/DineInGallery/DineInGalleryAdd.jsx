@@ -115,7 +115,7 @@ function DineInGalleryAdd(props) {
       orginalFile: [],
       maxFileSize: 5242880,
       label: "Max file size 5mb for each. Accepted file type jpg, jpeg, png",
-      imgExtension: [".jpg", ".png", ".jpeg"],
+      imgExtension: [".jpg", ".png", ".jpeg", ".webp", ".bmp"],
       defaultImages: [],
     },
   })
@@ -222,6 +222,7 @@ function DineInGalleryAdd(props) {
                   <div className="col-md-10">
                     <input
                       type="file"
+                      accept=".jpg, .jpeg, .bmp, .png, .webp"
                       className="form-control"
                       id="thumbnail_image"
                       placeholder="Enter category description"

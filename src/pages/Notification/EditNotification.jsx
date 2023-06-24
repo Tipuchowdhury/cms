@@ -278,6 +278,7 @@ function EditNotification(props) {
                     <div className="col-md-10">
                       <input
                         type="file"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         className="form-control"
                         id="image"
                         name="image"

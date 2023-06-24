@@ -125,11 +125,6 @@ function Permissions(props) {
   }
 
   const pathForEdit = nn => {
-    // console.log(nn);
-    // console.log(props?.get_all_branch_data);
-    // const common_permissions = props?.get_all_permission_data?.filter((elem) => nn?.find(({ permission_id }) => elem._id === permission_id));
-    //console.log(common_restaurants);
-
     const selectedPath = nn
       ? nn.map((item, key) => {
           return { path: item.path }

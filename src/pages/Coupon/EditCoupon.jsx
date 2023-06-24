@@ -68,10 +68,10 @@ function EditCoupon(props) {
       label: "Menu Item Wise",
       value: "menu_item_wise",
     },
-    {
-      label: "Subscription Type Wise",
-      value: "subscription_wise",
-    },
+    // {
+    //   label: "Subscription Type Wise",
+    //   value: "subscription_wise",
+    // },
   ])
 
   const [disabledDiscountAmount, setDisabledDiscountAmount] = useState(
@@ -407,6 +407,10 @@ function EditCoupon(props) {
       props?.get_coupon_by_id_data != undefined
         ? props?.get_coupon_by_id_data.is_dine
         : false,
+    is_free_delivery:
+      props?.get_coupon_by_id_data != undefined
+        ? props?.get_coupon_by_id_data.is_free_delivery
+        : false,
     is_active:
       props?.get_coupon_by_id_data != undefined
         ? props?.get_coupon_by_id_data.is_active
@@ -521,7 +525,16 @@ function EditCoupon(props) {
     // console.log(e);
     name = e.target.name
     checked = e.target.checked
-    setCouponInfo({ ...couponInfo, [name]: checked })
+    // setCouponInfo({ ...couponInfo, [name]: checked })
+    if (name == "is_free_delivery" && checked == true) {
+      setCouponInfo({
+        ...couponInfo,
+        is_free_delivery: checked,
+        is_auto_apply: "true",
+      })
+    } else {
+      setCouponInfo({ ...couponInfo, [name]: checked })
+    }
   }
 
   const handleSubmitForEdit = e => {
@@ -635,6 +648,10 @@ function EditCoupon(props) {
         is_delivery: props.get_coupon_by_id_data.is_delivery,
         is_pickup: props.get_coupon_by_id_data.is_pickup,
         is_dine: props.get_coupon_by_id_data.is_dine,
+        is_free_delivery: props.get_coupon_by_id_data.is_free_delivery
+          ? props.get_coupon_by_id_data.is_free_delivery
+          : false,
+
         discount_in_amount: props.get_coupon_by_id_data.discount_in_amount,
         discount_in_percent: props.get_coupon_by_id_data.discount_in_percent,
         minimum_order_amount: props.get_coupon_by_id_data.minimum_order_amount,
@@ -864,25 +881,6 @@ function EditCoupon(props) {
                       />
                     </div>
                   </Row>
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Type <span className="text-danger">*</span>
-                    </label>
-                    <div className="col-md-10">
-                      <Select
-                        value={selectedCouponType}
-                        onChange={handleSelectCouponType}
-                        options={couponTypes}
-                        isMulti={false}
-                        required
-                      />
-                    </div>
-                  </Row>
-
                   <Row className="mb-3">
                     <label
                       htmlFor="example-text-input"
@@ -901,6 +899,7 @@ function EditCoupon(props) {
                       ></textarea>
                     </div>
                   </Row>
+
                   <Row className="mb-3">
                     <label htmlFor="image" className="col-md-2 col-form-label">
                       Image
@@ -909,6 +908,7 @@ function EditCoupon(props) {
                       <input
                         type="file"
                         className="form-control"
+                        accept=".jpg, .jpeg, .bmp, .png, .webp"
                         id="image"
                         name="image"
                         onChange={handleFiles}
@@ -929,6 +929,24 @@ function EditCoupon(props) {
                       </div>
                     </Row>
                   )}
+
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="example-text-input"
+                      className="col-md-2 col-form-label"
+                    >
+                      Type <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-10">
+                      <Select
+                        value={selectedCouponType}
+                        onChange={handleSelectCouponType}
+                        options={couponTypes}
+                        isMulti={false}
+                        required
+                      />
+                    </div>
+                  </Row>
 
                   {selectedCouponType?.value == "branch_wise" ? (
                     <Row className="mb-3">
@@ -1062,7 +1080,7 @@ function EditCoupon(props) {
                     ""
                   )}
 
-                  {selectedCouponType?.value == "subscription_wise" ? (
+                  {selectedCouponType?.value != "user_wise" ? (
                     <Row className="mb-3">
                       <label
                         htmlFor="example-text-input"
@@ -1076,372 +1094,6 @@ function EditCoupon(props) {
                           onChange={handleSelectSubType}
                           options={subTypeData}
                           isMulti={true}
-                          required
-                        />
-                      </div>
-                    </Row>
-                  ) : (
-                    ""
-                  )}
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Auto Apply
-                    </label>
-                    <div className="col-md-10">
-                      <div className="btn-group" role="group">
-                        <input
-                          type="radio"
-                          className="btn-check"
-                          id="is_auto_apply"
-                          name="is_auto_apply"
-                          value="true"
-                          onChange={handleInputs}
-                          checked={couponInfo.is_auto_apply == "true"}
-                        />
-                        <label
-                          className="btn btn-outline-secondary"
-                          htmlFor="is_auto_apply"
-                        >
-                          Yes
-                        </label>
-
-                        <input
-                          type="radio"
-                          className="btn-check"
-                          name="is_auto_apply"
-                          value="false"
-                          onChange={handleInputs}
-                          id="is_auto_apply1"
-                          checked={couponInfo.is_auto_apply == "false"}
-                        />
-                        <label
-                          className="btn btn-outline-secondary"
-                          htmlFor="is_auto_apply1"
-                        >
-                          No
-                        </label>
-                      </div>
-                    </div>
-                  </Row>
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Use Limit
-                    </label>
-                    <div className="col-md-10">
-                      <input
-                        type="number"
-                        className="form-control"
-                        id="use_limit"
-                        placeholder="Enter Use Limit"
-                        name="use_limit"
-                        onChange={handleInputs}
-                        value={couponInfo.use_limit ?? ""}
-                      />
-                    </div>
-                  </Row>
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Daily Use Limit <span className="text-danger">*</span>
-                    </label>
-                    <div className="col-md-10">
-                      <input
-                        type="number"
-                        className="form-control"
-                        id="daily_use_limit"
-                        placeholder="Enter Daily Use Limit"
-                        name="daily_use_limit"
-                        onChange={handleInputs}
-                        value={couponInfo.daily_use_limit ?? ""}
-                        required
-                      />
-                    </div>
-                  </Row>
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Gradual
-                    </label>
-                    <div className="col-md-10">
-                      <div className="btn-group" role="group">
-                        <input
-                          type="radio"
-                          className="btn-check"
-                          id="is_gradual"
-                          name="is_gradual"
-                          value="true"
-                          onChange={handleInputs}
-                          checked={couponInfo.is_gradual == "true"}
-                        />
-                        <label
-                          className="btn btn-outline-secondary"
-                          htmlFor="is_gradual"
-                        >
-                          Yes
-                        </label>
-
-                        <input
-                          type="radio"
-                          className="btn-check"
-                          name="is_gradual"
-                          value="false"
-                          onChange={handleInputs}
-                          id="is_gradual1"
-                          checked={couponInfo.is_gradual == "false"}
-                        />
-                        <label
-                          className="btn btn-outline-secondary"
-                          htmlFor="is_gradual1"
-                        >
-                          No
-                        </label>
-                      </div>
-                    </div>
-                  </Row>
-                  {couponInfo?.is_gradual == "true" ? (
-                    <Row className="mb-1">
-                      <label
-                        htmlFor="example-text-input"
-                        className="col-md-3 col-form-label"
-                      >
-                        Gradual Information
-                      </label>
-                    </Row>
-                  ) : (
-                    ""
-                  )}
-
-                  {gradual.map((row, idx) => (
-                    <React.Fragment key={idx}>
-                      {couponInfo.is_gradual == "true" ? (
-                        <div data-repeater-list="group-a" id={"addr" + idx}>
-                          <div data-repeater-item className="row">
-                            <div className="mb-3 col-lg-3">
-                              <label className="form-label" htmlFor="sequence">
-                                Sequence <span className="text-danger">*</span>
-                              </label>
-                              <input
-                                type="number"
-                                id="sequence"
-                                className="form-control"
-                                name="sequence"
-                                placeholder="Sequence"
-                                value={row.sequence}
-                                onChange={e => handleGradualChange(e, idx)}
-                                required
-                              />
-                            </div>
-
-                            <div className="mb-3 col-lg-3">
-                              <label
-                                className="form-label"
-                                htmlFor="discount_percent"
-                              >
-                                Discount (%){" "}
-                                <span className="text-danger">*</span>
-                              </label>
-                              <input
-                                type="number"
-                                step={0.25}
-                                id="discount_percent"
-                                className="form-control"
-                                name="discount_percent"
-                                placeholder="Discount"
-                                min="0"
-                                value={row.discount_percent}
-                                onChange={e => handleGradualChange(e, idx)}
-                                required
-                              />
-                            </div>
-
-                            <Col
-                              lg={2}
-                              className="align-self-center d-grid mt-3"
-                            >
-                              <input
-                                data-repeater-delete
-                                type="button"
-                                className="btn btn-primary"
-                                value="Delete"
-                                onClick={() => handleRowDelete(idx)}
-                              />
-                            </Col>
-                          </div>
-                        </div>
-                      ) : (
-                        ""
-                      )}
-                    </React.Fragment>
-                  ))}
-                  {couponInfo?.is_gradual == "true" ? (
-                    <Button
-                      onClick={() => {
-                        handleAddRowNested()
-                      }}
-                      color="success"
-                      className="btn btn-success mt-3 mt-lg-0"
-                    >
-                      Add
-                    </Button>
-                  ) : (
-                    ""
-                  )}
-
-                  {couponInfo?.is_gradual == "false" ? (
-                    <>
-                      <Row className="mb-3">
-                        <label
-                          htmlFor="example-text-input"
-                          className="col-md-2 col-form-label"
-                        >
-                          Discount Type
-                        </label>
-                        <div className="col-md-10">
-                          <div className="btn-group" role="group">
-                            <input
-                              type="radio"
-                              className="btn-check"
-                              id="is_percent"
-                              name="is_percent"
-                              value="true"
-                              onChange={handleInputs}
-                              checked={couponInfo.is_percent == "true"}
-                            />
-                            <label
-                              className="btn btn-outline-secondary"
-                              htmlFor="is_percent"
-                            >
-                              Percent
-                            </label>
-
-                            <input
-                              type="radio"
-                              className="btn-check"
-                              name="is_percent"
-                              value="false"
-                              onChange={handleInputs}
-                              id="is_percent1"
-                              checked={couponInfo.is_percent == "false"}
-                            />
-                            <label
-                              className="btn btn-outline-secondary"
-                              htmlFor="is_percent1"
-                            >
-                              Amount
-                            </label>
-                          </div>
-                        </div>
-                      </Row>
-
-                      {couponInfo?.is_percent == "false" ? (
-                        <Row className="mb-3">
-                          <label
-                            htmlFor="example-text-input"
-                            className="col-md-2 col-form-label"
-                          >
-                            Discount <span className="text-danger">*</span>
-                          </label>
-                          <div className="col-md-10">
-                            <input
-                              type="number"
-                              className="form-control"
-                              id="discount_in_amount"
-                              placeholder="Enter Discount"
-                              name="discount_in_amount"
-                              onChange={handleInputs}
-                              value={couponInfo.discount_in_amount ?? ""}
-                              required
-                            />
-                          </div>
-                        </Row>
-                      ) : (
-                        ""
-                      )}
-
-                      {couponInfo?.is_percent == "true" ? (
-                        <Row className="mb-3">
-                          <label
-                            htmlFor="example-text-input"
-                            className="col-md-2 col-form-label"
-                          >
-                            Discount (%) <span className="text-danger">*</span>
-                          </label>
-                          <div className="col-md-10">
-                            <input
-                              type="number"
-                              className="form-control"
-                              id="discount_in_percent"
-                              placeholder="Enter Discount in Percent"
-                              name="discount_in_percent"
-                              onChange={handleInputs}
-                              value={couponInfo.discount_in_percent ?? ""}
-                              required
-                            />
-                          </div>
-                        </Row>
-                      ) : (
-                        ""
-                      )}
-                    </>
-                  ) : (
-                    ""
-                  )}
-
-                  <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Minimum Order Amount{" "}
-                      <span className="text-danger">*</span>
-                    </label>
-                    <div className="col-md-10">
-                      <input
-                        type="number"
-                        className="form-control"
-                        id="minimum_order_amount"
-                        placeholder="Minimum Order Amount"
-                        name="minimum_order_amount"
-                        onChange={handleInputs}
-                        value={couponInfo.minimum_order_amount ?? ""}
-                        required
-                      />
-                    </div>
-                  </Row>
-
-                  {couponInfo?.is_gradual == "true" ||
-                  couponInfo?.is_percent == "true" ? (
-                    <Row className="mb-3">
-                      <label
-                        htmlFor="example-text-input"
-                        className="col-md-2 col-form-label"
-                      >
-                        Maximum Discount Amount{" "}
-                        <span className="text-danger">*</span>
-                      </label>
-                      <div className="col-md-10">
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="maximum_discount_amount"
-                          placeholder="Maximum Discount Amount"
-                          name="maximum_discount_amount"
-                          onChange={handleInputs}
-                          value={couponInfo.maximum_discount_amount ?? ""}
                           required
                         />
                       </div>
@@ -1500,6 +1152,408 @@ function EditCoupon(props) {
                           onChange={handleCheckBox}
                         />
                       </div>
+                    </div>
+
+                    <div className="col-sm-4">
+                      <div className="form-check">
+                        <label
+                          className="form-check-label"
+                          htmlFor="is_free_delivery"
+                        >
+                          Free Delivery
+                        </label>
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id="is_free_delivery"
+                          checked={couponInfo.is_free_delivery}
+                          name="is_free_delivery"
+                          onChange={handleCheckBox}
+                        />
+                      </div>
+                    </div>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="example-text-input"
+                      className="col-md-2 col-form-label"
+                    >
+                      Auto Apply
+                    </label>
+                    <div className="col-md-10">
+                      <div className="btn-group" role="group">
+                        <input
+                          type="radio"
+                          className="btn-check"
+                          id="is_auto_apply"
+                          disabled={
+                            couponInfo.is_free_delivery == true ? true : false
+                          }
+                          name="is_auto_apply"
+                          value="true"
+                          onChange={handleInputs}
+                          checked={couponInfo.is_auto_apply == "true"}
+                        />
+                        <label
+                          className="btn btn-outline-secondary"
+                          htmlFor="is_auto_apply"
+                        >
+                          Yes
+                        </label>
+
+                        <input
+                          type="radio"
+                          className="btn-check"
+                          name="is_auto_apply"
+                          value="false"
+                          disabled={
+                            couponInfo.is_free_delivery == true ? true : false
+                          }
+                          onChange={handleInputs}
+                          id="is_auto_apply1"
+                          checked={couponInfo.is_auto_apply == "false"}
+                        />
+                        <label
+                          className="btn btn-outline-secondary"
+                          htmlFor="is_auto_apply1"
+                        >
+                          No
+                        </label>
+                      </div>
+                    </div>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="example-text-input"
+                      className="col-md-2 col-form-label"
+                    >
+                      Use Limit
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="use_limit"
+                        placeholder="Enter Use Limit"
+                        name="use_limit"
+                        onChange={handleInputs}
+                        value={couponInfo.use_limit ?? ""}
+                      />
+                    </div>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="example-text-input"
+                      className="col-md-2 col-form-label"
+                    >
+                      Daily Use Limit <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="daily_use_limit"
+                        placeholder="Enter Daily Use Limit"
+                        name="daily_use_limit"
+                        onChange={handleInputs}
+                        value={couponInfo.daily_use_limit ?? ""}
+                        required
+                      />
+                    </div>
+                  </Row>
+
+                  {couponInfo.is_free_delivery == false ? (
+                    <>
+                      <Row className="mb-3">
+                        <label
+                          htmlFor="example-text-input"
+                          className="col-md-2 col-form-label"
+                        >
+                          Gradual
+                        </label>
+                        <div className="col-md-10">
+                          <div className="btn-group" role="group">
+                            <input
+                              type="radio"
+                              className="btn-check"
+                              id="is_gradual"
+                              name="is_gradual"
+                              value="true"
+                              onChange={handleInputs}
+                              checked={couponInfo.is_gradual == "true"}
+                            />
+                            <label
+                              className="btn btn-outline-secondary"
+                              htmlFor="is_gradual"
+                            >
+                              Yes
+                            </label>
+
+                            <input
+                              type="radio"
+                              className="btn-check"
+                              name="is_gradual"
+                              value="false"
+                              onChange={handleInputs}
+                              id="is_gradual1"
+                              checked={couponInfo.is_gradual == "false"}
+                            />
+                            <label
+                              className="btn btn-outline-secondary"
+                              htmlFor="is_gradual1"
+                            >
+                              No
+                            </label>
+                          </div>
+                        </div>
+                      </Row>
+                      {couponInfo?.is_gradual == "true" ? (
+                        <Row className="mb-1">
+                          <label
+                            htmlFor="example-text-input"
+                            className="col-md-3 col-form-label"
+                          >
+                            Gradual Information
+                          </label>
+                        </Row>
+                      ) : (
+                        ""
+                      )}
+
+                      {gradual.map((row, idx) => (
+                        <React.Fragment key={idx}>
+                          {couponInfo.is_gradual == "true" ? (
+                            <div data-repeater-list="group-a" id={"addr" + idx}>
+                              <div data-repeater-item className="row">
+                                <div className="mb-3 col-lg-3">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="sequence"
+                                  >
+                                    Sequence{" "}
+                                    <span className="text-danger">*</span>
+                                  </label>
+                                  <input
+                                    type="number"
+                                    id="sequence"
+                                    className="form-control"
+                                    name="sequence"
+                                    placeholder="Sequence"
+                                    value={row.sequence}
+                                    onChange={e => handleGradualChange(e, idx)}
+                                    required
+                                  />
+                                </div>
+
+                                <div className="mb-3 col-lg-3">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="discount_percent"
+                                  >
+                                    Discount (%){" "}
+                                    <span className="text-danger">*</span>
+                                  </label>
+                                  <input
+                                    type="number"
+                                    step={0.25}
+                                    id="discount_percent"
+                                    className="form-control"
+                                    name="discount_percent"
+                                    placeholder="Discount"
+                                    min="0"
+                                    value={row.discount_percent}
+                                    onChange={e => handleGradualChange(e, idx)}
+                                    required
+                                  />
+                                </div>
+
+                                <Col
+                                  lg={2}
+                                  className="align-self-center d-grid mt-3"
+                                >
+                                  <input
+                                    data-repeater-delete
+                                    type="button"
+                                    className="btn btn-primary"
+                                    value="Delete"
+                                    onClick={() => handleRowDelete(idx)}
+                                  />
+                                </Col>
+                              </div>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                        </React.Fragment>
+                      ))}
+                      {couponInfo?.is_gradual == "true" ? (
+                        <Button
+                          onClick={() => {
+                            handleAddRowNested()
+                          }}
+                          color="success"
+                          className="btn btn-success mt-3 mt-lg-0"
+                        >
+                          Add
+                        </Button>
+                      ) : (
+                        ""
+                      )}
+
+                      {couponInfo?.is_gradual == "false" ? (
+                        <>
+                          <Row className="mb-3">
+                            <label
+                              htmlFor="example-text-input"
+                              className="col-md-2 col-form-label"
+                            >
+                              Discount Type
+                            </label>
+                            <div className="col-md-10">
+                              <div className="btn-group" role="group">
+                                <input
+                                  type="radio"
+                                  className="btn-check"
+                                  id="is_percent"
+                                  name="is_percent"
+                                  value="true"
+                                  onChange={handleInputs}
+                                  checked={couponInfo.is_percent == "true"}
+                                />
+                                <label
+                                  className="btn btn-outline-secondary"
+                                  htmlFor="is_percent"
+                                >
+                                  Percent
+                                </label>
+
+                                <input
+                                  type="radio"
+                                  className="btn-check"
+                                  name="is_percent"
+                                  value="false"
+                                  onChange={handleInputs}
+                                  id="is_percent1"
+                                  checked={couponInfo.is_percent == "false"}
+                                />
+                                <label
+                                  className="btn btn-outline-secondary"
+                                  htmlFor="is_percent1"
+                                >
+                                  Amount
+                                </label>
+                              </div>
+                            </div>
+                          </Row>
+
+                          {couponInfo?.is_percent == "false" ? (
+                            <Row className="mb-3">
+                              <label
+                                htmlFor="example-text-input"
+                                className="col-md-2 col-form-label"
+                              >
+                                Discount <span className="text-danger">*</span>
+                              </label>
+                              <div className="col-md-10">
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  id="discount_in_amount"
+                                  placeholder="Enter Discount"
+                                  name="discount_in_amount"
+                                  onChange={handleInputs}
+                                  value={couponInfo.discount_in_amount ?? ""}
+                                  required
+                                />
+                              </div>
+                            </Row>
+                          ) : (
+                            ""
+                          )}
+
+                          {couponInfo?.is_percent == "true" ? (
+                            <Row className="mb-3">
+                              <label
+                                htmlFor="example-text-input"
+                                className="col-md-2 col-form-label"
+                              >
+                                Discount (%){" "}
+                                <span className="text-danger">*</span>
+                              </label>
+                              <div className="col-md-10">
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  id="discount_in_percent"
+                                  placeholder="Enter Discount in Percent"
+                                  name="discount_in_percent"
+                                  onChange={handleInputs}
+                                  value={couponInfo.discount_in_percent ?? ""}
+                                  required
+                                />
+                              </div>
+                            </Row>
+                          ) : (
+                            ""
+                          )}
+                        </>
+                      ) : (
+                        ""
+                      )}
+
+                      {couponInfo?.is_gradual == "true" ||
+                      couponInfo?.is_percent == "true" ? (
+                        <Row className="mb-3">
+                          <label
+                            htmlFor="example-text-input"
+                            className="col-md-2 col-form-label"
+                          >
+                            Maximum Discount Amount{" "}
+                            <span className="text-danger">*</span>
+                          </label>
+                          <div className="col-md-10">
+                            <input
+                              type="number"
+                              className="form-control"
+                              id="maximum_discount_amount"
+                              placeholder="Maximum Discount Amount"
+                              name="maximum_discount_amount"
+                              onChange={handleInputs}
+                              value={couponInfo.maximum_discount_amount ?? ""}
+                              required
+                            />
+                          </div>
+                        </Row>
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  ) : (
+                    ""
+                  )}
+
+                  <Row className="mb-3">
+                    <label
+                      htmlFor="example-text-input"
+                      className="col-md-2 col-form-label"
+                    >
+                      Minimum Order Amount{" "}
+                      <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="minimum_order_amount"
+                        placeholder="Minimum Order Amount"
+                        name="minimum_order_amount"
+                        onChange={handleInputs}
+                        value={couponInfo.minimum_order_amount ?? ""}
+                        required
+                      />
                     </div>
                   </Row>
 

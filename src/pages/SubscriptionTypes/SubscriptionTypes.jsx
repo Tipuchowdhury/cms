@@ -49,22 +49,84 @@ function SubscriptionTypes(props) {
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
 
   const [addInfo, setAddInfo] = useState({
-    subscriptionTypeId: "",
-    subscriptionTypeName: "",
+    name: "",
+    subscription_fee: "",
+    subscribe_for_in_days: "",
+    is_premium: false,
+    is_active: true,
   })
 
   const [editInfo, setEditInfo] = useState({
-    subscriptionTypeId: "",
-    subscriptionTypeName: "",
-    isActive: true,
+    _id: "",
+    name: "",
+    subscription_fee: "",
+    subscribe_for_in_days: "",
+    is_premium: false,
+    is_active: true,
   })
+
+  const detailsTemplate = { details: "" }
+
+  const [details, setDetails] = useState([detailsTemplate])
+  const [detailsEdit, setDetailsEdit] = useState([detailsTemplate])
+
+  const detailsForEdit = nn => {
+    const selectedDetails = nn
+      ? nn.map((item, key) => {
+          return { details: item }
+        })
+      : []
+
+    setDetailsEdit(selectedDetails)
+  }
+
+  const handleDetails = (e, index) => {
+    // console.log(index);
+    const updatedValue = details.map((row, i) =>
+      index === i
+        ? Object.assign(row, { [e.target.name]: e.target.value })
+        : row
+    )
+    setDetails(updatedValue)
+  }
+
+  const handleDetailsEdit = (e, index) => {
+    // console.log(e);
+    const updatedValue = detailsEdit.map((row, i) =>
+      index === i
+        ? Object.assign(row, { [e.target.name]: e.target.value })
+        : row
+    )
+    setDetailsEdit(updatedValue)
+  }
+
+  function handleAddRowNested() {
+    setDetails([...details, detailsTemplate])
+  }
+
+  function handleEditRowNested() {
+    setDetailsEdit([...detailsEdit, detailsTemplate])
+  }
+
+  const handleRowDelete = index => {
+    const filteredTime = [...details]
+    if (filteredTime.length > 1) {
+      filteredTime.splice(index, 1)
+      setDetails(filteredTime)
+    }
+  }
+
+  const handleRowEditDelete = index => {
+    const filteredTime = [...detailsEdit]
+    if (filteredTime.length > 1) {
+      filteredTime.splice(index, 1)
+      setDetailsEdit(filteredTime)
+    }
+  }
 
   const [deleteItem, setDeleteItem] = useState()
 
-  const [statusItem, setStatusItem] = useState({
-    subscriptionTypeId: "",
-    is_active: "",
-  })
+  const [statusItem, setStatusItem] = useState({})
 
   let name, value, checked
   const handleInputs = e => {
@@ -86,6 +148,12 @@ function SubscriptionTypes(props) {
     name = e.target.name
     checked = e.target.checked
     setAddInfo({ ...addInfo, [name]: checked })
+  }
+
+  const handleEditCheckBox = e => {
+    // console.log(e);
+    name = e.target.name
+    checked = e.target.checked
     setEditInfo({ ...editInfo, [name]: checked })
   }
 
@@ -93,24 +161,29 @@ function SubscriptionTypes(props) {
     e.preventDefault()
     const val = uuidv4()
 
-    props.addSubscriptionTypeAction(addInfo)
+    props.addSubscriptionTypeAction(val, addInfo, details)
   }
 
   const handleEditSubscriptionType = row => {
     // console.log(row);
 
     setEditInfo(prevState => ({
-      subscriptionTypeId: row._id,
-      subscriptionTypeName: row.name,
-      isActive: row.is_active,
+      _id: row._id,
+      name: row.name,
+      subscription_fee: row.subscription_fee,
+      subscribe_for_in_days: row.subscribe_for_in_days,
+      is_premium: row.is_premium,
+      is_active: row.is_active,
     }))
+
+    detailsForEdit(row.details)
 
     toggleEditModal()
   }
 
   const handleEdit = e => {
     e.preventDefault()
-    props.subscriptionTypeUpdateAction(editInfo)
+    props.subscriptionTypeUpdateAction(editInfo, detailsEdit)
 
     //toggleEditModal();
   }
@@ -126,18 +199,18 @@ function SubscriptionTypes(props) {
   }
 
   const handleStatusModal = row => {
-    setEditInfo(prevState => ({
-      subscriptionTypeId: row._id,
-      subscriptionTypeName: row.name,
-      isActive: row.is_active,
-    }))
+    setStatusItem(row)
 
     toggleStatus()
   }
 
   const handleStatusUpdate = () => {
     // console.log(statusItem);
-    props.subscriptionTypeStatusUpdateAction(editInfo)
+    props.subscriptionTypeStatusUpdateAction({
+      ...statusItem,
+      is_active: !statusItem.is_active,
+    })
+
     // toggleDel();
   }
 
@@ -209,16 +282,11 @@ function SubscriptionTypes(props) {
       toggle()
       setAddInfo({
         ...addInfo,
-        subscriptionTypeId: "",
-        subscriptionTypeName: "",
-        freeDeliveryAmountLimit: 0,
-        freeDeliveryOrderLimit: 0,
-        pickupDiscountAmountLimit: 0,
-        pickupDiscountOrderLimit: 0,
-        deliveryFree: false,
-        unlimitedFreeDelivery: false,
-        pickupDiscount: false,
-        unlimitedPickupDiscount: false,
+        name: "",
+        subscription_fee: "",
+        subscribe_for_in_days: "",
+        is_premium: false,
+        is_active: true,
       })
       props.addSubscriptionTypeFresh()
     }
@@ -324,20 +392,120 @@ function SubscriptionTypes(props) {
           <ModalBody>
             <form className="mt-1" onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className="form-label" htmlFor="subscriptionTypeName">
+                <label className="form-label" htmlFor="name">
                   Subscription Type Name <span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="subscriptionTypeName"
+                  id="name"
                   placeholder="Enter subscription type name"
                   required
-                  name="subscriptionTypeName"
-                  value={addInfo.subscriptionTypeName}
+                  name="name"
+                  value={addInfo.name}
                   onChange={handleInputs}
                 />
               </div>
+              <div className="mb-3">
+                <label className="form-label" htmlFor="subscription_fee">
+                  Subscription fee <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  className="form-control"
+                  id="subscription_fee"
+                  placeholder="Enter subscription fee"
+                  required
+                  name="subscription_fee"
+                  value={addInfo.subscription_fee}
+                  onChange={handleInputs}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label" htmlFor="subscribe_for_in_days">
+                  Subscribe for in days <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  className="form-control"
+                  id="subscribe_for_in_days"
+                  placeholder="Enter subscribe for in days"
+                  required
+                  name="subscribe_for_in_days"
+                  value={addInfo.subscribe_for_in_days}
+                  onChange={handleInputs}
+                />
+              </div>
+
+              <div className="mb-3 form-check">
+                <label className="form-check-label" htmlFor="is_premium">
+                  Premium
+                </label>
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="is_premium"
+                  checked={addInfo.is_premium}
+                  name="is_premium"
+                  onChange={handleCheckBox}
+                />
+              </div>
+
+              {details.map((row, idx) => (
+                <React.Fragment key={idx}>
+                  <div data-repeater-list="group-a" id={"addr" + idx}>
+                    <div data-repeater-item className="row">
+                      <div className="mb-3 col-lg-10">
+                        <label className="form-label" htmlFor="details">
+                          Details
+                        </label>
+
+                        <textarea
+                          id="details"
+                          className="form-control"
+                          name="details"
+                          placeholder="Details"
+                          // defaultValue={row.details}
+                          rows="2"
+                          cols="2"
+                          value={row.details}
+                          onChange={e => handleDetails(e, idx)}
+                        ></textarea>
+                        {/* <input
+                          type="text"
+                          id="details"
+                          className="form-control"
+                          name="details"
+                          placeholder="Details"
+                          value={row.details}
+                          onChange={e => handleDetails(e, idx)}
+                        /> */}
+                      </div>
+
+                      <Col lg={2} className="align-self-center d-grid mt-3">
+                        <input
+                          data-repeater-delete
+                          type="button"
+                          className="btn btn-primary"
+                          value="Delete"
+                          onClick={() => handleRowDelete(idx)}
+                        />
+                      </Col>
+                    </div>
+                  </div>
+                </React.Fragment>
+              ))}
+              <Button
+                onClick={() => {
+                  handleAddRowNested()
+                }}
+                color="success"
+                className="btn btn-success mt-3 mt-lg-0"
+              >
+                Add
+              </Button>
 
               <div
                 style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
@@ -360,20 +528,120 @@ function SubscriptionTypes(props) {
           <ModalBody>
             <form className="mt-1" onSubmit={handleEdit}>
               <div className="mb-3">
-                <label className="form-label" htmlFor="subscriptionTypeName">
+                <label className="form-label" htmlFor="name">
                   Subscription Type Name <span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="subscriptionTypeName"
+                  id="name"
                   placeholder="Enter subscription type name"
                   required
-                  name="subscriptionTypeName"
+                  name="name"
                   onChange={handleEditInputs}
-                  value={editInfo.subscriptionTypeName}
+                  value={editInfo.name}
                 />
               </div>
+
+              <div className="mb-3">
+                <label className="form-label" htmlFor="subscription_fee">
+                  Subscription fee <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  className="form-control"
+                  id="subscription_fee"
+                  placeholder="Enter subscription fee"
+                  required
+                  name="subscription_fee"
+                  value={editInfo.subscription_fee}
+                  onChange={handleEditInputs}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label" htmlFor="subscribe_for_in_days">
+                  Subscribe for in days <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  className="form-control"
+                  id="subscribe_for_in_days"
+                  placeholder="Enter subscribe for in days"
+                  required
+                  name="subscribe_for_in_days"
+                  value={editInfo.subscribe_for_in_days}
+                  onChange={handleEditInputs}
+                />
+              </div>
+
+              <div className="mb-3 form-check">
+                <label className="form-check-label" htmlFor="is_premium">
+                  Premium
+                </label>
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="is_premium"
+                  checked={editInfo.is_premium}
+                  name="is_premium"
+                  onChange={handleEditCheckBox}
+                />
+              </div>
+
+              {detailsEdit.map((row, idx) => (
+                <React.Fragment key={idx}>
+                  <div data-repeater-list="group-a" id={"addr" + idx}>
+                    <div data-repeater-item className="row">
+                      <div className="mb-3 col-lg-10">
+                        <label className="form-label" htmlFor="details">
+                          Details
+                        </label>
+                        <textarea
+                          id="details"
+                          className="form-control"
+                          name="details"
+                          placeholder="Details"
+                          rows="2"
+                          cols="2"
+                          onChange={e => handleDetailsEdit(e, idx)}
+                        >
+                          {row.details}
+                        </textarea>
+                        {/* <input
+                          type="text"
+                          id="details"
+                          className="form-control"
+                          name="details"
+                          placeholder="Details"
+                          value={row.details}
+                          onChange={e => handleDetailsEdit(e, idx)}
+                        /> */}
+                      </div>
+
+                      <Col lg={2} className="align-self-center d-grid mt-3">
+                        <input
+                          data-repeater-delete
+                          type="button"
+                          className="btn btn-primary"
+                          value="Delete"
+                          onClick={() => handleRowEditDelete(idx)}
+                        />
+                      </Col>
+                    </div>
+                  </div>
+                </React.Fragment>
+              ))}
+              <Button
+                onClick={() => {
+                  handleEditRowNested()
+                }}
+                color="success"
+                className="btn btn-success mt-3 mt-lg-0"
+              >
+                Add
+              </Button>
 
               <div
                 style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
@@ -434,8 +702,8 @@ function SubscriptionTypes(props) {
             Are you sure?
           </ModalHeader>
           <ModalBody>
-            Do you want to {editInfo.isActive ? "deactivate" : "activate"} this
-            record?{" "}
+            Do you want to {statusItem.is_active ? "deactivate" : "activate"}{" "}
+            this record?{" "}
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={toggleStatus}>

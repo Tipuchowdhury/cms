@@ -114,7 +114,9 @@ export const getServerSidePaginationWalletAction = (index, limit, filters) => {
 
   var url =
     process.env.REACT_APP_LOCALHOST +
-    `/Wallet/Search?page=${index}&limit=${limit}${filters ? "&" + filters : ""}`
+    `/RiderWallet/WalletSearch?page=${index}&limit=${limit}${
+      filters ? "&" + filters : ""
+    }`
   //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
   const formData = {}
   return dispatch => {

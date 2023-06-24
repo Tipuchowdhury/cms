@@ -250,6 +250,7 @@ function AddCampaign(props) {
                       <div className="col-md-10">
                         <input
                           type="file"
+                          accept=".jpg, .jpeg, .bmp, .png, .webp"
                           className="form-control"
                           name="image"
                           id="image"
@@ -260,6 +261,7 @@ function AddCampaign(props) {
                       <div className="col-md-10">
                         <input
                           type="file"
+                          accept=".jpg, .jpeg, .bmp, .png, .webp"
                           className="form-control"
                           name="image"
                           id="image"
