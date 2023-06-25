@@ -253,7 +253,7 @@ function Order(props) {
     },
   }
 
-  const columnFilterGeneral = (cell, row, field) => {
+  const columnFilterGeneral = (cell, row, field, is_number = false) => {
     return cell.isFilter ? (
       <input
         className="form-control"
@@ -264,7 +264,7 @@ function Order(props) {
         onKeyDown={handleFilterKeyPress}
       />
     ) : (
-      <div>{cell[field]}</div>
+      <div>{is_number ? parseFloat(cell[field]).toFixed(2) : cell[field]}</div>
     )
   }
 
@@ -429,7 +429,7 @@ function Order(props) {
       selector: row => row.order_total,
       name: "Total Amount",
       sortable: true,
-      cell: (cell, row) => columnFilterGeneral(cell, row, "order_total"),
+      cell: (cell, row) => columnFilterGeneral(cell, row, "order_total", true),
     },
     {
       name: "Order Status",
