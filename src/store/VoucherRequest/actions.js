@@ -235,35 +235,40 @@ export const voucherRequestUpdateFresh = () => {
 }
 
 export const voucherRequestStatusUpdateAction = editData => {
-  var url = process.env.REACT_APP_LOCALHOST + "/VoucherRequest/Put"
-  const formData = editData
+  // var url = process.env.REACT_APP_LOCALHOST + "/VoucherRequest/Put"
+
+  var url = `${process.env.REACT_APP_LOCALHOST}/VoucherRequest/IsApproved?id=${editData.voucher_request_id}&is_approved=${editData.is_approved}`
+  // const objectData = editData
+  // const formData = convertToFormData(objectData)
+
+  const formData = {}
 
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     }
-    dispatch({
-      type: VOUCHER_REQUEST_STATUS_EDIT,
-      payload: [],
-      status: "Success",
-    })
-    // axios
-    //   .put(url, formData, { headers: headers })
-    //   .then(response => {
-    //     dispatch({
-    //       type: VOUCHER_REQUEST_STATUS_EDIT,
-    //       payload: response.data,
-    //       status: "Success",
-    //     })
-    //   })
-    //   .catch(error => {
-    //     dispatch({
-    //       type: VOUCHER_REQUEST_STATUS_EDIT,
-    //       payload: error,
-    //       status: "Failed",
-    //     })
-    //   })
+    // dispatch({
+    //   type: VOUCHER_REQUEST_STATUS_EDIT,
+    //   payload: [],
+    //   status: "Success",
+    // })
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: VOUCHER_REQUEST_STATUS_EDIT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: VOUCHER_REQUEST_STATUS_EDIT,
+          payload: error,
+          status: "Failed",
+        })
+      })
   }
 }
 
@@ -323,7 +328,9 @@ export const getServerSidePaginationVoucherRequestAction = (
 
   var url =
     process.env.REACT_APP_LOCALHOST +
-    `/Refund/Search?page=${index}&limit=${limit}${filters ? "&" + filters : ""}`
+    `/VoucherRequest/Search?page=${index}&limit=${limit}${
+      filters ? "&" + filters : ""
+    }`
   //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
   const formData = {}
   return dispatch => {
@@ -337,8 +344,8 @@ export const getServerSidePaginationVoucherRequestAction = (
       .then(response => {
         dispatch({
           type: SERVER_SIDE_PAGINATION_VOUCHER_REQUEST,
-          // payload: response.data,
-          payload: voucher_request_data,
+          payload: response.data,
+          //payload: voucher_request_data,
           status: "Success",
         })
       })
