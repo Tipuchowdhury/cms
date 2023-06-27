@@ -13,6 +13,12 @@ import {
   SERVER_SIDE_PAGINATION_WALLET_FRESH,
   SERVER_SIDE_PAGINATION_WALLET_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_WALLET_FRESH,
+  ADD_CASH_IN,
+  ADD_CASH_IN_FRESH,
+  ADD_CASH_OUT,
+  ADD_CASH_OUT_FRESH,
+  ADD_ADJUSTMENT,
+  ADD_ADJUSTMENT_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -20,6 +26,18 @@ const initialState = {
   add_wallet_data: null,
   add_wallet_error: null,
   add_wallet_loading: false,
+
+  add_cash_in_data: null,
+  add_cash_in_error: null,
+  add_cash_in_loading: false,
+
+  add_cash_out_data: null,
+  add_cash_out_error: null,
+  add_cash_out_loading: false,
+
+  add_adjustment_data: null,
+  add_adjustment_error: null,
+  add_adjustment_loading: false,
 
   // load all wallet type
   get_all_wallet_data: null,
@@ -60,6 +78,60 @@ const Wallet = (state = initialState, action) => {
       state = {
         ...state,
         add_wallet_loading: action.status,
+      }
+      break
+
+    case ADD_CASH_IN:
+      state = {
+        ...state,
+        add_cash_in_data: action.payload,
+        add_cash_in_error: null,
+        add_cash_in_loading: action.status,
+        get_all_wallet_loading: false,
+        get_server_side_pagination_wallet_loading: false,
+      }
+      break
+
+    case ADD_CASH_IN_FRESH:
+      state = {
+        ...state,
+        add_cash_in_loading: action.status,
+      }
+      break
+
+    case ADD_CASH_OUT:
+      state = {
+        ...state,
+        add_cash_out_data: action.payload,
+        add_cash_out_error: null,
+        add_cash_out_loading: action.status,
+        get_all_wallet_loading: false,
+        get_server_side_pagination_wallet_loading: false,
+      }
+      break
+
+    case ADD_CASH_OUT_FRESH:
+      state = {
+        ...state,
+        add_cash_out_loading: action.status,
+      }
+      break
+
+    case ADD_ADJUSTMENT:
+      state = {
+        ...state,
+        add_adjustment_data: action.payload,
+        add_adjustment_error: null,
+        add_adjustment_loading: action.status,
+        get_all_wallet_loading: false,
+        get_server_side_pagination_wallet_loading: false,
+      }
+      break
+
+    case ADD_ADJUSTMENT_FRESH:
+      state = {
+        ...state,
+        add_adjustment_loading: action.status,
       }
       break
 

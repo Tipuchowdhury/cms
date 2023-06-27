@@ -18,6 +18,12 @@ import {
   SERVER_SIDE_PAGINATION_SEARCH_USER_FRESH,
   GET_USER_BY_ID,
   GET_USER_BY_ID_FRESH,
+  GET_ZONAL_ADMIN,
+  GET_ZONAL_ADMIN_FRESH,
+  GET_BRANCH_ADMIN,
+  GET_BRANCH_ADMIN_FRESH,
+  GET_CENTRAL_ADMIN,
+  GET_CENTRAL_ADMIN_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -58,6 +64,18 @@ const initialState = {
   get_user_by_id_data: null,
   get_user_by_id_error: null,
   get_user_by_id_loading: false,
+
+  get_zonal_admin_data: null,
+  get_zonal_admin_error: null,
+  get_zonal_admin_loading: false,
+
+  get_branch_admin_data: null,
+  get_branch_admin_error: null,
+  get_branch_admin_loading: false,
+
+  get_central_admin_data: null,
+  get_central_admin_error: null,
+  get_central_admin_loading: false,
 }
 
 const registerNew = (state = initialState, action) => {
@@ -198,6 +216,54 @@ const registerNew = (state = initialState, action) => {
       state = {
         ...state,
         get_user_by_id_loading: action.status,
+      }
+      break
+
+    case GET_ZONAL_ADMIN:
+      state = {
+        ...state,
+        get_zonal_admin_data: action.payload,
+        get_zonal_admin_error: null,
+        get_zonal_admin_loading: action.status,
+      }
+      break
+
+    case GET_ZONAL_ADMIN_FRESH:
+      state = {
+        ...state,
+        get_zonal_admin_loading: action.status,
+      }
+      break
+
+    case GET_BRANCH_ADMIN:
+      state = {
+        ...state,
+        get_branch_admin_data: action.payload,
+        get_branch_admin_error: null,
+        get_branch_admin_loading: action.status,
+      }
+      break
+
+    case GET_BRANCH_ADMIN_FRESH:
+      state = {
+        ...state,
+        get_branch_admin_loading: action.status,
+      }
+      break
+
+    case GET_CENTRAL_ADMIN:
+      state = {
+        ...state,
+        get_central_admin_data: action.payload,
+        get_central_admin_error: null,
+        get_central_admin_loading: action.status,
+      }
+      break
+
+    case GET_CENTRAL_ADMIN_FRESH:
+      state = {
+        ...state,
+        get_central_admin_loading: action.status,
       }
       break
   }
