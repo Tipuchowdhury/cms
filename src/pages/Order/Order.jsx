@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef, useCallback } from "react"
 import {
   Badge,
   Button,
@@ -13,6 +13,7 @@ import {
   ModalFooter,
   ModalHeader,
   Row,
+  Table,
 } from "reactstrap"
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { toast } from "react-toastify"
@@ -40,12 +41,26 @@ import DataTable from "react-data-table-component"
 import { orderStatusNames, orderStatuses, orderTypes } from "common/data/order"
 import moment from "moment"
 import CustomLoader from "components/CustomLoader/CustomLoader"
+import {
+  GoogleMap,
+  LoadScript,
+  Marker,
+  InfoWindow,
+  useJsApiLoader,
+} from "@react-google-maps/api"
+
+import riderMarker from "assets/icons/map-rider.svg"
+import userMarker from "assets/icons/map-user.svg"
+import restaurantMarker from "assets/icons/map-restaruant.svg"
 
 function Order(props) {
   const [riderModalInfo, setRiderModalInfo] = useState("")
   const [availableRiderData, setAvailableRiderData] = useState(false)
   const [name, setName] = useState("")
   const [modal, setModal] = useState(false)
+  const [confirmRiderModal, setConfirmRiderModal] = useState(false)
+  const [mapCenter, setMapCenter] = useState(false)
+
   const [editInfo, setEditInfo] = useState(false)
   const [reload, setReload] = useState(false)
   const navigate = useNavigate()
@@ -55,6 +70,14 @@ function Order(props) {
   const [changeStatusModal, setChangeStatusModal] = useState(false)
   const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
   const [selectedRider, setSelectedRider] = useState("")
+
+  const [selectedPoint, setSelectedPoint] = useState(null)
+  const [locations, setLocations] = useState(null)
+
+  const containerStyle = {
+    width: "100%",
+    height: "300px",
+  }
 
   useEffect(() => {
     if (window.screen.width <= 992) {
@@ -69,8 +92,10 @@ function Order(props) {
     window.open(`/invoice/${order_id}`, "_blank")
   }
 
-  const handleSelectRider = e => {
-    setSelectedRider(e.target.value)
+  const handleSelectRider = rider_id => {
+    toggle()
+    toggleConfirmRider()
+    setSelectedRider(rider_id)
   }
 
   const handleSelectStatus = e => {
@@ -84,9 +109,14 @@ function Order(props) {
   const toggle = () => {
     setModal(!modal)
   }
+
+  const toggleConfirmRider = () => {
+    setConfirmRiderModal(!confirmRiderModal)
+  }
+
   const handleSubmit = e => {
     e.preventDefault()
-    toggle()
+    toggleConfirmRider()
     // console.log(name)
     // console.log(val)
     props.orderAssignRider(riderModalInfo.order_id, selectedRider)
@@ -253,7 +283,7 @@ function Order(props) {
     },
   }
 
-  const columnFilterGeneral = (cell, row, field) => {
+  const columnFilterGeneral = (cell, row, field, is_number = false) => {
     return cell.isFilter ? (
       <input
         className="form-control"
@@ -264,7 +294,7 @@ function Order(props) {
         onKeyDown={handleFilterKeyPress}
       />
     ) : (
-      <div>{cell[field]}</div>
+      <div>{is_number ? parseFloat(cell[field]).toFixed(2) : cell[field]}</div>
     )
   }
 
@@ -429,7 +459,7 @@ function Order(props) {
       selector: row => row.order_total,
       name: "Total Amount",
       sortable: true,
-      cell: (cell, row) => columnFilterGeneral(cell, row, "order_total"),
+      cell: (cell, row) => columnFilterGeneral(cell, row, "order_total", true),
     },
     {
       name: "Order Status",
@@ -450,8 +480,10 @@ function Order(props) {
   ]
 
   useEffect(() => {
-    if (riderModalInfo.zone_id) props.getAvailableRider(riderModalInfo.zone_id)
-  }, [riderModalInfo.zone_id])
+    console.log("riderModalInfo.order_id :", riderModalInfo.order_id)
+    if (riderModalInfo.order_id)
+      props.getAvailableRider(riderModalInfo.order_id)
+  }, [riderModalInfo.order_id])
 
   useEffect(() => {
     if (props.get_available_rider_data?.length > 0) {
@@ -587,6 +619,63 @@ function Order(props) {
     },
   ]
 
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
+  })
+
+  const mapRef = useRef()
+  const onMapLoad = useCallback(map => {
+    mapRef.current = map
+  }, [])
+
+  const panTo = ({ lat, lng }) => {
+    mapRef.current.panTo({ lat, lng })
+    mapRef.current.setZoom(12)
+  }
+
+  const selectedRiderData =
+    props.get_available_rider_data && selectedRider
+      ? props.get_available_rider_data?.riders.filter(
+          (value, index) => value._id == selectedRider
+        )
+      : ""
+  console.log("selectedRiderData :", selectedRiderData)
+
+  useEffect(() => {
+    props.get_available_rider_data
+      ? setLocations([
+          props.get_available_rider_data?.branch,
+          props.get_available_rider_data?.customer,
+          ...props.get_available_rider_data?.riders,
+        ])
+      : ""
+  }, [props.get_available_rider_data])
+
+  useEffect(() => {
+    if (locations) {
+      setMapCenter({
+        lat: locations[0].location.lat,
+        lng: locations[0].location.lng,
+      })
+    }
+  }, [locations])
+
+  useEffect(() => {
+    if (mapRef.current && locations) {
+      const bounds = new window.google.maps.LatLngBounds()
+      locations.forEach(location => {
+        bounds.extend(
+          new window.google.maps.LatLng(
+            location.location.lat,
+            location.location.lng
+          )
+        )
+      })
+      mapRef.current.fitBounds(bounds)
+    }
+  }, [mapRef.current])
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -667,30 +756,305 @@ function Order(props) {
             </Col>
           </Row>
         </Container>
+        {/* Assign Rider Modal */}
         <Modal isOpen={modal} toggle={toggle} centered>
           <ModalHeader toggle={toggle}>Assign Rider</ModalHeader>
           <ModalBody>
-            <form className="mt-1" onSubmit={handleSubmit}>
+            {riderModalInfo.order_id && props.get_available_rider_data ? (
+              <div>
+                <div className="mb-3">
+                  {isLoaded ? (
+                    <GoogleMap
+                      mapContainerStyle={containerStyle}
+                      // center={mapCenter}
+                      zoom={10}
+                      onLoad={onMapLoad}
+                    >
+                      {props.get_available_rider_data?.riders?.map(
+                        (location, i) => (
+                          <Marker
+                            key={i}
+                            icon={riderMarker}
+                            position={{
+                              lat: location.location.lat,
+                              lng: location.location.lng,
+                            }}
+                            onMouseOver={() => {
+                              setSelectedPoint({ ...location, type: "rider" })
+                            }}
+                          />
+                        )
+                      )}
+                      {props.get_available_rider_data?.branch?.location ? (
+                        <Marker
+                          position={{
+                            lat: props.get_available_rider_data?.branch
+                              ?.location.lat,
+                            lng: props.get_available_rider_data?.branch
+                              ?.location.lng,
+                          }}
+                          icon={restaurantMarker}
+                          onMouseOver={() => {
+                            setSelectedPoint({
+                              ...props.get_available_rider_data?.branch,
+                              type: "branch",
+                            })
+                          }}
+                        />
+                      ) : (
+                        ""
+                      )}
+                      {props.get_available_rider_data?.customer?.location ? (
+                        <Marker
+                          position={{
+                            lat: props.get_available_rider_data?.customer
+                              ?.location.lat,
+                            lng: props.get_available_rider_data?.customer
+                              ?.location.lng,
+                          }}
+                          icon={userMarker}
+                          onMouseOver={() => {
+                            setSelectedPoint({
+                              ...props.get_available_rider_data?.customer,
+                              type: "customer",
+                            })
+                          }}
+                        />
+                      ) : (
+                        ""
+                      )}
+                      {selectedPoint && (
+                        <InfoWindow
+                          position={{
+                            lat: selectedPoint.location.lat,
+                            lng: selectedPoint.location.lng,
+                          }}
+                          onCloseClick={() => {
+                            setSelectedPoint(null)
+                          }}
+                          options={{
+                            pixelOffset: new window.google.maps.Size(0, -30),
+                          }}
+                        >
+                          <div>
+                            <h4>
+                              {selectedPoint.name ||
+                                `${selectedPoint.first_name} ${selectedPoint.last_name}`}
+                            </h4>
+                            {selectedPoint.mobile_number ? (
+                              <div>
+                                <strong>Mobile:</strong>{" "}
+                                {selectedPoint.mobile_number}
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                            {selectedPoint.address ? (
+                              <div>
+                                <strong>Address:</strong>{" "}
+                                {selectedPoint.address}
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                            {/* {selectedPoint.type == "rider" &&
+                            selectedPoint.current_order ? (
+                              <div>
+                                <strong>Current Order:</strong>{" "}
+                                {selectedPoint.current_order}
+                              </div>
+                            ) : (
+                              ""
+                            )} */}
+                            {selectedPoint.distance_in_meter ? (
+                              <div>
+                                <strong>Distance from branch:</strong>{" "}
+                                {selectedPoint.distance_in_meter?.from_branch}{" "}
+                                {selectedPoint.distance_in_meter?.from_branch >
+                                0
+                                  ? "meters"
+                                  : "meter"}
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                            {selectedPoint.type == "rider" ? (
+                              <div
+                                className="col-sm-12"
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "end",
+                                }}
+                              >
+                                <button
+                                  className="btn btn-sm btn-success"
+                                  style={{ marginTop: "10px" }}
+                                  onClick={e => {
+                                    e.stopPropagation()
+                                    handleSelectRider(selectedPoint._id)
+                                  }}
+                                >
+                                  Assign
+                                </button>
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </InfoWindow>
+                      )}
+                    </GoogleMap>
+                  ) : (
+                    ""
+                  )}
+
+                  <Table hover bordered striped style={{ marginTop: "2rem" }}>
+                    <thead>
+                      <tr>
+                        <th>Rider Name</th>
+                        <th>Distance from Branch</th>
+                        <th>Current Order</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {props.get_available_rider_data?.riders.map(
+                        (rider, i) => (
+                          <tr
+                            key={i}
+                            onClick={() => {
+                              panTo(rider.location)
+                              setSelectedPoint({
+                                ...rider,
+                                type: "rider",
+                              })
+                            }}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <td>
+                              {`${rider.first_name} ${rider.last_name}`}
+                              <br />
+                              {`${rider.mobile_number}`}
+                            </td>
+                            <td>{rider.distance_in_meter?.from_branch}m</td>
+                            <td>{rider.current_order}</td>
+                            <td>
+                              {" "}
+                              <button
+                                className="btn btn-sm btn-success"
+                                type="button"
+                                onClick={e => {
+                                  e.stopPropagation()
+                                  handleSelectRider(rider._id)
+                                }}
+                              >
+                                Assign
+                              </button>
+                            </td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </Table>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: 5,
+                  }}
+                >
+                  <Button color="secondary" onClick={toggle}>
+                    Cancel
+                  </Button>{" "}
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+          </ModalBody>
+        </Modal>
+
+        <Modal
+          isOpen={confirmRiderModal}
+          toggle={toggleConfirmRider}
+          centered
+          style={{ zIndex: 100000 }}
+        >
+          <ModalHeader toggle={toggleConfirmRider}>Assign Rider</ModalHeader>
+          <ModalBody>
+            {riderModalInfo.order_id && selectedRiderData ? (
+              <div className="mt-1">
+                <div className="mb-3">
+                  <h4>
+                    Are you sure you want to assign order#{" "}
+                    {riderModalInfo?.order_id} to{" "}
+                    {selectedRiderData
+                      ? `${selectedRiderData[0]?.first_name} ${selectedRiderData[0]?.last_name}`
+                      : ""}
+                  </h4>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: 5,
+                  }}
+                >
+                  <Button color="secondary" onClick={toggleConfirmRider}>
+                    Cancel
+                  </Button>{" "}
+                  <Button color="primary" type="button" onClick={handleSubmit}>
+                    Proceed
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+          </ModalBody>
+        </Modal>
+        {/* Assign Rider Modal */}
+
+        {/* ============ change status modal starts=============== */}
+        <Modal
+          isOpen={changeStatusModal}
+          toggle={toggleChangeStatusModal}
+          centered
+        >
+          <ModalHeader
+            className="text-center"
+            style={{ textAlign: "center", margin: "0 auto" }}
+          >
+            <h2>Change Order Status</h2>
+            <h4>Order #{editInfo._id}</h4>
+          </ModalHeader>
+          <ModalBody>
+            <form className="mt-1" onSubmit={handleStatusChangeSubmit}>
               <div className="mb-3">
                 <label className="form-label" htmlFor="username">
-                  Rider
+                  Status
                 </label>
                 <Input
                   id="exampleSelect"
                   name="city"
-                  value={selectedRider}
+                  value={editInfo.status}
                   //required={true}
-                  onChange={handleSelectRider}
+                  onChange={handleSelectStatus}
                   type="select"
                 >
-                  <option>Choose Rider</option>
-                  {availableRiderData}
+                  <option>Choose Status</option>
+                  {Object.keys(orderStatusNames)?.map((item, key) => (
+                    <option key={key} value={item}>
+                      {orderStatusNames[item]}
+                    </option>
+                  ))}
                 </Input>
               </div>
               <div
                 style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
               >
-                <Button color="secondary" onClick={toggle}>
+                <Button color="secondary" onClick={toggleChangeStatusModal}>
                   Cancel
                 </Button>{" "}
                 <Button color="primary" type="submit">
@@ -700,6 +1064,7 @@ function Order(props) {
             </form>
           </ModalBody>
         </Modal>
+        {/* ============ change status modal ends=============== */}
 
         {/* ============ change status modal starts=============== */}
         <Modal

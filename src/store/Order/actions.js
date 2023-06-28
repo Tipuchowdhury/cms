@@ -196,9 +196,63 @@ export const orderDeleteFresh = () => {
     })
 }
 
-export const getAvailableRider = zone_id => {
-  var url = process.env.REACT_APP_LOCALHOST + "/Rider/GetByZoneId"
-  const params = { id: zone_id }
+export const getAvailableRider = order_id => {
+  console.log("order_id :", order_id)
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    "/Order/GetCustomBranchRidersWithLocationByOrderId"
+  const params = { order_id: order_id }
+  // const mockdata = {
+  //   branch: {
+  //     _id: "241dc76a-9320-4b47-b7af-aacb9aaea235",
+  //     name: "Kutumbari",
+  //     address: "GEC Circle",
+  //     mobile_number: "01833623472",
+  //     location: { lat: 23.8655, lng: 90.435 },
+  //   },
+  //   customer: {
+  //     _id: "241dc76a-9320-4b47-b7af-aacb9aae1135",
+  //     first_name: "Jhon",
+  //     last_name: "Doe",
+  //     address: "Mehedibag",
+  //     mobile_number: "01872721234",
+  //     location: { lat: 23.8155, lng: 90.435 },
+  //     distance_in_meter: {
+  //       from_branch: 3321,
+  //     },
+  //   },
+  //   riders: [
+  //     {
+  //       _id: "241dc76a-9320-4b47-b7af-aacb9aae1146",
+  //       first_name: "Sultan",
+  //       last_name: "Mirza",
+  //       mobile_number: "01533819558",
+  //       location: { lat: 23.8153, lng: 90.4165 },
+  //       current_order: 2,
+  //       distance_in_meter: {
+  //         from_branch: 1223,
+  //       },
+  //     },
+  //     {
+  //       _id: "241dc76a-9320-4b47-b7af-aacb9aae2246",
+  //       first_name: "Hasan",
+  //       last_name: "Raza",
+  //       mobile_number: "019284923993",
+  //       location: { lat: 23.9455, lng: 90.544 },
+  //       current_order: 1,
+  //       distance_in_meter: {
+  //         from_branch: 765,
+  //       },
+  //     },
+  //   ],
+  // }
+  // return dispatch => {
+  //   dispatch({
+  //     type: GET_AVAILABLE_RIDER,
+  //     payload: mockdata,
+  //     status: "Success",
+  //   })
+  // }
   return dispatch => {
     const headers = {
       "Content-Type": "application/json",

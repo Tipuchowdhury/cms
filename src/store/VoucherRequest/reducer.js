@@ -97,6 +97,7 @@ const VoucherRequest = (state = initialState, action) => {
         voucher_request_status_edit_data: action.payload,
         voucher_request_status_edit_loading: action.status,
         get_all_voucher_request_loading: false,
+        get_server_side_pagination_voucher_request_loading: false,
       }
       break
 

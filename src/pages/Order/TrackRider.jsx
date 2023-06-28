@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useCallback, useRef } from "react"
 import {
   Button,
   Modal,
@@ -16,7 +16,7 @@ import {
   Col,
   Form,
 } from "reactstrap"
-import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react"
+
 import { connect } from "react-redux"
 import withRouter from "components/Common/withRouter"
 import { useEffect } from "react"
@@ -31,100 +31,162 @@ import { toast } from "react-toastify"
 import { useMemo } from "react"
 import PageLoader from "components/CustomLoader/PageLoader"
 
-const LoadingContainer = () => <div>Loading...</div>
+import restaurant from "assets/icons/restaurant.png"
+import home from "assets/icons/home.png"
+import driver from "assets/icons/driver.png"
+import {
+  LoadScript,
+  GoogleMap,
+  Marker,
+  InfoWindow,
+  DirectionsService,
+  DirectionsRenderer,
+  Polyline,
+  DistanceMatrixService,
+  useJsApiLoader,
+} from "@react-google-maps/api"
 
 function TrackRider(props) {
   const location = useLocation()
   const naviagte = useNavigate()
 
-  const [loading, setLoading] = useState(true)
+  const mapRef = useRef(null)
 
-  const [initialLatLong, setInitialLatLong] = useState({
-    // lat: 23.8103,
-    // lng: 90.4125,
+  const containerStyle = {
+    width: "100%",
+    height: "100%",
+  }
+
+  const [directions, setDirections] = useState(null)
+
+  const options = {
+    disableDefaultUI: true,
+    zoomControl: true,
+  }
+
+  const directionsOptions = {
+    origin: {
+      lat: 23.8103,
+      lng: 90.4125,
+    },
+    destination: {
+      lat: 23.8293,
+      lng: 90.4325,
+    },
+    travelMode: "DRIVING",
+  }
+
+  const center = {
     lat: 23.8103,
     lng: 90.4125,
-  })
-
-  //   const [locationData, setLocationData] = useState({
-  //     location: `${initialLatLong.lat},${initialLatLong.lng}`,
-  //     lat: 23.8103,
-  //     lng: 90.4125,
-  //   })
-
-  const [userLatLong, setUserLatLong] = useState({
-    lat: 23.8103,
-    lng: 90.4125,
-  })
+  }
 
   const [restLatLong, setRestLatLong] = useState({
+    lat: 23.8103,
+    lng: 90.4125,
+  })
+
+  const [userLatLong, setUserLatLong] = useState({
     lat: 23.8293,
     lng: 90.4325,
   })
 
-  var rider = [
-    { lat: 23.8153, lng: 90.4165 },
-    { lat: 23.8173, lng: 90.4185 },
-    { lat: 23.8183, lng: 90.4205 },
-    { lat: 23.8193, lng: 90.4225 },
-    { lat: 23.8213, lng: 90.4245 },
-    { lat: 23.8233, lng: 90.4265 },
-    { lat: 23.8253, lng: 90.4285 },
-    { lat: 23.8273, lng: 90.4305 },
-  ]
+  const [rider, setRider] = useState({ lat: 23.8233, lng: 90.4265 })
 
-  var bounds = new props.google.maps.LatLngBounds()
-  for (var i = 0; i < rider.length; i++) {
-    bounds.extend(rider[i])
-  }
+  let count = useRef(0)
 
-  const onMarkerClick = e => {}
+  //   const directionsCallback = useCallback(res => {
+  //     // console.log(count.current)
+  //     if (res !== null) {
 
-  const onMapClickHandler = e => {}
-
-  const moveMarker = (props, marker, e) => {
-    setInitialLatLong({ lat: e.latLng.lat(), lng: e.latLng.lng() })
-    // setLocationData({
-    //   ...locationData,
-    //   location: [e.latLng.lat(), e.latLng.lng()],
-    //   lat: e.latLng.lat(),
-    //   lng: e.latLng.lng(),
-    // })
-  }
-
-  //   useEffect(() => {
-  //     if (props.get_branch_by_id_loading == "Success") {
-  //       const branchData = props.get_branch_by_id_data
-
-  //       // location set start
-  //       let coordinates = branchData?.location?.coordinates
-  //       console.log("coordinates :", coordinates)
-
-  //       setInitialLatLong({
-  //         lat: coordinates[1],
-  //         lng: coordinates[0],
-  //       })
-
-  //       setLocationData({
-  //         location: `${coordinates[1]},${coordinates[0]}`,
-
-  //         lat: coordinates[1],
-  //         lng: coordinates[0],
-  //       })
-  //       // location set end
-
-  //       setLoading(false)
+  //       if (res.status === "OK" && count.current < 2) {
+  //         count.current += 1
+  //         setDirections(res)
+  //         const map = mapRef.current
+  //         const bounds = new window.google.maps.LatLngBounds()
+  //         res.routes[0].legs.forEach(leg => {
+  //           leg.steps.forEach(step => {
+  //             step.path.forEach(point => {
+  //               bounds.extend(point)
+  //             })
+  //           })
+  //         })
+  //         map.fitBounds(bounds)
+  //       } else {
+  //         count.current = 0
+  //         // console.log("res: ", res)
+  //       }
   //     }
-  //   }, [props.get_branch_by_id_loading])
+  //   }, [])
+
+  const directionsCallback = res => {
+    if (res !== null) {
+      if (res.status === "OK" && count.current < 2) {
+        count.current += 1
+        setDirections(res)
+      } else {
+        count.current = 0
+        console.log("Directions request failed:", res)
+      }
+    }
+  }
 
   useEffect(() => {
-    if (location?.state) {
-      props.getBranchByIdAction(location.state._id)
+    if (directions && mapRef.current) {
+      const bounds = new window.google.maps.LatLngBounds()
+      directions.routes[0].legs.forEach(leg => {
+        leg.steps.forEach(step => {
+          step.path.forEach(point => {
+            bounds.extend(point)
+          })
+        })
+      })
+      mapRef.current.fitBounds(bounds)
     }
-  }, [location?.state])
+  }, [directions])
 
-  if (location?.state && loading) {
-    return <PageLoader />
+  //   useEffect(() => {
+  //     if (directions && mapRef.current) {
+  //       const map = mapRef.current.getMap()
+  //       const bounds = new window.google.maps.LatLngBounds()
+  //       directions.routes[0].legs.forEach(leg => {
+  //         leg.steps.forEach(step => {
+  //           step.path.forEach(point => {
+  //             bounds.extend(point)
+  //           })
+  //         })
+  //       })
+  //       map.fitBounds(bounds)
+  //     }
+  //   }, [directions])
+
+  //   const directionsCallback = response => {
+  //     if (response !== null) {
+  //       if (response.status === "OK") {
+  //         setDirections(response)
+  //         const map = mapRef.current
+  //         const bounds = new window.google.maps.LatLngBounds()
+  //         response.routes[0].legs.forEach(leg => {
+  //           leg.steps.forEach(step => {
+  //             step.path.forEach(point => {
+  //               bounds.extend(point)
+  //             })
+  //           })
+  //         })
+  //         map.fitBounds(bounds)
+  //       } else {
+  //         console.log("Directions request failed:", response)
+  //       }
+  //     }
+  //   }
+
+  const renderMarkers = directions => {
+    const { markers } = directions || {}
+    if (markers) {
+      markers.forEach(marker => {
+        marker.setOptions({ visible: false })
+      })
+    }
   }
 
   return (
@@ -169,47 +231,66 @@ function TrackRider(props) {
                     className="gmaps"
                     style={{ position: "relative" }}
                   >
-                    <Map
-                      style={{ width: "100%", height: "100%" }}
-                      google={props.google}
-                      //   initialCenter={{
-                      //     lat: 42.39,
-                      //     lng: -72.52,
-                      //   }}
+                    <LoadScript googleMapsApiKey="AIzaSyDKIxr2AXZPA1k8EyJz52suWseQCFxfoMU">
+                      <GoogleMap
+                        id="direction-example"
+                        mapContainerStyle={containerStyle}
+                        // zoom={2}
+                        center={center}
+                        // options={options}
 
-                      initialCenter={restLatLong}
-                      bounds={bounds}
-                      //   zoom={12}
-                      onClick={e => onMapClickHandler(e)}
-                    >
-                      <Marker
-                        position={restLatLong}
-                        draggable={true}
-                        onDragend={moveMarker}
-                        onClick={e => {
-                          onMarkerClick(e)
+                        zoom={14}
+                        options={options}
+                        onLoad={map => {
+                          mapRef.current = map
                         }}
-                      />
-                      {rider.map(latLng => (
+                      >
+                        <DirectionsService
+                          options={directionsOptions}
+                          callback={directionsCallback}
+                        />
+                        {/* {directions && (
+                          <DirectionsRenderer directions={directions} />
+                        )} */}
+                        {directions && (
+                          <DirectionsRenderer
+                            directions={directions}
+                            options={{
+                              suppressMarkers: true, // Hide the default markers
+                              preserveViewport: true, // Maintain the current viewport
+                              polylineOptions: {
+                                strokeColor: "red", // Set the desired line color here
+                              },
+                            }}
+                            onLoad={renderMarkers} // Hide the default markers after the directions are loaded
+                          />
+                        )}
+
                         <Marker
-                          position={latLng}
-                          draggable={true}
-                          onDragend={moveMarker}
-                          onClick={e => {
-                            onMarkerClick(e)
+                          position={directionsOptions.origin}
+                          icon={{
+                            url: restaurant,
+                            fillColor: "#120E43",
+                            fillOpacity: 0.9,
+                            scale: 0.05,
+                            strokeColor: "#120E43",
+                            strokeWeight: 2,
                           }}
                         />
-                      ))}
 
-                      <Marker
-                        position={userLatLong}
-                        draggable={true}
-                        onDragend={moveMarker}
-                        onClick={e => {
-                          onMarkerClick(e)
-                        }}
-                      />
-                    </Map>
+                        <Marker
+                          position={directionsOptions.destination}
+                          icon={{
+                            url: home,
+                            fillColor: "#120E43",
+                            fillOpacity: 0.9,
+                            scale: 0.05,
+                            strokeColor: "#120E43",
+                            strokeWeight: 2,
+                          }}
+                        />
+                      </GoogleMap>
+                    </LoadScript>
                   </div>
                 </CardBody>
               </Card>
@@ -220,8 +301,6 @@ function TrackRider(props) {
     </React.Fragment>
   )
 }
-
-//export default AddBranch;
 
 const mapStateToProps = state => {
   const {
@@ -240,11 +319,5 @@ const mapStateToProps = state => {
 export default withRouter(
   connect(mapStateToProps, {
     getBranchByIdAction,
-  })(
-    GoogleApiWrapper({
-      apiKey: "AIzaSyDKIxr2AXZPA1k8EyJz52suWseQCFxfoMU",
-      LoadingContainer: LoadingContainer,
-      v: "3",
-    })(TrackRider)
-  )
+  })(TrackRider)
 )

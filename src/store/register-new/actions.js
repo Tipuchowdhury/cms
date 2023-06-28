@@ -18,6 +18,12 @@ import {
   SERVER_SIDE_PAGINATION_SEARCH_USER_FRESH,
   GET_USER_BY_ID,
   GET_USER_BY_ID_FRESH,
+  GET_ZONAL_ADMIN,
+  GET_ZONAL_ADMIN_FRESH,
+  GET_BRANCH_ADMIN,
+  GET_BRANCH_ADMIN_FRESH,
+  GET_CENTRAL_ADMIN,
+  GET_CENTRAL_ADMIN_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -468,4 +474,109 @@ export const getUserByIdAction = id => {
         })
       })
   }
+}
+
+export const getZonalAdminUser = () => {
+  var url =
+    process.env.REACT_APP_LOCALHOST + `/User/GetByRole?role_name=zonal_admin`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_ZONAL_ADMIN,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_ZONAL_ADMIN,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getZonalAdminUserFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: GET_ZONAL_ADMIN_FRESH,
+      status: false,
+    })
+}
+
+export const getBranchAdminUser = () => {
+  var url =
+    process.env.REACT_APP_LOCALHOST + `/User/GetByRole?role_name=branch_admin`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_BRANCH_ADMIN,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_BRANCH_ADMIN,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getBranchAdminUserFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: GET_BRANCH_ADMIN_FRESH,
+      status: false,
+    })
+}
+
+export const getCentralAdminUser = () => {
+  var url =
+    process.env.REACT_APP_LOCALHOST + `/User/GetByRole?role_name=central_admin`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_CENTRAL_ADMIN,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_CENTRAL_ADMIN,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getCentralAdminUserFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: GET_CENTRAL_ADMIN_FRESH,
+      status: false,
+    })
 }

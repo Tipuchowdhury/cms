@@ -60,90 +60,99 @@ function VoucherRequest(props) {
     // console.log(editInfo);
     props.voucherRequestStatusUpdateAction({
       ...editInfo,
-      voucher_request_status: !editInfo.voucher_request_status,
+
+      is_approved: !editInfo.voucher_request_is_approved,
     })
   }
 
   const actionRef = (cell, row) => (
     <Button
-      color={row.voucher_request_status == true ? "warning" : "primary"}
+      color={cell.voucher_request_is_approved == true ? "warning" : "success"}
       className="btn btn-sm waves-effect waves-light"
-      onClick={() => handleStatusModal(row)}
+      onClick={() => handleStatusModal(cell)}
     >
-      {row.voucher_request_status == true ? "Disapproved" : "Approved"}
+      {cell.voucher_request_is_approved == true ? "Disapproved" : "Approved"}
     </Button>
   )
 
   const statusRef = (cell, row) => (
-    <Badge color={row.voucher_request_status == true ? "success" : "secondary"}>
-      {row.voucher_request_status == true ? "Approved" : "Disapproved"}
+    <Badge
+      color={cell.voucher_request_is_approved == true ? "success" : "warning"}
+    >
+      {cell.voucher_request_is_approved == true ? "Approved" : "Disapproved"}
     </Badge>
   )
 
-  const activeData = [
-    {
-      dataField: "voucher_name",
-      text: "Voucher Name",
-      sort: true,
-    },
-    {
-      dataField: "user_name",
-      text: "User Name",
-      sort: true,
-    },
-    {
-      dataField: "user_mobile",
-      text: "User Mobile",
-      sort: true,
-    },
-
-    {
-      dataField: "voucher_request_status",
-      text: "Status",
-      sort: true,
-      formatter: statusRef,
-    },
-    {
-      dataField: "",
-      text: "Action",
-      formatter: actionRef,
-    },
-  ]
-
   // const activeData = [
   //   {
-  //     // dataField: "customer_name",
-  //     selector: row => row.voucher_name,
-  //     name: "Voucher Name",
-  //     sortable: true,
+  //     dataField: "voucher_name",
+  //     text: "Voucher Name",
+  //     sort: true,
   //   },
   //   {
-  //     // dataField: "customer_mobile",
-  //     selector: row => row.user_name,
-  //     name: "User Name",
-  //     sortable: true,
+  //     dataField: "user_name",
+  //     text: "User Name",
+  //     sort: true,
   //   },
   //   {
-  //     // dataField: "order_total",
-  //     selector: row => row.user_mobile,
-  //     name: "User Mobile",
-  //     sortable: true,
+  //     dataField: "user_mobile",
+  //     text: "User Mobile",
+  //     sort: true,
   //   },
 
   //   {
-  //     // dataField: "",
-  //     selector: row => row.voucher_request_status,
-  //     name: "Status",
-  //     sortable: true,
-  //     cell: statusRef,
+  //     dataField: "voucher_request_status",
+  //     text: "Status",
+  //     sort: true,
+  //     formatter: statusRef,
   //   },
   //   {
-  //     //dataField: "he",
-  //     name: "Action",
-  //     // sortable: true,
-  //     cell: actionRef,
+  //     dataField: "",
+  //     text: "Action",
+  //     formatter: actionRef,
   //   },
   // ]
+
+  const activeData = [
+    {
+      // dataField: "customer_name",
+      selector: row => row.voucher_name,
+      name: "Voucher Name",
+      sortable: true,
+    },
+    {
+      // dataField: "customer_mobile",
+      selector: row => row.customer_first_name,
+      name: "User First Name",
+      sortable: true,
+    },
+    {
+      // dataField: "customer_mobile",
+      selector: row => row.customer_last_name,
+      name: "User Last Name",
+      sortable: true,
+    },
+    {
+      // dataField: "order_total",
+      selector: row => row.customer_mobile,
+      name: "User Mobile",
+      sortable: true,
+    },
+
+    {
+      // dataField: "",
+      selector: row => row.voucher_request_status,
+      name: "Status",
+      sortable: true,
+      cell: statusRef,
+    },
+    {
+      //dataField: "he",
+      name: "Action",
+      // sortable: true,
+      cell: actionRef,
+    },
+  ]
   const defaultSorted = [
     {
       dataField: "name",
@@ -156,7 +165,6 @@ function VoucherRequest(props) {
   const [countPerPage, setCountPerPage] = useState(10)
   const [pageFilters, setPageFilters] = useState({})
   const handleFilter = e => {
-    setSelectedPermission(e.target.value)
     let name = e.target.name
     let value = e.target.value
     setPageFilters({ ...pageFilters, [name]: value })
@@ -213,6 +221,8 @@ function VoucherRequest(props) {
     setCountPerPage(newPerPage)
   }
 
+  console.log(props.get_server_side_pagination_voucher_request_data)
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -243,7 +253,7 @@ function VoucherRequest(props) {
                   </div>
 
                   <Row className="mb-3">
-                    <Col className="col-12 col-sm-4 col-md-4 ">
+                    <Col className="col-12 col-sm-4 col-md-3 ">
                       <label className="form-label" htmlFor="voucher_name">
                         Voucher Name
                       </label>
@@ -257,37 +267,57 @@ function VoucherRequest(props) {
                         value={pageFilters.voucher_name}
                       />
                     </Col>
-                    <Col className="col-12 col-sm-4 col-md-4 ">
-                      <label className="form-label" htmlFor="user_name">
-                        User Name
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label
+                        className="form-label"
+                        htmlFor="customer_first_name"
+                      >
+                        User Firts Name
                       </label>
                       <input
                         type="text"
                         className="form-control"
-                        id="user_name"
-                        placeholder="Enter User Name"
-                        name="user_name"
+                        id="customer_first_name"
+                        placeholder="Enter User First Name"
+                        name="customer_first_name"
                         onChange={handleFilter}
-                        value={pageFilters.user_name}
+                        value={pageFilters.customer_first_name}
                       />
                     </Col>
-                    <Col className="col-12 col-sm-4 col-md-4 ">
-                      <label className="form-label" htmlFor="user_mobile">
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label
+                        className="form-label"
+                        htmlFor="customer_last_name"
+                      >
+                        User Last Name
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="customer_last_name"
+                        placeholder="Enter User Last Name"
+                        name="customer_last_name"
+                        onChange={handleFilter}
+                        value={pageFilters.customer_last_name}
+                      />
+                    </Col>
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label className="form-label" htmlFor="customer_mobile">
                         User Mobile
                       </label>
                       <input
                         type="text"
                         className="form-control"
-                        id="user_mobile"
+                        id="customer_mobile"
                         placeholder="Enter User Mobile"
-                        name="user_mobile"
+                        name="customer_mobile"
                         onChange={handleFilter}
-                        value={pageFilters.user_mobile}
+                        value={pageFilters.customer_mobile}
                       />
                     </Col>
                   </Row>
 
-                  {props.get_all_voucher_request_data ? (
+                  {/* {props.get_all_voucher_request_data ? (
                     props.get_all_voucher_request_data.length > 0 ? (
                       <DatatableTablesWorking
                         products={props.get_all_voucher_request_data}
@@ -295,9 +325,9 @@ function VoucherRequest(props) {
                         defaultSorted={defaultSorted}
                       />
                     ) : null
-                  ) : null}
+                  ) : null} */}
 
-                  {/* <DataTable
+                  <DataTable
                     columns={activeData}
                     data={
                       props?.get_server_side_pagination_voucher_request_data
@@ -318,7 +348,7 @@ function VoucherRequest(props) {
                       !props?.get_server_side_pagination_voucher_request_data
                     }
                     progressComponent={<CustomLoader />}
-                  /> */}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -341,8 +371,8 @@ function VoucherRequest(props) {
           </ModalHeader>
           <ModalBody>
             Do you want to{" "}
-            {editInfo.voucher_request_status ? "disapprove" : "approve"} this
-            data?{" "}
+            {editInfo.voucher_request_is_approved ? "disapprove" : "approve"}{" "}
+            this data?{" "}
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={toggleStatus}>
