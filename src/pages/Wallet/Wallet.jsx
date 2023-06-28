@@ -35,11 +35,18 @@ import {
   walletStatusUpdateFresh,
   getServerSidePaginationWalletAction,
   getServerSidePaginationWalletFresh,
+  addCashInAction,
+  addCashInFresh,
+  addCashOutAction,
+  addCashOutFresh,
+  addAdjustmentAction,
+  addAdjustmentFresh,
 } from "store/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import DataTable from "react-data-table-component"
 import { toast } from "react-toastify"
 import CustomLoader from "components/CustomLoader/CustomLoader"
+import moment from "moment/moment"
 
 function Wallet(props) {
   document.title = "Wallet | Foodi"
@@ -62,29 +69,30 @@ function Wallet(props) {
   const paymentMethods = [
     {
       label: "Cash",
-      value: "cash",
+      value: "Cash",
     },
     {
       label: "Bkash",
-      value: "bkash",
+      value: "Bkash",
     },
     {
       label: "Nagad",
-      value: "nagad",
+      value: "Nagad",
     },
     {
       label: "SSL",
-      value: "ssl",
+      value: "SSL",
     },
     {
       label: "Upay",
-      value: "upay",
+      value: "Upay",
     },
   ]
 
   const [editInfo, setEditInfo] = useState({
-    payment_method_id: "",
-    trans_id: "",
+    rider_id: "",
+    payment_method: "",
+    transaction_id: "",
     amount: 0,
     reason: "",
   })
@@ -92,15 +100,17 @@ function Wallet(props) {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState([])
   const handlePaymentMethod = e => {
     //console.log(e.value);
-    setEditInfo({ ...editInfo, payment_method_id: e.value })
+    setEditInfo({ ...editInfo, payment_method: e.value })
     setSelectedPaymentMethod(e)
   }
 
   const handleCashIn = row => {
     setEditInfo({
       ...editInfo,
-      payment_method_id: "",
-      trans_id: "",
+      rider_id: row.rider_id,
+      payment_method: "",
+      order_status: "",
+      transaction_id: "",
       amount: 0,
       reason: "",
     })
@@ -110,8 +120,9 @@ function Wallet(props) {
   const handleCashOut = row => {
     setEditInfo({
       ...editInfo,
-      payment_method_id: "",
-      trans_id: "",
+      rider_id: row.rider_id,
+      payment_method: "",
+      transaction_id: "",
       amount: 0,
       reason: "",
     })
@@ -121,8 +132,9 @@ function Wallet(props) {
   const handleAdjustment = row => {
     setEditInfo({
       ...editInfo,
-      payment_method_id: "",
-      trans_id: "",
+      rider_id: row.rider_id,
+      payment_method: "",
+      transaction_id: "",
       amount: 0,
       reason: "",
     })
@@ -145,22 +157,22 @@ function Wallet(props) {
   const cashInSubmit = e => {
     e.preventDefault()
     console.log(editInfo)
-    //props.walletUpdateAction(editInfo, pathEdit)
-    toggleCashInModal()
+    props.addCashInAction(editInfo)
+    //toggleCashInModal()
   }
 
   const cashOutSubmit = e => {
     e.preventDefault()
     console.log(editInfo)
-    //props.walletUpdateAction(editInfo, pathEdit)
-    toggleCashOutModal()
+    props.addCashOutAction(editInfo)
+    //toggleCashOutModal()
   }
 
   const adjustmentSubmit = e => {
     e.preventDefault()
     console.log(editInfo)
-    //props.walletUpdateAction(editInfo, pathEdit)
-    toggleAdjustmentModal()
+    props.addAdjustmentAction(editInfo)
+    //toggleAdjustmentModal()
   }
 
   // server side pagination
@@ -223,7 +235,7 @@ function Wallet(props) {
           textDecorationStyle: "dotted",
         }}
       >
-        {cell.rider_name}
+        {cell.rider_name.toUpperCase()}
       </span>
     </Link>
   )
@@ -256,19 +268,21 @@ function Wallet(props) {
   )
 
   const collectedAmount = (cell, row) => (
-    <p>{parseFloat(cell.collected_amount).toFixed(2)} TK</p>
+    <p className="mt-3">{parseFloat(cell.collected_amount).toFixed(2)} TK</p>
   )
   const cashInAmount = (cell, row) => (
-    <p>{parseFloat(cell.cash_in).toFixed(2)} TK</p>
+    <p className="mt-3">{parseFloat(cell.cash_in).toFixed(2)} TK</p>
   )
   const cashOutAmount = (cell, row) => (
-    <p>{parseFloat(cell.cash_out).toFixed(2)} TK</p>
+    <p className="mt-3">{parseFloat(cell.cash_out).toFixed(2)} TK</p>
   )
   const adjustmentAmount = (cell, row) => (
-    <p>{parseFloat(cell.adjustment).toFixed(2)} TK</p>
+    <p className="mt-3">{parseFloat(cell.adjustment).toFixed(2)} TK</p>
   )
   const currentWalletAmount = (cell, row) => (
-    <p>BDT {parseFloat(cell.current_wallet_amount).toFixed(2)}</p>
+    <p className="mt-3">
+      BDT {parseFloat(cell.current_wallet_amount).toFixed(2)}
+    </p>
   )
 
   // const activeData = [
@@ -278,7 +292,6 @@ function Wallet(props) {
   //   //   sort: true,
   //   // },
   //   {
-  //
   //     dataField: "rider_name",
   //     text: "Rider name",
   //     sort: true,
@@ -358,6 +371,13 @@ function Wallet(props) {
       selector: row => row.date,
       name: "Date",
       sortable: true,
+      cell: (cell, row) => (
+        <div>
+          <span>{moment(cell.date).format("DD-MM-YYYY")}</span>
+          <br />
+          <span>{moment(cell.date).format("hh:MM:SS A")}</span>
+        </div>
+      ),
     },
     {
       selector: row => row.rider_type,
@@ -408,7 +428,7 @@ function Wallet(props) {
     },
 
     {
-      text: "Action",
+      name: "Action",
       cell: actionRef,
     },
   ]
@@ -425,18 +445,46 @@ function Wallet(props) {
       props.getAllWalletAction()
     }
 
-    if (props.wallet_edit_loading === "Success") {
-      toast.success("Wallet Updated")
-      toggleEditModal()
-      props.walletUpdateFresh()
+    if (props.add_cash_in_loading === "Success") {
+      toast.success("Cash in Updated")
+      toggleCashInModal()
+      props.addCashInFresh()
     }
 
-    if (props.wallet_edit_loading === "Failed") {
+    if (props.add_cash_in_loading === "Failed") {
       toast.error("Something went wrong")
       // toggleEditModal();
-      props.walletUpdateFresh()
+      props.addCashInFresh()
     }
-  }, [props.wallet_edit_loading])
+
+    if (props.add_cash_out_loading === "Success") {
+      toast.success("Cash out Updated")
+      toggleCashOutModal()
+      props.addCashOutFresh()
+    }
+
+    if (props.add_cash_out_loading === "Failed") {
+      toast.error("Something went wrong")
+      // toggleEditModal();
+      props.addCashOutFresh()
+    }
+
+    if (props.add_adjustment_loading === "Success") {
+      toast.success("Adjustment Updated")
+      toggleAdjustmentModal()
+      props.addAdjustmentFresh()
+    }
+
+    if (props.add_adjustment_loading === "Failed") {
+      toast.error("Something went wrong")
+      // toggleEditModal();
+      props.addAdjustmentFresh()
+    }
+  }, [
+    props.add_cash_in_loading,
+    props.add_cash_out_loading,
+    props.add_adjustment_loading,
+  ])
 
   // console.log(props.get_server_side_pagination_wallet_data)
 
@@ -588,7 +636,7 @@ function Wallet(props) {
           <ModalBody>
             <form className="mt-1" onSubmit={cashInSubmit}>
               <div className="mb-3">
-                <label className="form-label" htmlFor="payment_method_id">
+                <label className="form-label" htmlFor="payment_method">
                   Payment Method <span className="text-danger">*</span>
                 </label>
                 <Select
@@ -602,21 +650,21 @@ function Wallet(props) {
 
               {selectedPaymentMethod?.val}
 
-              {selectedPaymentMethod?.value == "bkash" ||
-              selectedPaymentMethod?.value == "nagad" ? (
+              {selectedPaymentMethod?.value == "Bkash" ||
+              selectedPaymentMethod?.value == "Nagad" ? (
                 <div className="mb-3">
-                  <label className="form-label" htmlFor="trans_id">
+                  <label className="form-label" htmlFor="transaction_id">
                     Transaction ID <span className="text-danger">*</span>
                   </label>
                   <input
                     required
                     type="text"
                     className="form-control"
-                    id="trans_id"
+                    id="transaction_id"
                     placeholder="Enter transaction id"
-                    name="trans_id"
+                    name="transaction_id"
                     onChange={handleEditInputs}
-                    value={editInfo.trans_id}
+                    value={editInfo.transaction_id}
                   />
                 </div>
               ) : (
@@ -679,7 +727,7 @@ function Wallet(props) {
           <ModalBody>
             <form className="mt-1" onSubmit={cashOutSubmit}>
               <div className="mb-3">
-                <label className="form-label" htmlFor="payment_method_id">
+                <label className="form-label" htmlFor="payment_method">
                   Payment Method <span className="text-danger">*</span>
                 </label>
                 <Select
@@ -693,21 +741,21 @@ function Wallet(props) {
 
               {selectedPaymentMethod?.val}
 
-              {selectedPaymentMethod?.value == "bkash" ||
-              selectedPaymentMethod?.value == "nagad" ? (
+              {selectedPaymentMethod?.value == "Bkash" ||
+              selectedPaymentMethod?.value == "Nagad" ? (
                 <div className="mb-3">
-                  <label className="form-label" htmlFor="trans_id">
+                  <label className="form-label" htmlFor="transaction_id">
                     Transaction ID <span className="text-danger">*</span>
                   </label>
                   <input
                     required
                     type="text"
                     className="form-control"
-                    id="trans_id"
+                    id="transaction_id"
                     placeholder="Enter transaction id"
-                    name="trans_id"
+                    name="transaction_id"
                     onChange={handleEditInputs}
-                    value={editInfo.trans_id}
+                    value={editInfo.transaction_id}
                   />
                 </div>
               ) : (
@@ -770,7 +818,7 @@ function Wallet(props) {
           <ModalBody>
             <form className="mt-1" onSubmit={adjustmentSubmit}>
               <div className="mb-3">
-                <label className="form-label" htmlFor="payment_method_id">
+                <label className="form-label" htmlFor="payment_method">
                   Payment Method <span className="text-danger">*</span>
                 </label>
                 <Select
@@ -784,21 +832,21 @@ function Wallet(props) {
 
               {selectedPaymentMethod?.val}
 
-              {selectedPaymentMethod?.value == "bkash" ||
-              selectedPaymentMethod?.value == "nagad" ? (
+              {selectedPaymentMethod?.value == "Bkash" ||
+              selectedPaymentMethod?.value == "Nagad" ? (
                 <div className="mb-3">
-                  <label className="form-label" htmlFor="trans_id">
+                  <label className="form-label" htmlFor="transaction_id">
                     Transaction ID <span className="text-danger">*</span>
                   </label>
                   <input
                     required
                     type="text"
                     className="form-control"
-                    id="trans_id"
+                    id="transaction_id"
                     placeholder="Enter transaction id"
-                    name="trans_id"
+                    name="transaction_id"
                     onChange={handleEditInputs}
-                    value={editInfo.trans_id}
+                    value={editInfo.transaction_id}
                   />
                 </div>
               ) : (
@@ -861,6 +909,18 @@ const mapStateToProps = state => {
     add_wallet_error,
     add_wallet_loading,
 
+    add_cash_in_data,
+    add_cash_in_error,
+    add_cash_in_loading,
+
+    add_cash_out_data,
+    add_cash_out_error,
+    add_cash_out_loading,
+
+    add_adjustment_data,
+    add_adjustment_error,
+    add_adjustment_loading,
+
     get_all_wallet_data,
     get_all_wallet_error,
     get_all_wallet_loading,
@@ -881,6 +941,18 @@ const mapStateToProps = state => {
     add_wallet_data,
     add_wallet_error,
     add_wallet_loading,
+
+    add_cash_in_data,
+    add_cash_in_error,
+    add_cash_in_loading,
+
+    add_cash_out_data,
+    add_cash_out_error,
+    add_cash_out_loading,
+
+    add_adjustment_data,
+    add_adjustment_error,
+    add_adjustment_loading,
 
     get_all_wallet_data,
     get_all_wallet_error,
@@ -913,5 +985,11 @@ export default withRouter(
     walletStatusUpdateFresh,
     getServerSidePaginationWalletAction,
     getServerSidePaginationWalletFresh,
+    addCashInAction,
+    addCashInFresh,
+    addCashOutAction,
+    addCashOutFresh,
+    addAdjustmentAction,
+    addAdjustmentFresh,
   })(Wallet)
 )

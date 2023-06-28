@@ -97,7 +97,7 @@ const Register = props => {
       //   setPasswordStatus(false)
       // }, "3000")
     }
-    setRole()
+    //setRole()
   }
   let userData = undefined
   if (props.get_all_user_roles_data?.length > 0) {
@@ -116,7 +116,7 @@ const Register = props => {
 
       toast.success("Submitted")
       props.userRegistrationFresh()
-      navigate("/upload-token")
+      navigate("/manage-users")
     }
 
     if (props.registration_loading == "Failed") {

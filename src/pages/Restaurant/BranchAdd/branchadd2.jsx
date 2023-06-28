@@ -120,40 +120,6 @@ function BranchAdd(props) {
   let zonal_admin = undefined
   if (props.get_all_user_data?.length > 0) {
     zonal_admin = props.get_all_user_data
-      ?.filter(data => data.role == "zonal_admin")
-      .map((item, key) => ({
-        label: `${item.first_name} ${item.last_name}`,
-        value: item._id,
-      }))
-  }
-
-  const common_zonal_admin = props?.get_all_user_data?.filter(
-    elem => elem._id === location.state?.zonal_admin
-  )
-
-  const zonal_admin_edit = common_zonal_admin
-    ? common_zonal_admin?.map((item, key) => {
-        return {
-          label: `${item.first_name} ${item.last_name}`,
-          value: item._id,
-        }
-      })
-    : ""
-  const [selectedZonalAdmin, setSelectedZonalAdmin] = useState(
-    zonal_admin_edit ? zonal_admin_edit : ""
-  )
-
-  //const [selectedZonalAdmin, setSelectedZonalAdmin] = useState()
-
-  const handleSelectZonalAdmin = e => {
-    // console.log(e.value)
-    setZoneInfo({ ...zoneInfo, zonal_admin: e.value })
-    setSelectedZonalAdmin(e)
-  }
-
-  let branch_admin = undefined
-  if (props.get_branch_admin_data?.length > 0) {
-    branch_admin = props.get_branch_admin_data
       ?.filter(data => data.role == "branch_admin")
       .map((item, key) => ({
         label: `${item.first_name} ${item.last_name}`,
@@ -161,58 +127,29 @@ function BranchAdd(props) {
       }))
   }
 
-  const common_branch_admin = props?.get_branch_admin_data?.filter(
-    elem => elem._id === location.state?.branch_admin
-  )
+  // const common_zonal_admin = props?.get_all_user_data?.filter(
+  //   elem =>
+  //     elem._id === location.state?.zonal_admin && elem.role == "branch_admin"
+  // )
 
-  const branch_admin_edit = common_branch_admin
-    ? common_branch_admin?.map((item, key) => {
-        return {
-          label: `${item.first_name} ${item.last_name}`,
-          value: item._id,
-        }
-      })
-    : ""
-  const [selectedBranchAdmin, setSelectedBranchAdmin] = useState(
-    branch_admin_edit ? branch_admin_edit : ""
-  )
+  // const zonal_admin_edit = common_zonal_admin
+  //   ? common_zonal_admin?.map((item, key) => {
+  //       return {
+  //         label: `${item.first_name} ${item.last_name}`,
+  //         value: item._id,
+  //       }
+  //     })
+  //   : ""
+  // const [selectedZonalAdmin, setSelectedZonalAdmin] = useState(
+  //   zonal_admin_edit ? zonal_admin_edit : ""
+  // )
 
-  const handleSelectBranchAdmin = e => {
+  const [selectedZonalAdmin, setSelectedZonalAdmin] = useState()
+
+  const handleSelectZonalAdmin = e => {
     // console.log(e.value)
-    setZoneInfo({ ...zoneInfo, branch_admin: e.value })
-    setSelectedBranchAdmin(e)
-  }
-
-  let central_admin = undefined
-  if (props.get_central_admin_data?.length > 0) {
-    central_admin = props.get_central_admin_data
-      ?.filter(data => data.role == "central_admin")
-      .map((item, key) => ({
-        label: `${item.first_name} ${item.last_name}`,
-        value: item._id,
-      }))
-  }
-
-  const central_branch_admin = props?.get_central_admin_data?.filter(
-    elem => elem._id === location.state?.central_admin
-  )
-
-  const central_admin_edit = central_branch_admin
-    ? central_branch_admin?.map((item, key) => {
-        return {
-          label: `${item.first_name} ${item.last_name}`,
-          value: item._id,
-        }
-      })
-    : ""
-  const [selectedCentralAdmin, setSelectedCentralAdmin] = useState(
-    central_admin_edit ? central_admin_edit : ""
-  )
-
-  const handleSelectCentralAdmin = e => {
-    // console.log(e.value)
-    setZoneInfo({ ...zoneInfo, central_admin: e.value })
-    setSelectedCentralAdmin(e)
+    setZoneInfo({ ...zoneInfo, zonal_admin: e.value })
+    setSelectedZonalAdmin(e)
   }
 
   const [selectedCuisine, setSelectedCuisine] = useState("")
@@ -252,8 +189,6 @@ function BranchAdd(props) {
     restaurant: undefined,
     phone_number: "",
     zonal_admin: "",
-    branch_admin: "",
-    central_admin: "",
     address: "",
     cuisine: "",
     location: undefined,
@@ -421,13 +356,6 @@ function BranchAdd(props) {
     // if (props.get_zonal_admin_loading === false) {
     //   props.getZonalAdminUser()
     // }
-    if (props.get_branch_admin_loading === false) {
-      props.getBranchAdminUser()
-    }
-
-    if (props.get_central_admin_loading === false) {
-      props.getCentralAdminUser()
-    }
 
     if (props.get_all_cuisine_loading === false) {
       props.getAllCuisneAction()
@@ -459,13 +387,11 @@ function BranchAdd(props) {
   }, [
     props.get_all_restaurant_loading,
     props.get_all_user_loading,
+    props.get_zonal_admin_loading,
     props.get_all_cusine_loading,
     props.add_branch_loading,
     props.edit_branch_loading,
     props.get_all_branch_attribute_loading,
-    props.get_zonal_admin_loading,
-    props.get_branch_admin_loading,
-    props.get_central_admin_loading,
   ])
 
   useEffect(() => {
@@ -478,9 +404,7 @@ function BranchAdd(props) {
       props.get_all_branch_attribute_loading == "Success" &&
       props.get_all_restaurant_loading == "Success" &&
       props.get_all_user_loading == "Success" &&
-      // props.get_zonal_admin_loading == "Success" &&
-      props.get_branch_admin_loading == "Success" &&
-      props.get_central_admin_loading == "Success" &&
+      props.get_zonal_admin_loading == "Success" &&
       props.get_all_cuisine_loading == "Success"
     ) {
       const branchData = props.get_branch_by_id_data
@@ -490,8 +414,6 @@ function BranchAdd(props) {
         restaurant: branchData.parent_restaurant_id,
         phone_number: branchData.phone_number,
         zonal_admin: branchData.zonal_admin,
-        branch_admin: branchData.branch_admin,
-        central_admin: branchData.central_admin,
         address: branchData.address,
         cuisine: "",
         location: undefined,
@@ -522,51 +444,6 @@ function BranchAdd(props) {
         cover_image: branchData.cover_image,
       })
       // set image end
-
-      const common_zonal_admin = props?.get_all_user_data?.filter(
-        elem => elem._id === branchData.zonal_admin
-      )
-
-      const zonal_admin_edit = common_zonal_admin
-        ? common_zonal_admin?.map((item, key) => {
-            return {
-              label: `${item.first_name} ${item.last_name}`,
-              value: item._id,
-            }
-          })
-        : ""
-
-      setSelectedZonalAdmin(zonal_admin_edit)
-
-      const common_branch_admin = props?.get_branch_admin_data?.filter(
-        elem => elem._id === branchData.branch_admin
-      )
-
-      const branch_admin_edit = common_branch_admin
-        ? common_branch_admin?.map((item, key) => {
-            return {
-              label: `${item.first_name} ${item.last_name}`,
-              value: item._id,
-            }
-          })
-        : ""
-
-      setSelectedBranchAdmin(branch_admin_edit)
-
-      const central_branch_admin = props?.get_central_admin_data?.filter(
-        elem => elem._id === location.state?.central_admin
-      )
-
-      const central_admin_edit = central_branch_admin
-        ? central_branch_admin?.map((item, key) => {
-            return {
-              label: `${item.first_name} ${item.last_name}`,
-              value: item._id,
-            }
-          })
-        : ""
-
-      setSelectedCentralAdmin(central_admin_edit)
 
       // Attribute set start
       const common_attributes = props?.get_all_branch_attribute_data?.filter(
@@ -643,10 +520,8 @@ function BranchAdd(props) {
     props.get_all_branch_attribute_loading,
     props.get_all_restaurant_loading,
     props.get_all_user_loading,
-    props.get_all_cuisine_loading,
     props.get_zonal_admin_loading,
-    props.get_branch_admin_loading,
-    props.get_central_admin_loading,
+    props.get_all_cuisine_loading,
   ])
 
   useEffect(() => {
@@ -793,48 +668,23 @@ function BranchAdd(props) {
                     Zonal Admin
                   </label>
                   <div className="col-md-10">
+                    {/* <Input
+                      id="exampleSelect"
+                      name="zonal_admin"
+                      value={zoneInfo.zonal_admin}
+                      //required={true}
+                      onChange={handleInputs}
+                      type="select"
+                    >
+                      <option>Choose...</option>
+                      {userData}
+                    </Input> */}
 
                     <Select
-                      //required
+                      required
                       value={selectedZonalAdmin}
                       onChange={handleSelectZonalAdmin}
                       options={zonal_admin}
-                      isMulti={false}
-                    />
-                  </div>
-                </Row>
-
-                <Row className="mb-3">
-                  <label
-                    htmlFor="example-text-input"
-                    className="col-md-2 col-form-label"
-                  >
-                    Branch Admin
-                  </label>
-                  <div className="col-md-10">
-                    <Select
-                      //required
-                      value={selectedBranchAdmin}
-                      onChange={handleSelectBranchAdmin}
-                      options={branch_admin}
-                      isMulti={false}
-                    />
-                  </div>
-                </Row>
-
-                <Row className="mb-3">
-                  <label
-                    htmlFor="example-text-input"
-                    className="col-md-2 col-form-label"
-                  >
-                    Central Admin
-                  </label>
-                  <div className="col-md-10">
-                    <Select
-                      //required
-                      value={selectedCentralAdmin}
-                      onChange={handleSelectCentralAdmin}
-                      options={central_admin}
                       isMulti={false}
                     />
                   </div>
@@ -1612,13 +1462,10 @@ export default withRouter(
     getAllCuisneAction,
     getAllBranchAttributeAction,
     getBranchByIdAction,
-
     getZonalAdminUser,
     getZonalAdminUserFresh,
-
     getBranchAdminUser,
     getBranchAdminUserFresh,
-
     getCentralAdminUser,
     getCentralAdminUserFresh,
   })(

@@ -392,17 +392,27 @@ function AddMenu(props) {
   // }
 
   const [valueByID, setValue] = useState()
+  // const checkHandlerAddOns = categoryIndex => {
+  //   //console.log(addNewCategory)
+  //   const newCat = [...addNewCategory]
+  //   //console.log(newCat)
+  //   //console.log(newCat[categoryIndex])
+  //   newCat[categoryIndex] = {
+  //     ...newCat[categoryIndex],
+  //     cat_is_multiple: !(newCat[categoryIndex]?.cat_is_multiple == true ||
+  //     "true"
+  //       ? true
+  //       : false),
+  //   }
+
+  //   setAddNewCategory(newCat)
+  // }
+
   const checkHandlerAddOns = categoryIndex => {
-    //console.log(addNewCategory)
     const newCat = [...addNewCategory]
-    //console.log(newCat)
-    //console.log(newCat[categoryIndex])
     newCat[categoryIndex] = {
       ...newCat[categoryIndex],
-      cat_is_multiple: !(newCat[categoryIndex]?.cat_is_multiple == true ||
-      "true"
-        ? true
-        : false),
+      cat_is_multiple: !newCat[categoryIndex].cat_is_multiple,
     }
 
     setAddNewCategory(newCat)
@@ -1583,8 +1593,6 @@ function AddMenu(props) {
                     {/* {addOnsNew?.map((row, idx) => ( */}
                     {itemCat?.add_ons?.map((row, addon_index) => (
                       <React.Fragment key={addon_index}>
-                        {console.log("addon_index :", addon_index)}
-                        {console.log("itemCat :", itemCat)}
                         <div
                           data-repeater-list="group-a"
                           id={"addr" + addon_index}

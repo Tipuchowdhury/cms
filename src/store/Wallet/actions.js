@@ -13,6 +13,12 @@ import {
   SERVER_SIDE_PAGINATION_WALLET_FRESH,
   SERVER_SIDE_PAGINATION_WALLET_SEARCH,
   SERVER_SIDE_PAGINATION_SEARCH_WALLET_FRESH,
+  ADD_CASH_IN,
+  ADD_CASH_IN_FRESH,
+  ADD_CASH_OUT,
+  ADD_CASH_OUT_FRESH,
+  ADD_ADJUSTMENT,
+  ADD_ADJUSTMENT_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { v4 as uuidv4 } from "uuid"
@@ -254,6 +260,135 @@ export const addWalletFresh = () => {
   return dispatch =>
     dispatch({
       type: ADD_WALLET_FRESH,
+      status: false,
+    })
+}
+
+export const addCashInAction = addData => {
+  var url = process.env.REACT_APP_LOCALHOST + "/RiderWallet/CashIn"
+
+  const formData = {
+    ...addData,
+  }
+  // console.log(formData);
+  return dispatch => {
+    // console.log("-in the dispatch----")
+
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+
+    axios
+      .post(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: ADD_CASH_IN,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+
+      .catch(error => {
+        dispatch({
+          type: ADD_CASH_IN,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const addCashInFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: ADD_CASH_IN_FRESH,
+      status: false,
+    })
+}
+
+export const addCashOutAction = addData => {
+  var url = process.env.REACT_APP_LOCALHOST + "/RiderWallet/CashOut"
+
+  const formData = {
+    ...addData,
+  }
+  // console.log(formData);
+  return dispatch => {
+    // console.log("-in the dispatch----")
+
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+
+    axios
+      .post(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: ADD_CASH_OUT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+
+      .catch(error => {
+        dispatch({
+          type: ADD_CASH_OUT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const addCashOutFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: ADD_CASH_OUT_FRESH,
+      status: false,
+    })
+}
+
+export const addAdjustmentAction = addData => {
+  var url = process.env.REACT_APP_LOCALHOST + "/RiderWallet/Adjustment"
+
+  const formData = {
+    ...addData,
+  }
+  // console.log(formData);
+  return dispatch => {
+    // console.log("-in the dispatch----")
+
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+
+    axios
+      .post(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: ADD_ADJUSTMENT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+
+      .catch(error => {
+        dispatch({
+          type: ADD_ADJUSTMENT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const addAdjustmentFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: ADD_ADJUSTMENT_FRESH,
       status: false,
     })
 }

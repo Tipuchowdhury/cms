@@ -122,8 +122,14 @@ function VoucherRequest(props) {
     },
     {
       // dataField: "customer_mobile",
-      selector: row => row.customer_name,
-      name: "User Name",
+      selector: row => row.customer_first_name,
+      name: "User First Name",
+      sortable: true,
+    },
+    {
+      // dataField: "customer_mobile",
+      selector: row => row.customer_last_name,
+      name: "User Last Name",
       sortable: true,
     },
     {
@@ -247,7 +253,7 @@ function VoucherRequest(props) {
                   </div>
 
                   <Row className="mb-3">
-                    <Col className="col-12 col-sm-4 col-md-4 ">
+                    <Col className="col-12 col-sm-4 col-md-3 ">
                       <label className="form-label" htmlFor="voucher_name">
                         Voucher Name
                       </label>
@@ -261,21 +267,41 @@ function VoucherRequest(props) {
                         value={pageFilters.voucher_name}
                       />
                     </Col>
-                    <Col className="col-12 col-sm-4 col-md-4 ">
-                      <label className="form-label" htmlFor="customer_name">
-                        User Name
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label
+                        className="form-label"
+                        htmlFor="customer_first_name"
+                      >
+                        User Firts Name
                       </label>
                       <input
                         type="text"
                         className="form-control"
-                        id="customer_name"
-                        placeholder="Enter User Name"
-                        name="customer_name"
+                        id="customer_first_name"
+                        placeholder="Enter User First Name"
+                        name="customer_first_name"
                         onChange={handleFilter}
-                        value={pageFilters.customer_name}
+                        value={pageFilters.customer_first_name}
                       />
                     </Col>
-                    <Col className="col-12 col-sm-4 col-md-4 ">
+                    <Col className="col-12 col-sm-4 col-md-3 ">
+                      <label
+                        className="form-label"
+                        htmlFor="customer_last_name"
+                      >
+                        User Last Name
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="customer_last_name"
+                        placeholder="Enter User Last Name"
+                        name="customer_last_name"
+                        onChange={handleFilter}
+                        value={pageFilters.customer_last_name}
+                      />
+                    </Col>
+                    <Col className="col-12 col-sm-4 col-md-3 ">
                       <label className="form-label" htmlFor="customer_mobile">
                         User Mobile
                       </label>
