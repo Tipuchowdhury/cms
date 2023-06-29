@@ -177,6 +177,7 @@ import DineInGalleryEdit from "pages/DineInGallery/DineInGalleryEdit"
 import RewardLabel from "pages/RewardLevel/RewardLabel"
 import VoucherRequest from "pages/VoucherRequest/VoucherRequest"
 import TrackRider from "pages/Order/TrackRider"
+import TrackRider3 from "pages/Order/TrackRider3"
 
 const userRoutes = [
   // { path: "/dashboard", component: <Dashboard /> },
@@ -229,6 +230,7 @@ const userRoutes = [
   { path: "/manage-branch", component: <Branch /> },
   { path: "/branch-add", component: <BranchAdd /> },
   { path: "/track-rider", component: <TrackRider /> },
+  { path: "/track-rider3", component: <TrackRider3 /> },
 
   { path: "/category", component: <Category /> },
 
