@@ -39,6 +39,7 @@ import {
   Marker,
   Autocomplete,
   useJsApiLoader,
+  Polygon,
 } from "@react-google-maps/api"
 
 const LoadingContainer = () => <div>Loading...</div>
@@ -55,8 +56,12 @@ function TrackRider3(props) {
     width: "100%",
     height: "100%",
   }
+  const [centerMap, setCenterMap] = useState({ lat: 23.8103, lng: 90.4125 })
 
-  const [center, setCenter] = useState({ lat: 23.8103, lng: 90.4125 })
+  const [center, setCenter] = useState([
+    { lat: 23.8103, lng: 90.4125 },
+    { lat: 23.8103, lng: 90.4125 },
+  ])
   const [searchPlace, setSearchPlaces] = useState("")
 
   const [initialLatLong, setInitialLatLong] = useState({
@@ -89,7 +94,17 @@ function TrackRider3(props) {
     const { lat, lng } = place.geometry.location
 
     setSearchPlaces(place.name)
-    setInitialLatLong({ lat: lat(), lng: lng() })
+    // setInitialLatLong({ lat: lat(), lng: lng() }, )
+    setInitialLatLong([
+      { lat: lat(), lng: lng() },
+      { lat: lat(), lng: lng() },
+    ])
+    setPath([
+      { lat: lat(), lng: lng() },
+      { lat: lat(), lng: lng() },
+    ])
+
+    setCenterMap({ lat: lat(), lng: lng() })
     setLocationData({
       ...locationData,
       location: [lat(), lng()],
@@ -100,7 +115,10 @@ function TrackRider3(props) {
 
   const clear = () => {
     setSearchPlaces("")
-    setInitialLatLong({ lat: center.lat, lng: center.lng })
+    // setInitialLatLong({ lat: center.lat, lng: center.lng })
+    setInitialLatLong(center)
+    setCenterMap({ lat: 23.8103, lng: 90.4125 })
+    setPath(center)
     setLocationData({
       ...locationData,
       location: [center.lat, center.lng],
@@ -108,6 +126,48 @@ function TrackRider3(props) {
       lng: center.lng,
     })
   }
+
+  const [path, setPath] = useState([
+    { lng: 90.4125, lat: 23.8103 },
+    { lng: 90.4125, lat: 23.8103 },
+  ])
+
+  const polygonRef = useRef(null)
+  const listenersRef = useRef([])
+
+  const onEdit = useCallback(() => {
+    if (polygonRef.current) {
+      const nextPath = polygonRef.current
+        .getPath()
+        .getArray()
+        .map(latLng => {
+          return { lat: latLng.lat(), lng: latLng.lng() }
+        })
+      setPath(nextPath)
+    }
+  }, [setPath])
+
+  const onLoad = useCallback(
+    polygon => {
+      polygonRef.current = polygon
+      const path = polygon.getPath()
+      listenersRef.current.push(
+        path.addListener("set_at", onEdit),
+        path.addListener("insert_at", onEdit),
+        path.addListener("remove_at", onEdit)
+      )
+    },
+    [onEdit]
+  )
+
+  const onUnmount = useCallback(() => {
+    listenersRef.current.forEach(lis => lis.remove())
+    polygonRef.current = null
+  }, [])
+
+  console.log(path)
+
+  const allData = path?.map(item => Number(item.lng) + "," + Number(item.lat))
 
   if (!isLoaded) {
     return <PageLoader />
@@ -165,13 +225,22 @@ function TrackRider3(props) {
               </Autocomplete>
             </Col>
             <Col className="col-12 col-sm-5 col-md-5 ">
-              <input
+              {/* <input
                 type="text"
                 className="form-control"
                 id="location"
                 name="location"
                 required
                 value={locationData.location}
+                readOnly={true}
+                disabled={true}
+              /> */}
+              <textarea
+                required
+                className="form-control"
+                id="location"
+                name="location"
+                value={allData}
                 readOnly={true}
                 disabled={true}
               />
@@ -200,14 +269,27 @@ function TrackRider3(props) {
                   >
                     {/* <LoadScript googleMapsApiKey="AIzaSyDKIxr2AXZPA1k8EyJz52suWseQCFxfoMU"> */}
                     <GoogleMap
-                      center={initialLatLong}
+                      center={centerMap}
                       zoom={15}
                       mapContainerStyle={{ width: "100%", height: "100%" }}
                     >
-                      <Marker
+                      {/* <Marker
                         draggable={true}
                         onDragEnd={e => moveMarker(e)}
                         position={initialLatLong}
+                      /> */}
+
+                      <Polygon
+                        // Make the Polygon editable / draggable
+                        editable
+                        draggable
+                        path={path}
+                        // Event used when manipulating and adding points
+                        onMouseUp={onEdit}
+                        // Event used when dragging the whole Polygon
+                        onDragEnd={onEdit}
+                        onLoad={onLoad}
+                        onUnmount={onUnmount}
                       />
                     </GoogleMap>
                     {/* </LoadScript> */}
