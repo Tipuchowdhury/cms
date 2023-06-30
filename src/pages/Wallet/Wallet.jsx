@@ -280,9 +280,7 @@ function Wallet(props) {
     <p className="mt-3">{parseFloat(cell.adjustment).toFixed(2)} TK</p>
   )
   const currentWalletAmount = (cell, row) => (
-    <p className="mt-3">
-      BDT {parseFloat(cell.current_wallet_amount).toFixed(2)}
-    </p>
+    <p className="mt-3">BDT {parseFloat(cell.current_balance).toFixed(2)}</p>
   )
 
   // const activeData = [
