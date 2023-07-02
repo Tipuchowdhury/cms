@@ -178,6 +178,7 @@ import RewardLabel from "pages/RewardLevel/RewardLabel"
 import VoucherRequest from "pages/VoucherRequest/VoucherRequest"
 import TrackRider from "pages/Order/TrackRider"
 import TrackRider3 from "pages/Order/TrackRider3"
+import FAQ from "../pages/FAQ/FAQ"
 
 const userRoutes = [
   // { path: "/dashboard", component: <Dashboard /> },
@@ -313,6 +314,9 @@ const userRoutes = [
   // Reward Label
   { path: "/reward-label", component: <RewardLabel /> },
   { path: "/voucher-request", component: <VoucherRequest /> },
+
+  // FAQ
+  { path: "/faq", component: <FAQ /> },
 
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },
