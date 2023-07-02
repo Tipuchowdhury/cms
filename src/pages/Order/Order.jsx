@@ -91,6 +91,9 @@ function Order(props) {
   const toggleOrderInvoice = order_id => {
     window.open(`/invoice/${order_id}`, "_blank")
   }
+  const toggleRiderInvoice = order_id => {
+    window.open(`/rider_invoice/${order_id}`, "_blank")
+  }
 
   const handleSelectRider = rider_id => {
     toggle()
@@ -225,6 +228,18 @@ function Order(props) {
         >
           <span className="fas fa-file-invoice"></span> Invoice
         </Button>{" "}
+        {cell.rider_id != "" ? (
+          <Button
+            className="btn btn-sm btn-dark waves-effect waves-light mb-1"
+            onClick={() => {
+              toggleRiderInvoice(cell._id)
+            }}
+          >
+            <span className="fas fa-file-invoice"></span> Rider Invoice
+          </Button>
+        ) : (
+          ""
+        )}
       </div>
     )
 
@@ -365,7 +380,7 @@ function Order(props) {
           <div>
             <span>{moment(cell?.order_date).format("MMMM D, YYYY")}</span>
             <br />
-            <span>{moment(cell?.order_date).format("hh:MM:SS A")}</span>
+            <span>{moment(cell?.order_date).format("hh:mm:ss A")}</span>
           </div>
         ),
     },

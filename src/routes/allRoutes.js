@@ -168,6 +168,7 @@ import AddQuest from "pages/Quest/AddQuest"
 import Wallet from "pages/Wallet/Wallet"
 import RiderWalletDetail from "pages/Wallet/RiderWalletDetail"
 import Invoice from "pages/Order/Invoice"
+import RiderInvoice from "pages/Order/RiderInvoice"
 import EditUser from "pages/ManageUsers/EditUser"
 import CustomerEdit from "pages/Customer/CustomerEdit"
 import CategoryEdit from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryEdit"
@@ -284,6 +285,7 @@ const userRoutes = [
   // Orders
   { path: "/dispatch", component: <Order /> },
   { path: "/invoice/:orderID", component: <Invoice /> },
+  { path: "/rider_invoice/:orderID", component: <RiderInvoice /> },
 
   // Refund
   { path: "/refund", component: <Refund /> },
