@@ -30,60 +30,14 @@ const RiderInvoice = props => {
         <h1 style={{ fontWeight: "bolder" }}>Rider Invoice</h1>
       </Row>
       <Row style={{ marginTop: "1cm" }}>
-        {/* <Col>
-          <span className="logo-lg">
-            <img src={logodarkImg} alt="" height="40" />
-          </span>
-        </Col> */}
         <Col style={{ textAlign: "left" }}>
           <Col>
             <span style={{ fontWeight: "bold" }}>Order ID: </span>
             {props.get_rider_invoice_data._id}
           </Col>
-          {/* <Col>
-            <span style={{ fontWeight: "bold" }}>Order Date: </span>
-            <span>
-              {moment(props.get_rider_invoice_data.created_at).format(
-                "MMMM D, YYYY"
-              )}
-            </span>
-            <br />
-            <span>
-              {moment(props.get_rider_invoice_data.created_at).format(
-                "hh:MM:SS A"
-              )}
-            </span>
-          </Col> */}
         </Col>
       </Row>
-      {/* <Row className="invoice-section" style={{ marginTop: "1cm" }}>
-        <Col>Ship to</Col>
-        <Col style={{ textAlign: "right" }}>Restaurant Details</Col>
-      </Row> */}
-      {/* <Row>
-        <Col>
-          <p>
-            {`${props.get_rider_invoice_data.customer.firstName} ${props.get_rider_invoice_data.customer.lastName}`}
-            <br />
-            {props.get_rider_invoice_data.customer.mobile}
-            <br />
-            {props.get_rider_invoice_data.address}
-            <br />
-            <span style={{ fontWeight: "bold" }}>
-              Payment Type: {props.get_rider_invoice_data.payment_method_id}
-            </span>
-          </p>
-        </Col>
-        <Col style={{ textAlign: "right" }}>
-          <p>
-            {props.get_rider_invoice_data.branch.name}
-            <br />
-            {props.get_rider_invoice_data.branch.address}
-            <br />
-            {props.get_rider_invoice_data.branch.phone_number}
-          </p>
-        </Col>
-      </Row> */}
+
       <Table bordered style={{ marginTop: "1cm" }}>
         <thead>
           <tr className="invoice-section">
@@ -137,13 +91,14 @@ const RiderInvoice = props => {
               </td>
               <td style={{ textAlign: "right" }}>
                 <span>{CURRENCY_SYMBOLS} </span>
-                {item.menu_price}
+                {parseFloat(item.menu_price).toFixed(2)}
               </td>
               <td>{item.quantity}</td>
               <td></td>
               <td style={{ textAlign: "right" }}>
                 <span>{CURRENCY_SYMBOLS} </span>
-                {item.item_total}
+
+                {parseFloat(item.item_total).toFixed(2)}
               </td>
             </tr>
           ))}
@@ -167,34 +122,42 @@ const RiderInvoice = props => {
             <td className="fw-bold">Total Food Bill</td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {
+
+              {parseFloat(
                 props.get_rider_invoice_data.restaurant_payable_section
                   .total_food_bill
-              }
+              ).toFixed(2)}
             </td>
           </tr>
           <tr>
             <td>(+)SD</td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {props.get_rider_invoice_data.restaurant_payable_section.sd}
+
+              {parseFloat(
+                props.get_rider_invoice_data.restaurant_payable_section.sd
+              ).toFixed(2)}
             </td>
           </tr>
           <tr>
             <td>(+)VAT</td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {props.get_rider_invoice_data.restaurant_payable_section.vat}
+
+              {parseFloat(
+                props.get_rider_invoice_data.restaurant_payable_section.vat
+              ).toFixed(2)}
             </td>
           </tr>
           <tr>
             <td className="fw-bold">Subtotal</td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {
+
+              {parseFloat(
                 props.get_rider_invoice_data.restaurant_payable_section
                   .sub_total
-              }
+              ).toFixed(2)}
             </td>
           </tr>
 
@@ -209,10 +172,11 @@ const RiderInvoice = props => {
             </td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {
+
+              {parseFloat(
                 props.get_rider_invoice_data.restaurant_payable_section
                   .restaurant_commission_amount
-              }
+              ).toFixed(2)}
             </td>
           </tr>
 
@@ -222,10 +186,11 @@ const RiderInvoice = props => {
             </td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {
+
+              {parseFloat(
                 props.get_rider_invoice_data.restaurant_payable_section
                   .restaurant_payable
-              }
+              ).toFixed(2)}
             </td>
           </tr>
         </tbody>
@@ -241,41 +206,52 @@ const RiderInvoice = props => {
             <td className="fw-bold">Total Food Bill</td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {
+
+              {parseFloat(
                 props.get_rider_invoice_data.customer_payable_section
                   .total_food_bill
-              }
+              ).toFixed(2)}
             </td>
           </tr>
           <tr>
             <td>(+)SD</td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {props.get_rider_invoice_data.customer_payable_section.sd}
+
+              {parseFloat(
+                props.get_rider_invoice_data.customer_payable_section.sd
+              ).toFixed(2)}
             </td>
           </tr>
           <tr>
             <td>(+)VAT</td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {props.get_rider_invoice_data.customer_payable_section.vat}
+
+              {parseFloat(
+                props.get_rider_invoice_data.customer_payable_section.vat
+              ).toFixed(2)}
             </td>
           </tr>
           <tr>
             <td>Delivery Charge</td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {
+
+              {parseFloat(
                 props.get_rider_invoice_data.customer_payable_section
                   .delivery_charge
-              }
+              ).toFixed(2)}
             </td>
           </tr>
           <tr>
             <td className="fw-bold">Subtotal</td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {props.get_rider_invoice_data.customer_payable_section.sub_total}
+
+              {parseFloat(
+                props.get_rider_invoice_data.customer_payable_section.sub_total
+              ).toFixed(2)}
             </td>
           </tr>
           <tr style={{ borderBottom: "outset", borderColor: "#EA4D3C" }}>
@@ -289,10 +265,11 @@ const RiderInvoice = props => {
             </td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {
+
+              {parseFloat(
                 props.get_rider_invoice_data.customer_payable_section
                   .discount_amount
-              }
+              ).toFixed(2)}
             </td>
           </tr>
           <tr>
@@ -301,10 +278,11 @@ const RiderInvoice = props => {
             </td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {
+
+              {parseFloat(
                 props.get_rider_invoice_data.customer_payable_section
                   .customer_payable
-              }
+              ).toFixed(2)}
             </td>
           </tr>
         </tbody>
@@ -320,17 +298,21 @@ const RiderInvoice = props => {
             <td>Customer Payable</td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {props.get_rider_invoice_data.rider_cash_section.customer_payable}
+
+              {parseFloat(
+                props.get_rider_invoice_data.rider_cash_section.customer_payable
+              ).toFixed(2)}
             </td>
           </tr>
           <tr style={{ borderBottom: "outset", borderColor: "#EA4D3C" }}>
             <td>Restaurant Payable</td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {
+
+              {parseFloat(
                 props.get_rider_invoice_data.rider_cash_section
                   .restaurant_payable
-              }
+              ).toFixed(2)}
             </td>
           </tr>
 
@@ -340,7 +322,10 @@ const RiderInvoice = props => {
             </td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {props.get_rider_invoice_data.rider_cash_section.foodi_payable}
+
+              {parseFloat(
+                props.get_rider_invoice_data.rider_cash_section.foodi_payable
+              ).toFixed(2)}
             </td>
           </tr>
         </tbody>
@@ -356,17 +341,21 @@ const RiderInvoice = props => {
             <td>Foodi payable / Receivable</td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {props.get_rider_invoice_data.rider_earning_section.foodi_payable}
+
+              {parseFloat(
+                props.get_rider_invoice_data.rider_earning_section.foodi_payable
+              ).toFixed(2)}
             </td>
           </tr>
           <tr style={{ borderBottom: "outset", borderColor: "#EA4D3C" }}>
             <td>Per Ride Charge</td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {
+
+              {parseFloat(
                 props.get_rider_invoice_data.rider_earning_section
                   .per_ride_charge
-              }
+              ).toFixed(2)}
             </td>
           </tr>
 
@@ -376,10 +365,11 @@ const RiderInvoice = props => {
             </td>
             <td>
               <span>{CURRENCY_SYMBOLS} </span>
-              {
+
+              {parseFloat(
                 props.get_rider_invoice_data.rider_earning_section
                   .final_foodi_payable
-              }
+              ).toFixed(2)}
             </td>
           </tr>
         </tbody>

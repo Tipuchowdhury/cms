@@ -272,7 +272,7 @@ function VoucherRequest(props) {
                         className="form-label"
                         htmlFor="customer_first_name"
                       >
-                        User Firts Name
+                        User First Name
                       </label>
                       <input
                         type="text"
