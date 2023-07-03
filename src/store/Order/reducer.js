@@ -17,6 +17,8 @@ import {
   SERVER_SIDE_PAGINATION_ORDER_FRESH,
   GET_ORDER_INVOICE,
   GET_ORDER_INVOICE_FRESH,
+  GET_RIDER_INVOICE,
+  GET_RIDER_INVOICE_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -51,6 +53,11 @@ const initialState = {
   get_order_invoice_data: null,
   get_order_invoice_error: null,
   get_order_invoice_loading: false,
+
+  // rider invoice
+  get_rider_invoice_data: null,
+  get_rider_invoice_error: null,
+  get_rider_invoice_loading: false,
 }
 
 const order = (state = initialState, action) => {
@@ -174,6 +181,23 @@ const order = (state = initialState, action) => {
         ...state,
         get_order_invoice_data: action.payload,
         get_order_invoice_loading: action.status,
+      }
+      break
+
+    case GET_RIDER_INVOICE:
+      state = {
+        ...state,
+        get_rider_invoice_data: action.payload,
+        get_rider_invoice_error: null,
+        get_rider_invoice_loading: action.status,
+      }
+      break
+
+    case GET_RIDER_INVOICE_FRESH:
+      state = {
+        ...state,
+        get_rider_invoice_data: action.payload,
+        get_rider_invoice_loading: action.status,
       }
       break
   }

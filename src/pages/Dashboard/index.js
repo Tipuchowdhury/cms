@@ -49,7 +49,7 @@ const Dashboard = props => {
   const toggle = () => {
     setMenu(!menu)
   }
-  document.title = "Dashboard | Foodi - React Admin & Dashboard Template"
+  document.title = "Dashboard | Foodi"
   return (
     <React.Fragment>
       <div className="page-content">

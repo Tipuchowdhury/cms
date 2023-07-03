@@ -168,6 +168,7 @@ import AddQuest from "pages/Quest/AddQuest"
 import Wallet from "pages/Wallet/Wallet"
 import RiderWalletDetail from "pages/Wallet/RiderWalletDetail"
 import Invoice from "pages/Order/Invoice"
+import RiderInvoice from "pages/Order/RiderInvoice"
 import EditUser from "pages/ManageUsers/EditUser"
 import CustomerEdit from "pages/Customer/CustomerEdit"
 import CategoryEdit from "pages/Restaurant/AddOnsCategory/CategoryAdd/CategoryEdit"
@@ -177,6 +178,8 @@ import DineInGalleryEdit from "pages/DineInGallery/DineInGalleryEdit"
 import RewardLabel from "pages/RewardLevel/RewardLabel"
 import VoucherRequest from "pages/VoucherRequest/VoucherRequest"
 import TrackRider from "pages/Order/TrackRider"
+import TrackRider3 from "pages/Order/TrackRider3"
+import FAQ from "../pages/FAQ/FAQ"
 
 const userRoutes = [
   // { path: "/dashboard", component: <Dashboard /> },
@@ -229,6 +232,7 @@ const userRoutes = [
   { path: "/manage-branch", component: <Branch /> },
   { path: "/branch-add", component: <BranchAdd /> },
   { path: "/track-rider", component: <TrackRider /> },
+  { path: "/track-rider3", component: <TrackRider3 /> },
 
   { path: "/category", component: <Category /> },
 
@@ -281,6 +285,7 @@ const userRoutes = [
   // Orders
   { path: "/dispatch", component: <Order /> },
   { path: "/invoice/:orderID", component: <Invoice /> },
+  { path: "/rider_invoice/:orderID", component: <RiderInvoice /> },
 
   // Refund
   { path: "/refund", component: <Refund /> },
@@ -311,6 +316,9 @@ const userRoutes = [
   // Reward Label
   { path: "/reward-label", component: <RewardLabel /> },
   { path: "/voucher-request", component: <VoucherRequest /> },
+
+  // FAQ
+  { path: "/faq", component: <FAQ /> },
 
   //Charts
   { path: "/apex-charts", component: <ChartApex /> },

@@ -8,6 +8,7 @@ import {
   Row,
   Col,
   Input,
+  BreadcrumbItem,
 } from "reactstrap"
 import { connect } from "react-redux"
 import withRouter from "components/Common/withRouter"
@@ -22,7 +23,7 @@ import {
 } from "store/actions"
 import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
-import { useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import moment from "moment"
 
@@ -176,11 +177,23 @@ function AddCampaign(props) {
       <React.Fragment>
         <div className="page-content">
           <Container fluid>
-            <Breadcrumbs
-              maintitle="Foodi"
-              title="Campaign"
-              breadcrumbItem={location.state ? "Edit Campaign" : "Add Campaign"}
-            />
+            <Row className="align-items-center">
+              <Col sm={6}>
+                <div className="page-title-box">
+                  <h4 className="font-size-18">Add Campaign</h4>
+                  <ol className="breadcrumb mb-0">
+                    <BreadcrumbItem>
+                      <Link to="/">Foodi</Link>
+                    </BreadcrumbItem>
+                    <BreadcrumbItem>
+                      <Link to="/all-campaign">Campaign</Link>
+                    </BreadcrumbItem>
+
+                    <BreadcrumbItem active>Add Campaign</BreadcrumbItem>
+                  </ol>
+                </div>
+              </Col>
+            </Row>
 
             <Row>
               <Col className="col-12">

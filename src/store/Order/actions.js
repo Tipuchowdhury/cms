@@ -16,6 +16,8 @@ import {
   SERVER_SIDE_PAGINATION_ORDER_FRESH,
   GET_ORDER_INVOICE,
   GET_ORDER_INVOICE_FRESH,
+  GET_RIDER_INVOICE,
+  GET_RIDER_INVOICE_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -388,6 +390,42 @@ export const getOrderInvoiceFresh = () => {
   return dispatch =>
     dispatch({
       type: GET_ORDER_INVOICE_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const getRiderInvoice = order_id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Order/RiderInvoice"
+  const params = { order_id: order_id }
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers, params: params })
+      .then(response => {
+        dispatch({
+          type: GET_RIDER_INVOICE,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_RIDER_INVOICE,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getRiderInvoiceFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: GET_RIDER_INVOICE_FRESH,
       status: false,
       payload: null,
     })

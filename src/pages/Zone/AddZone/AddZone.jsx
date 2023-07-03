@@ -15,8 +15,14 @@ import {
   Col,
   Input,
 } from "reactstrap"
-import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react"
-import { Polygon } from "@react-google-maps/api"
+// import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react"
+import {
+  GoogleMap,
+  Marker,
+  Autocomplete,
+  useJsApiLoader,
+  Polygon,
+} from "@react-google-maps/api"
 import { connect } from "react-redux"
 import withRouter from "components/Common/withRouter"
 import Select from "react-select"
@@ -34,42 +40,57 @@ import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
 import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
+import PageLoader from "components/CustomLoader/PageLoader"
 
 const LoadingContainer = () => <div>Loading...</div>
 
 function AddZone(props) {
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: "AIzaSyDKIxr2AXZPA1k8EyJz52suWseQCFxfoMU",
+    libraries: ["places"],
+  })
   const navigate = useNavigate()
   const location = useLocation()
-  const [defaultProps, setDefaultProps] = useState({
-    lat: 23.810299999999998,
-    lng: 90.44133911132815,
-  })
-  console.log(location.state)
+  const [centerMap, setCenterMap] = useState({ lat: 23.8103, lng: 90.4125 })
 
-  const edit_map_data = location.state?.lat_long?.coordinates?.[0].map(x => ({
-    // lat: x[0],
-    // lng: x[1]
-    lng: x[0],
-    lat: x[1],
-  }))
-  console.log(edit_map_data)
+  const [center, setCenter] = useState([
+    { lat: 23.8103, lng: 90.4125 },
+    { lat: 23.8103, lng: 90.4125 },
+  ])
+  const [searchPlace, setSearchPlaces] = useState("")
 
-  const [path, setPath] = useState(
-    location.state
-      ? edit_map_data
-      : [
-          { lng: 90.44133911132815, lat: 23.810299999999998 },
-          { lng: 90.44133911132815, lat: 23.810299999999998 },
-          // { lng: 90.41764984130862, lat: 23.8209790138562 },
-        ]
-  )
+  const [autocomplete, setAutocomplete] = useState(null)
+
+  const handlePlaceSelect = () => {
+    const place = autocomplete.getPlace()
+    const { lat, lng } = place.geometry.location
+
+    setSearchPlaces(place.name)
+
+    setPath([
+      { lat: lat(), lng: lng() },
+      { lat: lat(), lng: lng() },
+    ])
+
+    setCenterMap({ lat: lat(), lng: lng() })
+  }
+
+  const clear = () => {
+    setSearchPlaces("")
+
+    setCenterMap({ lat: 23.8103, lng: 90.4125 })
+    setPath(center)
+  }
+
+  const [path, setPath] = useState([
+    { lng: 90.4125, lat: 23.8103 },
+    { lng: 90.4125, lat: 23.8103 },
+  ])
 
   const polygonRef = useRef(null)
   const listenersRef = useRef([])
 
-  // Call setPath with new edited path
   const onEdit = useCallback(() => {
-    console.log("I am in the edit section")
     if (polygonRef.current) {
       const nextPath = polygonRef.current
         .getPath()
@@ -84,7 +105,6 @@ function AddZone(props) {
   // Bind refs to current Polygon and listeners
   const onLoad = useCallback(
     polygon => {
-      console.log("I am on load")
       polygonRef.current = polygon
       const path = polygon.getPath()
       listenersRef.current.push(
@@ -95,14 +115,10 @@ function AddZone(props) {
     },
     [onEdit]
   )
-
-  // Clean up refs
   const onUnmount = useCallback(() => {
     listenersRef.current.forEach(lis => lis.remove())
     polygonRef.current = null
   }, [])
-
-  console.log("The path state is", path)
 
   const common_branches = props?.get_all_branch_data?.filter(elem =>
     location?.state?.branches?.find(({ branch_id }) => elem._id === branch_id)
@@ -113,13 +129,12 @@ function AddZone(props) {
         return { label: item.name, value: item._id }
       })
     : ""
-  console.log(branch_data_edit)
+
   //select multiple branch
   const [selectedBranch, setSelectedBranch] = useState(
     branch_data_edit ? branch_data_edit : ""
   )
   const handleSelectBranch = e => {
-    console.log(e)
     setSelectedBranch(e)
   }
 
@@ -141,11 +156,7 @@ function AddZone(props) {
     ))
   }
 
-  const onMapClickHandler = e => {
-    console.log(e)
-  }
-
-  console.log(location.state)
+  const onMapClickHandler = e => {}
 
   const [zoneInfo, setZoneInfo] = useState({
     area: location.state ? location.state.name : "",
@@ -156,15 +167,12 @@ function AddZone(props) {
 
   let name, value
   const handleInputs = e => {
-    console.log(e)
     name = e.target.name
     value = e.target.value
     setZoneInfo({ ...zoneInfo, [name]: value })
   }
 
   const allData = path?.map(item => Number(item.lng) + "," + Number(item.lat))
-
-  console.log(allData)
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -184,11 +192,7 @@ function AddZone(props) {
 
   const handleSubmitForEdit = e => {
     e.preventDefault()
-    console.log("======================I am in the edit form==================")
-    console.log(zoneInfo)
-    console.log(path)
-    console.log(deliveryCharge)
-    console.log(selectedBranch)
+
     const uniqueId = uuidv4()
 
     props.zoneEditAction(
@@ -208,7 +212,6 @@ function AddZone(props) {
     })
   )
 
-  console.log(edit_zone_delivery_charge)
   // Delivery charge functionality
   const deliveryChargeTemplate = {
     distanceStart: "",
@@ -219,7 +222,6 @@ function AddZone(props) {
     location.state ? edit_zone_delivery_charge : [deliveryChargeTemplate]
   )
   const handleTimeChange = (e, index) => {
-    console.log(index)
     const updatedValue = deliveryCharge.map((row, i) =>
       index === i
         ? Object.assign(row, { [e.target.name]: e.target.value })
@@ -234,13 +236,11 @@ function AddZone(props) {
       setDeliveryCHarge(filteredTime)
     }
   }
-  console.log("deliveryCharge array" + deliveryCharge)
 
   function handleAddRowNested() {
     setDeliveryCHarge([...deliveryCharge, deliveryChargeTemplate])
   }
-  console.log(props.add_zone_loading)
-  console.log(deliveryCharge)
+
   useEffect(() => {
     if (props.get_all_branch_loading == false) {
       props.getAllBranchAction()
@@ -269,9 +269,9 @@ function AddZone(props) {
     props.edit_zone_loading,
   ])
 
-  console.log(props.get_all_branch_data)
-  console.log(props.get_all_city_data)
-  console.log(props.get_zone_by_id_data)
+  if (!isLoaded) {
+    return <PageLoader />
+  }
 
   return (
     <>
@@ -395,7 +395,7 @@ function AddZone(props) {
                       />
                     </div>
                   </Row>
-                  <Row className="mb-3">
+                  {/* <Row className="mb-3">
                     <label
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
@@ -412,7 +412,59 @@ function AddZone(props) {
                         readOnly
                       />
                     </div>
-                  </Row>
+                  </Row> */}
+
+                  <fieldset
+                    style={{
+                      border: "1px solid #ced4da",
+                      borderRadius: "0.375rem",
+                      marginBottom: "10px",
+                      padding: "10px",
+                    }}
+                  >
+                    <legend>Location</legend>
+                    <Row className="row-cols-lg-auto g-3 align-items-center">
+                      <Col lg={5} md={5} sm={12}>
+                        <Autocomplete
+                          onLoad={autocomplete => {
+                            setAutocomplete(autocomplete)
+                          }}
+                          onPlaceChanged={handlePlaceSelect}
+                        >
+                          <Input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search location"
+                            value={searchPlace}
+                            onChange={e => setSearchPlaces(e.target.value)}
+                          />
+                        </Autocomplete>
+                      </Col>
+                      <Col lg={5} md={5} sm={12}>
+                        <textarea
+                          required
+                          className="form-control"
+                          id="location"
+                          name="location"
+                          value={allData}
+                          readOnly={true}
+                          disabled={true}
+                        />
+                      </Col>
+
+                      <Col lg={1} md={1} sm={12} className="text-center">
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-primary"
+                          onClick={() => {
+                            clear()
+                          }}
+                        >
+                          Clear
+                        </button>
+                      </Col>
+                    </Row>
+                  </fieldset>
 
                   <Card>
                     <CardBody>
@@ -421,12 +473,10 @@ function AddZone(props) {
                         className="gmaps"
                         style={{ position: "relative" }}
                       >
-                        <Map
-                          style={{ width: "100%", height: "100%" }}
-                          google={props.google}
-                          initialCenter={defaultProps}
-                          zoom={12}
-                          onClick={e => onMapClickHandler(e)}
+                        <GoogleMap
+                          center={centerMap}
+                          zoom={15}
+                          mapContainerStyle={{ width: "100%", height: "100%" }}
                         >
                           <Polygon
                             // Make the Polygon editable / draggable
@@ -440,7 +490,7 @@ function AddZone(props) {
                             onLoad={onLoad}
                             onUnmount={onUnmount}
                           />
-                        </Map>
+                        </GoogleMap>
                       </div>
                     </CardBody>
                   </Card>
@@ -595,11 +645,5 @@ export default withRouter(
     zoneAddFresh,
     zoneEditFresh,
     getZoneByIdAction,
-  })(
-    GoogleApiWrapper({
-      apiKey: "AIzaSyDKIxr2AXZPA1k8EyJz52suWseQCFxfoMU",
-      LoadingContainer: LoadingContainer,
-      v: "3",
-    })(AddZone)
-  )
+  })(AddZone)
 )

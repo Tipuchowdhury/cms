@@ -8,6 +8,8 @@ import {
   Col,
   Container,
   Input,
+  ListGroup,
+  ListGroupItem,
   Modal,
   ModalBody,
   ModalFooter,
@@ -17,7 +19,6 @@ import {
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { toast } from "react-toastify"
 import withRouter from "components/Common/withRouter"
-;` `
 import { connect } from "react-redux"
 import {
   branchStatusEditAction,
@@ -29,11 +30,23 @@ import {
   getServerSidePaginationBranchAction,
   getServerSidePaginationBranchFresh,
   getBranchByIdFresh,
+  getAllZoneAction,
+  getSortablePopularBranchesByZoneIdAction,
+  getSortablePopularBranchesByZoneIdActionFresh,
+  updateSortablePopularBranchesAction,
+  updateSortablePopularBranchesActionFresh,
 } from "store/actions"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import DataTable from "react-data-table-component"
 import CustomLoader from "components/CustomLoader/CustomLoader"
+import Select from "react-select"
+import {
+  SortableContainer,
+  SortableElement,
+  arrayMove,
+} from "react-sortable-hoc"
+import PageLoader from "components/CustomLoader/PageLoader"
 
 function Branch(props) {
   const [statusInfo, setStatusInfo] = useState(false)
@@ -43,6 +56,10 @@ function Branch(props) {
   const [isPopular, setIsPopular] = useState(false)
   const [isPopularModal, setIsPopularModal] = useState(false)
   const togglePopularModal = () => setIsPopularModal(!isPopularModal)
+
+  const [modalSort, setModalSort] = useState(false)
+
+  const toggleSortModal = () => setModalSort(!modalSort)
 
   const [deleteItem, setDeleteItem] = useState()
   const [modalDel, setModalDel] = useState(false)
@@ -337,6 +354,105 @@ function Branch(props) {
     //   },
     // },
   }
+
+  const [zones, setZones] = useState(null)
+
+  useEffect(() => {
+    if (props.get_all_zone_loading === false) {
+      props.getAllZoneAction()
+    }
+  }, [props.get_all_zone_loading])
+
+  useEffect(() => {
+    if (props.get_all_zone_data?.length > 0) {
+      setZones(
+        props.get_all_zone_data.map((item, key) => ({
+          label: `${item.name}`,
+          value: item._id,
+        }))
+      )
+    }
+  }, [props.get_all_zone_data])
+
+  const [selectedZone, setSelectedZone] = useState(null)
+
+  const handleSelectZone = e => {
+    props.getSortablePopularBranchesByZoneIdActionFresh()
+    setSelectedZone(e)
+  }
+
+  useEffect(() => {
+    if (selectedZone) {
+      props.getSortablePopularBranchesByZoneIdAction(selectedZone.value)
+    }
+  }, [selectedZone])
+
+  const [zonePopularBranches, setZonePopularBranches] = useState(null)
+
+  useEffect(() => {
+    if (props.get_sortable_popular_branch_by_zone_id_data) {
+      setZonePopularBranches(props.get_sortable_popular_branch_by_zone_id_data)
+    }
+  }, [props.get_sortable_popular_branch_by_zone_id_data])
+
+  // Sortable Item Component
+  const SortableItem = SortableElement(({ item, position }) => {
+    return (
+      <ListGroupItem key={item.id} style={{ cursor: "pointer" }}>
+        {position}. {item.name}
+      </ListGroupItem>
+    )
+  })
+
+  // Sortable List Component
+  const SortableList = SortableContainer(({ items }) => (
+    <ListGroup>
+      {items.map((item, index) => {
+        return (
+          <SortableItem
+            key={item._id}
+            index={index}
+            item={item}
+            position={index + 1}
+          />
+        )
+      })}
+    </ListGroup>
+  ))
+
+  const onSortEnd = ({ oldIndex, newIndex }) => {
+    const newItems = arrayMove(zonePopularBranches, oldIndex, newIndex)
+
+    // Update popularity_sort_value based on the new order
+    const updatedItems = newItems.map((item, index) => ({
+      ...item,
+      popularity_sort_value: index + 1,
+    }))
+
+    setZonePopularBranches(updatedItems)
+  }
+
+  const handleUpdatePopularSort = () => {
+    if (zonePopularBranches) {
+      props.updateSortablePopularBranchesAction(zonePopularBranches)
+    }
+  }
+
+  useEffect(() => {
+    if (props.update_sortable_popular_branch_loading === "Success") {
+      props.updateSortablePopularBranchesActionFresh()
+      toggleSortModal()
+      toast.success("Updated Successfully")
+      setSelectedZone(null)
+      setZonePopularBranches(null)
+    }
+
+    if (props.update_sortable_popular_branch_loading === "Failed") {
+      props.updateSortablePopularBranchesActionFresh()
+      toast.error("Failed to update")
+    }
+  }, [props.update_sortable_popular_branch_loading])
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -364,17 +480,33 @@ function Branch(props) {
                     <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
                       Branch{" "}
                     </CardTitle>
-                    <Link to="/branch-add">
+
+                    <div>
                       <Button
                         style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
                         className="btn btn-sm"
                         onClick={() => {
-                          props.getBranchByIdFresh()
+                          toggleSortModal()
                         }}
                       >
-                        Add Branch
+                        <span className="fa fa-sort"></span> Sort Popular
+                        Branches
                       </Button>
-                    </Link>
+                      <Link to="/branch-add">
+                        <Button
+                          style={{
+                            backgroundColor: "#DCA218",
+                            color: "#FFFFFF",
+                          }}
+                          className="btn btn-sm"
+                          onClick={() => {
+                            props.getBranchByIdFresh()
+                          }}
+                        >
+                          Add Branch
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                   <DataTable
                     columns={activeData}
@@ -397,7 +529,7 @@ function Branch(props) {
                     paginationComponentOptions={paginationComponentOptions}
                     onChangeRowsPerPage={handlePerRowsChange}
                     onChangePage={page => {
-                      props.getServerSidePaginationOrderFresh()
+                      props.getServerSidePaginationBranchFresh()
                       setPage(page)
                     }}
                     progressPending={
@@ -499,6 +631,59 @@ function Branch(props) {
           </ModalFooter>
         </Modal>
         {/* ============ status update modal ends=============== */}
+
+        {/* ============ sort modal starts=============== */}
+        <Modal isOpen={modalSort} toggle={toggleSortModal} centered>
+          <ModalHeader
+            className="text-center"
+            style={{ textAlign: "center", margin: "0 auto" }}
+          >
+            <h4>Sort Popular Branches</h4>
+          </ModalHeader>
+          <ModalBody>
+            <Row className="mb-3">
+              <label
+                htmlFor="example-text-input"
+                className="col-md-2 col-form-label"
+              >
+                Zone
+              </label>
+              <div className="col-md-10">
+                <Select
+                  //required
+                  value={selectedZone}
+                  onChange={handleSelectZone}
+                  options={zones}
+                  isMulti={false}
+                />
+              </div>
+            </Row>
+            {selectedZone && zonePopularBranches ? (
+              !props.get_sortable_popular_branch_by_zone_id_loading ? (
+                <PageLoader />
+              ) : (
+                <div>
+                  <SortableList
+                    items={zonePopularBranches}
+                    onSortEnd={onSortEnd}
+                    helperClass="moving-item"
+                  />
+                </div>
+              )
+            ) : (
+              ""
+            )}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={toggleSortModal}>
+              Cancel
+            </Button>{" "}
+            <Button color="success" onClick={handleUpdatePopularSort}>
+              Update
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/* ============ sort modal ends=============== */}
       </div>
     </React.Fragment>
   )
@@ -509,12 +694,24 @@ const mapStateToProps = state => {
     edit_branch_status_loading,
     edit_branch_popular_loading,
     branch_delete_loading,
+
+    get_all_zone_data,
+    get_all_zone_error,
+    get_all_zone_loading,
   } = state.Restaurant
 
   const {
     get_server_side_pagination_branch_data,
     get_server_side_pagination_branch_error,
     get_server_side_pagination_branch_loading,
+
+    get_sortable_popular_branch_by_zone_id_data,
+    get_sortable_popular_branch_by_zone_id_error,
+    get_sortable_popular_branch_by_zone_id_loading,
+
+    update_sortable_popular_branch_data,
+    update_sortable_popular_branch_error,
+    update_sortable_popular_branch_loading,
   } = state.Branch
 
   return {
@@ -524,6 +721,18 @@ const mapStateToProps = state => {
     get_server_side_pagination_branch_data,
     get_server_side_pagination_branch_error,
     get_server_side_pagination_branch_loading,
+
+    get_all_zone_data,
+    get_all_zone_error,
+    get_all_zone_loading,
+
+    get_sortable_popular_branch_by_zone_id_data,
+    get_sortable_popular_branch_by_zone_id_error,
+    get_sortable_popular_branch_by_zone_id_loading,
+
+    update_sortable_popular_branch_data,
+    update_sortable_popular_branch_error,
+    update_sortable_popular_branch_loading,
   }
 }
 
@@ -538,5 +747,10 @@ export default withRouter(
     getServerSidePaginationBranchAction,
     getServerSidePaginationBranchFresh,
     getBranchByIdFresh,
+    getAllZoneAction,
+    getSortablePopularBranchesByZoneIdAction,
+    getSortablePopularBranchesByZoneIdActionFresh,
+    updateSortablePopularBranchesAction,
+    updateSortablePopularBranchesActionFresh,
   })(Branch)
 )

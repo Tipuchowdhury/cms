@@ -16,7 +16,13 @@ import {
   Col,
   Form,
 } from "reactstrap"
-import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react"
+// import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react"
+import {
+  GoogleMap,
+  Marker,
+  Autocomplete,
+  useJsApiLoader,
+} from "@react-google-maps/api"
 import { connect } from "react-redux"
 import withRouter from "components/Common/withRouter"
 import { useEffect } from "react"
@@ -50,15 +56,20 @@ import PageLoader from "components/CustomLoader/PageLoader"
 const LoadingContainer = () => <div>Loading...</div>
 
 function BranchAdd(props) {
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: "AIzaSyDKIxr2AXZPA1k8EyJz52suWseQCFxfoMU",
+    libraries: ["places"],
+  })
+
   const location = useLocation()
   const naviagte = useNavigate()
 
-  const [modal, setModal] = useState(false)
   const [loading, setLoading] = useState(true)
 
+  const [center, setCenter] = useState({ lat: 23.8103, lng: 90.4125 })
+  const [searchPlace, setSearchPlaces] = useState("")
+
   const [initialLatLong, setInitialLatLong] = useState({
-    // lat: 23.8103,
-    // lng: 90.4125,
     lat: 23.8103,
     lng: 90.4125,
   })
@@ -69,6 +80,45 @@ function BranchAdd(props) {
     lng: 90.4125,
   })
 
+  const [autocomplete, setAutocomplete] = useState(null)
+
+  const moveMarker = e => {
+    setInitialLatLong({ lat: e.latLng.lat(), lng: e.latLng.lng() })
+
+    setSearchPlaces("")
+    setLocationData({
+      ...locationData,
+      location: [e.latLng.lat(), e.latLng.lng()],
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng(),
+    })
+  }
+
+  const handlePlaceSelect = () => {
+    const place = autocomplete.getPlace()
+    const { lat, lng } = place.geometry.location
+
+    setSearchPlaces(place.name)
+    setInitialLatLong({ lat: lat(), lng: lng() })
+    setLocationData({
+      ...locationData,
+      location: [lat(), lng()],
+      lat: lat(),
+      lng: lng(),
+    })
+  }
+
+  const clear = () => {
+    setSearchPlaces("")
+    setInitialLatLong({ lat: center.lat, lng: center.lng })
+    setLocationData({
+      ...locationData,
+      location: [center.lat, center.lng],
+      lat: center.lat,
+      lng: center.lng,
+    })
+  }
+
   const timeTemplate = { day: "", startTime: "", endTime: "" }
   const [time, setTime] = useState([timeTemplate])
 
@@ -76,19 +126,8 @@ function BranchAdd(props) {
     setTime([...time, timeTemplate])
   }
 
-  const toggle = () => setModal(!modal)
-  const onMarkerClick = e => {}
-
-  const onMapClickHandler = e => {}
-
-  const moveMarker = (props, marker, e) => {
-    setInitialLatLong({ lat: e.latLng.lat(), lng: e.latLng.lng() })
-    setLocationData({
-      ...locationData,
-      location: [e.latLng.lat(), e.latLng.lng()],
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng(),
-    })
+  const onLoad = autocomplete => {
+    setAutocomplete(autocomplete)
   }
 
   const [images, setImages] = useState({
@@ -217,7 +256,6 @@ function BranchAdd(props) {
 
   const [selectedCuisine, setSelectedCuisine] = useState("")
 
-  console.log(selectedCuisine)
   const handleSelectCuisine = e => {
     setSelectedCuisine(e)
   }
@@ -469,10 +507,6 @@ function BranchAdd(props) {
   ])
 
   useEffect(() => {
-    console.log(
-      "props.get_branch_by_id_loading",
-      props.get_branch_by_id_loading
-    )
     if (
       props.get_branch_by_id_loading == "Success" &&
       props.get_all_branch_attribute_loading == "Success" &&
@@ -484,7 +518,7 @@ function BranchAdd(props) {
       props.get_all_cuisine_loading == "Success"
     ) {
       const branchData = props.get_branch_by_id_data
-      console.log("branchData :", branchData)
+
       setZoneInfo({
         name: branchData.name,
         restaurant: branchData.parent_restaurant_id,
@@ -554,7 +588,7 @@ function BranchAdd(props) {
       setSelectedBranchAdmin(branch_admin_edit)
 
       const central_branch_admin = props?.get_central_admin_data?.filter(
-        elem => elem._id === location.state?.central_admin
+        elem => elem._id === branchData.central_admin
       )
 
       const central_admin_edit = central_branch_admin
@@ -604,7 +638,6 @@ function BranchAdd(props) {
 
       // location set start
       let coordinates = branchData?.location?.coordinates
-      console.log("coordinates :", coordinates)
 
       setInitialLatLong({
         lat: coordinates[1],
@@ -650,13 +683,16 @@ function BranchAdd(props) {
   ])
 
   useEffect(() => {
-    console.log("location?.state :", location?.state)
     if (location?.state) {
       props.getBranchByIdAction(location.state._id)
     }
   }, [location?.state])
 
   if (location?.state && loading) {
+    return <PageLoader />
+  }
+
+  if (!isLoaded) {
     return <PageLoader />
   }
 
@@ -793,7 +829,6 @@ function BranchAdd(props) {
                     Zonal Admin
                   </label>
                   <div className="col-md-10">
-
                     <Select
                       //required
                       value={selectedZonalAdmin}
@@ -1382,7 +1417,7 @@ function BranchAdd(props) {
                   </div>
                 </Row>
 
-                <Row className="mb-3">
+                {/* <Row className="mb-3">
                   <label
                     htmlFor="example-text-input"
                     className="col-md-2 col-form-label"
@@ -1400,7 +1435,60 @@ function BranchAdd(props) {
                       readOnly={true}
                     />
                   </div>
-                </Row>
+                </Row> */}
+
+                <fieldset
+                  style={{
+                    border: "1px solid #ced4da",
+                    borderRadius: "0.375rem",
+                    marginBottom: "10px",
+                    padding: "10px",
+                  }}
+                >
+                  <legend>Location</legend>
+                  <Row className="row-cols-lg-auto g-3 align-items-center">
+                    <Col lg={5} md={5} sm={12}>
+                      <Autocomplete
+                        onLoad={autocomplete => {
+                          setAutocomplete(autocomplete)
+                        }}
+                        onPlaceChanged={handlePlaceSelect}
+                      >
+                        <Input
+                          type="text"
+                          className="form-control"
+                          placeholder="Search location"
+                          value={searchPlace}
+                          onChange={e => setSearchPlaces(e.target.value)}
+                        />
+                      </Autocomplete>
+                    </Col>
+                    <Col lg={5} md={5} sm={12}>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="location"
+                        name="location"
+                        required
+                        value={locationData.location}
+                        readOnly={true}
+                        disabled={true}
+                      />
+                    </Col>
+
+                    <Col lg={1} md={1} sm={12} className="text-center">
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-primary"
+                        onClick={() => {
+                          clear()
+                        }}
+                      >
+                        Clear
+                      </button>
+                    </Col>
+                  </Row>
+                </fieldset>
 
                 <Card>
                   <CardBody>
@@ -1409,7 +1497,7 @@ function BranchAdd(props) {
                       className="gmaps"
                       style={{ position: "relative" }}
                     >
-                      <Map
+                      {/* <Map
                         style={{ width: "100%", height: "100%" }}
                         google={props.google}
                         initialCenter={initialLatLong}
@@ -1424,7 +1512,20 @@ function BranchAdd(props) {
                             onMarkerClick(e)
                           }}
                         />
-                      </Map>
+                      </Map> */}
+                      {/* <LoadScript googleMapsApiKey="AIzaSyDKIxr2AXZPA1k8EyJz52suWseQCFxfoMU"> */}
+                      <GoogleMap
+                        center={initialLatLong}
+                        zoom={18}
+                        mapContainerStyle={{ width: "100%", height: "100%" }}
+                      >
+                        <Marker
+                          draggable={true}
+                          onDragEnd={e => moveMarker(e)}
+                          position={initialLatLong}
+                        />
+                      </GoogleMap>
+                      {/* </LoadScript> */}
                     </div>
                   </CardBody>
                 </Card>
@@ -1621,11 +1722,5 @@ export default withRouter(
 
     getCentralAdminUser,
     getCentralAdminUserFresh,
-  })(
-    GoogleApiWrapper({
-      apiKey: "AIzaSyDKIxr2AXZPA1k8EyJz52suWseQCFxfoMU",
-      LoadingContainer: LoadingContainer,
-      v: "3",
-    })(BranchAdd)
-  )
+  })(BranchAdd)
 )
