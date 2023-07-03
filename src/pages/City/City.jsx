@@ -44,6 +44,9 @@ import { Link } from "react-router-dom"
 function City(props) {
   document.title = "City | Foodi"
   const [submitDisabled, setSubmitDisabled] = useState(false)
+  const [editSubmitDisabled, setEditSubmitDisabled] = useState(false)
+  const [statusSubmitDisabled, setStatusSubmitDisabled] = useState(false)
+  const [deleteSubmitDisabled, setDeleteSubmitDisabled] = useState(false)
   const [name, setName] = useState("")
   const [modal, setModal] = useState(false)
   const [cityId, setCityId] = useState()
@@ -60,19 +63,18 @@ function City(props) {
 
   const toggleDel = () => setModalDel(!modalDel)
   const handleDelete = () => {
-    toggleDel()
+    setDeleteSubmitDisabled(true)
     props.cityDeleteAction(deleteItem)
   }
 
   const toggle = () => {
-    //setSubmitDisabled(false)
     setModal(!modal)
   }
   const toggleEditModal = () => setEditModal(!editModal)
   const handleSubmit = e => {
     setSubmitDisabled(true)
     e.preventDefault()
-    toggle()
+
     const val = uuidv4()
     props.addCityAction(name, val)
   }
@@ -97,13 +99,14 @@ function City(props) {
 
   const handleStatusUpdate = e => {
     e.preventDefault()
+    setStatusSubmitDisabled(true)
     props.cityStatusEditAction(cityname, cityId, isActive)
-    // toggleDel();
   }
 
   const handleEditModalSubmit = e => {
     e.preventDefault()
-    toggleEditModal()
+    setEditSubmitDisabled(true)
+
     props.cityNameEditAction(cityname, cityId, isActive)
   }
   const handleDeleteModal = row => {
@@ -219,6 +222,7 @@ function City(props) {
 
     if (props.add_city_loading === "Success") {
       toast.success("City Addedd Successfully")
+      toggle()
       setName("")
       props.addCityFresh()
       setSubmitDisabled(false)
@@ -232,25 +236,40 @@ function City(props) {
 
     if (props.city_name_edit_loading === "Success") {
       toast.success("City Name Updated")
-
+      toggleEditModal()
       props.cityNameEditFresh()
+      setEditSubmitDisabled(false)
+    }
+    if (props.city_name_edit_loading === "Failed") {
+      toast.error("Something went wrong")
+      props.cityNameEditFresh()
+      setEditSubmitDisabled(false)
     }
 
     if (props.city_status_edit_loading === "Success") {
       toast.success("City Status Updated")
       toggleStatus()
       props.cityStatusEditFresh()
+      setStatusSubmitDisabled(false)
     }
 
     if (props.city_status_edit_loading === "Failed") {
       toast.error("Something went wrong")
       props.cityStatusEditFresh()
+      setStatusSubmitDisabled(false)
     }
 
     if (props.city_delete_loading === "Success") {
-      console.log("I am in the delete")
       toast.success("City Deleted")
+      toggleDel()
       props.cityDeleteFresh()
+      setDeleteSubmitDisabled(false)
+    }
+
+    if (props.city_delete_loading === "Failed") {
+      toast.error("Something went wrong")
+      props.cityDeleteFresh()
+      setDeleteSubmitDisabled(false)
     }
 
     // props.getServerSidePaginationAction(page, countPerPage)
@@ -411,9 +430,14 @@ function City(props) {
               <div
                 style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
               >
-                <Button color="primary" type="submit">
-                  Submit
-                </Button>{" "}
+                <Button
+                  disabled={editSubmitDisabled}
+                  color="primary"
+                  type="submit"
+                >
+                  Update
+                </Button>
+
                 <Button color="secondary" onClick={toggleEditModal}>
                   Cancel
                 </Button>
@@ -446,7 +470,11 @@ function City(props) {
             <Button color="secondary" onClick={toggleDel}>
               Cancel
             </Button>{" "}
-            <Button color="danger" onClick={handleDelete}>
+            <Button
+              disabled={deleteSubmitDisabled}
+              color="danger"
+              onClick={handleDelete}
+            >
               Delete
             </Button>
           </ModalFooter>
@@ -474,7 +502,11 @@ function City(props) {
             <Button color="secondary" onClick={toggleStatus}>
               Cancel
             </Button>{" "}
-            <Button color="primary" onClick={handleStatusUpdate}>
+            <Button
+              disabled={statusSubmitDisabled}
+              color="primary"
+              onClick={handleStatusUpdate}
+            >
               Update
             </Button>
           </ModalFooter>
