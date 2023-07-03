@@ -47,6 +47,7 @@ import Branch from "./Branch/reducer"
 import dineInCard from "./DineInGallery/reducer"
 import RewardLabel from "./RewardLabel/reducer"
 import VoucherRequest from "./VoucherRequest/reducer"
+import Faq from "./FAQ/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -89,6 +90,7 @@ const rootReducer = combineReducers({
   dineInCard,
   RewardLabel,
   VoucherRequest,
+  Faq,
 })
 
 export default rootReducer
