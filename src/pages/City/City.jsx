@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import {
+  BreadcrumbItem,
   Button,
   Card,
   CardBody,
@@ -38,8 +39,10 @@ import {
 } from "store/zoneCity/actions"
 import DataTable from "react-data-table-component"
 import CustomLoader from "components/CustomLoader/CustomLoader"
+import { Link } from "react-router-dom"
 
 function City(props) {
+  document.title = "City | Foodi"
   const [submitDisabled, setSubmitDisabled] = useState(false)
   const [name, setName] = useState("")
   const [modal, setModal] = useState(false)
@@ -266,19 +269,21 @@ function City(props) {
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          {/* Render Breadcrumbs */}
-          <Breadcrumbs
-            maintitle="Foodi"
-            title="Zone & City"
-            breadcrumbItem="City"
-          />
-          {/* <Row className="d-flex flex-row-reverse" style={{ marginBottom: "20px", alignItems: "end" }}>
-                        <Col className="col-12">
-                            <Button color="danger" onClick={toggle}>
-                                Add City
-                            </Button>
-                        </Col>
-                    </Row> */}
+          <Row className="align-items-center">
+            <Col sm={6}>
+              <div className="page-title-box">
+                <h4 className="font-size-18">City</h4>
+                <ol className="breadcrumb mb-0">
+                  <BreadcrumbItem>
+                    <Link to="/">Foodi</Link>
+                  </BreadcrumbItem>
+                  <BreadcrumbItem>Zone & City</BreadcrumbItem>
+                  <BreadcrumbItem active>City</BreadcrumbItem>
+                </ol>
+              </div>
+            </Col>
+          </Row>
+
           <Row>
             <Col className="col-12">
               <Card style={{ border: "none" }}>

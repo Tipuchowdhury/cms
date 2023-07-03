@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import {
   Badge,
+  BreadcrumbItem,
   Button,
   Card,
   CardBody,
@@ -219,19 +220,21 @@ function Campaign(props) {
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          {/* Render Breadcrumbs */}
-          <Breadcrumbs
-            maintitle="Foodi"
-            title="Campaign"
-            breadcrumbItem="Campaign"
-          />
-          {/* <Row className="d-flex flex-row-reverse" style={{ marginBottom: "20px", alignItems: "end" }}>
-                        <Col className="col-12">
-                            <Button color="danger" onClick={toggle}>
-                                Add Campaign
-                            </Button>
-                        </Col>
-                    </Row> */}
+          <Row className="align-items-center">
+            <Col sm={6}>
+              <div className="page-title-box">
+                <h4 className="font-size-18">Campaign</h4>
+                <ol className="breadcrumb mb-0">
+                  <BreadcrumbItem>
+                    <Link to="/">Foodi</Link>
+                  </BreadcrumbItem>
+
+                  <BreadcrumbItem active>Campaign</BreadcrumbItem>
+                </ol>
+              </div>
+            </Col>
+          </Row>
+
           <Row>
             <Col className="col-12">
               <Card style={{ border: "none" }}>

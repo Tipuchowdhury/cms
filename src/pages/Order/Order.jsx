@@ -228,7 +228,7 @@ function Order(props) {
         >
           <span className="fas fa-file-invoice"></span> Invoice
         </Button>{" "}
-        {cell.rider_id != "" ? (
+        {cell.rider_id != null ? (
           <Button
             className="btn btn-sm btn-dark waves-effect waves-light mb-1"
             onClick={() => {
