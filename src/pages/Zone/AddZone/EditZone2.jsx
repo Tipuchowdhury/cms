@@ -154,16 +154,18 @@ function EditZone(props) {
   }, [])
 
   const calculateZoom = () => {
-    const bounds = new window.google.maps.LatLngBounds()
-    path.forEach(coord => {
-      bounds.extend(coord)
-    })
+    if (mapRef.current) {
+      const bounds = new window.google.maps.LatLngBounds()
+      path.forEach(coord => {
+        bounds.extend(coord)
+      })
 
-    mapRef.current && mapRef.current.fitBounds(bounds)
+      mapRef.current && mapRef.current.fitBounds(bounds)
+    }
   }
 
   useEffect(() => {
-    calculateZoom()
+    if (path) calculateZoom()
     // const calculateZoom = () => {
     //   const bounds = new window.google.maps.LatLngBounds()
     //   path.forEach(coord => {
@@ -384,7 +386,7 @@ function EditZone(props) {
     }
   }, [props])
 
-  if (getInfo) {
+  if (!props.get_zone_by_id_data) {
     return <PageLoader />
   }
   if (!isLoaded) {

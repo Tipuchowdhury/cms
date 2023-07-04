@@ -41,11 +41,8 @@ import { useNavigate } from "react-router-dom"
 import DataTable from "react-data-table-component"
 import CustomLoader from "components/CustomLoader/CustomLoader"
 import Select from "react-select"
-import {
-  SortableContainer,
-  SortableElement,
-  arrayMove,
-} from "react-sortable-hoc"
+import { SortableContainer, SortableElement } from "react-sortable-hoc"
+import { arrayMoveImmutable as arrayMove } from "array-move"
 import PageLoader from "components/CustomLoader/PageLoader"
 
 function Branch(props) {
@@ -150,7 +147,7 @@ function Branch(props) {
     return cell.isFilter ? (
       <Input
         type="select"
-        className="form-control input-sm"
+        className="form-control input-sm w-50"
         name="is_active"
         value={pageFilters?.is_active}
         onChange={handleFilter}
@@ -397,9 +394,44 @@ function Branch(props) {
 
   // Sortable Item Component
   const SortableItem = SortableElement(({ item, position }) => {
+    const matchedData = props.get_sortable_popular_branch_by_zone_id_data.find(
+      data => data._id === item._id
+    )
+    const isPopularityDifferent =
+      matchedData &&
+      matchedData.popularity_sort_value !== item.popularity_sort_value
+    const popularityDifference = matchedData
+      ? matchedData.popularity_sort_value - item.popularity_sort_value
+      : 0
     return (
-      <ListGroupItem key={item.id} style={{ cursor: "pointer" }}>
-        {position}. {item.name}
+      <ListGroupItem
+        key={item._id}
+        style={{
+          cursor: "pointer",
+          background: `${isPopularityDifferent ? "#DCA21844" : "none"}`,
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <span>
+            {position}. {item.name}
+          </span>
+          {isPopularityDifferent ? (
+            <div>
+              <span
+                className={`${
+                  popularityDifference > 0
+                    ? "fa fa-arrow-up text-success"
+                    : "fa fa-arrow-down text-danger"
+                }`}
+              ></span>
+              {Math.abs(
+                matchedData.popularity_sort_value - item.popularity_sort_value
+              )}
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
       </ListGroupItem>
     )
   })
