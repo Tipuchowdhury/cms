@@ -41,11 +41,8 @@ import { useNavigate } from "react-router-dom"
 import DataTable from "react-data-table-component"
 import CustomLoader from "components/CustomLoader/CustomLoader"
 import Select from "react-select"
-import {
-  SortableContainer,
-  SortableElement,
-  arrayMove,
-} from "react-sortable-hoc"
+import { SortableContainer, SortableElement } from "react-sortable-hoc"
+import arrayMove from "array-move"
 import PageLoader from "components/CustomLoader/PageLoader"
 
 function Branch(props) {
