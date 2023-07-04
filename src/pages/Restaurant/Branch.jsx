@@ -150,7 +150,7 @@ function Branch(props) {
     return cell.isFilter ? (
       <Input
         type="select"
-        className="form-control input-sm"
+        className="form-control input-sm w-50"
         name="is_active"
         value={pageFilters?.is_active}
         onChange={handleFilter}
@@ -413,7 +413,31 @@ function Branch(props) {
           }`,
         }}
       >
-        {position}. {item.name}
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <span>
+            {position}. {item.name}
+          </span>
+          <div>
+            <span
+              className={`${
+                matchedData &&
+                matchedData.popularity_sort_value !== item.popularity_sort_value
+                  ? matchedData.popularity_sort_value -
+                      item.popularity_sort_value >
+                    0
+                    ? "fa fa-arrow-up text-success"
+                    : "fa fa-arrow-down text-danger"
+                  : ""
+              }`}
+            ></span>
+            {matchedData &&
+            matchedData.popularity_sort_value !== item.popularity_sort_value
+              ? Math.abs(
+                  matchedData.popularity_sort_value - item.popularity_sort_value
+                )
+              : ""}
+          </div>
+        </div>
       </ListGroupItem>
     )
   })
