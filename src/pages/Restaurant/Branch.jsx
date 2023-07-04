@@ -400,43 +400,40 @@ function Branch(props) {
     const matchedData = props.get_sortable_popular_branch_by_zone_id_data.find(
       data => data._id === item._id
     )
+    const isPopularityDifferent =
+      matchedData &&
+      matchedData.popularity_sort_value !== item.popularity_sort_value
+    const popularityDifference = matchedData
+      ? matchedData.popularity_sort_value - item.popularity_sort_value
+      : 0
     return (
       <ListGroupItem
         key={item._id}
         style={{
           cursor: "pointer",
-          background: `${
-            matchedData &&
-            matchedData.popularity_sort_value !== item.popularity_sort_value
-              ? "#DCA21888"
-              : "none"
-          }`,
+          background: `${isPopularityDifferent ? "#DCA21844" : "none"}`,
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <span>
             {position}. {item.name}
           </span>
-          <div>
-            <span
-              className={`${
-                matchedData &&
-                matchedData.popularity_sort_value !== item.popularity_sort_value
-                  ? matchedData.popularity_sort_value -
-                      item.popularity_sort_value >
-                    0
+          {isPopularityDifferent ? (
+            <div>
+              <span
+                className={`${
+                  popularityDifference > 0
                     ? "fa fa-arrow-up text-success"
                     : "fa fa-arrow-down text-danger"
-                  : ""
-              }`}
-            ></span>
-            {matchedData &&
-            matchedData.popularity_sort_value !== item.popularity_sort_value
-              ? Math.abs(
-                  matchedData.popularity_sort_value - item.popularity_sort_value
-                )
-              : ""}
-          </div>
+                }`}
+              ></span>
+              {Math.abs(
+                matchedData.popularity_sort_value - item.popularity_sort_value
+              )}
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </ListGroupItem>
     )
