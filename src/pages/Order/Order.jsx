@@ -217,7 +217,7 @@ function Order(props) {
             toggleChangeStatusModal()
           }}
         >
-          <span className="fas fa-edit"></span> Change Order Status
+          <span className="fas fa-edit"></span> Change Status
         </Button>
         <br></br>
         <Button
@@ -772,8 +772,15 @@ function Order(props) {
           </Row>
         </Container>
         {/* Assign Rider Modal */}
-        <Modal isOpen={modal} toggle={toggle} centered>
-          <ModalHeader toggle={toggle}>Assign Rider</ModalHeader>
+        <Modal
+          isOpen={modal}
+          toggle={toggle}
+          centered
+          style={{ minWidth: "35%" }}
+        >
+          <ModalHeader toggle={toggle}>
+            Assign Rider | Order# {riderModalInfo.order_id}
+          </ModalHeader>
           <ModalBody>
             {riderModalInfo.order_id && props.get_available_rider_data ? (
               <div>
@@ -1016,7 +1023,13 @@ function Order(props) {
                     gap: 5,
                   }}
                 >
-                  <Button color="secondary" onClick={toggleConfirmRider}>
+                  <Button
+                    color="secondary"
+                    onClick={() => {
+                      toggleConfirmRider()
+                      toggle()
+                    }}
+                  >
                     Cancel
                   </Button>{" "}
                   <Button color="primary" type="button" onClick={handleSubmit}>
