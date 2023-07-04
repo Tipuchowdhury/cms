@@ -397,8 +397,22 @@ function Branch(props) {
 
   // Sortable Item Component
   const SortableItem = SortableElement(({ item, position }) => {
+    const matchedData = props.get_sortable_popular_branch_by_zone_id_data.find(
+      data => data._id === item._id
+    )
     return (
-      <ListGroupItem key={item.id} style={{ cursor: "pointer" }}>
+      <ListGroupItem
+        key={item._id}
+        style={{
+          cursor: "pointer",
+          background: `${
+            matchedData &&
+            matchedData.popularity_sort_value !== item.popularity_sort_value
+              ? "#DCA21888"
+              : "none"
+          }`,
+        }}
+      >
         {position}. {item.name}
       </ListGroupItem>
     )
