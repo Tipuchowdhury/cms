@@ -207,7 +207,7 @@ function Order(props) {
           }}
         >
           <span className="fas fa-biking"></span>
-          {cell.rider_id ? " Assign Rider" : " Reassign Rider"}
+          {!cell.rider_id ? " Assign Rider" : " Reassign Rider"}
         </Button>
         <br></br>
         <Button
