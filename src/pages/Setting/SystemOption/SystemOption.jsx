@@ -233,6 +233,7 @@ function SystemOption(props) {
                                         onChange={handleAddInputs}
                                         type="select"
                                       >
+                                        <option value="">Choose...</option>
                                         {vehicleTypes.map(vehicleType => (
                                           <option
                                             key={vehicleType._id}
@@ -257,6 +258,7 @@ function SystemOption(props) {
                                         type="select"
                                         disabled
                                       >
+                                        <option value="">Choose...</option>
                                         {vehicleTypes.map(vehicleType => (
                                           <option
                                             key={vehicleType._id}

@@ -132,6 +132,7 @@ import Slider from "pages/Slider/Slider"
 import SliderAdd from "pages/Slider/addSlider/SliderAdd"
 import EditSlider from "pages/Slider/addSlider/EditSlider"
 import AddMenu from "pages/Restaurant/Menu/AddMenu/AddMenu"
+import AddMenuCopy from "pages/Restaurant/Menu/AddMenu/AddMenu copy"
 import EditMenu from "pages/Restaurant/Menu/AddMenu/EditMenu"
 import Cuisine from "pages/Restaurant/Cuisine/Cuisine"
 import RewardPoint from "pages/CRM/RewardPoints/RewardPoint"
@@ -242,6 +243,8 @@ const userRoutes = [
 
   { path: "/menu", component: <Menu /> },
   { path: "/add-menu", component: <AddMenu /> },
+  { path: "/add-multi-menu", component: <AddMenuCopy /> },
+
   { path: "/edit-menu", component: <EditMenu /> },
 
   { path: "/addons-category", component: <AddOnsCategory /> },
