@@ -48,6 +48,7 @@ import dineInCard from "./DineInGallery/reducer"
 import RewardLabel from "./RewardLabel/reducer"
 import VoucherRequest from "./VoucherRequest/reducer"
 import Faq from "./FAQ/reducer"
+import Menu from "./Menu/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -91,6 +92,7 @@ const rootReducer = combineReducers({
   RewardLabel,
   VoucherRequest,
   Faq,
+  Menu,
 })
 
 export default rootReducer

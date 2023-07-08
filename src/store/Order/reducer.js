@@ -19,6 +19,8 @@ import {
   GET_ORDER_INVOICE_FRESH,
   GET_RIDER_INVOICE,
   GET_RIDER_INVOICE_FRESH,
+  GET_CHECK_CART,
+  GET_CHECK_CART_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -58,6 +60,11 @@ const initialState = {
   get_rider_invoice_data: null,
   get_rider_invoice_error: null,
   get_rider_invoice_loading: false,
+
+  // check cart
+  get_check_cart_data: null,
+  get_check_cart_error: null,
+  get_check_cart_loading: false,
 }
 
 const order = (state = initialState, action) => {
@@ -198,6 +205,23 @@ const order = (state = initialState, action) => {
         ...state,
         get_rider_invoice_data: action.payload,
         get_rider_invoice_loading: action.status,
+      }
+      break
+
+    case GET_CHECK_CART:
+      state = {
+        ...state,
+        get_check_cart_data: action.payload,
+        get_check_cart_error: null,
+        get_check_cart_loading: action.status,
+      }
+      break
+
+    case GET_CHECK_CART_FRESH:
+      state = {
+        ...state,
+        get_check_cart_data: action.payload,
+        get_check_cart_loading: action.status,
       }
       break
   }

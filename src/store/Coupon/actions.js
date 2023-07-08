@@ -15,6 +15,8 @@ import {
   SERVER_SIDE_PAGINATION_COUPON_SEARCH_FRESH,
   GET_COUPON_BY_ID,
   GET_COUPON_BY_ID_FRESH,
+  GET_VALID_COUPONS_FOR_CART,
+  GET_VALID_COUPONS_FOR_CART_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { convertToFormData } from "helpers/functions"
@@ -658,4 +660,41 @@ export const getCouponByIdActionFresh = () => {
       type: GET_COUPON_BY_ID_FRESH,
       status: false,
     })
+}
+
+export const getValidCouponForCart = cart_data => {
+  var url = `${process.env.REACT_APP_LOCALHOST}/Coupon/Get`
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_VALID_COUPONS_FOR_CART,
+          payload: response.data,
+          // payload: sampleData,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_VALID_COUPONS_FOR_CART,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getValidCouponForCartFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: GET_VALID_COUPONS_FOR_CART_FRESH,
+      payload: null,
+      status: "Success",
+    })
+  }
 }
