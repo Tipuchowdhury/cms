@@ -235,7 +235,7 @@ function Menu(props) {
                     <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
                       Menu{" "}
                     </CardTitle>
-                    <Link to="/add-menu">
+                    <Link to="/add-multi-menu">
                       <Button
                         style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
                       >
