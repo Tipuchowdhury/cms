@@ -52,8 +52,10 @@ function AddMenu2(props) {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
+
   const [isLoading, setIsLoading] = useState(false)
   const [timeSLotLoading, setTimeSLotLoading] = useState(false)
+  const [branchLoading, setBranchLoading] = useState(false)
   useEffect(() => {
     props.getTimeSLotByBranchIdFresh()
     setMenuItem([{ ...menuItem, menu_available_times: [] }])
@@ -724,6 +726,7 @@ function AddMenu2(props) {
                   </label>
                   <div className="col-md-10">
                     <Select
+                      isLoading={branchDate == undefined ? true : false}
                       value={selectedBranch}
                       onChange={handleSelectBranch}
                       options={branchDate}
