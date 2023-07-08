@@ -1573,11 +1573,9 @@ export const addRestaurantMenuAction = (
   variations,
   menuTiming
 ) => {
-  console.log(val, info, isChecked)
-
   var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Post"
 
-  console.log("variations :", variations)
+  console.log("sending variations :", variations)
   const variationData =
     isChecked && variations?.length > 0
       ? variations.map(item => {
@@ -1611,19 +1609,7 @@ export const addRestaurantMenuAction = (
         })
       : []
 
-  console.log("variationData :", variationData)
-
-  // const menuTimingData =
-  //   menuTiming.length > 0
-  //     ? menuTiming.map(item => {
-  //         const _id = uuidv4()
-  //         return {
-  //           _id: _id,
-  //           menu_item_time_slot_id: item._id,
-  //           menu_item_id: val,
-  //         }
-  //       })
-  //     : []
+  console.log("alter variationData :", variationData)
 
   const menuTimingData = menuTiming
     .filter(data => data.checked != false)
@@ -1644,7 +1630,7 @@ export const addRestaurantMenuAction = (
     menu_price: Number(info.menu_price),
     pickup_menu_price: Number(info.pickup_menu_price),
     menu_group_id: info.restaurant,
-    variation_group_name: info.Variation_group_name,
+    variation_group_name: info.variation_group_name,
     variation_group_desc: info.Variation_grp_desc,
     // check_add_ons: isChecked === true ? 1 : 0,
     has_variation: isChecked === true ? 1 : 0,
@@ -1664,10 +1650,126 @@ export const addRestaurantMenuAction = (
     slug: "test",
     is_active: true,
   }
+
+  console.log("final object :", dataObject)
+  const formData = convertToFormData(dataObject)
+
+  // return dispatch => {
+  //   if (menuTimingData.length > 0) {
+  //     const headers = {
+  //       "Content-Type": "multipart/form-data",
+  //       "Access-Control-Allow-Origin": "*",
+  //     }
+
+  //     axios
+  //       .post(url, formData, { headers: headers })
+  //       .then(response => {
+  //         dispatch({
+  //           type: "ADD_RESTAURANT_MENU",
+  //           payload: response.data,
+  //           status: "Success",
+  //         })
+  //         toast.success("Menu Added Successfully")
+  //       })
+  //       .catch(error => {
+  //         dispatch({
+  //           type: "ADD_RESTAURANT_MENU",
+  //           payload: error,
+  //           status: "Failed",
+  //         })
+  //         toast.error("Menu Add Failed")
+  //       })
+  //   } else {
+  //     toast.error("Please select a menu availability time slot")
+  //   }
+  // }
+}
+
+export const addRestaurantMenuAction2 = (info, menuItem) => {
+  var url = process.env.REACT_APP_LOCALHOST + "/MenuItem/Post"
+
+  console.log(info, menuItem)
+
+  const menus =
+    menuItem?.length > 0
+      ? menuItem.map(item => {
+          return {
+            _id: item._id,
+            menu_name: item.menu_name,
+            menu_price: Number(item.menu_price),
+            pickup_menu_price: Number(item.pickup_menu_price),
+            recipe_time: Number(item.recipe_time),
+            menu_group_id: info.restaurant,
+            variation_group_name: item.variation_group_name,
+            variation_group_desc: item.variation_group_desc,
+            has_variation: item.has_variation === true ? 1 : 0,
+            image: item.image,
+            slug: "test",
+            is_popular: item.is_popular,
+            description: item.description,
+            vat: Number(item.vat),
+            sd: Number(item.sd),
+            restaurant_id: info.restaurant,
+            category_id: info.category,
+            is_delivery: item.is_delivery,
+            is_pickup: item.is_pickup,
+            is_dine: item.is_dine,
+            deactivation_date: "",
+            is_active: true,
+            menu_available_times: item.menu_available_times
+              .filter(
+                menu_available_times_data =>
+                  menu_available_times_data.checked != false
+              )
+              .map(menu_available_times_item => {
+                const menu_available_times_item_id = uuidv4()
+                return {
+                  _id: menu_available_times_item_id,
+                  menu_item_time_slot_id: menu_available_times_item._id,
+                  menu_item_id: item._id,
+                }
+              }),
+            variations:
+              item.has_variation === true
+                ? item.variations.map(variations_item => {
+                    return {
+                      _id: variations_item._id,
+                      menu_id: item._id,
+                      variation_name: variations_item.variation_name,
+                      variation_price: variations_item.variation_price,
+                      variation_group_desc:
+                        variations_item.variation_group_desc,
+                      variation_group_name:
+                        variations_item.variation_group_name,
+                      add_on: variations_item.add_on,
+                      is_active: true,
+                      add_on_categories: variations_item.add_on_categories,
+                    }
+                  })
+                : [],
+          }
+        })
+      : []
+
+  console.log(menus)
+
+  let error_data = []
+  let status = 0
+  const eror = menus.map(item => {
+    if (item.menu_available_times.length < 1) {
+      status = 1
+      error_data.push(" " + item.menu_name)
+    }
+  })
+
+  let dataObject = {
+    menus: menus,
+  }
+
   const formData = convertToFormData(dataObject)
 
   return dispatch => {
-    if (menuTimingData.length > 0) {
+    if (status == 0) {
       const headers = {
         "Content-Type": "multipart/form-data",
         "Access-Control-Allow-Origin": "*",
@@ -1692,7 +1794,9 @@ export const addRestaurantMenuAction = (
           toast.error("Menu Add Failed")
         })
     } else {
-      toast.error("Please select a menu availability time slot")
+      toast.error(
+        "Please select a menu availability time slot for" + error_data + " menu"
+      )
     }
   }
 }
@@ -1950,7 +2054,7 @@ export const editRestaurantMenuAction = (
     menu_price: Number(info.menu_price),
     pickup_menu_price: Number(info.pickup_menu_price),
     menu_group_id: info.restaurant,
-    variation_group_name: info.Variation_group_name,
+    variation_group_name: info.variation_group_name,
     variation_group_desc: info.Variation_grp_desc,
     // check_add_ons: isChecked === true ? 1 : 0,
     has_variation: isChecked === true ? 1 : 0,

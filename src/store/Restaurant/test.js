@@ -1,0 +1,240 @@
+const data = {
+  menus: [
+    {
+      _id: "f1218c2b-6710-4082-8089-c14f51698698",
+      menu_name: "Multimenu test with veriation and add_on 2",
+      menu_price: 750,
+      pickup_menu_price: 750,
+      recipe_time: 30,
+      menu_group_id: "ffa9fdbf-d9f0-4758-bb5f-582e8f5a5e8b",
+      variation_group_name: "Variation Group Name",
+      variation_group_desc: "Variation Group Name",
+      has_variation: 1,
+      image: "https://imagesandfilesbucket.theecotek.com/spicy chick.webp",
+      slug: "test",
+      is_popular: true,
+      description: "6 pc",
+      vat: 5,
+      sd: 5,
+      restaurant_id: "ffa9fdbf-d9f0-4758-bb5f-582e8f5a5e8b",
+      category_id: "1c95fce4-4df9-44c5-b51c-6e24837eff6a",
+      is_delivery: true,
+      is_pickup: true,
+      is_dine: true,
+      deactivation_date: "",
+      is_active: true,
+      created_at: "2023-06-17T12:49:21.889004",
+      created_by: "00000000-0000-0000-0000-000000000000",
+      updated_at: "2023-06-30T17:07:15.6887582",
+      updated_by: "00000000-0000-0000-0000-000000000000",
+      variations: [
+        {
+          _id: "1540a18a-80f9-4e28-b6fb-3a84b5b797ce",
+          menu_id: "f1218c2b-6710-4082-8089-c14f51698698",
+          variation_name: "Multimenu test with veriation and add_on 1",
+          variation_price: 20,
+          variation_group_desc: "",
+          variation_group_name: "g1",
+          add_on: false,
+          is_active: true,
+          add_on_categories: [
+            {
+              "[_id]": "5c6ee900-5c88-4a1d-96dd-b0ec0b00e83d",
+              "[add_on_category_id]": "379c5cef-91e5-4112-a739-730f8cbd9e76",
+              "[variation_id]": "1540a18a-80f9-4e28-b6fb-3a84b5b797ce",
+              "[add_on_category_name]":
+                "Multimenu test with veriation and add_on 1",
+              "[cat_is_multiple]": true,
+              "[cat_max_choice]": 2,
+              "[language_slug]": "en",
+              "[add_on_category_desc]": "",
+              "[add_ons][0][_id]": "2bd2c22f-6e2e-49f7-81c0-2c49412cf8c6",
+              "[add_ons][0][add_ons_name]":
+                "Multimenu test with veriation and add_on 1",
+              "[add_ons][0][max_choice]": 0,
+              "[add_ons][0][is_multiple]": false,
+              "[add_ons][0][add_ons_price]": 100,
+              "[add_ons][0][addoncat_id]":
+                "379c5cef-91e5-4112-a739-730f8cbd9e76",
+              "[add_ons][0][variation_and_add_on_category_id]":
+                "5c6ee900-5c88-4a1d-96dd-b0ec0b00e83d",
+              "[add_ons][1][_id]": "d6713b0e-3029-4559-87d1-01b83af1a505",
+              "[add_ons][1][add_ons_name]":
+                "Multimenu test with veriation and add_on 1",
+              "[add_ons][1][max_choice]": 0,
+              "[add_ons][1][is_multiple]": false,
+              "[add_ons][1][add_ons_price]": 100,
+              "[add_ons][1][addoncat_id]":
+                "379c5cef-91e5-4112-a739-730f8cbd9e76",
+              "[add_ons][1][variation_and_add_on_category_id]":
+                "5c6ee900-5c88-4a1d-96dd-b0ec0b00e83d",
+            },
+          ],
+        },
+        {
+          _id: "dbc4b9f5-4ac4-4802-b732-f5ace9344421",
+          menu_id: "f1218c2b-6710-4082-8089-c14f51698698",
+          variation_name: "Multimenu test with veriation and add_on 1",
+          variation_price: 19,
+          variation_group_desc: "",
+          variation_group_name: "g1",
+          add_on: false,
+          is_active: true,
+          add_on_categories: [
+            {
+              "[_id]": "8d3b85a2-b1db-4976-b08d-a2aa03a6a737",
+              "[add_on_category_id]": "9d92dcab-96f2-4670-9752-1982d317f203",
+              "[variation_id]": "dbc4b9f5-4ac4-4802-b732-f5ace9344421",
+              "[add_on_category_name]":
+                "Multimenu test with veriation and add_on 1",
+              "[cat_is_multiple]": false,
+              "[cat_max_choice]": 0,
+              "[language_slug]": "en",
+              "[add_on_category_desc]": "Claudia Buchanan",
+              "[add_ons][0][_id]": "b9f174c5-4e91-4198-8094-89fad63b14cc",
+              "[add_ons][0][add_ons_name]":
+                "Multimenu test with veriation and add_on 1",
+              "[add_ons][0][max_choice]": 0,
+              "[add_ons][0][is_multiple]": false,
+              "[add_ons][0][add_ons_price]": 227,
+              "[add_ons][0][addoncat_id]":
+                "9d92dcab-96f2-4670-9752-1982d317f203",
+              "[add_ons][0][variation_and_add_on_category_id]":
+                "8d3b85a2-b1db-4976-b08d-a2aa03a6a737",
+            },
+          ],
+        },
+      ],
+      menu_available_times: [
+        {
+          _id: "9351ea2d-7686-4f30-a040-22660dce5ee7",
+          menu_item_id: "f1218c2b-6710-4082-8089-c14f51698698",
+          menu_item_time_slot_id: "630b3602-8b7e-46cf-9498-5fe2a0a5da64",
+        },
+        {
+          _id: "da29d596-798f-4684-a003-3d884414e610",
+          menu_item_id: "f1218c2b-6710-4082-8089-c14f51698698",
+          menu_item_time_slot_id: "140ad893-e37c-47c1-85b8-6b20f53d76e9",
+        },
+      ],
+    },
+    {
+      _id: "0a2dc457-3685-4358-8067-4cef821c7634",
+      menu_name: "Multimenu test with veriation and add_on 2",
+      menu_price: 750,
+      pickup_menu_price: 750,
+      recipe_time: 30,
+      menu_group_id: "ffa9fdbf-d9f0-4758-bb5f-582e8f5a5e8b",
+      variation_group_name: "Variation Group Name",
+      variation_group_desc: "Variation Group Name",
+      has_variation: 1,
+      image: "https://imagesandfilesbucket.theecotek.com/spicy chick.webp",
+      slug: "test",
+      is_popular: true,
+      description: "6 pc",
+      vat: 5,
+      sd: 5,
+      restaurant_id: "ffa9fdbf-d9f0-4758-bb5f-582e8f5a5e8b",
+      category_id: "1c95fce4-4df9-44c5-b51c-6e24837eff6a",
+      is_delivery: true,
+      is_pickup: true,
+      is_dine: true,
+      deactivation_date: "",
+      is_active: true,
+      created_at: "2023-06-17T12:49:21.889004",
+      created_by: "00000000-0000-0000-0000-000000000000",
+      updated_at: "2023-06-30T17:07:15.6887582",
+      updated_by: "00000000-0000-0000-0000-000000000000",
+      variations: [
+        {
+          _id: "c700c50f-0c5b-4ef5-9765-f727118e5fe5",
+          menu_id: "0a2dc457-3685-4358-8067-4cef821c7634",
+          variation_name: "Multimenu test with veriation and add_on 2",
+          variation_price: 20,
+          variation_group_desc: "",
+          variation_group_name: "g1",
+          add_on: false,
+          is_active: true,
+          add_on_categories: [
+            {
+              "[_id]": "e82cb27a-acdb-4c86-8114-0809abb8f77c",
+              "[add_on_category_id]": "379c5cef-91e5-4112-a739-730f8cbd9e76",
+              "[variation_id]": "c700c50f-0c5b-4ef5-9765-f727118e5fe5",
+              "[add_on_category_name]":
+                "Multimenu test with veriation and add_on 2",
+              "[cat_is_multiple]": true,
+              "[cat_max_choice]": 2,
+              "[language_slug]": "en",
+              "[add_on_category_desc]": "",
+              "[add_ons][0][_id]": "57a4a988-4003-47ac-b8d1-b9a9872e186b",
+              "[add_ons][0][add_ons_name]":
+                "Multimenu test with veriation and add_on 2",
+              "[add_ons][0][max_choice]": 0,
+              "[add_ons][0][is_multiple]": false,
+              "[add_ons][0][add_ons_price]": 100,
+              "[add_ons][0][addoncat_id]":
+                "379c5cef-91e5-4112-a739-730f8cbd9e76",
+              "[add_ons][0][variation_and_add_on_category_id]":
+                "e82cb27a-acdb-4c86-8114-0809abb8f77c",
+              "[add_ons][1][_id]": "7745a08f-e632-4cab-80b0-2479f5766ab0",
+              "[add_ons][1][add_ons_name]":
+                "Multimenu test with veriation and add_on 2",
+              "[add_ons][1][max_choice]": 0,
+              "[add_ons][1][is_multiple]": false,
+              "[add_ons][1][add_ons_price]": 100,
+              "[add_ons][1][addoncat_id]":
+                "379c5cef-91e5-4112-a739-730f8cbd9e76",
+              "[add_ons][1][variation_and_add_on_category_id]":
+                "e82cb27a-acdb-4c86-8114-0809abb8f77c",
+            },
+          ],
+        },
+        {
+          _id: "e5b65642-b2e8-4993-bc50-ccecc330f2f1",
+          menu_id: "0a2dc457-3685-4358-8067-4cef821c7634",
+          variation_name: "Multimenu test with veriation and add_on 2",
+          variation_price: 19,
+          variation_group_desc: "",
+          variation_group_name: "g1",
+          add_on: false,
+          is_active: true,
+          add_on_categories: [
+            {
+              "[_id]": "faefcdd6-d27f-4f4a-82df-f7a68fa4053b",
+              "[add_on_category_id]": "9d92dcab-96f2-4670-9752-1982d317f203",
+              "[variation_id]": "e5b65642-b2e8-4993-bc50-ccecc330f2f1",
+              "[add_on_category_name]":
+                "Multimenu test with veriation and add_on 2",
+              "[cat_is_multiple]": false,
+              "[cat_max_choice]": 0,
+              "[language_slug]": "en",
+              "[add_on_category_desc]": "Claudia Buchanan",
+              "[add_ons][0][_id]": "4487c07c-918a-4280-a196-75f81173047a",
+              "[add_ons][0][add_ons_name]":
+                "Multimenu test with veriation and add_on 2",
+              "[add_ons][0][max_choice]": 0,
+              "[add_ons][0][is_multiple]": false,
+              "[add_ons][0][add_ons_price]": 227,
+              "[add_ons][0][addoncat_id]":
+                "9d92dcab-96f2-4670-9752-1982d317f203",
+              "[add_ons][0][variation_and_add_on_category_id]":
+                "faefcdd6-d27f-4f4a-82df-f7a68fa4053b",
+            },
+          ],
+        },
+      ],
+      menu_available_times: [
+        {
+          _id: "356abffd-1096-4ea1-b27f-7dc586f960c6",
+          menu_item_id: "0a2dc457-3685-4358-8067-4cef821c7634",
+          menu_item_time_slot_id: "630b3602-8b7e-46cf-9498-5fe2a0a5da64",
+        },
+        {
+          _id: "52f0440f-f9c3-4bca-8bb1-6e0c26fb9f1c",
+          menu_item_id: "0a2dc457-3685-4358-8067-4cef821c7634",
+          menu_item_time_slot_id: "140ad893-e37c-47c1-85b8-6b20f53d76e9",
+        },
+      ],
+    },
+  ],
+}
