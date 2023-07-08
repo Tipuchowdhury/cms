@@ -56,10 +56,17 @@ function AddMenu2(props) {
   const [isLoading, setIsLoading] = useState(false)
   const [timeSLotLoading, setTimeSLotLoading] = useState(false)
   const [branchLoading, setBranchLoading] = useState(false)
-  useEffect(() => {
-    props.getTimeSLotByBranchIdFresh()
-    setMenuItem([{ ...menuItem, menu_available_times: [] }])
-  }, [])
+  console.log(props?.get_time_slot_by_branch_id_data)
+  // useEffect(() => {
+  //   props.getTimeSLotByBranchIdFresh()
+  //   // setMenuItem([{ ...menuItem, menu_available_times: [] }])
+  // }, [])
+
+  // useEffect(() => {
+  //   if (props.get_time_slot_by_branch_id_loading === "Success") {
+  //     slot_data = []
+  //   }
+  // }, [props.get_time_slot_by_branch_id_loading])
   const [info, setInfo] = useState({
     // name: location.state ? location.state.menu_name : "",
     // menu_description: location.state ? location.state.description : "",
@@ -79,7 +86,7 @@ function AddMenu2(props) {
     // recipe_time: location.state ? location.state.recipe_time : "",
     // pickup_menu_price: location.state ? location.state.pickup_menu_price : "",
     // vat: location.state ? location.state.vat : "",
-    sd: location.state ? location.state.sd : "",
+    // sd: location.state ? location.state.sd : "",
   })
 
   const [addNewCategory, setAddNewCategory] = useState([])
@@ -366,7 +373,7 @@ function AddMenu2(props) {
   // }, [props.get_time_slot_by_branch_id_loading])
 
   console.log(slot_data)
-  console.log(menuItem[0].menu_available_times)
+  // console.log(props?.get_time_slot_by_branch_id_data)
 
   console.log(props?.get_time_slot_by_branch_id_loading)
 
