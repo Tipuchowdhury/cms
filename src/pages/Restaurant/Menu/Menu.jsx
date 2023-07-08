@@ -33,6 +33,7 @@ import {
   getMenuItemByIdActionFresh,
   getServerSidePaginationMenuItemAction,
   getServerSidePaginationMenuItemFresh,
+  getTimeSLotByBranchIdFresh,
 } from "store/actions"
 
 function Menu(props) {
@@ -158,6 +159,10 @@ function Menu(props) {
         countPerPage,
         pageFilters
       )
+    }
+
+    if (props.get_server_side_pagination_menu_item_loading === "Success") {
+      props.getTimeSLotByBranchIdFresh()
     }
   }, [
     page,
@@ -420,5 +425,6 @@ export default withRouter(
     getMenuItemByIdActionFresh,
     getServerSidePaginationMenuItemAction,
     getServerSidePaginationMenuItemFresh,
+    getTimeSLotByBranchIdFresh,
   })(Menu)
 )
