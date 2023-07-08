@@ -595,6 +595,7 @@ const Restaurant = (state = initialState, action) => {
         add_restaurant_menu_loading: action.status,
         get_all_menu_loading: false,
         get_server_side_pagination_menu_item_loading: false,
+        // get_menu_by_branch_id_loading: false,
       }
       break
     case ADD_RESTAURANT_MENU_FRESH:
