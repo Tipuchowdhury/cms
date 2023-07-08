@@ -9,6 +9,8 @@ import {
   RIDER_WALLET_DETAIL_DELETE_FRESH,
   RIDER_WALLET_DETAIL_STATUS_EDIT,
   RIDER_WALLET_DETAIL_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_WALLET_DETAIL,
+  SERVER_SIDE_PAGINATION_WALLET_DETAIL_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -30,6 +32,11 @@ const initialState = {
   rider_wallet_detail_status_edit_loading: false,
 
   rider_wallet_detail_delete_loading: false,
+
+  // server side pagination WALLET Detail
+  get_server_side_pagination_wallet_detail_data: null,
+  get_server_side_pagination_wallet_detail_error: null,
+  get_server_side_pagination_wallet_detail_loading: false,
 }
 
 const RiderWalletDetail = (state = initialState, action) => {
@@ -112,6 +119,23 @@ const RiderWalletDetail = (state = initialState, action) => {
         rider_wallet_detail_delete_loading: action.status,
         get_all_rider_wallet_detail_loading: false,
       }
+      break
+    case SERVER_SIDE_PAGINATION_WALLET_DETAIL:
+      state = {
+        ...state,
+        get_server_side_pagination_wallet_detail_data: action.payload,
+        get_server_side_pagination_wallet_detail_error: null,
+        get_server_side_pagination_wallet_detail_loading: action.status,
+      }
+      break
+
+    case SERVER_SIDE_PAGINATION_WALLET_DETAIL_FRESH:
+      state = {
+        ...state,
+        get_server_side_pagination_wallet_detail_data: action.payload,
+        get_server_side_pagination_wallet_detail_loading: action.status,
+      }
+      break
   }
   return state
 }

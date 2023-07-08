@@ -2,7 +2,7 @@ import Breadcrumbs from "components/Common/Breadcrumb"
 import withRouter from "components/Common/withRouter"
 import React, { useEffect, useState } from "react"
 import { connect } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import {
   Badge,
   Button,
@@ -31,12 +31,18 @@ import {
   riderWalletDetailDeleteFresh,
   riderWalletDetailStatusUpdateAction,
   riderWalletDetailStatusUpdateFresh,
+  getServerSidePaginationWalletDetailsAction,
+  getServerSidePaginationWalletDetailsFresh,
 } from "store/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
+import DataTable from "react-data-table-component"
 import { toast } from "react-toastify"
+import CustomLoader from "components/CustomLoader/CustomLoader"
+import PageLoader from "components/CustomLoader/PageLoader"
 
 function RiderWalletDetail(props) {
   document.title = "Rider Wallet Details | Foodi"
+  let params = useParams()
 
   const [modal, setModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
@@ -102,46 +108,120 @@ function RiderWalletDetail(props) {
   //     </Badge>
   //   )
 
+  // const activeData = [
+  //   // {
+  //   //   dataField: "rider_name",
+  //   //   text: "Rider Name",
+  //   //   sort: true,
+  //   // },
+  //   // {
+  //   //   dataField: "date",
+  //   //   text: "Date",
+  //   //   sort: true,
+  //   // },
+  //   // {
+  //   //   dataField: "zone",
+  //   //   text: "Zone",
+  //   //   sort: true,
+  //   // },
+  //   // {
+  //   //   dataField: "order_number",
+  //   //   text: "Order Number",
+  //   //   sort: true,
+  //   // },
+  //   // {
+  //   //   dataField: "total_restaurant_payable_amount",
+  //   //   text: "Total Restaurant Payable Amount",
+  //   //   sort: true,
+  //   // },
+  //   // {
+  //   //   dataField: "total_customer_payable_amount",
+  //   //   text: "Total Customer Payable Amount",
+  //   //   sort: true,
+  //   // },
+  //   // {
+  //   //   dataField: "rider_due_adjustment",
+  //   //   text: "Total Delivered Orders",
+  //   //   sort: true,
+  //   // },
+  //   // {
+  //   //   dataField: "rider_current_wallet",
+  //   //   text: "Rider Current Wallet",
+  //   //   sort: true,
+  //   // },
+  //   // {
+  //   //   dataField: "",
+  //   //   text: "RiderWalletDetail Status",
+  //   //   sort: true,
+  //   //   formatter: statusRef,
+  //   // },
+  //   // {
+  //   //   //dataField: "he",
+  //   //   text: "Action",
+  //   //   sort: true,
+  //   //   formatter: actionRef,
+  //   // },
+  // ]
+
   const activeData = [
+    // {
+    //   selector: row => row.rider_name,
+    //   name: "Rider name",
+    //   sortable: true,
+    // },
     {
-      dataField: "rider_name",
-      text: "Rider Name",
-      sort: true,
+      selector: row => row.rider_name,
+      name: "Rider Name",
+      sortable: true,
     },
     {
-      dataField: "date",
-      text: "Date",
-      sort: true,
+      // dataField: "date",
+      // text: "Date",
+      selector: row => row.date,
+      name: "Date",
+      sortable: true,
     },
     {
-      dataField: "zone",
-      text: "Zone",
-      sort: true,
+      // dataField: "zone",
+      // text: "Zone",
+      selector: row => row.zone,
+      name: "Zone",
+      sortable: true,
     },
     {
-      dataField: "order_number",
-      text: "Order Number",
-      sort: true,
+      // dataField: "order_number",
+      // text: "Order Number",
+      selector: row => row.order_number,
+      name: "Order Number",
+      sortable: true,
     },
     {
-      dataField: "total_restaurant_payable_amount",
-      text: "Total Restaurant Payable Amount",
-      sort: true,
+      // dataField: "total_restaurant_payable_amount",
+      // text: "Total Restaurant Payable Amount",
+      selector: row => row.total_restaurant_payable_amount,
+      name: "Total Restaurant Payable Amount",
+      sortable: true,
     },
     {
-      dataField: "total_customer_payable_amount",
-      text: "Total Customer Payable Amount",
-      sort: true,
+      // dataField: "total_customer_payable_amount",
+      // text: "Total Customer Payable Amount",
+      selector: row => row.total_customer_payable_amount,
+      name: "Total Customer Payable Amount",
+      sortable: true,
     },
     {
-      dataField: "rider_due_adjustment",
-      text: "Total Delivered Orders",
-      sort: true,
+      // dataField: "rider_due_adjustment",
+      // text: "Total Delivered Orders",
+      selector: row => row.rider_due_adjustment,
+      name: "Total Delivered Orders",
+      sortable: true,
     },
     {
-      dataField: "rider_current_wallet",
-      text: "Rider Current Wallet",
-      sort: true,
+      // dataField: "rider_current_wallet",
+      // text: "Rider Current Wallet",
+      selector: row => row.rider_current_wallet,
+      name: "Rider Current Wallet",
+      sortable: true,
     },
     // {
     //   dataField: "",
@@ -163,6 +243,54 @@ function RiderWalletDetail(props) {
     },
   ]
 
+  console.log(params.rider_id)
+
+  // server side pagination
+  const [page, setPage] = useState(1)
+  const [countPerPage, setCountPerPage] = useState(10)
+  const [pageFilters, setPageFilters] = useState({
+    rider_id: params.rider_id,
+  })
+  // const handleFilter = e => {
+  //   // let name = e.target.name
+  //   // let value = e.target.value
+
+  //   let name = "rider_id"
+  //   let value = location?.state?.rider_id
+  //   setPageFilters({ ...pageFilters, [name]: value })
+  // }
+
+  useEffect(() => {
+    props.getServerSidePaginationWalletDetailsAction(
+      page,
+      countPerPage,
+      pageFilters
+    )
+    if (props.get_server_side_pagination_wallet_detail_loading == false) {
+      //console.log("I am in get all permis type loading ")
+      props.getServerSidePaginationWalletDetailsAction(
+        page,
+        countPerPage,
+        pageFilters
+      )
+    }
+  }, [
+    page,
+    countPerPage,
+    pageFilters,
+    props.get_server_side_pagination_wallet_detail_loading,
+  ])
+
+  const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    //selectAllRowsItemText: "ALL"
+  }
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    // console.log(newPerPage, page)
+    setCountPerPage(newPerPage)
+  }
+
   useEffect(() => {
     if (props.get_all_rider_wallet_detail_loading == false) {
       //console.log("I am in get all permis type loading ")
@@ -182,6 +310,9 @@ function RiderWalletDetail(props) {
     }
   }, [props.rider_wallet_detail_edit_loading])
 
+  if (props?.get_server_side_pagination_wallet_detail_data == undefined) {
+    return <PageLoader />
+  }
   // console.log(props.get_all_rider_wallet_detail_data);
   return (
     <React.Fragment>
@@ -218,7 +349,7 @@ function RiderWalletDetail(props) {
                     </Button> */}
                   </div>
 
-                  {props.get_all_rider_wallet_detail_data ? (
+                  {/* {props.get_all_rider_wallet_detail_data ? (
                     props.get_all_rider_wallet_detail_data.length > 0 ? (
                       <DatatableTablesWorking
                         products={props.get_all_rider_wallet_detail_data}
@@ -226,7 +357,29 @@ function RiderWalletDetail(props) {
                         defaultSorted={defaultSorted}
                       />
                     ) : null
-                  ) : null}
+                  ) : null} */}
+
+                  <DataTable
+                    columns={activeData}
+                    data={
+                      props?.get_server_side_pagination_wallet_detail_data?.data
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props?.get_server_side_pagination_wallet_detail_data
+                        ?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={page => setPage(page)}
+                    progressPending={
+                      !props?.get_server_side_pagination_wallet_detail_data
+                    }
+                    progressComponent={<CustomLoader />}
+                  />
                 </CardBody>
               </Card>
             </Col>
@@ -276,7 +429,11 @@ function RiderWalletDetail(props) {
               </div>
 
               <div
-                style={{ display: "flex", justifyContent: "flex-end", gap: 5 }}
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  gap: 5,
+                }}
               >
                 {editInfo.rider_wallet_detail_status == false ? (
                   <Button color="primary" type="submit">
@@ -315,6 +472,9 @@ const mapStateToProps = state => {
     rider_wallet_detail_status_edit_loading,
 
     rider_wallet_detail_delete_loading,
+
+    get_server_side_pagination_wallet_detail_data,
+    get_server_side_pagination_wallet_detail_loading,
   } = state.RiderWalletDetail
 
   return {
@@ -333,6 +493,9 @@ const mapStateToProps = state => {
     rider_wallet_detail_status_edit_loading,
 
     rider_wallet_detail_delete_loading,
+
+    get_server_side_pagination_wallet_detail_data,
+    get_server_side_pagination_wallet_detail_loading,
   }
 }
 
@@ -348,5 +511,7 @@ export default withRouter(
     riderWalletDetailDeleteFresh,
     riderWalletDetailStatusUpdateAction,
     riderWalletDetailStatusUpdateFresh,
+    getServerSidePaginationWalletDetailsAction,
+    getServerSidePaginationWalletDetailsFresh,
   })(RiderWalletDetail)
 )

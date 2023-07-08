@@ -295,7 +295,7 @@ const userRoutes = [
 
   // Refund
   { path: "/wallet", component: <Wallet /> },
-  { path: "/rider-wallet-details", component: <RiderWalletDetail /> },
+  { path: "/rider-wallet-details/:rider_id", component: <RiderWalletDetail /> },
 
   // Zone Utilization
   { path: "/zone-utilization", component: <ZoneUtilization /> },
