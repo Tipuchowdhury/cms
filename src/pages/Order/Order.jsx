@@ -132,6 +132,12 @@ function Order(props) {
     toggleStatus()
   }
 
+  const trackRider = (order_id, order_status) => {
+    const row = { order_id: order_id, order_status: order_status }
+    // navigate("/track-rider", { state: row })
+    window.open(`/track-rider/${order_id}`, "_blank")
+  }
+
   const handleStatusUpdate = () => {
     // console.log(editInfo)
     props.orderStatusEditAction(editInfo)
@@ -237,6 +243,33 @@ function Order(props) {
           >
             <span className="fas fa-file-invoice"></span> Rider Invoice
           </Button>
+        ) : (
+          ""
+        )}
+        {cell.order_status == "assigned" ||
+        cell.order_status == "preparing" ||
+        cell.order_status == "ongoing" ||
+        cell.order_status == "delivered" ||
+        cell.order_status == "not_delivered" ? (
+          <>
+            <Button
+              disabled={
+                !(
+                  cell.order_status == "assigned" ||
+                  cell.order_status == "preparing" ||
+                  cell.order_status == "ongoing" ||
+                  cell.order_status == "delivered" ||
+                  cell.order_status == "not_delivered"
+                )
+              }
+              style={{ backgroundColor: "#03C6C7", borderColor: "#03C6C7" }}
+              // color={"#03C6C7"}
+              className="btn btn-sm waves-effect waves-light mb-1"
+              onClick={() => trackRider(cell._id, cell.order_status)}
+            >
+              <span className="fas fa-street-view"></span> Track Rider
+            </Button>
+          </>
         ) : (
           ""
         )}
@@ -720,7 +753,7 @@ function Order(props) {
                       onClick={handleParamChange}
                     >
                       <i
-                        class={`fa fa-refresh ${
+                        className={`fa fa-refresh ${
                           props.get_server_side_pagination_order_loading !=
                           "Success"
                             ? "spin"

@@ -18,6 +18,8 @@ import {
   GET_ORDER_INVOICE_FRESH,
   GET_RIDER_INVOICE,
   GET_RIDER_INVOICE_FRESH,
+  TRACK_RIDER,
+  TRACK_RIDER_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -426,6 +428,42 @@ export const getRiderInvoiceFresh = () => {
   return dispatch =>
     dispatch({
       type: GET_RIDER_INVOICE_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+export const trackRider = order_id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Order/GetOrderTrackByOrderId"
+  const params = { order_id: order_id }
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers, params: params })
+      .then(response => {
+        dispatch({
+          type: TRACK_RIDER,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: TRACK_RIDER,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const trackRiderFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: TRACK_RIDER_FRESH,
       status: false,
       payload: null,
     })

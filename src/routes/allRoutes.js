@@ -232,7 +232,7 @@ const userRoutes = [
 
   { path: "/manage-branch", component: <Branch /> },
   { path: "/branch-add", component: <BranchAdd /> },
-  { path: "/track-rider", component: <TrackRider /> },
+  { path: "/track-rider/:order_id", component: <TrackRider /> },
   { path: "/track-rider3", component: <TrackRider3 /> },
 
   { path: "/category", component: <Category /> },
