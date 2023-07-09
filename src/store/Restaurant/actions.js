@@ -89,6 +89,11 @@ import {
   GET_MENU_ITEM_BY_ID_FRESH,
   SERVER_SIDE_PAGINATION_MENU_ITEM,
   SERVER_SIDE_PAGINATION_MENU_ITEM_FRESH,
+  GET_RESTAURANT_BY_ID,
+  GET_RESTAURANT_BY_ID_FRESH,
+  ADD_RESTAURANT_FRESH,
+  RESTAURANT_EDIT,
+  RESTAURANT_EDIT_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -101,17 +106,14 @@ import CustomLoader from "components/CustomLoader/CustomLoader"
 // var authUser = JSON.parse(localStorage.getItem("user"));
 // console.log(authUser.token);
 
-export const restaurantAddAction = (name, id) => {
+export const restaurantAddAction = data => {
   var url = process.env.REACT_APP_LOCALHOST + "/Restaurant/Post"
 
-  let formData = {
-    _id: id,
-    name: name,
-  }
-
+  data._id = uuidv4()
+  let formData = convertToFormData(data)
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
     }
 
@@ -123,7 +125,7 @@ export const restaurantAddAction = (name, id) => {
           payload: response.data,
           status: "Success",
         })
-        toast.success("Restaurant Addedd Successfully")
+        toast.success("Restaurant Added Successfully")
       })
       .catch(error => {
         dispatch({
@@ -135,6 +137,18 @@ export const restaurantAddAction = (name, id) => {
       })
   }
 }
+
+export const addRestaurantActionFresh = () => {
+  console.log("=======In the fresh ---------")
+  return dispatch => {
+    dispatch({
+      type: ADD_RESTAURANT_FRESH,
+      status: false,
+      payload: null,
+    })
+  }
+}
+
 export const getAllRestaurantAction = () => {
   var url = process.env.REACT_APP_LOCALHOST + "/Restaurant/Get"
   return dispatch => {
@@ -2862,4 +2876,88 @@ export const getServerSidePaginationMenuItemFresh = () => {
       status: false,
       payload: null,
     })
+}
+
+export const getRestaurantByIdAction = id => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Restaurant/GetById?id=" + id
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: GET_RESTAURANT_BY_ID,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        console.log("error :", error)
+        dispatch({
+          type: GET_RESTAURANT_BY_ID,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getRestaurantByIdFresh = () => {
+  console.log("=======In the fresh ---------")
+  return dispatch => {
+    dispatch({
+      type: GET_RESTAURANT_BY_ID_FRESH,
+      status: false,
+      payload: null,
+    })
+  }
+}
+
+export const restaurantEditAction = (id, data) => {
+  var url = process.env.REACT_APP_LOCALHOST + "/Restaurant/Put"
+
+  const dataObject = {
+    _id: id,
+    ...data,
+  }
+
+  const formData = convertToFormData(dataObject)
+
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
+      // "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .put(url, formData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: RESTAURANT_EDIT,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: RESTAURANT_EDIT,
+          payload: error,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const restaurantEditFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: RESTAURANT_EDIT_FRESH,
+      payload: null,
+      status: false,
+    })
+  }
 }

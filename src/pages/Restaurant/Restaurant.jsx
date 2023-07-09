@@ -21,7 +21,6 @@ import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
   restaurantAddAction,
-  getAllRestaurantAction,
   restaurantNameUpdateAction,
   restaurantStatusUpdateAction,
   restaurantDeleteAction,
@@ -29,8 +28,10 @@ import {
   getServerSidePaginationRestaurantAction,
   getServerSidePaginationRestaurantSearchAction,
   getServerSidePaginationSearchRestaurantFresh,
+  getRestaurantByIdAction,
 } from "store/actions"
 import DataTable from "react-data-table-component"
+import { useNavigate } from "react-router-dom"
 
 function Restaurant(props) {
   const [name, setName] = useState("")
@@ -44,6 +45,8 @@ function Restaurant(props) {
   // delete modal
   const [deleteItem, setDeleteItem] = useState()
   const [modalDel, setModalDel] = useState(false)
+
+  const navigate = useNavigate()
 
   const toggleDel = () => setModalDel(!modalDel)
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
@@ -63,10 +66,9 @@ function Restaurant(props) {
     setName("")
   }
   const handleEditName = cell => {
-    setId(cell._id)
-    setRestaurantName(cell.name)
-    setIsActive(cell.is_active)
-    toggleEditModal()
+    props.getRestaurantByIdAction()
+
+    navigate("/edit-restaurant", { state: cell })
   }
   const handleNameChange = e => {
     setRestaurantName(e.target.value)
@@ -167,10 +169,6 @@ function Restaurant(props) {
   }
 
   useEffect(() => {
-    if (props.get_all_restaurant_loading == false) {
-      props.getAllRestaurantAction()
-    }
-
     props.getServerSidePaginationRestaurantAction(page, countPerPage)
 
     if (props.restaurant_delete_loading === "Success") {
@@ -179,12 +177,7 @@ function Restaurant(props) {
       toggleDel()
       props.restaurantDeleteFresh()
     }
-  }, [
-    props.get_all_restaurant_loading,
-    props.restaurant_delete_loading,
-    page,
-    countPerPage,
-  ])
+  }, [props.restaurant_delete_loading, page, countPerPage])
 
   return (
     <React.Fragment>
@@ -427,7 +420,6 @@ const mapStateToProps = state => {
 export default withRouter(
   connect(mapStateToProps, {
     restaurantAddAction,
-    getAllRestaurantAction,
     restaurantNameUpdateAction,
     restaurantStatusUpdateAction,
     restaurantDeleteAction,
@@ -435,5 +427,6 @@ export default withRouter(
     getServerSidePaginationRestaurantAction,
     getServerSidePaginationRestaurantSearchAction,
     getServerSidePaginationSearchRestaurantFresh,
+    getRestaurantByIdAction,
   })(Restaurant)
 )
