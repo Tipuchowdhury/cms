@@ -9,6 +9,8 @@ import {
   RIDER_WALLET_DETAIL_DELETE_FRESH,
   RIDER_WALLET_DETAIL_STATUS_EDIT,
   RIDER_WALLET_DETAIL_STATUS_EDIT_FRESH,
+  SERVER_SIDE_PAGINATION_WALLET_DETAIL,
+  SERVER_SIDE_PAGINATION_WALLET_DETAIL_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { v4 as uuidv4 } from "uuid"
@@ -357,5 +359,54 @@ export const riderWalletDetailDeleteFresh = () => {
     dispatch({
       type: RIDER_WALLET_DETAIL_DELETE_FRESH,
       status: false,
+    })
+}
+
+export const getServerSidePaginationWalletDetailsAction = (
+  index,
+  limit,
+  filters
+) => {
+  console.log("filters :", filters)
+  filters = filters ? new URLSearchParams(filters).toString() : ""
+  console.log("filters :", filters)
+
+  var url =
+    process.env.REACT_APP_LOCALHOST +
+    `/RiderWallet/RiderWalletHistory?page=${index}&limit=${limit}${
+      filters ? "&" + filters : ""
+    }`
+  //var url = process.env.REACT_APP_LOCALHOST + `/City/Search?page=${index}&limit=4`;
+  const formData = {}
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_WALLET_DETAIL,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: SERVER_SIDE_PAGINATION_WALLET_DETAIL,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getServerSidePaginationWalletDetailsFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: SERVER_SIDE_PAGINATION_WALLET_DETAIL_FRESH,
+      status: false,
+      payload: null,
     })
 }

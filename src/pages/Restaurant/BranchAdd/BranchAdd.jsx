@@ -42,6 +42,7 @@ import {
   getBranchAdminUserFresh,
   getCentralAdminUser,
   getCentralAdminUserFresh,
+  getRestaurantByIdAction,
 } from "store/actions"
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { boolean } from "yup"
@@ -319,6 +320,50 @@ function BranchAdd(props) {
     value = e.target.value
     setZoneInfo({ ...zoneInfo, [name]: value })
   }
+
+  const handleRestaurantChange = e => {
+    setZoneInfo({ ...zoneInfo, [e.target.name]: e.target.value })
+    props.getRestaurantByIdAction(e.target.value)
+  }
+
+  useEffect(() => {
+    if (props.get_restaurant_by_id_data) {
+      setZoneInfo({
+        ...zoneInfo,
+        image: props.get_restaurant_by_id_data.logo,
+        cover_image: props.get_restaurant_by_id_data.cover_image,
+        central_admin: props.get_restaurant_by_id_data.central_admin,
+        phone_number: props.get_restaurant_by_id_data.mobile
+          ? props.get_restaurant_by_id_data.mobile
+          : "",
+      })
+
+      // set image start
+      setImages({
+        image: props.get_restaurant_by_id_data.logo,
+      })
+
+      setCoverImages({
+        cover_image: props.get_restaurant_by_id_data.cover_image,
+      })
+
+      const central_branch_admin = props?.get_central_admin_data?.filter(
+        elem => elem._id === props.get_restaurant_by_id_data.central_admin
+      )
+
+      const central_admin_edit = central_branch_admin
+        ? central_branch_admin?.map((item, key) => {
+            return {
+              label: `${item.first_name} ${item.last_name}`,
+              value: item._id,
+            }
+          })
+        : ""
+
+      setSelectedCentralAdmin(central_admin_edit)
+    }
+  }, [props.get_restaurant_by_id_data])
+
   function handleChangeImage(event) {
     name = event.target.name
     value = event.target.files[0]
@@ -772,7 +817,7 @@ function BranchAdd(props) {
                       name="restaurant"
                       value={zoneInfo.restaurant}
                       required
-                      onChange={handleInputs}
+                      onChange={handleRestaurantChange}
                       type="select"
                     >
                       <option>Choose...</option>
@@ -1654,6 +1699,10 @@ const mapStateToProps = state => {
 
     get_all_cuisine_data,
     get_all_cuisine_loading,
+
+    get_restaurant_by_id_data,
+    get_restaurant_by_id_error,
+    get_restaurant_by_id_loading,
   } = state.Restaurant
 
   const {
@@ -1699,6 +1748,10 @@ const mapStateToProps = state => {
     get_branch_admin_loading,
     get_central_admin_data,
     get_central_admin_loading,
+
+    get_restaurant_by_id_data,
+    get_restaurant_by_id_error,
+    get_restaurant_by_id_loading,
   }
 }
 
@@ -1722,5 +1775,7 @@ export default withRouter(
 
     getCentralAdminUser,
     getCentralAdminUserFresh,
+
+    getRestaurantByIdAction,
   })(BranchAdd)
 )

@@ -21,7 +21,6 @@ import { connect } from "react-redux"
 import { v4 as uuidv4 } from "uuid"
 import {
   restaurantAddAction,
-  getAllRestaurantAction,
   restaurantNameUpdateAction,
   restaurantStatusUpdateAction,
   restaurantDeleteAction,
@@ -29,8 +28,11 @@ import {
   getServerSidePaginationRestaurantAction,
   getServerSidePaginationRestaurantSearchAction,
   getServerSidePaginationSearchRestaurantFresh,
+  getRestaurantByIdFresh,
+  restaurantStatusUpdateActionFresh,
 } from "store/actions"
 import DataTable from "react-data-table-component"
+import { useNavigate } from "react-router-dom"
 
 function Restaurant(props) {
   const [name, setName] = useState("")
@@ -44,6 +46,8 @@ function Restaurant(props) {
   // delete modal
   const [deleteItem, setDeleteItem] = useState()
   const [modalDel, setModalDel] = useState(false)
+
+  const navigate = useNavigate()
 
   const toggleDel = () => setModalDel(!modalDel)
   const toggleStatus = () => setModalStatusUpdate(!modalStatusUpdate)
@@ -63,10 +67,9 @@ function Restaurant(props) {
     setName("")
   }
   const handleEditName = cell => {
-    setId(cell._id)
-    setRestaurantName(cell.name)
-    setIsActive(cell.is_active)
-    toggleEditModal()
+    props.getRestaurantByIdFresh()
+
+    navigate("/edit-restaurant", { state: cell })
   }
   const handleNameChange = e => {
     setRestaurantName(e.target.value)
@@ -167,10 +170,13 @@ function Restaurant(props) {
   }
 
   useEffect(() => {
-    if (props.get_all_restaurant_loading == false) {
-      props.getAllRestaurantAction()
+    if (props.restaurant_status_update_loading === "Success") {
+      props.getServerSidePaginationRestaurantAction(page, countPerPage)
+      props.restaurantStatusUpdateActionFresh()
     }
+  }, [props.restaurant_status_update_loading])
 
+  useEffect(() => {
     props.getServerSidePaginationRestaurantAction(page, countPerPage)
 
     if (props.restaurant_delete_loading === "Success") {
@@ -179,12 +185,7 @@ function Restaurant(props) {
       toggleDel()
       props.restaurantDeleteFresh()
     }
-  }, [
-    props.get_all_restaurant_loading,
-    props.restaurant_delete_loading,
-    page,
-    countPerPage,
-  ])
+  }, [props.restaurant_delete_loading, page, countPerPage])
 
   return (
     <React.Fragment>
@@ -215,7 +216,10 @@ function Restaurant(props) {
                     </CardTitle>
                     <Button
                       style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
-                      onClick={toggle}
+                      onClick={() => {
+                        props.getRestaurantByIdFresh()
+                        navigate("/add-restaurant")
+                      }}
                     >
                       Add Restaurant
                     </Button>
@@ -407,7 +411,16 @@ const mapStateToProps = state => {
 
     restaurant_delete_loading,
     get_server_side_pagination_restaurant_data,
+    get_server_side_pagination_restaurant_loading,
     get_server_side_pagination_restaurant_search_data,
+
+    // restaurant_name_update_data,
+    // restaurant_name_update_error,
+    // restaurant_name_update_loading,
+
+    restaurant_status_update_data,
+    restaurant_status_update_error,
+    restaurant_status_update_loading,
   } = state.Restaurant
 
   return {
@@ -420,14 +433,22 @@ const mapStateToProps = state => {
 
     restaurant_delete_loading,
     get_server_side_pagination_restaurant_data,
+    get_server_side_pagination_restaurant_loading,
     get_server_side_pagination_restaurant_search_data,
+
+    // restaurant_name_update_data,
+    // restaurant_name_update_error,
+    // restaurant_name_update_loading,
+
+    restaurant_status_update_data,
+    restaurant_status_update_error,
+    restaurant_status_update_loading,
   }
 }
 
 export default withRouter(
   connect(mapStateToProps, {
     restaurantAddAction,
-    getAllRestaurantAction,
     restaurantNameUpdateAction,
     restaurantStatusUpdateAction,
     restaurantDeleteAction,
@@ -435,5 +456,7 @@ export default withRouter(
     getServerSidePaginationRestaurantAction,
     getServerSidePaginationRestaurantSearchAction,
     getServerSidePaginationSearchRestaurantFresh,
+    getRestaurantByIdFresh,
+    restaurantStatusUpdateActionFresh,
   })(Restaurant)
 )

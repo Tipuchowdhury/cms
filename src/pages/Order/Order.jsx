@@ -7,7 +7,9 @@ import {
   CardTitle,
   Col,
   Container,
+  FormGroup,
   Input,
+  Label,
   Modal,
   ModalBody,
   ModalFooter,
@@ -15,6 +17,7 @@ import {
   Row,
   Table,
 } from "reactstrap"
+import Select from "react-select"
 import Breadcrumbs from "components/Common/Breadcrumb"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
@@ -36,9 +39,20 @@ import {
   assignRiderFresh,
   getServerSidePaginationOrderAction,
   getServerSidePaginationOrderFresh,
-} from "store/Order/actions"
+  getValidCouponForCart,
+  getValidCouponForCartFresh,
+  getAvailableMenuByBranchId,
+  getAvailableMenuByBranchIdFresh,
+  getOrderInvoice,
+  getOrderInvoiceFresh,
+} from "store/actions"
 import DataTable from "react-data-table-component"
-import { orderStatusNames, orderStatuses, orderTypes } from "common/data/order"
+import {
+  orderStatusNames,
+  orderStatusRowColors,
+  orderStatuses,
+  orderTypes,
+} from "common/data/order"
 import moment from "moment"
 import CustomLoader from "components/CustomLoader/CustomLoader"
 import {
@@ -52,6 +66,9 @@ import {
 import riderMarker from "assets/icons/map-rider.svg"
 import userMarker from "assets/icons/map-user.svg"
 import restaurantMarker from "assets/icons/map-restaruant.svg"
+import { CURRENCY_SYMBOLS } from "constants/defaults"
+import PageLoader from "components/CustomLoader/PageLoader"
+import { MAX_COUPON_CHOICE_NUMBER } from "constants/order"
 
 function Order(props) {
   const [riderModalInfo, setRiderModalInfo] = useState("")
@@ -62,6 +79,8 @@ function Order(props) {
   const [mapCenter, setMapCenter] = useState(false)
 
   const [editInfo, setEditInfo] = useState(false)
+  const [editOrderInfo, setEditOrderInfo] = useState(false)
+  const [orderEditedData, setOrderEditedData] = useState(false)
   const [reload, setReload] = useState(false)
   const navigate = useNavigate()
 
@@ -69,10 +88,19 @@ function Order(props) {
   const [deleteItem, setDeleteItem] = useState()
   const [changeStatusModal, setChangeStatusModal] = useState(false)
   const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
+  const [modalAddItemInCart, setModalAddItemInCart] = useState(false)
   const [selectedRider, setSelectedRider] = useState("")
+
+  const [modalEditOrder, setModalEditOrder] = useState(false)
 
   const [selectedPoint, setSelectedPoint] = useState(null)
   const [locations, setLocations] = useState(null)
+
+  const toggleEditOrderModal = () => setModalEditOrder(!modalEditOrder)
+  const toggleAddItemInCartModal = () => {
+    clearSelectedMenu()
+    setModalAddItemInCart(!modalAddItemInCart)
+  }
 
   const containerStyle = {
     width: "100%",
@@ -120,26 +148,40 @@ function Order(props) {
   const handleSubmit = e => {
     e.preventDefault()
     toggleConfirmRider()
-    // console.log(name)
-    // console.log(val)
+
     props.orderAssignRider(riderModalInfo.order_id, selectedRider)
   }
 
   const handleStatusModal = (_id, status) => {
-    // console.log(row);
     setEditInfo({ _id, status })
 
     toggleStatus()
   }
 
+  const handleEditOrderClick = (_id, branch_id) => {
+    props.getValidCouponForCartFresh()
+    props.getOrderInvoiceFresh()
+    props.getAvailableMenuByBranchIdFresh()
+    props.getOrderInvoice(_id)
+    props.getAvailableMenuByBranchId(branch_id)
+
+    setEditOrderInfo({ _id })
+
+    toggleEditOrderModal()
+  }
+
+  const trackRider = (order_id, order_status) => {
+    const row = { order_id: order_id, order_status: order_status }
+    // navigate("/track-rider", { state: row })
+    window.open(`/track-rider/${order_id}`, "_blank")
+  }
+
   const handleStatusUpdate = () => {
-    // console.log(editInfo)
     props.orderStatusEditAction(editInfo)
     toggleStatus()
   }
 
   const handleStatusChangeSubmit = e => {
-    // console.log(editInfo)
     e.preventDefault()
     props.orderStatusEditAction(editInfo)
     toggleChangeStatusModal()
@@ -240,6 +282,43 @@ function Order(props) {
         ) : (
           ""
         )}
+        {cell.order_status == "assigned" ||
+        cell.order_status == "preparing" ||
+        cell.order_status == "ongoing" ||
+        cell.order_status == "delivered" ||
+        cell.order_status == "not_delivered" ? (
+          <>
+            <Button
+              disabled={
+                !(
+                  cell.order_status == "assigned" ||
+                  cell.order_status == "preparing" ||
+                  cell.order_status == "ongoing" ||
+                  cell.order_status == "delivered" ||
+                  cell.order_status == "not_delivered"
+                )
+              }
+              style={{ backgroundColor: "#03C6C7", borderColor: "#03C6C7" }}
+              // color={"#03C6C7"}
+              className="btn btn-sm waves-effect waves-light mb-1"
+              onClick={() => trackRider(cell._id, cell.order_status)}
+            >
+              <span className="fas fa-street-view"></span> Track Rider
+            </Button>
+          </>
+        ) : (
+          ""
+        )}
+        {/* <>
+          <br></br>
+          <Button
+            color="warning"
+            className="btn btn-sm waves-effect waves-light mb-1"
+            onClick={() => handleEditOrderClick(cell._id, cell.branch_id)}
+          >
+            <span className="fa fa-marker"></span> Edit Order
+          </Button>
+        </> */}
       </div>
     )
 
@@ -495,7 +574,6 @@ function Order(props) {
   ]
 
   useEffect(() => {
-    console.log("riderModalInfo.order_id :", riderModalInfo.order_id)
     if (riderModalInfo.order_id)
       props.getAvailableRider(riderModalInfo.order_id)
   }, [riderModalInfo.order_id])
@@ -535,7 +613,6 @@ function Order(props) {
   }
 
   const handleFilter = e => {
-    console.log("e :", e)
     let name = e.target.name
     let value = e.target.value
     setPageFilters({ ...pageFilters, [name]: value })
@@ -557,7 +634,6 @@ function Order(props) {
   }
 
   const handlePerRowsChange = async (newPerPage, page) => {
-    // console.log(newPerPage, page)
     setCountPerPage(newPerPage)
   }
 
@@ -573,7 +649,6 @@ function Order(props) {
     }
 
     if (props.order_delete_loading === "Success") {
-      //  console.log("I am in the delete")
       toast.success("Order Deleted")
       props.orderDeleteFresh()
     }
@@ -617,22 +692,18 @@ function Order(props) {
     },
   }
 
-  const conditionalRowStyles = [
-    {
-      when: row => row.order_status === orderStatuses.placed,
-      style: {
-        backgroundColor: "#ddee11",
-        color: "black",
-      },
-    },
-    {
-      when: row => row.order_status === orderStatuses.delivered,
-      style: {
-        backgroundColor: "#4ada99",
-        color: "white",
-      },
-    },
-  ]
+  const conditionalRowStyles = []
+
+  const rowColor = () => {
+    for (const key in orderStatusRowColors) {
+      conditionalRowStyles.push({
+        when: row => row.order_status === key,
+        style: orderStatusRowColors[key],
+      })
+    }
+  }
+
+  rowColor()
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -655,7 +726,6 @@ function Order(props) {
           (value, index) => value._id == selectedRider
         )
       : ""
-  console.log("selectedRiderData :", selectedRiderData)
 
   useEffect(() => {
     props.get_available_rider_data
@@ -691,6 +761,211 @@ function Order(props) {
     }
   }, [mapRef.current])
 
+  useEffect(() => {
+    setOrderEditedData(props.get_order_invoice_data)
+  }, [props.get_order_invoice_data])
+
+  useEffect(() => {
+    if (orderEditedData) props.getValidCouponForCart(orderEditedData)
+  }, [orderEditedData])
+
+  const [availableMenuData, setAvailableMenuData] = useState(null)
+
+  useEffect(() => {
+    if (props.get_available_menu_by_branch_id_data) {
+      setAvailableMenuData(
+        props.get_available_menu_by_branch_id_data?.map((item, key) => ({
+          label: `${item.menu_name} - ${CURRENCY_SYMBOLS}${item.menu_price}`,
+          value: item._id,
+          item: item,
+        }))
+      )
+    }
+  }, [props.get_available_menu_by_branch_id_data])
+
+  const [selectedMenuItem, setSelectedMenuItem] = useState("")
+  const [selectedMenuDetails, setSelectedMenuDetails] = useState("")
+
+  const handleSelectMenu = e => {
+    clearSelectedMenu()
+    setSelectedMenuItem(e)
+    setSelectedMenuDetails({
+      _id: e.item._id,
+      menu_name: e.item.menu_name,
+      menu_price: e.item.menu_price,
+      pickup_menu_price: e.item.pickup_menu_price,
+      variation_group_name: e.item.variation_group_name,
+      variation_group_desc: e.item.variation_group_desc,
+      has_variation: e.item.has_variation,
+      quantity: 1,
+      item_total: e.item.menu_price,
+    })
+  }
+
+  const handleMenuDetailUpdate = e => {
+    let name = e.target.name
+    let value = e.target.value
+
+    setSelectedMenuDetails({ ...selectedMenuDetails, [name]: value })
+  }
+
+  const [selectedVariation, setSelectedVariation] = useState(null)
+
+  const handleVariationChange = variation => {
+    setCheckedAddOns([])
+    setSelectedAddOns([])
+    setSelectedVariation(variation)
+  }
+
+  const clearSelectedMenu = () => {
+    setCheckedAddOns([])
+    setSelectedAddOns([])
+    setSelectedMenuItem(null)
+    setSelectedVariation(null)
+    setSelectedMenuDetails(null)
+  }
+
+  const [checkedAddOns, setCheckedAddOns] = useState({})
+
+  const [selectedAddOns, setSelectedAddOns] = useState([])
+
+  const handleAddOnChange = (addOnCategory, addOn, isChecked) => {
+    setSelectedAddOns(prevState => {
+      let updatedAddOns = [...prevState]
+      let addOnCategoryIndex = updatedAddOns.findIndex(
+        cat => cat._id === addOnCategory._id
+      )
+
+      if (addOnCategory.cat_is_multiple) {
+        if (addOnCategoryIndex === -1 && isChecked) {
+          updatedAddOns.push({
+            ...addOnCategory,
+            add_on_list: [addOn],
+          })
+        } else {
+          let addOnIndex = updatedAddOns[
+            addOnCategoryIndex
+          ].add_on_list.findIndex(a => a._id === addOn._id)
+
+          if (isChecked) {
+            if (addOnIndex === -1) {
+              updatedAddOns[addOnCategoryIndex].add_on_list.push(addOn)
+            }
+          } else {
+            if (addOnIndex !== -1) {
+              updatedAddOns[addOnCategoryIndex].add_on_list.splice(
+                addOnIndex,
+                1
+              )
+
+              if (updatedAddOns[addOnCategoryIndex].add_on_list.length === 0) {
+                updatedAddOns.splice(addOnCategoryIndex, 1)
+              }
+            }
+          }
+        }
+      } else {
+        if (isChecked) {
+          if (addOnCategoryIndex !== -1) {
+            updatedAddOns[addOnCategoryIndex].add_on_list = [addOn]
+          } else {
+            updatedAddOns.push({
+              ...addOnCategory,
+              add_on_list: [addOn],
+            })
+          }
+        } else {
+          if (addOnCategoryIndex !== -1) {
+            updatedAddOns.splice(addOnCategoryIndex, 1)
+          }
+        }
+      }
+
+      return updatedAddOns
+    })
+
+    setCheckedAddOns(prevState => {
+      const prevCatChecks = prevState[addOnCategory._id] || []
+      if (isChecked) {
+        return {
+          ...prevState,
+          [addOnCategory._id]: [...prevCatChecks, addOn._id],
+        }
+      } else {
+        return {
+          ...prevState,
+          [addOnCategory._id]: prevCatChecks.filter(id => id !== addOn._id),
+        }
+      }
+    })
+  }
+
+  const handleCartItemAdd = () => {
+    let newMenu = { ...selectedMenuDetails }
+    if (selectedVariation) {
+      let newVariation = { ...selectedVariation }
+
+      newVariation.add_on_category = selectedAddOns
+      newMenu.variations = [newVariation] //keep this an array
+    }
+
+    const newOrderEditedData = { ...orderEditedData }
+    newOrderEditedData.order_details.push(newMenu)
+    toggleAddItemInCartModal()
+  }
+
+  const calculation = () => {
+    if (selectedMenuItem) {
+      let item_total = 0
+      if (selectedMenuItem?.item?.variations?.length > 0) {
+        if (selectedVariation) {
+          item_total += parseFloat(selectedVariation.variation_price)
+        }
+        if (selectedAddOns) {
+          for (let category of selectedAddOns) {
+            for (let addOn of category.add_ons) {
+              item_total += parseFloat(addOn.add_ons_price)
+            }
+          }
+        }
+      } else {
+        item_total += parseFloat(selectedMenuItem?.item?.menu_price)
+      }
+      let total = item_total * selectedMenuDetails.quantity
+
+      setSelectedMenuDetails({ ...selectedMenuDetails, item_total: total })
+    }
+  }
+
+  useEffect(() => {
+    calculation()
+  }, [selectedVariation, selectedAddOns, selectedMenuDetails?.quantity])
+
+  const handleItemDeleteButton = index => {
+    const newOrderData = { ...orderEditedData }
+    newOrderData.order_details.splice(index, 1)
+
+    setEditOrderInfo(newOrderData)
+  }
+
+  const [availableCouponData, setAvailableCouponData] = useState(null)
+
+  useEffect(() => {
+    if (props.get_valid_coupons_for_cart_data) {
+      setAvailableCouponData(
+        props.get_valid_coupons_for_cart_data?.map((item, key) => ({
+          label: `${item.name}`,
+          value: item._id,
+        }))
+      )
+    }
+  }, [props.get_valid_coupons_for_cart_data])
+
+  const [selectedCoupons, setSelectedCoupons] = useState([])
+  const handleSelectCoupon = e => {
+    setSelectedCoupons(e)
+  }
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -720,7 +995,7 @@ function Order(props) {
                       onClick={handleParamChange}
                     >
                       <i
-                        class={`fa fa-refresh ${
+                        className={`fa fa-refresh ${
                           props.get_server_side_pagination_order_loading !=
                           "Success"
                             ? "spin"
@@ -992,7 +1267,7 @@ function Order(props) {
                 </div>
               </div>
             ) : (
-              ""
+              <PageLoader />
             )}
           </ModalBody>
         </Modal>
@@ -1172,6 +1447,417 @@ function Order(props) {
           </ModalFooter>
         </Modal>
         {/* ============ status update modal ends=============== */}
+
+        {/* ============ edit order modal starts=============== */}
+        <Modal
+          isOpen={modalEditOrder}
+          toggle={toggleEditOrderModal}
+          centered
+          style={{ minWidth: "50%" }}
+        >
+          <ModalHeader
+            className="text-center"
+            style={{ textAlign: "center", margin: "0 auto" }}
+          >
+            Edit Order# {editOrderInfo._id}
+          </ModalHeader>
+          <ModalBody>
+            {orderEditedData && orderEditedData?.order_details?.length > 0 ? (
+              <div>
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Items</th>
+                      <th>Rate</th>
+                      <th>Quantity</th>
+                      <th>Notes</th>
+                      <th>Total</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orderEditedData?.order_details.map((item, index) => (
+                      <tr key={item._id}>
+                        <th scope="row">{index + 1}</th>
+                        <td>
+                          <span style={{ fontWeight: "bold" }}>
+                            {item.menu_name}
+                          </span>
+                          {item.variations
+                            ? item.variations.map(variation => {
+                                return (
+                                  <>
+                                    <br />
+                                    <br />
+                                    <span style={{ fontWeight: "bold" }}>
+                                      {variation.variation_name}
+                                    </span>
+                                    {variation.add_on_category
+                                      ? variation.add_on_category.map(
+                                          addon_cat => {
+                                            return (
+                                              <>
+                                                <br />
+                                                <span>
+                                                  {addon_cat.name ||
+                                                    addon_cat.add_on_category_name}
+                                                  :
+                                                </span>
+                                                {addon_cat.add_on_list
+                                                  ? addon_cat.add_on_list.map(
+                                                      addon => {
+                                                        return (
+                                                          <>
+                                                            <br />
+                                                            <span>
+                                                              {
+                                                                addon.add_ons_name
+                                                              }
+                                                            </span>
+                                                          </>
+                                                        )
+                                                      }
+                                                    )
+                                                  : ""}
+                                              </>
+                                            )
+                                          }
+                                        )
+                                      : ""}
+                                  </>
+                                )
+                              })
+                            : ""}
+                        </td>
+                        <td style={{ textAlign: "right" }}>
+                          <span>{CURRENCY_SYMBOLS} </span>
+                          {item.menu_price}
+                        </td>
+                        <td>{item.quantity}</td>
+                        <td></td>
+                        <td style={{ textAlign: "right" }}>
+                          <span>{CURRENCY_SYMBOLS} </span>
+                          {item.item_total}
+                        </td>
+                        <td>
+                          <Button
+                            color="danger"
+                            className="btn btn-sm waves-effect waves-light"
+                            onClick={() => {
+                              handleItemDeleteButton(index)
+                            }}
+                          >
+                            <span className="fa fa-trash"></span>
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                    <tr>
+                      <td colSpan="4" rowSpan="5">
+                        {`${
+                          orderEditedData?.instruction
+                            ? "Preference : " + orderEditedData?.instruction
+                            : ""
+                        }`}
+                      </td>
+                      <td>
+                        <strong>SubTotal</strong>
+                      </td>
+                      <td style={{ textAlign: "right" }}>
+                        <span>{CURRENCY_SYMBOLS} </span>
+                        {parseFloat(orderEditedData?.sub_total).toFixed(2)}
+                      </td>
+                      <td>
+                        <Button
+                          color="success"
+                          className="btn btn-sm waves-effect waves-light"
+                          onClick={() => {
+                            toggleAddItemInCartModal()
+                          }}
+                        >
+                          <span className="fa fa-plus"></span>
+                        </Button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>VAT</strong>
+                      </td>
+                      <td style={{ textAlign: "right" }}>
+                        <span>{CURRENCY_SYMBOLS} </span>
+                        {parseFloat(
+                          orderEditedData?.value_added_tax_inclusive
+                        ).toFixed(2)}
+                      </td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>SD</strong>
+                      </td>
+                      <td style={{ textAlign: "right" }}>
+                        <span>{CURRENCY_SYMBOLS} </span>
+                        {parseFloat(
+                          orderEditedData?.supplymentary_duty
+                        ).toFixed(2)}
+                      </td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Delivery Charge</strong>
+                      </td>
+                      <td style={{ textAlign: "right" }}>
+                        <span>{CURRENCY_SYMBOLS} </span>
+                        {parseFloat(orderEditedData?.delivery_charge).toFixed(
+                          2
+                        )}
+                      </td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>
+                          Discount
+                          {orderEditedData?.discount_in_percent > 0
+                            ? `(${orderEditedData?.discount_in_percent}%)`
+                            : ""}
+                        </strong>
+                      </td>
+                      <td style={{ textAlign: "right" }}>
+                        <span>{CURRENCY_SYMBOLS} </span>
+                        {parseFloat(orderEditedData?.discount_amount).toFixed(
+                          2
+                        )}
+                      </td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td colSpan="4"></td>
+                      <td>
+                        <strong>Total</strong>
+                      </td>
+                      <td style={{ textAlign: "right" }}>
+                        <span>{CURRENCY_SYMBOLS} </span>
+                        {parseFloat(orderEditedData?.total_amount).toFixed(2)}
+                      </td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </Table>
+                {props.get_valid_coupons_for_cart_data ? (
+                  <Row>
+                    <label
+                      htmlFor="example-text-input"
+                      className="col-md-3 col-form-label"
+                    >
+                      Apply Coupons
+                    </label>
+                    <div className="col-md-9">
+                      <Select
+                        value={selectedCoupons}
+                        onChange={handleSelectCoupon}
+                        options={availableCouponData}
+                        isMulti={true}
+                        isOptionDisabled={() =>
+                          selectedCoupons?.length >= MAX_COUPON_CHOICE_NUMBER
+                        }
+                      />
+                    </div>
+                  </Row>
+                ) : (
+                  ""
+                )}
+              </div>
+            ) : (
+              <>
+                {props.get_order_invoice_loading !== "Success" ? (
+                  <PageLoader />
+                ) : (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <h5>No item to display</h5>
+                    <div className="col-md-6">
+                      <Button
+                        color="success"
+                        className="btn btn-sm waves-effect waves-light form-control"
+                        onClick={() => {
+                          toggleAddItemInCartModal()
+                        }}
+                      >
+                        <span className="fa fa-plus"></span> Add Item
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={toggleEditOrderModal}>
+              Cancel
+            </Button>{" "}
+            <Button color="primary" onClick={handleStatusUpdate}>
+              Update
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/* ============ edit order modal ends=============== */}
+
+        {/* ============ status update modal starts=============== */}
+        <Modal
+          isOpen={modalAddItemInCart}
+          toggle={toggleAddItemInCartModal}
+          centered
+        >
+          <ModalHeader
+            className="text-center"
+            style={{ textAlign: "center", margin: "0 auto" }}
+          >
+            Choose Menu
+          </ModalHeader>
+          <ModalBody>
+            <Row className="mb-3">
+              <label
+                htmlFor="example-text-input"
+                className="col-md-3 col-form-label"
+              >
+                Menu Item
+              </label>
+              <div className="col-md-9">
+                <Select
+                  value={selectedMenuItem}
+                  onChange={handleSelectMenu}
+                  options={availableMenuData}
+                  required
+                />
+              </div>
+            </Row>
+
+            {selectedMenuItem?.item?.variations?.length > 0 ? (
+              <>
+                <h5>Variations</h5>
+                <div className="col-md-3">
+                  <span> </span>
+                </div>
+                {selectedMenuItem.item?.variations?.map((variation, index) => (
+                  <FormGroup check key={variation._id}>
+                    <Label check className="col-md-9">
+                      <Input
+                        type="radio"
+                        name="variation"
+                        value={index}
+                        onChange={() => handleVariationChange(variation)}
+                      />{" "}
+                      {variation.variation_name} - {CURRENCY_SYMBOLS}
+                      {variation.variation_price}
+                    </Label>
+                  </FormGroup>
+                ))}
+                {selectedVariation &&
+                  selectedVariation.add_on_categories.map(addOnCategory => (
+                    <div key={addOnCategory._id}>
+                      <h5>{addOnCategory.add_on_category_name}</h5>
+                      {addOnCategory.add_ons.map(addOn => (
+                        <FormGroup check key={addOn._id}>
+                          <Label check>
+                            <Input
+                              type={
+                                addOnCategory.cat_is_multiple
+                                  ? "checkbox"
+                                  : "radio"
+                              }
+                              name={
+                                addOnCategory.cat_is_multiple
+                                  ? addOn._id
+                                  : addOnCategory._id
+                              }
+                              onChange={e =>
+                                handleAddOnChange(
+                                  addOnCategory,
+                                  addOn,
+                                  e.target.checked
+                                )
+                              }
+                              disabled={
+                                addOnCategory.cat_is_multiple &&
+                                (checkedAddOns[addOnCategory._id] || [])
+                                  .length >= addOnCategory.cat_max_choice &&
+                                !(
+                                  checkedAddOns[addOnCategory._id] || []
+                                ).includes(addOn._id)
+                              }
+                            />{" "}
+                            {addOn.add_ons_name} - {CURRENCY_SYMBOLS}
+                            {addOn.add_ons_price}
+                          </Label>
+                        </FormGroup>
+                      ))}
+                    </div>
+                  ))}
+              </>
+            ) : (
+              ""
+            )}
+
+            {selectedMenuItem ? (
+              <>
+                <Row className="mt-3">
+                  <label
+                    htmlFor="example-text-input"
+                    className="col-md-3 col-form-label"
+                  >
+                    Quantity
+                  </label>
+                  <div className="col-md-9">
+                    <Input
+                      name="quantity"
+                      value={selectedMenuDetails.quantity}
+                      onChange={handleMenuDetailUpdate}
+                      type="number"
+                      className="form-control input-sm w-50"
+                    />
+                  </div>
+                </Row>
+                <Row className="mt-3">
+                  <label
+                    htmlFor="example-text-input"
+                    className="col-md-3 col-form-label"
+                  >
+                    Total
+                  </label>
+                  <div className="col-md-9">
+                    <Input
+                      name="quantity"
+                      value={selectedMenuDetails.item_total}
+                      type="number"
+                      className="form-control input-sm w-50"
+                      disabled
+                    />
+                  </div>
+                </Row>
+              </>
+            ) : (
+              ""
+            )}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={toggleAddItemInCartModal}>
+              Cancel
+            </Button>{" "}
+            <Button color="primary" onClick={handleCartItemAdd}>
+              Add
+            </Button>
+          </ModalFooter>
+        </Modal>
+        {/* ============ status update modal ends=============== */}
       </div>
     </React.Fragment>
   )
@@ -1195,7 +1881,23 @@ const mapStateToProps = state => {
     get_server_side_pagination_order_data,
     get_server_side_pagination_order_error,
     get_server_side_pagination_order_loading,
+
+    get_order_invoice_data,
+    get_order_invoice_error,
+    get_order_invoice_loading,
   } = state.Order
+
+  const {
+    get_available_menu_by_branch_id_data,
+    get_available_menu_by_branch_id_error,
+    get_available_menu_by_branch_id_loading,
+  } = state.Menu
+
+  const {
+    get_valid_coupons_for_cart_data,
+    get_valid_coupons_for_cart_error,
+    get_valid_coupons_for_cart_loading,
+  } = state.Coupon
 
   return {
     get_all_order_data,
@@ -1214,6 +1916,18 @@ const mapStateToProps = state => {
     get_server_side_pagination_order_data,
     get_server_side_pagination_order_error,
     get_server_side_pagination_order_loading,
+
+    get_available_menu_by_branch_id_data,
+    get_available_menu_by_branch_id_error,
+    get_available_menu_by_branch_id_loading,
+
+    get_valid_coupons_for_cart_data,
+    get_valid_coupons_for_cart_error,
+    get_valid_coupons_for_cart_loading,
+
+    get_order_invoice_data,
+    get_order_invoice_error,
+    get_order_invoice_loading,
   }
 }
 
@@ -1231,5 +1945,11 @@ export default withRouter(
     assignRiderFresh,
     getServerSidePaginationOrderAction,
     getServerSidePaginationOrderFresh,
+    getValidCouponForCart,
+    getValidCouponForCartFresh,
+    getAvailableMenuByBranchId,
+    getAvailableMenuByBranchIdFresh,
+    getOrderInvoice,
+    getOrderInvoiceFresh,
   })(Order)
 )

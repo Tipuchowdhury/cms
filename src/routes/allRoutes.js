@@ -181,6 +181,7 @@ import VoucherRequest from "pages/VoucherRequest/VoucherRequest"
 import TrackRider from "pages/Order/TrackRider"
 import TrackRider3 from "pages/Order/TrackRider3"
 import FAQ from "../pages/FAQ/FAQ"
+import AddRestaurant from "pages/Restaurant/AddRestaurant"
 
 const userRoutes = [
   // { path: "/dashboard", component: <Dashboard /> },
@@ -227,12 +228,14 @@ const userRoutes = [
   { path: "/cuisine", component: <Cuisine /> },
 
   { path: "/restaurant", component: <Restaurant /> },
+  { path: "/add-restaurant", component: <AddRestaurant /> },
+  { path: "/edit-restaurant", component: <AddRestaurant /> },
 
   { path: "/branch-attribute", component: <BranchAttribute /> },
 
   { path: "/manage-branch", component: <Branch /> },
   { path: "/branch-add", component: <BranchAdd /> },
-  { path: "/track-rider", component: <TrackRider /> },
+  { path: "/track-rider/:order_id", component: <TrackRider /> },
   { path: "/track-rider3", component: <TrackRider3 /> },
 
   { path: "/category", component: <Category /> },
@@ -295,7 +298,7 @@ const userRoutes = [
 
   // Refund
   { path: "/wallet", component: <Wallet /> },
-  { path: "/rider-wallet-details", component: <RiderWalletDetail /> },
+  { path: "/rider-wallet-details/:rider_id", component: <RiderWalletDetail /> },
 
   // Zone Utilization
   { path: "/zone-utilization", component: <ZoneUtilization /> },

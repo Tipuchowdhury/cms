@@ -41,6 +41,7 @@ import {
   addCashOutFresh,
   addAdjustmentAction,
   addAdjustmentFresh,
+  getServerSidePaginationWalletDetailsFresh,
 } from "store/actions"
 import DatatableTablesWorking from "pages/Tables/DatatableTablesWorking"
 import DataTable from "react-data-table-component"
@@ -142,8 +143,13 @@ function Wallet(props) {
     toggleAdjustmentModal()
   }
   const handleRiderWalletDetail = row => {
-    navigate("/rider-wallet-details")
+    navigate("/rider-wallet-details", { state: row })
   }
+
+  // const handleEdit = row => {
+  //   // console.log(row);
+  //   navigate("/add-time-slot", { state: row })
+  // }
 
   let name, value, checked
 
@@ -191,6 +197,9 @@ function Wallet(props) {
       //console.log("I am in get all permis type loading ")
       props.getServerSidePaginationWalletAction(page, countPerPage, pageFilters)
     }
+    if (props.get_server_side_pagination_wallet_loading === "Success") {
+      props.getServerSidePaginationWalletDetailsFresh()
+    }
   }, [
     page,
     countPerPage,
@@ -226,7 +235,7 @@ function Wallet(props) {
   console.log(props.get_server_side_pagination_wallet_data)
 
   const riderName = (cell, row) => (
-    <Link to="/rider-wallet-details">
+    <Link to={`/rider-wallet-details/${cell.rider_id}`}>
       <span
         style={{
           color: "#3333cc",
@@ -238,6 +247,10 @@ function Wallet(props) {
         {cell.rider_name.toUpperCase()}
       </span>
     </Link>
+
+    // <Link to={`/path/${dataToSend}`}>
+    //   Go to the destination
+    // </Link>
   )
   const actionRef = (cell, row) => (
     <div>
@@ -989,5 +1002,6 @@ export default withRouter(
     addCashOutFresh,
     addAdjustmentAction,
     addAdjustmentFresh,
+    getServerSidePaginationWalletDetailsFresh,
   })(Wallet)
 )

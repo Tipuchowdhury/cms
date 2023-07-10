@@ -24,10 +24,15 @@ import { v4 as uuidv4 } from "uuid"
 var token = JSON.parse(localStorage.getItem("jwt"))
 //console.log(token.jwt);
 
-export const addNotificationAction = (id, data, selectedUser) => {
+export const addNotificationAction = (
+  id,
+  data,
+  selectedUser,
+  selectedRider
+) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Notification/Post"
   const selectedUserData =
-    selectedUser?.length > 0
+    data.type == "customer" && selectedUser?.length > 0
       ? selectedUser.map(item => {
           const val = uuidv4()
           return {
@@ -37,14 +42,29 @@ export const addNotificationAction = (id, data, selectedUser) => {
             notification_id: id,
           }
         })
-      : null
+      : []
 
-  // console.log(selectedUserData);
+  const selectedRiderData =
+    data.type == "rider" && selectedRider?.length > 0
+      ? selectedRider.map(item => {
+          const val = uuidv4()
+          return {
+            _id: val,
+            rider_id: item.value,
+            device_id: item.device_id,
+            notification_id: id,
+          }
+        })
+      : []
+
   const dataObject = {
     _id: id,
     ...data,
     customers: selectedUserData,
+    riders: selectedRiderData,
   }
+
+  // console.log(dataObject)
   const formData = convertToFormData(dataObject)
 
   return dispatch => {
@@ -123,10 +143,28 @@ export const getAllNotificationFresh = () => {
   }
 }
 
-export const notificationEditAction = (id, data, selectedUser) => {
+export const notificationEditAction = (
+  id,
+  data,
+  selectedUser,
+  selectedRider
+) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Notification/Put"
+  // const selectedUserData =
+  //   selectedUser?.length > 0
+  //     ? selectedUser.map(item => {
+  //         const val = uuidv4()
+  //         return {
+  //           _id: val,
+  //           customer_id: item.value,
+  //           device_id: item.device_id,
+  //           notification_id: id,
+  //         }
+  //       })
+  //     : null
+
   const selectedUserData =
-    selectedUser?.length > 0
+    data.type == "customer" && selectedUser?.length > 0
       ? selectedUser.map(item => {
           const val = uuidv4()
           return {
@@ -136,11 +174,25 @@ export const notificationEditAction = (id, data, selectedUser) => {
             notification_id: id,
           }
         })
-      : null
+      : []
+
+  const selectedRiderData =
+    data.type == "rider" && selectedRider?.length > 0
+      ? selectedRider.map(item => {
+          const val = uuidv4()
+          return {
+            _id: val,
+            rider_id: item.value,
+            device_id: item.device_id,
+            notification_id: id,
+          }
+        })
+      : []
   const dataObject = {
     _id: id,
     ...data,
     customers: selectedUserData,
+    riders: selectedRiderData,
   }
   const formData = convertToFormData(dataObject)
   return dispatch => {
