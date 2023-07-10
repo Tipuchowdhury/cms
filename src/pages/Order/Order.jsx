@@ -309,7 +309,7 @@ function Order(props) {
         ) : (
           ""
         )}
-        <>
+        {/* <>
           <br></br>
           <Button
             color="warning"
@@ -318,7 +318,7 @@ function Order(props) {
           >
             <span className="fa fa-marker"></span> Edit Order
           </Button>
-        </>
+        </> */}
       </div>
     )
 
@@ -1267,7 +1267,7 @@ function Order(props) {
                 </div>
               </div>
             ) : (
-              ""
+              <PageLoader />
             )}
           </ModalBody>
         </Modal>
