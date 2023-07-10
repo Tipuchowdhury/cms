@@ -45,6 +45,7 @@ import {
   DistanceMatrixService,
   useJsApiLoader,
 } from "@react-google-maps/api"
+import { orderStatusNames } from "common/data/order"
 
 function TrackRider(props) {
   const location = useLocation()
@@ -217,9 +218,13 @@ function TrackRider(props) {
           </Row>
           <Row>
             <Col className="col-12 mx-auto">
-              <h4 className="text-center mb-3">
-                Track rider for Order ID {params.order_id}
-              </h4>
+              <div className="text-center mb-3">
+                <h4>Track rider for Order ID {params.order_id}</h4>
+                <h6>
+                  Order Status:{" "}
+                  {orderStatusNames[props.get_track_rider_data.order_status]}
+                </h6>
+              </div>
               <Card>
                 <CardBody>
                   <div
