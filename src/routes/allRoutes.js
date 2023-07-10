@@ -181,6 +181,7 @@ import VoucherRequest from "pages/VoucherRequest/VoucherRequest"
 import TrackRider from "pages/Order/TrackRider"
 import TrackRider3 from "pages/Order/TrackRider3"
 import FAQ from "../pages/FAQ/FAQ"
+import AddRestaurant from "pages/Restaurant/AddRestaurant"
 
 const userRoutes = [
   // { path: "/dashboard", component: <Dashboard /> },
@@ -227,6 +228,8 @@ const userRoutes = [
   { path: "/cuisine", component: <Cuisine /> },
 
   { path: "/restaurant", component: <Restaurant /> },
+  { path: "/add-restaurant", component: <AddRestaurant /> },
+  { path: "/edit-restaurant", component: <AddRestaurant /> },
 
   { path: "/branch-attribute", component: <BranchAttribute /> },
 

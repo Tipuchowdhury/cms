@@ -1,0 +1,1 @@
+export const MAX_COUPON_CHOICE_NUMBER = 2

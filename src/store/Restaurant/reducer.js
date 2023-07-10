@@ -89,6 +89,12 @@ import {
   GET_MENU_ITEM_BY_ID_FRESH,
   SERVER_SIDE_PAGINATION_MENU_ITEM_FRESH,
   SERVER_SIDE_PAGINATION_MENU_ITEM,
+  GET_RESTAURANT_BY_ID,
+  GET_RESTAURANT_BY_ID_FRESH,
+  ADD_RESTAURANT_FRESH,
+  RESTAURANT_EDIT,
+  RESTAURANT_EDIT_FRESH,
+  RESTAURANT_STATUS_UPDATE_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -259,6 +265,22 @@ const initialState = {
   get_add_ons_by_id_data: null,
   get_add_ons_by_id_error: null,
   get_add_ons_by_id_loading: false,
+
+  get_restaurant_by_id_data: null,
+  get_restaurant_by_id_error: null,
+  get_restaurant_by_id_loading: false,
+
+  edit_restaurant_data: null,
+  edit_restaurant_error: null,
+  edit_restaurant_loading: false,
+
+  restaurant_name_update_data: null,
+  restaurant_name_update_error: null,
+  restaurant_name_update_loading: false,
+
+  restaurant_status_update_data: null,
+  restaurant_status_update_error: null,
+  restaurant_status_update_loading: false,
 }
 
 const Restaurant = (state = initialState, action) => {
@@ -282,19 +304,36 @@ const Restaurant = (state = initialState, action) => {
       }
       break
 
+    case ADD_RESTAURANT_FRESH:
+      state = {
+        ...state,
+        add_restaurant_data: action.payload,
+        add_restaurant_loading: action.status,
+      }
+      break
+
     case RESTAURANT_NAME_UPDATE:
       state = {
         ...state,
+        restaurant_name_update_data: action.payload,
+        restaurant_name_update_error: action.error,
         restaurant_name_update_loading: action.status,
-        get_all_restaurant_loading: false,
       }
       break
 
     case RESTAURANT_STATUS_UPDATE:
       state = {
         ...state,
+        restaurant_status_update_data: action.payload,
+        restaurant_status_update_error: action.error,
         restaurant_status_update_loading: action.status,
-        get_all_restaurant_loading: false,
+      }
+      break
+    case RESTAURANT_STATUS_UPDATE_FRESH:
+      state = {
+        ...state,
+        restaurant_status_update_data: action.payload,
+        restaurant_status_update_loading: action.status,
       }
       break
     case DELETE_RESTAURANT:
@@ -999,6 +1038,40 @@ const Restaurant = (state = initialState, action) => {
         ...state,
         get_server_side_pagination_menu_item_data: action.payload,
         get_server_side_pagination_menu_item_loading: action.status,
+      }
+      break
+
+    case GET_RESTAURANT_BY_ID:
+      state = {
+        ...state,
+        get_restaurant_by_id_data: action.payload,
+        get_restaurant_by_id_error: action.error,
+        get_restaurant_by_id_loading: action.status,
+      }
+      break
+
+    case GET_RESTAURANT_BY_ID_FRESH:
+      state = {
+        ...state,
+        get_restaurant_by_id_data: action.payload,
+        get_restaurant_by_id_loading: action.status,
+      }
+      break
+
+    case RESTAURANT_EDIT:
+      state = {
+        ...state,
+        edit_restaurant_data: action.payload,
+        edit_restaurant_error: action.error,
+        edit_restaurant_loading: action.status,
+      }
+      break
+
+    case RESTAURANT_EDIT_FRESH:
+      state = {
+        ...state,
+        edit_restaurant_data: action.payload,
+        edit_restaurant_loading: action.status,
       }
       break
   }

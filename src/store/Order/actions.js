@@ -18,6 +18,8 @@ import {
   GET_ORDER_INVOICE_FRESH,
   GET_RIDER_INVOICE,
   GET_RIDER_INVOICE_FRESH,
+  GET_CHECK_CART,
+  GET_CHECK_CART_FRESH,
   TRACK_RIDER,
   TRACK_RIDER_FRESH,
 } from "./actionTypes"
@@ -428,6 +430,195 @@ export const getRiderInvoiceFresh = () => {
   return dispatch =>
     dispatch({
       type: GET_RIDER_INVOICE_FRESH,
+      status: false,
+      payload: null,
+    })
+}
+
+// check Cart
+export const getCheckCart = (branch_id, zone_id, coupon_name, menu_data) => {
+  const mockData = {
+    status: 0,
+    data: {
+      restaurant_id: "1b9870f9-9b4a-4db3-a3de-392e2204a9b4",
+      long: 91.8244893,
+      lat: 22.3538999,
+      coupon_name: "",
+      menu_data: [
+        {
+          _id: "dc78f41b-430e-4d49-a6b5-541894bb8b53",
+          menu_item_id: "dc78f41b-430e-4d49-a6b5-541894bb8b53",
+          order_id: "df22a969-b4f3-4b01-abbc-1af69b5e4d01",
+          category_id: "169f9b85-a708-4a73-8000-56a64fd8f836",
+          restaurant_id: "1b9870f9-9b4a-4db3-a3de-392e2204a9b4",
+          menu_name: "Ultimate Cheese Maxx",
+          menu_price: 899,
+          recipe_time: 30,
+          image:
+            "https://imagesandfilesbucket.theecotek.com/Classic Cheese Maxx.jpeg",
+          quantity: 1,
+          variations: [],
+          is_active: true,
+          is_available: true,
+          item_total: 899,
+          item_sd: 44.95,
+          item_vat: 44.95,
+        },
+        {
+          _id: "13310133-708d-4b5d-81ab-afbcfe98469b",
+          menu_item_id: "13310133-708d-4b5d-81ab-afbcfe98469b",
+          order_id: "df22a969-b4f3-4b01-abbc-1af69b5e4d01",
+          category_id: "169f9b85-a708-4a73-8000-56a64fd8f836",
+          restaurant_id: "1b9870f9-9b4a-4db3-a3de-392e2204a9b4",
+          menu_name: "Deep Sea Fantasy Pizza",
+          menu_price: 295,
+          recipe_time: 35,
+          image:
+            "https://imagesandfilesbucket.theecotek.com/deep sea fantasi pizza.jpg",
+          quantity: 1,
+          variations: [
+            {
+              variation_name: "Medium",
+              variation_price: 415,
+              is_active: true,
+              add_on_category: [
+                {
+                  _id: "e0f2a11b-ce95-4ca7-8859-45c9768adf89",
+                  add_on_category_id: "170b003e-99a8-4f4b-9bfe-ab7b4fe331ae",
+                  name: 'Add Ons for 9" Pizza',
+                  is_active: true,
+                  add_on_list: [
+                    {
+                      _id: "40b21843-29d4-419e-949a-ed937ae8d720",
+                      addoncat_id: "170b003e-99a8-4f4b-9bfe-ab7b4fe331ae",
+                      add_ons_name: "More Naga",
+                      add_ons_price: 69,
+                      variation_and_add_on_category_id:
+                        "e0f2a11b-ce95-4ca7-8859-45c9768adf89",
+                      is_active: true,
+                      add_on_id: "40b21843-29d4-419e-949a-ed937ae8d720",
+                      order_add_on_category_details_id:
+                        "df22a969-b4f3-4b01-abbc-1af69b5e4d01",
+                    },
+                  ],
+                  order_variation_details_id:
+                    "df22a969-b4f3-4b01-abbc-1af69b5e4d01",
+                },
+                {
+                  _id: "55267d67-2999-4ab1-8c7d-78c54ee8e709",
+                  add_on_category_id: "8217326d-b62f-46c3-91c9-5a4a3cae8879",
+                  name: "Choice of Crust",
+                  is_active: true,
+                  add_on_list: [
+                    {
+                      _id: "42c04906-a9c0-4fd5-a2fd-a7ef2d4477b1",
+                      addoncat_id: "8217326d-b62f-46c3-91c9-5a4a3cae8879",
+                      add_ons_name: "Thin",
+                      add_ons_price: 1,
+                      variation_and_add_on_category_id:
+                        "55267d67-2999-4ab1-8c7d-78c54ee8e709",
+                      is_active: true,
+                      add_on_id: "42c04906-a9c0-4fd5-a2fd-a7ef2d4477b1",
+                      order_add_on_category_details_id:
+                        "df22a969-b4f3-4b01-abbc-1af69b5e4d01",
+                    },
+                  ],
+                  order_variation_details_id:
+                    "df22a969-b4f3-4b01-abbc-1af69b5e4d01",
+                },
+              ],
+              _id: "92e65c87-5e6c-4ff1-b872-e8b56ea43a8f",
+              variation_id: "92e65c87-5e6c-4ff1-b872-e8b56ea43a8f",
+              order_menu_item_details_id:
+                "df22a969-b4f3-4b01-abbc-1af69b5e4d01",
+            },
+          ],
+          is_active: true,
+          is_available: true,
+          item_total: 485,
+          item_sd: 24.25,
+          item_vat: 24.25,
+        },
+      ],
+      id: "9bc683e0-498f-4c17-8f0a-6f9ecba95217",
+      auto_applied_coupon: "",
+      auto_applied_coupon_name: "BK120",
+      delivery_time: 45,
+      rest_lat: 22.351168685634793,
+      rest_long: 91.79265747070315,
+      discount_type: "",
+      total: "1582.40",
+      price: [
+        {
+          name: "subtotal",
+          display: "Subtotal",
+          value: "1384.00",
+        },
+        {
+          name: "total_vat",
+          display: "VAT (inc.)",
+          value: "69.20",
+        },
+        {
+          name: "total_sd",
+          display: "SD (inc.)",
+          value: "69.20",
+        },
+        {
+          name: "total_discount",
+          display: "Discount",
+          value: "0.00",
+        },
+        {
+          name: "delivery_charge",
+          display: "Delivery Charge",
+          value: "60.00",
+        },
+        {
+          name: "total",
+          display: "Total",
+          value: "1582.40",
+        },
+      ],
+    },
+  }
+  return dispatch => {
+    dispatch({
+      type: GET_CHECK_CART,
+      payload: mockData.data,
+      status: "Success",
+    })
+  }
+  var url = process.env.REACT_APP_LOCALHOST + "/Order/RiderInvoice"
+  const params = { order_id: order_id }
+  return dispatch => {
+    const headers = {
+      "Content-Type": "application/json",
+
+      "Access-Control-Allow-Origin": "*",
+    }
+    axios
+      .get(url, { headers: headers, params: params })
+      .then(response => {
+        dispatch({
+          type: GET_CHECK_CART,
+          payload: response.data,
+          status: "Success",
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_CHECK_CART,
+          status: "Failed",
+        })
+      })
+  }
+}
+
+export const getCheckCartFresh = () => {
+  return dispatch =>
+    dispatch({
+      type: GET_CHECK_CART_FRESH,
       status: false,
       payload: null,
     })

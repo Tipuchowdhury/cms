@@ -25,3 +25,14 @@ export const orderTypes = {
   pickup: "Pick-Up",
   dineIn: "Dine-In",
 }
+
+export const orderStatusRowColors = {
+  placed: {
+    backgroundColor: "#ddee11",
+    color: "black",
+  },
+  delivered: {
+    backgroundColor: "#4ada99",
+    color: "white",
+  },
+}

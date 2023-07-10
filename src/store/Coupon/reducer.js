@@ -15,6 +15,8 @@ import {
   SERVER_SIDE_PAGINATION_COUPON_FRESH,
   SERVER_SIDE_PAGINATION_COUPON_SEARCH,
   SERVER_SIDE_PAGINATION_COUPON_SEARCH_FRESH,
+  GET_VALID_COUPONS_FOR_CART_FRESH,
+  GET_VALID_COUPONS_FOR_CART,
 } from "./actionTypes"
 
 const initialState = {
@@ -47,6 +49,10 @@ const initialState = {
   get_coupon_by_id_data: null,
   get_coupon_by_id_error: null,
   get_coupon_by_id_loading: false,
+
+  get_valid_coupons_for_cart_data: null,
+  get_valid_coupons_for_cart_error: null,
+  get_valid_coupons_for_cart_loading: false,
 }
 
 const Coupon = (state = initialState, action) => {
@@ -177,6 +183,23 @@ const Coupon = (state = initialState, action) => {
         ...state,
         get_coupon_by_id_data: null,
         get_coupon_by_id_loading: action.status,
+      }
+      break
+
+    case GET_VALID_COUPONS_FOR_CART:
+      state = {
+        ...state,
+        get_valid_coupons_for_cart_data: action.payload,
+        get_valid_coupons_for_cart_error: null,
+        get_valid_coupons_for_cart_loading: action.status,
+      }
+      break
+
+    case GET_VALID_COUPONS_FOR_CART_FRESH:
+      state = {
+        ...state,
+        get_valid_coupons_for_cart_data: null,
+        get_valid_coupons_for_cart_loading: action.status,
       }
       break
   }
