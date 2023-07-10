@@ -19,6 +19,8 @@ import {
   GET_ORDER_INVOICE_FRESH,
   GET_RIDER_INVOICE,
   GET_RIDER_INVOICE_FRESH,
+  TRACK_RIDER,
+  TRACK_RIDER_FRESH,
   GET_CHECK_CART,
   GET_CHECK_CART_FRESH,
 } from "./actionTypes"
@@ -205,6 +207,23 @@ const order = (state = initialState, action) => {
         ...state,
         get_rider_invoice_data: action.payload,
         get_rider_invoice_loading: action.status,
+      }
+      break
+
+    case TRACK_RIDER:
+      state = {
+        ...state,
+        get_track_rider_data: action.payload,
+        get_track_rider_error: null,
+        get_track_rider_loading: action.status,
+      }
+      break
+
+    case TRACK_RIDER_FRESH:
+      state = {
+        ...state,
+        get_track_rider_data: action.payload,
+        get_track_rider_loading: action.status,
       }
       break
 

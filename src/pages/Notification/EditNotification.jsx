@@ -18,6 +18,7 @@ import {
   addNotificationAction,
   addNotificationFresh,
   notificationEditAction,
+  getAllRiderAction,
   notificationEditFresh,
   getNotificationByIdAction,
   getNotificationByIdActionFresh,
@@ -38,7 +39,42 @@ function EditNotification(props) {
 
   const [getInfo, SetGetInfo] = useState(true)
 
-  // console.log("lof", location?.state?.restaurants)
+  const [allUser, setAllUser] = useState(false)
+
+  const [allRider, setAllRider] = useState(false)
+
+  let notification_type = [
+    { label: "Customer", value: "customer" },
+    { label: "Rider", value: "rider" },
+  ]
+
+  // const common_types = notification_type?.filter(elem =>
+  //   props.get_notification_by_id_data?.find(({ type }) => elem.value === type)
+  // )
+
+  const common_types = notification_type.filter(
+    elem => elem.value === props?.get_notification_by_id_data?.type
+  )
+
+  const types_data_edit = common_types
+    ? common_types?.map((item, key) => {
+        return {
+          label: item.label,
+          value: item.value,
+        }
+      })
+    : ""
+
+  const [selectNotificationType, setSelectNotificationType] = useState(
+    types_data_edit ? types_data_edit : ""
+  )
+
+  console.log(selectNotificationType)
+
+  const handleSelectType = e => {
+    setNotificationInfo({ ...notificationInfo, type: e.value })
+    setSelectNotificationType(e)
+  }
 
   //select multiple user
   const common_users = props?.get_all_customer_data?.filter(elem =>
@@ -72,6 +108,39 @@ function EditNotification(props) {
     }))
   }
 
+  //select multiple rider
+  const common_riders = props?.get_all_rider_data?.filter(elem =>
+    props.get_notification_by_id_data?.riders?.find(
+      ({ rider_id }) => elem._id === rider_id
+    )
+  )
+
+  const rider_data_edit = common_riders
+    ? common_riders?.map((item, key) => {
+        return {
+          label: `${item.firstName} ${item.lastName}`,
+          device_id: `${item.device_id ?? ""}`,
+          value: item._id,
+        }
+      })
+    : ""
+
+  const [selectedRider, setSelectedRider] = useState(
+    rider_data_edit ? rider_data_edit : ""
+  )
+  const handleSelectRider = e => {
+    setSelectedRider(e)
+  }
+
+  let riderData = undefined
+  if (props.get_all_rider_data?.length > 0) {
+    riderData = props.get_all_rider_data?.map((item, key) => ({
+      label: `${item.first_name} ${item.last_name}`,
+      device_id: `${item.device_id ?? ""}`,
+      value: item._id,
+    }))
+  }
+
   const [images, setImages] = useState({
     image:
       props?.get_notification_by_id_data != undefined
@@ -92,6 +161,10 @@ function EditNotification(props) {
       props?.get_notification_by_id_data != undefined
         ? props?.get_notification_by_id_data?.description
         : "",
+    type:
+      props?.get_notification_by_id_data != undefined
+        ? props?.get_notification_by_id_data?.type
+        : "",
     is_active:
       props?.get_notification_by_id_data != undefined
         ? props?.get_notification_by_id_data?.is_active
@@ -101,12 +174,29 @@ function EditNotification(props) {
   // const [notificationInfo, setNotificationInfo] = useState({})
   // const [images, setImages] = useState({})
 
-  let name, value
+  let name, value, checked
   const handleInputs = e => {
-    console.log(e)
     name = e.target.name
     value = e.target.value
     setNotificationInfo({ ...notificationInfo, [name]: value })
+  }
+
+  const handleUserCheckBox = e => {
+    if (e.target.checked == true) {
+      setSelectedUser(userData)
+    } else {
+      setSelectedUser("")
+    }
+    setAllUser(!allUser)
+  }
+
+  const handleRiderCheckBox = e => {
+    if (e.target.checked == true) {
+      setSelectedRider(riderData)
+    } else {
+      setSelectedRider("")
+    }
+    setAllRider(!allRider)
   }
 
   const handleFiles = e => {
@@ -124,12 +214,12 @@ function EditNotification(props) {
 
   const handleSubmitForEdit = e => {
     e.preventDefault()
-    console.log("======================I am in the edit form==================")
 
     props.notificationEditAction(
       location.state._id,
       notificationInfo,
-      selectedUser
+      selectedUser,
+      selectedRider
     )
   }
 
@@ -138,14 +228,34 @@ function EditNotification(props) {
       props.getAllCustomerAction()
     }
 
+    if (props.get_all_rider_loading == false) {
+      props.getAllRiderAction()
+    }
+
     if (props.get_notification_by_id_data != undefined) {
       setNotificationInfo({
         ...notificationInfo,
         title: props.get_notification_by_id_data.title,
         image: props.get_notification_by_id_data.image,
+        type: props.get_notification_by_id_data.type,
         description: props.get_notification_by_id_data.description,
         is_active: props.get_notification_by_id_data.is_active,
       })
+
+      const common_types = notification_type.filter(
+        elem => elem.value === props?.get_notification_by_id_data?.type
+      )
+
+      const types_data_edit = common_types
+        ? common_types?.map((item, key) => {
+            return {
+              label: item.label,
+              value: item.value,
+            }
+          })
+        : ""
+
+      setSelectNotificationType(types_data_edit)
 
       setImages({ ...images, image: props.get_notification_by_id_data.image })
 
@@ -166,6 +276,24 @@ function EditNotification(props) {
         : ""
 
       setSelectedUser(user_data_edit)
+
+      const common_riders = props?.get_all_rider_data?.filter(elem =>
+        props.get_notification_by_id_data?.riders?.find(
+          ({ rider_id }) => elem._id === rider_id
+        )
+      )
+
+      const rider_data_edit = common_riders
+        ? common_riders?.map((item, key) => {
+            return {
+              label: `${item.first_name} ${item.last_name}`,
+              device_id: `${item.device_id ?? ""}`,
+              value: item._id,
+            }
+          })
+        : ""
+
+      setSelectedRider(rider_data_edit)
     }
 
     if (getInfo) {
@@ -187,14 +315,14 @@ function EditNotification(props) {
     }
   }, [props])
 
-  if (getInfo) {
+  if (props.get_notification_by_id_data == undefined) {
     return <PageLoader />
   }
 
   return (
     <>
       <React.Fragment>
-        <div className="page-content">
+        <div className="page-content mb-5">
           <Container fluid>
             <Breadcrumbs
               maintitle="Foodi"
@@ -300,7 +428,7 @@ function EditNotification(props) {
                       </div>
                     </Row>
                   )}
-                  <Row className="mb-3">
+                  {/* <Row className="mb-3">
                     <label
                       htmlFor="example-text-input"
                       className="col-md-2 col-form-label"
@@ -316,7 +444,116 @@ function EditNotification(props) {
                         required
                       />
                     </div>
+                  </Row> */}
+
+                  <Row className="mb-3">
+                    <label htmlFor="type" className="col-md-2 col-form-label">
+                      Type
+                    </label>
+                    <div className="col-md-10">
+                      <Select
+                        value={selectNotificationType}
+                        onChange={handleSelectType}
+                        options={notification_type}
+                        isMulti={false}
+                        required
+                      />
+                    </div>
                   </Row>
+
+                  {notificationInfo.type == "customer" ||
+                  selectNotificationType?.value == "customer" ? (
+                    <>
+                      <Row className="mb-3">
+                        <div className="col-sm-4">
+                          <div className="form-check">
+                            <label
+                              className="form-check-label"
+                              htmlFor="select_all_user"
+                            >
+                              Select All Customer
+                            </label>
+                            <input
+                              type="checkbox"
+                              className="form-check-input"
+                              id="select_all_user"
+                              checked={allUser}
+                              name="select_all_user"
+                              onChange={handleUserCheckBox}
+                            />
+                          </div>
+                        </div>
+                      </Row>
+                      <Row className="mb-3">
+                        <label
+                          htmlFor="example-text-input"
+                          className="col-md-2 col-form-label"
+                        >
+                          Customers
+                        </label>
+                        <div className="col-md-10">
+                          <Select
+                            value={selectedUser}
+                            onChange={handleSelectUser}
+                            options={userData}
+                            isLoading={userData == undefined ? true : false}
+                            isDisabled={allUser}
+                            isMulti={true}
+                            required
+                          />
+                        </div>
+                      </Row>
+                    </>
+                  ) : (
+                    ""
+                  )}
+
+                  {notificationInfo.type == "rider" ||
+                  selectNotificationType?.value == "rider" ? (
+                    <>
+                      <Row className="mb-3">
+                        <div className="col-sm-4">
+                          <div className="form-check">
+                            <label
+                              className="form-check-label"
+                              htmlFor="select_all_rider"
+                            >
+                              Select All Rider
+                            </label>
+                            <input
+                              type="checkbox"
+                              className="form-check-input"
+                              id="select_all_rider"
+                              checked={allRider}
+                              name="select_all_rider"
+                              onChange={handleRiderCheckBox}
+                            />
+                          </div>
+                        </div>
+                      </Row>
+                      <Row className="mb-3">
+                        <label
+                          htmlFor="example-text-input"
+                          className="col-md-2 col-form-label"
+                        >
+                          Riders
+                        </label>
+                        <div className="col-md-10">
+                          <Select
+                            value={selectedRider}
+                            onChange={handleSelectRider}
+                            options={riderData}
+                            isLoading={riderData == undefined ? true : false}
+                            isDisabled={allRider}
+                            isMulti={true}
+                            required
+                          />
+                        </div>
+                      </Row>
+                    </>
+                  ) : (
+                    ""
+                  )}
 
                   <div className="mb-3 row">
                     <div className="col-12 text-end">
@@ -341,11 +578,9 @@ function EditNotification(props) {
 }
 
 const mapStateToProps = state => {
-  const {
-    get_all_customer_data,
-    get_all_customer_error,
-    get_all_customer_loading,
-  } = state.Customer
+  const { get_all_customer_data, get_all_customer_loading } = state.Customer
+
+  const { get_all_rider_data, get_all_rider_loading } = state.Rider
 
   const {
     add_notification_loading,
@@ -356,6 +591,8 @@ const mapStateToProps = state => {
   return {
     get_all_customer_loading,
     get_all_customer_data,
+    get_all_rider_data,
+    get_all_rider_loading,
     add_notification_loading,
     notification_edit_loading,
     get_notification_by_id_data,
@@ -366,6 +603,7 @@ const mapStateToProps = state => {
 export default withRouter(
   connect(mapStateToProps, {
     getAllCustomerAction,
+    getAllRiderAction,
     addNotificationAction,
     addNotificationFresh,
     notificationEditAction,
