@@ -94,6 +94,7 @@ import {
   ADD_RESTAURANT_FRESH,
   RESTAURANT_EDIT,
   RESTAURANT_EDIT_FRESH,
+  RESTAURANT_STATUS_UPDATE_FRESH,
 } from "./actionTypes"
 
 const initialState = {
@@ -272,6 +273,14 @@ const initialState = {
   edit_restaurant_data: null,
   edit_restaurant_error: null,
   edit_restaurant_loading: false,
+
+  restaurant_name_update_data: null,
+  restaurant_name_update_error: null,
+  restaurant_name_update_loading: false,
+
+  restaurant_status_update_data: null,
+  restaurant_status_update_error: null,
+  restaurant_status_update_loading: false,
 }
 
 const Restaurant = (state = initialState, action) => {
@@ -306,16 +315,25 @@ const Restaurant = (state = initialState, action) => {
     case RESTAURANT_NAME_UPDATE:
       state = {
         ...state,
+        restaurant_name_update_data: action.payload,
+        restaurant_name_update_error: action.error,
         restaurant_name_update_loading: action.status,
-        get_all_restaurant_loading: false,
       }
       break
 
     case RESTAURANT_STATUS_UPDATE:
       state = {
         ...state,
+        restaurant_status_update_data: action.payload,
+        restaurant_status_update_error: action.error,
         restaurant_status_update_loading: action.status,
-        get_all_restaurant_loading: false,
+      }
+      break
+    case RESTAURANT_STATUS_UPDATE_FRESH:
+      state = {
+        ...state,
+        restaurant_status_update_data: action.payload,
+        restaurant_status_update_loading: action.status,
       }
       break
     case DELETE_RESTAURANT:

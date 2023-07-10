@@ -28,7 +28,8 @@ import {
   getServerSidePaginationRestaurantAction,
   getServerSidePaginationRestaurantSearchAction,
   getServerSidePaginationSearchRestaurantFresh,
-  getRestaurantByIdAction,
+  getRestaurantByIdFresh,
+  restaurantStatusUpdateActionFresh,
 } from "store/actions"
 import DataTable from "react-data-table-component"
 import { useNavigate } from "react-router-dom"
@@ -66,7 +67,7 @@ function Restaurant(props) {
     setName("")
   }
   const handleEditName = cell => {
-    props.getRestaurantByIdAction()
+    props.getRestaurantByIdFresh()
 
     navigate("/edit-restaurant", { state: cell })
   }
@@ -169,6 +170,13 @@ function Restaurant(props) {
   }
 
   useEffect(() => {
+    if (props.restaurant_status_update_loading === "Success") {
+      props.getServerSidePaginationRestaurantAction(page, countPerPage)
+      props.restaurantStatusUpdateActionFresh()
+    }
+  }, [props.restaurant_status_update_loading])
+
+  useEffect(() => {
     props.getServerSidePaginationRestaurantAction(page, countPerPage)
 
     if (props.restaurant_delete_loading === "Success") {
@@ -208,7 +216,10 @@ function Restaurant(props) {
                     </CardTitle>
                     <Button
                       style={{ backgroundColor: "#DCA218", color: "#FFFFFF" }}
-                      onClick={toggle}
+                      onClick={() => {
+                        props.getRestaurantByIdFresh()
+                        navigate("/add-restaurant")
+                      }}
                     >
                       Add Restaurant
                     </Button>
@@ -400,7 +411,16 @@ const mapStateToProps = state => {
 
     restaurant_delete_loading,
     get_server_side_pagination_restaurant_data,
+    get_server_side_pagination_restaurant_loading,
     get_server_side_pagination_restaurant_search_data,
+
+    // restaurant_name_update_data,
+    // restaurant_name_update_error,
+    // restaurant_name_update_loading,
+
+    restaurant_status_update_data,
+    restaurant_status_update_error,
+    restaurant_status_update_loading,
   } = state.Restaurant
 
   return {
@@ -413,7 +433,16 @@ const mapStateToProps = state => {
 
     restaurant_delete_loading,
     get_server_side_pagination_restaurant_data,
+    get_server_side_pagination_restaurant_loading,
     get_server_side_pagination_restaurant_search_data,
+
+    // restaurant_name_update_data,
+    // restaurant_name_update_error,
+    // restaurant_name_update_loading,
+
+    restaurant_status_update_data,
+    restaurant_status_update_error,
+    restaurant_status_update_loading,
   }
 }
 
@@ -427,6 +456,7 @@ export default withRouter(
     getServerSidePaginationRestaurantAction,
     getServerSidePaginationRestaurantSearchAction,
     getServerSidePaginationSearchRestaurantFresh,
-    getRestaurantByIdAction,
+    getRestaurantByIdFresh,
+    restaurantStatusUpdateActionFresh,
   })(Restaurant)
 )

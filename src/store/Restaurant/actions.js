@@ -94,6 +94,7 @@ import {
   ADD_RESTAURANT_FRESH,
   RESTAURANT_EDIT,
   RESTAURANT_EDIT_FRESH,
+  RESTAURANT_STATUS_UPDATE_FRESH,
 } from "./actionTypes"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -177,14 +178,17 @@ export const getAllRestaurantAction = () => {
 
 export const restaurantNameUpdateAction = (name, id, is_active) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Restaurant/Put"
-  const formData = {
+  const dataObject = {
     _id: id,
     name: name,
     is_active: is_active,
   }
+
+  const formData = convertToFormData(dataObject)
   return dispatch => {
     const headers = {
-      "Content-Type": "application/json",
+      // "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
 
       "Access-Control-Allow-Origin": "*",
     }
@@ -243,6 +247,16 @@ export const restaurantStatusUpdateAction = (id, is_active) => {
         })
         toast.error("Something went wrong!!")
       })
+  }
+}
+
+export const restaurantStatusUpdateActionFresh = () => {
+  return dispatch => {
+    dispatch({
+      type: RESTAURANT_STATUS_UPDATE_FRESH,
+      payload: null,
+      status: false,
+    })
   }
 }
 

@@ -74,6 +74,7 @@ function AddRestaurant(props) {
       props.getRestaurantByIdAction(location.state._id)
     }
   }, [location?.state])
+  console.log("location?.state :", location?.state)
 
   let name, value, checked
   const handleInputs = e => {
@@ -85,6 +86,16 @@ function AddRestaurant(props) {
 
   const handleSubmit = e => {
     e.preventDefault()
+
+    if (restaurantInfo.mobile.length != 11) {
+      toast.error("Phone Number should be 11 digit")
+      return
+    }
+    if (isNaN(restaurantInfo.mobile)) {
+      toast.error("Phone Number should be numeric character")
+      return
+    }
+
     props.restaurantAddAction(restaurantInfo)
   }
 
@@ -310,13 +321,17 @@ function AddRestaurant(props) {
                     </label>
                     <div className="col-md-10">
                       <input
-                        type="number"
+                        type="text"
                         className="form-control"
                         id="mobile"
                         placeholder="Mobile Number"
                         name="mobile"
+                        pattern="[0-9]+"
+                        minLength={11}
+                        maxLength={11}
                         onChange={handleInputs}
                         value={restaurantInfo.mobile ?? ""}
+                        required
                       />
                     </div>
                   </Row>
