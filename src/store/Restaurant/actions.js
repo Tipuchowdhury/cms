@@ -897,7 +897,7 @@ export const getZoneByIdAction = id => {
 }
 
 export const getZoneByIdActionFresh = () => {
-  console.log("=========hererererer=======")
+  // console.log("=========hererererer=======")
   return dispatch =>
     dispatch({
       type: GET_ZONE_BY_ID_FRESH,
@@ -951,10 +951,10 @@ export const zoneEditAction = (
 ) => {
   var url = process.env.REACT_APP_LOCALHOST + "/Zone/Put"
 
-  console.log(zoneInfo)
-  console.log(path)
-  console.log(deliveryCharge)
-  console.log(selectedBranch)
+  // console.log(zoneInfo)
+  // console.log(path)
+  // console.log(deliveryCharge)
+  // console.log(selectedBranch)
 
   var url = process.env.REACT_APP_LOCALHOST + "/Zone/Put"
 
@@ -985,7 +985,7 @@ export const zoneEditAction = (
       : null
 
   const allData = path.map(item => [Number(item.lng), Number(item.lat)])
-  console.log(allData)
+  // console.log(allData)
   let formData = {
     _id: id,
     name: zoneInfo.area,

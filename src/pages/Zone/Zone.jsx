@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import {
   Badge,
+  BreadcrumbItem,
   Button,
   Card,
   CardBody,
@@ -36,6 +37,9 @@ import DataTable from "react-data-table-component"
 import CustomLoader from "components/CustomLoader/CustomLoader"
 
 function Zone(props) {
+  document.title = "Zone | Foodi"
+  const [statusSubmitDisabled, setStatusSubmitDisabled] = useState(false)
+  const [deleteSubmitDisabled, setDeleteSubmitDisabled] = useState(false)
   const [modalDel, setModalDel] = useState(false)
   const [editInfo, setEditInfo] = useState(false)
   const [modalStatusUpdate, setModalStatusUpdate] = useState(false)
@@ -57,6 +61,7 @@ function Zone(props) {
 
   const handleStatusUpdate = () => {
     //console.log(editInfo)
+    setStatusSubmitDisabled(true)
     props.zoneStatusEditAction({
       id: editInfo._id,
       is_active: !editInfo.is_active,
@@ -72,7 +77,7 @@ function Zone(props) {
   }
 
   const handleDelete = () => {
-    // console.log(deleteItem)
+    setDeleteSubmitDisabled(true)
     props.zoneDeleteAction(deleteItem)
     // toggleDel();
   }
@@ -172,22 +177,26 @@ function Zone(props) {
       toast.success("Zone Status Updated Successfully")
       toggleStatus()
       props.zoneStatusEditActionFresh()
+      setStatusSubmitDisabled(false)
     }
     if (props.edit_zone_status_loading == "Failed") {
       toast.error("Something went wrong")
       // toggleStatus();
       props.zoneStatusEditActionFresh()
+      setStatusSubmitDisabled(false)
     }
 
     if (props.zone_delete_loading == "Success") {
       toast.success("Zone Deleted Successfully")
       toggleDel()
       props.zoneDeleteFresh()
+      setDeleteSubmitDisabled(false)
     }
     if (props.zone_delete_loading == "Failed") {
       toast.error("Something went wrong")
       // toggleStatus();
       props.zoneDeleteFresh()
+      setDeleteSubmitDisabled(false)
     }
   }, [
     props.get_all_zone_loading,
@@ -201,15 +210,23 @@ function Zone(props) {
 
   return (
     <React.Fragment>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <div className="page-content">
         <Container fluid>
-          {/* Render Breadcrumbs */}
-          <Breadcrumbs
-            maintitle="Foodi"
-            title="Zone & City"
-            breadcrumbItem="Zone"
-          />
+          <Row className="align-items-center">
+            <Col sm={6}>
+              <div className="page-title-box">
+                <h4 className="font-size-18">Zone</h4>
+                <ol className="breadcrumb mb-0">
+                  <BreadcrumbItem>
+                    <Link to="/">Foodi</Link>
+                  </BreadcrumbItem>
+                  <BreadcrumbItem>Zone & City</BreadcrumbItem>
+                  <BreadcrumbItem active>Zone</BreadcrumbItem>
+                </ol>
+              </div>
+            </Col>
+          </Row>
 
           <Row>
             <Col className="col-12">
@@ -268,13 +285,37 @@ function Zone(props) {
                     }
                     paginationPerPage={countPerPage}
                     paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
                     progressPending={
                       !props.get_server_side_pagination_zone_loading
                     }
                     progressComponent={<CustomLoader />}
-                    onChangeRowsPerPage={handlePerRowsChange}
                     onChangePage={page => setPage(page)}
                   />
+
+                  {/* <DataTable
+                    columns={activeData}
+                    customStyles={customStyles}
+                    data={
+                      props.get_server_side_pagination_data != null
+                        ? props.get_server_side_pagination_data?.data
+                        : props?.get_server_side_pagination_data?.data
+                    }
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={
+                      props.get_server_side_pagination_data != null
+                        ? props.get_server_side_pagination_data?.count
+                        : props.get_server_side_pagination_data?.count
+                    }
+                    paginationPerPage={countPerPage}
+                    paginationComponentOptions={paginationComponentOptions}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    progressPending={!props.get_server_side_pagination_loading}
+                    progressComponent={<CustomLoader />}
+                    onChangePage={page => setPage(page)}
+                  /> */}
                 </CardBody>
               </Card>
             </Col>
@@ -303,7 +344,11 @@ function Zone(props) {
             <Button color="secondary" onClick={toggleDel}>
               Cancel
             </Button>{" "}
-            <Button color="danger" onClick={handleDelete}>
+            <Button
+              color="danger"
+              onClick={handleDelete}
+              disabled={deleteSubmitDisabled}
+            >
               Delete
             </Button>
           </ModalFooter>
@@ -332,7 +377,11 @@ function Zone(props) {
             <Button color="secondary" onClick={toggleStatus}>
               Cancel
             </Button>{" "}
-            <Button color="primary" onClick={handleStatusUpdate}>
+            <Button
+              color="primary"
+              onClick={handleStatusUpdate}
+              disabled={statusSubmitDisabled}
+            >
               Update
             </Button>
           </ModalFooter>

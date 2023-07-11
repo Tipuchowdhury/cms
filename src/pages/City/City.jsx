@@ -343,7 +343,6 @@ function City(props) {
                     />
                   </div>
                   <DataTable
-                    //title="Employees"
                     columns={activeData}
                     customStyles={customStyles}
                     data={
@@ -360,11 +359,6 @@ function City(props) {
                         : props.get_server_side_pagination_data?.count
                     }
                     paginationPerPage={countPerPage}
-                    // paginationComponentOptions={{
-                    //     noRowsPerPage: true,
-                    //     //noRowsPerPage: false,
-
-                    // }}
                     paginationComponentOptions={paginationComponentOptions}
                     onChangeRowsPerPage={handlePerRowsChange}
                     progressPending={!props.get_server_side_pagination_loading}
@@ -460,7 +454,7 @@ function City(props) {
                 style={{ color: "red", fontSize: "40px" }}
               ></i>
             </div>
-            <h2>Are you sure?</h2>
+            Are you sure?
           </ModalHeader>
           <ModalBody>
             Do you really want to delete these records? This process cannot be

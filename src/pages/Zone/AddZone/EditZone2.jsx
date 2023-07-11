@@ -14,6 +14,7 @@ import {
   Row,
   Col,
   Input,
+  BreadcrumbItem,
 } from "reactstrap"
 // import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react"
 import {
@@ -39,7 +40,7 @@ import {
 } from "store/actions"
 import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
-import { useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import CustomLoader from "components/CustomLoader/CustomLoader"
 import PageLoader from "components/CustomLoader/PageLoader"
 import { toast } from "react-toastify"
@@ -47,14 +48,17 @@ import { toast } from "react-toastify"
 const LoadingContainer = () => <div>Loading...</div>
 
 function EditZone(props) {
+  document.title = "Edit Zone | Foodi"
   useEffect(() => {
     props.getZoneByIdActionFresh()
   }, [])
 
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyDKIxr2AXZPA1k8EyJz52suWseQCFxfoMU",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
     libraries: ["places"],
   })
+
+  const [editSubmitDisabled, setEditSubmitDisabled] = useState(false)
 
   const [branch, setBranch] = useState([])
   const [getInfo, SetGetInfo] = useState(true)
@@ -194,11 +198,18 @@ function EditZone(props) {
   // get all city
   let cityData = undefined
   if (props.get_all_city_data?.length > 0) {
-    cityData = props.get_all_city_data?.map((item, key) => (
-      <option key={item._id} value={item._id}>
-        {item.name}
-      </option>
-    ))
+    cityData = props.get_all_city_data?.map((item, key) => ({
+      label: item.name,
+      value: item._id,
+    }))
+  }
+
+  //select city
+  const [selectedCity, setSelectedCity] = useState("")
+  const handleSelectCity = e => {
+    const value = e ? e.value : ""
+    setZoneInfo({ ...zoneInfo, city: value })
+    setSelectedCity(e)
   }
 
   const [zoneInfo, setZoneInfo] = useState({
@@ -228,6 +239,7 @@ function EditZone(props) {
   const allData = path?.map(item => Number(item.lng) + "," + Number(item.lat))
 
   const handleSubmitForEdit = e => {
+    setEditSubmitDisabled(true)
     e.preventDefault()
     //console.log(zoneInfo)
     if (zoneInfo.city == "") {
@@ -306,6 +318,12 @@ function EditZone(props) {
     if (props.edit_zone_loading == "Success") {
       navigate("/zone")
       props.zoneEditFresh()
+      setEditSubmitDisabled(false)
+    }
+
+    if (props.edit_zone_loading == "Failed") {
+      props.zoneEditFresh()
+      setEditSubmitDisabled(false)
     }
 
     if (props.get_zone_by_id_data != undefined) {
@@ -339,6 +357,28 @@ function EditZone(props) {
       setBranch(branchData)
       //setSelectedBranch(branchData)
       setSelectedBranch(branch_data_edit)
+
+      // let cityData = undefined
+      // if (props.get_all_city_data?.length > 0) {
+      //   cityData = props.get_all_city_data?.map((item, key) => ({
+      //     label: item.name,
+      //     value: item._id,
+      //   }))
+      // }
+
+      const common_cities = props?.get_all_city_data?.filter(
+        elem => elem._id === props?.get_zone_by_id_data?.city_id
+      )
+      // console.log(common_branches)
+
+      const city_data_edit =
+        common_cities?.length > 0
+          ? common_cities?.map((item, key) => {
+              return { label: item.name, value: item._id }
+            })
+          : ""
+
+      setSelectedCity(city_data_edit)
 
       // show path
       const edit_map_data =
@@ -398,11 +438,22 @@ function EditZone(props) {
       <React.Fragment>
         <div className="page-content">
           <Container fluid>
-            <Breadcrumbs
-              maintitle="Foodi"
-              title="Zone"
-              breadcrumbItem="Edit Zone"
-            />
+            <Row className="align-items-center">
+              <Col sm={6}>
+                <div className="page-title-box">
+                  <h4 className="font-size-18">Edit Zone</h4>
+                  <ol className="breadcrumb mb-0">
+                    <BreadcrumbItem>
+                      <Link to="/">Foodi</Link>
+                    </BreadcrumbItem>
+                    <BreadcrumbItem>
+                      <Link to="/zone">Zone</Link>
+                    </BreadcrumbItem>
+                    <BreadcrumbItem active>Edit Zone</BreadcrumbItem>
+                  </ol>
+                </div>
+              </Col>
+            </Row>
 
             <Row>
               <Col className="col-12">
@@ -419,7 +470,7 @@ function EditZone(props) {
                       }}
                     >
                       <CardTitle className="h4" style={{ color: "#FFFFFF" }}>
-                        {location.state ? "Edit Zone New" : "Add a New Zone"}{" "}
+                        Edit Zone New
                       </CardTitle>
                     </div>
                   </CardBody>
@@ -462,18 +513,15 @@ function EditZone(props) {
                       City <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
-                      <Input
+                      <Select
                         required
-                        id="exampleSelect"
-                        name="city"
-                        value={zoneInfo.city}
-                        //required={true}
-                        onChange={handleInputs}
-                        type="select"
-                      >
-                        <option value="">Choose City</option>
-                        {cityData}
-                      </Input>
+                        value={selectedCity}
+                        onChange={handleSelectCity}
+                        options={cityData}
+                        isLoading={cityData == undefined ? true : false}
+                        isClearable={true}
+                        isMulti={false}
+                      />
                     </div>
                   </Row>
 
@@ -511,6 +559,7 @@ function EditZone(props) {
                         value={selectedBranch}
                         onChange={handleSelectBranch}
                         options={branchDate}
+                        isLoading={branchDate == undefined ? true : false}
                         isMulti={true}
                       />
                     </div>
@@ -751,6 +800,7 @@ function EditZone(props) {
                       <button
                         className="btn btn-primary w-md waves-effect waves-light"
                         type="submit"
+                        disabled={editSubmitDisabled}
                       >
                         Edit Zone
                       </button>

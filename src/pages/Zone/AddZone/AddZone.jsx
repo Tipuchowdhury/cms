@@ -14,6 +14,7 @@ import {
   Row,
   Col,
   Input,
+  BreadcrumbItem,
 } from "reactstrap"
 // import { GoogleApiWrapper, InfoWindow, Map, Marker } from "google-maps-react"
 import {
@@ -21,6 +22,7 @@ import {
   Marker,
   Autocomplete,
   useJsApiLoader,
+  useLoadScript,
   Polygon,
 } from "@react-google-maps/api"
 import { connect } from "react-redux"
@@ -38,17 +40,21 @@ import {
 } from "store/actions"
 import { useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
-import { useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import PageLoader from "components/CustomLoader/PageLoader"
 
 const LoadingContainer = () => <div>Loading...</div>
 
 function AddZone(props) {
+  document.title = "Add Zone | Foodi"
+  // const libraries = ["places"]
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyDKIxr2AXZPA1k8EyJz52suWseQCFxfoMU",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
     libraries: ["places"],
   })
+
+  const [submitDisabled, setSubmitDisabled] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const [centerMap, setCenterMap] = useState({ lat: 23.8103, lng: 90.4125 })
@@ -149,11 +155,18 @@ function AddZone(props) {
   // get all city
   let cityData = undefined
   if (props.get_all_city_data?.length > 0) {
-    cityData = props.get_all_city_data?.map((item, key) => (
-      <option key={item._id} value={item._id}>
-        {item.name}
-      </option>
-    ))
+    cityData = props.get_all_city_data?.map((item, key) => ({
+      label: item.name,
+      value: item._id,
+    }))
+  }
+
+  const [selectedCity, setSelectedCity] = useState("")
+
+  const handleSelectCity = e => {
+    const value = e ? e.value : ""
+    setZoneInfo({ ...zoneInfo, city: value })
+    setSelectedCity(e)
   }
 
   const onMapClickHandler = e => {}
@@ -175,6 +188,7 @@ function AddZone(props) {
   const allData = path?.map(item => Number(item.lng) + "," + Number(item.lat))
 
   const handleSubmit = e => {
+    setSubmitDisabled(true)
     e.preventDefault()
     if (zoneInfo.city === "") {
       toast.error("Please select a city")
@@ -188,20 +202,6 @@ function AddZone(props) {
         selectedBranch
       )
     }
-  }
-
-  const handleSubmitForEdit = e => {
-    e.preventDefault()
-
-    const uniqueId = uuidv4()
-
-    props.zoneEditAction(
-      location.state._id,
-      zoneInfo,
-      path,
-      deliveryCharge,
-      selectedBranch
-    )
   }
 
   const edit_zone_delivery_charge = location.state?.zone_delivery_charges?.map(
@@ -252,21 +252,18 @@ function AddZone(props) {
 
     if (props.add_zone_loading == "Success") {
       navigate("/zone")
+      setSubmitDisabled(false)
       props.zoneAddFresh()
     }
 
-    if (props.edit_zone_loading == "Success") {
-      navigate("/zone")
-      props.zoneEditFresh()
-    }
-    if (location?.state?._id) {
-      props.getZoneByIdAction(location?.state?._id)
+    if (props.add_zone_loading == "Falied") {
+      setSubmitDisabled(false)
+      props.zoneAddFresh()
     }
   }, [
     props.get_all_branch_loading,
     props.get_all_city_loading,
     props.add_zone_loading,
-    props.edit_zone_loading,
   ])
 
   if (!isLoaded) {
@@ -278,11 +275,22 @@ function AddZone(props) {
       <React.Fragment>
         <div className="page-content">
           <Container fluid>
-            <Breadcrumbs
-              maintitle="Foodi"
-              title="Zone"
-              breadcrumbItem={location.state ? "Edit Zone" : "Add Zone"}
-            />
+            <Row className="align-items-center">
+              <Col sm={6}>
+                <div className="page-title-box">
+                  <h4 className="font-size-18">Add Zone</h4>
+                  <ol className="breadcrumb mb-0">
+                    <BreadcrumbItem>
+                      <Link to="/">Foodi</Link>
+                    </BreadcrumbItem>
+                    <BreadcrumbItem>
+                      <Link to="/zone">Zone</Link>
+                    </BreadcrumbItem>
+                    <BreadcrumbItem active>Add Zone</BreadcrumbItem>
+                  </ol>
+                </div>
+              </Col>
+            </Row>
 
             <Row>
               <Col className="col-12">
@@ -308,11 +316,7 @@ function AddZone(props) {
             </Row>
             <Row>
               <Col className="col-10 mx-auto">
-                <form
-                  className="mt-4"
-                  action="#"
-                  onSubmit={location.state ? handleSubmitForEdit : handleSubmit}
-                >
+                <form className="mt-4" action="#" onSubmit={handleSubmit}>
                   <Row className="mb-3">
                     <label
                       htmlFor="example-text-input"
@@ -342,18 +346,15 @@ function AddZone(props) {
                       City <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-10">
-                      <Input
+                      <Select
                         required
-                        id="exampleSelect"
-                        name="city"
-                        value={zoneInfo.city}
-                        //required={true}
-                        onChange={handleInputs}
-                        type="select"
-                      >
-                        <option value="">Choose City</option>
-                        {cityData}
-                      </Input>
+                        value={selectedCity}
+                        onChange={handleSelectCity}
+                        options={cityData}
+                        isLoading={cityData == undefined ? true : false}
+                        isClearable={true}
+                        isMulti={false}
+                      />
                     </div>
                   </Row>
 
@@ -391,28 +392,11 @@ function AddZone(props) {
                         value={selectedBranch}
                         onChange={handleSelectBranch}
                         options={branchDate}
+                        isLoading={branchDate == undefined ? true : false}
                         isMulti={true}
                       />
                     </div>
                   </Row>
-                  {/* <Row className="mb-3">
-                    <label
-                      htmlFor="example-text-input"
-                      className="col-md-2 col-form-label"
-                    >
-                      Location <span className="text-danger">*</span>
-                    </label>
-                    <div className="col-md-10">
-                      <textarea
-                        required
-                        className="form-control"
-                        id="location"
-                        name="location"
-                        value={allData}
-                        readOnly
-                      />
-                    </div>
-                  </Row> */}
 
                   <fieldset
                     style={{
@@ -597,8 +581,9 @@ function AddZone(props) {
                       <button
                         className="btn btn-primary w-md waves-effect waves-light"
                         type="submit"
+                        disabled={submitDisabled}
                       >
-                        {location.state ? "Edit Zone" : "Add Zone"}
+                        Add Zone
                       </button>
                     </div>
                   </div>
