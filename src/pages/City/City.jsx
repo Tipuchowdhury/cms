@@ -194,6 +194,12 @@ function City(props) {
     setParamChange(!paramChange)
   }
 
+  const handleFilterKeyPress = event => {
+    if (event.key === "Enter") {
+      handleParamChange()
+    }
+  }
+
   // server side pagination
   const [page, setPage] = useState(1)
   const [countPerPage, setCountPerPage] = useState(10)
@@ -354,41 +360,42 @@ function City(props) {
                     />
                   </div> */}
 
-                  <form className="mt-1">
-                    <Row className="justify-content-center align-items-center">
-                      <div className="mb-3 col-12 col-sm-6 col-md-3">
-                        <label className="form-label" htmlFor="city_name">
-                          City Name
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="city_name"
-                          placeholder="Serach by city name"
-                          name="city_name"
-                          onChange={e => handleFilter(e)}
-                          value={pageFilters.city_name ?? ""}
-                        />
-                      </div>
+                  {/* <form className="mt-1"> */}
+                  <Row className="justify-content-center align-items-center">
+                    <div className="mb-3 col-12 col-sm-6 col-md-3">
+                      <label className="form-label" htmlFor="city_name">
+                        City Name
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="city_name"
+                        placeholder="Serach by city name"
+                        name="city_name"
+                        value={pageFilters.city_name ?? ""}
+                        onChange={handleFilter}
+                        onKeyDown={handleFilterKeyPress}
+                      />
+                    </div>
 
-                      <div className="mt-4 mb-3 col-12 col-sm-6 col-md-3">
-                        <Button
-                          color="warning"
-                          className="btn me-1 btn-sm btn-primary waves-effect waves-light"
-                          onClick={handleParamClear}
-                        >
-                          <span className="fas fa-hand-sparkles"></span> Reset
-                        </Button>
-                        <Button
-                          color="primary"
-                          className="btn btn-sm btn-primary waves-effect waves-light"
-                          onClick={handleParamChange}
-                        >
-                          <span className="fa fa-search"></span> Filter
-                        </Button>
-                      </div>
-                    </Row>
-                  </form>
+                    <div className="mt-4 mb-3 col-12 col-sm-6 col-md-3">
+                      <Button
+                        color="warning"
+                        className="btn me-1 btn-sm btn-primary waves-effect waves-light"
+                        onClick={handleParamClear}
+                      >
+                        <span className="fas fa-hand-sparkles"></span> Reset
+                      </Button>
+                      <Button
+                        color="primary"
+                        className="btn btn-sm btn-primary waves-effect waves-light"
+                        onClick={handleParamChange}
+                      >
+                        <span className="fa fa-search"></span> Filter
+                      </Button>
+                    </div>
+                  </Row>
+                  {/* </form> */}
                   <DataTable
                     columns={activeData}
                     customStyles={customStyles}

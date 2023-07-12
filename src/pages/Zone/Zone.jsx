@@ -141,6 +141,26 @@ function Zone(props) {
     },
   }
 
+  const [paramChange, setParamChange] = useState(false)
+
+  const handleParamChange = () => {
+    props.getServerSidePaginationZoneFresh()
+    setParamChange(!paramChange)
+  }
+
+  const handleParamClear = () => {
+    setPageFilters({})
+    props.getServerSidePaginationZoneFresh()
+
+    setParamChange(!paramChange)
+  }
+
+  const handleFilterKeyPress = event => {
+    if (event.key === "Enter") {
+      handleParamChange()
+    }
+  }
+
   // server side pagination
   const [page, setPage] = useState(1)
   const [countPerPage, setCountPerPage] = useState(10)
@@ -162,16 +182,16 @@ function Zone(props) {
   }
 
   useEffect(() => {
-    if (props.get_all_zone_loading == false) {
-      props.getAllZoneAction()
-    }
+    // if (props.get_all_zone_loading == false) {
+    //   props.getAllZoneAction()
+    // }
 
     props.getServerSidePaginationZoneAction(page, countPerPage, pageFilters)
 
-    if (props.get_server_side_pagination_zone_loading == false) {
-      //console.log("I am in get all permis type loading ")
-      props.getServerSidePaginationZoneAction(page, countPerPage, pageFilters)
-    }
+    // if (props.get_server_side_pagination_zone_loading == false) {
+    //   //console.log("I am in get all permis type loading ")
+    //   props.getServerSidePaginationZoneAction(page, countPerPage, pageFilters)
+    // }
 
     if (props.edit_zone_status_loading == "Success") {
       toast.success("Zone Status Updated Successfully")
@@ -202,10 +222,11 @@ function Zone(props) {
     props.get_all_zone_loading,
     props.edit_zone_status_loading,
     props.zone_delete_loading,
-    props.get_server_side_pagination_zone_loading,
+    // props.get_server_side_pagination_zone_loading,
     page,
     countPerPage,
-    pageFilters,
+    // pageFilters,
+    paramChange,
   ])
 
   return (
@@ -253,7 +274,7 @@ function Zone(props) {
                       </Button>
                     </Link>
                   </div>
-                  <div className="text-end">
+                  {/* <div className="text-end">
                     <input
                       type="text"
                       placeholder="Search Zone"
@@ -266,7 +287,43 @@ function Zone(props) {
                       }}
                       onChange={e => handleFilter(e)}
                     />
-                  </div>
+                  </div> */}
+                  {/* <form className="mt-1"> */}
+                  <Row className="justify-content-center align-items-center">
+                    <div className="mb-3 col-12 col-sm-6 col-md-3">
+                      <label className="form-label" htmlFor="zone_name">
+                        Area Name
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="zone_name"
+                        placeholder="Serach by area name"
+                        name="zone_name"
+                        onChange={handleFilter}
+                        onKeyDown={handleFilterKeyPress}
+                        value={pageFilters.zone_name ?? ""}
+                      />
+                    </div>
+
+                    <div className="mt-4 mb-3 col-12 col-sm-6 col-md-3">
+                      <Button
+                        color="warning"
+                        className="btn me-1 btn-sm btn-primary waves-effect waves-light"
+                        onClick={handleParamClear}
+                      >
+                        <span className="fas fa-hand-sparkles"></span> Reset
+                      </Button>
+                      <Button
+                        color="primary"
+                        className="btn btn-sm btn-primary waves-effect waves-light"
+                        onClick={handleParamChange}
+                      >
+                        <span className="fa fa-search"></span> Filter
+                      </Button>
+                    </div>
+                  </Row>
+                  {/* </form> */}
                   <DataTable
                     columns={activeData}
                     customStyles={customStyles}
