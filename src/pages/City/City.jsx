@@ -89,7 +89,6 @@ function City(props) {
   }
 
   const handleStatusModal = row => {
-    // console.log(row)
     setCityId(row._id)
     setCityName(row.name)
     setIsActive(row.is_active)
@@ -181,6 +180,20 @@ function City(props) {
     },
   }
 
+  const [paramChange, setParamChange] = useState(false)
+
+  const handleParamChange = () => {
+    props.serverSidePaginationFresh()
+    setParamChange(!paramChange)
+  }
+
+  const handleParamClear = () => {
+    setPageFilters({})
+    props.serverSidePaginationFresh()
+
+    setParamChange(!paramChange)
+  }
+
   // server side pagination
   const [page, setPage] = useState(1)
   const [countPerPage, setCountPerPage] = useState(10)
@@ -197,16 +210,13 @@ function City(props) {
   }
 
   const handlePerRowsChange = async (newPerPage, page) => {
-    console.log(newPerPage, page)
     setCountPerPage(newPerPage)
   }
 
-  console.log(props.get_server_side_pagination_data)
-
   useEffect(() => {
-    if (props.get_all_city_loading == false) {
-      props.getAllCityAction()
-    }
+    // if (props.get_all_city_loading == false) {
+    //   props.getAllCityAction()
+    // }
 
     // if (props.get_server_side_pagination_loading == false) {
     //   props.getServerSidePaginationAction(page, countPerPage)
@@ -215,10 +225,10 @@ function City(props) {
 
     props.getServerSidePaginationAction(page, countPerPage, pageFilters)
 
-    if (props.get_server_side_pagination_loading == false) {
-      //console.log("I am in get all permis type loading ")
-      props.getServerSidePaginationAction(page, countPerPage, pageFilters)
-    }
+    // if (props.get_server_side_pagination_loading == false) {
+
+    //   props.getServerSidePaginationAction(page, countPerPage, pageFilters)
+    // }
 
     if (props.add_city_loading === "Success") {
       toast.success("City Addedd Successfully")
@@ -278,10 +288,11 @@ function City(props) {
     props.city_name_edit_loading,
     props.city_delete_loading,
     props.city_status_edit_loading,
-    props.get_server_side_pagination_loading,
+    // props.get_server_side_pagination_loading,
     page,
     countPerPage,
-    pageFilters,
+    // pageFilters,
+    paramChange,
   ])
 
   return (
@@ -328,7 +339,7 @@ function City(props) {
                     </Button>
                   </div>
 
-                  <div className="text-end">
+                  {/* <div className="text-end">
                     <input
                       type="text"
                       placeholder="Search City"
@@ -341,7 +352,43 @@ function City(props) {
                       }}
                       onChange={e => handleFilter(e)}
                     />
-                  </div>
+                  </div> */}
+
+                  <form className="mt-1">
+                    <Row className="justify-content-center align-items-center">
+                      <div className="mb-3 col-12 col-sm-6 col-md-3">
+                        <label className="form-label" htmlFor="city_name">
+                          City Name
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="city_name"
+                          placeholder="Serach by city name"
+                          name="city_name"
+                          onChange={e => handleFilter(e)}
+                          value={pageFilters.city_name ?? ""}
+                        />
+                      </div>
+
+                      <div className="mt-4 mb-3 col-12 col-sm-6 col-md-3">
+                        <Button
+                          color="warning"
+                          className="btn me-1 btn-sm btn-primary waves-effect waves-light"
+                          onClick={handleParamClear}
+                        >
+                          <span className="fas fa-hand-sparkles"></span> Reset
+                        </Button>
+                        <Button
+                          color="primary"
+                          className="btn btn-sm btn-primary waves-effect waves-light"
+                          onClick={handleParamChange}
+                        >
+                          <span className="fa fa-search"></span> Filter
+                        </Button>
+                      </div>
+                    </Row>
+                  </form>
                   <DataTable
                     columns={activeData}
                     customStyles={customStyles}
